@@ -1,0 +1,374 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "graphify_integration_system",
+        "label": "Graphify Integration System",
+        "nodes": [
+          "graphifyjs_GraphifyPlugin",
+          "graphify_skill",
+          "graphify_cli_tool",
+          "graphify_out_kg"
+        ],
+        "relation": "form",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "AGENTS.md"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "label": "opencode.json",
+      "file_type": "code",
+      "source_file": "opencode.json",
+      "source_location": "L1",
+      "id": "opencode_json",
+      "community": 1,
+      "norm_label": "opencode.json"
+    },
+    {
+      "label": "$schema",
+      "file_type": "code",
+      "source_file": "opencode.json",
+      "source_location": "L2",
+      "id": "opencode_opencode_schema",
+      "community": 1,
+      "norm_label": "$schema"
+    },
+    {
+      "label": "plugin",
+      "file_type": "code",
+      "source_file": "opencode.json",
+      "source_location": "L3",
+      "id": "opencode_opencode_plugin",
+      "community": 1,
+      "norm_label": "plugin"
+    },
+    {
+      "label": "package.json",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L1",
+      "id": "package_json",
+      "community": 2,
+      "norm_label": "package.json"
+    },
+    {
+      "label": "dependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "id": "opencode_package_dependencies",
+      "community": 2,
+      "norm_label": "dependencies"
+    },
+    {
+      "label": "@opencode-ai/plugin",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "id": "opencode_package_dependencies_opencode_ai_plugin",
+      "community": 2,
+      "norm_label": "@opencode-ai/plugin"
+    },
+    {
+      "label": "graphify.js",
+      "file_type": "code",
+      "source_file": "plugins/graphify.js",
+      "source_location": "L1",
+      "id": "plugins_graphify_js",
+      "community": 4,
+      "norm_label": "graphify.js"
+    },
+    {
+      "label": "GraphifyPlugin()",
+      "file_type": "code",
+      "source_file": "plugins/graphify.js",
+      "source_location": "L6",
+      "id": "plugins_graphify_graphifyplugin",
+      "community": 4,
+      "norm_label": "graphifyplugin()"
+    },
+    {
+      "label": "GraphifyPlugin",
+      "file_type": "code",
+      "source_file": ".opencode/plugins/graphify.js",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Inject knowledge graph reminder before bash tool calls when graph.json exists; guide users to graphify query for scoped subgraphs instead of raw grep; only read GRAPH_REPORT.md for broad architecture context",
+      "id": "graphifyjs_GraphifyPlugin",
+      "community": 0,
+      "norm_label": "graphifyplugin"
+    },
+    {
+      "label": "OpenCode Plugin Configuration",
+      "file_type": "code",
+      "source_file": ".opencode/opencode.json",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "opencodejson_config",
+      "community": 3,
+      "norm_label": "opencode plugin configuration"
+    },
+    {
+      "label": "OpenCode Plugin Dependencies",
+      "file_type": "code",
+      "source_file": ".opencode/package.json",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "opencodepkg_deps",
+      "community": 3,
+      "norm_label": "opencode plugin dependencies"
+    },
+    {
+      "label": "Graphify Agent Rules",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "graphify query/path/explain return scoped subgraphs much smaller than GRAPH_REPORT.md or raw grep; graphify update is AST-only with no API cost; dirty graph files expected after incremental updates and should not cause skipping graphify",
+      "id": "agentsmd_graphify_rules",
+      "community": 0,
+      "norm_label": "graphify agent rules"
+    },
+    {
+      "label": "Theobase Project",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readmemd_theobase",
+      "community": 5,
+      "norm_label": "theobase project"
+    },
+    {
+      "label": "graphify-out/ Knowledge Graph",
+      "file_type": "code",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "graphify_out_kg",
+      "community": 0,
+      "norm_label": "graphify-out/ knowledge graph"
+    },
+    {
+      "label": "Graphify CLI Tool",
+      "file_type": "code",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "graphify_cli_tool",
+      "community": 0,
+      "norm_label": "graphify cli tool"
+    },
+    {
+      "label": "Graphify Skill",
+      "file_type": "code",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "graphify_skill",
+      "community": 0,
+      "norm_label": "graphify skill"
+    },
+    {
+      "label": "SDA Church",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "sda_church",
+      "community": 5,
+      "norm_label": "sda church"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "opencode.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "opencode_json",
+      "target": "opencode_opencode_schema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "opencode.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "opencode_json",
+      "target": "opencode_opencode_plugin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "package_json",
+      "target": "opencode_package_dependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "opencode_package_dependencies",
+      "target": "opencode_package_dependencies_opencode_ai_plugin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "plugins/graphify.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "plugins_graphify_js",
+      "target": "plugins_graphify_graphifyplugin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".opencode/opencode.json",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "opencodejson_config",
+      "target": "graphifyjs_GraphifyPlugin"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".opencode/plugins/graphify.js",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "graphifyjs_GraphifyPlugin",
+      "target": "graphify_out_kg"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": ".opencode/plugins/graphify.js",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "graphifyjs_GraphifyPlugin",
+      "target": "graphify_cli_tool"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "graphifyjs_GraphifyPlugin",
+      "target": "graphify_skill"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": ".opencode/opencode.json",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "opencodepkg_deps",
+      "target": "opencodejson_config"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "agentsmd_graphify_rules",
+      "target": "graphify_cli_tool"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "agentsmd_graphify_rules",
+      "target": "graphify_out_kg"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "agentsmd_graphify_rules",
+      "target": "graphify_skill"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readmemd_theobase",
+      "target": "sda_church"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "graphify_integration_system",
+      "label": "Graphify Integration System",
+      "nodes": [
+        "graphifyjs_GraphifyPlugin",
+        "graphify_skill",
+        "graphify_cli_tool",
+        "graphify_out_kg"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "AGENTS.md"
+    }
+  ],
+  "built_at_commit": "e602f9be660b8291689f0448c9cc9d53117210e4"
+}
