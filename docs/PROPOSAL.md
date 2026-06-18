@@ -216,6 +216,18 @@ To keep the platform accessible and prevent long, complicated budget debates on 
 
 * **What is Included:** Every subscription includes **unlimited volunteer accounts** (pastors, clerks, treasurers, elders, deacons, and youth directors), **unlimited member profiles**, and access to all 19 operational modules with no tier restrictions or hidden upgrades.
 
+### Payment Processing
+
+Payments are processed via **Stripe** for card payments (Visa, Mastercard, Amex) and **Stripe Invoicing** for annual prepaid church invoices. For regions where card infrastructure is thin (Pacific Islands, parts of Sub-Saharan Africa), **mobile money integration** (M-PAiSA, M-Pesa, MTN Mobile Money) will be added in Phase 2 via local payment aggregators.
+
+**Failed payment handling** follows a standard dunning sequence:
+1. First failure → Retry after 3 days + email notification to church admin
+2. Second failure → Retry after 5 days + SMS notification
+3. Third failure → Retry after 7 days + final notice
+4. All retries exhausted → Subscription transitions to Read-Only View; data preserved; church can reactivate at any time
+
+**Tax handling**: Where applicable, VAT/GST is added to the $7 USD base price per local jurisdiction. Annual invoices are issued automatically via Stripe Invoicing with tax line items. For churches requiring tax exemption (many SDA churches qualify as religious non-profits), a tax ID field is provided during signup.
+
 ---
 
 ## 6. Rollout Plan
@@ -236,8 +248,407 @@ Introduces advanced structural tools for multi-church leadership and community i
 
 ---
 
-## 7. Adoption & Deployment Strategy
+## 7. Adoption & Go-to-Market Strategy
+
+### 7.1 Adoption Hooks
 
 1. **The Nominating Committee:** Release the *Secure Nominating Vault (2)* as a completely free, standalone utility during church election seasons. Because managing elections is a high-stress, short-term task, church clerks will readily adopt it, giving the platform a warm introduction to their church board when election season ends.
 2. **The Enterprise Bulk-License Deployment:** Target regional Conference and Mission Treasurers directly to sponsor systemic adoption. By offering leadership a master dashboard to coordinate multiple local sites simultaneously, the platform can be pitched as a bundle—anchoring the standard value at $7 USD/month but opening discussions for corporate distribution packages across their entire territory.
 3. **The Graceful Read-Only State:** To protect historical integrity, if a church's subscription is paused or card details lapse, accounts are never instantly deleted from the database. Instead, the application gracefully transitions into a permanent **"Read-Only View."** The local congregation never loses access to their historical audit history, past board meeting minutes, or member safety records, preserving local legacy data indefinitely.
+
+### 7.2 Marketing Channels
+
+| Channel | Strategy |
+|---------|----------|
+| **Denominational conferences & camp meetings** | Booth presence at SDA regional gatherings; live demos to pastors and clerks |
+| **SDA union/conference newsletters** | Sponsored articles and feature announcements in union papers and email bulletins |
+| **YouTube & video walkthroughs** | Short (2-3 minute) module-specific demos showing real church scenarios; dubbed into target languages |
+| **Church clerk WhatsApp/Facebook groups** | Peer-to-peer growth via existing communication channels; clerk-to-clerk referrals |
+| **SEO & content marketing** | Blog series: "How to survive church board season," "Treasurer's guide to audit readiness," etc. |
+| **Referral program** | Existing church admins who refer a new church receive one free month |
+
+### 7.3 Pilot & Case Study Pipeline
+
+The 12-church pilot (see Section 15.4) will produce written and video case studies from each region: "How [Church Name] cut Sabbath scheduling from 4 hours to 15 minutes." These case studies become the primary sales collateral for conference-level pitches.
+
+---
+
+## 8. Customer Success & Retention
+
+### 8.1 Health Scoring
+
+Each church receives an automated **health score** (0–100) based on:
+- Login frequency (are volunteers actually using it?)
+- Module activation count (are they using more than one feature?)
+- Receipt approval rate (is the treasurer actively verifying?)
+- Support ticket volume
+
+Churches scoring < 40 receive proactive outreach from the customer success team.
+
+### 8.2 Churn Prevention
+
+| Trigger | Response |
+|---------|----------|
+| No login in 14 days | Automated email: "Is everything okay? Here's a quick tip video." |
+| Subscription approaching renewal | 30-day and 7-day reminder emails with annual savings offer |
+| Only 1 module active after 60 days | "Did you know you can also…" onboarding email series |
+| Support ticket marked unresolved | Escalation to priority support within 24 hours |
+
+### 8.3 Expansion Revenue
+
+- **Annual prepaid upsell**: Month-to-month churches offered $84/year (saves $0/month vs monthly, but improves cash flow and retention)
+- **Bulk license discount**: Conferences purchasing 20+ church licenses at once receive 10% discount ($6.30/church/month)
+- **Future**: White-label conference dashboard, custom integrations, priority SLAs as paid add-ons
+
+---
+
+## 9. Technology Platform
+
+Theobase is a **Progressive Web Application (PWA)** — a single codebase that runs on phones, tablets, and desktops with full offline capability. A comprehensive technical architecture document is maintained at **[docs/TECHNICAL_ARCHITECTURE.md](TECHNICAL_ARCHITECTURE.md)**.
+
+### 9.1 Tech Stack Summary
+
+| Layer | Choice | Key Property |
+|-------|--------|-------------|
+| Frontend | React 18 + TypeScript + Vite | PWA with service worker offline caching |
+| UI | Tailwind CSS + Radix UI | Small bundle, accessible, responsive |
+| Backend | Cloudflare Workers + Hono | Global edge deployment, pay-per-request |
+| Database | Cloudflare D1 (distributed SQLite) | Per-church isolation, regional data residency |
+| File Storage | Cloudflare R2 | Zero egress fees for photo uploads |
+| Real-Time | Cloudflare Durable Objects (WebSocket) | Pulpit-to-AV sync, live notifications |
+| Offline Sync | Automerge (CRDT) | Conflict-free merges without server |
+| OCR | Tesseract.js v5 (client-side) | Works offline, supports 100+ languages |
+| Auth | Lucia Auth v3 | Passwordless (magic links + SMS OTP) |
+| Sunset Calculation | suncalc (client-side) | No API dependency, works offline |
+
+### 9.2 Why This Stack?
+
+- **Cost**: Infrastructure costs < $0.02 per church per month at scale (see [cost model](TECHNICAL_ARCHITECTURE.md#12-cost-model-infrastructure)) — sustainable at $7/church/month.
+- **Offline-first**: PWA + IndexedDB + CRDT sync means volunteers work without internet and data syncs when a connection returns.
+- **Global**: Cloudflare's edge network spans 330+ cities; churches in Fiji, Zambia, Brazil, or India all get sub-100ms latency.
+- **No app store**: Churches install from a URL; no Apple/Google approval delays; automatic updates via service worker.
+
+---
+
+## 10. User Onboarding & Migration
+
+### 10.1 New Church Setup
+
+1. **Registration** (2 minutes): Church clerk visits the app URL → enters church name, address (auto-geocoded for timezone and sunset calculation), selects preferred language → receives admin magic link via email or SMS.
+2. **Subscription** (1 minute): Enters card details or selects annual invoice. A **14-day free trial** begins immediately with full access to all 19 modules. No credit card required to start the trial.
+3. **First Data Entry** (3 options):
+   - **Invite by link**: Share a signup URL in the church WhatsApp or Facebook group; members self-register with name, phone, and email.
+   - **CSV upload**: Download a template → fill in member names and contacts → upload. The system maps columns and imports.
+   - **Manual entry**: Add members one at a time.
+4. **Quick Setup Wizard** (5 minutes): Guided walkthrough — "Who are your volunteers?" (assign roles), "Set up your first Sabbath service rota", "Try a test donation" → lands on the role-appropriate dashboard.
+
+### 10.2 Migration from Existing Systems
+
+| Existing System | Migration Method |
+|-----------------|------------------|
+| Excel / Google Sheets | CSV upload with column-mapping UI |
+| Paper records | Bulk photo upload → OCR processing → treasurer review queue |
+| ACMS / eAdventist | API import adapter (Phase 3 roadmap) |
+| Another church app | Data export from source → CSV → import |
+
+A **Migration Assistant** mode lets volunteers work through a queue of imported records, confirming or correcting each one.
+
+### 10.3 Member Invitation
+
+The church admin generates an **invitation link** — shared in the church communication channel. Members tap the link, enter their name and phone number, and their profile is created. The admin reviews and approves new profiles (or auto-approves if configured).
+
+---
+
+## 11. Roles & Permissions
+
+Theobase uses a **Role-Based Access Control (RBAC)** model. Every volunteer account is assigned exactly one role per church. Roles gate every endpoint, query, and UI element.
+
+| Role | Assigned To | Core Access |
+|------|------------|-------------|
+| **Church Admin** | Clerk | Full CRUD on all church data; manage subscriptions and roles; view audit logs |
+| **Pastor** | Pastor, District Pastor | View all church data; edit pastoral records, board minutes, district hub |
+| **Treasurer** | Church Treasurer, Assistant Treasurer | View and approve finances; manage budgets; export reports; **cannot** edit member profiles or board minutes |
+| **Board Chair** | Head Elder | View all; chair board meetings (run votes); manage duty rota |
+| **Department Leader** | Youth, Pathfinder, Sabbath School, Welfare, AV, Dorcas leaders | Full CRUD on their assigned department module; view-only on member directory |
+| **Volunteer** | Deacon, Deaconess, Teacher, Counselor | View assigned duties; mark attendance for assigned classes; submit welfare notes |
+| **Member** | All church members | View own profile and giving history; see duty schedule; upload donation receipts; update contact info |
+
+**Three modules use elevated confidentiality** beyond standard RBAC: the Nominating Vault (anonymous ballots, encrypted at rest), the Welfare CRM (recipient names encrypted), and the Safety Shield (background check documents encrypted per-church).
+
+---
+
+## 12. Localization & Accessibility
+
+### 12.1 Internationalization (i18n)
+
+Theobase is built for global deployment from day one:
+
+- **Interface languages**: English (default), French, Spanish, Portuguese, Swahili, Hindi, Fijian, Samoan, Tongan, Tok Pisin, Bislama, Bahasa Indonesia, Tagalog, and others added on demand.
+- **RTL support**: Full right-to-left layout support for Arabic, Urdu, and other RTL languages.
+- **Regional formats**: Dates, times, numbers, and currency display follow the church's locale (e.g., "24/12/2026" vs "12/24/2026", "$1,000.00" vs "FJ$1,000.00").
+- **Translation management**: Community-contributed translations via a translation portal; volunteer translators from SDA churches worldwide.
+
+### 12.2 Accessibility (WCAG 2.1 AA)
+
+Every interface meets WCAG 2.1 AA standards:
+
+- **Screen reader compatible**: All UI elements have ARIA labels; keyboard navigation throughout; focus indicators visible.
+- **Color contrast**: Minimum 4.5:1 contrast ratio on all text; no color-only information.
+- **Touch targets**: Minimum 44x44px on mobile; generous spacing.
+- **Text scaling**: Interface works at 200% browser zoom without content loss.
+- **Reduced motion**: Respects `prefers-reduced-motion` OS setting.
+
+---
+
+## 13. Support & Service Level
+
+### 13.1 Support Tiers
+
+| Level | Channel | Response Target | Included In |
+|-------|---------|----------------|-------------|
+| **Self-Help** | In-app help center, searchable knowledge base, video walkthroughs | Instant | All plans |
+| **Community** | Church admin discussion forum, WhatsApp peer-support groups | Within hours | All plans |
+| **Email Support** | support@theobase.app | Within 1 business day | All plans |
+| **Priority Support** | Email + WhatsApp chat | Within 4 hours, 7 days/week | Annual plan |
+| **Enterprise Support** | Dedicated account manager, phone support | Within 1 hour, 7 days/week | Bulk license (20+ churches) |
+
+### 13.2 Service Level Objectives (SLOs)
+
+| Metric | Target |
+|--------|--------|
+| API uptime | 99.9% monthly |
+| Sync reliability (changes not lost) | 99.99% |
+| Support response time (business days) | < 24 hours |
+| Bug fix turnaround (critical) | < 48 hours |
+| Feature request acknowledgement | < 1 week |
+
+### 13.3 Incident Communication
+
+Service disruptions are communicated via:
+1. In-app status banner (for online users)
+2. Status page at status.theobase.app
+3. Email to all church admins for incidents exceeding 30 minutes
+
+---
+
+## 14. Legal & Compliance
+
+### 14.1 Theobase Is Not a Financial Institution
+
+Theobase does not hold, transmit, process, route, or touch donation money. It functions as a **digital filing cabinet and verification ledger**. Members transfer funds directly from their personal bank or mobile money accounts into their church's official bank account. Theobase stores only the **screenshot receipt** and **allocation breakdown**. This design means Theobase:
+
+- Requires no banking license in any jurisdiction.
+- Incurs no payment processing fees, interchange fees, or percentage cuts.
+- Has no PCI-DSS compliance burden.
+- Bears no liability for fund transfers, reversals, or disputes.
+
+### 14.2 Data Protection
+
+| Regulation | Compliance Measure |
+|------------|-------------------|
+| **GDPR** (Europe) | Data stored in EU Cloudflare region; member data export (JSON); right to erasure (delete encrypted PII + destroy key); consent tracking; Data Processing Agreement available |
+| **CCPA/CPRA** (California) | Member data export; deletion on request; opt-out of data sale (though no data is sold) |
+| **PIPL** (China) | Data stored within China-accessible regions; separate deployment if needed |
+| **Pacific Islands** (no comprehensive laws) | GDPR-equivalent protections applied as the global standard |
+
+### 14.3 Child Data Protection
+
+The platform tracks children in Pathfinders (#9), Adventurers (#9), and Sabbath School (#10). Compliance measures:
+
+- **Parental consent**: Required before any child profile is created. Consent is recorded with timestamp and IP.
+- **Data minimization**: Only name, age, class progress, and parent contact are stored. No biometrics, no location tracking, no behavioral data.
+- **Parental access**: Parents can view and export all data stored about their children at any time.
+- **Deletion**: Parents can request deletion of their child's data at any time.
+
+### 14.4 Key Documents
+
+The following legal documents will be published before public launch:
+
+- **Terms of Service** — church-level agreement covering subscription, acceptable use, liability limitations
+- **Privacy Policy** — plain-language explanation of what data is stored, where, and why
+- **Data Processing Agreement (DPA)** — for churches in GDPR jurisdictions
+- **Subprocessors List** — Cloudflare (hosting), Resend (email), Twilio (SMS)
+- **Security Whitepaper** — technical overview of encryption, access controls, and audit logging
+
+### 14.5 Data Breach Response
+
+In the event of unauthorized access to member data:
+1. **Containment** within 24 hours (revoke keys, isolate affected resources)
+2. **Notification** to affected church admins within 72 hours
+3. **Public disclosure** if required by law
+4. **Post-incident report** published within 30 days
+
+### 14.6 Denominational Relationship
+
+Theobase is an independent technology provider. While designed specifically for Seventh-day Adventist church operations, it is not owned, operated, or endorsed by the General Conference of Seventh-day Adventists or any union, conference, or mission. The platform is designed to **complement** existing denominational systems, not replace them. Churches retain full ownership of their data at all times.
+
+---
+
+## 15. Competitive Landscape
+
+### 15.1 Existing Church Management Software
+
+| Product | Strengths | Limitations for SDA Local Churches |
+|---------|-----------|-------------------------------------|
+| **Planning Center** | Excellent volunteer scheduling | US-centric; no Sabbath timing; multi-site pricing model; no Pathfinder tracking |
+| **ChurchTrac** | Affordable; good accounting | No offline support; no tithe envelope digitization; no multi-church district hub |
+| **Breeze ChMS** | Simple UI; good member database | No SDA-specific workflows (Pathfinders, communion, nominating committee); online-only |
+| **ACS / Realm** | Powerful; widely used by large churches | Enterprise pricing; complex for volunteers; online-only |
+| **eAdventist / ACMS** | Official SDA system | Top-down design for conferences, not local churches; no mobile app; no offline support; does not serve the volunteer |
+
+### 15.2 Theobase's Differentiators
+
+1. **Built for local volunteers, not corporate offices.** Every feature is designed for the person who actually does the work every weekend.
+2. **Offline-first.** No other church platform works when the internet goes out.
+3. **SDA-specific.** Sabbath timing, Pathfinder curriculum, communion logistics, nominating committee — none of these exist in generic church software.
+4. **Flat pricing.** $7/church/month with unlimited volunteers and members. No per-user fees, no module add-on costs, no hidden charges.
+5. **No financial transaction fees.** Because Theobase doesn't touch the money, 100% of tithes and offerings reach the church.
+
+---
+
+## 16. Development Roadmap & Team
+
+### 16.1 Team Composition
+
+| Role | Count | Responsibility |
+|------|-------|---------------|
+| Full-Stack Engineer (Lead) | 1 | Architecture, backend, sync engine, deployment |
+| Frontend Engineer | 1 | PWA, UI components, offline UX, accessibility |
+| Product Designer (part-time) | 0.5 | UX research, design system, usability testing |
+| Domain Advisor (volunteer/stipend) | 1 | SDA church operations knowledge, field validation |
+| **Total** | **3.5** | |
+
+The team is intentionally small. The architecture choices (single PWA codebase, serverless backend, managed services) are designed to keep the surface area manageable for a lean team.
+
+### 16.2 Development Methodology
+
+- **Iterative, vertical-slice delivery.** Each phase delivers complete, usable modules — not layers of unfinished plumbing.
+- **2-week sprints** with a deployed, testable increment at the end of each sprint.
+- **Continuous deployment** to staging; production releases at sprint boundaries.
+- **Test-driven development** for sync logic, financial calculations, and auth.
+
+### 16.3 Timeline
+
+| Phase | Timeline | Deliverables |
+|-------|----------|-------------|
+| **Phase 0 — Foundation** (pre-launch) | Months 1–2 | PWA shell, auth, offline sync engine, multi-tenant infrastructure, RBAC, design system |
+| **Phase 1 — Weekly Essentials** | Months 3–5 | Member directory, duty rota (#3), boardroom ledger (#1), receipt registry (#8), offline core (#19) |
+| **Phase 2 — Department Growth** | Months 6–8 | Pathfinder matrix (#9), Sabbath School registers (#10), tithe camera (#6), volunteer treasury (#5), audit binder (#7), welfare CRM (#11) |
+| **Phase 3 — Broad Coordination** | Months 9–12 | Nominating vault (#2), pastoral district hub (#16), crisis resilience matrix (#18), communion planner (#14), AV sync (#15), facility coordinator (#17), evangelism pipeline (#12), Sabbath timing (#13) |
+| **Phase 4 — Scale & Optimize** | Months 13+ | Performance optimization, additional languages, bulk license dashboard, conference-level reporting |
+
+### 16.4 Pilot Program
+
+Before wide release, a **12-church pilot** across 3 regions (Oceania, Africa, North America) will run for 2 months. Pilots provide:
+- Real offline/internet scenarios in target deployment environments
+- Volunteer usability feedback from non-technical users
+- Validation of the OCR pipeline with real handwriting samples
+- Load testing with real church data patterns
+
+### 16.5 Quality Gates
+
+| Gate | Criteria |
+|------|----------|
+| Beta release | All Phase 1 modules functional; PWA passes Lighthouse PWA audit (score ≥ 90); offline sync passes 100-cycle reliability test |
+| Public launch | All Phase 2 modules functional; 12-church pilot results reviewed; WCAG 2.1 AA audit passed; load tested at 500 concurrent churches |
+| Enterprise launch | Phase 3 complete; bulk license dashboard functional; SLA monitoring in place |
+
+---
+
+## 17. Operating Budget & Financial Model
+
+### 17.1 Development Phase (Year 1)
+
+| Cost Category | Monthly | Annual |
+|---------------|---------|--------|
+| Full-Stack Engineer (Lead, salary/contract) | $6,000 | $72,000 |
+| Frontend Engineer (salary/contract) | $5,000 | $60,000 |
+| Product Designer (part-time, 20h/week) | $2,500 | $30,000 |
+| Domain Advisor (stipend) | $500 | $6,000 |
+| Cloud infrastructure (dev + staging) | $100 | $1,200 |
+| SaaS tools (GitHub, Sentry, Resend, Twilio, Stripe) | $200 | $2,400 |
+| Legal (incorporation, DPAs, ToS drafting) | $500 | $6,000 |
+| **Total Monthly Burn** | **$14,800** | **$177,600** |
+
+### 17.2 Post-Launch Operating (Year 2, at 200 churches)
+
+| Cost Category | Monthly | Notes |
+|---------------|---------|-------|
+| Team (3.5 FTE, reduced post-launch) | $12,000 | Lead + Frontend + Designer (part-time) + Advisor |
+| Cloud infrastructure (~200 churches) | $400 | ~$2/church/month at low scale, decreases with volume |
+| SaaS tools + support desk | $350 | Help Scout or similar |
+| Marketing & conference attendance | $500 | Booth fees, travel, ads |
+| Legal & accounting | $300 | Ongoing compliance, tax filings |
+| **Total Monthly Burn** | **$13,550** | |
+| **Monthly Revenue** (at 200 churches × $7) | **$1,400** | |
+| **Monthly Net** | **-$12,150** | Pre-scale investment phase |
+
+### 17.3 Break-Even & Sustainability
+
+At the target price of $7/church/month, break-even requires ~1,950 churches (monthly) or ~1,700 churches (annual prepaid). This is achievable at the 24-month mark based on the growth targets in Section 19 (Success Metrics).
+
+**Funding requirement**: Approximately **$250,000** to cover development (Year 1: ~$178K) and negative operating margin during early growth (Year 2: ~$72K bridge to break-even). Funding sources under consideration: angel investment, SDA foundation grants, or bootstrapped with reduced scope.
+
+**Cost levers** (if bootstrapping):
+- Reduce to 1.5 FTE (lead engineer as solo developer with contract designer) → ~$110K Year 1
+- Launch with 8 core modules instead of 19 → faster time-to-revenue
+- Use open-source volunteer translators → $0 localization cost
+- Conference-subsidized pilot program → reduced marketing spend
+
+---
+
+## 18. Product Analytics (Privacy-Safe)
+
+All analytics must respect that church member data is sensitive. The analytics strategy uses only **anonymized, aggregate, role-scoped telemetry**:
+
+| Metric | Method | Privacy Safeguard |
+|--------|--------|-------------------|
+| Feature adoption (which modules are active) | Church-level flag: "Module X has ≥ 1 action this month" | No member-level data; church identity hashed |
+| User activity (DAU/WAU/MAU per church) | Counter incremented per role per church | No individual user IDs; only count of active roles |
+| Funnel analysis (signup → first member → first receipt → first rota) | Church-level stage tracking | Aggregated across cohort; no individual church identifiable in < 10-church cohorts |
+| Error tracking | Sentry (server-side), anonymized client crash reports | No PII in error context; source IP truncated |
+| Performance (LCP, FID, CLS) | Cloudflare Web Analytics | No cookies; no fingerprinting |
+
+**What is NOT tracked**: Individual member behavior, donation amounts, attendance patterns, content of board minutes, welfare cases, or any data that could identify a specific church member.
+
+---
+
+## 19. Success Metrics & KPIs
+
+| Metric | 6-Month Target | 12-Month Target | 24-Month Target |
+|--------|---------------|----------------|-----------------|
+| Active churches (paying) | 50 | 200 | 1,000 |
+| Monthly Recurring Revenue | $350 | $1,400 | $7,000 |
+| Church 30-day retention | > 90% | > 92% | > 95% |
+| Volunteer Weekly Active Users (WAU) per church | 5+ | 8+ | 10+ |
+| Donation receipts processed / month | 500 | 3,000 | 15,000 |
+| Net Promoter Score (NPS) | — | > 50 | > 60 |
+| Support tickets per church per month | < 2 | < 1.5 | < 1 |
+| Uptime | 99.5% | 99.9% | 99.95% |
+| Sync success rate | > 99% | > 99.5% | > 99.9% |
+
+---
+
+## 20. Risk Register
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|------------|
+| Low smartphone adoption in target regions | Medium | High | SMS-based interaction for members without smartphones; treasurer desktop access |
+| Expensive mobile data deters usage | High | Medium | PWA < 5 MB; compressed sync payloads; WiFi-preferred uploads; offline-first means infrequent sync |
+| Church resistance to digital tools | Medium | High | Free nominating committee tool as warm introduction; 14-day free trial; no credit card to start; migration assistance |
+| OCR accuracy insufficient for Pacific island names | Medium | Medium | Confidence score display with easy correction; manual entry fallback; train custom Tesseract data over time |
+| Browser IndexedDB eviction | Low | High | Persistent storage API; automatic cloud backup on every sync; warn user on low storage |
+| DDoS or abuse targeting churches | Low | Medium | Cloudflare DDoS protection; per-IP rate limiting; audit logging for abuse detection |
+| Denominational conflict with official systems | Low | Medium | Position as complementary, not replacement; data export to official formats; engage conferences proactively |
+| Single point of failure (small team) | Medium | High | Fully documented architecture; automated CI/CD; managed cloud services minimize operational burden; build open-source community |
+| Regulatory change in data residency laws | Low | Medium | Regional data placement from day one; per-region DPA templates; legal counsel retainer |
+| Currency fluctuation for $7 USD pricing | Medium | Low | Annual prepaid option locks in rate; regional pricing adjustments possible |
+
+---
+
+## 21. Companion Documents
+
+| Document | Covers |
+|----------|--------|
+| **[TECHNICAL_ARCHITECTURE.md](TECHNICAL_ARCHITECTURE.md)** | Full technology stack, offline-first sync design, multi-tenancy, security, API design, storage, deployment, cost model |
+| **[FEATURE_SPECIFICATION.md](FEATURE_SPECIFICATION.md)** | Detailed specs for all 19 modules: data models, user flows, edge cases, UX patterns, roles/permissions matrix |
