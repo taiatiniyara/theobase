@@ -78,7 +78,7 @@ export async function authedRequest(method: string, path: string, token: string,
     ctx,
   );
   await waitOnExecutionContext(ctx);
-  return { res, ctx, json: () => res.json() };
+  return { res, ctx, json: () => res.json() as Promise<Record<string, unknown> | Record<string, unknown>[]> };
 }
 
 export async function execSql(sql: string) {

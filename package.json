@@ -1,6 +1,7 @@
 {
   "name": "theobase",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "wrangler dev",
     "test": "vitest run",

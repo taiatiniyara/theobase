@@ -2,13 +2,11 @@ import { Hono } from "hono";
 import { drizzle, type DrizzleD1Database } from "drizzle-orm/d1";
 import * as schema from "@theobase/db";
 import { eq, and, isNull, asc } from "drizzle-orm";
-import { generateToken, createJwt, getTokenTtlSeconds, requireAuth as createRequireAuth, requireCongregation as createRequireCongregation, requireRole as createRequireRole } from "@theobase/auth";
+import { generateToken, createJwt, getTokenTtlSeconds, requireAuth as createRequireAuth } from "@theobase/auth";
 import { createEmailSender } from "@theobase/email";
 import { generateId, z } from "@theobase/shared";
 
 const requireAuth = createRequireAuth();
-const requireCongregation = createRequireCongregation();
-
 async function loadUserRoles(db: DrizzleD1Database<typeof schema>, userId: string, congregationId?: string): Promise<string[]> {
   if (!congregationId) return [];
 
@@ -708,15 +706,6 @@ app.post("/board/meetings/:id/decisions", requireAuth, async (c) => {
 
   const [user] = await db.select({ personId: schema.user.personId }).from(schema.user).where(eq(schema.user.id, userId));
   if (!user?.personId) return c.json({ error: "No profile" }, 400);
-
-  const [last] = await db
-    .select({ number: schema.boardDecision.number })
-    .from(schema.boardDecision)
-    .where(eq(schema.boardDecision.meetingId, meetingId))
-    .orderBy(asc(schema.boardDecision.number))
-    .limit(1);
-
-  // Actually need desc. Let me just use a different approach.
 
   const decisions = await db
     .select({ number: schema.boardDecision.number })

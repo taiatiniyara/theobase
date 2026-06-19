@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import {
-  TEST_SECRET, jwt, env, createExecutionContext, waitOnExecutionContext,
+  jwt, env, createExecutionContext, waitOnExecutionContext,
   worker, runMigrations, setupEmails, getEmails, execSql, authedRequest,
 } from "./test-helpers";
 

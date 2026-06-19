@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { createJwt, verifyJwt } from "@theobase/auth";
 import {
-  TEST_SECRET, jwt, vjwt, env, createExecutionContext, waitOnExecutionContext,
+  jwt, env, createExecutionContext, waitOnExecutionContext,
   worker, runMigrations, setupEmails, getEmails, getLastToken, authRequest, authVerify,
 } from "./test-helpers";
 

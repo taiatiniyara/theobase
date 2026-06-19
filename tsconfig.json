@@ -16,6 +16,8 @@
     "node_modules",
     ".svelte-kit",
     "apps/web/src/service-worker.ts",
+    "apps/api/src/index.ts",
+    "apps/api/src/__tests__",
     "drizzle"
   ]
 }

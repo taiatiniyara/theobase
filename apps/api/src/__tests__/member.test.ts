@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import {
-  TEST_SECRET, jwt, env, createExecutionContext, waitOnExecutionContext,
-  worker, runMigrations, setupEmails, execSql, authedRequest,
+  jwt, runMigrations, setupEmails, execSql, authedRequest,
 } from "./test-helpers";
 import { createJwt } from "@theobase/auth";
 

@@ -10,9 +10,6 @@ describe("departments", () => {
     await execSql(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('pf-user', 'pf@test.com', 'pf-1', 'con-1', '2025-01-01')`);
   });
 
-  const h = (method: string, path: string, body?: any) =>
-    fetchWithToken(method, path, body);
-
   async function fetchWithToken(method: string, path: string, body?: any) {
     const token = await jwt({ userId: "pf-user", congregationId: "con-1" });
     const ctx = createExecutionContext();
