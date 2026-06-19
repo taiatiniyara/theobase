@@ -61,11 +61,18 @@ export function getTokenTtlSeconds(): number {
 export function requireAuth(): MiddlewareHandler {
   return async (c, next) => {
     const secret = (c.env as any).JWT_SECRET || DEFAULT_SECRET;
-    const cookie = c.req.header("Cookie") || "";
-    const match = cookie.match(/token=([^;]+)/);
-    if (!match) return c.json({ error: "Unauthorized" }, 401);
 
-    const payload = await verifyJwt(match[1], secret);
+    const cookie = c.req.header("Cookie") || "";
+    const cookieMatch = cookie.match(/token=([^;]+)/);
+
+    const authHeader = c.req.header("Authorization") || "";
+    const bearerMatch = authHeader.match(/^Bearer (.+)$/);
+
+    const token = cookieMatch?.[1] || bearerMatch?.[1];
+
+    if (!token) return c.json({ error: "Unauthorized" }, 401);
+
+    const payload = await verifyJwt(token, secret);
     if (!payload) return c.json({ error: "Unauthorized" }, 401);
 
     c.set("userId", payload.userId);

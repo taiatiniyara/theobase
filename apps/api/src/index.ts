@@ -30,6 +30,22 @@ type Variables = {
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
+app.use("*", async (c, next) => {
+  if (c.req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PATCH, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Max-Age": "86400",
+      },
+    });
+  }
+  await next();
+  c.res.headers.set("Access-Control-Allow-Origin", "*");
+});
+
 function getDb(c: any): DrizzleD1Database<typeof schema> {
   return drizzle(c.env.DB, { schema });
 }
@@ -106,8 +122,8 @@ app.post("/auth/verify", async (c) => {
   }
 
   const jwt = await createJwt({ userId: user.id, congregationId: user.congregationId ?? undefined }, c.env.JWT_SECRET || "theobase-dev-secret-change-in-production");
-  c.header("Set-Cookie", `token=${jwt}; HttpOnly; Path=/; SameSite=Lax; Max-Age=86400`);
-  return c.json({ ok: true, userId: user.id });
+  c.header("Set-Cookie", `token=${jwt}; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=86400`);
+  return c.json({ ok: true, userId: user.id, token: jwt });
 });
 
 app.get("/me", requireAuth, async (c) => {

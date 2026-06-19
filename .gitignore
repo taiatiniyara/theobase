@@ -1,1 +1,11 @@
 node_modules
+.wrangler
+.svelte-kit
+dist
+build
+*.bak
+.env
+.env.local
+.dev.vars
+.DS_Store
+Thumbs.db
