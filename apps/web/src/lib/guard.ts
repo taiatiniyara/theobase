@@ -19,8 +19,8 @@ export async function getRoles(): Promise<string[]> {
 
   fetchPromise = (async () => {
     try {
-      const profile = await getMe();
-      const roles: string[] = profile?.roles || [];
+      const profile = await getMe() as Record<string, unknown> | null;
+      const roles: string[] = (profile?.roles as string[]) || [];
       cachedRoles = roles;
       return roles;
     } catch {

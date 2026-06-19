@@ -22,7 +22,6 @@ import Presentation from "@lucide/svelte/icons/presentation";
 
 import type { Component } from "svelte";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type IconComponent = Component<any>;
 
 export interface NavItem {
