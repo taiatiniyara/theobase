@@ -1,0 +1,23 @@
+{
+  "name": "@theobase/api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.8.0",
+    "@theobase/auth": "workspace:*",
+    "@theobase/db": "workspace:*",
+    "@theobase/email": "workspace:*",
+    "@theobase/shared": "workspace:*",
+    "drizzle-orm": "^0.38.0",
+    "hono": "^4.12.26",
+    "jose": "^6.2.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250600.0",
+    "wrangler": "^3.107.0"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "theobase",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.8",
+    "@types/better-sqlite3": "^7.6.13",
+    "miniflare": "^4.20260617.0",
+    "vitest": "^3.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.11.1",
+    "drizzle-kit": "^0.30.0",
+    "drizzle-orm": "^0.38.0"
+  }
+}

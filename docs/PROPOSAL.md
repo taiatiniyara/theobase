@@ -19,8 +19,11 @@ volunteers—clerks, treasurers, deacons, and elders—drowning in messy group
 chats, lost paper trails, complex spreadsheets, and manual weekend calculations.
 
 **Theobase** is built from the ground up for the local church. It automates
-weekly scheduling, simplifies local budgeting, tracks youth ministries, and
-organizes church board meetings.
+weekly platform scheduling, simplifies local treasury work, tracks membership
+records and baptisms, manages youth ministries, organizes board governance,
+secures nominating committee ballots, coordinates pastoral districts, prepares
+conference statistical reports, and keeps every department — from Pathfinders
+to Dorcas to Health Ministries — running on one unified platform.
 
 Crucially, **Theobase does not act as a bank or a payment system.** Instead, it
 serves as a secure **Digital Filing Cabinet**. Members donate using the local
@@ -41,9 +44,11 @@ non-technical rules:
   the internet drops out during a Sabbath service, the app saves everything
   locally on the user's phone or tablet and automatically syncs the moment a
   signal returns.
-- **Total Safety and Privacy:** Built to match international privacy rules. A
-  church’s data stays securely locked and physically hosted within its own
-  geographic region, keeping member records fully protected.
+- **Total Safety and Privacy:** Built to comply with GDPR and equivalent
+  international data-protection regulations (Kenya's DPA, Nigeria's NDPR,
+  Brazil's LGPD, and others). A church's data stays securely encrypted and
+  physically hosted within its own geographic region, keeping member records
+  fully protected.
 - **Zero Financial Middlemen:** Because money moves directly from the member's
   personal banking app to the church's official bank account, no tech company
   takes a percentage of the tithe or offerings.
@@ -61,7 +66,7 @@ week, and exactly how Theobase fixes them.
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **1. The Church Board Paper Trail:** No organized way to build meeting agendas, take minutes, verify voting quorums, or find past decisions.                      | Endless email threads, loose paper folders, and scattered Word documents.       | **Boardroom Management Ledger:** An automated agenda builder, digital voting tracking, and a searchable archive of all past board decisions.                |
 | **2. Nominating Committee Privacy:** Annual or biennial officer elections require complete confidentiality, role matching, and tracking who accepted or declined. | Paper ballots hidden in boxes, manual hand-tallies, or insecure spreadsheets.   | **Secure Nominating Vault:** A completely confidential, digital ballot box that tracks invitations and candidate responses in real-time.                    |
-| **3. Saturday Platform Scheduling:** Coordinating ordained elders, deacons, preachers, and musicians for the main worship service.                                | Frantic, last-minute WhatsApp groups and emergency phone calls on Friday night. | **Smart-Swap Duty Rota:** A calendar scheduler that automatically alerts volunteers of their duties and offers declined slots to pre-qualified substitutes. |
+| **3. Saturday Platform Scheduling:** Coordinating ordained elders, deacons, preachers, and musicians for the main worship service.                                | Frantic, last-minute WhatsApp groups and emergency phone calls on Friday night. | **Smart-Swap Duty Rota:** A calendar scheduler that automatically notifies volunteers via in-app WebSocket alert and email when their duty week is coming up, and offers declined slots to pre-qualified substitutes. |
 | **4. Volunteer Safety Clearances:** No simple, local way to track background checks and child protection certifications for youth leaders.                        | Outdated spreadsheets managed sporadically by an overworked church clerk.       | **Volunteer Safety Shield:** A scheduling guardrail that flags expired safety clearances and gently pauses uncertified volunteers from youth duties.        |
 
 ### Finance & Treasury
@@ -86,9 +91,9 @@ week, and exactly how Theobase fixes them.
 
 | The Practical Problem                                                                                                                                       | The Messy Manual Workaround                                                                     | The Theobase Solution                                                                                                                                                      |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **13. "Sabbath-First" Software Clashes:** Standard church apps follow a Sabbath paradigm, missing the Friday-sunset-to-Saturday-sunset cycle.               | Church leaders manually sending text reminders because generic apps send automated alerts late. | **Sabbath-Calibrated Timing Engine:** Automated notifications calibrated to local Friday sunset times, keeping reminders aligned with the sacred hours.                    |
+| **13. "Sunday-First" Software Clashes:** Standard church apps follow a Sunday paradigm, missing the Friday-sunset-to-Saturday-sunset cycle.               | Church leaders manually sending text reminders because generic apps send automated alerts late. | **Sabbath-Calibrated Timing Engine:** Real-time WebSocket notifications paired with email delivery, all calibrated to local Friday sunset times so reminders never arrive during sacred hours.                    |
 | **14. Communion Logistics:** Coordinating the venue splits, towel inventories, and rapid room transitions required for the Ordinance of Humility.           | Verbal coordination and heavy reliance on the memory of older deacons and deaconesses.          | **Communion Service Planner:** A structural planning map for communion rooms, volunteer team allocations, and bread/wine inventory management.                             |
-| **15. Pulpit-to-AV Booth Miscommunication:** Last-minute changes to scripture readings or hymns made on the pulpit do not reach the media team in the back. | Running physical notes down the aisle or frantic hand signals across a packed sanctuary.        | **Pulpit-to-AV Live-Sync:** An instant wireless link connecting the pulpit's order of service directly to screen presentation software (like EasyWorship or ProPresenter). |
+| **15. Pulpit-to-AV Booth Miscommunication:** Last-minute changes to scripture readings or hymns made on the pulpit do not reach the media team in the back. | Running physical notes down the aisle or frantic hand signals across a packed sanctuary.        | **Pulpit-to-AV Live-Sync:** A real-time WebSocket link connecting the pulpit's order of service directly to screen presentation software (like EasyWorship or ProPresenter), updating slides the moment a change is made. |
 
 ### District Strategy
 
@@ -103,7 +108,7 @@ week, and exactly how Theobase fixes them.
 | The Practical Problem                                                                                                                                              | The Messy Manual Workaround                                                                                                     | The Theobase Solution                                                                                                                                                                                                                 |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **19. Member Profile & Self-Service:** Members have no way to view their giving history, update contact details, or see their ministry involvement without calling the clerk. | Clerks fielding repetitive phone calls and manually updating spreadsheets whenever a member changes phone numbers or addresses. | **Member Self-Service Portal:** Each member receives a secure profile where they can update their own details, view a personal giving summary, and see their ministry involvement record at any time.                                  |
-| **20. Family & Household Gap:** Membership is tracked individually, but tithe returns, Sabbath School records, and pastoral visits operate at the household level with no digital bridge. | Clerks keeping mental notes about which members belong to which household, leading to incomplete family ministry records.        | **Household Relationship Mapper:** A unified family view linking spouses, children, and dependants, enabling household-level giving summaries, pastoral visit planning, and children's ministry tracking.                              |
+| **20. Family & Household Gap:** Membership is tracked individually, but giving records, Sabbath School rolls, and pastoral visits operate at the household level with no digital bridge. | Clerks keeping mental notes about which members belong to which household, leading to incomplete family ministry records.        | **Household Relationship Mapper:** A unified family view linking spouses, children, and dependants, enabling household-level giving summaries, pastoral visit planning, and children's ministry tracking.                              |
 | **21. Baptism & Profession of Faith Tracking:** No integrated tool for tracking Bible study interests, baptismal candidates, and decisions — a core metric for every SDA congregation. | Paper decision cards collected during evangelistic series, stored in shoeboxes, and manually tallied for quarterly conference reports. | **Harvest Decision Tracker:** A pipeline from first Bible study interest through baptismal preparation, recording baptismal dates, officiating pastors, and profession-of-faith decisions for accurate membership growth reporting.    |
 | **22. Membership Transfer Bottleneck:** Letters of transfer between churches move through slow postal mail or unsecured email, taking months while members attend without formal transfer. | Handwritten transfer requests sent via post, lost in transit, or delayed indefinitely.                                           | **Digital Transfer & Reception Desk:** A secure, traceable workflow for requesting, approving, and receiving membership transfers between congregations, with automatic record handover once both churches confirm.                     |
 
@@ -112,21 +117,21 @@ week, and exactly how Theobase fixes them.
 | The Practical Problem                                                                                                                                              | The Messy Manual Workaround                                                                                                     | The Theobase Solution                                                                                                                                                                                                                 |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **23. Conference & Mission Reporting:** Local churches must submit quarterly statistical reports to their conference (membership, finances, baptisms, attendance). A local-only platform creates duplicate data entry. | Manually copying figures from local spreadsheets into the conference's separate online reporting portal, prone to transcription errors. | **Conference Report Generator:** A one-click export that compiles the local church's operational data into the standard conference statistical report format, eliminating double data entry while keeping the local-first philosophy. |
-| **24. Church Manual & Working Policy Compliance:** Denominational policy mandates specific record-keeping standards, financial controls, and membership governance that volunteers often violate unknowingly. | Overworked volunteers breaching policy unaware because no automated guardrail flags non-compliance.                               | **Policy Compliance Guardrails:** Built-in checks aligned with the SDA _Church Manual_ — from quorum verification and financial audit trails to membership discipline record-keeping — ensuring volunteers operate within policy by default. |
+| **24. Church Manual & Working Policy Compliance:** Denominational policy mandates specific record-keeping standards, financial controls, and membership governance that volunteers often violate unknowingly. | Overworked volunteers unknowingly breaching policy because no automated guardrail flags non-compliance.                               | **Policy Compliance Guardrails:** Built-in checks aligned with the SDA _Church Manual_ — from quorum verification and financial audit trails to membership discipline record-keeping — ensuring volunteers operate within policy by default. |
 
 ---
 
 ## 4. How the "Digital Tithe Envelope" Works
 
-Because Seventh-day Adventist giving requires precise splits (separating tithe
-from local church operational budgets), the app replaces physical paper
-envelopes with a simple **Digital Tithe Envelope**.
+Because Seventh-day Adventist giving requires precise fund allocation across
+tithe, local church budget, and department offerings, the app replaces physical
+paper envelopes with a simple **Digital Tithe Envelope**.
 
 1. **The Member’s Experience:** A member sends money to the church’s bank using
    their phone, takes a screenshot of the receipt, and uploads it to the app.
-   Below the photo, they type out their desired split: _Tithe: $70, Local
-   Budget: $20, Pathfinders: $10_. The app makes sure the breakdown matches the
-   receipt total before submission.
+    Below the photo, they type out their desired split: _Tithe: $70, Church
+    Budget: $20, Pathfinders: $10_. The app makes sure the breakdown
+    matches the receipt total before submission.
 2. **The Treasurer’s Experience:** Each week, the treasurer opens a clean
    digital list. They see the member's name, the uploaded receipt image, and the
    requested fund breakdown. They verify the deposit on their bank statement and
@@ -160,6 +165,18 @@ granular permission model out of the box:
 The **Secure Nominating Vault** and **Community Welfare CRM** operate under
 additional encryption and access isolation, ensuring that only explicitly
 authorized officers can view nomination ballots or welfare case histories.
+
+### Authentication & Account Security
+
+Users log in with **email-based passwordless authentication**. A secure
+magic link or one-time code is sent to the user's email address — no
+passwords to remember, no password database to breach. This approach is
+deliberately aligned with the elderly-volunteer accessibility goal: a
+church elder who struggles with passwords simply opens their email and taps
+the link. Accounts are protected by rate-limited login attempts, automatic
+session expiry after inactivity, and mandatory two-factor verification
+for roles handling financial or confidential data (treasurers, clerks,
+nominating committee members).
 
 ### Multi-Language & Global Readiness
 
@@ -209,7 +226,7 @@ reduced vision, or dexterity challenges. Theobase prioritizes:
 
 Theobase is delivered as a **Progressive Web Application (PWA)** — no app
 store download required. A volunteer simply visits the church's Theobase URL
-and adds it to their home screen. This approach provides:
+and adds it to their home screen. The PWA approach provides:
 
 - **Instant deployment** across iOS, Android, and desktop browsers from a
   single codebase.
@@ -219,6 +236,22 @@ and adds it to their home screen. This approach provides:
   smartphones with limited internal memory common in developing regions.
 - **Over-the-air updates** that don't require re-downloading from an app
   store over expensive or slow mobile data connections.
+
+### Real-Time & Notification Strategy
+
+All live communication within the platform runs over **WebSockets**. When a
+user has the app open, changes stream instantly: duty rota swaps appear as
+they happen, board meeting minutes sync across participants, and pulpit
+order-of-service changes reach the AV booth before the elder finishes
+speaking. The same WebSocket channel delivers in-app notification toasts
+for time-sensitive actions.
+
+Every notification is also delivered by **email** as a guaranteed fallback.
+If a volunteer isn't looking at their phone when a duty reminder fires, the
+email ensures they still receive it. This dual-channel approach means the
+platform avoids the iOS PWA push-notification gap entirely — the WebSocket
+handles the active-user case, and email guarantees delivery for everyone
+else.
 
 ### Data Resilience & Backup
 
@@ -270,7 +303,7 @@ When a church first signs up, a step-by-step wizard walks the clerk through:
 3. Setting up department rosters (Pathfinders, Sabbath School divisions,
    Dorcas, Health).
 4. Configuring the church's bank account details for receipt verification.
-5. Inviting officers via secure email or SMS links.
+5. Inviting officers via secure email links.
 
 ### Migration Templates & Bulk Import
 
@@ -323,9 +356,23 @@ logical steps:
 
 By charging an **Annual Subscription of $60 USD** (the equivalent of just $5 a
 month), local congregations can easily fund the platform out of their basic
-administrative budget.
+administrative budget. Every church receives a **30-day free trial** with no
+payment details required — the church only pays once they've migrated their
+data, trained their officers, and confirmed the platform works for their
+specific needs.
 
-Because the app is built on edge-computing infrastructure with near-zero idle
-costs, the system can scale globally at minimal expense. This lean architecture
-keeps overhead low while delivering premium customer support and continuous
-security updates directly back to local fields.
+Because the platform runs on serverless edge infrastructure, a typical church
+spends most of the month incurring near-zero compute cost — the system only
+bills for the brief moments it actively processes requests. This lean
+architecture keeps overhead low while delivering reliable customer support
+and continuous security updates directly back to local fields.
+
+---
+
+## 9. About Theobase
+
+Theobase is a self-funded initiative built by an Adventist technologist with
+deep experience in both local church operations and modern web infrastructure.
+The platform is developed in close consultation with active local church
+officers — clerks, treasurers, pastors, and department leaders — to ensure
+every feature solves a real problem a real volunteer faced last Sabbath.

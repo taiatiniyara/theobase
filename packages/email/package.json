@@ -1,0 +1,10 @@
+{
+  "name": "@theobase/email",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@theobase/shared": "workspace:*"
+  }
+}

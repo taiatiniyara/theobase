@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
+  "name": "theobase-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-06-19",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "theobase-spd",
+      "database_id": "f0498166-49c6-448f-8148-cb9790a8d558"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "STORAGE",
+      "bucket_name": "theobase-receipts"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@theobase/auth",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@theobase/db": "workspace:*",
+    "@theobase/email": "workspace:*",
+    "@theobase/shared": "workspace:*",
+    "hono": "^4.12.26",
+    "jose": "^6.2.3"
+  }
+}
