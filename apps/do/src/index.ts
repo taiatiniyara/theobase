@@ -1,5 +1,11 @@
 import { DurableObject } from "cloudflare:workers";
 
+export default {
+  async fetch(request: Request): Promise<Response> {
+    return new Response("Theobase DO Worker", { status: 200 });
+  },
+};
+
 const CHANNELS = ["board", "rota", "av", "notifications"] as const;
 
 interface BroadcastMessage {
@@ -29,73 +35,58 @@ export class CongregationDO extends DurableObject {
     return new Response("Congregation DO", { status: 200 });
   }
 
-  // RPC: Broadcast a board meeting was created or updated
   async meetingUpdated(meeting: { id: string; status: string; date: string }): Promise<void> {
     this.broadcast("board", { type: "meeting_updated", meeting });
   }
 
-  // RPC: Broadcast a board decision was recorded
   async decisionRecorded(meetingId: string, decision: { id: string; title: string; voteOutcome: string }): Promise<void> {
     this.broadcast("board", { type: "decision_recorded", meetingId, decision });
   }
 
-  // RPC: Broadcast duty rota changes
   async rotaUpdated(date: string, slots: unknown[]): Promise<void> {
     this.broadcast("rota", { type: "rota_updated", date, slots });
   }
 
-  // RPC: Broadcast a specific slot was assigned
   async slotAssigned(slot: { id: string; role: string; volunteerId: string; date: string }): Promise<void> {
     this.broadcast("rota", { type: "slot_assigned", slot });
   }
 
-  // RPC: Broadcast a slot swap request
   async slotSwapRequested(slot: { id: string; fromVolunteerId: string; date: string }): Promise<void> {
     this.broadcast("rota", { type: "swap_requested", slot });
   }
 
-  // RPC: Broadcast AV order of service update (pulpit-to-AV sync)
   async orderUpdated(date: string, items: unknown[]): Promise<void> {
     this.broadcast("av", { type: "order_updated", date, items });
   }
 
-  // RPC: Broadcast current slide position changed (live sync)
   async slideChanged(slideIndex: number, slideLabel?: string): Promise<void> {
     this.broadcast("av", { type: "slide_changed", slideIndex, slideLabel });
   }
 
-  // RPC: Send targeted notification to a user
   async notifyUser(userId: string, message: string): Promise<void> {
     this.broadcast("notifications", { type: "notification", userId, message, timestamp: Date.now() });
   }
 
-  // RPC: Broadcast a global congregation notification
   async notifyCongregation(message: string): Promise<void> {
     this.broadcast("notifications", { type: "congregation_notification", message, timestamp: Date.now() });
   }
 
-  // RPC: Schedule a duty reminder alarm
   async scheduleReminder(at: number, data: { date: string; role: string; volunteerId: string }): Promise<void> {
     await this.ctx.storage.setAlarm(at);
     await this.ctx.storage.put("pendingReminder", data);
   }
 
-  // Alarm handler: fires at scheduled time
   override async alarm(): Promise<void> {
     const data = await this.ctx.storage.get<{ date: string; role: string; volunteerId: string }>("pendingReminder");
     if (data) {
       this.broadcast("notifications", {
-        type: "duty_reminder",
-        date: data.date,
-        role: data.role,
-        volunteerId: data.volunteerId,
-        timestamp: Date.now(),
+        type: "duty_reminder", date: data.date, role: data.role,
+        volunteerId: data.volunteerId, timestamp: Date.now(),
       });
       await this.ctx.storage.delete("pendingReminder");
     }
   }
 
-  // RPC: Get connected client count (for monitoring)
   async connectedCount(): Promise<Record<string, number>> {
     const counts: Record<string, number> = {};
     for (const channel of CHANNELS) {
@@ -120,7 +111,7 @@ export class CongregationDO extends DurableObject {
     if (!clients) return;
     const msg = JSON.stringify(data);
     for (const ws of clients) {
-      try { ws.send(msg); } catch { /* client disconnected between check and send */ }
+      try { ws.send(msg); } catch { /* disconnected */ }
     }
   }
 
