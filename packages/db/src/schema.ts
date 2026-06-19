@@ -51,7 +51,7 @@ export const authToken = sqliteTable("auth_token", {
 
 export const role = sqliteTable("role", {
   id: text("id").primaryKey(),
-  personId: text("person_id").references(() => person.id).notNull(),
+  personId: text("person_id").references(() => person.id),
   congregationId: text("congregation_id").references(() => congregation.id).notNull(),
   roleType: text("role_type", {
     enum: ["clerk", "treasurer", "elder", "deacon", "deaconess", "department_leader", "pastor", "district_pastor", "member"],

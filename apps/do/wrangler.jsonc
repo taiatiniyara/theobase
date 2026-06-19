@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
+  "name": "theobase-do",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-06-19",
+  "compatibility_flags": ["nodejs_compat"],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CONGREGATION_DO",
+        "class_name": "CongregationDO"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["CongregationDO"]
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

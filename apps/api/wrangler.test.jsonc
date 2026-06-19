@@ -16,23 +16,5 @@
       "binding": "STORAGE",
       "bucket_name": "theobase-receipts"
     }
-  ],
-  "durable_objects": {
-    "bindings": [
-      {
-        "name": "CONGREGATION_DO",
-        "class_name": "CongregationDO",
-        "script_name": "theobase-do"
-      }
-    ]
-  },
-  "send_email": [
-    {
-      "name": "THEOBASE_EMAIL",
-      "destination_address": "messenger@theobase.net"
-    }
-  ],
-  "observability": {
-    "enabled": true
-  }
+  ]
 }

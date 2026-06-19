@@ -2,11 +2,30 @@ import { Hono } from "hono";
 import { drizzle, type DrizzleD1Database } from "drizzle-orm/d1";
 import * as schema from "@theobase/db";
 import { eq, and, isNull, asc } from "drizzle-orm";
-import { generateToken, createJwt, getTokenTtlSeconds, requireAuth as createRequireAuth } from "@theobase/auth";
+import { generateToken, createJwt, getTokenTtlSeconds, requireAuth as createRequireAuth, requireCongregation as createRequireCongregation, requireRole as createRequireRole } from "@theobase/auth";
 import { createEmailSender } from "@theobase/email";
 import { generateId, z } from "@theobase/shared";
 
 const requireAuth = createRequireAuth();
+const requireCongregation = createRequireCongregation();
+
+async function loadUserRoles(db: DrizzleD1Database<typeof schema>, userId: string, congregationId?: string): Promise<string[]> {
+  if (!congregationId) return [];
+
+  const [user] = await db
+    .select({ personId: schema.user.personId })
+    .from(schema.user)
+    .where(eq(schema.user.id, userId));
+
+  if (!user?.personId) return [];
+
+  const roleRows = await db
+    .select({ roleType: schema.role.roleType })
+    .from(schema.role)
+    .where(and(eq(schema.role.personId, user.personId), eq(schema.role.congregationId, congregationId)));
+
+  return roleRows.map((r) => r.roleType);
+}
 
 function getEmailSender(c: any) {
   const env = c.env as Bindings;
@@ -121,6 +140,59 @@ app.post("/auth/verify", async (c) => {
     user = { id, email: found.email, personId: null, congregationId: null, createdAt: now };
   }
 
+  // Auto-assign pending roles: if user has no congregation, check invite tokens
+  if (!user.congregationId) {
+    // Try to link user to a person record with matching email
+    let personId = user.personId;
+    if (!personId) {
+      const [person] = await db
+        .select({ id: schema.person.id, congregationId: schema.person.congregationId })
+        .from(schema.person)
+        .where(eq(schema.person.email, found.email));
+      if (person) {
+        personId = person.id;
+        await db
+          .update(schema.user)
+          .set({ personId: person.id, congregationId: person.congregationId })
+          .where(eq(schema.user.id, user.id));
+        user.personId = person.id;
+        user.congregationId = person.congregationId;
+      }
+    }
+
+    if (personId) {
+      const [person] = await db
+        .select({ congregationId: schema.person.congregationId })
+        .from(schema.person)
+        .where(eq(schema.person.id, personId));
+
+      if (person?.congregationId) {
+        const pendingRoles = await db
+          .select()
+          .from(schema.role)
+          .where(and(
+            eq(schema.role.congregationId, person.congregationId),
+            isNull(schema.role.personId)
+          ));
+
+        for (const role of pendingRoles) {
+          await db
+            .update(schema.role)
+            .set({ personId })
+            .where(eq(schema.role.id, role.id));
+        }
+
+        if (!user.congregationId) {
+          await db
+            .update(schema.user)
+            .set({ congregationId: person.congregationId })
+            .where(eq(schema.user.id, user.id));
+          user.congregationId = person.congregationId;
+        }
+      }
+    }
+  }
+
   const jwt = await createJwt({ userId: user.id, congregationId: user.congregationId ?? undefined }, c.env.JWT_SECRET || "theobase-dev-secret-change-in-production");
   c.header("Set-Cookie", `token=${jwt}; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=86400`);
   return c.json({ ok: true, userId: user.id, token: jwt });
@@ -128,6 +200,9 @@ app.post("/auth/verify", async (c) => {
 
 app.get("/me", requireAuth, async (c) => {
   const db = getDb(c);
+  const userId = c.get("userId");
+  const congregationId = c.get("congregationId");
+
   const [row] = await db
     .select({
       id: schema.user.id,
@@ -142,9 +217,33 @@ app.get("/me", requireAuth, async (c) => {
     })
     .from(schema.user)
     .leftJoin(schema.person, eq(schema.user.personId, schema.person.id))
-    .where(eq(schema.user.id, c.get("userId")));
+    .where(eq(schema.user.id, userId));
 
   if (!row) return c.json({ error: "User not found" }, 404);
+
+  const personId = row.personId;
+
+  const giving = { totalReceipts: 0, approvedCount: 0, pendingCount: 0, totalAmount: 0 };
+  const roles: string[] = [];
+
+  if (personId && congregationId) {
+    const receipts = await db
+      .select()
+      .from(schema.receipt)
+      .where(and(eq(schema.receipt.memberId, personId), eq(schema.receipt.congregationId, congregationId)));
+
+    giving.totalReceipts = receipts.length;
+    giving.approvedCount = receipts.filter((r) => r.status === "approved").length;
+    giving.pendingCount = receipts.filter((r) => r.status === "pending").length;
+    giving.totalAmount = receipts.reduce((sum, r) => sum + r.amount, 0);
+
+    const roleRows = await db
+      .select({ roleType: schema.role.roleType })
+      .from(schema.role)
+      .where(and(eq(schema.role.personId, personId), eq(schema.role.congregationId, congregationId)));
+
+    roles.push(...roleRows.map((r) => r.roleType));
+  }
 
   return c.json({
     id: row.id,
@@ -156,6 +255,8 @@ app.get("/me", requireAuth, async (c) => {
     phone: row.phone,
     address: row.address,
     isMember: !!row.isMember,
+    giving,
+    roles,
   });
 });
 
@@ -283,13 +384,20 @@ const updateCongregationSchema = z.object({
 });
 
 app.patch("/congregations/:id", requireAuth, async (c) => {
+  const db = getDb(c);
+  const userId = c.get("userId");
+  const congregationId = c.get("congregationId");
+  const roles = await loadUserRoles(db, userId, congregationId);
+  if (!roles.includes("clerk")) {
+    return c.json({ error: "Insufficient permissions" }, 403);
+  }
+
   const body = await c.req.json();
   const parsed = updateCongregationSchema.safeParse(body);
   if (!parsed.success) {
     return c.json({ error: parsed.error.issues }, 400);
   }
 
-  const db = getDb(c);
   const congId = c.req.param("id");
 
   const updates: Record<string, any> = {};
@@ -316,15 +424,122 @@ app.post("/congregations/:id/invite", requireAuth, async (c) => {
     return c.json({ error: "Email and role required" }, 400);
   }
 
+  const db = getDb(c);
   const congId = c.req.param("id");
+  const userId = c.get("userId");
+  const congregationId = c.get("congregationId");
+
+  // Only clerk can invite
+  const roles = await loadUserRoles(db, userId, congregationId);
+  if (!roles.includes("clerk")) {
+    return c.json({ error: "Insufficient permissions" }, 403);
+  }
+
+  // Create a pending role without a person (personId will be set when invitee logs in)
+  const existingRoles = await db
+    .select()
+    .from(schema.role)
+    .where(and(eq(schema.role.congregationId, congId), eq(schema.role.roleType, role as any)));
+
+  // Only create if no existing role of this type for this congregation
+  if (existingRoles.length === 0) {
+    await db.insert(schema.role).values({
+      id: generateId(),
+      personId: null,
+      congregationId: congId,
+      roleType: role as any,
+      createdAt: new Date().toISOString(),
+    });
+  }
+
+  // Generate invite token
+  const token = generateToken();
+  const now = new Date().toISOString();
+  await db.insert(schema.authToken).values({
+    id: generateId(),
+    email: email.toLowerCase(),
+    token,
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days
+    createdAt: now,
+  });
 
   const sendEmail = getEmailSender(c); await sendEmail({
     to: email,
     subject: "You've been invited to Theobase",
-    html: `<p>You have been invited to join a congregation on Theobase as <strong>${role}</strong>.</p><p>Click the link below to sign up:</p><p><a href="https://theobase.app/join?congregation=${congId}&role=${role}">Join Theobase</a></p>`,
+    html: `<p>You have been invited to join a congregation on Theobase as <strong>${role}</strong>.</p><p>Click the link below to sign up:</p><p><a href="https://theobase.app/join?congregation=${congId}&role=${role}&token=${token}">Join Theobase</a></p>`,
   });
 
   return c.json({ ok: true });
+});
+
+const importMemberSchema = z.object({
+  csv: z.string().min(1),
+});
+
+app.post("/congregations/:id/members/import", requireAuth, async (c) => {
+  const db = getDb(c);
+  const userId = c.get("userId");
+  const congregationId = c.get("congregationId");
+  const roles = await loadUserRoles(db, userId, congregationId);
+  if (!roles.includes("clerk")) {
+    return c.json({ error: "Insufficient permissions" }, 403);
+  }
+
+  const body = await c.req.json();
+  const parsed = importMemberSchema.safeParse(body);
+  if (!parsed.success) {
+    return c.json({ error: parsed.error.issues }, 400);
+  }
+
+  const congId = c.req.param("id");
+  const lines = parsed.data.csv.trim().split("\n");
+  if (lines.length < 2) {
+    return c.json({ error: "CSV must have header and at least one row" }, 400);
+  }
+
+  const headers = lines[0].split(",").map((h) => h.trim());
+  const rows = lines.slice(1).map((l) => l.split(",").map((c) => c.trim()));
+
+  const now = new Date().toISOString();
+  const personIds: string[] = [];
+  const errors: { row: number; message: string }[] = [];
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const record: Record<string, string> = {};
+    for (let j = 0; j < headers.length; j++) {
+      record[headers[j]] = row[j] || "";
+    }
+
+    const firstName = record["firstName"] || "";
+    const lastName = record["lastName"] || "";
+    const email = record["email"] || "";
+
+    if (!firstName || !lastName) {
+      errors.push({ row: i + 2, message: "Missing firstName or lastName" });
+      continue;
+    }
+
+    const id = generateId();
+    try {
+      await db.insert(schema.person).values({
+        id,
+        congregationId: congId,
+        firstName,
+        lastName,
+        email: email || null,
+        phone: record["phone"] || null,
+        isMember: record["isMember"]?.toLowerCase() === "true",
+        createdAt: now,
+        updatedAt: now,
+      });
+      personIds.push(id);
+    } catch (err: any) {
+      errors.push({ row: i + 2, message: err.message || "Failed to insert" });
+    }
+  }
+
+  return c.json({ imported: personIds.length, errors, personIds }, personIds.length > 0 ? 201 : 200);
 });
 
 const createReceiptSchema = z.object({

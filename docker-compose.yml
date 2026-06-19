@@ -1,0 +1,31 @@
+services:
+  smtp-relay:
+    build:
+      context: ./apps/relay
+      dockerfile: Dockerfile
+    ports:
+      - "3113:3113"
+    environment:
+      - PORT=3113
+      - RELAY_TOKEN=theobase-relay-dev-token
+      - SMTP_HOST=smtp.hostinger.com
+      - SMTP_PORT=465
+      - SMTP_USER=messenger@theobase.net
+      - SMTP_PASS=${SMTP_PASS:-}
+    restart: unless-stopped
+
+  api:
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "corepack enable && pnpm install && pnpm run dev --filter @theobase/api"
+    ports:
+      - "8787:8787"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - SMTP_RELAY_URL=http://smtp-relay:3113
+      - SMTP_RELAY_TOKEN=theobase-relay-dev-token
+      - JWT_SECRET=theobase-dev-secret-change-in-production
+    depends_on:
+      - smtp-relay

@@ -2,6 +2,7 @@ import { env, createExecutionContext, waitOnExecutionContext } from "cloudflare:
 import { describe, it, expect, beforeAll } from "vitest";
 import worker from "../src/index";
 import { createJwt, verifyJwt } from "@theobase/auth";
+import { applyMigrations, MIGRATION_STATEMENTS } from "@theobase/db";
 
 const TEST_SECRET = "theobase-dev-secret-change-in-production";
 
@@ -48,53 +49,8 @@ async function authenticate(email: string): Promise<{ cookie: string; userId: st
   return { cookie: cookieField, userId: body.userId };
 }
 
-const MIGRATION_STATEMENTS = [
-  `CREATE TABLE IF NOT EXISTS auth_token (id text PRIMARY KEY NOT NULL, email text NOT NULL, token text NOT NULL, expires_at text NOT NULL, used_at text, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS organization (id text PRIMARY KEY NOT NULL, name text NOT NULL, type text NOT NULL, parent_id text, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS congregation (id text PRIMARY KEY NOT NULL, name text NOT NULL, type text NOT NULL, parent_id text, parent_type text, organization_id text REFERENCES organization(id), timezone text DEFAULT 'UTC' NOT NULL, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS person (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), first_name text NOT NULL, last_name text NOT NULL, email text, phone text, address text, is_member integer DEFAULT false, created_at text NOT NULL, updated_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS department (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), name text NOT NULL, type text NOT NULL, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS role (id text PRIMARY KEY NOT NULL, person_id text NOT NULL REFERENCES person(id), congregation_id text NOT NULL REFERENCES congregation(id), role_type text NOT NULL, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS "user" (id text PRIMARY KEY NOT NULL, email text NOT NULL, person_id text REFERENCES person(id), congregation_id text REFERENCES congregation(id), created_at text NOT NULL)`,
-  `CREATE UNIQUE INDEX IF NOT EXISTS user_email_unique ON "user" (email)`,
-  `CREATE TABLE IF NOT EXISTS receipt (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), member_id text NOT NULL REFERENCES person(id), amount integer NOT NULL, fund_split text NOT NULL, image_key text, status text NOT NULL DEFAULT 'pending', verified_by_id text REFERENCES person(id), verified_at text, rejection_note text, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS board_meeting (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), date text NOT NULL, agenda text, status text NOT NULL DEFAULT 'draft', created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS board_minute (id text PRIMARY KEY NOT NULL, meeting_id text NOT NULL REFERENCES board_meeting(id), content text NOT NULL, revision_number integer NOT NULL DEFAULT 1, author_id text NOT NULL REFERENCES person(id), created_at text NOT NULL, updated_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS board_decision (id text PRIMARY KEY NOT NULL, meeting_id text NOT NULL REFERENCES board_meeting(id), number integer NOT NULL, title text NOT NULL, description text, mover_id text REFERENCES person(id), seconder_id text REFERENCES person(id), vote_outcome text, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS duty_slot (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), date text NOT NULL, role text NOT NULL, volunteer_id text REFERENCES person(id), status text NOT NULL DEFAULT 'open', created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS safety_clearance (id text PRIMARY KEY NOT NULL, volunteer_id text NOT NULL REFERENCES person(id), congregation_id text NOT NULL REFERENCES congregation(id), type text NOT NULL, issued_date text NOT NULL, expiry_date text NOT NULL, certificate_key text, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS expense (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), amount integer NOT NULL, description text NOT NULL, category text NOT NULL, receipt_id text REFERENCES receipt(id), board_decision_id text REFERENCES board_decision(id), created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS pathfinder_progress (id text PRIMARY KEY NOT NULL, member_id text NOT NULL REFERENCES person(id), class_name text NOT NULL, club_type text NOT NULL, status text NOT NULL DEFAULT 'in_progress', completed_at text, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS pathfinder_honor (id text PRIMARY KEY NOT NULL, member_id text NOT NULL REFERENCES person(id), name text NOT NULL, category text NOT NULL, earned_at text NOT NULL, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS sabbath_school_class (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), division text NOT NULL, name text NOT NULL, teacher_id text REFERENCES person(id), created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS sabbath_school_attendance (id text PRIMARY KEY NOT NULL, class_id text NOT NULL REFERENCES sabbath_school_class(id), date text NOT NULL, member_id text NOT NULL REFERENCES person(id), present integer NOT NULL, notes text, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS welfare_case (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), person_id text REFERENCES person(id), assistance_type text NOT NULL, description text NOT NULL, value integer, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS pantry_item (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), name text NOT NULL, quantity integer NOT NULL, unit text NOT NULL, updated_at text NOT NULL, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS health_event (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), name text NOT NULL, date text NOT NULL, type text NOT NULL, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS health_contact (id text PRIMARY KEY NOT NULL, event_id text NOT NULL REFERENCES health_event(id), congregation_id text NOT NULL REFERENCES congregation(id), name text NOT NULL, phone text, email text, interests text, follow_up_status text NOT NULL DEFAULT 'new', created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS household (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), name text NOT NULL, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS household_member (id text PRIMARY KEY NOT NULL, household_id text NOT NULL REFERENCES household(id), person_id text NOT NULL REFERENCES person(id), relationship text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS candidacy (id text PRIMARY KEY NOT NULL, person_id text NOT NULL REFERENCES person(id), congregation_id text NOT NULL REFERENCES congregation(id), stage text NOT NULL, start_date text NOT NULL, decision_date text, decision_type text, officiating_pastor_id text REFERENCES person(id), created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS communion_service (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), date text NOT NULL, status text NOT NULL DEFAULT 'planned', created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS communion_room (id text PRIMARY KEY NOT NULL, service_id text NOT NULL REFERENCES communion_service(id), name text NOT NULL, gender text NOT NULL, volunteer_ids text)`,
-  `CREATE TABLE IF NOT EXISTS communion_inventory (id text PRIMARY KEY NOT NULL, service_id text NOT NULL REFERENCES communion_service(id), item text NOT NULL, quantity integer NOT NULL, unit text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS av_order_of_service (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), date text NOT NULL, items text NOT NULL, updated_at text NOT NULL, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS district (id text PRIMARY KEY NOT NULL, name text NOT NULL, organization_id text REFERENCES organization(id), created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS district_congregation (id text PRIMARY KEY NOT NULL, district_id text NOT NULL REFERENCES district(id), congregation_id text NOT NULL REFERENCES congregation(id))`,
-  `CREATE TABLE IF NOT EXISTS preaching_rotation (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), date text NOT NULL, preacher_id text NOT NULL REFERENCES person(id), topic text, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS pastoral_visit (id text PRIMARY KEY NOT NULL, household_id text REFERENCES household(id), pastor_id text NOT NULL REFERENCES person(id), congregation_id text NOT NULL REFERENCES congregation(id), date text NOT NULL, purpose text, notes text, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS facility_booking (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), date text NOT NULL, time_start text NOT NULL, time_end text NOT NULL, purpose text NOT NULL, requester_id text REFERENCES person(id), status text NOT NULL DEFAULT 'pending', created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS congregation_asset (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), type text NOT NULL, description text, status text NOT NULL DEFAULT 'operational', updated_at text NOT NULL, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS transfer_request (id text PRIMARY KEY NOT NULL, member_id text NOT NULL REFERENCES person(id), from_congregation_id text NOT NULL REFERENCES congregation(id), to_congregation_id text NOT NULL REFERENCES congregation(id), status text NOT NULL DEFAULT 'requested', requested_by_id text REFERENCES person(id), approved_by_id text REFERENCES person(id), received_by_id text REFERENCES person(id), created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS nominating_session (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), year integer NOT NULL, status text NOT NULL DEFAULT 'open', opened_by_id text REFERENCES person(id), created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS nominating_role (id text PRIMARY KEY NOT NULL, session_id text NOT NULL REFERENCES nominating_session(id), role_type text NOT NULL, status text NOT NULL DEFAULT 'open', created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS nominating_candidate (id text PRIMARY KEY NOT NULL, role_id text NOT NULL REFERENCES nominating_role(id), person_id text NOT NULL REFERENCES person(id), nominated_by_id text REFERENCES person(id), status text NOT NULL DEFAULT 'nominated', created_at text NOT NULL)`,
-];
-
 async function runMigrations() {
-  for (const sql of MIGRATION_STATEMENTS) {
-    await env.DB.exec(sql);
-  }
+  await applyMigrations(env.DB, MIGRATION_STATEMENTS);
 }
 
 describe("auth", () => {
@@ -436,6 +392,9 @@ describe("congregation management", () => {
       await env.DB.exec(sql);
     }
     await env.DB.exec(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('con-1', 'Suva SDA Church', 'church', 'Pacific/Fiji', '2025-01-01T00:00:00Z')`);
+    await env.DB.exec(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('clerk-con1', 'con-1', 'Clerk', 'C1', 'clerk1@test.com', 1, '2025-01-01T00:00:00Z', '2025-01-01T00:00:00Z')`);
+    await env.DB.exec(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('clerk1-user', 'clerk1@test.com', 'clerk-con1', 'con-1', '2025-01-01T00:00:00Z')`);
+    await env.DB.exec(`INSERT INTO role (id, person_id, congregation_id, role_type, created_at) VALUES ('role-clerk-1', 'clerk-con1', 'con-1', 'clerk', '2025-01-01T00:00:00Z')`);
     (globalThis as any).__testEmails = [];
   });
 
@@ -488,7 +447,7 @@ describe("congregation management", () => {
   });
 
   it("PATCH /congregations/:id updates details", async () => {
-    const jwt = await createJwt({ userId: "clerk-1" });
+    const jwt = await createJwt({ userId: "clerk1-user", congregationId: "con-1" });
     const ctx = createExecutionContext();
     const res = await worker.fetch(
       new Request("http://localhost/congregations/con-1", {
@@ -510,7 +469,7 @@ describe("congregation management", () => {
   });
 
   it("POST /congregations/:id/invite sends officer invitation with role", async () => {
-    const jwt = await createJwt({ userId: "clerk-1" });
+    const jwt = await createJwt({ userId: "clerk1-user", congregationId: "con-1" });
     const ctx = createExecutionContext();
     const res = await worker.fetch(
       new Request("http://localhost/congregations/con-1/invite", {
@@ -1098,5 +1057,316 @@ describe("coordination", () => {
     expect(res.status).toBe(201);
     const body = await res.json();
     expect(body.year).toBe(2025);
+  });
+});
+
+describe("rls isolation", () => {
+  beforeAll(async () => {
+    for (const sql of MIGRATION_STATEMENTS) {
+      await env.DB.exec(sql);
+    }
+    await env.DB.exec(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('con-a', 'Church A', 'church', 'UTC', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('con-b', 'Church B', 'church', 'UTC', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('member-a', 'con-a', 'Alice', 'A', 'alice@a.org', 1, '2025-01-01', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('member-b', 'con-b', 'Bob', 'B', 'bob@b.org', 1, '2025-01-01', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('user-a', 'alice@a.org', 'member-a', 'con-a', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('user-b', 'bob@b.org', 'member-b', 'con-b', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO receipt (id, congregation_id, member_id, amount, fund_split, status, created_at) VALUES ('rec-a', 'con-a', 'member-a', 5000, '{"tithe":5000}', 'approved', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO receipt (id, congregation_id, member_id, amount, fund_split, status, created_at) VALUES ('rec-b', 'con-b', 'member-b', 9000, '{"church_budget":9000}', 'approved', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO board_meeting (id, congregation_id, date, status, created_at) VALUES ('meet-a', 'con-a', '2025-06-01', 'completed', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO board_meeting (id, congregation_id, date, status, created_at) VALUES ('meet-b', 'con-b', '2025-06-01', 'completed', '2025-01-01')`);
+  });
+
+  it("user from Church A cannot see Church B receipts", async () => {
+    const jwtA = await createJwt({ userId: "user-a", congregationId: "con-a" });
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(
+      new Request("http://localhost/receipts", {
+        method: "GET",
+        headers: { Cookie: `token=${jwtA}` },
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(Array.isArray(body)).toBe(true);
+    const ids = body.map((r: any) => r.id);
+    expect(ids).toContain("rec-a");
+    expect(ids).not.toContain("rec-b");
+  });
+
+  it("user from Church A cannot see Church B board meetings", async () => {
+    const jwtA = await createJwt({ userId: "user-a", congregationId: "con-a" });
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(
+      new Request("http://localhost/board/meetings", {
+        method: "GET",
+        headers: { Cookie: `token=${jwtA}` },
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    const ids = body.map((m: any) => m.id);
+    expect(ids).toContain("meet-a");
+    expect(ids).not.toContain("meet-b");
+  });
+
+  it("user without congregation gets empty results", async () => {
+    const jwtNoCong = await createJwt({ userId: "user-a", congregationId: undefined });
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(
+      new Request("http://localhost/receipts", {
+        method: "GET",
+        headers: { Cookie: `token=${jwtNoCong}` },
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body).toEqual([]);
+  });
+});
+
+describe("enhanced /me endpoint", () => {
+  beforeAll(async () => {
+    for (const sql of MIGRATION_STATEMENTS) {
+      await env.DB.exec(sql);
+    }
+    await env.DB.exec(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('con-1', 'Grace SDA', 'church', 'UTC', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO person (id, congregation_id, first_name, last_name, email, phone, is_member, created_at, updated_at) VALUES ('person-1', 'con-1', 'Mary', 'Member', 'mary@grace.org', '+679 111222', 1, '2025-01-01', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('user-1', 'mary@grace.org', 'person-1', 'con-1', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO role (id, person_id, congregation_id, role_type, created_at) VALUES ('role-1', 'person-1', 'con-1', 'elder', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO role (id, person_id, congregation_id, role_type, created_at) VALUES ('role-2', 'person-1', 'con-1', 'deaconess', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO receipt (id, congregation_id, member_id, amount, fund_split, status, created_at) VALUES ('rec-1', 'con-1', 'person-1', 7000, '{"tithe":5000,"church_budget":2000}', 'approved', '2025-06-01')`);
+    await env.DB.exec(`INSERT INTO receipt (id, congregation_id, member_id, amount, fund_split, status, created_at) VALUES ('rec-2', 'con-1', 'person-1', 3000, '{"tithe":3000}', 'pending', '2025-06-15')`);
+  });
+
+  it("GET /me returns giving summary", async () => {
+    const jwt = await createJwt({ userId: "user-1", congregationId: "con-1" });
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(
+      new Request("http://localhost/me", {
+        method: "GET",
+        headers: { Cookie: `token=${jwt}` },
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.email).toBe("mary@grace.org");
+    expect(body.giving).toBeDefined();
+    expect(body.giving.totalReceipts).toBe(2);
+    expect(body.giving.approvedCount).toBe(1);
+    expect(body.giving.pendingCount).toBe(1);
+    expect(body.giving.totalAmount).toBe(10000);
+  });
+
+  it("GET /me returns ministry roles", async () => {
+    const jwt = await createJwt({ userId: "user-1", congregationId: "con-1" });
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(
+      new Request("http://localhost/me", {
+        method: "GET",
+        headers: { Cookie: `token=${jwt}` },
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.roles).toBeDefined();
+    expect(body.roles).toHaveLength(2);
+    expect(body.roles).toContain("elder");
+    expect(body.roles).toContain("deaconess");
+  });
+});
+
+describe("csv member import", () => {
+  beforeAll(async () => {
+    for (const sql of MIGRATION_STATEMENTS) {
+      await env.DB.exec(sql);
+    }
+    await env.DB.exec(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('con-1', 'Test Church', 'church', 'UTC', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('clerk-1', 'con-1', 'Clerk', 'One', 'clerk@test.com', 1, '2025-01-01', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('clerk-user', 'clerk@test.com', 'clerk-1', 'con-1', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO role (id, person_id, congregation_id, role_type, created_at) VALUES ('role-clerk', 'clerk-1', 'con-1', 'clerk', '2025-01-01')`);
+  });
+
+  it("POST /congregations/:id/members/import creates persons from CSV", async () => {
+    const jwt = await createJwt({ userId: "clerk-user", congregationId: "con-1" });
+    const csv = "firstName,lastName,email,phone,isMember\nAlice,Smith,alice@test.com,+679 111,true\nBob,Jones,bob@test.com,+679 222,false";
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(
+      new Request("http://localhost/congregations/con-1/members/import", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Cookie: `token=${jwt}` },
+        body: JSON.stringify({ csv }),
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+    expect(res.status).toBe(201);
+    const body = await res.json();
+    expect(body.imported).toBe(2);
+    expect(body.errors).toHaveLength(0);
+    expect(body.personIds).toHaveLength(2);
+  });
+
+  it("POST /congregations/:id/members/import returns validation errors", async () => {
+    const jwt = await createJwt({ userId: "clerk-user", congregationId: "con-1" });
+    const csv = "firstName,lastName,email,phone,isMember\n,Smith,bademail,+679 111,true";
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(
+      new Request("http://localhost/congregations/con-1/members/import", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Cookie: `token=${jwt}` },
+        body: JSON.stringify({ csv }),
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.errors.length).toBeGreaterThan(0);
+  });
+});
+
+describe("officer invitation flow", () => {
+  beforeAll(async () => {
+    for (const sql of MIGRATION_STATEMENTS) {
+      await env.DB.exec(sql);
+    }
+    await env.DB.exec(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('con-1', 'Test Church', 'church', 'UTC', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('clerk-1', 'con-1', 'Clerk', 'One', 'clerk@test.com', 1, '2025-01-01', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('clerk-user', 'clerk@test.com', 'clerk-1', 'con-1', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO role (id, person_id, congregation_id, role_type, created_at) VALUES ('role-clerk', 'clerk-1', 'con-1', 'clerk', '2025-01-01')`);
+    (globalThis as any).__testEmails = [];
+  });
+
+  it("POST /congregations/:id/invite creates pending role and sends email", async () => {
+    const jwt = await createJwt({ userId: "clerk-user", congregationId: "con-1" });
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(
+      new Request("http://localhost/congregations/con-1/invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Cookie: `token=${jwt}` },
+        body: JSON.stringify({ email: "treasurer@test.com", role: "treasurer" }),
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.ok).toBe(true);
+
+    // Verify role was created as pending
+    const roles = await env.DB.prepare("SELECT * FROM role WHERE congregation_id = 'con-1'").all();
+    const pendingRole = roles.results.find((r: any) => r.role_type === "treasurer");
+    expect(pendingRole).toBeDefined();
+
+    // Verify email was sent with invite token
+    const emails = (globalThis as any).__testEmails;
+    const inviteEmail = emails[emails.length - 1];
+    expect(inviteEmail.to).toBe("treasurer@test.com");
+    expect(inviteEmail.html).toContain("treasurer");
+  });
+
+  it("invited officer logging in gets role assigned to their person record", async () => {
+    // First create an invite with a role
+    const jwtClerk = await createJwt({ userId: "clerk-user", congregationId: "con-1" });
+    const ctx = createExecutionContext();
+
+    await env.DB.exec(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('treas-1', 'con-1', 'Treas', 'Urer', 'treasurer@test.com', 1, '2025-01-01', '2025-01-01')`);
+
+    // Clerk invites treasurer
+    await worker.fetch(
+      new Request("http://localhost/congregations/con-1/invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Cookie: `token=${jwtClerk}` },
+        body: JSON.stringify({ email: "treasurer@test.com", role: "treasurer" }),
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+
+    // Treasurer requests magic link and verifies
+    await worker.fetch(
+      new Request("http://localhost/auth/request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "treasurer@test.com" }),
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+
+    const emails = (globalThis as any).__testEmails;
+    const tokenMatch = emails[emails.length - 1].html.match(/token=([a-f0-9]+)/);
+    const token = tokenMatch![1];
+
+    const verifyRes = await worker.fetch(
+      new Request("http://localhost/auth/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+    expect(verifyRes.status).toBe(200);
+
+    // Verify role is now assigned to the person
+    const roles = await env.DB.prepare("SELECT * FROM role WHERE congregation_id = 'con-1' AND role_type = 'treasurer'").all();
+    const assignedRole = roles.results.find((r: any) => r.person_id === "treas-1");
+    expect(assignedRole).toBeDefined();
+  });
+});
+
+describe("role-based permissions", () => {
+  beforeAll(async () => {
+    for (const sql of MIGRATION_STATEMENTS) {
+      await env.DB.exec(sql);
+    }
+    await env.DB.exec(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('con-1', 'Test Church', 'church', 'UTC', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('clerk-1', 'con-1', 'Clerk', 'One', 'clerk@test.com', 1, '2025-01-01', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('member-1', 'con-1', 'Member', 'One', 'member@test.com', 1, '2025-01-01', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('clerk-user', 'clerk@test.com', 'clerk-1', 'con-1', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('member-user', 'member@test.com', 'member-1', 'con-1', '2025-01-01')`);
+    await env.DB.exec(`INSERT INTO role (id, person_id, congregation_id, role_type, created_at) VALUES ('role-clerk', 'clerk-1', 'con-1', 'clerk', '2025-01-01')`);
+  });
+
+  it("non-clerk cannot modify congregation details", async () => {
+    const jwt = await createJwt({ userId: "member-user", congregationId: "con-1" });
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(
+      new Request("http://localhost/congregations/con-1", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Cookie: `token=${jwt}` },
+        body: JSON.stringify({ name: "Hacked Name" }),
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+    expect(res.status).toBe(403);
+  });
+
+  it("clerk can modify congregation details", async () => {
+    const jwt = await createJwt({ userId: "clerk-user", congregationId: "con-1" });
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(
+      new Request("http://localhost/congregations/con-1", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Cookie: `token=${jwt}` },
+        body: JSON.stringify({ timezone: "Pacific/Auckland" }),
+      }),
+      env, ctx
+    );
+    await waitOnExecutionContext(ctx);
+    expect(res.status).toBe(200);
   });
 });

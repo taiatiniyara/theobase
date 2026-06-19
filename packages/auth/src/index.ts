@@ -80,3 +80,23 @@ export function requireAuth(): MiddlewareHandler {
     await next();
   };
 }
+
+export function requireCongregation(): MiddlewareHandler {
+  return async (c, next) => {
+    const congregationId = c.get("congregationId");
+    if (!congregationId) {
+      return c.json({ error: "No congregation membership" }, 403);
+    }
+    await next();
+  };
+}
+
+export function requireRole(...roles: string[]): MiddlewareHandler {
+  return async (c, next) => {
+    const userRoles: string[] = c.get("userRoles") || [];
+    if (roles.length > 0 && !roles.some((r) => userRoles.includes(r))) {
+      return c.json({ error: "Insufficient permissions" }, 403);
+    }
+    await next();
+  };
+}

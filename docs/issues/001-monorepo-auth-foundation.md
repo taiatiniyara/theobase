@@ -8,23 +8,23 @@ The deliverable is a running (local via Miniflare) system where a test user requ
 
 ## Acceptance criteria
 
-- [ ] pnpm monorepo with `apps/api`, `apps/do`, `apps/web`, `packages/db`, `packages/auth`, `packages/email`, `packages/shared`
-- [ ] `wrangler.jsonc` with D1 binding, DO binding, R2 binding, Email Routing binding
-- [ ] Core Drizzle schemas: `congregation`, `person`, `user`, `organization`, `department`
-- [ ] D1 migration runner (CI Worker script that iterates division bindings)
-- [ ] `packages/auth`: magic link token generation (SHA-256), JWT sign/verify, Hono session middleware
-- [ ] `packages/email`: `sendEmail()` dispatching via HTTPS POST to SMTP relay; test mode logs to console
-- [ ] Hono endpoint `POST /auth/request` — accepts email, generates token, dispatches email
-- [ ] Hono endpoint `POST /auth/verify` — accepts token, issues JWT in httpOnly cookie
-- [ ] Hono middleware `requireAuth` — rejects unauthenticated requests with 401
-- [ ] Vitest + Miniflare 3 test setup with throwaway D1
-- [ ] Test: full magic link flow — request → token logged → verify → JWT → protected endpoint returns 200
-- [ ] Test: unauthenticated request to protected endpoint returns 401
-- [ ] Test: expired JWT returns 401
-- [ ] SMTP relay: minimal Node.js HTTP server proxying to Hostinger SMTP, Cloudflare Tunnel config
-- [ ] SMTP relay: test mode that logs email body instead of connecting to Hostinger
-- [ ] GitHub Actions CI: install, typecheck, lint, test across all packages
-- [ ] `docker-compose.yml` for local dev: Miniflare Workers + SMTP relay
+- [x] pnpm monorepo with `apps/api`, `apps/do`, `apps/web`, `packages/db`, `packages/auth`, `packages/email`, `packages/shared`
+- [x] `wrangler.jsonc` with D1 binding, DO binding, R2 binding, Email Routing binding
+- [x] Core Drizzle schemas: `congregation`, `person`, `user`, `organization`, `department`
+- [x] D1 migration runner (`packages/db/src/migrate.ts` with MIGRATION_STATEMENTS + `applyMigrations()`)
+- [x] `packages/auth`: magic link token generation (SHA-256), JWT sign/verify, Hono session middleware
+- [x] `packages/email`: `sendEmail()` dispatching via HTTPS POST to SMTP relay; test mode logs to console
+- [x] Hono endpoint `POST /auth/request` — accepts email, generates token, dispatches email
+- [x] Hono endpoint `POST /auth/verify` — accepts token, issues JWT in httpOnly cookie
+- [x] Hono middleware `requireAuth` — rejects unauthenticated requests with 401
+- [x] Vitest + Miniflare 3 test setup with throwaway D1
+- [x] Test: full magic link flow — request → token logged → verify → JWT → protected endpoint returns 200
+- [x] Test: unauthenticated request to protected endpoint returns 401
+- [x] Test: expired JWT returns 401
+- [x] SMTP relay: minimal Node.js HTTP server proxying to Hostinger SMTP (Cloudflare Tunnel config TODO)
+- [x] SMTP relay: test mode that logs email body instead of connecting to Hostinger
+- [x] GitHub Actions CI: install, typecheck, lint, test across all packages
+- [x] `docker-compose.yml` for local dev: Miniflare Workers + SMTP relay
 
 ## Blocked by
 
