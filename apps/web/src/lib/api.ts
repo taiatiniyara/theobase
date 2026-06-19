@@ -113,8 +113,90 @@ export async function getTreasuryBalance() {
   return res.json();
 }
 
+export async function getExpenses() {
+  const res = await api('/treasury/expenses');
+  return res.json();
+}
+
+export async function createExpense(data: { amount: number; description: string; category: string; receiptId?: string; boardDecisionId?: string }) {
+  const res = await api('/treasury/expenses', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
 // Rota (issue 006)
 export async function getRota(date: string) {
   const res = await api(`/rota/${date}`);
+  return res.json();
+}
+
+// Pathfinders (issue 010)
+export async function getPathfinderProgress(memberId: string) {
+  const res = await api(`/pathfinder/progress/${memberId}`);
+  return res.json();
+}
+
+export async function createPathfinderProgress(data: { memberId: string; className: string; clubType: string; status: string }) {
+  const res = await api('/pathfinder/progress', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function getPathfinderHonors(memberId: string) {
+  const res = await api(`/pathfinder/honors/${memberId}`);
+  return res.json();
+}
+
+export async function createPathfinderHonor(data: { memberId: string; name: string; category: string; earnedAt: string }) {
+  const res = await api('/pathfinder/honors', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+// Welfare (issue 012)
+export async function getWelfareCases() {
+  const res = await api('/welfare/cases');
+  return res.json();
+}
+
+export async function createWelfareCase(data: { personId: string; assistanceType: string; description: string; value: number }) {
+  const res = await api('/welfare/cases', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function getPantryItems() {
+  const res = await api('/pantry/items');
+  return res.json();
+}
+
+export async function createPantryItem(data: { name: string; quantity: number; unit: string }) {
+  const res = await api('/pantry/items', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+// Sabbath School (issue 011)
+export async function getSabbathSchoolClasses() {
+  const res = await api('/sabbath-school/classes');
+  return res.json();
+}
+
+export async function createSabbathSchoolClass(data: { division: string; name: string }) {
+  const res = await api('/sabbath-school/classes', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+// Health (issue 013)
+export async function getHealthContacts() {
+  const res = await api('/health/contacts');
+  return res.json();
+}
+
+export async function createHealthEvent(data: { name: string; date: string; type: string }) {
+  const res = await api('/health/events', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function createHealthContact(data: { eventId: string; name: string; phone: string; email: string; interests: string[] }) {
+  const res = await api('/health/contacts', { method: 'POST', body: JSON.stringify(data) });
   return res.json();
 }

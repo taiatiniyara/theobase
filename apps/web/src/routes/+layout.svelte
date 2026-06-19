@@ -8,6 +8,8 @@
   let { children } = $props();
   let profile = $state<any>(null);
   let navOpen = $state(false);
+  let online = $state(true);
+  let pendingSync = $state(0);
 
   onMount(async () => {
     const token = getToken();
@@ -15,6 +17,27 @@
       try {
         profile = await getMe();
       } catch { clearToken(); }
+    }
+
+    // Service worker messages
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data?.type === 'connectivity') {
+          online = event.data.online;
+          if (event.data.online) {
+            navigator.serviceWorker.controller?.postMessage({ type: 'sync_outbox' });
+          }
+        } else if (event.data?.type === 'outbox_queued') {
+          pendingSync++;
+        } else if (event.data?.type === 'outbox_synced') {
+          pendingSync = event.data.remaining || 0;
+        }
+      });
+
+      // Initial connectivity check
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: 'check_online' });
+      }
     }
   });
 
@@ -38,11 +61,19 @@
 <div class="app">
   <header class="header">
     <a href={profile ? '/dashboard' : '/'} class="logo">Theobase</a>
-    {#if profile && !isAuthPage}
-      <button class="menu-toggle" onclick={() => navOpen = !navOpen}>
-        {navOpen ? '✕' : '☰'}
-      </button>
-    {/if}
+    <div style="display: flex; align-items: center; gap: 8px;">
+      {#if !online}
+        <span class="offline-badge">Offline</span>
+      {/if}
+      {#if pendingSync > 0}
+        <span class="sync-badge">{pendingSync}</span>
+      {/if}
+      {#if profile && !isAuthPage}
+        <button class="menu-toggle" onclick={() => navOpen = !navOpen}>
+          {navOpen ? '✕' : '☰'}
+        </button>
+      {/if}
+    </div>
   </header>
 
   {#if navOpen && profile}
@@ -53,8 +84,15 @@
       {#if isClerk() || isTreasurer()}
         <a href="/boardroom" class:active={$page.url.pathname === '/boardroom'}>Boardroom</a>
       {/if}
+      {#if isTreasurer()}
+        <a href="/treasury" class:active={$page.url.pathname === '/treasury'}>Treasury</a>
+      {/if}
       {#if isClerk()}
         <a href="/rota" class:active={$page.url.pathname === '/rota'}>Rota</a>
+        <a href="/congregation" class:active={$page.url.pathname === '/congregation'}>Congregation</a>
+        <a href="/pathfinders" class:active={$page.url.pathname === '/pathfinders'}>Pathfinders</a>
+        <a href="/welfare" class:active={$page.url.pathname === '/welfare'}>Welfare</a>
+        <a href="/sabbath-school" class:active={$page.url.pathname === '/sabbath-school'}>Sabbath School</a>
       {/if}
       <button class="nav-signout" onclick={signOut}>Sign out</button>
     </nav>
@@ -80,6 +118,14 @@
   .nav-signout {
     margin-top: 8px; padding: 10px 12px; background: transparent; color: #e53e3e;
     text-align: left; font-size: 0.95rem; font-weight: 500;
+  }
+  .offline-badge {
+    background: #fed7d7; color: #9b2c2c; padding: 2px 8px; border-radius: 12px;
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .sync-badge {
+    background: #fefcbf; color: #975a16; padding: 2px 8px; border-radius: 12px;
+    font-size: 0.7rem; font-weight: 600; min-width: 18px; text-align: center;
   }
   main { padding: 24px 0; }
 </style>
