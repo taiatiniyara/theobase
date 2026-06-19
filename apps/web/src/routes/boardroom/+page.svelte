@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getBoardMeetings, createBoardMeeting, getBoardMeeting, createBoardDecision } from '$lib/api';
   import { onMount } from 'svelte';
+  import FormField from '$lib/components/FormField.svelte';
 
   let meetings = $state<any[]>([]);
   let loading = $state(true);
@@ -76,20 +77,26 @@
 {:else if showCreate}
   <div class="card">
     <h2>New Board Meeting</h2>
-    <div class="label">Date</div>
-    <input type="date" bind:value={meetingDate} />
 
-    <div class="label">Agenda</div>
-    {#each agendaItems as item, i}
-      <input
-        type="text"
-        value={item.title}
-        oninput={(e) => agendaItems = agendaItems.map((a, j) => j === i ? { title: (e.target as HTMLInputElement).value } : a)}
-        placeholder="Agenda item {i + 1}"
-        style="margin-bottom: 8px;"
-      />
-    {/each}
-    <button onclick={addAgendaItem} style="background: #718096; padding: 8px 16px; font-size: 0.85rem; margin-bottom: 16px;">+ Add item</button>
+    <FormField
+      label="Date"
+      type="date"
+      value={meetingDate}
+      oninput={(e) => meetingDate = (e.target as HTMLInputElement).value}
+    />
+
+    <div class="field-group">
+      <label class="field-label">Agenda</label>
+      {#each agendaItems as item, i}
+        <FormField
+          label=""
+          value={item.title}
+          placeholder="Agenda item {i + 1}"
+          oninput={(e) => agendaItems = agendaItems.map((a, j) => j === i ? { title: (e.target as HTMLInputElement).value } : a)}
+        />
+      {/each}
+      <button class="add-btn" onclick={addAgendaItem}>+ Add item</button>
+    </div>
 
     {#if createError}
       <p class="error">{createError}</p>
@@ -105,14 +112,18 @@
 
   <div class="card">
     <h2>Meeting — {selectedMeeting.date}</h2>
-    <div class="label">Status</div>
-    <div class="value" style="text-transform: capitalize;">{selectedMeeting.status?.replace(/_/g, ' ')}</div>
+    <div class="field">
+      <span class="label">Status</span>
+      <div class="value" style="text-transform: capitalize;">{selectedMeeting.status?.replace(/_/g, ' ')}</div>
+    </div>
 
     {#if selectedMeeting.agenda?.length}
-      <div class="label">Agenda</div>
-      {#each selectedMeeting.agenda as item}
-        <div class="value">{item.title}</div>
-      {/each}
+      <div class="field">
+        <span class="label">Agenda</span>
+        {#each selectedMeeting.agenda as item}
+          <div class="value">{item.title}</div>
+        {/each}
+      </div>
     {/if}
   </div>
 
@@ -120,29 +131,40 @@
     <h2>Decisions</h2>
     {#if selectedMeeting.decisions?.length}
       {#each selectedMeeting.decisions as dec}
-        <div style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
+        <div class="decision-row">
           <div style="font-weight: 600;">#{dec.number} — {dec.title}</div>
           {#if dec.description}
-            <div style="color: #718096; font-size: 0.875rem;">{dec.description}</div>
+            <div class="desc">{dec.description}</div>
           {/if}
-          <div style="font-size: 0.8rem; margin-top: 4px; text-transform: capitalize; color: {dec.voteOutcome === 'approved' ? '#38a169' : '#e53e3e'};">
-            {dec.voteOutcome}
-          </div>
+          <div class="vote {dec.voteOutcome}">{dec.voteOutcome}</div>
         </div>
       {/each}
     {:else}
       <p style="color: #718096;">No decisions recorded yet.</p>
     {/if}
 
-    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
-      <div class="label">Record a Decision</div>
-      <input type="text" bind:value={decisionTitle} placeholder="Decision title" />
-      <input type="text" bind:value={decisionDesc} placeholder="Description (optional)" />
-      <select bind:value={decisionVote} style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem;">
-        <option value="approved">Approved</option>
-        <option value="rejected">Rejected</option>
-        <option value="tabled">Tabled</option>
-      </select>
+    <div class="record-section">
+      <span class="label">Record a Decision</span>
+      <FormField
+        label="Decision Title"
+        value={decisionTitle}
+        placeholder="Decision title"
+        oninput={(e) => decisionTitle = (e.target as HTMLInputElement).value}
+      />
+      <FormField
+        label="Description (optional)"
+        value={decisionDesc}
+        placeholder="Description (optional)"
+        oninput={(e) => decisionDesc = (e.target as HTMLInputElement).value}
+      />
+      <div class="field">
+        <label class="field-label">Vote Outcome</label>
+        <select bind:value={decisionVote} class="select">
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+          <option value="tabled">Tabled</option>
+        </select>
+      </div>
       {#if decisionError}
         <p class="error">{decisionError}</p>
       {/if}
@@ -160,7 +182,7 @@
     </div>
   {:else}
     {#each meetings as meeting}
-      <div class="card" style="cursor: pointer;" onclick={() => viewMeeting(meeting.id)}>
+      <div class="card meeting-card" onclick={() => viewMeeting(meeting.id)}>
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div>
             <div style="font-weight: 600;">{meeting.date}</div>
@@ -172,3 +194,35 @@
     {/each}
   {/if}
 {/if}
+
+<style>
+  .field { margin-bottom: 12px; }
+  .field-group { margin-bottom: 16px; }
+  .field-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .label {
+    font-size: 0.75rem;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+  .value { font-size: 1rem; }
+  .add-btn { background: #718096; padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; color: white; border: none; cursor: pointer; margin-bottom: 12px; }
+  .decision-row { padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
+  .desc { color: #718096; font-size: 0.875rem; }
+  .vote { font-size: 0.8rem; margin-top: 4px; text-transform: capitalize; }
+  .vote.approved { color: #38a169; }
+  .vote.rejected { color: #e53e3e; }
+  .vote.tabled { color: #718096; }
+  .select { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem; box-sizing: border-box; }
+  .record-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0; }
+  .meeting-card { cursor: pointer; }
+</style>

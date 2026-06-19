@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { jwt, runMigrations, setupEmails, execSql, env, createExecutionContext, waitOnExecutionContext, worker } from "./test-helpers";
+import { jwt, runMigrations, setupEmails, execSql, seedRoles, env, createExecutionContext, waitOnExecutionContext, worker } from "./test-helpers";
 
 describe("communion + AV", () => {
   beforeAll(async () => {
@@ -8,6 +8,7 @@ describe("communion + AV", () => {
     await execSql(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('con-1', 'Test Church', 'church', 'UTC', '2025-01-01')`);
     await execSql(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('deacon-1', 'con-1', 'Deacon', 'One', 'deacon@test.com', 1, '2025-01-01', '2025-01-01')`);
     await execSql(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('deacon-user', 'deacon@test.com', 'deacon-1', 'con-1', '2025-01-01')`);
+    await seedRoles("deacon-1", "con-1", ["clerk"]);
     await execSql(`INSERT INTO av_order_of_service (id, congregation_id, date, items, updated_at, created_at) VALUES ('av-1', 'con-1', '2025-06-21', '[{"type":"hymn","title":"Amazing Grace"},{"type":"scripture","title":"Psalm 23"}]', '2025-01-01', '2025-01-01')`);
   });
 
@@ -63,6 +64,7 @@ describe("coordination", () => {
     await execSql(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('con-2', 'Other Church', 'church', 'UTC', '2025-01-01')`);
     await execSql(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('pastor-1', 'con-1', 'Pastor', 'One', 'pastor@test.com', 1, '2025-01-01', '2025-01-01')`);
     await execSql(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('pastor-user', 'pastor@test.com', 'pastor-1', 'con-1', '2025-01-01')`);
+    await seedRoles("pastor-1", "con-1", ["clerk"]);
   });
 
   async function fetchWithToken(method: string, path: string, body?: any) {

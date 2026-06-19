@@ -100,6 +100,8 @@
         <a href="/facilities" class:active={$page.url.pathname === '/facilities'}>Facilities</a>
         <a href="/crisis" class:active={$page.url.pathname === '/crisis'}>Crisis Assets</a>
         <a href="/transfers" class:active={$page.url.pathname === '/transfers'}>Transfers</a>
+        <a href="/households" class:active={$page.url.pathname === '/households'}>Households</a>
+        <a href="/candidacies" class:active={$page.url.pathname === '/candidacies'}>Candidacies</a>
         <a href="/nominating" class:active={$page.url.pathname === '/nominating'}>Nominating</a>
         <a href="/conference" class:active={$page.url.pathname === '/conference'}>Conference Report</a>
       {/if}

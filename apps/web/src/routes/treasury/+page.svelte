@@ -1,6 +1,8 @@
 <script lang="ts">
   import { getTreasuryBalance, getExpenses, createExpense, getReceipts, getBoardMeetings } from '$lib/api';
   import { onMount } from 'svelte';
+  import FormField from '$lib/components/FormField.svelte';
+  import AmountField from '$lib/components/AmountField.svelte';
 
   let balance = $state<Record<string, number>>({});
   let expenses = $state<any[]>([]);
@@ -33,7 +35,6 @@
       expenses = [...expenses, result];
       showForm = false;
       expAmount = 0; expDesc = ''; expReceiptId = ''; expDecisionId = '';
-      // Refresh balance
       balance = await getTreasuryBalance();
     } catch { formError = 'Failed to create expense.'; }
   }
@@ -69,7 +70,7 @@
       <p style="color: #718096;">No fund activity yet.</p>
     {:else}
       {#each Object.entries(balance) as [fund, amount]}
-        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0;">
+        <div class="balance-row">
           <span style="text-transform: capitalize;">{formatFund(fund)}</span>
           <span style="font-weight: 600; color: {amount >= 0 ? '#38a169' : '#e53e3e'};">
             ${(amount / 100).toFixed(2)}
@@ -84,34 +85,49 @@
   {:else}
     <div class="card">
       <h2>Record Expense</h2>
-      <div class="label">Amount (cents)</div>
-      <input type="number" bind:value={expAmount} placeholder="3000" />
 
-      <div class="label">Description</div>
-      <input type="text" bind:value={expDesc} placeholder="Electricity bill" />
+      <AmountField
+        cents={expAmount}
+        onchange={(c) => expAmount = c}
+        error={formError && !expDesc ? formError : ''}
+      />
 
-      <div class="label">Category</div>
-      <select bind:value={expCategory} style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem;">
-        {#each categories as cat}
-          <option value={cat}>{formatFund(cat)}</option>
-        {/each}
-      </select>
+      <FormField
+        label="Description"
+        value={expDesc}
+        placeholder="Electricity bill"
+        oninput={(e) => expDesc = (e.target as HTMLInputElement).value}
+        error={formError && !expAmount ? formError : ''}
+      />
 
-      <div class="label">Linked Receipt (optional)</div>
-      <select bind:value={expReceiptId} style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem;">
-        <option value="">None</option>
-        {#each receipts as r}
-          <option value={r.id}>#{r.id?.slice(0, 8)} — ${(r.amount / 100).toFixed(2)}</option>
-        {/each}
-      </select>
+      <div class="field">
+        <label class="field-label">Category</label>
+        <select bind:value={expCategory} class="select">
+          {#each categories as cat}
+            <option value={cat}>{formatFund(cat)}</option>
+          {/each}
+        </select>
+      </div>
 
-      <div class="label">Board Decision (optional)</div>
-      <select bind:value={expDecisionId} style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem;">
-        <option value="">None</option>
-        {#each meetings as m}
-          <option value={m.id}>{m.date}</option>
-        {/each}
-      </select>
+      <div class="field">
+        <label class="field-label">Linked Receipt (optional)</label>
+        <select bind:value={expReceiptId} class="select">
+          <option value="">None</option>
+          {#each receipts as r}
+            <option value={r.id}>#{r.id?.slice(0, 8)} — ${(r.amount / 100).toFixed(2)}</option>
+          {/each}
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Board Decision (optional)</label>
+        <select bind:value={expDecisionId} class="select">
+          <option value="">None</option>
+          {#each meetings as m}
+            <option value={m.id}>{m.date}</option>
+          {/each}
+        </select>
+      </div>
 
       {#if formError}
         <p class="error">{formError}</p>
@@ -130,12 +146,12 @@
       <p style="color: #718096;">No expenses recorded yet.</p>
     {:else}
       {#each expenses as exp}
-        <div style="padding: 8px 0; border-bottom: 1px solid #f0f0f0;">
+        <div class="expense-row">
           <div style="display: flex; justify-content: space-between;">
             <span style="font-weight: 600;">{exp.description}</span>
             <span style="font-weight: 600; color: #e53e3e;">-${(exp.amount / 100).toFixed(2)}</span>
           </div>
-          <div style="font-size: 0.8rem; color: #718096; display: flex; gap: 12px;">
+          <div class="expense-meta">
             <span style="text-transform: capitalize;">{formatFund(exp.category)}</span>
             {#if exp.receiptId}
               <span>Receipt #{exp.receiptId?.slice(0, 8)}</span>
@@ -146,3 +162,20 @@
     {/if}
   </div>
 {/if}
+
+<style>
+  .balance-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+  .expense-row { padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+  .expense-meta { font-size: 0.8rem; color: #718096; display: flex; gap: 12px; }
+  .field { margin-bottom: 12px; }
+  .field-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .select { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; box-sizing: border-box; }
+</style>

@@ -4,7 +4,7 @@ import { build, files, version } from '$service-worker';
 const CACHE = `theobase-${version}`;
 const ASSETS = [...build, ...files];
 const DB_NAME = 'theobase-offline';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -21,6 +21,12 @@ function openDB(): Promise<IDBDatabase> {
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
   });
+}
+
+const API_PATH_PATTERN = /^\/(me|receipts|board|rota|treasury|congregations|pathfinder|sabbath-school|welfare|pantry|health|households|candidacies|communion|av|district|facilities|crisis|transfers|nominating|sessions|roles|items|attendance|classes|events|contacts|bookings|assets|rotations|visits|slots)\b/;
+
+function isAPIPath(pathname: string): boolean {
+  return API_PATH_PATTERN.test(pathname);
 }
 
 async function cacheAPIResponse(url: string, data: unknown) {
@@ -43,12 +49,11 @@ async function getCachedAPI(url: string): Promise<unknown | null> {
   } catch { return null; }
 }
 
-async function addToOutbox(request: { method: string; url: string; body?: string }) {
+async function addToOutbox(request: { method: string; url: string; body?: string; authHeader?: string }) {
   try {
     const db = await openDB();
     const tx = db.transaction('outbox', 'readwrite');
     tx.objectStore('outbox').add({ ...request, ts: Date.now() });
-    // Notify clients about pending sync
     notifyClients({ type: 'outbox_queued' });
   } catch {}
 }
@@ -65,14 +70,15 @@ async function flushOutbox() {
     for (const item of items) {
       try {
         const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (item.authHeader) {
+          headers['Authorization'] = item.authHeader;
+        }
         await fetch(item.url, { method: item.method, headers, body: item.body });
-        // Delete from outbox
         const delTx = db.transaction('outbox', 'readwrite');
         delTx.objectStore('outbox').delete(item.id);
-      } catch { break; /* stop flushing if network fails */ }
+      } catch { break; }
     }
 
-    // Check remaining
     const remainingTx = db.transaction('outbox', 'readonly');
     const remaining: any[] = await new Promise((resolve) => {
       const req = remainingTx.objectStore('outbox').getAll();
@@ -99,7 +105,6 @@ async function isOnline(): Promise<boolean> {
   }
 }
 
-// Install
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE).then((cache) => cache.addAll(ASSETS))
@@ -107,7 +112,6 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -117,18 +121,10 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch
 self.addEventListener('fetch', (event: FetchEvent) => {
   const url = new URL(event.request.url);
-  const isAPI = url.pathname.startsWith('/me') ||
-    url.pathname.startsWith('/receipts') ||
-    url.pathname.startsWith('/board') ||
-    url.pathname.startsWith('/rota') ||
-    url.pathname.startsWith('/treasury') ||
-    url.pathname.startsWith('/congregations');
 
-  // API reads: network first, cache fallback
-  if (isAPI && event.request.method === 'GET') {
+  if (isAPIPath(url.pathname) && event.request.method === 'GET') {
     event.respondWith(
       fetch(event.request.clone())
         .then(async (response) => {
@@ -140,7 +136,6 @@ self.addEventListener('fetch', (event: FetchEvent) => {
             } catch {}
             return response;
           }
-          // If API error, try cache
           const cached = await getCachedAPI(url.pathname + url.search);
           if (cached) return new Response(JSON.stringify(cached), { headers: { 'Content-Type': 'application/json' } });
           return response;
@@ -154,15 +149,16 @@ self.addEventListener('fetch', (event: FetchEvent) => {
     return;
   }
 
-  // API writes while offline: queue in outbox
-  if (isAPI && event.request.method !== 'GET') {
+  if (isAPIPath(url.pathname) && event.request.method !== 'GET') {
     event.respondWith(
       fetch(event.request.clone()).catch(async () => {
         const body = await event.request.clone().text();
+        const authHeader = event.request.headers.get('Authorization') || undefined;
         await addToOutbox({
           method: event.request.method,
           url: url.pathname + url.search,
           body: body || undefined,
+          authHeader,
         });
         return new Response(JSON.stringify({ ok: true, queued: true }), {
           status: 202,
@@ -173,13 +169,11 @@ self.addEventListener('fetch', (event: FetchEvent) => {
     return;
   }
 
-  // Auth endpoints: always go to network
   if (url.pathname.startsWith('/auth')) {
     event.respondWith(fetch(event.request));
     return;
   }
 
-  // Static assets: cache first
   if (event.request.method === 'GET') {
     event.respondWith(
       caches.match(event.request).then((cached) => cached || fetch(event.request))
@@ -187,7 +181,6 @@ self.addEventListener('fetch', (event: FetchEvent) => {
   }
 });
 
-// Message handler (from client)
 self.addEventListener('message', (event) => {
   if (event.data?.type === 'sync_outbox') {
     event.waitUntil(flushOutbox());
@@ -200,7 +193,6 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Background sync
 self.addEventListener('sync', (event) => {
   if (event.tag === 'flush-outbox') {
     event.waitUntil(flushOutbox());

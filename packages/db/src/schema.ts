@@ -54,7 +54,7 @@ export const role = sqliteTable("role", {
   personId: text("person_id").references(() => person.id),
   congregationId: text("congregation_id").references(() => congregation.id).notNull(),
   roleType: text("role_type", {
-    enum: ["clerk", "treasurer", "elder", "deacon", "deaconess", "department_leader", "pastor", "district_pastor", "member"],
+    enum: ["clerk", "treasurer", "elder", "deacon", "deaconess", "head_deacon", "head_deaconess", "pastor", "district_pastor", "member", "pathfinder_director", "adventurer_director", "dorcas_coordinator", "health_ministries_leader", "sabbath_school_superintendent", "av_operator", "youth_leader", "music_coordinator"],
   }).notNull(),
   createdAt: text("created_at").notNull(),
 });

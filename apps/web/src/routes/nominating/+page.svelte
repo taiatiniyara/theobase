@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createNominatingSession, createNominatingRole } from '$lib/api';
+  import FormField from '$lib/components/FormField.svelte';
 
   let year = $state(new Date().getFullYear());
   let session = $state<any>(null);
@@ -32,25 +33,25 @@
 {#if !session}
   <div class="card">
     <h2>Open Session</h2>
-    <div class="label">Year</div>
-    <input type="number" bind:value={year} placeholder="2025" />
+    <FormField label="Year" type="number" value={year} placeholder="2025" oninput={(e) => year = parseInt((e.target as HTMLInputElement).value) || 0} />
     <button onclick={openSession}>Open Nominating Session</button>
   </div>
 {:else}
   <div class="card">
     <h2>Session Active — {session.year}</h2>
-    <div class="label">Opened</div>
-    <div class="value">{session.id?.slice(0, 8)}</div>
+    <div class="info-row"><span class="label">Opened</span> <span class="value">{session.id?.slice(0, 8)}</span></div>
   </div>
 
   <div class="card">
     <h2>Add Role to Ballot</h2>
-    <div class="label">Role</div>
-    <select bind:value={roleType} style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem; text-transform: capitalize;">
-      {#each roleTypes as r}
-        <option value={r}>{r.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
-      {/each}
-    </select>
+    <div class="field">
+      <label class="field-label">Role</label>
+      <select bind:value={roleType} class="select">
+        {#each roleTypes as r}
+          <option value={r}>{r.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
+        {/each}
+      </select>
+    </div>
     <button onclick={addRole}>Add Role</button>
   </div>
 
@@ -65,3 +66,20 @@
     </div>
   {/if}
 {/if}
+
+<style>
+  .field { margin-bottom: 12px; }
+  .field-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .select { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; box-sizing: border-box; }
+  .info-row { margin-bottom: 8px; }
+  .label { font-size: 0.75rem; color: #718096; text-transform: uppercase; }
+  .value { font-size: 1rem; }
+</style>

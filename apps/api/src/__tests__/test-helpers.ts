@@ -1,6 +1,7 @@
 import { env, createExecutionContext, waitOnExecutionContext } from "cloudflare:test";
 import { createJwt, verifyJwt } from "@theobase/auth";
 import { applyMigrations, MIGRATION_STATEMENTS } from "@theobase/db";
+import { generateId } from "@theobase/shared";
 import worker from "../index";
 
 export const TEST_SECRET = "theobase-dev-secret-change-in-production";
@@ -83,4 +84,13 @@ export async function authedRequest(method: string, path: string, token: string,
 
 export async function execSql(sql: string) {
   await env.DB.exec(sql);
+}
+
+export async function seedRoles(personId: string, congregationId: string, roles: string[]) {
+  for (const roleType of roles) {
+    const id = generateId();
+    await env.DB.exec(
+      `INSERT INTO role (id, person_id, congregation_id, role_type, created_at) VALUES ('${id}', '${personId}', '${congregationId}', '${roleType}', '${new Date().toISOString()}')`
+    );
+  }
 }

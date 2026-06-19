@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import {
-  jwt, runMigrations, setupEmails, execSql, authedRequest,
+  jwt, runMigrations, setupEmails, execSql, authedRequest, seedRoles,
 } from "./test-helpers";
 import { createJwt } from "@theobase/auth";
 
@@ -11,6 +11,7 @@ describe("member portal", () => {
     await execSql(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('church-1', 'Test Church', 'church', 'Pacific/Fiji', '2025-01-01T00:00:00Z')`);
     await execSql(`INSERT INTO person (id, congregation_id, first_name, last_name, email, phone, address, is_member, created_at, updated_at) VALUES ('person-1', 'church-1', 'John', 'Elder', 'john@example.com', '+679 1234567', '123 Church St', 1, '2025-01-01T00:00:00Z', '2025-01-01T00:00:00Z')`);
     await execSql(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('user-1', 'john@example.com', 'person-1', 'church-1', '2025-01-01T00:00:00Z')`);
+    await seedRoles("person-1", "church-1", ["member"]);
   });
 
   it("GET /me returns enriched profile when person record is linked", async () => {
@@ -102,6 +103,8 @@ describe("rls isolation", () => {
     await execSql(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('member-b', 'con-b', 'Bob', 'B', 'bob@b.org', 1, '2025-01-01', '2025-01-01')`);
     await execSql(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('user-a', 'alice@a.org', 'member-a', 'con-a', '2025-01-01')`);
     await execSql(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('user-b', 'bob@b.org', 'member-b', 'con-b', '2025-01-01')`);
+    await seedRoles("member-a", "con-a", ["member", "elder"]);
+    await seedRoles("member-b", "con-b", ["member"]);
     await execSql(`INSERT INTO receipt (id, congregation_id, member_id, amount, fund_split, status, created_at) VALUES ('rec-a', 'con-a', 'member-a', 5000, '{"tithe":5000}', 'approved', '2025-01-01')`);
     await execSql(`INSERT INTO receipt (id, congregation_id, member_id, amount, fund_split, status, created_at) VALUES ('rec-b', 'con-b', 'member-b', 9000, '{"church_budget":9000}', 'approved', '2025-01-01')`);
     await execSql(`INSERT INTO board_meeting (id, congregation_id, date, status, created_at) VALUES ('meet-a', 'con-a', '2025-06-01', 'completed', '2025-01-01')`);

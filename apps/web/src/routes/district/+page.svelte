@@ -1,18 +1,17 @@
 <script lang="ts">
   import { getDistrictRotations, createDistrictRotation, createDistrictVisit } from '$lib/api';
   import { onMount } from 'svelte';
+  import FormField from '$lib/components/FormField.svelte';
 
   let rotations = $state<any[]>([]);
   let loading = $state(true);
   let tab = $state<'rotations' | 'visits'>('rotations');
 
-  // Rotation form
   let rotCongId = $state('');
   let rotDate = $state('');
   let rotPreacher = $state('');
   let rotTopic = $state('');
 
-  // Visit form
   let visHousehold = $state('');
   let visPastor = $state('');
   let visDate = $state('');
@@ -61,14 +60,10 @@
 {:else if tab === 'rotations'}
   <div class="card">
     <h2>Schedule Preaching</h2>
-    <div class="label">Congregation ID</div>
-    <input type="text" bind:value={rotCongId} placeholder="con-1" />
-    <div class="label">Date</div>
-    <input type="date" bind:value={rotDate} />
-    <div class="label">Preacher ID</div>
-    <input type="text" bind:value={rotPreacher} placeholder="pastor-1" />
-    <div class="label">Topic</div>
-    <input type="text" bind:value={rotTopic} placeholder="Faith" />
+    <FormField label="Congregation ID" value={rotCongId} placeholder="con-1" oninput={(e) => rotCongId = (e.target as HTMLInputElement).value} />
+    <FormField label="Date" type="date" value={rotDate} oninput={(e) => rotDate = (e.target as HTMLInputElement).value} />
+    <FormField label="Preacher ID" value={rotPreacher} placeholder="pastor-1" oninput={(e) => rotPreacher = (e.target as HTMLInputElement).value} />
+    <FormField label="Topic" value={rotTopic} placeholder="Faith" oninput={(e) => rotTopic = (e.target as HTMLInputElement).value} />
     <button onclick={addRotation} disabled={!rotCongId || !rotDate || !rotPreacher}>Schedule</button>
   </div>
 
@@ -81,16 +76,11 @@
 {:else}
   <div class="card">
     <h2>Record Visit</h2>
-    <div class="label">Household ID</div>
-    <input type="text" bind:value={visHousehold} placeholder="household-1" />
-    <div class="label">Pastor ID</div>
-    <input type="text" bind:value={visPastor} placeholder="pastor-1" />
-    <div class="label">Date</div>
-    <input type="date" bind:value={visDate} />
-    <div class="label">Purpose</div>
-    <input type="text" bind:value={visPurpose} placeholder="Pastoral visit" />
-    <div class="label">Notes</div>
-    <textarea bind:value={visNotes} rows="2" placeholder="Visit notes..." style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; box-sizing: border-box; margin-bottom: 12px;"></textarea>
+    <FormField label="Household ID" value={visHousehold} placeholder="household-1" oninput={(e) => visHousehold = (e.target as HTMLInputElement).value} />
+    <FormField label="Pastor ID" value={visPastor} placeholder="pastor-1" oninput={(e) => visPastor = (e.target as HTMLInputElement).value} />
+    <FormField label="Date" type="date" value={visDate} oninput={(e) => visDate = (e.target as HTMLInputElement).value} />
+    <FormField label="Purpose" value={visPurpose} placeholder="Pastoral visit" oninput={(e) => visPurpose = (e.target as HTMLInputElement).value} />
+    <FormField label="Notes" type="textarea" value={visNotes} placeholder="Visit notes..." oninput={(e) => visNotes = (e.target as HTMLTextAreaElement).value} />
     <button onclick={addVisit} disabled={!visHousehold || !visDate}>Record Visit</button>
   </div>
 {/if}

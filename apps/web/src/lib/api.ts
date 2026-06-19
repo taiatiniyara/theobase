@@ -185,6 +185,11 @@ export async function createSabbathSchoolClass(data: { division: string; name: s
   return res.json();
 }
 
+export async function recordAttendance(data: { attendance: { classId: string; date: string; memberId: string; present: boolean }[] }) {
+  const res = await api('/sabbath-school/attendance', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
 // Health (issue 013)
 export async function getHealthContacts() {
   const res = await api('/health/contacts');
@@ -202,6 +207,16 @@ export async function createHealthContact(data: { eventId: string; name: string;
 }
 
 // Communion (issue 016)
+export async function getCommunionServices() {
+  const res = await api('/communion');
+  return res.json();
+}
+
+export async function getCommunionService(id: string) {
+  const res = await api(`/communion/${id}`);
+  return res.json();
+}
+
 export async function createCommunion(data: { date: string; rooms: any[]; inventory: any[] }) {
   const res = await api('/communion', { method: 'POST', body: JSON.stringify(data) });
   return res.json();
@@ -235,6 +250,11 @@ export async function createDistrictVisit(data: { householdId: string; pastorId:
 }
 
 // Facilities (issue 019)
+export async function getFacilityBookings() {
+  const res = await api('/facilities/bookings');
+  return res.json();
+}
+
 export async function createFacilityBooking(data: { date: string; timeStart: string; timeEnd: string; purpose: string }) {
   const res = await api('/facilities/bookings', { method: 'POST', body: JSON.stringify(data) });
   return res.json();
@@ -262,6 +282,11 @@ export async function createTransfer(data: { memberId: string; toCongregationId:
   return res.json();
 }
 
+export async function updateTransferStatus(id: string, status: string) {
+  const res = await api(`/transfers/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) });
+  return res.json();
+}
+
 // Nominating (issue 023)
 export async function createNominatingSession(data: { year: number }) {
   const res = await api('/nominating/sessions', { method: 'POST', body: JSON.stringify(data) });
@@ -276,5 +301,27 @@ export async function createNominatingRole(data: { sessionId: string; roleType: 
 // Health (issue 013)
 export async function getHealthEvents() {
   const res = await api('/health/events');
+  return res.json();
+}
+
+// Households (issue 014)
+export async function getHouseholds() {
+  const res = await api('/households');
+  return res.json();
+}
+
+export async function createHousehold(data: { name: string }) {
+  const res = await api('/households', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+// Candidacies (issue 014)
+export async function getCandidacies() {
+  const res = await api('/candidacies');
+  return res.json();
+}
+
+export async function createCandidacy(data: { personId: string; stage: string; startDate: string }) {
+  const res = await api('/candidacies', { method: 'POST', body: JSON.stringify(data) });
   return res.json();
 }

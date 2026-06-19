@@ -1,6 +1,7 @@
 <script lang="ts">
   import { api } from '$lib/api';
   import { onMount } from 'svelte';
+  import FormField from '$lib/components/FormField.svelte';
 
   let congregation = $state<any>(null);
   let loading = $state(true);
@@ -82,23 +83,34 @@
 {:else}
   <div class="card">
     <h2>{congregation.name}</h2>
-    <div class="label">Type</div>
-    <div class="value" style="text-transform: capitalize;">{congregation.type}</div>
-    <div class="label">Timezone</div>
-    <div class="value">{congregation.timezone}</div>
+    <div class="field">
+      <span class="label">Type</span>
+      <div class="value" style="text-transform: capitalize;">{congregation.type}</div>
+    </div>
+    <div class="field">
+      <span class="label">Timezone</span>
+      <div class="value">{congregation.timezone}</div>
+    </div>
   </div>
 
   <div class="card">
     <h2>Invite Officer</h2>
-    <div class="label">Email</div>
-    <input type="email" bind:value={inviteEmail} placeholder="officer@mychurch.org" />
+    <FormField
+      label="Email"
+      type="email"
+      value={inviteEmail}
+      placeholder="officer@mychurch.org"
+      oninput={(e) => inviteEmail = (e.target as HTMLInputElement).value}
+    />
 
-    <div class="label">Role</div>
-    <select bind:value={inviteRole} style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem;">
-      {#each roleOptions as role}
-        <option value={role}>{role.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
-      {/each}
-    </select>
+    <div class="field">
+      <label class="field-label">Role</label>
+      <select bind:value={inviteRole} class="select">
+        {#each roleOptions as role}
+          <option value={role}>{role.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
+        {/each}
+      </select>
+    </div>
 
     <button onclick={sendInvite} disabled={!inviteEmail}>Send Invitation</button>
     {#if inviteStatus}
@@ -108,8 +120,10 @@
 
   <div class="card">
     <h2>Import Members (CSV)</h2>
-    <div class="label">Paste CSV</div>
-    <textarea bind:value={csvText} rows="5" placeholder="firstName,lastName,email,phone,isMember&#10;Alice,Smith,alice@test.com,+679 111,true&#10;Bob,Jones,bob@test.com,+679 222,false" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; font-family: monospace; box-sizing: border-box; margin-bottom: 12px;"></textarea>
+    <div class="field">
+      <label class="field-label">Paste CSV</label>
+      <textarea bind:value={csvText} rows="5" placeholder="firstName,lastName,email,phone,isMember&#10;Alice,Smith,alice@test.com,+679 111,true&#10;Bob,Jones,bob@test.com,+679 222,false" class="textarea"></textarea>
+    </div>
 
     <button onclick={importCSV} disabled={!csvText.trim()}>Import</button>
 
@@ -126,3 +140,26 @@
     {/if}
   </div>
 {/if}
+
+<style>
+  .field { margin-bottom: 12px; }
+  .label {
+    font-size: 0.75rem;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+  .value { font-size: 1rem; }
+  .field-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .select { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem; box-sizing: border-box; }
+  .textarea { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; font-family: monospace; box-sizing: border-box; margin-bottom: 12px; }
+</style>

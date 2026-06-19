@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { jwt, runMigrations, setupEmails, execSql, authedRequest } from "./test-helpers";
+import { jwt, runMigrations, setupEmails, execSql, authedRequest, seedRoles } from "./test-helpers";
 
 describe("boardroom", () => {
   beforeAll(async () => {
@@ -8,6 +8,7 @@ describe("boardroom", () => {
     await execSql(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('con-1', 'Test Church', 'church', 'UTC', '2025-01-01')`);
     await execSql(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('clerk-1', 'con-1', 'Clerk', 'One', 'clerk@test.com', 1, '2025-01-01', '2025-01-01')`);
     await execSql(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('clerk-user-1', 'clerk@test.com', 'clerk-1', 'con-1', '2025-01-01')`);
+    await seedRoles("clerk-1", "con-1", ["clerk"]);
     await execSql(`INSERT INTO board_meeting (id, congregation_id, date, status, created_at) VALUES ('meet-1', 'con-1', '2025-06-21', 'in_progress', '2025-01-01')`);
     await execSql(`INSERT INTO board_decision (id, meeting_id, number, title, description, vote_outcome, created_at) VALUES ('dec-1', 'meet-1', 1, 'Approve budget', 'Q3 budget', 'approved', '2025-01-01')`);
   });
@@ -63,6 +64,7 @@ describe("duty rota", () => {
     await execSql(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('con-1', 'Test Church', 'church', 'UTC', '2025-01-01')`);
     await execSql(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('elder-1', 'con-1', 'Elder', 'One', 'elder@test.com', 1, '2025-01-01', '2025-01-01')`);
     await execSql(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('elder-user-1', 'elder@test.com', 'elder-1', 'con-1', '2025-01-01')`);
+    await seedRoles("elder-1", "con-1", ["clerk"]);
   });
 
   it("POST /rota/slots creates a duty slot", async () => {

@@ -1,18 +1,17 @@
 <script lang="ts">
-  import { getHealthEvents, createHealthEvent, getHealthContacts, createHealthContact, getMe } from '$lib/api';
+  import { getHealthEvents, createHealthEvent, getHealthContacts, createHealthContact } from '$lib/api';
   import { onMount } from 'svelte';
+  import FormField from '$lib/components/FormField.svelte';
 
   let events = $state<any[]>([]);
   let contacts = $state<any[]>([]);
   let loading = $state(true);
   let tab = $state<'events' | 'contacts'>('events');
 
-  // Event form
   let evName = $state('');
   let evDate = $state(new Date().toISOString().slice(0, 10));
   let evType = $state('health_expo');
 
-  // Contact form
   let ctEventId = $state('');
   let ctName = $state('');
   let ctPhone = $state('');
@@ -63,17 +62,18 @@
 {:else if tab === 'events'}
   <div class="card">
     <h2>New Event</h2>
-    <div class="label">Name</div>
-    <input type="text" bind:value={evName} placeholder="Spring Health Expo" />
-    <div class="label">Date</div>
-    <input type="date" bind:value={evDate} />
-    <div class="label">Type</div>
-    <select bind:value={evType} style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem;">
-      <option value="health_expo">Health Expo</option>
-      <option value="cooking_school">Cooking School</option>
-      <option value="screening">Screening</option>
-      <option value="seminar">Seminar</option>
-    </select>
+    <FormField label="Name" value={evName} placeholder="Spring Health Expo" oninput={(e) => evName = (e.target as HTMLInputElement).value} />
+    <FormField label="Date" type="date" value={evDate} oninput={(e) => evDate = (e.target as HTMLInputElement).value} />
+
+    <div class="field">
+      <label class="field-label">Type</label>
+      <select bind:value={evType} class="select">
+        <option value="health_expo">Health Expo</option>
+        <option value="cooking_school">Cooking School</option>
+        <option value="screening">Screening</option>
+        <option value="seminar">Seminar</option>
+      </select>
+    </div>
     <button onclick={addEvent} disabled={!evName}>Create Event</button>
   </div>
 
@@ -86,20 +86,18 @@
 {:else}
   <div class="card">
     <h2>Add Contact</h2>
-    <div class="label">Event</div>
-    <select bind:value={ctEventId} style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; font-size: 0.9rem;">
-      {#each events as ev}
-        <option value={ev.id}>{ev.name} ({ev.date})</option>
-      {/each}
-    </select>
-    <div class="label">Name</div>
-    <input type="text" bind:value={ctName} placeholder="Jane Visitor" />
-    <div class="label">Phone</div>
-    <input type="tel" bind:value={ctPhone} placeholder="+679 1234567" />
-    <div class="label">Email</div>
-    <input type="email" bind:value={ctEmail} placeholder="jane@example.com" />
-    <div class="label">Health Interests (comma-separated)</div>
-    <input type="text" bind:value={ctInterests} placeholder="diabetes, hypertension" />
+    <div class="field">
+      <label class="field-label">Event</label>
+      <select bind:value={ctEventId} class="select">
+        {#each events as ev}
+          <option value={ev.id}>{ev.name} ({ev.date})</option>
+        {/each}
+      </select>
+    </div>
+    <FormField label="Name" value={ctName} placeholder="Jane Visitor" oninput={(e) => ctName = (e.target as HTMLInputElement).value} />
+    <FormField label="Phone" type="tel" value={ctPhone} placeholder="+679 1234567" oninput={(e) => ctPhone = (e.target as HTMLInputElement).value} />
+    <FormField label="Email" type="email" value={ctEmail} placeholder="jane@example.com" oninput={(e) => ctEmail = (e.target as HTMLInputElement).value} />
+    <FormField label="Health Interests (comma-separated)" value={ctInterests} placeholder="diabetes, hypertension" oninput={(e) => ctInterests = (e.target as HTMLInputElement).value} />
     <button onclick={addContact} disabled={!ctEventId || !ctName}>Add Contact</button>
   </div>
 
@@ -118,3 +116,17 @@
     </div>
   {/each}
 {/if}
+
+<style>
+  .field { margin-bottom: 12px; }
+  .field-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .select { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; box-sizing: border-box; }
+</style>

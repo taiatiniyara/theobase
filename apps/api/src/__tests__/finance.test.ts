@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { jwt, runMigrations, setupEmails, execSql, authedRequest } from "./test-helpers";
+import { jwt, runMigrations, setupEmails, execSql, authedRequest, seedRoles } from "./test-helpers";
 
 describe("receipt registry", () => {
   beforeAll(async () => {
@@ -10,6 +10,8 @@ describe("receipt registry", () => {
     await execSql(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('treasurer-1', 'con-1', 'Treas', 'Urer', 'treasurer@test.com', 1, '2025-01-01', '2025-01-01')`);
     await execSql(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('member-user-1', 'john@test.com', 'member-1', 'con-1', '2025-01-01')`);
     await execSql(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('treasurer-user-1', 'treasurer@test.com', 'treasurer-1', 'con-1', '2025-01-01')`);
+    await seedRoles("member-1", "con-1", ["member"]);
+    await seedRoles("treasurer-1", "con-1", ["treasurer"]);
   });
 
   it("POST /receipts creates a receipt with valid fund split", async () => {
@@ -62,6 +64,7 @@ describe("treasury", () => {
     await execSql(`INSERT INTO congregation (id, name, type, timezone, created_at) VALUES ('con-1', 'Test Church', 'church', 'UTC', '2025-01-01')`);
     await execSql(`INSERT INTO person (id, congregation_id, first_name, last_name, email, is_member, created_at, updated_at) VALUES ('treas-1', 'con-1', 'Treas', 'Urer', 'treas@test.com', 1, '2025-01-01', '2025-01-01')`);
     await execSql(`INSERT INTO "user" (id, email, person_id, congregation_id, created_at) VALUES ('treas-user-1', 'treas@test.com', 'treas-1', 'con-1', '2025-01-01')`);
+    await seedRoles("treas-1", "con-1", ["treasurer"]);
     await execSql(`INSERT INTO receipt (id, congregation_id, member_id, amount, fund_split, status, created_at) VALUES ('rec-1', 'con-1', 'treas-1', 10000, '{"tithe":7000,"church_budget":3000}', 'approved', '2025-01-01')`);
     await execSql(`INSERT INTO board_meeting (id, congregation_id, date, status, created_at) VALUES ('meet-1', 'con-1', '2025-06-21', 'completed', '2025-01-01')`);
     await execSql(`INSERT INTO board_decision (id, meeting_id, number, title, description, vote_outcome, created_at) VALUES ('dec-1', 'meet-1', 1, 'Approve budget', 'Q3 budget', 'approved', '2025-01-01')`);

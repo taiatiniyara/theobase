@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getMe, updateMe } from '$lib/api';
   import { onMount } from 'svelte';
+  import FormField from '$lib/components/FormField.svelte';
 
   let profile = $state<any>(null);
   let loading = $state(true);
@@ -51,18 +52,26 @@
     <h1>Welcome, {profile.firstName || profile.email}</h1>
 
     {#if !editMode}
-      <div class="label">Email</div>
-      <div class="value">{profile.email}</div>
+      <div class="field">
+        <span class="label">Email</span>
+        <div class="value">{profile.email}</div>
+      </div>
 
-      <div class="label">Phone</div>
-      <div class="value">{profile.phone || 'Not set'}</div>
+      <div class="field">
+        <span class="label">Phone</span>
+        <div class="value">{profile.phone || 'Not set'}</div>
+      </div>
 
-      <div class="label">Address</div>
-      <div class="value">{profile.address || 'Not set'}</div>
+      <div class="field">
+        <span class="label">Address</span>
+        <div class="value">{profile.address || 'Not set'}</div>
+      </div>
 
       {#if profile.congregationId}
-        <div class="label">Congregation</div>
-        <div class="value">{profile.congregationId}</div>
+        <div class="field">
+          <span class="label">Congregation</span>
+          <div class="value">{profile.congregationId}</div>
+        </div>
       {/if}
 
       <button onclick={startEdit}>Edit Profile</button>
@@ -70,12 +79,35 @@
         <p class="success">Profile updated.</p>
       {/if}
     {:else}
-      <div class="label">Phone</div>
-      <input type="tel" bind:value={phone} placeholder="+679 1234567" />
-      <div class="label">Address</div>
-      <input type="text" bind:value={address} placeholder="123 Church St" />
+      <FormField
+        label="Phone"
+        type="tel"
+        value={phone}
+        placeholder="+679 1234567"
+        oninput={(e) => phone = (e.target as HTMLInputElement).value}
+      />
+      <FormField
+        label="Address"
+        value={address}
+        placeholder="123 Church St"
+        oninput={(e) => address = (e.target as HTMLInputElement).value}
+      />
       <button onclick={save}>Save</button>
       <button style="background: #718096; margin-left: 8px;" onclick={() => editMode = false}>Cancel</button>
     {/if}
   </div>
 {/if}
+
+<style>
+  .field { margin-bottom: 12px; }
+  .label {
+    display: block;
+    font-size: 0.75rem;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+    font-weight: 600;
+  }
+  .value { font-size: 1rem; margin-bottom: 0; }
+</style>

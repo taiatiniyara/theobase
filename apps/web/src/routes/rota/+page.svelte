@@ -49,10 +49,10 @@
 
 <h1>Duty Rota</h1>
 
-<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-  <button onclick={prevWeek} style="background: #718096; padding: 8px 16px;">← Prev</button>
-  <input type="date" bind:value={date} onchange={loadRota} style="flex: 1; margin: 0;" />
-  <button onclick={nextWeek} style="background: #718096; padding: 8px 16px;">Next →</button>
+<div class="date-nav">
+  <button onclick={prevWeek} class="nav-btn">← Prev</button>
+  <input type="date" bind:value={date} onchange={loadRota} class="date-input" />
+  <button onclick={nextWeek} class="nav-btn">Next →</button>
 </div>
 
 {#if loading}
@@ -73,11 +73,19 @@
             <div style="color: #718096; font-size: 0.875rem;">{slot.volunteerName}</div>
           {/if}
         </div>
-        <span style="font-size: 0.8rem; padding: 2px 10px; border-radius: 12px;
-          {slot.status === 'assigned' ? 'background: #c6f6d5; color: #276749;' : 'background: #fefcbf; color: #975a16;'}">
+        <span class="badge" class:assigned={slot.status === 'assigned'} class:unfilled={slot.status !== 'assigned'}>
           {slot.status}
         </span>
       </div>
     </div>
   {/each}
 {/if}
+
+<style>
+  .date-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .nav-btn { background: #718096; padding: 8px 16px; }
+  .date-input { flex: 1; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; box-sizing: border-box; }
+  .badge { font-size: 0.8rem; padding: 2px 10px; border-radius: 12px; }
+  .badge.assigned { background: #c6f6d5; color: #276749; }
+  .badge.unfilled { background: #fefcbf; color: #975a16; }
+</style>
