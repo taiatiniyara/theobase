@@ -12,7 +12,7 @@
 
 <div class="w-full">
   {#if data.length === 0}
-    <div class="flex items-center justify-center text-sm text-slate-400" style="height: {height}px">
+    <div class="flex items-center justify-center text-sm text-slate-400 dark:text-slate-500" style="height: {height}px">
       No data
     </div>
   {:else}
@@ -20,12 +20,12 @@
       {#each data as d, i}
         {@const h = Math.max(4, (d.value / max) * height)}
         <div class="flex flex-col items-center gap-1" style="width: {barWidth}px">
-          <span class="text-[10px] font-medium text-slate-500">{d.value ? `$${(d.value / 100).toFixed(0)}` : ""}</span>
+          <span class="text-[10px] font-medium text-slate-500 dark:text-slate-300">{d.value ? `$${(d.value / 100).toFixed(0)}` : ""}</span>
           <div
             class="w-full rounded-t-sm transition-all duration-500"
             style="height: {h}px; background: {d.color || `hsl(${(i * 50) % 360}, 60%, 55%)`}"
           ></div>
-          <span class="text-[10px] text-slate-400 truncate w-full text-center">{d.label}</span>
+          <span class="text-[10px] text-slate-400 dark:text-slate-400 truncate w-full text-center">{d.label}</span>
         </div>
       {/each}
     </div>

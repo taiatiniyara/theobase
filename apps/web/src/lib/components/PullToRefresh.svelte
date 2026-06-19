@@ -61,7 +61,7 @@
       style="height: {pullDistance}px"
     >
       <RefreshCw
-        class="size-5 text-slate-400 {refreshing ? 'animate-spin' : ''}"
+        class="size-5 text-slate-400 dark:text-slate-300 {refreshing ? 'animate-spin' : ''}"
         style="transform: rotate({Math.min(pullDistance * 3, 360)}deg)"
       />
     </div>

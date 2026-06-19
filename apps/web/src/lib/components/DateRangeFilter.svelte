@@ -32,14 +32,14 @@
 
 <div class="flex items-center gap-2">
   <div class="flex items-center gap-1.5">
-    <Calendar class="size-4 text-slate-400 shrink-0" />
+    <Calendar class="size-4 text-slate-400 dark:text-slate-500 shrink-0" />
     <Input
       type="date"
       class="w-[140px] h-8 text-xs"
       bind:value={from}
       onchange={apply}
     />
-    <span class="text-xs text-slate-400">to</span>
+    <span class="text-xs text-slate-400 dark:text-slate-500">to</span>
     <Input
       type="date"
       class="w-[140px] h-8 text-xs"

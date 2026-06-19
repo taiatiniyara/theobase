@@ -46,6 +46,11 @@
   --color-border: oklch(92.9% 0.013 255.508);
   --color-input: oklch(92.9% 0.013 255.508);
   --color-ring: oklch(55.4% 0.046 257.417);
+  --radius: 0.5rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 :root.dark {
