@@ -1,21 +1,31 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from "$app/stores";
+  import { Button } from "$lib/components/ui/button";
+  import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
+
+  const message = $derived(
+    $page.status === 404
+      ? "Page not found."
+      : $page.status === 500
+        ? "Server error. Please try again."
+        : "An unexpected error occurred.",
+  );
 </script>
 
 <svelte:head>
   <title>Error — Theobase</title>
 </svelte:head>
 
-<div class="card" style="margin-top: 32px; text-align: center;">
-  <h1>Something went wrong</h1>
-  <p style="color: #718096; margin-bottom: 24px;">
-    {#if $page.status === 404}
-      Page not found.
-    {:else if $page.status === 500}
-      Server error. Please try again.
-    {:else}
-      An unexpected error occurred.
-    {/if}
-  </p>
-  <a href="/" class="btn">Go home</a>
+<div class="flex min-h-[60vh] items-center justify-center">
+  <Card class="w-full max-w-md text-center">
+    <CardHeader>
+      <CardTitle>Something went wrong</CardTitle>
+    </CardHeader>
+    <CardContent class="space-y-4">
+      <p class="text-slate-500">{message}</p>
+      <a href="/">
+        <Button>Go home</Button>
+      </a>
+    </CardContent>
+  </Card>
 </div>

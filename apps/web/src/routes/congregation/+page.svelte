@@ -1,10 +1,18 @@
 <script lang="ts">
   import { api } from '$lib/api';
   import { onMount } from 'svelte';
-  import FormField from '$lib/components/FormField.svelte';
+  import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
+  import { Button } from "$lib/components/ui/button";
+  import { Input } from "$lib/components/ui/input";
+  import { Label } from "$lib/components/ui/label";
+  import { Textarea } from "$lib/components/ui/textarea";
+  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "$lib/components/ui/select";
+  import { Skeleton } from "$lib/components/ui/skeleton";
+  import { Building2, Mail, Upload, Send } from "@lucide/svelte";
 
   let congregation = $state<any>(null);
   let loading = $state(true);
+  let loadError = $state("");
   let inviteEmail = $state('');
   let inviteRole = $state('elder');
   let inviteStatus = $state('');
@@ -18,7 +26,7 @@
     try {
       const res = await api(`/congregations/${id}`);
       congregation = await res.json();
-    } catch {}
+    } catch { loadError = "Failed to load congregation."; }
     loading = false;
   }
 
@@ -55,7 +63,9 @@
     } catch { csvError = 'Import failed.'; }
   }
 
-  onMount(async () => {
+  async function fetchData() {
+    loading = true;
+    loadError = "";
     try {
       const meRes = await api('/me');
       const me = await meRes.json();
@@ -64,102 +74,128 @@
       } else {
         loading = false;
       }
-    } catch { loading = false; }
-  });
+    } catch { loadError = "Failed to load congregation."; loading = false; }
+  }
+
+  onMount(fetchData);
+
+  function formatRole(role: string) {
+    return role.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
 </script>
 
 <svelte:head>
   <title>Congregation — Theobase</title>
 </svelte:head>
 
-<h1>Congregation</h1>
+<div class="space-y-6">
+  <h1 class="text-2xl font-bold text-slate-900">Congregation</h1>
 
-{#if loading}
-  <p style="color: #718096;">Loading...</p>
-{:else if !congregation}
-  <div class="card">
-    <p style="color: #718096;">You are not associated with a congregation yet. Contact your conference office.</p>
-  </div>
-{:else}
-  <div class="card">
-    <h2>{congregation.name}</h2>
-    <div class="field">
-      <span class="label">Type</span>
-      <div class="value" style="text-transform: capitalize;">{congregation.type}</div>
+  {#if loading}
+    <Skeleton class="h-32" />
+    <Skeleton class="h-64" />
+  {:else if loadError}
+    <div class="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+      <p class="text-sm text-red-600">{loadError}</p>
+      <button class="mt-3 text-sm font-medium text-red-700 underline hover:text-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 rounded" onclick={fetchData}>Try again</button>
     </div>
-    <div class="field">
-      <span class="label">Timezone</span>
-      <div class="value">{congregation.timezone}</div>
+  {:else if !congregation}
+    <div class="flex flex-col items-center gap-3 py-12">
+      <Building2 class="size-8 text-slate-300" />
+      <p class="text-sm text-slate-500">You are not associated with a congregation yet. Contact your conference office.</p>
     </div>
-  </div>
+  {:else}
+    <Card>
+      <CardHeader>
+        <CardTitle>{congregation.name}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Type</p>
+          <p class="capitalize text-slate-900">{congregation.type}</p>
+        </div>
+        <div class="mt-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Timezone</p>
+          <p class="text-slate-900">{congregation.timezone}</p>
+        </div>
+      </CardContent>
+    </Card>
 
-  <div class="card">
-    <h2>Invite Officer</h2>
-    <FormField
-      label="Email"
-      type="email"
-      value={inviteEmail}
-      placeholder="officer@mychurch.org"
-      oninput={(e) => inviteEmail = (e.target as HTMLInputElement).value}
-    />
+    <Card>
+      <CardHeader>
+        <CardTitle class="flex items-center gap-2">
+          <Mail class="size-5" /> Invite Officer
+        </CardTitle>
+        <CardDescription>Send an invitation to add an officer to your congregation</CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-4">
+        <div class="space-y-2">
+          <Label for="invite-email">Email</Label>
+          <Input
+            id="invite-email"
+            type="email"
+            bind:value={inviteEmail}
+            placeholder="officer@mychurch.org"
+          />
+        </div>
 
-    <div class="field">
-      <label class="field-label">Role</label>
-      <select bind:value={inviteRole} class="select">
-        {#each roleOptions as role}
-          <option value={role}>{role.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
-        {/each}
-      </select>
-    </div>
+        <div class="space-y-2">
+          <Label for="invite-role">Role</Label>
+          <Select bind:value={inviteRole}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {#each roleOptions as role}
+                <SelectItem value={role}>{formatRole(role)}</SelectItem>
+              {/each}
+            </SelectContent>
+          </Select>
+        </div>
 
-    <button onclick={sendInvite} disabled={!inviteEmail}>Send Invitation</button>
-    {#if inviteStatus}
-      <p class={inviteStatus.includes('sent') ? 'success' : 'error'} style="margin-top: 8px;">{inviteStatus}</p>
-    {/if}
-  </div>
+        <Button onclick={sendInvite} disabled={!inviteEmail}>
+          <Send class="size-4" /> Send Invitation
+        </Button>
 
-  <div class="card">
-    <h2>Import Members (CSV)</h2>
-    <div class="field">
-      <label class="field-label">Paste CSV</label>
-      <textarea bind:value={csvText} rows="5" placeholder="firstName,lastName,email,phone,isMember&#10;Alice,Smith,alice@test.com,+679 111,true&#10;Bob,Jones,bob@test.com,+679 222,false" class="textarea"></textarea>
-    </div>
-
-    <button onclick={importCSV} disabled={!csvText.trim()}>Import</button>
-
-    {#if csvResult}
-      <div style="margin-top: 12px;">
-        <p class="success">{csvResult.imported} members imported.</p>
-        {#if csvResult.errors?.length}
-          <p class="error">{csvResult.errors.length} rows had errors.</p>
+        {#if inviteStatus}
+          <p class="text-sm {inviteStatus.includes('sent') ? 'text-green-600' : 'text-red-600'}">{inviteStatus}</p>
         {/if}
-      </div>
-    {/if}
-    {#if csvError}
-      <p class="error">{csvError}</p>
-    {/if}
-  </div>
-{/if}
+      </CardContent>
+    </Card>
 
-<style>
-  .field { margin-bottom: 12px; }
-  .label {
-    font-size: 0.75rem;
-    color: #4a5568;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 600;
-  }
-  .value { font-size: 1rem; }
-  .field-label {
-    display: block;
-    font-size: 0.75rem;
-    color: #4a5568;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-    font-weight: 600;
-  }
-  .select { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem; box-sizing: border-box; }
-  .textarea { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; font-family: monospace; box-sizing: border-box; margin-bottom: 12px; }
-</style>
+    <Card>
+      <CardHeader>
+        <CardTitle class="flex items-center gap-2">
+          <Upload class="size-5" /> Import Members (CSV)
+        </CardTitle>
+        <CardDescription>Paste CSV data to bulk-import members</CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-4">
+        <div class="space-y-2">
+          <Label for="csv-input">Paste CSV</Label>
+          <Textarea
+            id="csv-input"
+            bind:value={csvText}
+            rows={5}
+            placeholder="firstName,lastName,email,phone,isMember&#10;Alice,Smith,alice@test.com,+679 111,true&#10;Bob,Jones,bob@test.com,+679 222,false"
+            class="font-mono"
+          />
+        </div>
+
+        <Button onclick={importCSV} disabled={!csvText.trim()}>Import Members</Button>
+
+        {#if csvResult}
+          <div class="space-y-1">
+            <p class="text-sm text-green-600">{csvResult.imported} members imported.</p>
+            {#if csvResult.errors?.length}
+              <p class="text-sm text-red-600">{csvResult.errors.length} rows had errors.</p>
+            {/if}
+          </div>
+        {/if}
+        {#if csvError}
+          <p class="text-sm text-red-600">{csvError}</p>
+        {/if}
+      </CardContent>
+    </Card>
+  {/if}
+</div>

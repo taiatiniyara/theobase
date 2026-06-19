@@ -1,14 +1,60 @@
 <script lang="ts">
   import { getMe, getPathfinderProgress, createPathfinderProgress, getPathfinderHonors, createPathfinderHonor } from '$lib/api';
   import { onMount } from 'svelte';
-  import FormField from '$lib/components/FormField.svelte';
+  import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { Button } from '$lib/components/ui/button';
+  import { Input } from '$lib/components/ui/input';
+  import { Label } from '$lib/components/ui/label';
+  import { Badge } from '$lib/components/ui/badge';
+  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '$lib/components/ui/select';
+  import { Skeleton } from '$lib/components/ui/skeleton';
+  import { Compass } from '@lucide/svelte';
+  import { formatDate } from '$lib/format';
+  import DataToolbar from "$lib/components/DataToolbar.svelte";
 
   let memberId = $state('');
   let progress = $state<any[]>([]);
   let honors = $state<any[]>([]);
   let loading = $state(false);
   let loaded = $state(false);
+  let loadError = $state("");
+  let actionError = $state("");
+  let submitting = $state(false);
   let tab = $state<'progress' | 'honors'>('progress');
+
+  let searchQuery = $state("");
+  let sortKey = $state("className");
+  let sortDir = $state<"asc" | "desc">("asc");
+
+  const filteredProgress = $derived(
+    progress
+      .filter(p => !searchQuery ||
+        Object.values(p).some(v => String(v).toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+      .sort((a, b) => {
+        const aVal = a[sortKey] ?? "";
+        const bVal = b[sortKey] ?? "";
+        const cmp = String(aVal).localeCompare(String(bVal));
+        return sortDir === "asc" ? cmp : -cmp;
+      })
+  );
+
+  let hSearchQuery = $state("");
+  let hSortKey = $state("name");
+  let hSortDir = $state<"asc" | "desc">("asc");
+
+  const filteredHonors = $derived(
+    honors
+      .filter(h => !hSearchQuery ||
+        Object.values(h).some(v => String(v).toLowerCase().includes(hSearchQuery.toLowerCase()))
+      )
+      .sort((a, b) => {
+        const aVal = a[hSortKey] ?? "";
+        const bVal = b[hSortKey] ?? "";
+        const cmp = String(aVal).localeCompare(String(bVal));
+        return hSortDir === "asc" ? cmp : -cmp;
+      })
+  );
 
   let clsName = $state('friend');
   let clsStatus = $state('in_progress');
@@ -30,32 +76,46 @@
       progress = Array.isArray(p) ? p : [];
       honors = Array.isArray(h) ? h : [];
       loaded = true;
-    } catch {}
+    } catch { 
+      loadError = "Failed to load. Please try again.";
+    }
     loading = false;
   }
 
   async function addProgress() {
     if (!memberId) return;
+    actionError = "";
+    submitting = true;
     try {
       const result = await createPathfinderProgress({ memberId, className: clsName, clubType: 'pathfinders', status: clsStatus });
       progress = [...progress, result];
-    } catch {}
+    } catch { 
+      actionError = "Failed to record progress. Please try again.";
+    }
+    submitting = false;
   }
 
   async function addHonor() {
     if (!memberId || !honorName) return;
+    actionError = "";
+    submitting = true;
     try {
       const result = await createPathfinderHonor({ memberId, name: honorName, category: honorCategory, earnedAt: honorDate });
       honors = [...honors, result];
       honorName = '';
-    } catch {}
+    } catch { 
+      actionError = "Failed to add honor. Please try again.";
+    }
+    submitting = false;
   }
 
   onMount(async () => {
     try {
       const me = await getMe();
       if (me?.personId) memberId = me.personId;
-    } catch {}
+    } catch { 
+      loadError = "Failed to load. Please try again.";
+    }
   });
 </script>
 
@@ -63,101 +123,175 @@
   <title>Pathfinders — Theobase</title>
 </svelte:head>
 
-<h1>Pathfinders</h1>
+<div class="space-y-6">
+  <h1 class="text-2xl font-bold text-slate-900">Pathfinders</h1>
 
-<div class="card">
-  <div class="field">
-    <label class="field-label">Member ID</label>
-    <div style="display: flex; gap: 8px;">
-      <input type="text" bind:value={memberId} placeholder="person-1" class="input" />
-      <button onclick={loadData}>Load</button>
+  <Card>
+    <CardContent class="pt-6">
+      <div class="flex gap-2">
+        <Input bind:value={memberId} placeholder="person-1" class="flex-1" />
+        <Button onclick={loadData}>Load Data</Button>
+      </div>
+    </CardContent>
+  </Card>
+
+  {#if loadError}
+    <div class="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+      <p class="text-sm text-red-600">{loadError}</p>
+      <button 
+        class="mt-3 text-sm font-medium text-red-700 underline hover:text-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 rounded"
+        onclick={() => { loadError = ""; loadData(); }}
+      >
+        Try again
+      </button>
     </div>
-  </div>
-</div>
-
-{#if loading}
-  <p style="color: #718096;">Loading...</p>
-{:else if loaded}
-  <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-    <button onclick={() => tab = 'progress'} style={tab === 'progress' ? '' : 'background: #718096;'}>Class Progress</button>
-    <button onclick={() => tab = 'honors'} style={tab === 'honors' ? '' : 'background: #718096;'}>Honors</button>
-  </div>
-
-  {#if tab === 'progress'}
-    <div class="card">
-      <h2>Record Progress</h2>
-      <div class="field">
-        <label class="field-label">Class</label>
-        <select bind:value={clsName} class="select">
-          {#each classRanks as rank}
-            <option value={rank}>{rank.charAt(0).toUpperCase() + rank.slice(1)}</option>
-          {/each}
-        </select>
-      </div>
-      <div class="field">
-        <label class="field-label">Status</label>
-        <select bind:value={clsStatus} class="select">
-          <option value="in_progress">In Progress</option>
-          <option value="completed">Completed</option>
-          <option value="invested">Invested</option>
-        </select>
-      </div>
-      <button onclick={addProgress}>Record</button>
+  {:else if loading}
+    <div class="space-y-3">
+      <Skeleton class="h-8 w-40" />
+      <Skeleton class="h-20" />
+      <Skeleton class="h-20" />
+    </div>
+  {:else if loaded}
+    <div class="flex gap-2">
+      <Button variant={tab === 'progress' ? 'default' : 'ghost'} onclick={() => tab = 'progress'}>Class Progress</Button>
+      <Button variant={tab === 'honors' ? 'default' : 'ghost'} onclick={() => tab = 'honors'}>Honors</Button>
     </div>
 
-    {#each progress as p}
-      <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div style="text-transform: capitalize; font-weight: 600;">{p.className} — {p.clubType}</div>
-          <span class="badge" class:done={p.status === 'completed' || p.status === 'invested'} class:progress={p.status !== 'completed' && p.status !== 'invested'}>
-            {p.status?.replace(/_/g, ' ')}
-          </span>
-        </div>
-      </div>
-    {/each}
-  {:else}
-    <div class="card">
-      <h2>Add Honor</h2>
-      <FormField label="Name" value={honorName} placeholder="First Aid" oninput={(e) => honorName = (e.target as HTMLInputElement).value} />
-      <div class="field">
-        <label class="field-label">Category</label>
-        <select bind:value={honorCategory} class="select">
-          {#each honorCategories as cat}
-            <option value={cat}>{cat}</option>
-          {/each}
-        </select>
-      </div>
-      <FormField label="Date Earned" type="date" value={honorDate} oninput={(e) => honorDate = (e.target as HTMLInputElement).value} />
-      <button onclick={addHonor} disabled={!honorName}>Add Honor</button>
-    </div>
-
-    {#each honors as h}
-      <div class="card">
-        <div style="display: flex; justify-content: space-between;">
-          <div>
-            <div style="font-weight: 600;">{h.name}</div>
-            <div style="color: #718096; font-size: 0.85rem;">{h.category} — {h.earnedAt}</div>
+    {#if tab === 'progress'}
+      <Card>
+        <CardHeader>
+          <CardTitle>Record Progress</CardTitle>
+        </CardHeader>
+        <CardContent class="space-y-4">
+          <div class="space-y-2">
+            <Label for="cls">Class</Label>
+            <Select bind:value={clsName}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {#each classRanks as rank}
+                  <SelectItem value={rank}>{rank.charAt(0).toUpperCase() + rank.slice(1)}</SelectItem>
+                {/each}
+              </SelectContent>
+            </Select>
           </div>
-        </div>
-      </div>
-    {/each}
-  {/if}
-{/if}
+          <div class="space-y-2">
+            <Label for="status">Status</Label>
+            <Select bind:value={clsStatus}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="in_progress">In Progress</SelectItem>
+                <SelectItem value="completed">Completed</SelectItem>
+                <SelectItem value="invested">Invested</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <Button onclick={addProgress} disabled={submitting}>Record Progress</Button>
+          {#if actionError}
+            <div class="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+              <p class="text-sm text-red-600">{actionError}</p>
+              <button class="mt-3 text-sm font-medium text-red-700 underline hover:text-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 rounded" onclick={() => { actionError = ""; }}>Dismiss</button>
+            </div>
+          {/if}
+        </CardContent>
+      </Card>
 
-<style>
-  .field { margin-bottom: 12px; }
-  .field-label {
-    display: block;
-    font-size: 0.75rem;
-    color: #4a5568;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-    font-weight: 600;
-  }
-  .select { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; box-sizing: border-box; }
-  .input { flex: 1; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
-  .badge { font-size: 0.8rem; padding: 2px 10px; border-radius: 12px; }
-  .badge.done { background: #c6f6d5; color: #276749; }
-  .badge.progress { background: #fefcbf; color: #975a16; }
-</style>
+      {#if progress.length === 0}
+        <div class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-slate-200 bg-white dark:bg-slate-900 py-12">
+          <Compass class="size-8 text-slate-300" />
+          <p class="text-sm text-slate-500">No class progress recorded.</p>
+          <Button variant="outline" size="sm" onclick={() => document.querySelector('button:has([value])')?.click()}>Record your first progress</Button>
+        </div>
+      {:else}
+        <DataToolbar
+          searchPlaceholder="Search progress..."
+          sortOptions={[{ label: "Class", key: "className" }, { label: "Status", key: "status" }]}
+          sortKey={sortKey}
+          sortDir={sortDir}
+          onsearch={(q) => searchQuery = q}
+          onsort={(k, d) => { sortKey = k; sortDir = d; }}
+          resultCount={filteredProgress.length}
+          totalCount={progress.length}
+        />
+        {#each filteredProgress as p}
+          <div class="border rounded-lg bg-white dark:bg-slate-900 p-4">
+            <div class="flex items-center justify-between">
+              <div class="capitalize font-semibold text-slate-900">{p.className} — {p.clubType}</div>
+              <Badge variant="secondary" class={p.status === 'completed' || p.status === 'invested' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}>
+                {p.status?.replace(/_/g, ' ')}
+              </Badge>
+            </div>
+          </div>
+        {/each}
+      {/if}
+    {:else}
+      <Card>
+        <CardHeader>
+          <CardTitle>Add Honor</CardTitle>
+        </CardHeader>
+        <CardContent class="space-y-4">
+          <div class="space-y-2">
+            <Label for="honor-name">Name</Label>
+            <Input id="honor-name" bind:value={honorName} placeholder="First Aid" />
+          </div>
+          <div class="space-y-2">
+            <Label for="honor-category">Category</Label>
+            <Select bind:value={honorCategory}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {#each honorCategories as cat}
+                  <SelectItem value={cat}>{cat}</SelectItem>
+                {/each}
+              </SelectContent>
+            </Select>
+          </div>
+          <div class="space-y-2">
+            <Label for="honor-date">Date Earned</Label>
+            <Input id="honor-date" type="date" bind:value={honorDate} />
+          </div>
+          <Button onclick={addHonor} disabled={!honorName || submitting}>Add Honor</Button>
+          {#if actionError}
+            <div class="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+              <p class="text-sm text-red-600">{actionError}</p>
+              <button class="mt-3 text-sm font-medium text-red-700 underline hover:text-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 rounded" onclick={() => { actionError = ""; }}>Dismiss</button>
+            </div>
+          {/if}
+        </CardContent>
+      </Card>
+
+      {#if honors.length === 0}
+        <div class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-slate-200 bg-white dark:bg-slate-900 py-12">
+          <Compass class="size-8 text-slate-300" />
+          <p class="text-sm text-slate-500">No honors earned yet.</p>
+          <Button variant="outline" size="sm" onclick={() => document.getElementById('honor-name')?.focus()}>Add your first honor</Button>
+        </div>
+      {:else}
+        <DataToolbar
+          searchPlaceholder="Search honors..."
+          sortOptions={[{ label: "Name", key: "name" }, { label: "Category", key: "category" }]}
+          sortKey={hSortKey}
+          sortDir={hSortDir}
+          onsearch={(q) => hSearchQuery = q}
+          onsort={(k, d) => { hSortKey = k; hSortDir = d; }}
+          resultCount={filteredHonors.length}
+          totalCount={honors.length}
+        />
+        {#each filteredHonors as h}
+          <div class="border rounded-lg bg-white dark:bg-slate-900 p-4">
+            <div class="flex justify-between">
+              <div>
+                <div class="font-semibold text-slate-900">{h.name}</div>
+                <div class="text-sm text-slate-500">{h.category} — {formatDate(h.earnedAt)}</div>
+              </div>
+            </div>
+          </div>
+        {/each}
+      {/if}
+    {/if}
+  {/if}
+</div>

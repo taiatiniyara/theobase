@@ -1,11 +1,21 @@
 <script lang="ts">
   import { getOrderOfService, updateOrderOfService } from '$lib/api';
   import { onMount } from 'svelte';
-  import FormField from '$lib/components/FormField.svelte';
+  import { toast } from '$lib/toast';
+  import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { Button } from '$lib/components/ui/button';
+  import { Input } from '$lib/components/ui/input';
+  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '$lib/components/ui/select';
+  import { Skeleton } from '$lib/components/ui/skeleton';
+  import { MonitorPlay, X } from '@lucide/svelte';
+  import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
 
   let date = $state(new Date().toISOString().slice(0, 10));
   let items = $state<any[]>([]);
   let loaded = $state(false);
+  let loadError = $state("");
+  let saving = $state(false);
+  let deleteIndex = $state<number | null>(null);
 
   let newType = $state('hymn');
   let newTitle = $state('');
@@ -13,30 +23,41 @@
   const itemTypes = ['hymn', 'scripture', 'prayer', 'sermon', 'announcement', 'offering', 'special_music', 'benediction'];
 
   async function load(dateStr: string) {
+    loaded = false;
+    loadError = "";
     try {
       const data = await getOrderOfService(dateStr);
       if (data?.items) items = data.items;
       else items = [];
-    } catch { items = []; }
+    } catch { loadError = "Failed to load order of service."; }
     loaded = true;
   }
 
   async function addItem() {
-    if (!newTitle) return;
+    if (!newTitle || saving) return;
     items = [...items, { type: newType, title: newTitle }];
     newTitle = '';
     await save(items);
   }
 
-  async function removeItem(i: number) {
-    items = items.filter((_, j) => j !== i);
-    await save(items);
+  function removeItem(i: number) {
+    deleteIndex = i;
+  }
+
+  async function confirmRemove() {
+    if (deleteIndex !== null) {
+      items = items.filter((_, j) => j !== deleteIndex);
+      await save(items);
+      deleteIndex = null;
+    }
   }
 
   async function save(current: any[]) {
+    saving = true;
     try {
       await updateOrderOfService({ date, items: current });
-    } catch {}
+    } catch { toast.error("Failed to save."); items = []; await load(date); }
+    saving = false;
   }
 
   onMount(() => load(date));
@@ -44,54 +65,78 @@
 
 <svelte:head><title>AV Sync — Theobase</title></svelte:head>
 
-<h1>AV — Order of Service</h1>
+<div class="space-y-6">
+  <h1 class="text-2xl font-bold text-slate-900">AV — Order of Service</h1>
 
-<div style="display: flex; gap: 8px; margin-bottom: 16px; align-items: center;">
-  <input type="date" bind:value={date} onchange={() => load(date)} class="input-date" />
-</div>
-
-<div class="card">
-  <h2>Add Item</h2>
-  <div class="add-row">
-    <div style="flex: 1;">
-      <select bind:value={newType} class="select">
-        {#each itemTypes as t}
-          <option value={t}>{t.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
-        {/each}
-      </select>
-    </div>
-    <div style="flex: 2;">
-      <FormField label="Title" value={newTitle} placeholder="Amazing Grace" oninput={(e) => newTitle = (e.target as HTMLInputElement).value} />
-    </div>
-    <button onclick={addItem} disabled={!newTitle} class="add-btn">+ Add</button>
+  <div class="flex gap-2 items-end">
+    <Input type="date" bind:value={date} onchange={() => load(date)} class="w-full max-w-xs" />
   </div>
-</div>
 
-{#if loaded}
-  {#if items.length === 0}
-    <div class="card"><p style="color: #718096;">No order of service for this date.</p></div>
-  {:else}
-    {#each items as item, i}
-      <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <div class="item-type">{item.type?.replace(/_/g, ' ')}</div>
-            <div style="font-weight: 600;">{item.title}</div>
-          </div>
-          <button onclick={() => removeItem(i)} class="remove-btn">✕</button>
+  <Card>
+    <CardHeader>
+      <CardTitle>Add Item</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div class="flex gap-2 items-end">
+        <div class="w-36">
+          <Select bind:value={newType}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {#each itemTypes as t}
+                <SelectItem value={t}>{t.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</SelectItem>
+              {/each}
+            </SelectContent>
+          </Select>
         </div>
+        <div class="flex-1">
+          <Input bind:value={newTitle} placeholder="Amazing Grace" />
+        </div>
+        <Button onclick={addItem} disabled={!newTitle || saving}>+ Add</Button>
       </div>
-    {/each}
-  {/if}
-{:else}
-  <p style="color: #718096;">Loading...</p>
-{/if}
+    </CardContent>
+  </Card>
 
-<style>
-  .input-date { flex: 1; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; }
-  .select { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; box-sizing: border-box; }
-  .add-row { display: flex; gap: 8px; align-items: flex-end; }
-  .add-btn { flex-shrink: 0; padding: 12px 16px; }
-  .remove-btn { background: #e53e3e; padding: 6px 10px; font-size: 0.8rem; color: white; border: none; border-radius: 8px; cursor: pointer; }
-  .item-type { font-size: 0.75rem; color: #718096; text-transform: uppercase; }
-</style>
+  {#if loadError}
+    <div class="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+      <p class="text-sm text-red-600">{loadError}</p>
+      <button class="mt-3 text-sm font-medium text-red-700 underline" onclick={() => load(date)}>Try again</button>
+    </div>
+  {:else if loaded}
+    {#if items.length === 0}
+      <div class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-slate-200 bg-white dark:bg-slate-900 py-12">
+        <MonitorPlay class="size-8 text-slate-300" />
+        <p class="text-sm text-slate-500">No order of service for this date.</p>
+        <Button variant="outline" size="sm" onclick={() => document.querySelector('[placeholder="Amazing Grace"]')?.focus()}>Add your first item</Button>
+      </div>
+    {:else}
+      {#each items as item, i}
+        <div class="border rounded-lg bg-white dark:bg-slate-900 p-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-xs text-slate-500 dark:text-slate-400 uppercase">{item.type?.replace(/_/g, ' ')}</div>
+              <div class="font-semibold text-slate-900">{item.title}</div>
+            </div>
+            <Button variant="destructive" size="icon" class="size-7" onclick={() => removeItem(i)} disabled={saving} aria-label="Remove item"><X class="size-4" /></Button>
+          </div>
+        </div>
+      {/each}
+    {/if}
+  {:else}
+    <div class="space-y-3">
+      <Skeleton class="h-16" />
+      <Skeleton class="h-16" />
+    </div>
+  {/if}
+
+  <ConfirmDialog
+    open={deleteIndex !== null}
+    onOpenChange={(o) => { if (!o) deleteIndex = null; }}
+    title="Remove item"
+    description="Remove this item from the order of service?"
+    confirmLabel="Remove"
+    variant="destructive"
+    onconfirm={confirmRemove}
+  />
+</div>

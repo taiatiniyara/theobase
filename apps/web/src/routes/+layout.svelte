@@ -1,142 +1,291 @@
 <script lang="ts">
-  import '../app.css';
-  import { getMe, clearToken, getToken } from '$lib/api';
-  import { onMount } from 'svelte';
-  import { page } from '$app/stores';
-  import { goto } from '$app/navigation';
+  import "../app.css";
+  import { getMe, clearToken, getToken } from "$lib/api";
+  import { connectRealtime } from "$lib/realtime";
+  import { onMount } from "svelte";
+  import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
+  import { cn } from "$lib/utils";
+  import Sidebar from "$lib/components/Sidebar.svelte";
+  import { Sheet, SheetContent, SheetTrigger } from "$lib/components/ui/sheet";
+  import { Button } from "$lib/components/ui/button";
+  import { Avatar, AvatarFallback } from "$lib/components/ui/avatar";
+  import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "$lib/components/ui/dropdown-menu";
+  import { Toaster } from "$lib/components/ui/sonner";
+  import CommandPalette from "$lib/components/CommandPalette.svelte";
+  import ConfirmDialog from "$lib/components/ConfirmDialog.svelte";
+  import PullToRefresh from "$lib/components/PullToRefresh.svelte";
+  import KeyboardShortcuts from "$lib/components/KeyboardShortcuts.svelte";
+  import Menu from "@lucide/svelte/icons/menu";
+  import Bell from "@lucide/svelte/icons/bell";
+  import LogOut from "@lucide/svelte/icons/log-out";
+  import User from "@lucide/svelte/icons/user";
+  import Keyboard from "@lucide/svelte/icons/keyboard";
+  import Moon from "@lucide/svelte/icons/moon";
+  import Sun from "@lucide/svelte/icons/sun";
 
   let { children } = $props();
   let profile = $state<any>(null);
-  let navOpen = $state(false);
   let online = $state(true);
   let pendingSync = $state(0);
+  let mobileNavOpen = $state(false);
+  let cmdOpen = $state(false);
+  let signOutOpen = $state(false);
+  let dark = $state(false);
+  let shortcutsOpen = $state(false);
+  let realtimeConn: ReturnType<typeof connectRealtime> | null = null;
+  let notifCount = $state(0);
 
   onMount(async () => {
+    const stored = localStorage.getItem("theobase_dark");
+    if (stored !== null) {
+      dark = stored === "true";
+      document.documentElement.classList.toggle("dark", dark);
+    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      dark = true;
+      document.documentElement.classList.add("dark");
+    }
+
     const token = getToken();
     if (token) {
       try {
         profile = await getMe();
-      } catch { clearToken(); }
+      } catch {
+        clearToken();
+      }
     }
 
-    // Service worker messages
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data?.type === 'connectivity') {
+    if (token && profile) {
+      realtimeConn = connectRealtime(token, {
+        onMessage: (data) => {
+          if (data.type === "notification" || data.type === "congregation_notification") {
+            notifCount++;
+          }
+        },
+      });
+    }
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.addEventListener("message", (event) => {
+        if (event.data?.type === "connectivity") {
           online = event.data.online;
           if (event.data.online) {
-            navigator.serviceWorker.controller?.postMessage({ type: 'sync_outbox' });
+            navigator.serviceWorker.controller?.postMessage({ type: "sync_outbox" });
           }
-        } else if (event.data?.type === 'outbox_queued') {
+        } else if (event.data?.type === "outbox_queued") {
           pendingSync++;
-        } else if (event.data?.type === 'outbox_synced') {
+        } else if (event.data?.type === "outbox_synced") {
           pendingSync = event.data.remaining || 0;
         }
       });
 
-      // Initial connectivity check
       if (navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({ type: 'check_online' });
+        navigator.serviceWorker.controller.postMessage({ type: "check_online" });
       }
     }
+
+    function handleKeydown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        cmdOpen = !cmdOpen;
+      } else if (e.key === "?" && !isInput(e)) {
+        e.preventDefault();
+        shortcutsOpen = !shortcutsOpen;
+      }
+    }
+
+    function isInput(e: KeyboardEvent): boolean {
+      const tag = (e.target as HTMLElement)?.tagName;
+      return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+    }
+    window.addEventListener("keydown", handleKeydown);
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+      realtimeConn?.close();
+    };
   });
 
   function signOut() {
     clearToken();
     profile = null;
-    goto('/');
+    goto("/");
   }
 
-  function isClerk() {
-    return profile?.roles?.includes('clerk');
+  function toggleDark() {
+    dark = !dark;
+    document.documentElement.classList.toggle("dark", dark);
+    localStorage.setItem("theobase_dark", String(dark));
   }
 
-  function isTreasurer() {
-    return profile?.roles?.includes('treasurer');
-  }
+  const roles = $derived<string[]>(profile?.roles || []);
+  const isAuthPage = $derived($page.url.pathname.startsWith("/auth"));
+  const initials = $derived(
+    profile?.firstName ? profile.firstName[0].toUpperCase() : "?",
+  );
 
-  const isAuthPage = $derived($page.url.pathname.startsWith('/auth'));
+  function getPageTitle(): string {
+    const path = $page.url.pathname;
+    const titles: Record<string, string> = {
+      "/dashboard": "Dashboard",
+      "/me": "Profile",
+      "/receipts": "Giving",
+      "/boardroom": "Boardroom",
+      "/treasury": "Treasury",
+      "/rota": "Duty Rota",
+      "/congregation": "Congregation",
+      "/pathfinders": "Pathfinders",
+      "/welfare": "Welfare",
+      "/sabbath-school": "Sabbath School",
+      "/health": "Health Ministry",
+      "/communion": "Communion",
+      "/av": "AV Sync",
+      "/district": "District Hub",
+      "/facilities": "Facilities",
+      "/crisis": "Crisis Assets",
+      "/transfers": "Transfers",
+      "/households": "Households",
+      "/candidacies": "Candidacies",
+      "/nominating": "Nominating",
+      "/conference": "Conference Report",
+    };
+    return titles[path] || "Theobase";
+  }
 </script>
 
-<div class="app">
-  <header class="header">
-    <a href={profile ? '/dashboard' : '/'} class="logo">Theobase</a>
-    <div style="display: flex; align-items: center; gap: 8px;">
-      {#if !online}
-        <span class="offline-badge">Offline</span>
-      {/if}
-      {#if pendingSync > 0}
-        <span class="sync-badge">{pendingSync}</span>
-      {/if}
-      {#if profile && !isAuthPage}
-        <button class="menu-toggle" onclick={() => navOpen = !navOpen}>
-          {navOpen ? '✕' : '☰'}
-        </button>
-      {/if}
+<svelte:head>
+  <title>{getPageTitle()} — Theobase</title>
+</svelte:head>
+
+{#if isAuthPage || !profile}
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <main class="mx-auto max-w-lg px-4 py-8" style="animation: fade-in 0.15s ease-out">
+      {@render children()}
+    </main>
+  </div>
+{:else}
+  <div class="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
+    <!-- Desktop Sidebar -->
+    <aside class="hidden lg:flex lg:w-60 lg:flex-col lg:border-r lg:border-slate-200 lg:bg-white dark:border-slate-800 dark:bg-slate-900">
+      <Sidebar {roles} />
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex flex-1 flex-col overflow-hidden">
+      <!-- Header -->
+      <header class="flex h-14 shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 dark:border-slate-800 dark:bg-slate-900">
+        <!-- Mobile menu trigger -->
+        <Sheet open={mobileNavOpen} onOpenChange={(o) => mobileNavOpen = o}>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" class="lg:hidden" aria-label="Open menu">
+              <Menu class="size-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" class="w-60 p-0">
+            <Sidebar {roles} onNavigate={() => mobileNavOpen = false} />
+          </SheetContent>
+        </Sheet>
+
+        <!-- Page title / breadcrumb -->
+        <nav class="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
+          <a href="/dashboard" class="hover:text-slate-900 dark:hover:text-slate-200 transition-colors">Theobase</a>
+          <span class="text-slate-300 dark:text-slate-600">/</span>
+          <span class="font-medium text-slate-900 dark:text-slate-100">{getPageTitle()}</span>
+        </nav>
+
+        <div class="flex-1"></div>
+
+        <!-- Status indicators -->
+        <div class="flex items-center gap-2">
+          {#if notifCount > 0}
+            <button
+              class="relative inline-flex items-center rounded-full p-1 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+              onclick={() => notifCount = 0}
+              aria-label="{notifCount} notifications"
+            >
+              <Bell class="size-4" />
+              <span class="absolute -right-0.5 -top-0.5 flex size-3.5 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white">
+                {notifCount}
+              </span>
+            </button>
+          {/if}
+          {#if !online}
+            <span class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700">
+              <span class="size-1.5 rounded-full bg-red-500"></span>
+              Offline
+            </span>
+          {/if}
+          {#if pendingSync > 0}
+            <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">
+              {pendingSync} queued
+            </span>
+          {/if}
+        </div>
+
+        <!-- User menu -->
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" class="rounded-full" aria-label="User menu">
+              <Avatar class="size-8">
+                <AvatarFallback class="bg-brand-100 text-brand-900 text-xs font-medium">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" class="w-48">
+            <div class="flex items-center gap-2 px-2 py-1.5">
+              <div class="flex flex-col">
+                <span class="text-sm font-medium">{profile?.firstName || profile?.email}</span>
+                <span class="text-xs text-slate-500">{profile?.email}</span>
+              </div>
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onclick={() => goto("/me")}>
+              <User class="size-4" />
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem onclick={toggleDark}>
+              {#if dark}
+                <Sun class="size-4" />
+                Light mode
+              {:else}
+                <Moon class="size-4" />
+                Dark mode
+              {/if}
+            </DropdownMenuItem>
+            <DropdownMenuItem onclick={() => {}} disabled>
+              <Keyboard class="size-4" />
+              Shortcuts (Cmd+K)
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onclick={() => signOutOpen = true} class="text-red-600">
+              <LogOut class="size-4" />
+              Sign out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </header>
+
+      <!-- Page Content -->
+      <main class="flex-1 overflow-y-auto p-6" style="animation: fade-in 0.15s ease-out">
+        <PullToRefresh onrefresh={async () => { window.location.reload(); }}>
+          {@render children()}
+        </PullToRefresh>
+      </main>
     </div>
-  </header>
+  </div>
 
-  {#if navOpen && profile}
-    <nav class="mobile-nav">
-      <a href="/dashboard" class:active={$page.url.pathname === '/dashboard'}>Dashboard</a>
-      <a href="/me" class:active={$page.url.pathname === '/me'}>Profile</a>
-      <a href="/receipts" class:active={$page.url.pathname === '/receipts'}>Giving</a>
-      {#if isClerk() || isTreasurer()}
-        <a href="/boardroom" class:active={$page.url.pathname === '/boardroom'}>Boardroom</a>
-      {/if}
-      {#if isTreasurer()}
-        <a href="/treasury" class:active={$page.url.pathname === '/treasury'}>Treasury</a>
-      {/if}
-      {#if isClerk()}
-        <a href="/rota" class:active={$page.url.pathname === '/rota'}>Rota</a>
-        <a href="/congregation" class:active={$page.url.pathname === '/congregation'}>Congregation</a>
-        <a href="/pathfinders" class:active={$page.url.pathname === '/pathfinders'}>Pathfinders</a>
-        <a href="/welfare" class:active={$page.url.pathname === '/welfare'}>Welfare</a>
-        <a href="/sabbath-school" class:active={$page.url.pathname === '/sabbath-school'}>Sabbath School</a>
-        <a href="/health" class:active={$page.url.pathname === '/health'}>Health Ministry</a>
-        <a href="/communion" class:active={$page.url.pathname === '/communion'}>Communion</a>
-        <a href="/av" class:active={$page.url.pathname === '/av'}>AV Sync</a>
-        <a href="/district" class:active={$page.url.pathname === '/district'}>District Hub</a>
-        <a href="/facilities" class:active={$page.url.pathname === '/facilities'}>Facilities</a>
-        <a href="/crisis" class:active={$page.url.pathname === '/crisis'}>Crisis Assets</a>
-        <a href="/transfers" class:active={$page.url.pathname === '/transfers'}>Transfers</a>
-        <a href="/households" class:active={$page.url.pathname === '/households'}>Households</a>
-        <a href="/candidacies" class:active={$page.url.pathname === '/candidacies'}>Candidacies</a>
-        <a href="/nominating" class:active={$page.url.pathname === '/nominating'}>Nominating</a>
-        <a href="/conference" class:active={$page.url.pathname === '/conference'}>Conference Report</a>
-      {/if}
-      <button class="nav-signout" onclick={signOut}>Sign out</button>
-    </nav>
-  {/if}
-
-  <main>
-    {@render children()}
-  </main>
-</div>
-
-<style>
-  .app { max-width: 640px; margin: 0 auto; padding: 0 16px; }
-  .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #e2e8f0; }
-  .logo { font-weight: 700; font-size: 1.25rem; color: #1a365d; text-decoration: none; }
-  .menu-toggle { background: #edf2f7; color: #1a365d; padding: 8px 12px; font-size: 1.2rem; line-height: 1; }
-  .mobile-nav { display: flex; flex-direction: column; gap: 4px; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
-  .mobile-nav a {
-    display: block; padding: 10px 12px; border-radius: 8px; text-decoration: none;
-    color: #4a5568; font-size: 0.95rem; font-weight: 500;
-  }
-  .mobile-nav a.active { background: #ebf4ff; color: #1a365d; }
-  .mobile-nav a:hover { background: #f7fafc; }
-  .nav-signout {
-    margin-top: 8px; padding: 10px 12px; background: transparent; color: #e53e3e;
-    text-align: left; font-size: 0.95rem; font-weight: 500;
-  }
-  .offline-badge {
-    background: #fed7d7; color: #9b2c2c; padding: 2px 8px; border-radius: 12px;
-    font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
-  }
-  .sync-badge {
-    background: #fefcbf; color: #975a16; padding: 2px 8px; border-radius: 12px;
-    font-size: 0.7rem; font-weight: 600; min-width: 18px; text-align: center;
-  }
-  main { padding: 24px 0; }
-</style>
+  <div class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+  <Toaster position="bottom-right" />
+  <CommandPalette {roles} open={cmdOpen} onOpenChange={(o) => cmdOpen = o} />
+  <KeyboardShortcuts open={shortcutsOpen} onOpenChange={(o) => shortcutsOpen = o} />
+  <ConfirmDialog
+    open={signOutOpen}
+    onOpenChange={(o) => signOutOpen = o}
+    title="Sign out"
+    description="Are you sure you want to sign out?"
+    confirmLabel="Sign out"
+    variant="destructive"
+    onconfirm={signOut}
+  />
+{/if}

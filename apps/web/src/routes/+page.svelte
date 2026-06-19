@@ -1,23 +1,33 @@
 <script lang="ts">
-  import { requestMagicLink } from '$lib/api';
-  import FormField from '$lib/components/FormField.svelte';
+  import { requestMagicLink } from "$lib/api";
+  import { toast } from "$lib/toast";
+  import { Button } from "$lib/components/ui/button";
+  import { Input } from "$lib/components/ui/input";
+  import { Label } from "$lib/components/ui/label";
+  import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
 
-  let email = $state('');
-  let status = $state<'idle' | 'sent' | 'error'>('idle');
-  let emailError = $state('');
+  let email = $state("");
+  let status = $state<"idle" | "sent" | "error">("idle");
+  let emailError = $state("");
+  let loading = $state(false);
 
   async function submit() {
-    status = 'idle';
-    emailError = '';
-    if (!email.includes('@')) {
-      emailError = 'Please enter a valid email address.';
+    status = "idle";
+    emailError = "";
+    if (!email.includes("@")) {
+      emailError = "Please enter a valid email address.";
       return;
     }
+    loading = true;
     try {
       await requestMagicLink(email);
-      status = 'sent';
+      status = "sent";
+      toast.success("Check your email for the magic link.");
     } catch {
-      status = 'error';
+      status = "error";
+      toast.error("Something went wrong. Try again.");
+    } finally {
+      loading = false;
     }
   }
 </script>
@@ -26,31 +36,40 @@
   <title>Sign in — Theobase</title>
 </svelte:head>
 
-<div class="card" style="margin-top: 32px;">
-  <h1>Sign in to Theobase</h1>
-  {#if status === 'sent'}
-    <p class="success">Check your email — we sent you a magic link.</p>
-  {:else}
-    <p class="hint-block">Enter your email address and we'll send you a sign-in link.</p>
-    <FormField
-      label="Email"
-      type="email"
-      value={email}
-      placeholder="elder@mychurch.org"
-      error={emailError}
-      oninput={(e) => email = (e.target as HTMLInputElement).value}
-    />
-    <button onclick={submit} disabled={!email.includes('@')}>Send magic link</button>
-    {#if status === 'error'}
-      <p class="error" style="margin-top: 12px;">Something went wrong. Try again.</p>
-    {/if}
-  {/if}
+<div class="flex min-h-[80vh] items-center justify-center">
+  <Card class="w-full max-w-md">
+    <CardHeader class="text-center">
+      <CardTitle class="text-2xl">Sign in to Theobase</CardTitle>
+      <CardDescription>
+        Enter your email address and we'll send you a sign-in link.
+      </CardDescription>
+    </CardHeader>
+    <CardContent class="space-y-4">
+      {#if status === "sent"}
+        <div class="rounded-lg bg-green-50 p-4 text-sm text-green-800">
+          Check your email &mdash; we sent you a magic link.
+        </div>
+      {:else}
+        <div class="space-y-2">
+          <Label for="email">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="elder@mychurch.org"
+            bind:value={email}
+            onkeydown={(e) => e.key === "Enter" && submit()}
+          />
+          {#if emailError}
+            <p class="text-sm text-red-600">{emailError}</p>
+          {/if}
+        </div>
+        <Button class="w-full" onclick={submit} disabled={!email.includes("@") || loading}>
+          {loading ? "Sending..." : "Send magic link"}
+        </Button>
+        {#if status === "error"}
+          <p class="text-center text-sm text-red-600">Something went wrong. Try again.</p>
+        {/if}
+      {/if}
+    </CardContent>
+  </Card>
 </div>
-
-<style>
-  .hint-block {
-    color: #718096;
-    margin-bottom: 16px;
-    font-size: 0.95rem;
-  }
-</style>

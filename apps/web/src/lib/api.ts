@@ -1,4 +1,4 @@
-const API_URL = 'https://api.theobase.net';
+export const API_URL = 'https://api.theobase.net';
 
 export function getToken(): string | null {
   if (typeof window === 'undefined') return null;
@@ -67,8 +67,12 @@ export async function updateMe(data: { phone?: string; address?: string }) {
 }
 
 // Receipts (issue 004)
-export async function getReceipts() {
-  const res = await api('/receipts');
+export async function getReceipts(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/receipts${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -81,8 +85,12 @@ export async function createReceipt(data: { amount: number; fundSplit: Record<st
 }
 
 // Boardroom (issue 005)
-export async function getBoardMeetings() {
-  const res = await api('/board/meetings');
+export async function getBoardMeetings(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/board/meetings${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -113,8 +121,12 @@ export async function getTreasuryBalance() {
   return res.json();
 }
 
-export async function getExpenses() {
-  const res = await api('/treasury/expenses');
+export async function getExpenses(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/treasury/expenses${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -133,8 +145,12 @@ export async function getRota(date: string) {
 }
 
 // Pathfinders (issue 010)
-export async function getPathfinderProgress(memberId: string) {
-  const res = await api(`/pathfinder/progress/${memberId}`);
+export async function getPathfinderProgress(memberId: string, limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/pathfinder/progress/${memberId}${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -143,8 +159,12 @@ export async function createPathfinderProgress(data: { memberId: string; classNa
   return res.json();
 }
 
-export async function getPathfinderHonors(memberId: string) {
-  const res = await api(`/pathfinder/honors/${memberId}`);
+export async function getPathfinderHonors(memberId: string, limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/pathfinder/honors/${memberId}${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -154,8 +174,12 @@ export async function createPathfinderHonor(data: { memberId: string; name: stri
 }
 
 // Welfare (issue 012)
-export async function getWelfareCases() {
-  const res = await api('/welfare/cases');
+export async function getWelfareCases(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/welfare/cases${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -164,8 +188,12 @@ export async function createWelfareCase(data: { personId: string; assistanceType
   return res.json();
 }
 
-export async function getPantryItems() {
-  const res = await api('/pantry/items');
+export async function getPantryItems(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/pantry/items${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -175,8 +203,12 @@ export async function createPantryItem(data: { name: string; quantity: number; u
 }
 
 // Sabbath School (issue 011)
-export async function getSabbathSchoolClasses() {
-  const res = await api('/sabbath-school/classes');
+export async function getSabbathSchoolClasses(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/sabbath-school/classes${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -191,8 +223,12 @@ export async function recordAttendance(data: { attendance: { classId: string; da
 }
 
 // Health (issue 013)
-export async function getHealthContacts() {
-  const res = await api('/health/contacts');
+export async function getHealthContacts(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/health/contacts${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -207,8 +243,12 @@ export async function createHealthContact(data: { eventId: string; name: string;
 }
 
 // Communion (issue 016)
-export async function getCommunionServices() {
-  const res = await api('/communion');
+export async function getCommunionServices(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/communion${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -234,8 +274,12 @@ export async function updateOrderOfService(data: { date: string; items: any[] })
 }
 
 // District Hub (issue 018)
-export async function getDistrictRotations() {
-  const res = await api('/district/rotations');
+export async function getDistrictRotations(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/district/rotations${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -250,8 +294,12 @@ export async function createDistrictVisit(data: { householdId: string; pastorId:
 }
 
 // Facilities (issue 019)
-export async function getFacilityBookings() {
-  const res = await api('/facilities/bookings');
+export async function getFacilityBookings(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/facilities/bookings${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -261,8 +309,12 @@ export async function createFacilityBooking(data: { date: string; timeStart: str
 }
 
 // Crisis (issue 020)
-export async function getCrisisAssets() {
-  const res = await api('/crisis/assets');
+export async function getCrisisAssets(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/crisis/assets${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -272,8 +324,12 @@ export async function createCrisisAsset(data: { type: string; description: strin
 }
 
 // Transfers (issue 021)
-export async function getTransfers() {
-  const res = await api('/transfers');
+export async function getTransfers(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/transfers${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -299,14 +355,22 @@ export async function createNominatingRole(data: { sessionId: string; roleType: 
 }
 
 // Health (issue 013)
-export async function getHealthEvents() {
-  const res = await api('/health/events');
+export async function getHealthEvents(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/health/events${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
 // Households (issue 014)
-export async function getHouseholds() {
-  const res = await api('/households');
+export async function getHouseholds(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/households${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 
@@ -316,8 +380,12 @@ export async function createHousehold(data: { name: string }) {
 }
 
 // Candidacies (issue 014)
-export async function getCandidacies() {
-  const res = await api('/candidacies');
+export async function getCandidacies(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit !== undefined) params.set("limit", String(limit));
+  if (offset !== undefined) params.set("offset", String(offset));
+  const qs = params.toString();
+  const res = await api(`/candidacies${qs ? `?${qs}` : ""}`);
   return res.json();
 }
 

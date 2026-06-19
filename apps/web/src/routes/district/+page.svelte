@@ -1,11 +1,39 @@
 <script lang="ts">
   import { getDistrictRotations, createDistrictRotation, createDistrictVisit } from '$lib/api';
   import { onMount } from 'svelte';
-  import FormField from '$lib/components/FormField.svelte';
+  import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { Button } from '$lib/components/ui/button';
+  import { Input } from '$lib/components/ui/input';
+  import { Label } from '$lib/components/ui/label';
+  import { Textarea } from '$lib/components/ui/textarea';
+  import { Skeleton } from '$lib/components/ui/skeleton';
+  import { Building2 } from '@lucide/svelte';
+  import { formatDate } from '$lib/format';
+  import DataToolbar from "$lib/components/DataToolbar.svelte";
 
   let rotations = $state<any[]>([]);
   let loading = $state(true);
+  let loadError = $state("");
+  let actionError = $state("");
+  let submitting = $state(false);
   let tab = $state<'rotations' | 'visits'>('rotations');
+
+  let searchQuery = $state("");
+  let sortKey = $state("date");
+  let sortDir = $state<"asc" | "desc">("desc");
+
+  const filteredRotations = $derived(
+    rotations
+      .filter(r => !searchQuery ||
+        Object.values(r).some(v => String(v).toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+      .sort((a, b) => {
+        const aVal = a[sortKey] ?? "";
+        const bVal = b[sortKey] ?? "";
+        const cmp = String(aVal).localeCompare(String(bVal));
+        return sortDir === "asc" ? cmp : -cmp;
+      })
+  );
 
   let rotCongId = $state('');
   let rotDate = $state('');
@@ -20,67 +48,160 @@
 
   async function addRotation() {
     if (!rotCongId || !rotDate || !rotPreacher) return;
+    actionError = "";
+    submitting = true;
     try {
       const result = await createDistrictRotation({
         congregationId: rotCongId, date: rotDate, preacherId: rotPreacher, topic: rotTopic,
       });
       rotations = [...rotations, result];
       rotTopic = '';
-    } catch {}
+    } catch { 
+      actionError = "Failed to schedule rotation. Please try again.";
+    }
+    submitting = false;
   }
 
   async function addVisit() {
     if (!visHousehold || !visDate) return;
+    actionError = "";
+    submitting = true;
     try {
       await createDistrictVisit({
         householdId: visHousehold, pastorId: visPastor, date: visDate,
         purpose: visPurpose, notes: visNotes,
       });
       visHousehold = ''; visPurpose = ''; visNotes = '';
-    } catch {}
+    } catch { 
+      actionError = "Failed to record visit. Please try again.";
+    }
+    submitting = false;
   }
 
   onMount(async () => {
-    try { rotations = await getDistrictRotations(); } catch {}
+    try { rotations = await getDistrictRotations(); } catch { 
+      loadError = "Failed to load. Please try again.";
+    }
     loading = false;
   });
 </script>
 
 <svelte:head><title>District Hub — Theobase</title></svelte:head>
 
-<h1>District Hub</h1>
+<div class="space-y-6">
+  <h1 class="text-2xl font-bold text-slate-900">District Hub</h1>
 
-<div style="display: flex; gap: 8px; margin-bottom: 16px;">
-  <button onclick={() => tab = 'rotations'} style={tab === 'rotations' ? '' : 'background: #718096;'}>Preaching Rotations</button>
-  <button onclick={() => tab = 'visits'} style={tab === 'visits' ? '' : 'background: #718096;'}>Pastoral Visits</button>
-</div>
-
-{#if loading}
-  <p style="color: #718096;">Loading...</p>
-{:else if tab === 'rotations'}
-  <div class="card">
-    <h2>Schedule Preaching</h2>
-    <FormField label="Congregation ID" value={rotCongId} placeholder="con-1" oninput={(e) => rotCongId = (e.target as HTMLInputElement).value} />
-    <FormField label="Date" type="date" value={rotDate} oninput={(e) => rotDate = (e.target as HTMLInputElement).value} />
-    <FormField label="Preacher ID" value={rotPreacher} placeholder="pastor-1" oninput={(e) => rotPreacher = (e.target as HTMLInputElement).value} />
-    <FormField label="Topic" value={rotTopic} placeholder="Faith" oninput={(e) => rotTopic = (e.target as HTMLInputElement).value} />
-    <button onclick={addRotation} disabled={!rotCongId || !rotDate || !rotPreacher}>Schedule</button>
+  <div class="flex gap-2">
+    <Button variant={tab === 'rotations' ? 'default' : 'ghost'} onclick={() => tab = 'rotations'}>Preaching Rotations</Button>
+    <Button variant={tab === 'visits' ? 'default' : 'ghost'} onclick={() => tab = 'visits'}>Pastoral Visits</Button>
   </div>
 
-  {#each rotations as r}
-    <div class="card">
-      <div style="font-weight: 600;">{r.date} — {r.topic || 'TBD'}</div>
-      <div style="color: #718096; font-size: 0.85rem;">Preacher: {r.preacherId} | Church: {r.congregationId}</div>
+  {#if loadError}
+    <div class="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+      <p class="text-sm text-red-600">{loadError}</p>
+      <button 
+        class="mt-3 text-sm font-medium text-red-700 underline hover:text-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 rounded"
+        onclick={() => { loadError = ""; onMount(async () => { try { rotations = await getDistrictRotations(); } catch { loadError = "Failed to load. Please try again."; } loading = false; }); }}
+      >
+        Try again
+      </button>
     </div>
-  {/each}
-{:else}
-  <div class="card">
-    <h2>Record Visit</h2>
-    <FormField label="Household ID" value={visHousehold} placeholder="household-1" oninput={(e) => visHousehold = (e.target as HTMLInputElement).value} />
-    <FormField label="Pastor ID" value={visPastor} placeholder="pastor-1" oninput={(e) => visPastor = (e.target as HTMLInputElement).value} />
-    <FormField label="Date" type="date" value={visDate} oninput={(e) => visDate = (e.target as HTMLInputElement).value} />
-    <FormField label="Purpose" value={visPurpose} placeholder="Pastoral visit" oninput={(e) => visPurpose = (e.target as HTMLInputElement).value} />
-    <FormField label="Notes" type="textarea" value={visNotes} placeholder="Visit notes..." oninput={(e) => visNotes = (e.target as HTMLTextAreaElement).value} />
-    <button onclick={addVisit} disabled={!visHousehold || !visDate}>Record Visit</button>
-  </div>
-{/if}
+  {:else if loading}
+    <div class="space-y-3">
+      <Skeleton class="h-8 w-40" />
+      <Skeleton class="h-20" />
+      <Skeleton class="h-20" />
+    </div>
+  {:else if tab === 'rotations'}
+    <Card>
+      <CardHeader>
+        <CardTitle>Schedule Preaching</CardTitle>
+      </CardHeader>
+      <CardContent class="space-y-4">
+        <div class="space-y-2">
+          <Label for="rot-cong">Congregation ID</Label>
+          <Input id="rot-cong" bind:value={rotCongId} placeholder="con-1" />
+        </div>
+        <div class="space-y-2">
+          <Label for="rot-date">Date</Label>
+          <Input id="rot-date" type="date" bind:value={rotDate} />
+        </div>
+        <div class="space-y-2">
+          <Label for="rot-preacher">Preacher ID</Label>
+          <Input id="rot-preacher" bind:value={rotPreacher} placeholder="pastor-1" />
+        </div>
+        <div class="space-y-2">
+          <Label for="rot-topic">Topic</Label>
+          <Input id="rot-topic" bind:value={rotTopic} placeholder="Faith" />
+        </div>
+        <Button onclick={addRotation} disabled={!rotCongId || !rotDate || !rotPreacher || submitting}>Schedule</Button>
+        {#if actionError}
+          <div class="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+            <p class="text-sm text-red-600">{actionError}</p>
+            <button class="mt-3 text-sm font-medium text-red-700 underline hover:text-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 rounded" onclick={() => { actionError = ""; }}>Dismiss</button>
+          </div>
+        {/if}
+      </CardContent>
+    </Card>
+
+    {#if rotations.length === 0}
+      <div class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-slate-200 bg-white dark:bg-slate-900 py-12">
+        <Building2 class="size-8 text-slate-300" />
+        <p class="text-sm text-slate-500">No preaching rotations scheduled.</p>
+        <Button variant="outline" size="sm" onclick={() => document.getElementById('rot-cong')?.focus()}>Schedule your first rotation</Button>
+      </div>
+    {:else}
+      <DataToolbar
+        searchPlaceholder="Search rotations..."
+        sortOptions={[{ label: "Date", key: "date" }, { label: "Congregation", key: "congregationId" }]}
+        sortKey={sortKey}
+        sortDir={sortDir}
+        onsearch={(q) => searchQuery = q}
+        onsort={(k, d) => { sortKey = k; sortDir = d; }}
+        resultCount={filteredRotations.length}
+        totalCount={rotations.length}
+      />
+      {#each filteredRotations as r}
+        <div class="border rounded-lg bg-white dark:bg-slate-900 p-4">
+          <div class="font-semibold text-slate-900">{formatDate(r.date)} — {r.topic || 'TBD'}</div>
+          <div class="text-sm text-slate-500">Preacher: {r.preacherId} | Church: {r.congregationId}</div>
+        </div>
+      {/each}
+    {/if}
+  {:else}
+    <Card>
+      <CardHeader>
+        <CardTitle>Record Visit</CardTitle>
+      </CardHeader>
+      <CardContent class="space-y-4">
+        <div class="space-y-2">
+          <Label for="vis-household">Household ID</Label>
+          <Input id="vis-household" bind:value={visHousehold} placeholder="household-1" />
+        </div>
+        <div class="space-y-2">
+          <Label for="vis-pastor">Pastor ID</Label>
+          <Input id="vis-pastor" bind:value={visPastor} placeholder="pastor-1" />
+        </div>
+        <div class="space-y-2">
+          <Label for="vis-date">Date</Label>
+          <Input id="vis-date" type="date" bind:value={visDate} />
+        </div>
+        <div class="space-y-2">
+          <Label for="vis-purpose">Purpose</Label>
+          <Input id="vis-purpose" bind:value={visPurpose} placeholder="Pastoral visit" />
+        </div>
+        <div class="space-y-2">
+          <Label for="vis-notes">Notes</Label>
+          <Textarea id="vis-notes" bind:value={visNotes} placeholder="Visit notes..." />
+        </div>
+        <Button onclick={addVisit} disabled={!visHousehold || !visDate || submitting}>Record Visit</Button>
+        {#if actionError}
+          <div class="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+            <p class="text-sm text-red-600">{actionError}</p>
+            <button class="mt-3 text-sm font-medium text-red-700 underline hover:text-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 rounded" onclick={() => { actionError = ""; }}>Dismiss</button>
+          </div>
+        {/if}
+      </CardContent>
+    </Card>
+  {/if}
+</div>

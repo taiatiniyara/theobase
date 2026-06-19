@@ -1,17 +1,25 @@
 <script lang="ts">
   import { getRota } from '$lib/api';
   import { onMount } from 'svelte';
+  import { Card, CardContent } from "$lib/components/ui/card";
+  import { Button } from "$lib/components/ui/button";
+  import { Input } from "$lib/components/ui/input";
+  import { Badge } from "$lib/components/ui/badge";
+  import { Skeleton } from "$lib/components/ui/skeleton";
+  import { ChevronLeft, ChevronRight, CalendarCheck } from "@lucide/svelte";
 
   let date = $state(new Date().toISOString().slice(0, 10));
   let slots = $state<any[]>([]);
   let loading = $state(false);
+  let loadError = $state("");
 
   async function loadRota() {
     loading = true;
+    loadError = "";
     try {
       const data = await getRota(date);
       slots = Array.isArray(data) ? data : [];
-    } catch { slots = []; }
+    } catch { loadError = "Failed to load rota."; }
     loading = false;
   }
 
@@ -47,45 +55,54 @@
   <title>Duty Rota — Theobase</title>
 </svelte:head>
 
-<h1>Duty Rota</h1>
+<div class="space-y-6">
+  <h1 class="text-2xl font-bold text-slate-900">Duty Rota</h1>
 
-<div class="date-nav">
-  <button onclick={prevWeek} class="nav-btn">← Prev</button>
-  <input type="date" bind:value={date} onchange={loadRota} class="date-input" />
-  <button onclick={nextWeek} class="nav-btn">Next →</button>
-</div>
-
-{#if loading}
-  <p style="color: #718096;">Loading...</p>
-{:else if slots.length === 0}
-  <div class="card">
-    <p style="color: #718096;">No duty assignments for this Sabbath. Ask your clerk to set up the rota.</p>
+  <div class="flex items-center gap-3">
+    <Button variant="ghost" size="icon" onclick={prevWeek} aria-label="Previous week">
+      <ChevronLeft class="size-4" />
+    </Button>
+    <Input type="date" bind:value={date} onchange={loadRota} class="flex-1" />
+    <Button variant="ghost" size="icon" onclick={nextWeek} aria-label="Next week">
+      <ChevronRight class="size-4" />
+    </Button>
   </div>
-{:else}
-  {#each slots as slot}
-    <div class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <div style="font-weight: 600; text-transform: capitalize;">
-            {roleLabels[slot.role] || slot.role?.replace(/_/g, ' ')}
-          </div>
-          {#if slot.volunteerName}
-            <div style="color: #718096; font-size: 0.875rem;">{slot.volunteerName}</div>
-          {/if}
-        </div>
-        <span class="badge" class:assigned={slot.status === 'assigned'} class:unfilled={slot.status !== 'assigned'}>
-          {slot.status}
-        </span>
-      </div>
-    </div>
-  {/each}
-{/if}
 
-<style>
-  .date-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-  .nav-btn { background: #718096; padding: 8px 16px; }
-  .date-input { flex: 1; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; box-sizing: border-box; }
-  .badge { font-size: 0.8rem; padding: 2px 10px; border-radius: 12px; }
-  .badge.assigned { background: #c6f6d5; color: #276749; }
-  .badge.unfilled { background: #fefcbf; color: #975a16; }
-</style>
+  {#if loading}
+    <div class="space-y-3">
+      <Skeleton class="h-16" />
+      <Skeleton class="h-16" />
+      <Skeleton class="h-16" />
+    </div>
+  {:else if loadError}
+    <div class="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+      <p class="text-sm text-red-600">{loadError}</p>
+      <button class="mt-3 text-sm font-medium text-red-700 underline" onclick={loadRota}>Try again</button>
+    </div>
+  {:else if slots.length === 0}
+    <div class="flex flex-col items-center gap-3 py-12">
+      <CalendarCheck class="size-8 text-slate-300" />
+      <p class="text-sm text-slate-500">No duty assignments for this Sabbath. Ask your clerk to set up the rota.</p>
+    </div>
+  {:else}
+    <div class="space-y-3">
+      {#each slots as slot}
+        <Card>
+          <CardContent class="flex items-center justify-between p-4">
+            <div>
+              <p class="font-semibold capitalize text-slate-900">
+                {roleLabels[slot.role] || slot.role?.replace(/_/g, ' ')}
+              </p>
+              {#if slot.volunteerName}
+                <p class="text-sm text-slate-500">{slot.volunteerName}</p>
+              {/if}
+            </div>
+            <Badge variant={slot.status === 'assigned' ? 'default' : 'secondary'}>
+              {slot.status}
+            </Badge>
+          </CardContent>
+        </Card>
+      {/each}
+    </div>
+  {/if}
+</div>
