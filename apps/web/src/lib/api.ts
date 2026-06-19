@@ -200,3 +200,81 @@ export async function createHealthContact(data: { eventId: string; name: string;
   const res = await api('/health/contacts', { method: 'POST', body: JSON.stringify(data) });
   return res.json();
 }
+
+// Communion (issue 016)
+export async function createCommunion(data: { date: string; rooms: any[]; inventory: any[] }) {
+  const res = await api('/communion', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+// AV Sync (issue 017)
+export async function getOrderOfService(date: string) {
+  const res = await api(`/av/order-of-service/${date}`);
+  return res.json();
+}
+
+export async function updateOrderOfService(data: { date: string; items: any[] }) {
+  const res = await api('/av/order-of-service', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+// District Hub (issue 018)
+export async function getDistrictRotations() {
+  const res = await api('/district/rotations');
+  return res.json();
+}
+
+export async function createDistrictRotation(data: { congregationId: string; date: string; preacherId: string; topic: string }) {
+  const res = await api('/district/rotations', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function createDistrictVisit(data: { householdId: string; pastorId: string; date: string; purpose: string; notes: string }) {
+  const res = await api('/district/visits', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+// Facilities (issue 019)
+export async function createFacilityBooking(data: { date: string; timeStart: string; timeEnd: string; purpose: string }) {
+  const res = await api('/facilities/bookings', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+// Crisis (issue 020)
+export async function getCrisisAssets() {
+  const res = await api('/crisis/assets');
+  return res.json();
+}
+
+export async function createCrisisAsset(data: { type: string; description: string; status?: string }) {
+  const res = await api('/crisis/assets', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+// Transfers (issue 021)
+export async function getTransfers() {
+  const res = await api('/transfers');
+  return res.json();
+}
+
+export async function createTransfer(data: { memberId: string; toCongregationId: string }) {
+  const res = await api('/transfers', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+// Nominating (issue 023)
+export async function createNominatingSession(data: { year: number }) {
+  const res = await api('/nominating/sessions', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function createNominatingRole(data: { sessionId: string; roleType: string }) {
+  const res = await api('/nominating/roles', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+// Health (issue 013)
+export async function getHealthEvents() {
+  const res = await api('/health/events');
+  return res.json();
+}

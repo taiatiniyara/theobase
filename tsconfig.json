@@ -11,5 +11,11 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    ".svelte-kit",
+    "apps/web/src/service-worker.ts",
+    "drizzle"
+  ]
 }

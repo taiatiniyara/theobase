@@ -1,3 +1,5 @@
+/// <reference types="@cloudflare/workers-types" />
+
 export async function applyMigrations(
   db: D1Database,
   statements: string[]

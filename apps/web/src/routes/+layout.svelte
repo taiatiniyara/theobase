@@ -93,6 +93,15 @@
         <a href="/pathfinders" class:active={$page.url.pathname === '/pathfinders'}>Pathfinders</a>
         <a href="/welfare" class:active={$page.url.pathname === '/welfare'}>Welfare</a>
         <a href="/sabbath-school" class:active={$page.url.pathname === '/sabbath-school'}>Sabbath School</a>
+        <a href="/health" class:active={$page.url.pathname === '/health'}>Health Ministry</a>
+        <a href="/communion" class:active={$page.url.pathname === '/communion'}>Communion</a>
+        <a href="/av" class:active={$page.url.pathname === '/av'}>AV Sync</a>
+        <a href="/district" class:active={$page.url.pathname === '/district'}>District Hub</a>
+        <a href="/facilities" class:active={$page.url.pathname === '/facilities'}>Facilities</a>
+        <a href="/crisis" class:active={$page.url.pathname === '/crisis'}>Crisis Assets</a>
+        <a href="/transfers" class:active={$page.url.pathname === '/transfers'}>Transfers</a>
+        <a href="/nominating" class:active={$page.url.pathname === '/nominating'}>Nominating</a>
+        <a href="/conference" class:active={$page.url.pathname === '/conference'}>Conference Report</a>
       {/if}
       <button class="nav-signout" onclick={signOut}>Sign out</button>
     </nav>

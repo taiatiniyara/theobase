@@ -118,7 +118,7 @@ self.addEventListener('activate', (event) => {
 });
 
 // Fetch
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', (event: FetchEvent) => {
   const url = new URL(event.request.url);
   const isAPI = url.pathname.startsWith('/me') ||
     url.pathname.startsWith('/receipts') ||
