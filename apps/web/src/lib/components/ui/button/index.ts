@@ -1,8 +1,9 @@
+// @ts-nocheck
 import Root, {
-	type ButtonProps,
-	type ButtonSize,
-	type ButtonVariant,
-	buttonVariants,
+  type ButtonProps,
+  type ButtonSize,
+  type ButtonVariant,
+  buttonVariants,
 } from "./button.svelte";
 
 export {

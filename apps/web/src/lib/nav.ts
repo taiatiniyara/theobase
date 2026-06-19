@@ -20,18 +20,21 @@ import ClipboardCheck from "@lucide/svelte/icons/clipboard-check";
 import Vote from "@lucide/svelte/icons/vote";
 import Presentation from "@lucide/svelte/icons/presentation";
 
-import type { ComponentType } from "svelte";
+import type { Component } from "svelte";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type IconComponent = Component<any>;
 
 export interface NavItem {
   label: string;
   href: string;
-  icon: ComponentType;
+  icon: IconComponent;
   roles?: string[];
 }
 
 export interface NavSection {
   label: string;
-  icon: ComponentType;
+  icon: IconComponent;
   roles?: string[];
   items: NavItem[];
 }
