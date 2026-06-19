@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getHealthEvents, createHealthEvent, getHealthContacts, createHealthContact } from '$lib/api';
+  import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
@@ -94,6 +95,8 @@
   }
 
   onMount(async () => {
+    const authorized = await requireRole("clerk", "health_ministries_leader");
+    if (!authorized) return;
     try {
       const [ev, ct] = await Promise.all([getHealthEvents(), getHealthContacts()]);
       events = Array.isArray(ev) ? ev : [];

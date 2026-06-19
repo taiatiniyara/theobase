@@ -1,5 +1,6 @@
 <script lang="ts">
   import { api, getMe } from '$lib/api';
+  import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
@@ -89,6 +90,8 @@
   }
 
   onMount(async () => {
+    const authorized = await requireRole("clerk", "treasurer");
+    if (!authorized) return;
     setCurrentQuarter();
     try {
       const me = await getMe();

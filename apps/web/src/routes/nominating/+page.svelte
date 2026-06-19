@@ -1,5 +1,7 @@
 <script lang="ts">
   import { createNominatingSession, createNominatingRole } from '$lib/api';
+  import { requireRole } from "$lib/guard";
+  import { onMount } from 'svelte';
   import { toast } from '$lib/toast';
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
@@ -45,6 +47,11 @@
   function roleLabel(r: string) {
     return r.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   }
+
+  onMount(async () => {
+    const authorized = await requireRole("clerk");
+    if (!authorized) return;
+  });
 </script>
 
 <svelte:head><title>Nominating — Theobase</title></svelte:head>

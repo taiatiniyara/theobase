@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getRota } from '$lib/api';
+  import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { Card, CardContent } from "$lib/components/ui/card";
   import { Button } from "$lib/components/ui/button";
@@ -23,7 +24,11 @@
     loading = false;
   }
 
-  onMount(loadRota);
+  onMount(async () => {
+    const authorized = await requireRole("clerk");
+    if (!authorized) return;
+    loadRota();
+  });
 
   function prevWeek() {
     const d = new Date(date);

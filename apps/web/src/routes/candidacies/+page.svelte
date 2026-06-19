@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getCandidacies, createCandidacy } from '$lib/api';
+  import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { toast } from '$lib/toast';
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '$lib/components/ui/card';
@@ -48,7 +49,11 @@
     loading = false;
   }
 
-  onMount(loadCandidacies);
+  onMount(async () => {
+    const authorized = await requireRole("clerk");
+    if (!authorized) return;
+    loadCandidacies();
+  });
 
   async function addCandidacy() {
     if (!cdPersonId || submitting) return;

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getFacilityBookings, createFacilityBooking } from '$lib/api';
+  import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
@@ -40,6 +41,8 @@
   let booked = $state(false);
 
   onMount(async () => {
+    const authorized = await requireRole("clerk");
+    if (!authorized) return;
     try { bookings = await getFacilityBookings(); } catch { 
       loadError = "Failed to load. Please try again.";
     }

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { api } from '$lib/api';
+  import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
   import { Button } from "$lib/components/ui/button";
@@ -77,7 +78,11 @@
     } catch { loadError = "Failed to load congregation."; loading = false; }
   }
 
-  onMount(fetchData);
+  onMount(async () => {
+    const authorized = await requireRole("clerk");
+    if (!authorized) return;
+    fetchData();
+  });
 
   function formatRole(role: string) {
     return role.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());

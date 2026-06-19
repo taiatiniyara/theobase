@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getDistrictRotations, createDistrictRotation, createDistrictVisit } from '$lib/api';
+  import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
@@ -79,6 +80,8 @@
   }
 
   onMount(async () => {
+    const authorized = await requireRole("clerk", "district_pastor");
+    if (!authorized) return;
     try { rotations = await getDistrictRotations(); } catch { 
       loadError = "Failed to load. Please try again.";
     }

@@ -1,6 +1,7 @@
 <script lang="ts">
   import "../app.css";
   import { getMe, clearToken, getToken } from "$lib/api";
+  import { clearRoles } from "$lib/guard";
   import { connectRealtime } from "$lib/realtime";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
@@ -36,6 +37,43 @@
   let realtimeConn: ReturnType<typeof connectRealtime> | null = null;
   let notifCount = $state(0);
 
+  async function loadProfile() {
+    const token = getToken();
+    if (!token) {
+      profile = null;
+      realtimeConn?.close();
+      realtimeConn = null;
+      return;
+    }
+    if (profile) return;
+    try {
+      profile = await getMe();
+      if (profile) {
+        realtimeConn?.close();
+        realtimeConn = connectRealtime(token, {
+          onMessage: (data) => {
+            if (data.type === "notification" || data.type === "congregation_notification") {
+              notifCount++;
+            }
+          },
+        });
+        const path = $page.url.pathname;
+        if (path === "/" || path === "/auth/verify") {
+          goto("/dashboard");
+        }
+      }
+    } catch {
+      clearToken();
+      profile = null;
+    }
+  }
+
+  // Reactively load profile when token or path changes
+  $effect(() => {
+    const token = $page.url.pathname;
+    loadProfile();
+  });
+
   onMount(async () => {
     const stored = localStorage.getItem("theobase_dark");
     if (stored !== null) {
@@ -46,30 +84,17 @@
       document.documentElement.classList.add("dark");
     }
 
-    const token = getToken();
-    if (token) {
-      try {
-        profile = await getMe();
-        if (profile) {
-          const path = $page.url.pathname;
-          if (path === "/" || path === "/auth/verify") {
-            goto("/dashboard");
-          }
+    // Cross-tab sign-out detection
+    window.addEventListener("storage", (e) => {
+      if (e.key === "theobase_token" && !e.newValue) {
+        profile = null;
+        realtimeConn?.close();
+        realtimeConn = null;
+        if (!$page.url.pathname.startsWith("/auth")) {
+          goto("/");
         }
-      } catch {
-        clearToken();
       }
-    }
-
-    if (token && profile) {
-      realtimeConn = connectRealtime(token, {
-        onMessage: (data) => {
-          if (data.type === "notification" || data.type === "congregation_notification") {
-            notifCount++;
-          }
-        },
-      });
-    }
+    });
 
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.addEventListener("message", (event) => {
@@ -113,7 +138,11 @@
 
   function signOut() {
     clearToken();
+    clearRoles();
     profile = null;
+    realtimeConn?.close();
+    realtimeConn = null;
+    notifCount = 0;
     goto("/");
   }
 

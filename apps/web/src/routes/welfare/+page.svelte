@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getWelfareCases, createWelfareCase, getPantryItems, createPantryItem } from '$lib/api';
+  import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import AmountField from '$lib/components/AmountField.svelte';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
@@ -91,6 +92,8 @@
   }
 
   onMount(async () => {
+    const authorized = await requireRole("clerk", "dorcas_coordinator");
+    if (!authorized) return;
     try {
       const [c, p] = await Promise.all([getWelfareCases(), getPantryItems()]);
       cases = Array.isArray(c) ? c : [];

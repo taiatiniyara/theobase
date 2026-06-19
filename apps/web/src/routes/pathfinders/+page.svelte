@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getMe, getPathfinderProgress, createPathfinderProgress, getPathfinderHonors, createPathfinderHonor } from '$lib/api';
+  import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
@@ -110,6 +111,8 @@
   }
 
   onMount(async () => {
+    const authorized = await requireRole("clerk", "pathfinder_director");
+    if (!authorized) return;
     try {
       const me = await getMe();
       if (me?.personId) memberId = me.personId;

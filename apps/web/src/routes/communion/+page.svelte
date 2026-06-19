@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getCommunionServices, createCommunion } from '$lib/api';
+  import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
@@ -24,6 +25,8 @@
   let planned = $state(false);
 
   onMount(async () => {
+    const authorized = await requireRole("clerk", "elder", "deacon", "deaconess");
+    if (!authorized) return;
     try { services = await getCommunionServices(); } catch { 
       loadError = "Failed to load. Please try again.";
     }

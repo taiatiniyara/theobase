@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getOrderOfService, updateOrderOfService } from '$lib/api';
+  import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { toast } from '$lib/toast';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
@@ -60,7 +61,11 @@
     saving = false;
   }
 
-  onMount(() => load(date));
+  onMount(async () => {
+    const authorized = await requireRole("clerk", "av_operator", "elder");
+    if (!authorized) return;
+    load(date);
+  });
 </script>
 
 <svelte:head><title>AV Sync — Theobase</title></svelte:head>

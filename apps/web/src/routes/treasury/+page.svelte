@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getTreasuryBalance, getExpenses, createExpense, getReceipts, getBoardMeetings } from "$lib/api";
+  import { requireRole } from "$lib/guard";
   import { onMount } from "svelte";
   import { toast } from "$lib/toast";
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
@@ -88,7 +89,11 @@
     loadingMore = false;
   }
 
-  onMount(loadData);
+  onMount(async () => {
+    const authorized = await requireRole("clerk", "treasurer");
+    if (!authorized) return;
+    loadData();
+  });
 
   const filteredExpenses = $derived(
     expenses

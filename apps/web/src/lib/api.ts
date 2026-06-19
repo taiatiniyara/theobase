@@ -26,12 +26,15 @@ export async function api(path: string, options: RequestInit = {}) {
     ...options,
     headers,
   });
-  if (res.status === 401 && token) {
+  if (res.status === 401) {
     clearToken();
     if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/auth')) {
       window.location.href = '/';
     }
-    return res;
+    throw new Error("Unauthorized");
+  }
+  if (res.status === 403) {
+    throw new Error("Forbidden");
   }
   return res;
 }

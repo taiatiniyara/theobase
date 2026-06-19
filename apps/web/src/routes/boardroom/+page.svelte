@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getBoardMeetings, createBoardMeeting, getBoardMeeting, createBoardDecision } from "$lib/api";
+  import { requireRole } from "$lib/guard";
   import { onMount } from "svelte";
   import { toast } from "$lib/toast";
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
@@ -125,7 +126,11 @@
     loadingMore = false;
   }
 
-  onMount(loadMeetings);
+  onMount(async () => {
+    const authorized = await requireRole("clerk", "treasurer", "elder");
+    if (!authorized) return;
+    loadMeetings();
+  });
 
   const filteredMeetings = $derived(
     meetings
