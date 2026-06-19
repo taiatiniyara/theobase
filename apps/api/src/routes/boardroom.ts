@@ -47,11 +47,16 @@ export function registerBoardroomRoutes(app: AppType) {
     const congregationId = c.get("congregationId");
     if (!congregationId) return c.json([]);
 
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+
     const meetings = await db
       .select()
       .from(schema.boardMeeting)
       .where(eq(schema.boardMeeting.congregationId, congregationId))
-      .orderBy(asc(schema.boardMeeting.date));
+      .orderBy(asc(schema.boardMeeting.date))
+      .limit(limit)
+      .offset(offset);
 
     return c.json(meetings.map((m: any) => ({ ...m, agenda: m.agenda ? JSON.parse(m.agenda) : null })));
   });

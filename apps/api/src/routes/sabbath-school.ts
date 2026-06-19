@@ -18,7 +18,9 @@ export function registerSabbathSchoolRoutes(app: AppType) {
   });
 
   app.get("/sabbath-school/classes", requireAuth(), loadRoles(), requireRole("clerk", "sabbath_school_superintendent"), async (c) => {
-    const rows = await getDb(c).select().from(schema.sabbathSchoolClass).where(eq(schema.sabbathSchoolClass.congregationId, c.get("congregationId")!));
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+    const rows = await getDb(c).select().from(schema.sabbathSchoolClass).where(eq(schema.sabbathSchoolClass.congregationId, c.get("congregationId")!)).limit(limit).offset(offset);
     return c.json(rows);
   });
 

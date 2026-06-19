@@ -30,11 +30,16 @@ export function registerCommunionRoutes(app: AppType) {
 
   app.get("/communion", requireAuth(), loadRoles(), requireRole("clerk", "elder", "deacon", "deaconess"), async (c) => {
     const db = getDb(c);
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+
     const services = await db
       .select()
       .from(schema.communionService)
       .where(eq(schema.communionService.congregationId, c.get("congregationId")!))
-      .orderBy(desc(schema.communionService.date));
+      .orderBy(desc(schema.communionService.date))
+      .limit(limit)
+      .offset(offset);
 
     return c.json(services);
   });

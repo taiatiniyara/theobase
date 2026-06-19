@@ -58,11 +58,16 @@ export function registerReceiptRoutes(app: AppType) {
     const congregationId = c.get("congregationId");
     if (!congregationId) return c.json([]);
 
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+
     const receipts = await db
       .select()
       .from(schema.receipt)
       .where(eq(schema.receipt.congregationId, congregationId))
-      .orderBy(asc(schema.receipt.createdAt));
+      .orderBy(asc(schema.receipt.createdAt))
+      .limit(limit)
+      .offset(offset);
 
     return c.json(receipts);
   });
@@ -99,5 +104,27 @@ export function registerReceiptRoutes(app: AppType) {
 
     const [updated] = await db.select().from(schema.receipt).where(eq(schema.receipt.id, recId));
     return c.json(updated);
+  });
+
+  app.post("/receipts/:id/upload", requireAuth(), loadRoles(), requireRole("clerk", "treasurer"), async (c) => {
+    const db = getDb(c);
+    const recId = c.req.param("id");
+
+    const [rec] = await db.select().from(schema.receipt).where(eq(schema.receipt.id, recId));
+    if (!rec) return c.json({ error: "Not found" }, 404);
+
+    const formData = await c.req.formData();
+    const file = formData.get("file");
+    if (!file || !(file instanceof File)) {
+      return c.json({ error: "No file uploaded" }, 400);
+    }
+
+    const key = `receipts/${recId}/${Date.now()}-${(file as File).name || "receipt.png"}`;
+    await c.env.STORAGE.put(key, (file as File).stream());
+
+    await db.update(schema.receipt).set({ imageKey: key }).where(eq(schema.receipt.id, recId));
+
+    const [updated] = await db.select().from(schema.receipt).where(eq(schema.receipt.id, recId));
+    return c.json(updated, 200);
   });
 }

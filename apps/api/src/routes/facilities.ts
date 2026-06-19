@@ -8,7 +8,9 @@ import { getDb } from "../middleware/get-db";
 
 export function registerFacilitiesRoutes(app: AppType) {
   app.get("/facilities/bookings", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
-    const rows = await getDb(c).select().from(schema.facilityBooking).where(eq(schema.facilityBooking.congregationId, c.get("congregationId")!));
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+    const rows = await getDb(c).select().from(schema.facilityBooking).where(eq(schema.facilityBooking.congregationId, c.get("congregationId")!)).limit(limit).offset(offset);
     return c.json(rows);
   });
 

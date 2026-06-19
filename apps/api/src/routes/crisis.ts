@@ -18,7 +18,9 @@ export function registerCrisisRoutes(app: AppType) {
   });
 
   app.get("/crisis/assets", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
-    const rows = await getDb(c).select().from(schema.congregationAsset).where(eq(schema.congregationAsset.congregationId, c.get("congregationId")!));
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+    const rows = await getDb(c).select().from(schema.congregationAsset).where(eq(schema.congregationAsset.congregationId, c.get("congregationId")!)).limit(limit).offset(offset);
     return c.json(rows);
   });
 }

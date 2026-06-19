@@ -17,7 +17,9 @@ export function registerHouseholdRoutes(app: AppType) {
   });
 
   app.get("/households", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
-    const rows = await getDb(c).select().from(schema.household).where(eq(schema.household.congregationId, c.get("congregationId")!));
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+    const rows = await getDb(c).select().from(schema.household).where(eq(schema.household.congregationId, c.get("congregationId")!)).limit(limit).offset(offset);
     return c.json(rows);
   });
 
@@ -31,7 +33,9 @@ export function registerHouseholdRoutes(app: AppType) {
   });
 
   app.get("/candidacies", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
-    const rows = await getDb(c).select().from(schema.candidacy).where(eq(schema.candidacy.congregationId, c.get("congregationId")!));
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+    const rows = await getDb(c).select().from(schema.candidacy).where(eq(schema.candidacy.congregationId, c.get("congregationId")!)).limit(limit).offset(offset);
     return c.json(rows);
   });
 }

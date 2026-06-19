@@ -18,7 +18,9 @@ export function registerPathfinderRoutes(app: AppType) {
 
   app.get("/pathfinder/progress/:memberId", requireAuth(), loadRoles(), requireRole("clerk", "pathfinder_director"), async (c) => {
     const db = getDb(c);
-    const rows = await db.select().from(schema.pathfinderProgress).where(eq(schema.pathfinderProgress.memberId, c.req.param("memberId")));
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+    const rows = await db.select().from(schema.pathfinderProgress).where(eq(schema.pathfinderProgress.memberId, c.req.param("memberId"))).limit(limit).offset(offset);
     return c.json(rows);
   });
 
@@ -32,7 +34,9 @@ export function registerPathfinderRoutes(app: AppType) {
   });
 
   app.get("/pathfinder/honors/:memberId", requireAuth(), loadRoles(), requireRole("clerk", "pathfinder_director"), async (c) => {
-    const rows = await getDb(c).select().from(schema.pathfinderHonor).where(eq(schema.pathfinderHonor.memberId, c.req.param("memberId")));
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+    const rows = await getDb(c).select().from(schema.pathfinderHonor).where(eq(schema.pathfinderHonor.memberId, c.req.param("memberId"))).limit(limit).offset(offset);
     return c.json(rows);
   });
 }

@@ -17,7 +17,9 @@ export function registerHealthRoutes(app: AppType) {
   });
 
   app.get("/health/events", requireAuth(), loadRoles(), requireRole("clerk", "health_ministries_leader"), async (c) => {
-    const rows = await getDb(c).select().from(schema.healthEvent).where(eq(schema.healthEvent.congregationId, c.get("congregationId")!));
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+    const rows = await getDb(c).select().from(schema.healthEvent).where(eq(schema.healthEvent.congregationId, c.get("congregationId")!)).limit(limit).offset(offset);
     return c.json(rows);
   });
 
@@ -31,7 +33,9 @@ export function registerHealthRoutes(app: AppType) {
   });
 
   app.get("/health/contacts", requireAuth(), loadRoles(), requireRole("clerk", "health_ministries_leader"), async (c) => {
-    const rows = await getDb(c).select().from(schema.healthContact).where(eq(schema.healthContact.congregationId, c.get("congregationId")!));
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+    const rows = await getDb(c).select().from(schema.healthContact).where(eq(schema.healthContact.congregationId, c.get("congregationId")!)).limit(limit).offset(offset);
     return c.json(rows.map((r: any) => ({ ...r, interests: r.interests ? JSON.parse(r.interests) : null })));
   });
 }

@@ -47,11 +47,16 @@ export function registerTreasuryRoutes(app: AppType) {
     const congregationId = c.get("congregationId");
     if (!congregationId) return c.json([]);
 
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+
     const expenses = await db
       .select()
       .from(schema.expense)
       .where(eq(schema.expense.congregationId, congregationId))
-      .orderBy(asc(schema.expense.createdAt));
+      .orderBy(asc(schema.expense.createdAt))
+      .limit(limit)
+      .offset(offset);
 
     return c.json(expenses);
   });

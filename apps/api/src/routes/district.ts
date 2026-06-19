@@ -17,7 +17,9 @@ export function registerDistrictRoutes(app: AppType) {
   });
 
   app.get("/district/rotations", requireAuth(), loadRoles(), requireRole("clerk", "district_pastor"), async (c) => {
-    const rows = await getDb(c).select().from(schema.preachingRotation).where(eq(schema.preachingRotation.congregationId, c.get("congregationId")!));
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+    const rows = await getDb(c).select().from(schema.preachingRotation).where(eq(schema.preachingRotation.congregationId, c.get("congregationId")!)).limit(limit).offset(offset);
     return c.json(rows);
   });
 
