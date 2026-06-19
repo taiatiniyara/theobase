@@ -9,7 +9,7 @@ export const GraphifyPlugin = async ({ directory }) => {
   return {
     "tool.execute.before": async (input, output) => {
       if (reminded) return;
-      if (!existsSync(join(directory, "graphify-out", "graph.json"))) return;
+      if (!existsSync(join(directory, ".graphify", "graph.json"))) return;
 
       if (input.tool === "bash") {
         output.args.command =
