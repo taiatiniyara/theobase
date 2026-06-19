@@ -1,7 +1,7 @@
 import { DurableObject } from "cloudflare:workers";
 
 export default {
-  async fetch(request: Request): Promise<Response> {
+  async fetch(_request: Request): Promise<Response> {
     return new Response("Theobase DO Worker", { status: 200 });
   },
 };
