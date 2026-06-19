@@ -50,6 +50,12 @@
     if (token) {
       try {
         profile = await getMe();
+        if (profile) {
+          const path = $page.url.pathname;
+          if (path === "/" || path === "/auth/verify") {
+            goto("/dashboard");
+          }
+        }
       } catch {
         clearToken();
       }
