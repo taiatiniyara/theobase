@@ -80,7 +80,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @theobase/web run build
-      - run: pnpm exec wrangler pages deploy apps/web/.svelte-kit/cloudflare --project-name theobase-web
+      - run: pnpm exec wrangler pages deploy .svelte-kit/cloudflare --project-name theobase-web
+        working-directory: apps/web
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
