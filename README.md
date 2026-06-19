@@ -36,8 +36,14 @@ npx wrangler d1 migrations apply theobase-spd --config apps/api/wrangler.jsonc
 ### Run Tests
 
 ```bash
-npx vitest run                                  # All tests
-npx vitest run --config packages/shared/vitest.config.ts  # CRDT + timing
+npx vitest run                                  # 74 tests, 9 files
+```
+
+### Code Quality
+
+```bash
+pnpm typecheck    # tsc --noEmit (0 errors)
+pnpm lint         # ESLint (0 errors, 0 warnings)
 ```
 
 ### Deploy
@@ -55,18 +61,18 @@ npx wrangler pages deploy apps/web/.svelte-kit/cloudflare --project-name theobas
 
 ```
 apps/
-  api/      Hono Worker — 40+ REST endpoints
-  do/       CongregationDO (Durable Object stub)
-  web/      SvelteKit PWA
+  api/      Hono Worker — 40+ REST endpoints (all 23 issues covered)
+  do/       CongregationDO — 10 RPC methods, 4-channel multiplexing, alarms
+  web/      SvelteKit PWA — 20 pages, offline-first (IndexedDB + outbox)
   relay/    SMTP relay (Node.js, deploys to VPS)
 packages/
-  auth/     JWT + magic link + middleware
-  db/       39 Drizzle tables
+  auth/     JWT + magic link + RLS middleware
+  db/       39 Drizzle tables, migration runner
   email/    Email sender (relay transport)
-  shared/   Zod schemas, CRDTs, sabbath timing
+  shared/   Zod schemas, CRDTs (LWW, OR-Set), sabbath timing engine
 docs/
   PROPOSAL.md     Platform proposal (24 use cases)
-  PRD.md          Product requirements
+  PRD.md          Product requirements (30 user stories)
   CONTEXT.md      Domain glossary (47 terms)
   adr/            Architecture decisions (9 ADRs)
   issues/         23 tracer-bullet issues
