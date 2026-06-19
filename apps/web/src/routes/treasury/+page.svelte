@@ -14,6 +14,7 @@
   import { formatDate, formatCents } from "$lib/format";
   import DataToolbar from "$lib/components/DataToolbar.svelte";
   import DateRangeFilter from "$lib/components/DateRangeFilter.svelte";
+  import StaggerList from "$lib/components/StaggerList.svelte";
 
   let expenseSearch = $state("");
   let expenseSortKey = $state("description");
@@ -278,20 +279,22 @@
           </div>
         {:else}
           <div class="divide-y">
-            {#each filteredExpenses as exp}
-              <div class="flex items-center justify-between py-2.5">
-                <div class="min-w-0 flex-1">
-                  <p class="truncate text-sm font-medium">{exp.description}</p>
-                  <div class="flex gap-2">
-                    <Badge variant="secondary" class="text-xs">{formatFund(exp.category)}</Badge>
-                    {#if exp.receiptId}
-                      <span class="text-xs text-slate-400">Receipt #{exp.receiptId?.slice(0, 8)}</span>
-                    {/if}
+            <StaggerList each={filteredExpenses}>
+              {#snippet children(exp, index)}
+                <div class="flex items-center justify-between py-2.5">
+                  <div class="min-w-0 flex-1">
+                    <p class="truncate text-sm font-medium">{exp.description}</p>
+                    <div class="flex gap-2">
+                      <Badge variant="secondary" class="text-xs">{formatFund(exp.category)}</Badge>
+                      {#if exp.receiptId}
+                        <span class="text-xs text-slate-400">Receipt #{exp.receiptId?.slice(0, 8)}</span>
+                      {/if}
+                    </div>
                   </div>
+                  <span class="ml-3 shrink-0 text-sm font-semibold text-red-600">-${formatCents(exp.amount)}</span>
                 </div>
-                <span class="ml-3 shrink-0 text-sm font-semibold text-red-600">-${formatCents(exp.amount)}</span>
-              </div>
-            {/each}
+              {/snippet}
+            </StaggerList>
           </div>
         {/if}
         {#if hasMore}

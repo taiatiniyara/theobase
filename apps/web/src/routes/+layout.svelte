@@ -303,7 +303,7 @@
       </header>
 
       <!-- Page Content -->
-      <main class="flex-1 overflow-y-auto p-6" style="animation: fade-in 0.15s ease-out">
+      <main class="flex-1 overflow-y-auto p-6" style="animation: fade-in-up 0.2s ease-out both">
         <PullToRefresh onrefresh={async () => { window.location.reload(); }}>
           {@render children()}
         </PullToRefresh>

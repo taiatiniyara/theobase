@@ -13,6 +13,7 @@
   import { formatCents } from "$lib/format";
   import DataToolbar from "$lib/components/DataToolbar.svelte";
   import DateRangeFilter from "$lib/components/DateRangeFilter.svelte";
+  import StaggerList from "$lib/components/StaggerList.svelte";
 
   let receiptSearch = $state("");
   let receiptSortKey = $state("amount");
@@ -314,48 +315,50 @@
       </Card>
     {:else}
       <div class="space-y-3">
-        {#each filteredReceipts as receipt}
-          <Card>
-            <CardContent class="pt-6">
-              <div class="flex items-start gap-3">
-                <button
-                  class="shrink-0 mt-1"
-                  onclick={() => {
-                    const next = new Set(selectedIds);
-                    if (next.has(receipt.id)) next.delete(receipt.id); else next.add(receipt.id);
-                    selectedIds = next;
-                  }}
-                  aria-label={selectedIds.has(receipt.id) ? "Deselect" : "Select"}
-                >
-                  {#if selectedIds.has(receipt.id)}
-                    <CheckSquare class="size-5 text-brand-600" />
-                  {:else}
-                    <Square class="size-5 text-slate-300" />
-                  {/if}
-                </button>
-                <div class="flex-1">
-                  <div class="flex items-start justify-between">
-                    <div>
-                      <p class="text-xs text-slate-400">Receipt #{receipt.id?.slice(0, 8)}</p>
-                      <p class="text-xl font-bold text-slate-900">${formatCents(receipt.amount)}</p>
-                    </div>
-                    <Badge class={statusBadge(receipt.status)}>{receipt.status}</Badge>
-                  </div>
-                {#if receipt.fundSplit}
-                  <div class="mt-3 space-y-1 border-t pt-3">
-                    {#each Object.entries(receipt.fundSplit) as [fund, val]}
-                      <div class="flex justify-between text-sm">
-                        <span class="capitalize text-slate-500">{fund.replace(/_/g, " ")}</span>
-                        <span class="font-medium">${formatCents(val as number)}</span>
+        <StaggerList each={filteredReceipts}>
+          {#snippet children(receipt, index)}
+            <Card>
+              <CardContent class="pt-6">
+                <div class="flex items-start gap-3">
+                  <button
+                    class="shrink-0 mt-1"
+                    onclick={() => {
+                      const next = new Set(selectedIds);
+                      if (next.has(receipt.id)) next.delete(receipt.id); else next.add(receipt.id);
+                      selectedIds = next;
+                    }}
+                    aria-label={selectedIds.has(receipt.id) ? "Deselect" : "Select"}
+                  >
+                    {#if selectedIds.has(receipt.id)}
+                      <CheckSquare class="size-5 text-brand-600" />
+                    {:else}
+                      <Square class="size-5 text-slate-300" />
+                    {/if}
+                  </button>
+                  <div class="flex-1">
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <p class="text-xs text-slate-400">Receipt #{receipt.id?.slice(0, 8)}</p>
+                        <p class="text-xl font-bold text-slate-900">${formatCents(receipt.amount)}</p>
                       </div>
-                    {/each}
+                      <Badge class={statusBadge(receipt.status)}>{receipt.status}</Badge>
+                    </div>
+                  {#if receipt.fundSplit}
+                    <div class="mt-3 space-y-1 border-t pt-3">
+                      {#each Object.entries(receipt.fundSplit) as [fund, val]}
+                        <div class="flex justify-between text-sm">
+                          <span class="capitalize text-slate-500">{fund.replace(/_/g, " ")}</span>
+                          <span class="font-medium">${formatCents(val as number)}</span>
+                        </div>
+                      {/each}
+                    </div>
+                  {/if}
                   </div>
-                {/if}
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        {/each}
+              </CardContent>
+            </Card>
+          {/snippet}
+        </StaggerList>
       </div>
       {#if hasMore}
         <div class="flex justify-center pt-2">

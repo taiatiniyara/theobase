@@ -8,8 +8,10 @@
   import { Skeleton } from "$lib/components/ui/skeleton";
   import { DollarSign, Receipt, Clock, Gavel, CalendarCheck, Sparkles, RefreshCw, Pause } from "@lucide/svelte";
   import { formatCents } from "$lib/format";
+  import AnimatedCounter from "$lib/components/AnimatedCounter.svelte";
   import DonutChart from "$lib/components/DonutChart.svelte";
   import BarChart from "$lib/components/BarChart.svelte";
+  import StaggerList from "$lib/components/StaggerList.svelte";
 
   let profile = $state<any>(null);
   let balance = $state<any>(null);
@@ -130,7 +132,7 @@
           </CardHeader>
           <CardContent>
             <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">
-              ${formatCents(profile.giving.totalAmount)}
+              <AnimatedCounter value={profile.giving.totalAmount / 100} prefix="$" duration={800} decimals={2} />
             </p>
           </CardContent>
         </Card>
@@ -143,7 +145,7 @@
           </CardHeader>
           <CardContent>
             <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">
-              {profile.giving.totalReceipts}
+              <AnimatedCounter value={profile.giving.totalReceipts} duration={500} />
             </p>
           </CardContent>
         </Card>
@@ -156,7 +158,7 @@
           </CardHeader>
           <CardContent>
             <p class="text-2xl font-bold text-amber-600">
-              {profile.giving.pendingCount}
+              <AnimatedCounter value={profile.giving.pendingCount} duration={500} />
             </p>
           </CardContent>
         </Card>
@@ -215,18 +217,18 @@
         </CardHeader>
         <CardContent>
           <div class="divide-y">
-            {#each Object.entries(balance || {}) as [fund, amount]}
-              {#if fund !== "error" && typeof amount === "number"}
+            <StaggerList each={Object.entries(balance || {}).filter(([k]) => k !== "error").filter(([, v]) => typeof v === "number") as [string, number][]}>
+              {#snippet children([fund, amount], index)}
                 <div class="flex items-center justify-between py-2.5">
                   <span class="text-sm capitalize text-slate-600 dark:text-slate-400">
                     {fundLabel(fund)}
                   </span>
                   <span class="text-sm font-semibold {amount >= 0 ? 'text-green-600' : 'text-red-600'}">
-                    ${formatCents(amount as number)}
+                    ${formatCents(amount)}
                   </span>
                 </div>
-              {/if}
-            {/each}
+              {/snippet}
+            </StaggerList>
           </div>
         </CardContent>
       </Card>

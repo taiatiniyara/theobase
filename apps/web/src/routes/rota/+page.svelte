@@ -8,6 +8,7 @@
   import { Badge } from "$lib/components/ui/badge";
   import { Skeleton } from "$lib/components/ui/skeleton";
   import { ChevronLeft, ChevronRight, CalendarCheck } from "@lucide/svelte";
+  import StaggerList from "$lib/components/StaggerList.svelte";
 
   let date = $state(new Date().toISOString().slice(0, 10));
   let slots = $state<any[]>([]);
@@ -91,23 +92,25 @@
     </div>
   {:else}
     <div class="space-y-3">
-      {#each slots as slot}
-        <Card>
-          <CardContent class="flex items-center justify-between p-4">
-            <div>
-              <p class="font-semibold capitalize text-slate-900">
-                {roleLabels[slot.role] || slot.role?.replace(/_/g, ' ')}
-              </p>
-              {#if slot.volunteerName}
-                <p class="text-sm text-slate-500">{slot.volunteerName}</p>
-              {/if}
-            </div>
-            <Badge variant={slot.status === 'assigned' ? 'default' : 'secondary'}>
-              {slot.status}
-            </Badge>
-          </CardContent>
-        </Card>
-      {/each}
+      <StaggerList each={slots}>
+        {#snippet children(slot, index)}
+          <Card>
+            <CardContent class="flex items-center justify-between p-4">
+              <div>
+                <p class="font-semibold capitalize text-slate-900">
+                  {roleLabels[slot.role] || slot.role?.replace(/_/g, ' ')}
+                </p>
+                {#if slot.volunteerName}
+                  <p class="text-sm text-slate-500">{slot.volunteerName}</p>
+                {/if}
+              </div>
+              <Badge variant={slot.status === 'assigned' ? 'default' : 'secondary'}>
+                {slot.status}
+              </Badge>
+            </CardContent>
+          </Card>
+        {/snippet}
+      </StaggerList>
     </div>
   {/if}
 </div>

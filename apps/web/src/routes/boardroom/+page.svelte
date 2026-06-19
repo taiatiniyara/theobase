@@ -14,6 +14,7 @@
   import { formatDate } from "$lib/format";
   import DataToolbar from "$lib/components/DataToolbar.svelte";
   import DateRangeFilter from "$lib/components/DateRangeFilter.svelte";
+  import StaggerList from "$lib/components/StaggerList.svelte";
 
   let searchQuery = $state("");
   let sortKey = $state("date");
@@ -327,20 +328,22 @@
           </CardContent>
         </Card>
       {:else}
-        {#each filteredMeetings as meeting}
-          <button
-            class="flex w-full items-center justify-between rounded-lg border bg-white dark:bg-slate-900 p-4 text-left shadow-sm transition-colors hover:bg-slate-50"
-            onclick={() => viewMeeting(meeting.id)}
-          >
-            <div>
-              <p class="font-medium text-slate-900">{formatDate(meeting.date)}</p>
-              <Badge class={statusBadge(meeting.status)}>
-                {(meeting.status || "").replace(/_/g, " ")}
-              </Badge>
-            </div>
-            <ChevronRight class="size-5 text-slate-400" />
-          </button>
-        {/each}
+        <StaggerList each={filteredMeetings}>
+          {#snippet children(meeting, index)}
+            <button
+              class="flex w-full items-center justify-between rounded-lg border bg-white dark:bg-slate-900 p-4 text-left shadow-sm transition-colors hover:bg-slate-50"
+              onclick={() => viewMeeting(meeting.id)}
+            >
+              <div>
+                <p class="font-medium text-slate-900">{formatDate(meeting.date)}</p>
+                <Badge class={statusBadge(meeting.status)}>
+                  {(meeting.status || "").replace(/_/g, " ")}
+                </Badge>
+              </div>
+              <ChevronRight class="size-5 text-slate-400" />
+            </button>
+          {/snippet}
+        </StaggerList>
         {#if hasMore}
           <div class="flex justify-center pt-2">
             <Button variant="outline" onclick={loadMore} disabled={loadingMore}>
