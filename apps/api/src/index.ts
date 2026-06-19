@@ -22,6 +22,22 @@ import { Hono } from "hono";
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
+app.use("*", async (c, next) => {
+  if (c.req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PATCH, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Max-Age": "86400",
+      },
+    });
+  }
+  await next();
+  c.header("Access-Control-Allow-Origin", "*");
+});
+
 registerAuthRoutes(app);
 registerMeRoutes(app);
 registerReceiptRoutes(app);
