@@ -1,6 +1,6 @@
 const API_URL = 'https://api.theobase.net';
 
-function getToken(): string | null {
+export function getToken(): string | null {
   if (typeof window === 'undefined') return null;
   return localStorage.getItem('theobase_token');
 }
@@ -63,5 +63,58 @@ export async function updateMe(data: { phone?: string; address?: string }) {
     method: 'PATCH',
     body: JSON.stringify(data),
   });
+  return res.json();
+}
+
+// Receipts (issue 004)
+export async function getReceipts() {
+  const res = await api('/receipts');
+  return res.json();
+}
+
+export async function createReceipt(data: { amount: number; fundSplit: Record<string, number> }) {
+  const res = await api('/receipts', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+// Boardroom (issue 005)
+export async function getBoardMeetings() {
+  const res = await api('/board/meetings');
+  return res.json();
+}
+
+export async function createBoardMeeting(data: { date: string; agenda: { title: string }[] }) {
+  const res = await api('/board/meetings', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function getBoardMeeting(id: string) {
+  const res = await api(`/board/meetings/${id}`);
+  return res.json();
+}
+
+export async function createBoardDecision(meetingId: string, data: { title: string; description: string; voteOutcome: string }) {
+  const res = await api(`/board/meetings/${meetingId}/decisions`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+// Treasury (issue 007)
+export async function getTreasuryBalance() {
+  const res = await api('/treasury/balance');
+  return res.json();
+}
+
+// Rota (issue 006)
+export async function getRota(date: string) {
+  const res = await api(`/rota/${date}`);
   return res.json();
 }

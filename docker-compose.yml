@@ -3,16 +3,16 @@ services:
     build:
       context: ./apps/relay
       dockerfile: Dockerfile
-    ports:
-      - "3113:3113"
     environment:
       - PORT=3113
-      - RELAY_TOKEN=theobase-relay-dev-token
-      - SMTP_HOST=smtp.hostinger.com
-      - SMTP_PORT=465
-      - SMTP_USER=messenger@theobase.net
+      - RELAY_TOKEN=${RELAY_TOKEN:-theobase-relay-dev-token}
+      - SMTP_HOST=${SMTP_HOST:-smtp.hostinger.com}
+      - SMTP_PORT=${SMTP_PORT:-465}
+      - SMTP_USER=${SMTP_USER:-messenger@theobase.net}
       - SMTP_PASS=${SMTP_PASS:-}
     restart: unless-stopped
+    ports:
+      - "3113:3113"
 
   api:
     image: node:22-alpine
@@ -25,7 +25,37 @@ services:
       - /app/node_modules
     environment:
       - SMTP_RELAY_URL=http://smtp-relay:3113
-      - SMTP_RELAY_TOKEN=theobase-relay-dev-token
-      - JWT_SECRET=theobase-dev-secret-change-in-production
+      - SMTP_RELAY_TOKEN=${RELAY_TOKEN:-theobase-relay-dev-token}
+      - JWT_SECRET=${JWT_SECRET:-theobase-dev-secret-change-in-production}
     depends_on:
       - smtp-relay
+    profiles:
+      - dev
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/relay.conf:/etc/nginx/conf.d/relay.conf:ro
+      - certbot_www:/var/www/certbot:ro
+      - certbot_certs:/etc/letsencrypt:ro
+    depends_on:
+      - smtp-relay
+    restart: unless-stopped
+    profiles:
+      - prod
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - certbot_www:/var/www/certbot
+      - certbot_certs:/etc/letsencrypt
+    entrypoint: /bin/sh -c "trap exit TERM; while :; do sleep 12h & wait $${!}; certbot renew; done"
+    profiles:
+      - prod
+
+volumes:
+  certbot_www:
+  certbot_certs:

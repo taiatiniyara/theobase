@@ -15,6 +15,12 @@ const transporter = nodemailer.createTransport({
 });
 
 const server = http.createServer(async (req, res) => {
+  if (req.method === "GET" && req.url === "/health") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ status: "ok" }));
+    return;
+  }
+
   if (req.method !== "POST") {
     res.writeHead(405);
     res.end("Method not allowed");

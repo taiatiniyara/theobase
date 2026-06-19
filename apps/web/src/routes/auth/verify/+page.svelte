@@ -18,7 +18,7 @@
       const res = await verifyToken(token);
       if (res.ok && res.token) {
         setToken(res.token);
-        goto('/me');
+        goto('/dashboard');
       } else {
         status = 'error';
         error = res.error || 'Invalid or expired token.';

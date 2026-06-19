@@ -45,7 +45,9 @@
     <a href="/" class="btn">Sign in</a>
   </div>
 {:else}
-  <div class="card" style="margin-top: 32px;">
+  <a href="/dashboard" style="display: inline-block; margin-top: 16px; color: #2b6cb0; text-decoration: none;">← Dashboard</a>
+
+  <div class="card">
     <h1>Welcome, {profile.firstName || profile.email}</h1>
 
     {#if !editMode}
