@@ -17,6 +17,7 @@
   import ConfirmDialog from "$lib/components/ConfirmDialog.svelte";
   import PullToRefresh from "$lib/components/PullToRefresh.svelte";
   import KeyboardShortcuts from "$lib/components/KeyboardShortcuts.svelte";
+  import InstallPrompt from "$lib/components/InstallPrompt.svelte";
   import Menu from "@lucide/svelte/icons/menu";
   import Bell from "@lucide/svelte/icons/bell";
   import LogOut from "@lucide/svelte/icons/log-out";
@@ -311,6 +312,7 @@
   </div>
 
   <div class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+  <InstallPrompt />
   <Toaster position="bottom-right" />
   <CommandPalette {roles} open={cmdOpen} onOpenChange={(o) => cmdOpen = o} />
   <KeyboardShortcuts open={shortcutsOpen} onOpenChange={(o) => shortcutsOpen = o} />

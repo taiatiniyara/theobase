@@ -3,6 +3,7 @@ import { build, files, version } from '$service-worker';
 
 const CACHE = `theobase-${version}`;
 const ASSETS = [...build, ...files];
+const OFFLINE_URL = '/offline.html';
 const DB_NAME = 'theobase-offline';
 const DB_VERSION = 2;
 
@@ -176,7 +177,23 @@ self.addEventListener('fetch', (event: FetchEvent) => {
 
   if (event.request.method === 'GET') {
     event.respondWith(
-      caches.match(event.request).then((cached) => cached || fetch(event.request))
+      fetch(event.request.clone())
+        .then((res) => {
+          if (res.ok) {
+            const clone = res.clone();
+            caches.open(CACHE).then((cache) => cache.put(event.request, clone));
+          }
+          return res;
+        })
+        .catch(() =>
+          caches.match(event.request).then((cached) => {
+            if (cached) return cached;
+            if (event.request.mode === 'navigate') {
+              return caches.match(OFFLINE_URL) || fetch(OFFLINE_URL);
+            }
+            return new Response('Offline', { status: 503 });
+          })
+        )
     );
   }
 });
