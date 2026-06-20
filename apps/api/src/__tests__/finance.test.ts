@@ -15,7 +15,7 @@ describe("receipt registry", () => {
   });
 
   it("POST /receipts creates a receipt with valid fund split", async () => {
-    const token = await jwt({ userId: "member-user-1", congregationId: "con-1" });
+    const token = await jwt({ userId: "treasurer-user-1", congregationId: "con-1" });
     const { res, json } = await authedRequest("POST", "/receipts", token, {
       amount: 10000,
       fundSplit: { tithe: 7000, church_budget: 2000, pathfinders: 1000 },
@@ -29,7 +29,7 @@ describe("receipt registry", () => {
   });
 
   it("POST /receipts rejects fund split that doesn't match total", async () => {
-    const token = await jwt({ userId: "member-user-1", congregationId: "con-1" });
+    const token = await jwt({ userId: "treasurer-user-1", congregationId: "con-1" });
     const { res } = await authedRequest("POST", "/receipts", token, {
       amount: 10000,
       fundSplit: { tithe: 5000, church_budget: 3000 },
