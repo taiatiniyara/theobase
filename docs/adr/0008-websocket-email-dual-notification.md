@@ -1,5 +1,7 @@
 # WebSocket + email dual-channel notifications
 
+## Status: Accepted (partial — DO alarm path does not yet dispatch email)
+
 All notifications are delivered over two channels: WebSocket (in-app, real-time)
 and email (guaranteed delivery). No push notifications are used.
 
@@ -13,8 +15,11 @@ PWA-only delivery.
 **Consequences:** Email delivery adds latency compared to native push
 notifications, but for Theobase's use cases (Sabbath duty reminders sent 24+
 hours in advance, audit preparation notices days ahead), this latency is
-acceptable. The Durable Object schedules notification alarms and dispatches both
-WebSocket and email channels from a single code path.
+acceptable. Immediate notification emails are dispatched from REST handlers
+alongside writes (e.g. rota slot assignment triggers an email to the
+volunteer). The Durable Object schedules notification alarms and broadcasts
+reminders via WebSocket; email dispatch from the DO alarm path is planned but
+not yet implemented.
 
 **Rejected:** Native push notifications (require native app, reintroduce the
 store dependency). SMS (costs money per message, variable deliverability across

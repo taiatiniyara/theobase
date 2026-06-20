@@ -1,19 +1,29 @@
 import type { AppType } from "../types";
 import { eq } from "drizzle-orm";
 import * as schema from "@theobase/db";
-import { generateId } from "@theobase/shared";
+import { generateId, z } from "@theobase/shared";
 import { requireAuth, requireRole } from "@theobase/auth";
 import { loadRoles } from "../middleware/load-roles";
 import { getDb } from "../middleware/get-db";
+import { recordAudit } from "../middleware/audit";
 
 export function registerTransferRoutes(app: AppType) {
+  const createTransferSchema = z.object({
+    memberId: z.string().min(1),
+    toCongregationId: z.string().min(1),
+  });
+
   app.post("/transfers", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
     const db = getDb(c);
-    const { memberId, toCongregationId } = await c.req.json();
+    const body = await c.req.json();
+    const parsed = createTransferSchema.safeParse(body);
+    if (!parsed.success) return c.json({ error: parsed.error.issues }, 400);
+
     const userId = c.get("userId");
     const [user] = await db.select({ personId: schema.user.personId }).from(schema.user).where(eq(schema.user.id, userId));
     const id = generateId();
-    await db.insert(schema.transferRequest).values({ id, memberId, fromCongregationId: c.get("congregationId")!, toCongregationId, requestedById: user?.personId, createdAt: new Date().toISOString() });
+    await db.insert(schema.transferRequest).values({ id, memberId: parsed.data.memberId, fromCongregationId: c.get("congregationId")!, toCongregationId: parsed.data.toCongregationId, requestedById: user?.personId, createdAt: new Date().toISOString() });
+    await recordAudit(db, c.get("userId"), c.get("congregationId")!, { action: "transfer.create", resourceType: "transfer_request", resourceId: id });
     const [r] = await db.select().from(schema.transferRequest).where(eq(schema.transferRequest.id, id));
     return c.json(r, 201);
   });

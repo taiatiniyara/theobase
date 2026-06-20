@@ -1,32 +1,40 @@
+import { locale, formatLocalizedDate, formatLocalizedRelative, formatLocalizedCurrency } from "./i18n";
+import type { Locale } from "./i18n/types";
+import { get as storeGet } from "svelte/store";
+
+function currentLocale(): Locale {
+  try {
+    return storeGet(locale) as Locale;
+  } catch {
+    return "en";
+  }
+}
+
 export function formatDate(iso: string): string {
-  if (!iso) return "";
-  const date = new Date(iso);
-  if (isNaN(date.getTime())) return iso;
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  return formatLocalizedDate(iso, currentLocale());
 }
 
 export function formatCents(cents: number): string {
-  return (cents / 100).toFixed(2);
+  return formatLocalizedCurrency(cents, currentLocale());
 }
 
 export function formatRelative(iso: string): string {
-  if (!iso) return "";
-  const date = new Date(iso);
-  if (isNaN(date.getTime())) return iso;
-  const now = Date.now();
-  const diff = now - date.getTime();
-  const seconds = Math.floor(diff / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
+  return formatLocalizedRelative(iso, currentLocale());
+}
 
-  if (seconds < 60) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
-  if (hours < 24) return `${hours}h ago`;
-  if (days < 7) return `${days}d ago`;
-  return formatDate(iso);
+export function csvEscape(value: string | number): string {
+  const str = String(value);
+  if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+  return str;
+}
+
+export function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }

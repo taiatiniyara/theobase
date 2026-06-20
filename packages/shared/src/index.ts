@@ -1,8 +1,10 @@
 export { z } from "zod";
 
-export function generateId(): string {
-  return crypto.randomUUID();
-}
+export { generateId, sanitizeHtml } from "./utils";
 
 export { getSabbathWindow, isDuringSabbath, shiftBeforeSabbath } from "./sabbath";
 export type { SabbathWindow } from "./sabbath";
+
+export { LWWRegister, lwwMerge, lwwSet, ORSet, detectRevisionFork } from "./crdt";
+export type { RevisionFork } from "./crdt";
+export { deriveKey, encrypt, decrypt } from "./crypto";

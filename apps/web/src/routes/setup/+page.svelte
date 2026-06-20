@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { createCongregation, importMembers, inviteOfficer, api } from "$lib/api";
   import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "$lib/components/ui/card";
   import { Button } from "$lib/components/ui/button";
   import { Badge } from "$lib/components/ui/badge";
@@ -16,8 +17,11 @@
   let currentStep = $state(0);
   let stepError = $state("");
   let showCelebration = $state(false);
+  let submitting = $state(false);
+  let submitError = $state("");
 
   let churchName = $state("");
+  let churchType = $state("church");
   let address = $state("");
   let conference = $state("");
   let timezone = $state("");
@@ -55,11 +59,73 @@
     return true;
   }
 
+  async function submitSetup() {
+    submitting = true;
+    submitError = "";
+    try {
+      const result = await createCongregation({
+        name: churchName.trim(),
+        type: churchType,
+        timezone: timezone || undefined,
+      });
+
+      if (result.error) {
+        submitError = result.error;
+        submitting = false;
+        return;
+      }
+
+      const congregationId = result.id;
+
+      if (csvContent.trim()) {
+        try {
+          await importMembers(congregationId, csvContent.trim());
+        } catch { /* non-fatal */ }
+      }
+
+      for (const invite of pendingInvites) {
+        try {
+          await inviteOfficer(congregationId, {
+            email: invite.email,
+            role: invite.role,
+          });
+        } catch { /* non-fatal */ }
+      }
+
+      const deptMap: Record<string, string> = {
+        "Pathfinders": "pathfinders",
+        "Sabbath School": "sabbath_school",
+        "Dorcas/Welfare": "dorcas",
+        "Health Ministry": "health",
+        "AV Team": "av",
+        "Facilities": "other",
+      };
+      for (const deptName of selectedDepartments) {
+        try {
+          await api('/departments', { method: 'POST', body: JSON.stringify({ name: deptName, type: deptMap[deptName] || "other" }) });
+        } catch { /* non-fatal */ }
+      }
+
+      if (bankName && accountName && accountNumber) {
+        try {
+          await api(`/congregations/${congregationId}/bank-account`, {
+            method: 'POST', body: JSON.stringify({ bankName, accountName, accountNumber }),
+          });
+        } catch { /* non-fatal */ }
+      }
+
+      showCelebration = true;
+      setTimeout(() => goto("/dashboard"), 3000);
+    } catch (err: any) {
+      submitError = err?.message || "Setup failed. Please try again.";
+    }
+    submitting = false;
+  }
+
   function next() {
     if (!validateStep()) return;
     if (isLastStep) {
-      showCelebration = true;
-      setTimeout(() => goto("/dashboard"), 300);
+      submitSetup();
       return;
     }
     stepError = "";
@@ -128,6 +194,19 @@
             placeholder="e.g. Nairobi Central SDA Church"
             oninput={(e) => churchName = (e.target as HTMLInputElement).value}
           />
+          <div>
+            <Label for="church-type" class="mb-2 block">Church Type</Label>
+            <Select bind:value={churchType}>
+              <SelectTrigger id="church-type">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="church">Local Church</SelectItem>
+                <SelectItem value="company">Company</SelectItem>
+                <SelectItem value="branch">Branch Sabbath School</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <FormField
             label="Address"
             value={address}
@@ -270,14 +349,22 @@
       {/if}
     </CardContent>
 
+    {#if submitError}
+      <div class="px-6 pb-2">
+        <p class="text-sm text-red-600">{submitError}</p>
+      </div>
+    {/if}
+
     <CardFooter>
       <div class="flex items-center justify-between w-full">
         <Button variant="outline" onclick={back} disabled={currentStep === 0}>
           <ArrowLeft class="size-4" />
           Back
         </Button>
-        <Button onclick={next}>
-          {#if isLastStep}
+        <Button onclick={next} disabled={submitting}>
+          {#if submitting}
+            Setting up...
+          {:else if isLastStep}
             <Check class="size-4" />
             Complete Setup
           {:else}

@@ -1,5 +1,7 @@
 # 005 — Boardroom Management Ledger
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A clerk builds a board meeting agenda from templates, records attendance and quorum, takes minutes collaboratively in real time via the Durable Object, records numbered board decisions with mover/seconder/vote outcome, and searches the archive of all past decisions. The minute editor supports two offline editors producing revision forks that reconcile online.

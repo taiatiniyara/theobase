@@ -1,5 +1,7 @@
 # 022 — Conference Report Generator
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A one-click export that compiles the local congregation's operational data into the standard conference quarterly statistical report format. Eliminates double data entry — the clerk no longer copies figures from Theobase into the conference's separate reporting portal. Covers membership changes, baptisms, finances, Sabbath School attendance, and departmental activity.

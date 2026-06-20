@@ -39,6 +39,12 @@ export function clearRoles() {
   fetchPromise = null;
 }
 
+const READ_ONLY_ROLES = new Set(["pastor", "elder", "member"]);
+
+export function hasWriteAccess(roles: string[]): boolean {
+  return roles.some((r) => !READ_ONLY_ROLES.has(r));
+}
+
 export async function requireRole(...requiredRoles: string[]): Promise<boolean> {
   const token = getToken();
   if (!token) {
@@ -64,4 +70,9 @@ export async function requireRole(...requiredRoles: string[]): Promise<boolean> 
     goto("/");
     return false;
   }
+}
+
+export async function isReadOnly(): Promise<boolean> {
+  const roles = await getRoles();
+  return roles.length > 0 && roles.every((r) => READ_ONLY_ROLES.has(r));
 }

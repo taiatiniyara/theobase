@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getReceipts, createReceipt, getToken, API_URL } from "$lib/api";
+  import { requireRole } from "$lib/guard";
   import { onMount } from "svelte";
   import { toast } from "$lib/toast";
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
@@ -127,11 +128,15 @@
       const more = await getReceipts(PAGE_SIZE, receipts.length);
       receipts = [...receipts, ...more];
       hasMore = more.length >= PAGE_SIZE;
-    } catch {}
+    } catch { loadError = "Failed to load more receipts."; }
     loadingMore = false;
   }
 
-  onMount(loadReceipts);
+  onMount(async () => {
+    const authorized = await requireRole("clerk", "treasurer", "member");
+    if (!authorized) return;
+    loadReceipts();
+  });
 
   const filteredReceipts = $derived(
     receipts

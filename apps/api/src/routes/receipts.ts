@@ -1,10 +1,11 @@
 import type { AppType } from "../types";
-import { eq, asc } from "drizzle-orm";
+import { eq, asc, and } from "drizzle-orm";
 import * as schema from "@theobase/db";
 import { generateId, z } from "@theobase/shared";
-import { requireAuth, requireRole } from "@theobase/auth";
+import { requireAuth, requireWriteAccess } from "@theobase/auth";
 import { loadRoles } from "../middleware/load-roles";
 import { getDb } from "../middleware/get-db";
+import { recordAudit } from "../middleware/audit";
 
 export function registerReceiptRoutes(app: AppType) {
   const createReceiptSchema = z.object({
@@ -12,7 +13,7 @@ export function registerReceiptRoutes(app: AppType) {
     fundSplit: z.record(z.string(), z.number().int().nonnegative()),
   });
 
-  app.post("/receipts", requireAuth(), loadRoles(), requireRole("clerk", "treasurer", "member"), async (c) => {
+  app.post("/receipts", requireAuth(), loadRoles(), requireWriteAccess("clerk", "treasurer", "member"), async (c) => {
     const db = getDb(c);
     const body = await c.req.json();
     const parsed = createReceiptSchema.safeParse(body);
@@ -49,6 +50,8 @@ export function registerReceiptRoutes(app: AppType) {
       createdAt: now,
     });
 
+    await recordAudit(db, userId, congregationId, { action: "receipt.create", resourceType: "receipt", resourceId: id });
+
     const [created] = await db.select().from(schema.receipt).where(eq(schema.receipt.id, id));
     return c.json(created, 201);
   });
@@ -60,11 +63,15 @@ export function registerReceiptRoutes(app: AppType) {
 
     const limit = parseInt(c.req.query("limit") || "50");
     const offset = parseInt(c.req.query("offset") || "0");
+    const statusFilter = c.req.query("status");
+
+    const conditions = [eq(schema.receipt.congregationId, congregationId)];
+    if (statusFilter) conditions.push(eq(schema.receipt.status, statusFilter as any));
 
     const receipts = await db
       .select()
       .from(schema.receipt)
-      .where(eq(schema.receipt.congregationId, congregationId))
+      .where(and(...conditions))
       .orderBy(asc(schema.receipt.createdAt))
       .limit(limit)
       .offset(offset);
@@ -72,7 +79,7 @@ export function registerReceiptRoutes(app: AppType) {
     return c.json(receipts);
   });
 
-  app.post("/receipts/:id/verify", requireAuth(), loadRoles(), requireRole("clerk", "treasurer"), async (c) => {
+  app.post("/receipts/:id/verify", requireAuth(), loadRoles(), requireWriteAccess("clerk", "treasurer"), async (c) => {
     const db = getDb(c);
     const { approved, note } = await c.req.json<{ approved: boolean; note?: string }>();
     const recId = c.req.param("id");
@@ -102,11 +109,18 @@ export function registerReceiptRoutes(app: AppType) {
       rejectionNote: approved ? null : (note || null),
     }).where(eq(schema.receipt.id, recId));
 
+    await recordAudit(db, userId, c.get("congregationId") || "", {
+      action: approved ? "receipt.approve" : "receipt.reject",
+      resourceType: "receipt",
+      resourceId: recId,
+      details: note ? JSON.stringify({ note }) : undefined,
+    });
+
     const [updated] = await db.select().from(schema.receipt).where(eq(schema.receipt.id, recId));
     return c.json(updated);
   });
 
-  app.post("/receipts/:id/upload", requireAuth(), loadRoles(), requireRole("clerk", "treasurer"), async (c) => {
+  app.post("/receipts/:id/upload", requireAuth(), loadRoles(), requireWriteAccess("clerk", "treasurer"), async (c) => {
     const db = getDb(c);
     const recId = c.req.param("id");
 

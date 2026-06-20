@@ -1,5 +1,7 @@
 # 003 — Congregation Setup & Officer Management
 
+**Status: Complete** (10/10 criteria met)
+
 ## What to build
 
 A clerk can register their congregation, configure basic details (name, address, conference, time zone, bank account), import a member roll from CSV, and invite officers via email. Sets up the role-based permission framework.

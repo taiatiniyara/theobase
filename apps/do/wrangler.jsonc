@@ -4,18 +4,27 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-06-19",
   "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "SMTP_RELAY_URL": "https://relay.theobase.net",
+    "SMTP_RELAY_TOKEN": "",
+    "JWT_SECRET": ""
+  },
   "durable_objects": {
     "bindings": [
       {
         "name": "CONGREGATION_DO",
         "class_name": "CongregationDO"
+      },
+      {
+        "name": "NOMINATING_DO",
+        "class_name": "NominatingDO"
       }
     ]
   },
   "migrations": [
     {
       "tag": "v1",
-      "new_classes": ["CongregationDO"]
+      "new_classes": ["CongregationDO", "NominatingDO"]
     }
   ],
   "observability": {

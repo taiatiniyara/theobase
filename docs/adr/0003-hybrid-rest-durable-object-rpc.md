@@ -1,8 +1,12 @@
 # Hybrid REST + Durable Object RPC API
 
-Reads use Hono REST endpoints querying D1 directly. Writes and real-time
-collaboration use Durable Object RPC methods, with one DO per congregation
-multiplexing multiple WebSocket channels.
+## Status: Accepted
+
+Reads use Hono REST endpoints querying D1 directly. Writes go through REST
+handlers to D1; after a successful D1 write, a Durable Object stub is called
+to broadcast the change over WebSocket to connected clients. The DO is a
+real-time notification sidecar, not the data authority. One DO per congregation
+multiplexes 4 WebSocket channels (board, rota, AV, notifications).
 
 **Why:** REST endpoints are cacheable via the PWA's Service Worker — a member
 viewing their giving history or a clerk loading the membership roll hits

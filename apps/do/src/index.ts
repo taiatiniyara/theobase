@@ -1,10 +1,14 @@
 import { DurableObject } from "cloudflare:workers";
+import { createEmailSender } from "@theobase/email";
+import { verifyJwt } from "@theobase/auth";
 
 export default {
   async fetch(_request: Request): Promise<Response> {
     return new Response("Theobase DO Worker", { status: 200 });
   },
 };
+
+export { NominatingDO } from "./nominating";
 
 const CHANNELS = ["board", "rota", "av", "notifications"] as const;
 
@@ -71,18 +75,37 @@ export class CongregationDO extends DurableObject {
     this.broadcast("notifications", { type: "congregation_notification", message, timestamp: Date.now() });
   }
 
-  async scheduleReminder(at: number, data: { date: string; role: string; volunteerId: string }): Promise<void> {
+  async scheduleReminder(at: number, data: { date: string; role: string; volunteerId: string; email?: string }): Promise<void> {
     await this.ctx.storage.setAlarm(at);
     await this.ctx.storage.put("pendingReminder", data);
   }
 
   override async alarm(): Promise<void> {
-    const data = await this.ctx.storage.get<{ date: string; role: string; volunteerId: string }>("pendingReminder");
+    const data = await this.ctx.storage.get<{ date: string; role: string; volunteerId: string; email?: string }>("pendingReminder");
     if (data) {
       this.broadcast("notifications", {
         type: "duty_reminder", date: data.date, role: data.role,
         volunteerId: data.volunteerId, timestamp: Date.now(),
       });
+
+      if (data.email) {
+        const env = this.env as { SMTP_RELAY_URL?: string; SMTP_RELAY_TOKEN?: string };
+        if (env.SMTP_RELAY_URL && env.SMTP_RELAY_TOKEN) {
+          const sendEmail = createEmailSender({ relayUrl: env.SMTP_RELAY_URL, relayToken: env.SMTP_RELAY_TOKEN });
+          try {
+            await sendEmail({
+              to: data.email,
+              subject: `Duty Reminder: ${data.role} on ${data.date}`,
+              html: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px">
+                <h2 style="color:#1e3a5f">Theobase</h2>
+                <p>This is a reminder that you are scheduled for <strong>${data.role}</strong> on <strong>${data.date}</strong>.</p>
+                <p>If you are unable to serve, please contact your church clerk to arrange a swap.</p>
+              </div>`,
+            });
+          } catch { /* email failure is non-fatal */ }
+        }
+      }
+
       await this.ctx.storage.delete("pendingReminder");
     }
   }
@@ -117,7 +140,28 @@ export class CongregationDO extends DurableObject {
 
   override async webSocketMessage(ws: WebSocket, message: string): Promise<void> {
     try {
-      const data = JSON.parse(message) as { type: string; channel?: string };
+      const data = JSON.parse(message) as { type: string; channel?: string; token?: string };
+
+      if (data.type === "auth" && data.token) {
+        const env = this.env as { JWT_SECRET?: string };
+        const secret = env.JWT_SECRET || "theobase-dev-secret-change-in-production";
+        const payload = await verifyJwt(data.token, secret);
+        if (payload) {
+          ws.serializeAttachment({ userId: payload.userId, congregationId: payload.congregationId, authenticated: true });
+          ws.send(JSON.stringify({ type: "authenticated" }));
+        } else {
+          ws.send(JSON.stringify({ type: "auth_error", message: "Invalid token" }));
+          ws.close(1008, "Auth failed");
+        }
+        return;
+      }
+
+      const attachment = ws.deserializeAttachment() as { authenticated?: boolean } | undefined;
+      if (!attachment?.authenticated) {
+        ws.send(JSON.stringify({ type: "auth_error", message: "Not authenticated" }));
+        return;
+      }
+
       if (data.type === "subscribe" && data.channel && CHANNELS.includes(data.channel as typeof CHANNELS[number])) {
         this.removeClient(ws);
         this.addClient(data.channel, ws);

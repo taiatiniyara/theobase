@@ -1,5 +1,7 @@
 # 008 — Offline Foundation
 
+**Status: Implemented** (CRDTs + IndexedDB outbox + Service Worker exist; acceptance criteria need review)
+
 ## What to build
 
 Harden the PWA's offline capabilities across the features built so far. Implement the three-tier CRDT strategy (LWW for scalars, OR-Set for rota slots, revision-based merge for board minutes), the IndexedDB outbox for offline writes, and automatic sync with conflict resolution UI. This is not a standalone feature — it retrofits offline support into Slices 002–007.

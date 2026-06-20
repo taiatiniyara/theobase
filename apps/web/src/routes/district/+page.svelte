@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getDistrictRotations, createDistrictRotation, createDistrictVisit } from '$lib/api';
+  import { getDistrictRotations, createDistrictRotation, createDistrictVisit, getDistrictVisits } from '$lib/api';
   import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
@@ -13,6 +13,7 @@
   import DataToolbar from "$lib/components/DataToolbar.svelte";
 
   let rotations = $state<any[]>([]);
+  let visits = $state<any[]>([]);
   let loading = $state(true);
   let loadError = $state("");
   let actionError = $state("");
@@ -85,6 +86,7 @@
     try { rotations = await getDistrictRotations(); } catch { 
       loadError = "Failed to load. Please try again.";
     }
+    try { visits = await getDistrictVisits(); } catch { visits = []; }
     loading = false;
   });
 </script>
@@ -206,5 +208,17 @@
         {/if}
       </CardContent>
     </Card>
+
+    {#if visits.length > 0}
+      <div class="space-y-2">
+        <h3 class="text-sm font-medium text-slate-500">Recent Visits</h3>
+        {#each visits as v (v.id)}
+          <div class="rounded border px-3 py-2 text-sm">
+            <p><strong>{v.date}</strong> — {v.purpose || 'Pastoral visit'}</p>
+            {#if v.notes}<p class="text-xs text-slate-500 mt-1">{v.notes}</p>{/if}
+          </div>
+        {/each}
+      </div>
+    {/if}
   {/if}
 </div>

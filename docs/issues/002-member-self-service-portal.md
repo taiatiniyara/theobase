@@ -1,5 +1,7 @@
 # 002 — Member Self-Service Portal
 
+**Status: Complete** (10/10 criteria met)
+
 ## What to build
 
 A logged-in member can view their personal profile, see their giving history, update contact details, and view their ministry involvement — all scoped to their congregation via RLS. Establishes the SvelteKit PWA shell with basic Service Worker caching.

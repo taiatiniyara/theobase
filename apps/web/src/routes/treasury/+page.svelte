@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getTreasuryBalance, getExpenses, createExpense, getReceipts, getBoardMeetings } from "$lib/api";
+  import { getTreasuryBalance, getExpenses, createExpense, getReceipts, getBoardMeetings, getReceiptsByStatus, api } from "$lib/api";
   import { requireRole } from "$lib/guard";
   import { onMount } from "svelte";
   import { toast } from "$lib/toast";
@@ -39,6 +39,23 @@
   let expCategory = $state("church_budget");
   let expReceiptId = $state("");
   let expDecisionId = $state("");
+  let pendingReceipts = $state<any[]>([]);
+  let loadingPending = $state(false);
+
+  async function loadPendingReceipts() {
+    loadingPending = true;
+    try { pendingReceipts = await getReceiptsByStatus("pending", 10); }
+    catch { pendingReceipts = []; }
+    loadingPending = false;
+  }
+
+  async function verifyReceipt(recId: string, approved: boolean) {
+    try {
+      await api(`/receipts/${recId}/verify`, { method: 'POST', body: JSON.stringify({ approved }) });
+      await loadPendingReceipts();
+      loadData();
+    } catch { toast.error("Failed to verify receipt"); }
+  }
 
   const categories = ["church_budget", "pathfinders", "sabbath_school", "adra", "local_church", "dorcas", "health"];
 
@@ -86,7 +103,7 @@
       const more = await getExpenses(PAGE_SIZE, expenses.length);
       expenses = [...expenses, ...more];
       hasMore = more.length >= PAGE_SIZE;
-    } catch {}
+    } catch { loadError = "Failed to load more expenses."; }
     loadingMore = false;
   }
 
@@ -94,6 +111,7 @@
     const authorized = await requireRole("clerk", "treasurer");
     if (!authorized) return;
     loadData();
+    loadPendingReceipts();
   });
 
   const filteredExpenses = $derived(
@@ -165,6 +183,33 @@
           </div>
         {/if}
       </CardContent>
+    </Card>
+
+    <Card>
+      <CardHeader>
+        <CardTitle class="flex items-center gap-2">Pending Verification</CardTitle>
+        <CardDescription>
+          {#if loadingPending}Loading...{:else}{pendingReceipts.length} receipt{pendingReceipts.length !== 1 ? 's' : ''} awaiting verification{/if}
+        </CardDescription>
+      </CardHeader>
+      {#if pendingReceipts.length > 0}
+        <CardContent>
+          <div class="space-y-2">
+            {#each pendingReceipts as rec (rec.id)}
+              <div class="flex items-center justify-between rounded bg-amber-50 px-3 py-2">
+                <div>
+                  <p class="text-sm font-medium">${formatCents(rec.amount)}</p>
+                  <p class="text-xs text-slate-500">{formatDate(rec.createdAt)}</p>
+                </div>
+                <div class="flex gap-1">
+                  <Button size="sm" class="h-7 text-xs bg-green-600 hover:bg-green-700 text-white" onclick={() => verifyReceipt(rec.id, true)}>Approve</Button>
+                  <Button size="sm" variant="outline" class="h-7 text-xs text-red-600" onclick={() => verifyReceipt(rec.id, false)}>Reject</Button>
+                </div>
+              </div>
+            {/each}
+          </div>
+        </CardContent>
+      {/if}
     </Card>
 
     {#if !showForm}

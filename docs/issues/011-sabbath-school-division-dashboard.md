@@ -1,5 +1,7 @@
 # 011 — Sabbath School Division Dashboard
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 Digital class registers for each Sabbath School age division (Beginners, Kindergarten, Primary, Juniors, Earliteen, Youth, Adult). Teachers record attendance weekly and see personal engagement trends. Includes built-in links to the current lesson study (the Quarterly). Replaces physical paper roll-books.

@@ -8,6 +8,7 @@ import { getDb } from "../middleware/get-db";
 import { getEmailSender } from "../middleware/get-email";
 import { renderInviteEmail } from "@theobase/email";
 import { generateToken } from "@theobase/auth";
+import { recordAudit } from "../middleware/audit";
 
 export function registerCongregationRoutes(app: AppType) {
   const createCongregationSchema = z.object({
@@ -27,6 +28,11 @@ export function registerCongregationRoutes(app: AppType) {
 
   const importMemberSchema = z.object({
     csv: z.string().min(1),
+  });
+
+  const inviteSchema = z.object({
+    email: z.string().email(),
+    role: z.string().min(1),
   });
 
   app.post("/congregations", requireAuth(), async (c) => {
@@ -70,6 +76,14 @@ export function registerCongregationRoutes(app: AppType) {
     return c.json(cong);
   });
 
+  app.get("/congregations/:id/members", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
+    const db = getDb(c);
+    const congId = c.req.param("id");
+    const persons = await db.select().from(schema.person).where(eq(schema.person.congregationId, congId));
+    const roles = await db.select().from(schema.role).where(eq(schema.role.congregationId, congId));
+    return c.json({ persons, roles });
+  });
+
   app.patch("/congregations/:id", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
     const db = getDb(c);
     const body = await c.req.json();
@@ -98,13 +112,15 @@ export function registerCongregationRoutes(app: AppType) {
   });
 
   app.post("/congregations/:id/invite", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
-    const { email, role } = await c.req.json<{ email: string; role: string }>();
-    if (!email || !role) {
-      return c.json({ error: "Email and role required" }, 400);
+    const body = await c.req.json();
+    const parsed = inviteSchema.safeParse(body);
+    if (!parsed.success) {
+      return c.json({ error: parsed.error.issues }, 400);
     }
 
     const db = getDb(c);
     const congId = c.req.param("id");
+    const { email, role } = parsed.data;
 
     const existingRoles = await db
       .select()
@@ -133,13 +149,20 @@ export function registerCongregationRoutes(app: AppType) {
     });
 
     const sendEmail = getEmailSender(c);
+    const appUrl = (c.env as any).APP_URL || "https://theobase.app";
     await sendEmail({
       to: email,
       subject: "You've been invited to Theobase",
       html: renderInviteEmail({
         role,
-        joinUrl: `https://theobase.app/join?congregation=${congId}&role=${role}&token=${token}`,
+        joinUrl: `${appUrl}/join?congregation=${congId}&role=${role}&token=${token}`,
       }),
+    });
+
+    await recordAudit(db, c.get("userId"), c.get("congregationId") || "", {
+      action: "congregation.invite_officer",
+      resourceType: "role",
+      details: JSON.stringify({ email: email.toLowerCase(), role }),
     });
 
     return c.json({ ok: true });
@@ -202,5 +225,23 @@ export function registerCongregationRoutes(app: AppType) {
     }
 
     return c.json({ imported: personIds.length, errors, personIds }, personIds.length > 0 ? 201 : 200);
+  });
+
+  app.post("/congregations/:id/bank-account", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
+    const db = getDb(c);
+    const { bankName, accountName, accountNumber } = await c.req.json();
+    const id = generateId();
+    const now = new Date().toISOString();
+    await db.insert(schema.bankAccount).values({ id, congregationId: c.req.param("id"), bankName, accountName, accountNumber, createdAt: now });
+    const [r] = await db.select().from(schema.bankAccount).where(eq(schema.bankAccount.id, id));
+    await recordAudit(db, c.get("userId"), c.get("congregationId") || "", { action: "bank_account.create", resourceType: "bank_account", resourceId: id });
+    return c.json(r, 201);
+  });
+
+  app.get("/congregations/:id/bank-account", requireAuth(), loadRoles(), requireRole("clerk", "treasurer"), async (c) => {
+    const congId = c.req.param("id");
+    if (c.get("congregationId") !== congId) return c.json({ error: "Access denied" }, 403);
+    const [r] = await getDb(c).select().from(schema.bankAccount).where(eq(schema.bankAccount.congregationId, congId));
+    return c.json(r || null);
   });
 }

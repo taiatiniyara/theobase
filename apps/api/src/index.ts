@@ -17,10 +17,20 @@ import { registerFacilitiesRoutes } from "./routes/facilities";
 import { registerCrisisRoutes } from "./routes/crisis";
 import { registerTransferRoutes } from "./routes/transfers";
 import { registerNominatingRoutes } from "./routes/nominating";
+import { registerConferenceRoutes } from "./routes/conference";
+import { registerDisciplineRoutes } from "./routes/discipline";
+import { registerOrganizationRoutes } from "./routes/organization";
+import { registerPersonRoutes } from "./routes/persons";
+import { registerAuditRoutes } from "./middleware/audit";
+import { rateLimiter } from "./middleware/rate-limit";
+import { securityHeaders, csrfProtection } from "./middleware/security";
+import { policyGuardian } from "./middleware/policy-compliance";
 import type { Bindings, Variables } from "./types";
 import { Hono } from "hono";
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
+
+app.use("*", securityHeaders());
 
 app.use("*", async (c, next) => {
   if (c.req.method === "OPTIONS") {
@@ -28,7 +38,7 @@ app.use("*", async (c, next) => {
       status: 204,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PATCH, OPTIONS",
+        "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
         "Access-Control-Max-Age": "86400",
       },
@@ -37,6 +47,12 @@ app.use("*", async (c, next) => {
   await next();
   c.header("Access-Control-Allow-Origin", "*");
 });
+
+app.use("*", rateLimiter(100, 60));
+app.use("*", csrfProtection());
+app.use("*", policyGuardian());
+
+app.get("/health", (c) => c.json({ ok: true, timestamp: new Date().toISOString() }));
 
 registerAuthRoutes(app);
 registerMeRoutes(app);
@@ -57,5 +73,10 @@ registerFacilitiesRoutes(app);
 registerCrisisRoutes(app);
 registerTransferRoutes(app);
 registerNominatingRoutes(app);
+registerConferenceRoutes(app);
+registerDisciplineRoutes(app);
+registerOrganizationRoutes(app);
+registerPersonRoutes(app);
+registerAuditRoutes(app);
 
 export default app;

@@ -4,6 +4,9 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-06-19",
   "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "APP_URL": "https://theobase.app"
+  },
   "d1_databases": [
     {
       "binding": "DB",
@@ -22,6 +25,11 @@
       {
         "name": "CONGREGATION_DO",
         "class_name": "CongregationDO",
+        "script_name": "theobase-do"
+      },
+      {
+        "name": "NOMINATING_DO",
+        "class_name": "NominatingDO",
         "script_name": "theobase-do"
       }
     ]

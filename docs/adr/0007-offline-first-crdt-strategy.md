@@ -1,5 +1,7 @@
 # Offline-first CRDT strategy
 
+## Status: Accepted
+
 Offline writes are handled with three conflict-resolution strategies chosen per
 data type: last-writer-wins registers for scalar fields (member phone numbers,
 uniform sizes, communion inventories), Observed-Remove Sets for duty rota slot

@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { getBoardMeetings, createBoardMeeting, getBoardMeeting, createBoardDecision } from "$lib/api";
+  import { getBoardMeetings, createBoardMeeting, getBoardMeeting, createBoardDecision, getBoardMinutes, createBoardMinute, deleteBoardMinute, updateBoardMinute } from "$lib/api";
   import { requireRole } from "$lib/guard";
   import { onMount } from "svelte";
+  import { onDestroy } from "svelte";
   import { toast } from "$lib/toast";
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
   import { Button } from "$lib/components/ui/button";
@@ -10,8 +11,10 @@
   import { Badge } from "$lib/components/ui/badge";
   import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "$lib/components/ui/select";
   import { Skeleton } from "$lib/components/ui/skeleton";
-  import { Plus, ChevronRight, ArrowLeft, Gavel, HelpCircle } from "@lucide/svelte";
+  import { Plus, ChevronRight, ArrowLeft, Gavel, HelpCircle, Trash2, FileText, Edit3 } from "@lucide/svelte";
   import { formatDate } from "$lib/format";
+  import { realtimeEvents } from "$lib/rtstore";
+  import { get } from "svelte/store";
   import DataToolbar from "$lib/components/DataToolbar.svelte";
   import DateRangeFilter from "$lib/components/DateRangeFilter.svelte";
   import StaggerList from "$lib/components/StaggerList.svelte";
@@ -41,6 +44,53 @@
   let decisionVote = $state("approved");
   let decisionError = $state("");
 
+  let minutes = $state<any[]>([]);
+  let minuteContent = $state("");
+  let submittingMinute = $state(false);
+  let editingMinuteId = $state<string | null>(null);
+  let editingMinuteContent = $state('');
+
+  async function startEditMinute(m: any) { editingMinuteId = m.id; editingMinuteContent = m.content; }
+  function cancelEditMinute() { editingMinuteId = null; }
+
+  async function saveMinute() {
+    if (!editingMinuteId || !editingMinuteContent.trim()) return;
+    try {
+      const result = await updateBoardMinute(editingMinuteId, editingMinuteContent);
+      if (result?.fork) {
+        toast("Conflict detected. A merge version was saved. Review both versions.");
+      }
+      editingMinuteId = null;
+      await loadMinutes();
+    } catch { toast.error("Failed to update minute."); }
+  }
+
+  async function loadMinutes() {
+    if (!selectedMeeting) return;
+    try { minutes = await getBoardMinutes(selectedMeeting.id) || []; }
+    catch { minutes = []; }
+  }
+
+  async function addMinute() {
+    if (!minuteContent.trim() || !selectedMeeting) return;
+    submittingMinute = true;
+    try {
+      const result = await createBoardMinute(selectedMeeting.id, minuteContent);
+      minutes = [...minutes, result];
+      minuteContent = "";
+      toast.success("Minute recorded.");
+    } catch { toast.error("Failed to save minute."); }
+    submittingMinute = false;
+  }
+
+  async function removeMinute(id: string) {
+    try {
+      await deleteBoardMinute(id);
+      minutes = minutes.filter(m => m.id !== id);
+      toast.success("Minute removed.");
+    } catch { toast.error("Failed to delete minute."); }
+  }
+
   function addAgendaItem() {
     agendaItems = [...agendaItems, { title: "" }];
   }
@@ -68,6 +118,7 @@
   async function viewMeeting(id: string) {
     try {
       selectedMeeting = await getBoardMeeting(id);
+      await loadMinutes();
     } catch { loadError = "Failed to load meeting details."; }
   }
 
@@ -123,7 +174,7 @@
       const more = await getBoardMeetings(PAGE_SIZE, meetings.length);
       meetings = [...meetings, ...more];
       hasMore = more.length >= PAGE_SIZE;
-    } catch {}
+    } catch { loadError = "Failed to load more meetings."; }
     loadingMore = false;
   }
 
@@ -131,6 +182,16 @@
     const authorized = await requireRole("clerk", "treasurer", "elder");
     if (!authorized) return;
     loadMeetings();
+
+    const unsub = realtimeEvents.subscribe((event) => {
+      if (!event) return;
+      if (event.type === "meeting_updated" || event.type === "decision_recorded") {
+        loadMeetings();
+        if (selectedMeeting) viewMeeting(selectedMeeting.id);
+      }
+    });
+
+    onDestroy(() => unsub());
   });
 
   const filteredMeetings = $derived(
@@ -241,6 +302,54 @@
             </ul>
           </CardContent>
         {/if}
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Minutes</CardTitle>
+          <CardDescription>{minutes.length ? `${minutes.length} entries` : 'No minutes recorded'}</CardDescription>
+        </CardHeader>
+        <CardContent class="space-y-3">
+          {#if minutes.length}
+            <div class="space-y-2">
+              {#each minutes as m (m.id)}
+                <div class="rounded-lg border p-3">
+                  {#if editingMinuteId === m.id}
+                    <textarea bind:value={editingMinuteContent} rows="3"
+                      class="flex w-full rounded-md border px-3 py-2 text-sm"></textarea>
+                    <div class="flex gap-2 mt-2">
+                      <Button size="sm" class="h-7 text-xs" onclick={saveMinute}>Save</Button>
+                      <Button variant="ghost" size="sm" class="h-7 text-xs" onclick={cancelEditMinute}>Cancel</Button>
+                    </div>
+                  {:else}
+                    <div class="flex justify-between items-start gap-2">
+                      <p class="text-sm text-slate-700 whitespace-pre-wrap">{m.content}</p>
+                      <div class="flex gap-1 shrink-0">
+                        <Button variant="ghost" size="icon" class="size-7" onclick={() => startEditMinute(m)}>
+                          <Edit3 class="size-3 text-slate-400" />
+                        </Button>
+                        <Button variant="ghost" size="icon" class="size-7 text-red-400" onclick={() => removeMinute(m.id)}>
+                          <Trash2 class="size-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  {/if}
+                  <p class="text-[10px] text-slate-400 mt-1">{m.createdAt ? new Date(m.createdAt).toLocaleString() : ''}</p>
+                </div>
+              {/each}
+            </div>
+          {/if}
+          <div class="space-y-2 border-t pt-3">
+            <Label for="minute-content">New Minute Entry</Label>
+            <textarea id="minute-content" bind:value={minuteContent} rows="3"
+              class="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              placeholder="Record meeting minutes..."></textarea>
+            <Button onclick={addMinute} disabled={submittingMinute || !minuteContent.trim()}>
+              <FileText class="size-4" />
+              {submittingMinute ? 'Saving...' : 'Add Minute'}
+            </Button>
+          </div>
+        </CardContent>
       </Card>
 
       <Card>

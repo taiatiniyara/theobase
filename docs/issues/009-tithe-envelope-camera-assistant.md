@@ -1,5 +1,7 @@
 # 009 — Tithe Envelope Camera Assistant
 
+**Status: Not yet implemented** (requires on-device OCR; receipt upload via file picker is implemented in issue 004)
+
 ## What to build
 
 A treasurer points their phone camera at a physical tithe envelope with handwritten amounts. The app uses on-device OCR to read the handwritten lines and pre-fills the fund split form. The treasurer confirms or corrects, then the receipt is recorded as if uploaded normally.

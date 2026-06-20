@@ -1,4 +1,5 @@
 import { toast } from "./toast";
+import { WS_URL } from "./api";
 
 type Channel = "board" | "rota" | "av" | "notifications";
 
@@ -10,11 +11,12 @@ interface RealtimeOptions {
 export function connectRealtime(token: string, options: RealtimeOptions = {}) {
   const { channels = ["board", "rota", "notifications"] as Channel[], onMessage } = options;
 
-  const wsUrl = `wss://api.theobase.net/do?token=${encodeURIComponent(token)}`;
+  const wsUrl = `${WS_URL}/do`;
 
   let ws: WebSocket | null = null;
   let reconnectTimer: ReturnType<typeof setTimeout>;
   let currentChannel = 0;
+  let authenticated = false;
 
   function connect() {
     try {
@@ -25,12 +27,12 @@ export function connectRealtime(token: string, options: RealtimeOptions = {}) {
     }
 
     ws.onopen = () => {
-      currentChannel = 0;
-      subscribeNext();
+      authenticated = false;
+      ws?.send(JSON.stringify({ type: "auth", token }));
     };
 
     function subscribeNext() {
-      if (currentChannel < channels.length && ws?.readyState === WebSocket.OPEN) {
+      if (currentChannel < channels.length && ws?.readyState === WebSocket.OPEN && authenticated) {
         ws.send(JSON.stringify({ type: "subscribe", channel: channels[currentChannel] }));
         currentChannel++;
         setTimeout(subscribeNext, 100);
@@ -40,6 +42,20 @@ export function connectRealtime(token: string, options: RealtimeOptions = {}) {
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+
+        if (data.type === "authenticated") {
+          authenticated = true;
+          currentChannel = 0;
+          subscribeNext();
+          return;
+        }
+
+        if (data.type === "auth_error") {
+          toast("Authentication failed. Reconnecting...");
+          ws?.close();
+          return;
+        }
+
         onMessage?.(data);
 
         if (data.type === "meeting_updated") {

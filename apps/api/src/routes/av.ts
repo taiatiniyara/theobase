@@ -1,16 +1,30 @@
 import type { AppType } from "../types";
 import { and, eq } from "drizzle-orm";
 import * as schema from "@theobase/db";
-import { generateId } from "@theobase/shared";
+import { generateId, z } from "@theobase/shared";
 import { requireAuth, requireRole } from "@theobase/auth";
 import { loadRoles } from "../middleware/load-roles";
 import { getDb } from "../middleware/get-db";
 import { getCongregationDO } from "../middleware/get-do";
 
+const avItemSchema = z.object({
+  type: z.string().min(1),
+  title: z.string().min(1),
+});
+
+const createOrderSchema = z.object({
+  date: z.string().min(1),
+  items: z.array(avItemSchema),
+});
+
 export function registerAvRoutes(app: AppType) {
   app.post("/av/order-of-service", requireAuth(), loadRoles(), requireRole("clerk", "av_operator"), async (c) => {
     const db = getDb(c);
-    const { date, items } = await c.req.json<{ date: string; items: any[] }>();
+    const body = await c.req.json();
+    const parsed = createOrderSchema.safeParse(body);
+    if (!parsed.success) return c.json({ error: parsed.error.issues }, 400);
+
+    const { date, items } = parsed.data;
     const congregationId = c.get("congregationId")!;
     const now = new Date().toISOString();
     const [existing] = await db.select().from(schema.avOrderOfService).where(and(eq(schema.avOrderOfService.congregationId, congregationId), eq(schema.avOrderOfService.date, date)));
@@ -33,5 +47,19 @@ export function registerAvRoutes(app: AppType) {
     const [r] = await db.select().from(schema.avOrderOfService).where(and(eq(schema.avOrderOfService.congregationId, c.get("congregationId")!), eq(schema.avOrderOfService.date, c.req.param("date"))));
     if (!r) return c.json({ error: "Not found" }, 404);
     return c.json({ ...r, items: JSON.parse(r.items) });
+  });
+
+  const slideSchema = z.object({ date: z.string().min(1), slideIndex: z.number().int().min(0) });
+
+  app.post("/av/order-of-service/slide", requireAuth(), loadRoles(), requireRole("av_operator", "clerk"), async (c) => {
+    const parsed = slideSchema.safeParse(await c.req.json());
+    if (!parsed.success) return c.json({ error: parsed.error.issues }, 400);
+
+    const { date, slideIndex } = parsed.data;
+
+    const doStub = getCongregationDO(c, c.get("congregationId")!);
+    if (doStub) await doStub.slideChanged(slideIndex);
+
+    return c.json({ slideIndex, date });
   });
 }

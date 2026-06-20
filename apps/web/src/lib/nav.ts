@@ -18,8 +18,11 @@ import ArrowRightLeft from "@lucide/svelte/icons/arrow-right-left";
 import Home from "@lucide/svelte/icons/house";
 import ClipboardCheck from "@lucide/svelte/icons/clipboard-check";
 import Vote from "@lucide/svelte/icons/vote";
+import Scale from "@lucide/svelte/icons/scale";
 import Presentation from "@lucide/svelte/icons/presentation";
 import HelpCircle from "@lucide/svelte/icons/help-circle";
+import ShieldCheck from "@lucide/svelte/icons/shield-check";
+import History from "@lucide/svelte/icons/history";
 import Rocket from "@lucide/svelte/icons/rocket";
 
 import type { Component } from "svelte";
@@ -27,14 +30,14 @@ import type { Component } from "svelte";
 type IconComponent = Component<any>;
 
 export interface NavItem {
-  label: string;
+  labelKey: string;
   href: string;
   icon: IconComponent;
   roles?: string[];
 }
 
 export interface NavSection {
-  label: string;
+  labelKey: string;
   icon: IconComponent;
   roles?: string[];
   items: NavItem[];
@@ -42,52 +45,55 @@ export interface NavSection {
 
 export const navigation: NavSection[] = [
   {
-    label: "Dashboard",
+    labelKey: "nav.dashboard",
     icon: LayoutDashboard,
     items: [
-      { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
-      { label: "Help Center", href: "/help", icon: HelpCircle },
+      { labelKey: "nav.overview", href: "/dashboard", icon: LayoutDashboard },
+      { labelKey: "nav.help_center", href: "/help", icon: HelpCircle },
     ],
   },
   {
-    label: "Member",
+    labelKey: "nav.member",
     icon: User,
     items: [
-      { label: "Profile", href: "/me", icon: User },
-      { label: "Giving", href: "/receipts", icon: Receipt },
+      { labelKey: "nav.profile", href: "/me", icon: User },
+      { labelKey: "nav.giving", href: "/receipts", icon: Receipt },
     ],
   },
   {
-    label: "Clerk",
+    labelKey: "nav.clerk",
     icon: ClipboardCheck,
     roles: ["clerk"],
     items: [
-      { label: "Boardroom", href: "/boardroom", icon: Gavel },
-      { label: "Duty Rota", href: "/rota", icon: CalendarCheck },
-      { label: "Congregation", href: "/congregation", icon: Church },
-      { label: "Church Setup", href: "/setup", icon: Rocket },
-      { label: "Pathfinders", href: "/pathfinders", icon: Compass },
-      { label: "Welfare", href: "/welfare", icon: HeartHandshake },
-      { label: "Sabbath School", href: "/sabbath-school", icon: GraduationCap },
-      { label: "Health Ministry", href: "/health", icon: HeartPulse },
-      { label: "Communion", href: "/communion", icon: Wine },
-      { label: "AV Sync", href: "/av", icon: MonitorPlay },
-      { label: "District Hub", href: "/district", icon: Building2 },
-      { label: "Facilities", href: "/facilities", icon: Building },
-      { label: "Crisis Assets", href: "/crisis", icon: AlertTriangle },
-      { label: "Transfers", href: "/transfers", icon: ArrowRightLeft },
-      { label: "Households", href: "/households", icon: Home },
-      { label: "Candidacies", href: "/candidacies", icon: ClipboardCheck },
-      { label: "Nominating", href: "/nominating", icon: Vote },
+      { labelKey: "nav.boardroom", href: "/boardroom", icon: Gavel },
+      { labelKey: "nav.duty_rota", href: "/rota", icon: CalendarCheck },
+      { labelKey: "nav.congregation", href: "/congregation", icon: Church },
+      { labelKey: "nav.church_setup", href: "/setup", icon: Rocket },
+      { labelKey: "nav.pathfinders", href: "/pathfinders", icon: Compass },
+      { labelKey: "nav.welfare", href: "/welfare", icon: HeartHandshake },
+      { labelKey: "nav.sabbath_school", href: "/sabbath-school", icon: GraduationCap },
+      { labelKey: "nav.health_ministry", href: "/health", icon: HeartPulse },
+      { labelKey: "nav.communion", href: "/communion", icon: Wine },
+      { labelKey: "nav.av_sync", href: "/av", icon: MonitorPlay },
+      { labelKey: "nav.district_hub", href: "/district", icon: Building2 },
+      { labelKey: "nav.facilities", href: "/facilities", icon: Building },
+      { labelKey: "nav.crisis_assets", href: "/crisis", icon: AlertTriangle },
+      { labelKey: "nav.transfers", href: "/transfers", icon: ArrowRightLeft },
+      { labelKey: "nav.households", href: "/households", icon: Home },
+      { labelKey: "nav.candidacies", href: "/candidacies", icon: ClipboardCheck },
+      { labelKey: "nav.nominating", href: "/nominating", icon: Vote },
+      { labelKey: "nav.discipline", href: "/discipline", icon: Scale },
+      { labelKey: "nav.safety", href: "/safety", icon: ShieldCheck },
+      { labelKey: "nav.audit", href: "/audit", icon: History },
     ],
   },
   {
-    label: "Treasurer",
+    labelKey: "nav.treasurer",
     icon: Landmark,
     roles: ["treasurer"],
     items: [
-      { label: "Treasury", href: "/treasury", icon: Landmark },
-      { label: "Conference Report", href: "/conference", icon: Presentation },
+      { labelKey: "nav.treasury", href: "/treasury", icon: Landmark },
+      { labelKey: "nav.conference_report", href: "/conference", icon: Presentation },
     ],
   },
 ];

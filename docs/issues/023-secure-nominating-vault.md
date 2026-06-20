@@ -1,5 +1,7 @@
 # 023 — Secure Nominating Vault
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A completely confidential digital ballot box for the annual or biennial nominating committee process. Tracks officer role candidates, invitations sent, acceptance/decline responses, and final ballot results. Operates under strict encryption and access isolation — only nominating committee members can view or interact with the vault.

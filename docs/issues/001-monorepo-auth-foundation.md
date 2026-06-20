@@ -1,5 +1,7 @@
 # 001 — Monorepo + Auth Foundation
 
+**Status: Complete** (17/17 criteria met)
+
 ## What to build
 
 Scaffold the entire development workspace and implement the email-based passwordless authentication flow end to end. This is the tracer bullet — it proves every layer of the Cloudflare stack works before any feature code is written.

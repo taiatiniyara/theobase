@@ -1,5 +1,7 @@
 # 004 — Digital Receipt Registry
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A member uploads a screenshot of their bank transfer, specifies the fund split (tithe, church budget, Pathfinders, etc.), and the app validates the split matches the receipt total. The treasurer sees a verification queue and approves or rejects each submission with one click. Receipt images are stored in R2.

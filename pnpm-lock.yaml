@@ -82,6 +82,9 @@ importers:
 
   apps/do:
     dependencies:
+      '@theobase/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
       '@theobase/db':
         specifier: workspace:*
         version: link:../../packages/db

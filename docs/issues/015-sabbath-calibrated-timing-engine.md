@@ -1,5 +1,7 @@
 # 015 — Sabbath-Calibrated Timing Engine
 
+**Status: Implemented** (Sabbath timing utilities in packages/shared; guard in API middleware; acceptance criteria need review)
+
 ## What to build
 
 All scheduled notifications and reminders are calibrated to local Friday sunset times, not midnight or arbitrary time zones. The engine queries a global geolocation database for the congregation's coordinates and adjusts all scheduled DO alarms, email dispatches, and in-app reminders to respect sacred hours (never fire between Friday sunset and Saturday sunset).

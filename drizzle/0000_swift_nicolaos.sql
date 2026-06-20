@@ -52,7 +52,7 @@ CREATE TABLE `person` (
 --> statement-breakpoint
 CREATE TABLE `role` (
 	`id` text PRIMARY KEY NOT NULL,
-	`person_id` text NOT NULL,
+	`person_id` text,
 	`congregation_id` text NOT NULL,
 	`role_type` text NOT NULL,
 	`created_at` text NOT NULL,

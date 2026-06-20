@@ -1,5 +1,7 @@
 # 021 — Digital Transfer & Reception Desk
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A secure, traceable workflow for membership transfers between congregations. A clerk requests a letter of transfer for a departing member, the receiving clerk accepts, and the member record automatically migrates upon confirmation. Replaces postal mail and unsecured email with a digital audit trail.

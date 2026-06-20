@@ -1,5 +1,7 @@
 # 006 — Smart-Swap Duty Rota + Volunteer Safety Shield
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A rota coordinator assigns platform duty slots (elder of the day, preacher, deacon, musician, AV operator) to volunteers on a weekly calendar. Volunteers receive email + WebSocket notifications when assigned. Declined slots auto-offer to pre-qualified substitutes via OR-Set conflict resolution. The Safety Shield flags expired safety clearances and blocks uncertified volunteers from youth-related duties.

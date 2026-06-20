@@ -36,7 +36,8 @@ npx wrangler d1 migrations apply theobase-spd --config apps/api/wrangler.jsonc
 ### Run Tests
 
 ```bash
-npx vitest run                                  # 74 tests, 9 files
+pnpm test                                      # 74 tests, 9 files (API + shared)
+pnpm test:do                                   # 10 tests, 3 files (Durable Object)
 ```
 
 ### Code Quality
@@ -61,9 +62,9 @@ npx wrangler pages deploy apps/web/.svelte-kit/cloudflare --project-name theobas
 
 ```
 apps/
-  api/      Hono Worker — 40+ REST endpoints (all 23 issues covered)
+  api/      Hono Worker — 60+ REST endpoints across 21 route modules
   do/       CongregationDO — 10 RPC methods, 4-channel multiplexing, alarms
-  web/      SvelteKit PWA — 20 pages, offline-first (IndexedDB + outbox)
+  web/      SvelteKit PWA — 26 pages, offline-first (IndexedDB + outbox)
   relay/    SMTP relay (Node.js, deploys to VPS)
 packages/
   auth/     JWT + magic link + RLS middleware

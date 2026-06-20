@@ -60,7 +60,11 @@ export function getTokenTtlSeconds(): number {
 
 export function requireAuth(): MiddlewareHandler {
   return async (c, next) => {
-    const secret = (c.env as any).JWT_SECRET || DEFAULT_SECRET;
+    const secret = (c.env as any).JWT_SECRET;
+    if (!secret) {
+      console.error("JWT_SECRET is not configured");
+      return c.json({ error: "Authentication service unavailable" }, 500);
+    }
 
     const cookie = c.req.header("Cookie") || "";
     const cookieMatch = cookie.match(/token=([^;]+)/);
@@ -99,4 +103,103 @@ export function requireRole(...roles: string[]): MiddlewareHandler {
     }
     await next();
   };
+}
+
+const READ_ONLY_ROLES = new Set(["pastor", "elder", "member"]);
+
+const WRITE_ROLES = new Set([
+  "clerk",
+  "treasurer",
+  "pathfinder_director",
+  "adventurer_director",
+  "sabbath_school_superintendent",
+  "dorcas_coordinator",
+  "health_ministries_leader",
+  "av_operator",
+  "youth_leader",
+  "music_coordinator",
+  "deacon",
+  "deaconess",
+  "head_deacon",
+  "head_deaconess",
+  "district_pastor",
+]);
+
+export function isWriteRole(role: string): boolean {
+  return WRITE_ROLES.has(role);
+}
+
+export function isReadOnly(userRoles: string[]): boolean {
+  return userRoles.length > 0 && userRoles.every((r) => READ_ONLY_ROLES.has(r));
+}
+
+export function requireWriteAccess(...roles: string[]): MiddlewareHandler {
+  return async (c, next) => {
+    const userRoles: string[] = c.get("userRoles") || [];
+
+    if (roles.length > 0 && !roles.some((r) => userRoles.includes(r))) {
+      return c.json({ error: "Insufficient permissions" }, 403);
+    }
+
+    const hasWriteRole = userRoles.some((r) => WRITE_ROLES.has(r));
+    if (!hasWriteRole) {
+      return c.json({ error: "Read-only access. Contact your clerk to modify records." }, 403);
+    }
+
+    await next();
+  };
+}
+
+export const DEPARTMENT_ROLE_MAP: Record<string, string> = {
+  pathfinders: "pathfinder_director",
+  adventurers: "adventurer_director",
+  sabbath_school: "sabbath_school_superintendent",
+  dorcas: "dorcas_coordinator",
+  health: "health_ministries_leader",
+  av: "av_operator",
+};
+
+export function requireDepartmentRole(departmentType: string): MiddlewareHandler {
+  return async (c, next) => {
+    const userRoles: string[] = c.get("userRoles") || [];
+
+    if (userRoles.includes("clerk") || userRoles.includes("pastor") || userRoles.includes("district_pastor")) {
+      await next();
+      return;
+    }
+
+    const requiredRole = DEPARTMENT_ROLE_MAP[departmentType];
+    if (!requiredRole || !userRoles.includes(requiredRole)) {
+      return c.json({ error: "Access limited to department leaders" }, 403);
+    }
+
+    await next();
+  };
+}
+
+export function anonymizeForViewer(
+  records: Record<string, unknown>[],
+  userRoles: string[],
+): Record<string, unknown>[] {
+  const isDistrictPastor = userRoles.includes("district_pastor") && !userRoles.includes("clerk");
+
+  if (!isDistrictPastor) return records;
+
+  const sensitiveFields = new Set([
+    "firstName", "lastName", "email", "phone", "address",
+    "first_name", "last_name", "person_id", "member_id",
+    "volunteer_id", "actor_name",
+  ]);
+
+  return records.map((record) => {
+    const cleaned: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(record)) {
+      if (sensitiveFields.has(key)) {
+        cleaned[key] = "[redacted]";
+      } else {
+        cleaned[key] = value;
+      }
+    }
+    return cleaned;
+  });
 }

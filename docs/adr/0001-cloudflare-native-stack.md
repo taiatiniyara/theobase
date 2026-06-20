@@ -1,5 +1,7 @@
 # Cloudflare-native stack
 
+## Status: Accepted
+
 Theobase runs entirely on Cloudflare: Pages for the PWA, Workers (Hono) for the
 API, D1 for SQLite storage, Durable Objects for WebSocket real-time, R2 for blob
 storage, and Email Routing for inbound mail. No traditional servers, no VPS

@@ -1,5 +1,7 @@
 # 019 — Facility Coordinator + Policy Compliance Guardrails
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A facility reservation engine for church hall bookings that runs an integrated safety and policy questionnaire before sending a booking to the board. Simultaneously, build the Policy Compliance Guardrails — Church Manual and Working Policy rule checks that flag violations automatically: quorum not met for a vote, missing audit trail for an expense, membership discipline process not documented.

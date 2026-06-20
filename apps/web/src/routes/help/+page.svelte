@@ -14,28 +14,31 @@
   import MessageCircle from "@lucide/svelte/icons/message-circle";
 
   const descriptions: Record<string, string> = {
-    "Overview": "Your personal overview showing giving history, role badges, and quick actions.",
-    "Profile": "Edit your name, email, and notification preferences.",
-    "Giving": "Submit giving receipts by uploading bank transfer screenshots and allocating funds.",
-    "Boardroom": "Schedule and run board meetings with agendas, minutes, and recorded decisions.",
-    "Duty Rota": "Manage the weekly duty roster with assignments, swaps, and rotations.",
-    "Congregation": "Manage church details, import member rolls, and invite officers.",
-    "Church Setup": "Step-by-step wizard to configure your congregation, import members, and invite officers.",
-    "Pathfinders": "Track Pathfinder class progress, honors, and achievements.",
-    "Welfare": "Record welfare cases, assistance provided, and follow-up actions.",
-    "Sabbath School": "Manage Sabbath School classes, attendance, and divisions.",
-    "Health Ministry": "Log health events, contacts, and wellness activities.",
-    "Communion": "Plan communion services, manage inventory, and assign room setups.",
-    "AV Sync": "Control live service slides, order-of-service, and AV schedules.",
-    "District Hub": "Manage district visit rotations, bookings, and progress tracking.",
-    "Facilities": "Manage church facilities, assets, and resource bookings.",
-    "Crisis Assets": "Register and track congregation crisis response assets.",
-    "Transfers": "Handle membership transfer requests in and out of the congregation.",
-    "Households": "Manage household groupings and family member associations.",
-    "Candidacies": "Track member candidacy applications and appointment stages.",
-    "Nominating": "Manage nomination sessions for church officer positions.",
-    "Treasury": "View fund balances, record expenses, and manage financial operations.",
-    "Conference Report": "Generate and submit quarterly conference financial reports.",
+    "nav.overview": "Your personal overview showing giving history, role badges, and quick actions.",
+    "nav.profile": "Edit your name, email, and notification preferences.",
+    "nav.giving": "Submit giving receipts by uploading bank transfer screenshots and allocating funds.",
+    "nav.boardroom": "Schedule and run board meetings with agendas, minutes, and recorded decisions.",
+    "nav.duty_rota": "Manage the weekly duty roster with assignments, swaps, and rotations.",
+    "nav.congregation": "Manage church details, import member rolls, and invite officers.",
+    "nav.church_setup": "Step-by-step wizard to configure your congregation, import members, and invite officers.",
+    "nav.pathfinders": "Track Pathfinder class progress, honors, and achievements.",
+    "nav.welfare": "Record welfare cases, assistance provided, and follow-up actions.",
+    "nav.sabbath_school": "Manage Sabbath School classes, attendance, and divisions.",
+    "nav.health_ministry": "Log health events, contacts, and wellness activities.",
+    "nav.communion": "Plan communion services, manage inventory, and assign room setups.",
+    "nav.av_sync": "Control live service slides, order-of-service, and AV schedules.",
+    "nav.district_hub": "Manage district visit rotations, bookings, and progress tracking.",
+    "nav.facilities": "Manage church facilities, assets, and resource bookings.",
+    "nav.crisis_assets": "Register and track congregation crisis response assets.",
+    "nav.transfers": "Handle membership transfer requests in and out of the congregation.",
+    "nav.households": "Manage household groupings and family member associations.",
+    "nav.candidacies": "Track member candidacy applications and appointment stages.",
+    "nav.nominating": "Manage nomination sessions for church officer positions.",
+    "nav.treasury": "View fund balances, record expenses, and manage financial operations.",
+    "nav.conference_report": "Generate and submit quarterly conference financial reports.",
+    "nav.safety": "Manage volunteer safety clearances and child protection certifications.",
+    "nav.audit": "View the audit log of all sensitive actions in the congregation.",
+    "nav.discipline": "Manage church discipline cases per Church Manual procedures.",
   };
 
   const shortcuts = [
@@ -63,11 +66,11 @@
       .map((section) => ({
         ...section,
         items: section.items.filter(
-          (item) =>
-            !search ||
-            item.label.toLowerCase().includes(search.toLowerCase()) ||
-            (descriptions[item.label] || "").toLowerCase().includes(search.toLowerCase()) ||
-            section.label.toLowerCase().includes(search.toLowerCase())
+      (item) =>
+        !search ||
+        item.labelKey.toLowerCase().includes(search.toLowerCase()) ||
+        (descriptions[item.labelKey] || "").toLowerCase().includes(search.toLowerCase()) ||
+        section.labelKey.toLowerCase().includes(search.toLowerCase())
         ),
       }))
       .filter((section) => section.items.length > 0)
@@ -111,7 +114,7 @@
   {:else}
     <div class="space-y-3">
       {#each filteredSections as section}
-        {@const sectionKey = section.label}
+        {@const sectionKey = section.labelKey}
         <Card>
           <Collapsible bind:open={openSections[sectionKey]}>
             <CollapsibleTrigger class="w-full">
@@ -122,7 +125,7 @@
                       <section.icon class="size-4 text-brand-600 dark:text-brand-400" />
                     </div>
                     <div class="text-left">
-                      <CardTitle class="text-base">{section.label}</CardTitle>
+                      <CardTitle class="text-base">{section.labelKey}</CardTitle>
                       <CardDescription>
                         {section.items.length} module{section.items.length !== 1 ? "s" : ""}
                       </CardDescription>
@@ -145,10 +148,10 @@
                         </div>
                         <div class="min-w-0">
                           <p class="text-sm font-medium text-slate-900 dark:text-slate-100">
-                            {item.label}
+                            {item.labelKey}
                           </p>
                           <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
-                            {descriptions[item.label] || ""}
+                            {descriptions[item.labelKey] || ""}
                           </p>
                         </div>
                       </div>

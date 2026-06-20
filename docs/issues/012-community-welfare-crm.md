@@ -1,5 +1,7 @@
 # 012 — Community Welfare CRM
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A confidential, privacy-first portal for the Dorcas / Community Welfare department. Track welfare assistance cases (food, financial aid, clothing), manage pantry inventory, and maintain assistance histories. Strict confidentiality controls — only authorized Dorcas officers can access case data.

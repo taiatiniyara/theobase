@@ -1,5 +1,7 @@
 # 020 — Crisis Resilience Matrix
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A regional registry of local congregation utility assets — generators, water storage, shelter capacity, first aid supplies, communication equipment. During cyclones, floods, or other emergencies, disaster coordinators (conference-level) can instantly identify which congregations are operational shelter sites.

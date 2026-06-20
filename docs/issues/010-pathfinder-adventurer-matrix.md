@@ -1,5 +1,7 @@
 # 010 — Pathfinder/Adventurer Matrix
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A dedicated youth ministry portal for Pathfinder and Adventurer directors. Track each member's progressive class rank (Friend → Companion → Explorer → Ranger → Guide for Pathfinders; Little Lamb → Eager Beaver → Busy Bee → Sunbeam → Builder → Helping Hand for Adventurers), honors/merit badges earned, uniform sizes, and campout permission slips.

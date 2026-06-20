@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { api, getMe } from '$lib/api';
+  import { getConferenceStats, getMe, getConferenceFullExport } from '$lib/api';
   import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '$lib/components/ui/card';
@@ -8,6 +8,7 @@
   import { Label } from '$lib/components/ui/label';
   import { Skeleton } from '$lib/components/ui/skeleton';
   import { Download, FileSpreadsheet } from '@lucide/svelte';
+  import { csvEscape } from '$lib/format';
 
   let stats = $state<any>(null);
   let loading = $state(true);
@@ -32,38 +33,8 @@
   async function loadStats() {
     loading = true;
     try {
-      const [receipts, expenses, transfers, meetings] = await Promise.all([
-        api('/receipts').then(r => r.json()),
-        api('/treasury/expenses').then(r => r.json()),
-        api('/transfers').then(r => r.json()),
-        api('/board/meetings').then(r => r.json()),
-      ]);
-
-      const receiptsArr: any[] = Array.isArray(receipts) ? receipts : [];
-      const expensesArr: any[] = Array.isArray(expenses) ? expenses : [];
-      const transfersArr: any[] = Array.isArray(transfers) ? transfers : [];
-      const meetingsArr: any[] = Array.isArray(meetings) ? meetings : [];
-
-      const filteredReceipts = receiptsArr.filter((r: any) => inRange(r.createdAt));
-      const filteredExpenses = expensesArr.filter((e: any) => inRange(e.createdAt));
-      const filteredTransfers = transfersArr.filter((t: any) => inRange(t.createdAt));
-      const filteredMeetings = meetingsArr.filter((m: any) => inRange(m.date || m.createdAt));
-
-      const totalIncome = filteredReceipts.reduce((sum: number, r: any) => sum + (r.amount || 0), 0);
-      const totalExpenses = filteredExpenses.reduce((sum: number, e: any) => sum + (e.amount || 0), 0);
-
-      stats = {
-        congregationId: congId,
-        receipts: filteredReceipts.length,
-        approvedReceipts: filteredReceipts.filter((r: any) => r.status === 'approved').length,
-        totalIncome,
-        totalExpenses,
-        transfers: filteredTransfers.length,
-        meetings: filteredMeetings.length,
-        quarterStart,
-        quarterEnd,
-        generatedAt: new Date().toISOString(),
-      };
+      const data = await getConferenceStats(quarterStart, quarterEnd);
+      stats = data;
     } catch { stats = null; }
     loading = false;
   }
@@ -72,19 +43,19 @@
     if (!stats) return;
     const header = quarterStart ? `Q${Math.floor((parseInt(quarterStart.slice(5,7)) - 1) / 3) + 1} ${quarterStart.slice(0,4)}` : 'All Time';
     const csv = [
-      `Theobase Quarterly Report — ${header}`,
-      `Congregation: ${stats.congregationId}`,
-      `Period: ${quarterStart || 'All'} to ${quarterEnd || 'All'}`,
+      `Theobase Quarterly Report — ${csvEscape(header)}`,
+      `Congregation: ${csvEscape(stats.congregationId)}`,
+      `Period: ${csvEscape(quarterStart || 'All')} to ${csvEscape(quarterEnd || 'All')}`,
       '',
       'Metric,Value',
-      `Total Receipts,${stats.receipts}`,
-      `Approved Receipts,${stats.approvedReceipts}`,
-      `Total Income (cents),${stats.totalIncome}`,
-      `Total Expenses (cents),${stats.totalExpenses}`,
-      `Net Balance (cents),${stats.totalIncome - stats.totalExpenses}`,
-      `Transfers,${stats.transfers}`,
-      `Board Meetings,${stats.meetings}`,
-      `Generated,${stats.generatedAt}`,
+      `Total Receipts,${csvEscape(stats.receipts)}`,
+      `Approved Receipts,${csvEscape(stats.approvedReceipts)}`,
+      `Total Income (cents),${csvEscape(stats.totalIncome)}`,
+      `Total Expenses (cents),${csvEscape(stats.totalExpenses)}`,
+      `Net Balance (cents),${csvEscape(stats.totalIncome - stats.totalExpenses)}`,
+      `Transfers,${csvEscape(stats.transfers)}`,
+      `Board Meetings,${csvEscape(stats.meetings)}`,
+      `Generated,${csvEscape(stats.generatedAt)}`,
     ].join('\n');
     exportText = csv;
   }
@@ -179,10 +150,24 @@
       </CardContent>
     </Card>
 
-    <Button onclick={generateExport}>
-      <Download class="size-4" />
-      Generate CSV Export
-    </Button>
+    <div class="flex gap-2">
+      <Button onclick={generateExport}>
+        <Download class="size-4" />
+        Generate CSV
+      </Button>
+      <Button variant="outline" onclick={async () => {
+        try {
+          const data = await getConferenceFullExport();
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a'); a.href = url; a.download = 'theobase-full-export.json';
+          a.click(); URL.revokeObjectURL(url);
+        } catch { /* ignore */ }
+      }}>
+        <Download class="size-4" />
+        Full JSON Export
+      </Button>
+    </div>
 
     {#if exportText}
       <Card>

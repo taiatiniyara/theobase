@@ -1,5 +1,7 @@
 # Congregation type discriminator
 
+## Status: Accepted
+
 Local Churches, Companies, and Branch Sabbath Schools are modeled as a single
 `congregation` table with a `type` column (`'church' | 'company' | 'branch'`)
 and a self-referencing `parent_id` for hierarchy. No separate tables per type.

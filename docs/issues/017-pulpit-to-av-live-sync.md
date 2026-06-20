@@ -1,5 +1,7 @@
 # 017 — Pulpit-to-AV Live-Sync
 
+**Status: Implemented** (API endpoints + page + DO WebSocket channel exist; acceptance criteria need review)
+
 ## What to build
 
 A real-time WebSocket connection between the pulpit (service leader's device) and the AV booth (presentation computer). When the service leader makes a last-minute change to the order of service — a swapped hymn, an added scripture reading, a changed announcement — the AV operator's presentation software receives the update instantly via the Durable Object, updating slides without running physical notes down the aisle.

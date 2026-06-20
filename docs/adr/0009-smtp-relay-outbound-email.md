@@ -1,5 +1,7 @@
 # SMTP relay for outbound email
 
+## Status: Accepted
+
 Outbound transactional email (magic links, duty reminders, notification
 fallbacks) is sent via a dedicated micro VPS running a lightweight SMTP relay
 connected to the Hostinger `messenger@theobase.net` account. The Cloudflare

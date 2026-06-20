@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
 
 export const organization = sqliteTable("organization", {
   id: text("id").primaryKey(),
@@ -46,6 +46,8 @@ export const authToken = sqliteTable("auth_token", {
   token: text("token").notNull(),
   expiresAt: text("expires_at").notNull(),
   usedAt: text("used_at"),
+  twoFactorCode: text("two_factor_code"),
+  twoFactorExpiresAt: text("two_factor_expires_at"),
   createdAt: text("created_at").notNull(),
 });
 
@@ -138,7 +140,7 @@ export const expense = sqliteTable("expense", {
   congregationId: text("congregation_id").references(() => congregation.id).notNull(),
   amount: integer("amount").notNull(),
   description: text("description").notNull(),
-  category: text("category", { enum: ["church_budget", "pathfinders", "sabbath_school", "dorcas", "health", "other"] }).notNull(),
+  category: text("category", { enum: ["church_budget", "pathfinders", "sabbath_school", "adra", "local_church", "dorcas", "health", "other"] }).notNull(),
   receiptId: text("receipt_id").references(() => receipt.id),
   boardDecisionId: text("board_decision_id").references(() => boardDecision.id),
   createdAt: text("created_at").notNull(),
@@ -235,6 +237,7 @@ export const householdMember = sqliteTable("household_member", {
   householdId: text("household_id").references(() => household.id).notNull(),
   personId: text("person_id").references(() => person.id).notNull(),
   relationship: text("relationship", { enum: ["head", "spouse", "child", "dependant"] }).notNull(),
+  createdAt: text("created_at").notNull(),
 });
 
 export const candidacy = sqliteTable("candidacy", {
@@ -374,3 +377,67 @@ export const nominatingCandidate = sqliteTable("nominating_candidate", {
   status: text("status", { enum: ["nominated", "invited", "accepted", "declined"] }).notNull().default("nominated"),
   createdAt: text("created_at").notNull(),
 });
+
+export const nominatingBallot = sqliteTable("nominating_ballot", {
+  id: text("id").primaryKey(),
+  sessionId: text("session_id").references(() => nominatingSession.id).notNull(),
+  roleId: text("role_id").references(() => nominatingRole.id).notNull(),
+  candidateId: text("candidate_id").references(() => nominatingCandidate.id),
+  voterId: text("voter_id").references(() => person.id).notNull(),
+  encryptedVote: text("encrypted_vote").notNull(),
+  createdAt: text("created_at").notNull(),
+});
+
+export const bankAccount = sqliteTable("bank_account", {
+  id: text("id").primaryKey(),
+  congregationId: text("congregation_id").references(() => congregation.id).notNull(),
+  bankName: text("bank_name").notNull(),
+  accountName: text("account_name").notNull(),
+  accountNumber: text("account_number").notNull(),
+  createdAt: text("created_at").notNull(),
+});
+
+export const disciplineCase = sqliteTable("discipline_case", {
+  id: text("id").primaryKey(),
+  congregationId: text("congregation_id").references(() => congregation.id).notNull(),
+  personId: text("person_id").references(() => person.id).notNull(),
+  caseType: text("case_type", { enum: ["censure", "removal", "reinstatement", "counseling"] }).notNull(),
+  status: text("status", { enum: ["active", "resolved", "appealed"] }).notNull().default("active"),
+  description: text("description").notNull(),
+  resolution: text("resolution"),
+  decidedById: text("decided_by_id").references(() => person.id),
+  decidedAt: text("decided_at"),
+  boardMeetingId: text("board_meeting_id").references(() => boardMeeting.id),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
+export const auditLog = sqliteTable("audit_log", {
+  id: text("id").primaryKey(),
+  congregationId: text("congregation_id").references(() => congregation.id).notNull(),
+  actorId: text("actor_id").references(() => person.id).notNull(),
+  action: text("action").notNull(),
+  resourceType: text("resource_type").notNull(),
+  resourceId: text("resource_id"),
+  details: text("details"),
+  createdAt: text("created_at").notNull(),
+});
+
+export const authTokenTokenIdx = index("auth_token_token_idx").on(authToken.token);
+export const authTokenEmailIdx = index("auth_token_email_idx").on(authToken.email);
+export const personCongregationIdx = index("person_congregation_idx").on(person.congregationId);
+export const personEmailIdx = index("person_email_idx").on(person.email);
+export const rolePersonIdx = index("role_person_idx").on(role.personId);
+export const roleCongregationIdx = index("role_congregation_idx").on(role.congregationId);
+export const receiptCongregationIdx = index("receipt_congregation_idx").on(receipt.congregationId);
+export const receiptStatusIdx = index("receipt_status_idx").on(receipt.status);
+export const dutySlotCongregationDateIdx = index("duty_slot_congregation_date_idx").on(dutySlot.congregationId, dutySlot.date);
+export const boardMeetingCongregationIdx = index("board_meeting_congregation_idx").on(boardMeeting.congregationId);
+export const boardDecisionMeetingIdx = index("board_decision_meeting_idx").on(boardDecision.meetingId);
+export const expenseCongregationIdx = index("expense_congregation_idx").on(expense.congregationId);
+export const transferFromCongregationIdx = index("transfer_from_congregation_idx").on(transferRequest.fromCongregationId);
+export const transferToCongregationIdx = index("transfer_to_congregation_idx").on(transferRequest.toCongregationId);
+export const candidacyCongregationIdx = index("candidacy_congregation_idx").on(candidacy.congregationId);
+export const disciplineCaseCongregationIdx = index("discipline_case_congregation_idx").on(disciplineCase.congregationId);
+export const auditLogCongregationIdx = index("audit_log_congregation_idx").on(auditLog.congregationId);
+export const auditLogActorIdx = index("audit_log_actor_idx").on(auditLog.actorId);

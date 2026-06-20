@@ -1,5 +1,7 @@
 # 016 — Communion Service Planner
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A structural planning tool for the quarterly Ordinance of Humility. Maps venue splits (men's room, women's room), tracks towel and basin inventories, manages bread and wine preparation quantities, and allocates volunteer teams for each room. Designed to replace verbal coordination and the memory of older deacons/deaconesses.

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getMe, getTreasuryBalance, getReceipts } from "$lib/api";
+  import { requireRole } from "$lib/guard";
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
@@ -57,7 +58,9 @@
     loading = false;
   }
 
-  onMount(() => {
+  onMount(async () => {
+    const authorized = await requireRole("clerk", "treasurer", "elder");
+    if (!authorized) return;
     loadData();
     refreshTimer = setInterval(() => {
       if (autoRefresh) loadData();

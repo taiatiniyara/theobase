@@ -1,5 +1,7 @@
 # 014 — Harvest Decision Tracker + Household Mapper
 
+**Status: Implemented** (API endpoints + pages for households and candidacies exist; acceptance criteria need review)
+
 ## What to build
 
 Track Bible study interests through baptismal preparation to a recorded decision (baptism, profession of faith, or re-baptism). Includes the officiating pastor and date. Simultaneously, build the household mapper linking spouses, children, and dependants into family units for pastoral visit planning and household-level giving summaries.

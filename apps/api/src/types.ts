@@ -6,6 +6,7 @@ export type Bindings = {
   SMTP_RELAY_URL: string;
   SMTP_RELAY_TOKEN: string;
   CONGREGATION_DO: DurableObjectNamespace;
+  NOMINATING_DO: DurableObjectNamespace;
   STORAGE: R2Bucket;
 };
 

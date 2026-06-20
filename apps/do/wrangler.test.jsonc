@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
+  "name": "theobase-do-test",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-06-19",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "SMTP_RELAY_URL": "https://relay.test",
+    "SMTP_RELAY_TOKEN": "test-token",
+    "JWT_SECRET": "test-secret"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CONGREGATION_DO",
+        "class_name": "CongregationDO"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["CongregationDO"]
+    }
+  ]
+}

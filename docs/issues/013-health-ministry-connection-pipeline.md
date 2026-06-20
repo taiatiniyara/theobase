@@ -1,5 +1,7 @@
 # 013 — Health Ministry Connection Pipeline
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A digital screener used on tablets at health expos and cooking schools. Collects community contact data and automatically organizes interests into follow-up invitation lists for future health seminars, cooking demonstrations, and evangelistic meetings.

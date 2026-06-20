@@ -2,20 +2,21 @@ import type { AppType } from "../types";
 import { and, eq, asc } from "drizzle-orm";
 import * as schema from "@theobase/db";
 import { generateId, z } from "@theobase/shared";
-import { requireAuth, requireRole } from "@theobase/auth";
+import { requireAuth, requireRole, requireWriteAccess } from "@theobase/auth";
 import { loadRoles } from "../middleware/load-roles";
 import { getDb } from "../middleware/get-db";
+import { recordAudit } from "../middleware/audit";
 
 export function registerTreasuryRoutes(app: AppType) {
   const createExpenseSchema = z.object({
     amount: z.number().int().positive(),
     description: z.string().min(1).max(500),
-    category: z.enum(["church_budget", "pathfinders", "sabbath_school", "dorcas", "health", "other"]),
+    category: z.enum(["church_budget", "pathfinders", "sabbath_school", "adra", "local_church", "dorcas", "health", "other"]),
     receiptId: z.string().optional(),
     boardDecisionId: z.string().optional(),
   });
 
-  app.post("/treasury/expenses", requireAuth(), loadRoles(), requireRole("clerk", "treasurer"), async (c) => {
+  app.post("/treasury/expenses", requireAuth(), loadRoles(), requireWriteAccess("clerk", "treasurer"), async (c) => {
     const db = getDb(c);
     const body = await c.req.json();
     const parsed = createExpenseSchema.safeParse(body);
@@ -39,6 +40,14 @@ export function registerTreasuryRoutes(app: AppType) {
     });
 
     const [created] = await db.select().from(schema.expense).where(eq(schema.expense.id, id));
+
+    await recordAudit(db, c.get("userId"), congregationId, {
+      action: "expense.create",
+      resourceType: "expense",
+      resourceId: id,
+      details: JSON.stringify({ amount: parsed.data.amount, category: parsed.data.category }),
+    });
+
     return c.json(created, 201);
   });
 
@@ -64,7 +73,7 @@ export function registerTreasuryRoutes(app: AppType) {
   app.get("/treasury/balance", requireAuth(), loadRoles(), requireRole("clerk", "treasurer"), async (c) => {
     const db = getDb(c);
     const congregationId = c.get("congregationId");
-    if (!congregationId) return c.json({});
+    if (!congregationId) return c.json({ error: "No congregation" }, 400);
 
     const receipts = await db
       .select()

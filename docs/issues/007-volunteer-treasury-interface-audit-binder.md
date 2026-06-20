@@ -1,5 +1,7 @@
 # 007 — Volunteer Treasury Interface + Audit Binder
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A simplified ledger dashboard showing weekly fund balances by department with automatic fund splits. The audit binder explicitly links every expense entry to its receipt image and the board decision that authorized it. Designed for a volunteer treasurer — no general ledger, no double-entry accounting.

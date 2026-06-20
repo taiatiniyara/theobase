@@ -26,7 +26,7 @@ function openDB(): Promise<IDBDatabase> {
   });
 }
 
-const API_PATH_PATTERN = /^\/(me|receipts|board|rota|treasury|congregations|pathfinder|sabbath-school|welfare|pantry|health|households|candidacies|communion|av|district|facilities|crisis|transfers|nominating|sessions|roles|items|attendance|classes|events|contacts|bookings|assets|rotations|visits|slots)\b/;
+const API_PATH_PATTERN = /^\/(me|receipts|board|rota|treasury|congregations|pathfinder|sabbath-school|welfare|pantry|health|households|candidacies|communion|av|district|facilities|crisis|transfers|nominating|sessions|roles|items|attendance|classes|events|contacts|bookings|assets|rotations|visits|slots|conference|discipline)\b/;
 
 function isAPIPath(pathname: string): boolean {
   return API_PATH_PATTERN.test(pathname);
@@ -270,6 +270,38 @@ self.addEventListener('sync', (event) => {
 self.addEventListener('periodicsync', (event: any) => {
   if (event.tag === 'flush-outbox') {
     event.waitUntil(flushOutbox());
+  }
+});
+
+self.addEventListener('message', (event: ExtendableMessageEvent) => {
+  if (event.data?.type === 'INVALIDATE_CACHE') {
+    const prefix = event.data.prefix as string | undefined;
+    event.waitUntil(
+      (async () => {
+        const db = await openDB();
+        const tx = db.transaction('api-cache', 'readwrite');
+        const store = tx.objectStore('api-cache');
+
+        if (prefix) {
+          const all = await new Promise<{ url: string }[]>((resolve, reject) => {
+            const req = store.getAll();
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+          });
+          for (const entry of all) {
+            if (entry.url.includes(prefix)) {
+              store.delete(entry.url);
+            }
+          }
+        } else {
+          store.clear();
+        }
+        await new Promise<void>((resolve, reject) => {
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error);
+        });
+      })()
+    );
   }
 });
 

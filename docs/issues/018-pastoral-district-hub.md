@@ -1,5 +1,7 @@
 # 018 — Pastoral District Hub
 
+**Status: Implemented** (API endpoints + page exist; acceptance criteria need review)
+
 ## What to build
 
 A master dashboard for district pastors overseeing 3–8 congregations. Shows preaching rotation schedules, travel logs, pastoral visit tracking, and anonymized cross-church health metrics. The district pastor sees aggregated data without accessing individual member records in congregations outside their pastoral charge.

@@ -3,11 +3,14 @@
   import { getMe, clearToken, getToken } from "$lib/api";
   import { clearRoles } from "$lib/guard";
   import { connectRealtime } from "$lib/realtime";
+  import { realtimeEvents, type RealtimeEvent } from "$lib/rtstore";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import { cn } from "$lib/utils";
+  import { locale, getT, initI18n } from "$lib/i18n";
   import Sidebar from "$lib/components/Sidebar.svelte";
+  import LocaleSwitcher from "$lib/components/LocaleSwitcher.svelte";
   import { Sheet, SheetContent, SheetTrigger } from "$lib/components/ui/sheet";
   import { Button } from "$lib/components/ui/button";
   import { Avatar, AvatarFallback } from "$lib/components/ui/avatar";
@@ -39,6 +42,9 @@
   let gModeActive = $state(false);
   let realtimeConn: ReturnType<typeof connectRealtime> | null = null;
   let notifCount = $state(0);
+  let notificationHistory = $state<{ message: string; timestamp: number; type: string }[]>([]);
+
+  const t = $derived(getT($locale));
 
   async function loadProfile() {
     const token = getToken();
@@ -54,10 +60,12 @@
       if (profile) {
         realtimeConn?.close();
         realtimeConn = connectRealtime(token, {
-          onMessage: (data) => {
+          onMessage: (data: RealtimeEvent) => {
             if (data.type === "notification" || data.type === "congregation_notification") {
               notifCount++;
+              notificationHistory = [{ message: String(data.message || data.type), timestamp: Date.now(), type: data.type as string }, ...notificationHistory.slice(0, 19)];
             }
+            realtimeEvents.set(data);
           },
         });
         const path = $page.url.pathname;
@@ -65,19 +73,22 @@
           goto("/dashboard");
         }
       }
-    } catch {
-      clearToken();
-      profile = null;
+    } catch (e: any) {
+      if (e?.message === "Unauthorized") {
+        clearToken();
+        profile = null;
+      }
     }
   }
 
-  // Reactively load profile when token or path changes
   $effect(() => {
-    const token = $page.url.pathname;
+    if (profile) return;
     loadProfile();
   });
 
   onMount(async () => {
+    initI18n();
+
     const stored = localStorage.getItem("theobase_dark");
     if (stored !== null) {
       dark = stored === "true";
@@ -87,7 +98,6 @@
       document.documentElement.classList.add("dark");
     }
 
-    // Cross-tab sign-out detection
     window.addEventListener("storage", (e) => {
       if (e.key === "theobase_token" && !e.newValue) {
         profile = null;
@@ -142,6 +152,23 @@
           "c": "/congregation",
           "m": "/me",
           "s": "/setup",
+          "p": "/pathfinders",
+          "w": "/welfare",
+          "a": "/av",
+          "i": "/district",
+          "f": "/facilities",
+          "k": "/crisis",
+          "n": "/nominating",
+          "l": "/safety",
+          "u": "/audit",
+          "e": "/conference",
+          "x": "/transfers",
+          "o": "/households",
+          "y": "/candidacies",
+          "z": "/sabbath-school",
+          "j": "/communion",
+          "v": "/health",
+          "q": "/discipline",
         };
         const target = nav[e.key.toLowerCase()];
         if (target) goto(target);
@@ -181,41 +208,46 @@
     profile?.firstName ? profile.firstName[0].toUpperCase() : "?",
   );
 
+  const pathTitleMap: Record<string, string> = {
+    "/dashboard": "nav.overview",
+    "/me": "nav.profile",
+    "/receipts": "nav.giving",
+    "/boardroom": "nav.boardroom",
+    "/treasury": "nav.treasury",
+    "/rota": "nav.duty_rota",
+    "/congregation": "nav.congregation",
+    "/pathfinders": "nav.pathfinders",
+    "/welfare": "nav.welfare",
+    "/sabbath-school": "nav.sabbath_school",
+    "/health": "nav.health_ministry",
+    "/communion": "nav.communion",
+    "/av": "nav.av_sync",
+    "/district": "nav.district_hub",
+    "/facilities": "nav.facilities",
+    "/crisis": "nav.crisis_assets",
+    "/transfers": "nav.transfers",
+    "/households": "nav.households",
+    "/candidacies": "nav.candidacies",
+    "/nominating": "nav.nominating",
+    "/discipline": "nav.discipline",
+    "/safety": "nav.safety",
+    "/audit": "nav.audit",
+    "/conference": "nav.conference_report",
+    "/setup": "nav.church_setup",
+    "/help": "nav.help_center",
+    "/join": "Join",
+  };
+
   function getPageTitle(): string {
     const path = $page.url.pathname;
-    const titles: Record<string, string> = {
-      "/dashboard": "Dashboard",
-      "/me": "Profile",
-      "/receipts": "Giving",
-      "/boardroom": "Boardroom",
-      "/treasury": "Treasury",
-      "/rota": "Duty Rota",
-      "/congregation": "Congregation",
-      "/pathfinders": "Pathfinders",
-      "/welfare": "Welfare",
-      "/sabbath-school": "Sabbath School",
-      "/health": "Health Ministry",
-      "/communion": "Communion",
-      "/av": "AV Sync",
-      "/district": "District Hub",
-      "/facilities": "Facilities",
-      "/crisis": "Crisis Assets",
-      "/transfers": "Transfers",
-      "/households": "Households",
-      "/candidacies": "Candidacies",
-      "/nominating": "Nominating",
-      "/conference": "Conference Report",
-      "/setup": "Church Setup",
-      "/help": "Help Center",
-      "/join": "Join",
-      "/auth/verify": "Verify",
-    };
-    return titles[path] || "Theobase";
+    const key = pathTitleMap[path];
+    if (key) return t(key);
+    return t("common.app_name");
   }
 </script>
 
 <svelte:head>
-  <title>{getPageTitle()} — Theobase</title>
+  <title>{getPageTitle()} — {t("common.app_name")}</title>
 </svelte:head>
 
 {#if isAuthPage || !profile}
@@ -226,19 +258,15 @@
   </div>
 {:else}
   <div class="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
-    <!-- Desktop Sidebar -->
     <aside class="hidden lg:flex lg:w-60 lg:flex-col lg:border-r lg:border-slate-200 lg:bg-white dark:border-slate-800 dark:bg-slate-900">
       <Sidebar {roles} />
     </aside>
 
-    <!-- Main Content Area -->
     <div class="flex flex-1 flex-col overflow-hidden">
-      <!-- Header -->
       <header class="flex h-14 shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 pt-safe wco-drag dark:border-slate-800 dark:bg-slate-900" style="padding-top: calc(0.5rem + var(--safe-area-inset-top))">
-        <!-- Mobile menu trigger -->
         <Sheet open={mobileNavOpen} onOpenChange={(o) => mobileNavOpen = o}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" class="lg:hidden" aria-label="Open menu">
+            <Button variant="ghost" size="icon" class="lg:hidden" aria-label={t("layout.open_menu")}>
               <Menu class="size-5" />
             </Button>
           </SheetTrigger>
@@ -247,46 +275,60 @@
           </SheetContent>
         </Sheet>
 
-        <!-- Page title / breadcrumb -->
         <nav class="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
-          <a href="/dashboard" class="hover:text-slate-900 dark:hover:text-slate-200 transition-colors">Theobase</a>
+          <a href="/dashboard" class="hover:text-slate-900 dark:hover:text-slate-200 transition-colors">{t("common.app_name")}</a>
           <span class="text-slate-300 dark:text-slate-600">/</span>
           <span class="font-medium text-slate-900 dark:text-slate-100">{getPageTitle()}</span>
         </nav>
 
         <div class="flex-1"></div>
 
-        <!-- Status indicators -->
         <div class="flex items-center gap-2">
           {#if notifCount > 0}
-            <button
-              class="relative inline-flex items-center rounded-full p-1 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
-              onclick={() => notifCount = 0}
-              aria-label="{notifCount} notifications"
-            >
-              <Bell class="size-4" />
-              <span class="absolute -right-0.5 -top-0.5 flex size-3.5 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white">
-                {notifCount}
-              </span>
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  class="relative inline-flex items-center rounded-full p-1 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+                  aria-label={t("layout.notifications", { n: notifCount })}
+                >
+                  <Bell class="size-4" />
+                  <span class="absolute -right-0.5 -top-0.5 flex size-3.5 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white">
+                    {notifCount}
+                  </span>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" class="w-72 max-h-64 overflow-y-auto">
+                <div class="flex items-center justify-between px-2 py-1.5 border-b">
+                  <span class="text-xs font-medium">Notifications</span>
+                  <button class="text-xs text-brand-600 hover:underline" onclick={() => { notifCount = 0; notificationHistory = []; }}>Clear all</button>
+                </div>
+                {#each notificationHistory as n}
+                  <div class="px-3 py-2 text-xs border-b last:border-0">
+                    <p>{n.message}</p>
+                    <p class="text-slate-400 mt-0.5">{new Date(n.timestamp).toLocaleTimeString()}</p>
+                  </div>
+                {/each}
+              </DropdownMenuContent>
+            </DropdownMenu>
           {/if}
           {#if !online}
-            <span class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 cursor-help" title="You're offline. Your changes will be queued and synced when you reconnect.">
+            <span class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 cursor-help" title={t("layout.offline")}>
               <span class="size-1.5 rounded-full bg-red-500"></span>
-              Offline — changes queued
+              {t("layout.offline")}
             </span>
           {/if}
           {#if pendingSync > 0}
-            <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 cursor-help" title="Changes saved offline will sync automatically when you reconnect.">
-              {pendingSync} pending sync{pendingSync !== 1 ? 's' : ''}
+            <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 cursor-help" title={t("layout.pending_syncs", { n: pendingSync })}>
+              {t("layout.pending_syncs", { n: pendingSync })}
             </span>
           {/if}
         </div>
 
-        <!-- User menu -->
+        <LocaleSwitcher />
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" class="rounded-full" aria-label="User menu">
+            <Button variant="ghost" size="icon" class="rounded-full" aria-label={t("layout.user_menu")}>
               <Avatar class="size-8">
                 <AvatarFallback class="bg-brand-100 text-brand-900 text-xs font-medium">
                   {initials}
@@ -304,35 +346,34 @@
             <DropdownMenuSeparator />
             <DropdownMenuItem onclick={() => goto("/me")}>
               <User class="size-4" />
-              Profile
+              {t("nav.profile")}
             </DropdownMenuItem>
             <DropdownMenuItem onclick={() => goto("/help")}>
               <HelpCircle class="size-4" />
-              Help Center
+              {t("nav.help_center")}
             </DropdownMenuItem>
             <DropdownMenuItem onclick={toggleDark}>
               {#if dark}
                 <Sun class="size-4" />
-                Light mode
+                {t("layout.light_mode")}
               {:else}
                 <Moon class="size-4" />
-                Dark mode
+                {t("layout.dark_mode")}
               {/if}
             </DropdownMenuItem>
             <DropdownMenuItem onclick={() => { cmdOpen = true; }}>
               <Keyboard class="size-4" />
-              Shortcuts (Cmd+K)
+              {t("layout.shortcuts")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onclick={() => signOutOpen = true} class="text-red-600">
               <LogOut class="size-4" />
-              Sign out
+              {t("layout.sign_out")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </header>
 
-      <!-- Page Content -->
       <main class="flex-1 overflow-y-auto p-6 pb-safe" style="animation: fade-in-up 0.2s ease-out both">
         <PullToRefresh onrefresh={async () => { window.location.reload(); }}>
           {@render children()}
@@ -349,9 +390,9 @@
   <ConfirmDialog
     open={signOutOpen}
     onOpenChange={(o) => signOutOpen = o}
-    title="Sign out"
-    description="Are you sure you want to sign out?"
-    confirmLabel="Sign out"
+    title={t("layout.sign_out_confirm_label")}
+    description={t("layout.sign_out_confirm")}
+    confirmLabel={t("layout.sign_out_confirm_label")}
     variant="destructive"
     onconfirm={signOut}
   />

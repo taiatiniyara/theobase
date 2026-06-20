@@ -1,4 +1,5 @@
-export const API_URL = 'https://api.theobase.net';
+export const API_URL = (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_API_URL) || 'https://api.theobase.net';
+export const WS_URL = (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_WS_URL) || 'wss://api.theobase.net';
 
 export function getToken(): string | null {
   if (typeof window === 'undefined') return null;
@@ -396,3 +397,252 @@ export async function createCandidacy(data: { personId: string; stage: string; s
   const res = await api('/candidacies', { method: 'POST', body: JSON.stringify(data) });
   return res.json();
 }
+
+export async function getConferenceStats(quarterStart?: string, quarterEnd?: string) {
+  const params = new URLSearchParams();
+  if (quarterStart) params.set("quarterStart", quarterStart);
+  if (quarterEnd) params.set("quarterEnd", quarterEnd);
+  const qs = params.toString();
+  const res = await api(`/conference/stats${qs ? `?${qs}` : ""}`);
+  return res.json();
+}
+
+export async function getConferenceExport(quarterStart?: string, quarterEnd?: string) {
+  const params = new URLSearchParams({ format: "csv" });
+  if (quarterStart) params.set("quarterStart", quarterStart);
+  if (quarterEnd) params.set("quarterEnd", quarterEnd);
+  const res = await api(`/conference/export?${params.toString()}`);
+  return res.text();
+}
+
+export async function getCongregation(id: string) {
+  const res = await api(`/congregations/${id}`);
+  return res.json();
+}
+
+export async function createCongregation(data: {
+  name: string;
+  type: string;
+  timezone?: string;
+  parentId?: string;
+  parentType?: string;
+  organizationId?: string;
+}) {
+  const res = await api('/congregations', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function inviteOfficer(congregationId: string, data: { email: string; role: string }) {
+  const res = await api(`/congregations/${congregationId}/invite`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function importMembers(congregationId: string, csv: string) {
+  const res = await api(`/congregations/${congregationId}/members/import`, {
+    method: 'POST',
+    body: JSON.stringify({ csv }),
+  });
+  return res.json();
+}
+
+export async function createRotaSlot(data: { date: string; role: string; volunteerId?: string }) {
+  const res = await api('/rota/slots', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function updateRotaSlot(id: string, data: { volunteerId?: string; status?: string }) {
+  const res = await api(`/rota/slots/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function deleteRotaSlot(id: string) {
+  await api(`/rota/slots/${id}`, { method: 'DELETE' });
+}
+
+export async function getNominatingSessions() {
+  const res = await api('/nominating/sessions');
+  return res.json();
+}
+
+export async function getNominatingRoles(sessionId: string) {
+  const res = await api(`/nominating/roles?sessionId=${encodeURIComponent(sessionId)}`);
+  return res.json();
+}
+
+export async function getNominatingCandidates(roleId: string) {
+  const res = await api(`/nominating/candidates?roleId=${encodeURIComponent(roleId)}`);
+  return res.json();
+}
+
+export async function createNominatingCandidate(data: { roleId: string; personId: string }) {
+  const res = await api('/nominating/candidates', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function updateNominatingCandidate(id: string, status: string) {
+  const res = await api(`/nominating/candidates/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) });
+  return res.json();
+}
+
+export async function deleteNominatingSession(id: string) {
+  await api(`/nominating/sessions/${id}`, { method: 'DELETE' });
+}
+
+export async function deleteNominatingRole(id: string) {
+  await api(`/nominating/roles/${id}`, { method: 'DELETE' });
+}
+
+export async function deleteNominatingCandidate(id: string) {
+  await api(`/nominating/candidates/${id}`, { method: 'DELETE' });
+}
+
+export async function getSafetyClearances(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit) params.set('limit', String(limit));
+  if (offset) params.set('offset', String(offset));
+  const qs = params.toString();
+  const res = await api(`/safety-clearances${qs ? `?${qs}` : ''}`);
+  return res.json();
+}
+
+export async function createSafetyClearance(data: { volunteerId: string; type: string; issuedDate: string; expiryDate: string }) {
+  const res = await api('/safety-clearances', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function getHouseholdMembers(householdId: string) {
+  const res = await api(`/households/${encodeURIComponent(householdId)}/members`);
+  return res.json();
+}
+
+export async function addHouseholdMember(householdId: string, data: { personId: string; relationship: string }) {
+  const res = await api(`/households/${encodeURIComponent(householdId)}/members`, { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function removeHouseholdMember(memberId: string) {
+  await api(`/household-members/${encodeURIComponent(memberId)}`, { method: 'DELETE' });
+}
+
+export async function getBoardMinutes(meetingId: string) {
+  const res = await api(`/board/meetings/${encodeURIComponent(meetingId)}/minutes`);
+  return res.json();
+}
+
+export async function createBoardMinute(meetingId: string, content: string) {
+  const res = await api(`/board/meetings/${encodeURIComponent(meetingId)}/minutes`, { method: 'POST', body: JSON.stringify({ content }) });
+  return res.json();
+}
+
+export async function updateCandidacy(id: string, data: { stage?: string; decisionDate?: string; decisionType?: string }) {
+  const res = await api(`/candidacies/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function getAuditLog(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit) params.set('limit', String(limit));
+  if (offset) params.set('offset', String(offset));
+  const qs = params.toString();
+  const res = await api(`/audit${qs ? `?${qs}` : ''}`);
+  return res.json();
+}
+
+export async function updateBoardMinute(id: string, content: string) {
+  const res = await api(`/board/minutes/${id}`, { method: 'PATCH', body: JSON.stringify({ content }) });
+  return res.json();
+}
+
+export async function deleteBoardMinute(id: string) {
+  await api(`/board/minutes/${id}`, { method: 'DELETE' });
+}
+
+export async function deleteSafetyClearance(id: string) {
+  await api(`/safety-clearances/${id}`, { method: 'DELETE' });
+}
+
+export async function getCongregationMembers(congregationId: string) {
+  const res = await api(`/congregations/${encodeURIComponent(congregationId)}/members`);
+  return res.json();
+}
+
+export async function getDistrictVisits(limit?: number, offset?: number) {
+  const params = new URLSearchParams();
+  if (limit) params.set('limit', String(limit));
+  if (offset) params.set('offset', String(offset));
+  const qs = params.toString();
+  const res = await api(`/district/visits${qs ? `?${qs}` : ''}`);
+  return res.json();
+}
+
+export async function createPerson(data: { firstName: string; lastName: string; email?: string; phone?: string; isMember?: boolean }) {
+  const res = await api('/persons', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function updatePerson(id: string, data: { firstName?: string; lastName?: string; email?: string; phone?: string; isMember?: boolean }) {
+  const res = await api(`/persons/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function assignRole(data: { personId: string; congregationId: string; roleType: string }) {
+  const res = await api('/roles', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function removeRole(roleId: string) {
+  await api(`/roles/${roleId}`, { method: 'DELETE' });
+}
+
+export async function getReceiptsByStatus(status: string, limit?: number) {
+  const params = new URLSearchParams();
+  if (status) params.set('status', status);
+  if (limit) params.set('limit', String(limit));
+  const res = await api(`/receipts?${params.toString()}`);
+  return res.json();
+}
+
+export async function getConferenceFullExport() {
+  const res = await api('/conference/export/full');
+  return res.json();
+}
+
+export async function updateAVSlide(date: string, slideIndex: number) {
+  const res = await api('/av/order-of-service/slide', { method: 'POST', body: JSON.stringify({ date, slideIndex }) });
+  return res.json();
+}
+
+export async function getPersons(congregationId?: string) {
+  const params = congregationId ? `?congregationId=${encodeURIComponent(congregationId)}` : '';
+  const res = await api(`/persons${params}`);
+  return res.json();
+}
+
+export async function castBallot(data: { sessionId: string; roleId: string; candidateId: string }) {
+  const res = await api('/nominating/ballots', { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
+export async function getTally(sessionId: string) {
+  const res = await api(`/nominating/tally/${encodeURIComponent(sessionId)}`);
+  return res.json();
+}
+
+export async function closeVoting(sessionId: string) {
+  const res = await api(`/nominating/sessions/${encodeURIComponent(sessionId)}/close`, { method: 'POST' });
+  return res.json();
+}
+
+export async function getBankAccount(congregationId: string) {
+  const res = await api(`/congregations/${encodeURIComponent(congregationId)}/bank-account`);
+  return res.json();
+}
+
+export async function saveBankAccount(congregationId: string, data: { bankName: string; accountName: string; accountNumber: string }) {
+  const res = await api(`/congregations/${encodeURIComponent(congregationId)}/bank-account`, { method: 'POST', body: JSON.stringify(data) });
+  return res.json();
+}
+
