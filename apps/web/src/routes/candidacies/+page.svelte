@@ -10,7 +10,7 @@
   import { Badge } from '$lib/components/ui/badge';
   import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '$lib/components/ui/select';
   import { Skeleton } from '$lib/components/ui/skeleton';
-  import { ClipboardList, Plus } from '@lucide/svelte';
+  import { ClipboardList, Plus, HelpCircle } from '@lucide/svelte';
   import { formatDate } from '$lib/format';
   import DataToolbar from "$lib/components/DataToolbar.svelte";
 
@@ -75,7 +75,12 @@
 <svelte:head><title>Candidacy Pipeline — Theobase</title></svelte:head>
 
 <div class="space-y-6">
-  <h1 class="text-2xl font-bold text-slate-900">Candidacy Pipeline</h1>
+  <div class="flex items-center gap-3">
+    <h1 class="text-2xl font-bold text-slate-900">Candidacy Pipeline</h1>
+    <a href="/help" class="rounded-full p-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Learn more about Candidacy Pipeline">
+      <HelpCircle class="size-4 text-slate-400" />
+    </a>
+  </div>
 
   <Card>
     <CardHeader>

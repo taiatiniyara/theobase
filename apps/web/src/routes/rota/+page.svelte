@@ -8,7 +8,7 @@
   import { Input } from "$lib/components/ui/input";
   import { Badge } from "$lib/components/ui/badge";
   import { Skeleton } from "$lib/components/ui/skeleton";
-  import { ChevronLeft, ChevronRight, CalendarCheck } from "@lucide/svelte";
+  import { ChevronLeft, ChevronRight, CalendarCheck, HelpCircle } from "@lucide/svelte";
   import StaggerList from "$lib/components/StaggerList.svelte";
 
   let date = $state(new Date().toISOString().slice(0, 10));
@@ -63,7 +63,12 @@
 </svelte:head>
 
 <div class="space-y-6">
-  <h1 class="text-2xl font-bold text-slate-900">Duty Rota</h1>
+  <div class="flex items-center gap-3">
+    <h1 class="text-2xl font-bold text-slate-900">Duty Rota</h1>
+    <a href="/help" class="rounded-full p-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Learn more about Duty Rota">
+      <HelpCircle class="size-4 text-slate-400" />
+    </a>
+  </div>
 
   <div class="flex items-center gap-3">
     <Button variant="ghost" size="icon" onclick={prevWeek} aria-label="Previous week">

@@ -12,11 +12,18 @@
   const shortcuts = [
     { keys: ["Cmd", "K"], description: "Command palette — search and navigate" },
     { keys: ["?"], description: "Show keyboard shortcuts" },
+    { keys: ["G", "D"], description: "Go to Dashboard" },
+    { keys: ["G", "H"], description: "Go to Help Center" },
+    { keys: ["G", "B"], description: "Go to Boardroom" },
+    { keys: ["G", "R"], description: "Go to Duty Rota" },
+    { keys: ["G", "G"], description: "Go to Giving" },
+    { keys: ["G", "T"], description: "Go to Treasury" },
+    { keys: ["G", "C"], description: "Go to Congregation" },
+    { keys: ["G", "M"], description: "Go to Profile" },
+    { keys: ["G", "S"], description: "Go to Church Setup" },
     { keys: ["Esc"], description: "Close dialogs and menus" },
     { keys: ["↑", "↓"], description: "Navigate command palette results" },
     { keys: ["Enter"], description: "Select command palette result" },
-    { keys: ["G", "D"], description: "Go to Dashboard" },
-    { keys: ["G", "H"], description: "Go to Help Center" },
   ];
 </script>
 
@@ -28,7 +35,7 @@
         Keyboard Shortcuts
       </DialogTitle>
       <DialogDescription>
-        Press <kbd class="rounded border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">?</kbd> at any time to see this dialog.
+        Press <kbd class="rounded border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">?</kbd> at any time to see these shortcuts. Press <kbd class="rounded border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">G</kbd> then a letter to jump anywhere.
       </DialogDescription>
     </DialogHeader>
     <div class="space-y-2">

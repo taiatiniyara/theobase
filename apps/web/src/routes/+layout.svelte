@@ -36,6 +36,7 @@
   let signOutOpen = $state(false);
   let dark = $state(false);
   let shortcutsOpen = $state(false);
+  let gModeActive = $state(false);
   let realtimeConn: ReturnType<typeof connectRealtime> | null = null;
   let notifCount = $state(0);
 
@@ -124,6 +125,26 @@
       } else if (e.key === "?" && !isInput(e)) {
         e.preventDefault();
         shortcutsOpen = !shortcutsOpen;
+      } else if (e.key === "g" && !isInput(e) && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        gModeActive = true;
+        setTimeout(() => { gModeActive = false; }, 2000);
+      } else if (gModeActive && !isInput(e)) {
+        e.preventDefault();
+        gModeActive = false;
+        const nav: Record<string, string> = {
+          "d": "/dashboard",
+          "h": "/help",
+          "b": "/boardroom",
+          "r": "/rota",
+          "g": "/receipts",
+          "t": "/treasury",
+          "c": "/congregation",
+          "m": "/me",
+          "s": "/setup",
+        };
+        const target = nav[e.key.toLowerCase()];
+        if (target) goto(target);
       }
     }
 

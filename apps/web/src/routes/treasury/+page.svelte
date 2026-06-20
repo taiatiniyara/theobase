@@ -10,7 +10,7 @@
   import { Badge } from "$lib/components/ui/badge";
   import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "$lib/components/ui/select";
   import { Skeleton } from "$lib/components/ui/skeleton";
-  import { Landmark, Plus, DollarSign } from "@lucide/svelte";
+  import { Landmark, Plus, DollarSign, HelpCircle } from "@lucide/svelte";
   import { formatDate, formatCents } from "$lib/format";
   import DataToolbar from "$lib/components/DataToolbar.svelte";
   import DateRangeFilter from "$lib/components/DateRangeFilter.svelte";
@@ -122,7 +122,12 @@
 </svelte:head>
 
 <div class="space-y-6">
-  <h1 class="text-2xl font-bold text-slate-900">Treasury</h1>
+  <div class="flex items-center gap-3">
+    <h1 class="text-2xl font-bold text-slate-900">Treasury</h1>
+    <a href="/help" class="rounded-full p-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Learn more about Treasury">
+      <HelpCircle class="size-4 text-slate-400" />
+    </a>
+  </div>
 
   {#if loading}
     <Skeleton class="h-40" />

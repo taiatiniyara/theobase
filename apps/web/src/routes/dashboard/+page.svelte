@@ -6,7 +6,7 @@
   import { Button } from "$lib/components/ui/button";
   import { Badge } from "$lib/components/ui/badge";
   import { Skeleton } from "$lib/components/ui/skeleton";
-  import { DollarSign, Receipt, Clock, Gavel, CalendarCheck, Sparkles, RefreshCw, Pause, ArrowRight, Check, ClipboardCheck } from "@lucide/svelte";
+  import { DollarSign, Receipt, Clock, Gavel, CalendarCheck, Sparkles, RefreshCw, Pause, ArrowRight, Check, ClipboardCheck, Rocket } from "@lucide/svelte";
   import { formatCents } from "$lib/format";
   import AnimatedCounter from "$lib/components/AnimatedCounter.svelte";
   import DonutChart from "$lib/components/DonutChart.svelte";
@@ -23,7 +23,19 @@
   let refreshTimer: ReturnType<typeof setInterval>;
   let showCelebration = $state(false);
   let celebrationMessage = $state("");
-  let checklistDone = $state(localStorage.getItem("theobase_checklist_done") === "true");
+  let checklistDone = $state(checklistHidden());
+
+  function checklistHidden(): boolean {
+    if (localStorage.getItem("theobase_checklist_done") === "true") return true;
+    const snoozed = localStorage.getItem("theobase_checklist_snoozed");
+    if (snoozed) {
+      const snoozeTime = parseInt(snoozed, 10);
+      const now = Date.now();
+      if (now - snoozeTime < 86400000) return true; // 24 hours
+      localStorage.removeItem("theobase_checklist_snoozed");
+    }
+    return false;
+  }
 
   const CHART_COLORS = ["#3b82f6", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4", "#ec4899"];
 
@@ -190,11 +202,17 @@
             {/if}
           </div>
           <div class="mt-4 flex items-center justify-between">
-            <p class="text-xs text-slate-400">You can dismiss this checklist when you're ready.</p>
-            <Button variant="outline" size="sm" onclick={() => { checklistDone = true; localStorage.setItem("theobase_checklist_done", "true"); }}>
-              <Check class="size-3.5" />
-              Dismiss
-            </Button>
+            <p class="text-xs text-slate-400">Skip for now, or dismiss when you're all set.</p>
+            <div class="flex gap-2">
+              <Button variant="ghost" size="sm" onclick={() => { checklistDone = true; localStorage.setItem("theobase_checklist_snoozed", Date.now().toString()); }}>
+                <Clock class="size-3.5" />
+                Remind tomorrow
+              </Button>
+              <Button variant="outline" size="sm" onclick={() => { checklistDone = true; localStorage.setItem("theobase_checklist_done", "true"); }}>
+                <Check class="size-3.5" />
+                Dismiss
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -259,6 +277,15 @@
                 Submit your first receipt
               </Button>
             </a>
+            {#if isClerk() || isTreasurer()}
+              <p class="text-xs text-slate-400">or</p>
+              <a href="/setup">
+                <Button variant="outline">
+                  <Rocket class="size-4" />
+                  Set up your congregation
+                </Button>
+              </a>
+            {/if}
           </CardContent>
         </Card>
       {/if}

@@ -9,7 +9,7 @@
   import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '$lib/components/ui/select';
   import { Skeleton } from '$lib/components/ui/skeleton';
   import { toast } from "$lib/toast";
-  import { Wine, X } from '@lucide/svelte';
+  import { Wine, X, HelpCircle } from '@lucide/svelte';
   import { formatDate } from '$lib/format';
   import ConfirmDialog from "$lib/components/ConfirmDialog.svelte";
 
@@ -96,7 +96,12 @@
 <svelte:head><title>Communion — Theobase</title></svelte:head>
 
 <div class="space-y-6">
-  <h1 class="text-2xl font-bold text-slate-900">Communion</h1>
+  <div class="flex items-center gap-3">
+    <h1 class="text-2xl font-bold text-slate-900">Communion</h1>
+    <a href="/help" class="rounded-full p-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Learn more about Communion">
+      <HelpCircle class="size-4 text-slate-400" />
+    </a>
+  </div>
 
   <div class="flex gap-2">
     <Button variant={tab === 'history' ? 'default' : 'ghost'} onclick={() => tab = 'history'}>History</Button>
