@@ -25,6 +25,7 @@
   import Keyboard from "@lucide/svelte/icons/keyboard";
   import Moon from "@lucide/svelte/icons/moon";
   import Sun from "@lucide/svelte/icons/sun";
+  import HelpCircle from "@lucide/svelte/icons/help-circle";
 
   let { children } = $props();
   let profile = $state<any>(null);
@@ -245,14 +246,14 @@
             </button>
           {/if}
           {#if !online}
-            <span class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700">
+            <span class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 cursor-help" title="You're offline. Your changes will be queued and synced when you reconnect.">
               <span class="size-1.5 rounded-full bg-red-500"></span>
-              Offline
+              Offline — changes queued
             </span>
           {/if}
           {#if pendingSync > 0}
-            <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">
-              {pendingSync} queued
+            <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 cursor-help" title="Changes saved offline will sync automatically when you reconnect.">
+              {pendingSync} pending sync{pendingSync !== 1 ? 's' : ''}
             </span>
           {/if}
         </div>
@@ -279,6 +280,10 @@
             <DropdownMenuItem onclick={() => goto("/me")}>
               <User class="size-4" />
               Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem onclick={() => goto("/help")}>
+              <HelpCircle class="size-4" />
+              Help Center
             </DropdownMenuItem>
             <DropdownMenuItem onclick={toggleDark}>
               {#if dark}

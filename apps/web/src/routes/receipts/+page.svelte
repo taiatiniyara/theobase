@@ -14,6 +14,7 @@
   import DataToolbar from "$lib/components/DataToolbar.svelte";
   import DateRangeFilter from "$lib/components/DateRangeFilter.svelte";
   import StaggerList from "$lib/components/StaggerList.svelte";
+  import Celebration from "$lib/components/Celebration.svelte";
 
   let receiptSearch = $state("");
   let receiptSortKey = $state("amount");
@@ -30,6 +31,8 @@
   let submitting = $state(false);
   let showForm = $state(false);
   let formError = $state("");
+  let showCelebration = $state(false);
+  let celebrationMessage = $state("");
 
   let amountCents = $state(0);
   let file = $state<File | null>(null);
@@ -102,6 +105,10 @@
         filePreview = "";
       }
       toast.success("Receipt submitted.");
+      if (receipts.length === 1) {
+        celebrationMessage = "Your first receipt! Thank you for giving.";
+        showCelebration = true;
+      }
     } catch { formError = "Failed to submit receipt."; }
     finally { submitting = false; }
   }
@@ -180,6 +187,7 @@
         <CardContent class="space-y-4">
           <div class="space-y-2">
             <Label for="amount">Amount ($)</Label>
+            <p class="text-xs text-slate-400">Enter the total amount in dollars (e.g. 50.00).</p>
             <Input
               id="amount"
               type="text"
@@ -194,6 +202,7 @@
 
           <div class="space-y-2">
             <Label for="receipt-file">Receipt Image</Label>
+            <p class="text-xs text-slate-400">Upload a screenshot or photo of your bank transfer confirmation.</p>
             <Input id="receipt-file" type="file" accept="image/*" onchange={handleFile} />
             {#if filePreview}
               <img src={filePreview} alt="Preview" class="max-h-40 rounded-lg border object-cover" />
@@ -202,6 +211,7 @@
 
           <div class="space-y-2">
             <Label>Fund Split</Label>
+            <p class="text-xs text-slate-400">Split your donation across church funds. The total should equal your transfer amount.</p>
             {#each fundSplits as fund, i}
               <div class="flex gap-2">
                 <Select value={fund.name} onValueChange={(v) => updateFundName(i, v ?? "")}>
@@ -310,7 +320,12 @@
       <Card>
         <CardContent class="flex flex-col items-center gap-3 py-8">
           <Receipt class="size-8 text-slate-300" />
-          <p class="text-sm text-slate-500">No receipts yet. Submit your first one above.</p>
+          <div class="text-center">
+            <p class="text-sm font-medium text-slate-700 dark:text-slate-300">No receipts yet</p>
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+              Submit your first giving receipt above. Upload a bank transfer screenshot and split the amount across church funds.
+            </p>
+          </div>
         </CardContent>
       </Card>
     {:else}
@@ -369,4 +384,5 @@
       {/if}
     {/if}
   {/if}
+  <Celebration trigger={showCelebration} message={celebrationMessage} />
 </div>

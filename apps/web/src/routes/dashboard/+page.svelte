@@ -1,17 +1,18 @@
 <script lang="ts">
   import { getMe, getTreasuryBalance, getReceipts } from "$lib/api";
-  import { onMount, onDestroy } from "svelte";
+  import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
   import { Button } from "$lib/components/ui/button";
   import { Badge } from "$lib/components/ui/badge";
   import { Skeleton } from "$lib/components/ui/skeleton";
-  import { DollarSign, Receipt, Clock, Gavel, CalendarCheck, Sparkles, RefreshCw, Pause } from "@lucide/svelte";
+  import { DollarSign, Receipt, Clock, Gavel, CalendarCheck, Sparkles, RefreshCw, Pause, ArrowRight, Check, ClipboardCheck } from "@lucide/svelte";
   import { formatCents } from "$lib/format";
   import AnimatedCounter from "$lib/components/AnimatedCounter.svelte";
   import DonutChart from "$lib/components/DonutChart.svelte";
   import BarChart from "$lib/components/BarChart.svelte";
   import StaggerList from "$lib/components/StaggerList.svelte";
+  import Celebration from "$lib/components/Celebration.svelte";
 
   let profile = $state<any>(null);
   let balance = $state<any>(null);
@@ -20,6 +21,9 @@
   let autoRefresh = $state(true);
   let lastRefresh = $state<Date | null>(null);
   let refreshTimer: ReturnType<typeof setInterval>;
+  let showCelebration = $state(false);
+  let celebrationMessage = $state("");
+  let checklistDone = $state(localStorage.getItem("theobase_checklist_done") === "true");
 
   const CHART_COLORS = ["#3b82f6", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4", "#ec4899"];
 
@@ -46,9 +50,17 @@
     refreshTimer = setInterval(() => {
       if (autoRefresh) loadData();
     }, 30000);
-  });
 
-  onDestroy(() => clearInterval(refreshTimer));
+    if (!localStorage.getItem("theobase_celebrated") && profile?.firstName) {
+      setTimeout(() => {
+        celebrationMessage = `Welcome aboard, ${profile.firstName}! Your account is ready.`;
+        showCelebration = true;
+        localStorage.setItem("theobase_celebrated", "true");
+      }, 500);
+    }
+
+    return () => clearInterval(refreshTimer);
+  });
 
   function isClerk() { return profile?.roles?.includes("clerk"); }
   function isTreasurer() { return profile?.roles?.includes("treasurer"); }
@@ -120,6 +132,65 @@
         </div>
       </div>
     </div>
+
+    {#if (isClerk() || isTreasurer()) && !checklistDone}
+      <Card class="border-brand-100 dark:border-brand-900 bg-gradient-to-br from-brand-50/50 to-white dark:from-brand-950/20 dark:to-slate-900">
+        <CardHeader>
+          <CardTitle class="flex items-center gap-2">
+            <ClipboardCheck class="size-5 text-brand-600" />
+            Getting Started
+          </CardTitle>
+          <CardDescription>The essential steps to set up your congregation.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div class="space-y-2">
+            {#if isClerk()}
+              <a href="/congregation" class="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
+                <div class="flex size-6 items-center justify-center rounded-full border-2 border-slate-300 text-xs font-medium text-slate-400">1</div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100">Import your member roll</p>
+                  <p class="text-xs text-slate-400">Upload a CSV of your congregation members</p>
+                </div>
+                <ArrowRight class="size-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
+              </a>
+              <a href="/boardroom" class="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
+                <div class="flex size-6 items-center justify-center rounded-full border-2 border-slate-300 text-xs font-medium text-slate-400">2</div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100">Schedule your first board meeting</p>
+                  <p class="text-xs text-slate-400">Create an agenda and record decisions</p>
+                </div>
+                <ArrowRight class="size-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
+              </a>
+              <a href="/rota" class="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
+                <div class="flex size-6 items-center justify-center rounded-full border-2 border-slate-300 text-xs font-medium text-slate-400">3</div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100">Publish the duty rota</p>
+                  <p class="text-xs text-slate-400">Assign weekly service duties to members</p>
+                </div>
+                <ArrowRight class="size-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
+              </a>
+            {/if}
+            {#if isTreasurer()}
+              <a href="/treasury" class="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
+                <div class="flex size-6 items-center justify-center rounded-full border-2 border-slate-300 text-xs font-medium text-slate-400">{isClerk() ? 4 : 1}</div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100">Review treasury balances</p>
+                  <p class="text-xs text-slate-400">Check fund distribution and record expenses</p>
+                </div>
+                <ArrowRight class="size-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
+              </a>
+            {/if}
+          </div>
+          <div class="mt-4 flex items-center justify-between">
+            <p class="text-xs text-slate-400">You can dismiss this checklist when you're ready.</p>
+            <Button variant="outline" size="sm" onclick={() => { checklistDone = true; localStorage.setItem("theobase_checklist_done", "true"); }}>
+              <Check class="size-3.5" />
+              Dismiss
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    {/if}
 
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {#if profile?.giving}
@@ -258,4 +329,5 @@
       </Card>
     {/if}
   </div>
+  <Celebration trigger={showCelebration} message={celebrationMessage} />
 {/if}

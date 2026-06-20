@@ -19,6 +19,7 @@ import Home from "@lucide/svelte/icons/house";
 import ClipboardCheck from "@lucide/svelte/icons/clipboard-check";
 import Vote from "@lucide/svelte/icons/vote";
 import Presentation from "@lucide/svelte/icons/presentation";
+import HelpCircle from "@lucide/svelte/icons/help-circle";
 
 import type { Component } from "svelte";
 
@@ -42,7 +43,10 @@ export const navigation: NavSection[] = [
   {
     label: "Dashboard",
     icon: LayoutDashboard,
-    items: [{ label: "Overview", href: "/dashboard", icon: LayoutDashboard }],
+    items: [
+      { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
+      { label: "Help Center", href: "/help", icon: HelpCircle },
+    ],
   },
   {
     label: "Member",
