@@ -48,4 +48,6 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - run: npx vitest run --config vitest.shared.config.ts
+
       - run: npx vitest run --config vitest.config.ts
