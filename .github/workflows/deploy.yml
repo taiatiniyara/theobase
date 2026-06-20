@@ -40,7 +40,14 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: npx vitest run --config vitest.config.ts
+      - run: npx vitest run --config vitest.shared.config.ts
+      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/auth.test.ts
+      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/congregation.test.ts
+      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/departments.test.ts
+      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/finance.test.ts
+      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/governance.test.ts
+      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/member.test.ts
+      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/operations.test.ts
 
   deploy-api:
     needs: [test, deploy-do]
