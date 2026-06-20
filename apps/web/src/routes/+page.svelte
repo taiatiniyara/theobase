@@ -58,12 +58,13 @@
             placeholder="elder@mychurch.org"
             bind:value={email}
             onkeydown={(e) => e.key === "Enter" && submit()}
+            onblur={() => { emailError = email.includes("@") ? "" : "Please enter a valid email address."; }}
           />
           {#if emailError}
             <p class="text-sm text-red-600">{emailError}</p>
           {/if}
         </div>
-        <Button class="w-full" onclick={submit} disabled={!email.includes("@") || loading}>
+        <Button class="w-full" onclick={submit} disabled={!email.includes("@") || loading || !!emailError}>
           {loading ? "Sending..." : "Send magic link"}
         </Button>
         {#if status === "error"}

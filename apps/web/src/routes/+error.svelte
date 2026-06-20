@@ -1,7 +1,10 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { getToken } from "$lib/api";
   import { Button } from "$lib/components/ui/button";
   import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
+
+  const homeHref = $derived(getToken() ? "/dashboard" : "/");
 
   const message = $derived(
     $page.status === 404
@@ -19,13 +22,16 @@
 <div class="flex min-h-[60vh] items-center justify-center">
   <Card class="w-full max-w-md text-center">
     <CardHeader>
-      <CardTitle>Something went wrong</CardTitle>
+      <CardTitle>{$page.status === 404 ? "Page not found" : "Something went wrong"}</CardTitle>
     </CardHeader>
     <CardContent class="space-y-4">
       <p class="text-slate-500">{message}</p>
-      <a href="/">
-        <Button>Go home</Button>
-      </a>
+      <div class="flex items-center justify-center gap-3">
+        <a href={homeHref}>
+          <Button>Go home</Button>
+        </a>
+        <Button variant="outline" onclick={() => window.location.reload()}>Try again</Button>
+      </div>
     </CardContent>
   </Card>
 </div>

@@ -20,6 +20,7 @@ import ClipboardCheck from "@lucide/svelte/icons/clipboard-check";
 import Vote from "@lucide/svelte/icons/vote";
 import Presentation from "@lucide/svelte/icons/presentation";
 import HelpCircle from "@lucide/svelte/icons/help-circle";
+import Rocket from "@lucide/svelte/icons/rocket";
 
 import type { Component } from "svelte";
 
@@ -64,6 +65,7 @@ export const navigation: NavSection[] = [
       { label: "Boardroom", href: "/boardroom", icon: Gavel },
       { label: "Duty Rota", href: "/rota", icon: CalendarCheck },
       { label: "Congregation", href: "/congregation", icon: Church },
+      { label: "Church Setup", href: "/setup", icon: Rocket },
       { label: "Pathfinders", href: "/pathfinders", icon: Compass },
       { label: "Welfare", href: "/welfare", icon: HeartHandshake },
       { label: "Sabbath School", href: "/sabbath-school", icon: GraduationCap },

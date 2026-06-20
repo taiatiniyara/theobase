@@ -145,8 +145,16 @@
         <CardContent>
           <div class="space-y-2">
             {#if isClerk()}
+              <a href="/setup" class="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
+                <div class="flex size-6 items-center justify-center rounded-full border-2 border-brand-500 bg-brand-500 text-xs font-medium text-white">1</div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100">Set up your congregation</p>
+                  <p class="text-xs text-slate-400">Guided wizard for church details, members, and officers</p>
+                </div>
+                <ArrowRight class="size-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
+              </a>
               <a href="/congregation" class="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
-                <div class="flex size-6 items-center justify-center rounded-full border-2 border-slate-300 text-xs font-medium text-slate-400">1</div>
+                <div class="flex size-6 items-center justify-center rounded-full border-2 border-slate-300 text-xs font-medium text-slate-400">2</div>
                 <div class="flex-1">
                   <p class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100">Import your member roll</p>
                   <p class="text-xs text-slate-400">Upload a CSV of your congregation members</p>
@@ -154,7 +162,7 @@
                 <ArrowRight class="size-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
               </a>
               <a href="/boardroom" class="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
-                <div class="flex size-6 items-center justify-center rounded-full border-2 border-slate-300 text-xs font-medium text-slate-400">2</div>
+                <div class="flex size-6 items-center justify-center rounded-full border-2 border-slate-300 text-xs font-medium text-slate-400">3</div>
                 <div class="flex-1">
                   <p class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100">Schedule your first board meeting</p>
                   <p class="text-xs text-slate-400">Create an agenda and record decisions</p>
@@ -162,7 +170,7 @@
                 <ArrowRight class="size-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
               </a>
               <a href="/rota" class="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
-                <div class="flex size-6 items-center justify-center rounded-full border-2 border-slate-300 text-xs font-medium text-slate-400">3</div>
+                <div class="flex size-6 items-center justify-center rounded-full border-2 border-slate-300 text-xs font-medium text-slate-400">4</div>
                 <div class="flex-1">
                   <p class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100">Publish the duty rota</p>
                   <p class="text-xs text-slate-400">Assign weekly service duties to members</p>
@@ -172,7 +180,7 @@
             {/if}
             {#if isTreasurer()}
               <a href="/treasury" class="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
-                <div class="flex size-6 items-center justify-center rounded-full border-2 border-slate-300 text-xs font-medium text-slate-400">{isClerk() ? 4 : 1}</div>
+                <div class="flex size-6 items-center justify-center rounded-full border-2 border-slate-300 text-xs font-medium text-slate-400">{isClerk() ? 5 : 1}</div>
                 <div class="flex-1">
                   <p class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100">Review treasury balances</p>
                   <p class="text-xs text-slate-400">Check fund distribution and record expenses</p>

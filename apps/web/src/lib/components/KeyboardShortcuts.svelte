@@ -15,6 +15,8 @@
     { keys: ["Esc"], description: "Close dialogs and menus" },
     { keys: ["↑", "↓"], description: "Navigate command palette results" },
     { keys: ["Enter"], description: "Select command palette result" },
+    { keys: ["G", "D"], description: "Go to Dashboard" },
+    { keys: ["G", "H"], description: "Go to Help Center" },
   ];
 </script>
 

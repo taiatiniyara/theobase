@@ -11,6 +11,7 @@
   import { toast } from "$lib/toast";
   import { Wine, X } from '@lucide/svelte';
   import { formatDate } from '$lib/format';
+  import ConfirmDialog from "$lib/components/ConfirmDialog.svelte";
 
   let services = $state<any[]>([]);
   let loading = $state(true);
@@ -23,6 +24,7 @@
   let rooms = $state([{ name: '', gender: 'male', volunteerIds: '' }]);
   let inventory = $state([{ item: 'towel', quantity: 1, unit: 'pieces' }]);
   let planned = $state(false);
+  let removeTarget = $state<{ type: "room" | "item"; index: number } | null>(null);
 
   onMount(async () => {
     const authorized = await requireRole("clerk", "elder", "deacon", "deaconess");
@@ -35,29 +37,41 @@
 
   function addRoom() { rooms = [...rooms, { name: '', gender: 'male', volunteerIds: '' }]; }
   function removeRoom(i: number) {
-    const removed = rooms[i];
-    rooms = rooms.filter((_, j) => j !== i);
-    toast("Room removed", {
-      action: {
-        label: "Undo",
-        onClick: () => {
-          rooms = [...rooms.slice(0, i), removed, ...rooms.slice(i)];
-        },
-      },
-    });
+    removeTarget = { type: "room", index: i };
   }
   function addItem() { inventory = [...inventory, { item: 'towel', quantity: 1, unit: 'pieces' }]; }
   function removeItem(i: number) {
-    const removed = inventory[i];
-    inventory = inventory.filter((_, j) => j !== i);
-    toast("Item removed", {
-      action: {
-        label: "Undo",
-        onClick: () => {
-          inventory = [...inventory.slice(0, i), removed, ...inventory.slice(i)];
+    removeTarget = { type: "item", index: i };
+  }
+
+  function confirmRemove() {
+    if (!removeTarget) return;
+    if (removeTarget.type === "room") {
+      const i = removeTarget.index;
+      const removed = rooms[i];
+      rooms = rooms.filter((_, j) => j !== i);
+      toast("Room removed", {
+        action: {
+          label: "Undo",
+          onClick: () => {
+            rooms = [...rooms.slice(0, i), removed, ...rooms.slice(i)];
+          },
         },
-      },
-    });
+      });
+    } else {
+      const i = removeTarget.index;
+      const removed = inventory[i];
+      inventory = inventory.filter((_, j) => j !== i);
+      toast("Item removed", {
+        action: {
+          label: "Undo",
+          onClick: () => {
+            inventory = [...inventory.slice(0, i), removed, ...inventory.slice(i)];
+          },
+        },
+      });
+    }
+    removeTarget = null;
   }
 
   async function plan() {
@@ -203,4 +217,14 @@
       </CardContent>
     </Card>
   {/if}
+
+  <ConfirmDialog
+    open={removeTarget !== null}
+    onOpenChange={(o) => { if (!o) removeTarget = null; }}
+    title="Remove {removeTarget?.type === 'room' ? 'Room' : 'Item'}"
+    description="This action cannot be undone."
+    confirmLabel="Remove"
+    variant="destructive"
+    onconfirm={confirmRemove}
+  />
 </div>

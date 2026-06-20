@@ -11,6 +11,7 @@
   import { toast } from "$lib/toast";
   import { GraduationCap, X } from '@lucide/svelte';
   import DataToolbar from "$lib/components/DataToolbar.svelte";
+  import ConfirmDialog from "$lib/components/ConfirmDialog.svelte";
 
   let classes = $state<any[]>([]);
   let loading = $state(true);
@@ -43,6 +44,8 @@
   let attDate = $state(new Date().toISOString().slice(0, 10));
   let attRecords = $state<{ memberId: string; present: boolean }[]>([]);
   let attSaved = $state(false);
+  let removeAttendeeTarget = $state<number | null>(null);
+  let removedAttendeeRecord = $state<{ index: number; data: any } | null>(null);
 
   const divisions = ['beginners', 'kindergarten', 'primary', 'juniors', 'earliteen', 'youth', 'adult'];
 
@@ -62,16 +65,29 @@
 
   function addAttendee() { attRecords = [...attRecords, { memberId: '', present: true }]; }
   function removeAttendee(i: number) {
-    const removed = attRecords[i];
+    removeAttendeeTarget = i;
+  }
+
+  function confirmRemoveAttendee() {
+    if (removeAttendeeTarget === null) return;
+    const i = removeAttendeeTarget;
+    removedAttendeeRecord = { index: i, data: { ...attRecords[i] } };
     attRecords = attRecords.filter((_, j) => j !== i);
     toast("Attendee removed", {
       action: {
         label: "Undo",
-        onClick: () => {
-          attRecords = [...attRecords.slice(0, i), removed, ...attRecords.slice(i)];
-        },
+        onClick: undoRemoveAttendee,
       },
     });
+    removeAttendeeTarget = null;
+  }
+
+  function undoRemoveAttendee() {
+    if (removedAttendeeRecord) {
+      const { index, data } = removedAttendeeRecord;
+      attRecords = [...attRecords.slice(0, index), data, ...attRecords.slice(index)];
+      removedAttendeeRecord = null;
+    }
   }
 
   async function submitAttendance() {
@@ -237,4 +253,14 @@
       {/each}
     {/if}
   {/if}
+
+  <ConfirmDialog
+    open={removeAttendeeTarget !== null}
+    onOpenChange={(o) => { if (!o) removeAttendeeTarget = null; }}
+    title="Remove Attendee"
+    description="This action cannot be undone."
+    confirmLabel="Remove"
+    variant="destructive"
+    onconfirm={confirmRemoveAttendee}
+  />
 </div>

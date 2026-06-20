@@ -9,6 +9,7 @@
   import FormField from "$lib/components/FormField.svelte";
   import Celebration from "$lib/components/Celebration.svelte";
   import { ArrowRight, ArrowLeft, Check, Plus, X } from "@lucide/svelte";
+  import ConfirmDialog from "$lib/components/ConfirmDialog.svelte";
 
   const STEPS = ["Church Details", "Member Import", "Department Rosters", "Bank Account", "Invite Officers"];
 
@@ -40,6 +41,7 @@
   let officerEmail = $state("");
   let officerRole = $state("Clerk");
   let pendingInvites = $state<{ email: string; role: string }[]>([]);
+  let removeInviteTarget = $state<number | null>(null);
 
   const completed = $derived(Array.from({ length: currentStep }, (_, i) => i));
   const isLastStep = $derived(currentStep === STEPS.length - 1);
@@ -90,7 +92,13 @@
   }
 
   function removeInvite(index: number) {
-    pendingInvites = pendingInvites.filter((_, i) => i !== index);
+    removeInviteTarget = index;
+  }
+
+  function confirmRemoveInvite() {
+    if (removeInviteTarget === null) return;
+    pendingInvites = pendingInvites.filter((_, i) => i !== removeInviteTarget);
+    removeInviteTarget = null;
   }
 </script>
 
@@ -283,3 +291,13 @@
 </div>
 
 <Celebration trigger={showCelebration} message="Setup complete! Welcome to Theobase." />
+
+<ConfirmDialog
+  open={removeInviteTarget !== null}
+  onOpenChange={(o) => { if (!o) removeInviteTarget = null; }}
+  title="Remove Invite"
+  description="This action cannot be undone."
+  confirmLabel="Remove"
+  variant="destructive"
+  onconfirm={confirmRemoveInvite}
+/>

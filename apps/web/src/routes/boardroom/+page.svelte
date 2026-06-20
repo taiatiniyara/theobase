@@ -324,6 +324,7 @@
           <CardContent class="flex flex-col items-center gap-3 py-8">
             <Gavel class="size-8 text-slate-300" />
             <p class="text-sm text-slate-500">No board meetings yet.</p>
+            <p class="text-xs text-slate-400 mt-1">Schedule meetings, build agendas, and record board decisions.</p>
             <Button variant="outline" onclick={() => showCreate = true}>Schedule your first meeting</Button>
           </CardContent>
         </Card>

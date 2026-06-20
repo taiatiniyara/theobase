@@ -52,8 +52,9 @@
         </div>
       {:else}
         <p class="text-red-600">{error}</p>
+        <p class="text-xs text-slate-500 mt-1">Your verification link may have expired or already been used.</p>
         <a href="/">
-          <Button>Try again</Button>
+          <Button>Request a new link</Button>
         </a>
       {/if}
     </CardContent>

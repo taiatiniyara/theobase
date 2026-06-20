@@ -20,6 +20,7 @@
     "Boardroom": "Schedule and run board meetings with agendas, minutes, and recorded decisions.",
     "Duty Rota": "Manage the weekly duty roster with assignments, swaps, and rotations.",
     "Congregation": "Manage church details, import member rolls, and invite officers.",
+    "Church Setup": "Step-by-step wizard to configure your congregation, import members, and invite officers.",
     "Pathfinders": "Track Pathfinder class progress, honors, and achievements.",
     "Welfare": "Record welfare cases, assistance provided, and follow-up actions.",
     "Sabbath School": "Manage Sabbath School classes, attendance, and divisions.",

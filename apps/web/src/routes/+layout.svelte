@@ -184,6 +184,10 @@
       "/candidacies": "Candidacies",
       "/nominating": "Nominating",
       "/conference": "Conference Report",
+      "/setup": "Church Setup",
+      "/help": "Help Center",
+      "/join": "Join",
+      "/auth/verify": "Verify",
     };
     return titles[path] || "Theobase";
   }
@@ -294,7 +298,7 @@
                 Dark mode
               {/if}
             </DropdownMenuItem>
-            <DropdownMenuItem onclick={() => {}} disabled>
+            <DropdownMenuItem onclick={() => { cmdOpen = true; }}>
               <Keyboard class="size-4" />
               Shortcuts (Cmd+K)
             </DropdownMenuItem>

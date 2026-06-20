@@ -2,6 +2,7 @@
   import { getRota } from '$lib/api';
   import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
+  import { goto } from "$app/navigation";
   import { Card, CardContent } from "$lib/components/ui/card";
   import { Button } from "$lib/components/ui/button";
   import { Input } from "$lib/components/ui/input";
@@ -89,6 +90,10 @@
     <div class="flex flex-col items-center gap-3 py-12">
       <CalendarCheck class="size-8 text-slate-300" />
       <p class="text-sm text-slate-500">No duty assignments for this Sabbath. Ask your clerk to set up the rota.</p>
+      <div class="flex gap-2">
+        <Button variant="outline" size="sm" onclick={() => goto('/congregation')}>Configure rota settings</Button>
+        <Button size="sm" onclick={() => goto('/congregation')}>Set up the duty rota</Button>
+      </div>
     </div>
   {:else}
     <div class="space-y-3">

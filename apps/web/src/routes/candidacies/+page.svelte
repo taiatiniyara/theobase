@@ -126,6 +126,7 @@
     <div class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-slate-200 bg-white dark:bg-slate-900 py-12">
       <ClipboardList class="size-8 text-slate-300" />
       <p class="text-sm text-slate-500">No candidacies registered.</p>
+      <p class="text-xs text-slate-400 mt-1">Track member candidacy applications through each appointment stage.</p>
       <Button variant="outline" size="sm" onclick={() => document.getElementById('cd-person-id')?.focus()}>Create your first candidacy</Button>
     </div>
   {:else}

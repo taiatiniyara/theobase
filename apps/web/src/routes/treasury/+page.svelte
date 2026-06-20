@@ -275,6 +275,7 @@
           <div class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-slate-200 bg-white dark:bg-slate-900 py-12">
             <DollarSign class="size-8 text-slate-300" />
             <p class="text-sm text-slate-500">No expenses recorded yet.</p>
+            <p class="text-xs text-slate-400 mt-1">Track fund balances, record expenses, and manage church finances.</p>
             <Button variant="outline" size="sm" onclick={() => showForm = true}>Record your first expense</Button>
           </div>
         {:else}

@@ -134,6 +134,7 @@
     <div class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-slate-200 bg-white dark:bg-slate-900 py-12">
       <AlertTriangle class="size-8 text-slate-300" />
       <p class="text-sm text-slate-500">No crisis assets registered.</p>
+      <p class="text-xs text-slate-400 mt-1">Record crisis assistance cases, track help provided, and manage pantry inventory.</p>
       <Button variant="outline" size="sm" onclick={() => document.getElementById('as-desc')?.focus()}>Register your first asset</Button>
     </div>
   {:else}
