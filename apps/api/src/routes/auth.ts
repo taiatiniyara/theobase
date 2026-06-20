@@ -5,6 +5,7 @@ import { generateToken, createJwt, getTokenTtlSeconds } from "@theobase/auth";
 import { generateId } from "@theobase/shared";
 import { getDb } from "../middleware/get-db";
 import { getEmailSender } from "../middleware/get-email";
+import { renderMagicLinkEmail } from "@theobase/email";
 
 export function registerAuthRoutes(app: AppType) {
   app.post("/auth/request", async (c) => {
@@ -34,7 +35,7 @@ export function registerAuthRoutes(app: AppType) {
     await sendEmail({
       to: email,
       subject: "Sign in to Theobase",
-      html: `<p>Click the link below to sign in:</p><p><a href="${magicLink}">${magicLink}</a></p><p>This link expires in 10 minutes.</p>`,
+      html: renderMagicLinkEmail({ magicLink }),
     });
 
     return c.json({ ok: true });

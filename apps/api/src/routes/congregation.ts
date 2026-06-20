@@ -6,6 +6,7 @@ import { requireAuth, requireRole } from "@theobase/auth";
 import { loadRoles } from "../middleware/load-roles";
 import { getDb } from "../middleware/get-db";
 import { getEmailSender } from "../middleware/get-email";
+import { renderInviteEmail } from "@theobase/email";
 import { generateToken } from "@theobase/auth";
 
 export function registerCongregationRoutes(app: AppType) {
@@ -135,7 +136,10 @@ export function registerCongregationRoutes(app: AppType) {
     await sendEmail({
       to: email,
       subject: "You've been invited to Theobase",
-      html: `<p>You have been invited to join a congregation on Theobase as <strong>${role}</strong>.</p><p>Click the link below to sign up:</p><p><a href="https://theobase.app/join?congregation=${congId}&role=${role}&token=${token}">Join Theobase</a></p>`,
+      html: renderInviteEmail({
+        role,
+        joinUrl: `https://theobase.app/join?congregation=${congId}&role=${role}&token=${token}`,
+      }),
     });
 
     return c.json({ ok: true });

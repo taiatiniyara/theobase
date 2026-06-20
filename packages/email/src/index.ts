@@ -4,6 +4,8 @@ export interface EmailPayload {
   html: string;
 }
 
+export { renderMagicLinkEmail, renderRotaAssignmentEmail, renderInviteEmail } from "./template";
+
 export function createEmailSender(config: { relayUrl: string; relayToken: string }) {
   return async function sendEmail(payload: EmailPayload): Promise<void> {
     if ((globalThis as any).__testEmails !== undefined) {

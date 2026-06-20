@@ -6,6 +6,7 @@ import { requireAuth, requireRole } from "@theobase/auth";
 import { loadRoles } from "../middleware/load-roles";
 import { getDb } from "../middleware/get-db";
 import { getEmailSender } from "../middleware/get-email";
+import { renderRotaAssignmentEmail } from "@theobase/email";
 import { getCongregationDO } from "../middleware/get-do";
 import { isDuringSabbathHours } from "../middleware/sabbath-guard";
 
@@ -76,7 +77,7 @@ export function registerRotaRoutes(app: AppType) {
           await sendEmail({
             to: volunteer.email,
             subject: `You've been assigned: ${parsed.data.role} on ${parsed.data.date}`,
-            html: `<p>You have been assigned as <strong>${parsed.data.role}</strong> on <strong>${parsed.data.date}</strong>.</p><p>Log in to Theobase to confirm or decline this duty.</p>`,
+            html: renderRotaAssignmentEmail({ role: parsed.data.role, date: parsed.data.date }),
           });
         }
       }
