@@ -30,7 +30,7 @@
 </script>
 
 <nav class="flex flex-col h-full">
-  <div class="flex items-center gap-2 px-4 py-4">
+  <div class="flex items-center gap-2 px-4 py-4 pt-safe">
     <a href="/dashboard" class="text-xl font-bold text-brand-900 hover:text-brand-700 dark:text-brand-200 dark:hover:text-brand-100 transition-colors">
       Theobase
     </a>

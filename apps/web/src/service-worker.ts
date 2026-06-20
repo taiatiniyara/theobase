@@ -5,7 +5,8 @@ const CACHE = `theobase-${version}`;
 const ASSETS = [...build, ...files];
 const OFFLINE_URL = '/offline.html';
 const DB_NAME = 'theobase-offline';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
+const API_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -16,7 +17,8 @@ function openDB(): Promise<IDBDatabase> {
         db.createObjectStore('api-cache', { keyPath: 'url' });
       }
       if (!db.objectStoreNames.contains('outbox')) {
-        db.createObjectStore('outbox', { keyPath: 'id', autoIncrement: true });
+        const store = db.createObjectStore('outbox', { keyPath: 'id', autoIncrement: true });
+        store.createIndex('ts', 'ts', { unique: false });
       }
     };
     req.onsuccess = () => resolve(req.result);
@@ -30,6 +32,24 @@ function isAPIPath(pathname: string): boolean {
   return API_PATH_PATTERN.test(pathname);
 }
 
+async function pruneAPICache() {
+  try {
+    const db = await openDB();
+    const tx = db.transaction('api-cache', 'readwrite');
+    const store = tx.objectStore('api-cache');
+    const entries: any[] = await new Promise((resolve) => {
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
+    });
+    const cutoff = Date.now() - API_CACHE_TTL;
+    for (const entry of entries) {
+      if (entry.ts < cutoff) {
+        store.delete(entry.url);
+      }
+    }
+  } catch { /* IndexedDB not available */ }
+}
+
 async function cacheAPIResponse(url: string, data: unknown) {
   try {
     const db = await openDB();
@@ -38,13 +58,18 @@ async function cacheAPIResponse(url: string, data: unknown) {
   } catch { /* IndexedDB not available */ }
 }
 
-async function getCachedAPI(url: string): Promise<unknown | null> {
+async function getCachedAPI(url: string): Promise<{ data: unknown; fresh: boolean } | null> {
   try {
     const db = await openDB();
     return new Promise((resolve) => {
       const tx = db.transaction('api-cache', 'readonly');
       const req = tx.objectStore('api-cache').get(url);
-      req.onsuccess = () => resolve(req.result?.data ?? null);
+      req.onsuccess = () => {
+        const entry = req.result;
+        if (!entry) return resolve(null);
+        const fresh = Date.now() - entry.ts < API_CACHE_TTL;
+        resolve({ data: entry.data, fresh });
+      };
       req.onerror = () => resolve(null);
     });
   } catch { return null; }
@@ -56,6 +81,16 @@ async function addToOutbox(request: { method: string; url: string; body?: string
     const tx = db.transaction('outbox', 'readwrite');
     tx.objectStore('outbox').add({ ...request, ts: Date.now() });
     notifyClients({ type: 'outbox_queued' });
+    await registerOutboxSync();
+  } catch {}
+}
+
+async function registerOutboxSync() {
+  try {
+    const registration = self.registration as any;
+    if ('sync' in registration) {
+      await registration.sync.register('flush-outbox');
+    }
   } catch {}
 }
 
@@ -115,11 +150,14 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
-    )
+    (async () => {
+      await caches.keys().then((keys) =>
+        Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+      );
+      await pruneAPICache();
+      await self.clients.claim();
+    })()
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', (event: FetchEvent) => {
@@ -138,12 +176,12 @@ self.addEventListener('fetch', (event: FetchEvent) => {
             return response;
           }
           const cached = await getCachedAPI(url.pathname + url.search);
-          if (cached) return new Response(JSON.stringify(cached), { headers: { 'Content-Type': 'application/json' } });
+          if (cached?.data) return new Response(JSON.stringify(cached.data), { headers: { 'Content-Type': 'application/json' } });
           return response;
         })
         .catch(async () => {
           const cached = await getCachedAPI(url.pathname + url.search);
-          if (cached) return new Response(JSON.stringify(cached), { headers: { 'Content-Type': 'application/json' } });
+          if (cached?.data) return new Response(JSON.stringify(cached.data), { headers: { 'Content-Type': 'application/json' } });
           return new Response(JSON.stringify({ error: 'offline' }), { status: 503, headers: { 'Content-Type': 'application/json' } });
         })
     );
@@ -177,23 +215,24 @@ self.addEventListener('fetch', (event: FetchEvent) => {
 
   if (event.request.method === 'GET') {
     event.respondWith(
-      fetch(event.request.clone())
-        .then((res) => {
-          if (res.ok) {
-            const clone = res.clone();
-            caches.open(CACHE).then((cache) => cache.put(event.request, clone));
-          }
-          return res;
-        })
-        .catch(() =>
-          caches.match(event.request).then((cached) => {
-            if (cached) return cached;
+      caches.match(event.request).then((cached) => {
+        const fetched = fetch(event.request.clone())
+          .then((res) => {
+            if (res.ok) {
+              const clone = res.clone();
+              caches.open(CACHE).then((cache) => cache.put(event.request, clone));
+            }
+            return res;
+          })
+          .catch(() => {
             if (event.request.mode === 'navigate') {
               return caches.match(OFFLINE_URL) || fetch(OFFLINE_URL);
             }
             return new Response('Offline', { status: 503 });
-          })
-        )
+          });
+
+        return cached || fetched;
+      })
     );
   }
 });
@@ -207,6 +246,18 @@ self.addEventListener('message', (event) => {
         notifyClients({ type: 'connectivity', online });
       })
     );
+  } else if (event.data?.type === 'purge_cache') {
+    event.waitUntil(purgeStaleEntries());
+  } else if (event.data?.type === 'skip_waiting') {
+    self.skipWaiting();
+  }
+});
+
+self.addEventListener('periodicsync', (event) => {
+  if (event.tag === 'flush-outbox') {
+    event.waitUntil(flushOutbox());
+  } else if (event.tag === 'purge-cache') {
+    event.waitUntil(purgeStaleEntries());
   }
 });
 
@@ -214,4 +265,44 @@ self.addEventListener('sync', (event) => {
   if (event.tag === 'flush-outbox') {
     event.waitUntil(flushOutbox());
   }
+});
+
+self.addEventListener('periodicsync', (event: any) => {
+  if (event.tag === 'flush-outbox') {
+    event.waitUntil(flushOutbox());
+  }
+});
+
+self.addEventListener('push', (event: PushEvent) => {
+  if (!event.data) return;
+  try {
+    const payload = event.data.json();
+    const title = payload.title || 'Theobase';
+    const options: NotificationOptions = {
+      body: payload.body || '',
+      icon: '/icon-192.png',
+      badge: '/icon-192.png',
+      data: payload.url || '/',
+      tag: payload.tag || 'theobase',
+      requireInteraction: payload.requireInteraction ?? false,
+    };
+    event.waitUntil(self.registration.showNotification(title, options));
+  } catch {}
+});
+
+self.addEventListener('notificationclick', (event: NotificationEvent) => {
+  event.notification.close();
+  const url = event.notification.data || '/';
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window' }).then((clients) => {
+      for (const client of clients) {
+        if (client.url.includes(self.registration.scope) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(url);
+      }
+    })
+  );
 });

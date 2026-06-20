@@ -219,7 +219,7 @@
 </svelte:head>
 
 {#if isAuthPage || !profile}
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950 pb-safe">
     <main class="mx-auto max-w-lg px-4 py-8" style="animation: fade-in 0.15s ease-out">
       {@render children()}
     </main>
@@ -234,7 +234,7 @@
     <!-- Main Content Area -->
     <div class="flex flex-1 flex-col overflow-hidden">
       <!-- Header -->
-      <header class="flex h-14 shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 dark:border-slate-800 dark:bg-slate-900">
+      <header class="flex h-14 shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 pt-safe wco-drag dark:border-slate-800 dark:bg-slate-900" style="padding-top: calc(0.5rem + var(--safe-area-inset-top))">
         <!-- Mobile menu trigger -->
         <Sheet open={mobileNavOpen} onOpenChange={(o) => mobileNavOpen = o}>
           <SheetTrigger asChild>
@@ -242,7 +242,7 @@
               <Menu class="size-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" class="w-60 p-0">
+          <SheetContent side="left" class="w-60 p-0 pt-safe pb-safe">
             <Sidebar {roles} onNavigate={() => mobileNavOpen = false} />
           </SheetContent>
         </Sheet>
@@ -333,7 +333,7 @@
       </header>
 
       <!-- Page Content -->
-      <main class="flex-1 overflow-y-auto p-6" style="animation: fade-in-up 0.2s ease-out both">
+      <main class="flex-1 overflow-y-auto p-6 pb-safe" style="animation: fade-in-up 0.2s ease-out both">
         <PullToRefresh onrefresh={async () => { window.location.reload(); }}>
           {@render children()}
         </PullToRefresh>

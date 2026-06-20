@@ -2,6 +2,56 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* === PWA / Mobile Optimizations === */
+
+html {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-right: env(safe-area-inset-right, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-inset-left: env(safe-area-inset-left, 0px);
+}
+
+body {
+  overscroll-behavior: none;
+}
+
+button, a, [role="button"] {
+  touch-action: manipulation;
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+  .pt-safe { padding-top: var(--safe-area-inset-top); }
+  .pr-safe { padding-right: var(--safe-area-inset-right); }
+  .pb-safe { padding-bottom: var(--safe-area-inset-bottom); }
+  .pl-safe { padding-left: var(--safe-area-inset-left); }
+}
+
+/* Desktop PWA: window-controls-overlay titlebar area */
+@media (display-mode: window-controls-overlay) {
+  :root {
+    --titlebar-area-height: env(titlebar-area-height, 0px);
+    --wco-x: env(titlebar-area-x, 0px);
+    --wco-y: env(titlebar-area-y, 0px);
+    --wco-width: env(titlebar-area-width, 100%);
+  }
+
+  .wco-drag {
+    -webkit-app-region: drag;
+    app-region: drag;
+  }
+
+  .wco-no-drag {
+    -webkit-app-region: no-drag;
+    app-region: no-drag;
+  }
+
+  header {
+    padding-top: var(--wco-y);
+    padding-left: var(--wco-x);
+    width: var(--wco-width);
+  }
+}
+
 @media print {
   header, aside, .sr-only, button, [role="dialog"] { display: none !important; }
   body { background: white !important; color: black !important; }

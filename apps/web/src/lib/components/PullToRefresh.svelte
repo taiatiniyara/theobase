@@ -13,14 +13,30 @@
   let pullDistance = $state(0);
   let startY = $state(0);
   let el: HTMLElement | undefined;
+  let disabled = $state(false);
+
+  function getScrollParent(node: HTMLElement): HTMLElement {
+    let parent = node.parentElement;
+    while (parent) {
+      const style = window.getComputedStyle(parent);
+      if (/(auto|scroll)/.test(style.overflowY)) return parent;
+      parent = parent.parentElement;
+    }
+    return document.scrollingElement as HTMLElement || document.documentElement;
+  }
+
+  let scrollParent: HTMLElement | null = null;
 
   function handleTouchStart(e: TouchEvent) {
-    if (window.scrollY > 0) return;
+    if (disabled || refreshing) return;
+    if (!scrollParent) scrollParent = getScrollParent(el!);
+    if (scrollParent.scrollTop > 0) return;
     startY = e.touches[0].clientY;
   }
 
   function handleTouchMove(e: TouchEvent) {
-    if (window.scrollY > 0 || refreshing) return;
+    if (disabled || refreshing || !scrollParent) return;
+    if (scrollParent.scrollTop > 0) return;
     const dist = e.touches[0].clientY - startY;
     if (dist > 0) {
       pullDistance = Math.min(dist * 0.4, 80);
@@ -29,7 +45,8 @@
   }
 
   async function handleTouchEnd() {
-    if (pullDistance > 50 && !refreshing) {
+    if (disabled || refreshing) return;
+    if (pullDistance > 50) {
       refreshing = true;
       try {
         await onrefresh?.();
@@ -43,13 +60,20 @@
 
   onMount(() => {
     if (!el) return;
+
+    if (window.matchMedia("(display-mode: standalone)").matches) {
+      disabled = true;
+      return;
+    }
+
+    scrollParent = getScrollParent(el);
     el.addEventListener("touchstart", handleTouchStart, { passive: true });
     el.addEventListener("touchmove", handleTouchMove, { passive: true });
     el.addEventListener("touchend", handleTouchEnd);
     return () => {
-      el.removeEventListener("touchstart", handleTouchStart);
-      el.removeEventListener("touchmove", handleTouchMove);
-      el.removeEventListener("touchend", handleTouchEnd);
+      el!.removeEventListener("touchstart", handleTouchStart);
+      el!.removeEventListener("touchmove", handleTouchMove);
+      el!.removeEventListener("touchend", handleTouchEnd);
     };
   });
 </script>

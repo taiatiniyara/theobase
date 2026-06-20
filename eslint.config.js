@@ -34,7 +34,7 @@ export default tseslint.config(
   {
     files: ["apps/web/src/service-worker.ts"],
     languageOptions: {
-      globals: { self: "readonly", fetch: "readonly", Response: "readonly", Headers: "readonly", caches: "readonly", indexedDB: "readonly", IDBDatabase: "readonly", ExtendableMessageEvent: "readonly" },
+      globals: { self: "readonly", fetch: "readonly", Response: "readonly", Headers: "readonly", caches: "readonly", indexedDB: "readonly", IDBDatabase: "readonly", ExtendableMessageEvent: "readonly", PushEvent: "readonly", NotificationEvent: "readonly", Notification: "readonly" },
     },
     rules: {
       "no-empty": "off",
