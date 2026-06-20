@@ -1,6 +1,9 @@
 import type { AppType } from "../types";
 import { requireAuth, requireRole } from "@theobase/auth";
 import { loadRoles } from "../middleware/load-roles";
+import { drizzle } from "drizzle-orm/d1";
+import { eq } from "drizzle-orm";
+import * as schema from "@theobase/db";
 
 export interface AuditEntry {
   action: string;
@@ -10,28 +13,33 @@ export interface AuditEntry {
 }
 
 export async function recordAudit(
-  db: D1Database,
+  db: ReturnType<typeof drizzle>,
   userId: string,
   congregationId: string,
   entry: AuditEntry
 ) {
-  const personResult = await db
-    .prepare("SELECT id FROM person WHERE id = (SELECT person_id FROM user WHERE id = ?)")
-    .bind(userId)
-    .first<{ id: string }>();
+  const userRow = await db
+    .select({ personId: schema.user.personId })
+    .from(schema.user)
+    .where(eq(schema.user.id, userId))
+    .limit(1);
 
-  const actorId = personResult?.id;
+  const actorId = userRow[0]?.personId;
   if (!actorId) return;
 
   const id = crypto.randomUUID();
   const createdAt = new Date().toISOString();
 
-  await db
-    .prepare(
-      "INSERT INTO audit_log (id, congregation_id, actor_id, action, resource_type, resource_id, details, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-    )
-    .bind(id, congregationId, actorId, entry.action, entry.resourceType, entry.resourceId ?? null, entry.details ?? null, createdAt)
-    .run();
+  await db.insert(schema.auditLog).values({
+    id,
+    congregationId,
+    actorId,
+    action: entry.action,
+    resourceType: entry.resourceType,
+    resourceId: entry.resourceId ?? null,
+    details: entry.details ?? null,
+    createdAt,
+  });
 }
 
 export function registerAuditRoutes(app: AppType) {

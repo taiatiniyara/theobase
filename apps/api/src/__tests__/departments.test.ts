@@ -73,7 +73,7 @@ describe("departments", () => {
     const evBody = await ev.json();
 
     const ct = await fetchWithToken("POST", "/health/contacts", {
-      eventId: evBody.id, name: "Jane Visitor", phone: "123", email: "jane@test.com", interests: ["diabetes"],
+      eventId: evBody.id, name: "Jane Visitor", phone: "123", email: "jane@test.com", interests: "diabetes",
     });
     expect(ct.res.status).toBe(201);
   });
