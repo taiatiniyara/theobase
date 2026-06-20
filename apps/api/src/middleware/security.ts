@@ -12,10 +12,16 @@ export function securityHeaders(): MiddlewareHandler {
 }
 
 const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
+const CSRF_EXEMPT_PATHS = ["/auth/", "/health"];
 
 export function csrfProtection(): MiddlewareHandler {
   return async (c, next) => {
     if (SAFE_METHODS.has(c.req.method)) {
+      await next();
+      return;
+    }
+
+    if (CSRF_EXEMPT_PATHS.some((p) => c.req.path.startsWith(p))) {
       await next();
       return;
     }

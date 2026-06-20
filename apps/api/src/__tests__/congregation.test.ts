@@ -125,7 +125,7 @@ describe("officer invitation flow", () => {
     await worker.fetch(
       new Request("http://localhost/congregations/con-1/invite", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Cookie: `token=${jwtClerk}` },
+        headers: { "Content-Type": "application/json", Cookie: `token=${jwtClerk}`, Origin: "http://localhost:5173" },
         body: JSON.stringify({ email: "treasurer@test.com", role: "treasurer" }),
       }),
       env, ctx,

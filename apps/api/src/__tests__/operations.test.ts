@@ -15,7 +15,7 @@ describe("communion + AV", () => {
   async function fetchWithToken(method: string, path: string, body?: any) {
     const token = await jwt({ userId: "deacon-user", congregationId: "con-1" });
     const ctx = createExecutionContext();
-    const headers: Record<string, string> = { Cookie: `token=${token}` };
+    const headers: Record<string, string> = { Cookie: `token=${token}`, Origin: "http://localhost:5173" };
     if (body) headers["Content-Type"] = "application/json";
     const res = await worker.fetch(
       new Request(`http://localhost${path}`, {
@@ -70,7 +70,7 @@ describe("coordination", () => {
   async function fetchWithToken(method: string, path: string, body?: any) {
     const token = await jwt({ userId: "pastor-user", congregationId: "con-1" });
     const ctx = createExecutionContext();
-    const headers: Record<string, string> = { Cookie: `token=${token}` };
+    const headers: Record<string, string> = { Cookie: `token=${token}`, Origin: "http://localhost:5173" };
     if (body) headers["Content-Type"] = "application/json";
     const res = await worker.fetch(
       new Request(`http://localhost${path}`, {

@@ -67,7 +67,7 @@ export async function authVerify(token: string, ctx?: ExecutionContext) {
 
 export async function authedRequest(method: string, path: string, token: string, body?: any) {
   const ctx = createExecutionContext();
-  const headers: Record<string, string> = { Cookie: `token=${token}` };
+  const headers: Record<string, string> = { Cookie: `token=${token}`, Origin: "http://localhost:5173" };
   if (body) headers["Content-Type"] = "application/json";
   const res = await worker.fetch(
     new Request(`http://localhost${path}`, {
