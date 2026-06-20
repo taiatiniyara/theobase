@@ -1,4 +1,5 @@
 import http from "node:http";
+import { fileURLToPath } from "node:url";
 import nodemailer from "nodemailer";
 
 export function createRelayServer(options = {}) {
@@ -58,7 +59,7 @@ export function createRelayServer(options = {}) {
 
 const PORT = parseInt(process.env.PORT || "3113");
 
-const isMainModule = process.argv[1] && import.meta.url === `file://${process.argv[1]}`;
+const isMainModule = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
 if (isMainModule) {
   const server = createRelayServer();
   server.listen(PORT, () => {
