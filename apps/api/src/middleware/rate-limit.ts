@@ -6,18 +6,7 @@ interface RateLimitEntry {
 }
 
 export function rateLimiter(limit: number = 10, windowSeconds: number = 60): MiddlewareHandler {
-  // Uses in-memory Map per Worker isolate.
-  // For distributed rate limiting across Workers, replace with D1-backed counter:
-  //   INSERT INTO rate_store (key, count, reset_at) VALUES (?, 1, ?)
-  //     ON CONFLICT (key) DO UPDATE SET count = count + 1
   const store = new Map<string, RateLimitEntry>();
-
-  setInterval(() => {
-    const now = Date.now();
-    for (const [key, entry] of store) {
-      if (entry.resetAt < now) store.delete(key);
-    }
-  }, 60_000).unref?.();
 
   return async (c, next) => {
     const ip = c.req.header("CF-Connecting-IP") || c.req.header("X-Forwarded-For") || "unknown";
