@@ -4,13 +4,19 @@ export interface EmailPayload {
   html: string;
 }
 
+export interface EmailResult {
+  success: boolean;
+  error?: string;
+}
+
 export { renderMagicLinkEmail, renderRotaAssignmentEmail, renderInviteEmail } from "./template";
 
 export function createEmailSender(config: { relayUrl: string; relayToken: string }) {
-  return async function sendEmail(payload: EmailPayload): Promise<void> {
-    if ((globalThis as any).__testEmails !== undefined) {
-      (globalThis as any).__testEmails.push({ ...payload, sentAt: new Date().toISOString() });
-      return;
+  return async function sendEmail(payload: EmailPayload): Promise<EmailResult> {
+    const testEmails = (globalThis as Record<string, unknown>).__testEmails as EmailPayload[] | undefined;
+    if (testEmails !== undefined) {
+      testEmails.push({ ...payload, sentAt: new Date().toISOString() } as EmailPayload & { sentAt: string });
+      return { success: true };
     }
 
     try {
@@ -23,10 +29,14 @@ export function createEmailSender(config: { relayUrl: string; relayToken: string
         body: JSON.stringify(payload),
       });
       if (!res.ok) {
-        console.error("[email] Relay returned", res.status, await res.text());
+        const body = await res.text().catch(() => "");
+        console.error("[email] Relay returned", res.status, body);
+        return { success: false, error: `Relay returned ${res.status}` };
       }
+      return { success: true };
     } catch (err) {
       console.error("[email] Relay error:", err);
+      return { success: false, error: err instanceof Error ? err.message : "Unknown error" };
     }
   };
 }

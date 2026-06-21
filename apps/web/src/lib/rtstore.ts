@@ -7,7 +7,3 @@ export interface RealtimeEvent {
 }
 
 export const realtimeEvents = writable<RealtimeEvent | null>(null);
-
-export function dispatchRealtimeEvent(event: RealtimeEvent) {
-  realtimeEvents.set(event);
-}

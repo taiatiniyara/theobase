@@ -1,6 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
-import { createEmailSender } from "@theobase/email";
-import { verifyJwt } from "@theobase/auth";
+import { createEmailSender, renderRotaAssignmentEmail } from "@theobase/email";
+import { verifyJwt, DEFAULT_SECRET } from "@theobase/auth";
 
 export default {
   async fetch(_request: Request): Promise<Response> {
@@ -9,6 +9,12 @@ export default {
 };
 
 export { NominatingDO } from "./nominating";
+
+interface Env {
+  JWT_SECRET?: string;
+  SMTP_RELAY_URL?: string;
+  SMTP_RELAY_TOKEN?: string;
+}
 
 const CHANNELS = ["board", "rota", "av", "notifications"] as const;
 
@@ -89,20 +95,17 @@ export class CongregationDO extends DurableObject {
       });
 
       if (data.email) {
-        const env = this.env as { SMTP_RELAY_URL?: string; SMTP_RELAY_TOKEN?: string };
+        const env = this.env as Env;
         if (env.SMTP_RELAY_URL && env.SMTP_RELAY_TOKEN) {
           const sendEmail = createEmailSender({ relayUrl: env.SMTP_RELAY_URL, relayToken: env.SMTP_RELAY_TOKEN });
-          try {
-            await sendEmail({
+          const result = await sendEmail({
               to: data.email,
               subject: `Duty Reminder: ${data.role} on ${data.date}`,
-              html: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px">
-                <h2 style="color:#1e3a5f">Theobase</h2>
-                <p>This is a reminder that you are scheduled for <strong>${data.role}</strong> on <strong>${data.date}</strong>.</p>
-                <p>If you are unable to serve, please contact your church clerk to arrange a swap.</p>
-              </div>`,
+              html: renderRotaAssignmentEmail({ role: data.role, date: data.date }),
             });
-          } catch { /* email failure is non-fatal */ }
+            if (!result.success) {
+              console.error("[do] Email reminder failed:", result.error);
+            }
         }
       }
 
@@ -143,15 +146,15 @@ export class CongregationDO extends DurableObject {
       const data = JSON.parse(message) as { type: string; channel?: string; token?: string };
 
       if (data.type === "auth" && data.token) {
-        const env = this.env as { JWT_SECRET?: string };
-        const secret = env.JWT_SECRET || "theobase-dev-secret-change-in-production";
+        const env = this.env as Env;
+        const secret = env.JWT_SECRET || DEFAULT_SECRET;
         const payload = await verifyJwt(data.token, secret);
-        if (payload) {
+        if ("error" in payload) {
+          ws.send(JSON.stringify({ type: "auth_error", message: payload.error }));
+          ws.close(1008, "Auth failed");
+        } else {
           ws.serializeAttachment({ userId: payload.userId, congregationId: payload.congregationId, authenticated: true });
           ws.send(JSON.stringify({ type: "authenticated" }));
-        } else {
-          ws.send(JSON.stringify({ type: "auth_error", message: "Invalid token" }));
-          ws.close(1008, "Auth failed");
         }
         return;
       }

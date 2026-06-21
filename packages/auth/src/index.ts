@@ -4,7 +4,7 @@ import { type MiddlewareHandler } from "hono";
 const TOKEN_TTL_SECONDS = 60 * 10;
 const JWT_TTL_SECONDS = 60 * 60 * 24;
 
-const DEFAULT_SECRET = "theobase-dev-secret-change-in-production";
+export const DEFAULT_SECRET = "theobase-dev-secret-change-in-production";
 
 function encodeSecret(secret: string): Uint8Array {
   return new TextEncoder().encode(secret);
@@ -41,7 +41,7 @@ export async function createJwt(
 export async function verifyJwt(
   token: string,
   secret?: string
-): Promise<{ userId: string; congregationId?: string } | null> {
+): Promise<{ userId: string; congregationId?: string } | { error: string }> {
   try {
     const key = encodeSecret(secret || DEFAULT_SECRET);
     const { payload } = await jwtVerify(token, key);
@@ -49,8 +49,11 @@ export async function verifyJwt(
       userId: payload.sub!,
       congregationId: payload.congregation_id as string | undefined,
     };
-  } catch {
-    return null;
+  } catch (err) {
+    if (err instanceof Error && err.name === "JWTExpired") {
+      return { error: "Token expired" };
+    }
+    return { error: "Invalid token" };
   }
 }
 
@@ -77,20 +80,10 @@ export function requireAuth(): MiddlewareHandler {
     if (!token) return c.json({ error: "Unauthorized" }, 401);
 
     const payload = await verifyJwt(token, secret);
-    if (!payload) return c.json({ error: "Unauthorized" }, 401);
+    if ("error" in payload) return c.json({ error: payload.error }, 401);
 
     c.set("userId", payload.userId);
     c.set("congregationId", payload.congregationId);
-    await next();
-  };
-}
-
-export function requireCongregation(): MiddlewareHandler {
-  return async (c, next) => {
-    const congregationId = c.get("congregationId");
-    if (!congregationId) {
-      return c.json({ error: "No congregation membership" }, 403);
-    }
     await next();
   };
 }
@@ -104,8 +97,6 @@ export function requireRole(...roles: string[]): MiddlewareHandler {
     await next();
   };
 }
-
-const READ_ONLY_ROLES = new Set(["pastor", "elder", "member"]);
 
 const WRITE_ROLES = new Set([
   "clerk",
@@ -125,14 +116,6 @@ const WRITE_ROLES = new Set([
   "district_pastor",
 ]);
 
-export function isWriteRole(role: string): boolean {
-  return WRITE_ROLES.has(role);
-}
-
-export function isReadOnly(userRoles: string[]): boolean {
-  return userRoles.length > 0 && userRoles.every((r) => READ_ONLY_ROLES.has(r));
-}
-
 export function requireWriteAccess(...roles: string[]): MiddlewareHandler {
   return async (c, next) => {
     const userRoles: string[] = c.get("userRoles") || [];
@@ -150,56 +133,4 @@ export function requireWriteAccess(...roles: string[]): MiddlewareHandler {
   };
 }
 
-export const DEPARTMENT_ROLE_MAP: Record<string, string> = {
-  pathfinders: "pathfinder_director",
-  adventurers: "adventurer_director",
-  sabbath_school: "sabbath_school_superintendent",
-  dorcas: "dorcas_coordinator",
-  health: "health_ministries_leader",
-  av: "av_operator",
-};
 
-export function requireDepartmentRole(departmentType: string): MiddlewareHandler {
-  return async (c, next) => {
-    const userRoles: string[] = c.get("userRoles") || [];
-
-    if (userRoles.includes("clerk") || userRoles.includes("pastor") || userRoles.includes("district_pastor")) {
-      await next();
-      return;
-    }
-
-    const requiredRole = DEPARTMENT_ROLE_MAP[departmentType];
-    if (!requiredRole || !userRoles.includes(requiredRole)) {
-      return c.json({ error: "Access limited to department leaders" }, 403);
-    }
-
-    await next();
-  };
-}
-
-export function anonymizeForViewer(
-  records: Record<string, unknown>[],
-  userRoles: string[],
-): Record<string, unknown>[] {
-  const isDistrictPastor = userRoles.includes("district_pastor") && !userRoles.includes("clerk");
-
-  if (!isDistrictPastor) return records;
-
-  const sensitiveFields = new Set([
-    "firstName", "lastName", "email", "phone", "address",
-    "first_name", "last_name", "person_id", "member_id",
-    "volunteer_id", "actor_name",
-  ]);
-
-  return records.map((record) => {
-    const cleaned: Record<string, unknown> = {};
-    for (const [key, value] of Object.entries(record)) {
-      if (sensitiveFields.has(key)) {
-        cleaned[key] = "[redacted]";
-      } else {
-        cleaned[key] = value;
-      }
-    }
-    return cleaned;
-  });
-}

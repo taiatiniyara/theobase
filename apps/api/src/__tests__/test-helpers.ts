@@ -1,16 +1,16 @@
 import { env, createExecutionContext, waitOnExecutionContext } from "cloudflare:test";
-import { createJwt, verifyJwt } from "@theobase/auth";
+import { createJwt, verifyJwt, DEFAULT_SECRET } from "@theobase/auth";
 import { applyMigrations, MIGRATION_STATEMENTS } from "@theobase/db";
 import { generateId } from "@theobase/shared";
 import worker from "../index";
 
-export const TEST_SECRET = "theobase-dev-secret-change-in-production";
+export const TEST_SECRET = DEFAULT_SECRET;
 
 export function jwt(payload: { userId: string; congregationId?: string }, ttlSeconds?: number): Promise<string> {
   return createJwt(payload, TEST_SECRET, ttlSeconds);
 }
 
-export function vjwt(token: string): Promise<{ userId: string; congregationId?: string } | null> {
+export function vjwt(token: string): Promise<{ userId: string; congregationId?: string } | { error: string }> {
   return verifyJwt(token, TEST_SECRET);
 }
 

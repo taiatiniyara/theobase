@@ -112,7 +112,7 @@ async function flushOutbox() {
         await fetch(item.url, { method: item.method, headers, body: item.body });
         const delTx = db.transaction('outbox', 'readwrite');
         delTx.objectStore('outbox').delete(item.id);
-      } catch { break; }
+      } catch { continue; }
     }
 
     const remainingTx = db.transaction('outbox', 'readonly');
@@ -237,7 +237,7 @@ self.addEventListener('fetch', (event: FetchEvent) => {
   }
 });
 
-self.addEventListener('message', (event) => {
+self.addEventListener('message', (event: ExtendableMessageEvent) => {
   if (event.data?.type === 'sync_outbox') {
     event.waitUntil(flushOutbox());
   } else if (event.data?.type === 'check_online') {
@@ -247,34 +247,10 @@ self.addEventListener('message', (event) => {
       })
     );
   } else if (event.data?.type === 'purge_cache') {
-    event.waitUntil(purgeStaleEntries());
+    event.waitUntil(pruneAPICache());
   } else if (event.data?.type === 'skip_waiting') {
     self.skipWaiting();
-  }
-});
-
-self.addEventListener('periodicsync', (event) => {
-  if (event.tag === 'flush-outbox') {
-    event.waitUntil(flushOutbox());
-  } else if (event.tag === 'purge-cache') {
-    event.waitUntil(purgeStaleEntries());
-  }
-});
-
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'flush-outbox') {
-    event.waitUntil(flushOutbox());
-  }
-});
-
-self.addEventListener('periodicsync', (event: any) => {
-  if (event.tag === 'flush-outbox') {
-    event.waitUntil(flushOutbox());
-  }
-});
-
-self.addEventListener('message', (event: ExtendableMessageEvent) => {
-  if (event.data?.type === 'INVALIDATE_CACHE') {
+  } else if (event.data?.type === 'INVALIDATE_CACHE') {
     const prefix = event.data.prefix as string | undefined;
     event.waitUntil(
       (async () => {
@@ -302,6 +278,20 @@ self.addEventListener('message', (event: ExtendableMessageEvent) => {
         });
       })()
     );
+  }
+});
+
+self.addEventListener('periodicsync', (event) => {
+  if (event.tag === 'flush-outbox') {
+    event.waitUntil(flushOutbox());
+  } else if (event.tag === 'purge-cache') {
+    event.waitUntil(pruneAPICache());
+  }
+});
+
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'flush-outbox') {
+    event.waitUntil(flushOutbox());
   }
 });
 

@@ -5,6 +5,7 @@ import { generateId, z } from "@theobase/shared";
 import { requireAuth, requireRole, requireWriteAccess } from "@theobase/auth";
 import { loadRoles } from "../middleware/load-roles";
 import { getDb } from "../middleware/get-db";
+import { recordAudit } from "../middleware/audit";
 
 export function registerDistrictRoutes(app: AppType) {
   const createRotationSchema = z.object({ congregationId: z.string().min(1), date: z.string().min(1), preacherId: z.string().min(1), topic: z.string().optional() });
@@ -17,6 +18,7 @@ export function registerDistrictRoutes(app: AppType) {
     if (!parsed.success) return c.json({ error: parsed.error.issues }, 400);
     const id = generateId();
     await db.insert(schema.preachingRotation).values({ id, ...parsed.data, createdAt: new Date().toISOString() });
+    await recordAudit(db, c.get("userId"), c.get("congregationId")!, { action: "rotation.create", resourceType: "preaching_rotation", resourceId: id });
     const [r] = await db.select().from(schema.preachingRotation).where(eq(schema.preachingRotation.id, id));
     return c.json(r, 201);
   });
@@ -32,6 +34,7 @@ export function registerDistrictRoutes(app: AppType) {
     const [existing] = await db.select().from(schema.preachingRotation).where(eq(schema.preachingRotation.id, id));
     if (!existing) return c.json({ error: "Not found" }, 404);
     await db.delete(schema.preachingRotation).where(eq(schema.preachingRotation.id, id));
+    await recordAudit(db, c.get("userId"), c.get("congregationId")!, { action: "rotation.delete", resourceType: "preaching_rotation", resourceId: id });
     return c.json({ ok: true });
   });
 
@@ -41,6 +44,7 @@ export function registerDistrictRoutes(app: AppType) {
     if (!parsed.success) return c.json({ error: parsed.error.issues }, 400);
     const id = generateId();
     await db.insert(schema.pastoralVisit).values({ id, congregationId: c.get("congregationId")!, ...parsed.data, createdAt: new Date().toISOString() });
+    await recordAudit(db, c.get("userId"), c.get("congregationId")!, { action: "visit.create", resourceType: "pastoral_visit", resourceId: id });
     const [r] = await db.select().from(schema.pastoralVisit).where(eq(schema.pastoralVisit.id, id));
     return c.json(r, 201);
   });
@@ -56,6 +60,7 @@ export function registerDistrictRoutes(app: AppType) {
     const [existing] = await db.select().from(schema.pastoralVisit).where(eq(schema.pastoralVisit.id, id));
     if (!existing) return c.json({ error: "Not found" }, 404);
     await db.delete(schema.pastoralVisit).where(eq(schema.pastoralVisit.id, id));
+    await recordAudit(db, c.get("userId"), c.get("congregationId")!, { action: "visit.delete", resourceType: "pastoral_visit", resourceId: id });
     return c.json({ ok: true });
   });
 
@@ -65,6 +70,7 @@ export function registerDistrictRoutes(app: AppType) {
     if (!parsed.success) return c.json({ error: parsed.error.issues }, 400);
     const id = generateId();
     await db.insert(schema.district).values({ id, ...parsed.data, createdAt: new Date().toISOString() });
+    await recordAudit(db, c.get("userId"), c.get("congregationId")!, { action: "district.create", resourceType: "district", resourceId: id });
     const [r] = await db.select().from(schema.district).where(eq(schema.district.id, id));
     return c.json(r, 201);
   });
@@ -78,8 +84,10 @@ export function registerDistrictRoutes(app: AppType) {
     const db = getDb(c);
     const parsed = districtSchema.partial().safeParse(await c.req.json());
     if (!parsed.success) return c.json({ error: parsed.error.issues }, 400);
-    await db.update(schema.district).set(parsed.data).where(eq(schema.district.id, c.req.param("id")));
-    const [r] = await db.select().from(schema.district).where(eq(schema.district.id, c.req.param("id")));
+    const districtId = c.req.param("id");
+    await db.update(schema.district).set(parsed.data).where(eq(schema.district.id, districtId));
+    await recordAudit(db, c.get("userId"), c.get("congregationId")!, { action: "district.update", resourceType: "district", resourceId: districtId });
+    const [r] = await db.select().from(schema.district).where(eq(schema.district.id, districtId));
     return c.json(r);
   });
 
@@ -88,15 +96,19 @@ export function registerDistrictRoutes(app: AppType) {
     const { congregationId } = await c.req.json<{ congregationId: string }>();
     const id = generateId();
     await db.insert(schema.districtCongregation).values({ id, districtId: c.req.param("id"), congregationId });
+    await recordAudit(db, c.get("userId"), c.get("congregationId")!, { action: "district.congregation_add", resourceType: "district_congregation", resourceId: id });
     const [r] = await db.select().from(schema.districtCongregation).where(eq(schema.districtCongregation.id, id));
     return c.json(r, 201);
   });
 
   app.delete("/districts/:id/congregations/:congId", requireAuth(), loadRoles(), requireWriteAccess("clerk"), async (c) => {
     const db = getDb(c);
+    const districtId = c.req.param("id");
+    const congId = c.req.param("congId");
     await db.delete(schema.districtCongregation).where(
-      and(eq(schema.districtCongregation.districtId, c.req.param("id")), eq(schema.districtCongregation.congregationId, c.req.param("congId")))
+      and(eq(schema.districtCongregation.districtId, districtId), eq(schema.districtCongregation.congregationId, congId))
     );
+    await recordAudit(db, c.get("userId"), c.get("congregationId")!, { action: "district.congregation_remove", resourceType: "district_congregation", details: JSON.stringify({ districtId, congregationId: congId }) });
     return c.json({ ok: true });
   });
 }

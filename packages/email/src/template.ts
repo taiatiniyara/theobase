@@ -1,16 +1,9 @@
+import { sanitizeHtml } from "@theobase/shared";
+
 const SYSTEM_FONT =
   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'";
 
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-export function renderLayout(opts: {
+function renderLayout(opts: {
   preheader: string;
   title: string;
   body: string;
@@ -22,12 +15,12 @@ export function renderLayout(opts: {
       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 32px 0 28px;">
         <tr>
           <td align="center">
-            <a href="${escapeHtml(opts.cta.url)}"
+            <a href="${sanitizeHtml(opts.cta.url)}"
                target="_blank"
                rel="noopener noreferrer"
                style="display: inline-block; padding: 14px 40px; background: #4F46E5; color: #FFFFFF; font-family: ${SYSTEM_FONT}; font-size: 16px; font-weight: 600; text-decoration: none; border-radius: 8px; line-height: 1.4; mso-padding-alt: 0;">
               <!--[if mso]><i style="letter-spacing: 40px; mso-font-width: -100%; mso-text-raise: 28pt;">&nbsp;</i><![endif]-->
-              <span style="color: #FFFFFF; font-family: ${SYSTEM_FONT}; font-size: 16px; font-weight: 600; line-height: 1.4;">${escapeHtml(opts.cta.label)} &rarr;</span>
+              <span style="color: #FFFFFF; font-family: ${SYSTEM_FONT}; font-size: 16px; font-weight: 600; line-height: 1.4;">${sanitizeHtml(opts.cta.label)} &rarr;</span>
               <!--[if mso]><i style="letter-spacing: 40px; mso-font-width: -100%;">&nbsp;</i><![endif]-->
             </a>
           </td>
@@ -55,11 +48,11 @@ export function renderLayout(opts: {
   <meta name="x-apple-disable-message-reformatting">
   <meta name="color-scheme" content="light">
   <meta name="supported-color-schemes" content="light">
-  <title>${escapeHtml(opts.title)}</title>
+  <title>${sanitizeHtml(opts.title)}</title>
   <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
 </head>
 <body style="margin: 0; padding: 0; background-color: #F3F4F6; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
-  <span style="display: none !important; visibility: hidden; mso-hide: all; font-size: 1px; color: #F3F4F6; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">${escapeHtml(opts.preheader)}</span>
+  <span style="display: none !important; visibility: hidden; mso-hide: all; font-size: 1px; color: #F3F4F6; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">${sanitizeHtml(opts.preheader)}</span>
 
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F3F4F6;">
     <tr>
@@ -100,7 +93,7 @@ export function renderLayout(opts: {
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td align="center" style="padding: 16px 0 8px; font-family: ${SYSTEM_FONT}; font-size: 24px; font-weight: 700; color: #111827; line-height: 1.3; letter-spacing: -0.3px;">
-                    ${escapeHtml(opts.title)}
+                    ${sanitizeHtml(opts.title)}
                   </td>
                 </tr>
               </table>
@@ -144,7 +137,7 @@ export function renderMagicLinkEmail(opts: { magicLink: string }): string {
 <p style="margin: 0;">This link expires in <strong>10 minutes</strong>. If you didn't request this, you can safely ignore this email.</p>`,
     cta: { label: "Sign in", url: opts.magicLink },
     footer: `<p style="margin: 0;">If the button doesn't work, copy and paste this link into your browser:</p>
-<p style="margin: 8px 0 0; word-break: break-all;"><a href="${escapeHtml(opts.magicLink)}" style="color: #4F46E5; text-decoration: underline;">${escapeHtml(opts.magicLink)}</a></p>`,
+<p style="margin: 8px 0 0; word-break: break-all;"><a href="${sanitizeHtml(opts.magicLink)}" style="color: #4F46E5; text-decoration: underline;">${sanitizeHtml(opts.magicLink)}</a></p>`,
   });
 }
 
@@ -170,8 +163,8 @@ export function renderRotaAssignmentEmail(opts: { role: string; date: string }):
           <td style="font-family: ${SYSTEM_FONT}; font-size: 13px; color: #6B7280; padding: 0 0 4px; text-transform: uppercase; letter-spacing: 0.5px;">Date</td>
         </tr>
         <tr>
-          <td style="font-family: ${SYSTEM_FONT}; font-size: 16px; font-weight: 600; color: #111827;">${escapeHtml(displayRole)}</td>
-          <td style="font-family: ${SYSTEM_FONT}; font-size: 16px; font-weight: 600; color: #111827;">${escapeHtml(displayDate)}</td>
+          <td style="font-family: ${SYSTEM_FONT}; font-size: 16px; font-weight: 600; color: #111827;">${sanitizeHtml(displayRole)}</td>
+          <td style="font-family: ${SYSTEM_FONT}; font-size: 16px; font-weight: 600; color: #111827;">${sanitizeHtml(displayDate)}</td>
         </tr>
       </table>
     </td>
@@ -190,7 +183,7 @@ export function renderInviteEmail(opts: {
   return renderLayout({
     preheader: `You've been invited to join a congregation on Theobase as ${opts.role}`,
     title: "You're invited",
-    body: `<p style="margin: 0 0 12px;">You have been invited to join a congregation on Theobase as <strong>${escapeHtml(opts.role)}</strong>.</p>
+    body: `<p style="margin: 0 0 12px;">You have been invited to join a congregation on Theobase as <strong>${sanitizeHtml(opts.role)}</strong>.</p>
 <p style="margin: 0;">Theobase helps congregations manage rosters, duties, members, and more — all in one place.</p>`,
     cta: { label: "Join Theobase", url: opts.joinUrl },
     footer: `<p style="margin: 0;">If you weren't expecting this invitation, you can safely ignore this email.</p>`,

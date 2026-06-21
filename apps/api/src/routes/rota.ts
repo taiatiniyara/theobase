@@ -8,7 +8,7 @@ import { getDb } from "../middleware/get-db";
 import { getEmailSender } from "../middleware/get-email";
 import { renderRotaAssignmentEmail } from "@theobase/email";
 import { getCongregationDO } from "../middleware/get-do";
-import { isDuringSabbathHours } from "../middleware/sabbath-guard";
+import { isDuringSabbathHours } from "@theobase/shared";
 import { recordAudit } from "../middleware/audit";
 
 export function registerRotaRoutes(app: AppType) {

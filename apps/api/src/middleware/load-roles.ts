@@ -1,6 +1,7 @@
-import { type MiddlewareHandler } from "hono";
+import type { MiddlewareHandler } from "hono";
+import type { Bindings, Variables } from "../types";
 
-export function loadRoles(): MiddlewareHandler {
+export function loadRoles(): MiddlewareHandler<{ Bindings: Bindings; Variables: Variables }> {
   return async (c, next) => {
     const userId = c.get("userId");
     const congregationId = c.get("congregationId");
@@ -10,7 +11,7 @@ export function loadRoles(): MiddlewareHandler {
     }
 
     try {
-      const db = (c.env as any).DB as D1Database;
+      const db = c.env.DB;
 
       const userResult = await db
         .prepare("SELECT person_id FROM user WHERE id = ?")

@@ -112,6 +112,6 @@ describe("auth", () => {
   it("verifyJwt rejects expired tokens", async () => {
     const expiredJwt = await createJwt({ userId: "test-user" }, -1);
     const result = await verifyJwt(expiredJwt);
-    expect(result).toBeNull();
+    expect("error" in result).toBe(true);
   });
 });

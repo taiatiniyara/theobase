@@ -1,4 +1,4 @@
-import { writable, derived } from "svelte/store";
+import { writable } from "svelte/store";
 import { locales, defaultLocale, localeFromNavigator } from "./locales";
 import { translations } from "./translations/index";
 import type { Locale, LocaleMeta, TFunc } from "./types";
@@ -17,8 +17,6 @@ function loadLocale(): Locale {
 }
 
 export const locale = writable<Locale>(loadLocale());
-
-export const localeMeta = derived(locale, ($locale) => locales[$locale]);
 
 export function setLocale(code: Locale) {
   locale.set(code);
@@ -78,12 +76,6 @@ export function getT(localeValue: Locale): TFunc {
     const value = resolve(key, dict);
     return interpolate(value, params);
   };
-}
-
-export function formatLocalizedNumber(value: number, localeValue?: Locale): string {
-  const loc = localeValue ?? defaultLocale;
-  const meta = locales[loc];
-  return new Intl.NumberFormat(meta.dateLocale).format(value);
 }
 
 export function formatLocalizedCurrency(cents: number, localeValue?: Locale): string {

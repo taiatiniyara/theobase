@@ -76,7 +76,7 @@ export function registerHouseholdRoutes(app: AppType) {
     const parsed = householdMemberSchema.safeParse(await c.req.json());
     if (!parsed.success) return c.json({ error: parsed.error.issues }, 400);
     const id = generateId();
-    await db.insert(schema.householdMember).values({ id, householdId: c.req.param("id"), personId: parsed.data.personId, relationship: parsed.data.relationship });
+    await db.insert(schema.householdMember).values({ id, householdId: c.req.param("id"), personId: parsed.data.personId, relationship: parsed.data.relationship, createdAt: new Date().toISOString() });
     const [r] = await db.select().from(schema.householdMember).where(eq(schema.householdMember.id, id));
     await recordAudit(db, c.get("userId"), c.get("congregationId")!, { action: "household.member_add", resourceType: "household_member", resourceId: id });
     return c.json(r, 201);

@@ -40,6 +40,38 @@ export async function api(path: string, options: RequestInit = {}) {
   return res;
 }
 
+function qs(params: Record<string, string | number | undefined>): string {
+  const p = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) {
+    if (v !== undefined) p.set(k, String(v));
+  }
+  const s = p.toString();
+  return s ? `?${s}` : '';
+}
+
+async function get<T>(path: string): Promise<T> {
+  const res = await api(path);
+  return res.json();
+}
+
+async function post<T>(path: string, body?: unknown): Promise<T> {
+  const res = await api(path, { method: 'POST', body: body ? JSON.stringify(body) : undefined });
+  return res.json();
+}
+
+async function patch<T>(path: string, body: unknown): Promise<T> {
+  const res = await api(path, { method: 'PATCH', body: JSON.stringify(body) });
+  return res.json();
+}
+
+async function del(path: string): Promise<void> {
+  await api(path, { method: 'DELETE' });
+}
+
+async function paginated<T>(path: string, limit?: number, offset?: number): Promise<T> {
+  return get<T>(`${path}${qs({ limit, offset })}`);
+}
+
 export async function requestMagicLink(email: string) {
   const res = await fetch(`${API_URL}/auth/request`, {
     method: 'POST',
@@ -49,378 +81,328 @@ export async function requestMagicLink(email: string) {
   return res.json();
 }
 
-export async function verifyToken(token: string) {
-  const res = await api('/auth/verify', {
-    method: 'POST',
-    body: JSON.stringify({ token }),
-  });
-  return res.json();
+export function verifyToken(token: string) {
+  return post('/auth/verify', { token });
 }
 
-export async function getMe() {
-  const res = await api('/me');
-  return res.json();
+export function getMe() {
+  return get('/me');
 }
 
-export async function updateMe(data: { phone?: string; address?: string }) {
-  const res = await api('/me', {
-    method: 'PATCH',
-    body: JSON.stringify(data),
-  });
-  return res.json();
+export function updateMe(data: { phone?: string; address?: string }) {
+  return patch('/me', data);
 }
 
-// Receipts (issue 004)
-export async function getReceipts(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/receipts${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function getReceipts(limit?: number, offset?: number) {
+  return paginated('/receipts', limit, offset);
 }
 
-export async function createReceipt(data: { amount: number; fundSplit: Record<string, number> }) {
-  const res = await api('/receipts', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
-  return res.json();
+export function createReceipt(data: { amount: number; fundSplit: Record<string, number> }) {
+  return post('/receipts', data);
 }
 
-// Boardroom (issue 005)
-export async function getBoardMeetings(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/board/meetings${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function getReceiptsByStatus(status: string, limit?: number) {
+  return get(`/receipts${qs({ status, limit })}`);
 }
 
-export async function createBoardMeeting(data: { date: string; agenda: { title: string }[] }) {
-  const res = await api('/board/meetings', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
-  return res.json();
+export function getBoardMeetings(limit?: number, offset?: number) {
+  return paginated('/board/meetings', limit, offset);
 }
 
-export async function getBoardMeeting(id: string) {
-  const res = await api(`/board/meetings/${id}`);
-  return res.json();
+export function createBoardMeeting(data: { date: string; agenda: { title: string }[] }) {
+  return post('/board/meetings', data);
 }
 
-export async function createBoardDecision(meetingId: string, data: { title: string; description: string; voteOutcome: string }) {
-  const res = await api(`/board/meetings/${meetingId}/decisions`, {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
-  return res.json();
+export function getBoardMeeting(id: string) {
+  return get(`/board/meetings/${id}`);
 }
 
-// Treasury (issue 007)
-export async function getTreasuryBalance() {
-  const res = await api('/treasury/balance');
-  return res.json();
+export function createBoardDecision(meetingId: string, data: { title: string; description: string; voteOutcome: string }) {
+  return post(`/board/meetings/${meetingId}/decisions`, data);
 }
 
-export async function getExpenses(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/treasury/expenses${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function getBoardMinutes(meetingId: string) {
+  return get(`/board/meetings/${encodeURIComponent(meetingId)}/minutes`);
 }
 
-export async function createExpense(data: { amount: number; description: string; category: string; receiptId?: string; boardDecisionId?: string }) {
-  const res = await api('/treasury/expenses', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
-  return res.json();
+export function createBoardMinute(meetingId: string, content: string) {
+  return post(`/board/meetings/${encodeURIComponent(meetingId)}/minutes`, { content });
 }
 
-// Rota (issue 006)
-export async function getRota(date: string) {
-  const res = await api(`/rota/${date}`);
-  return res.json();
+export function updateBoardMinute(id: string, content: string) {
+  return patch(`/board/minutes/${id}`, { content });
 }
 
-// Pathfinders (issue 010)
-export async function getPathfinderProgress(memberId: string, limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/pathfinder/progress/${memberId}${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function deleteBoardMinute(id: string) {
+  return del(`/board/minutes/${id}`);
 }
 
-export async function createPathfinderProgress(data: { memberId: string; className: string; clubType: string; status: string }) {
-  const res = await api('/pathfinder/progress', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function getTreasuryBalance() {
+  return get('/treasury/balance');
 }
 
-export async function getPathfinderHonors(memberId: string, limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/pathfinder/honors/${memberId}${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function getExpenses(limit?: number, offset?: number) {
+  return paginated('/treasury/expenses', limit, offset);
 }
 
-export async function createPathfinderHonor(data: { memberId: string; name: string; category: string; earnedAt: string }) {
-  const res = await api('/pathfinder/honors', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function createExpense(data: { amount: number; description: string; category: string; receiptId?: string; boardDecisionId?: string }) {
+  return post('/treasury/expenses', data);
 }
 
-// Welfare (issue 012)
-export async function getWelfareCases(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/welfare/cases${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function getRota(date: string) {
+  return get(`/rota/${date}`);
 }
 
-export async function createWelfareCase(data: { personId: string; assistanceType: string; description: string; value: number }) {
-  const res = await api('/welfare/cases', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function createRotaSlot(data: { date: string; role: string; volunteerId?: string }) {
+  return post('/rota/slots', data);
 }
 
-export async function getPantryItems(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/pantry/items${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function updateRotaSlot(id: string, data: { volunteerId?: string; status?: string }) {
+  return patch(`/rota/slots/${id}`, data);
 }
 
-export async function createPantryItem(data: { name: string; quantity: number; unit: string }) {
-  const res = await api('/pantry/items', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function deleteRotaSlot(id: string) {
+  return del(`/rota/slots/${id}`);
 }
 
-// Sabbath School (issue 011)
-export async function getSabbathSchoolClasses(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/sabbath-school/classes${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function getPathfinderProgress(memberId: string, limit?: number, offset?: number) {
+  return paginated(`/pathfinder/progress/${memberId}`, limit, offset);
 }
 
-export async function createSabbathSchoolClass(data: { division: string; name: string }) {
-  const res = await api('/sabbath-school/classes', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function createPathfinderProgress(data: { memberId: string; className: string; clubType: string; status: string }) {
+  return post('/pathfinder/progress', data);
 }
 
-export async function recordAttendance(data: { attendance: { classId: string; date: string; memberId: string; present: boolean }[] }) {
-  const res = await api('/sabbath-school/attendance', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function getPathfinderHonors(memberId: string, limit?: number, offset?: number) {
+  return paginated(`/pathfinder/honors/${memberId}`, limit, offset);
 }
 
-// Health (issue 013)
-export async function getHealthContacts(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/health/contacts${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function createPathfinderHonor(data: { memberId: string; name: string; category: string; earnedAt: string }) {
+  return post('/pathfinder/honors', data);
 }
 
-export async function createHealthEvent(data: { name: string; date: string; type: string }) {
-  const res = await api('/health/events', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function getWelfareCases(limit?: number, offset?: number) {
+  return paginated('/welfare/cases', limit, offset);
 }
 
-export async function createHealthContact(data: { eventId: string; name: string; phone: string; email: string; interests: string[] }) {
-  const res = await api('/health/contacts', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function createWelfareCase(data: { personId: string; assistanceType: string; description: string; value: number }) {
+  return post('/welfare/cases', data);
 }
 
-// Communion (issue 016)
-export async function getCommunionServices(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/communion${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function getPantryItems(limit?: number, offset?: number) {
+  return paginated('/pantry/items', limit, offset);
 }
 
-export async function getCommunionService(id: string) {
-  const res = await api(`/communion/${id}`);
-  return res.json();
+export function createPantryItem(data: { name: string; quantity: number; unit: string }) {
+  return post('/pantry/items', data);
 }
 
-export async function createCommunion(data: { date: string; rooms: any[]; inventory: any[] }) {
-  const res = await api('/communion', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function getSabbathSchoolClasses(limit?: number, offset?: number) {
+  return paginated('/sabbath-school/classes', limit, offset);
 }
 
-// AV Sync (issue 017)
-export async function getOrderOfService(date: string) {
-  const res = await api(`/av/order-of-service/${date}`);
-  return res.json();
+export function createSabbathSchoolClass(data: { division: string; name: string }) {
+  return post('/sabbath-school/classes', data);
 }
 
-export async function updateOrderOfService(data: { date: string; items: any[] }) {
-  const res = await api('/av/order-of-service', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function recordAttendance(data: { attendance: { classId: string; date: string; memberId: string; present: boolean }[] }) {
+  return post('/sabbath-school/attendance', data);
 }
 
-// District Hub (issue 018)
-export async function getDistrictRotations(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/district/rotations${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function getHealthEvents(limit?: number, offset?: number) {
+  return paginated('/health/events', limit, offset);
 }
 
-export async function createDistrictRotation(data: { congregationId: string; date: string; preacherId: string; topic: string }) {
-  const res = await api('/district/rotations', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function getHealthContacts(limit?: number, offset?: number) {
+  return paginated('/health/contacts', limit, offset);
 }
 
-export async function createDistrictVisit(data: { householdId: string; pastorId: string; date: string; purpose: string; notes: string }) {
-  const res = await api('/district/visits', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function createHealthEvent(data: { name: string; date: string; type: string }) {
+  return post('/health/events', data);
 }
 
-// Facilities (issue 019)
-export async function getFacilityBookings(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/facilities/bookings${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function createHealthContact(data: { eventId: string; name: string; phone: string; email: string; interests: string[] }) {
+  return post('/health/contacts', data);
 }
 
-export async function createFacilityBooking(data: { date: string; timeStart: string; timeEnd: string; purpose: string }) {
-  const res = await api('/facilities/bookings', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function getCommunionServices(limit?: number, offset?: number) {
+  return paginated('/communion', limit, offset);
 }
 
-// Crisis (issue 020)
-export async function getCrisisAssets(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/crisis/assets${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function getCommunionService(id: string) {
+  return get(`/communion/${id}`);
 }
 
-export async function createCrisisAsset(data: { type: string; description: string; status?: string }) {
-  const res = await api('/crisis/assets', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function createCommunion(data: { date: string; rooms: { name: string; gender: string; volunteerIds?: string[] }[]; inventory: { item: string; quantity: number; unit: string }[] }) {
+  return post('/communion', data);
 }
 
-// Transfers (issue 021)
-export async function getTransfers(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/transfers${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function getOrderOfService(date: string) {
+  return get(`/av/order-of-service/${date}`);
 }
 
-export async function createTransfer(data: { memberId: string; toCongregationId: string }) {
-  const res = await api('/transfers', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function updateOrderOfService(data: { date: string; items: { title: string; type: string; resource?: string; notes?: string }[] }) {
+  return post('/av/order-of-service', data);
 }
 
-export async function updateTransferStatus(id: string, status: string) {
-  const res = await api(`/transfers/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) });
-  return res.json();
+export function updateAVSlide(date: string, slideIndex: number) {
+  return post('/av/order-of-service/slide', { date, slideIndex });
 }
 
-// Nominating (issue 023)
-export async function createNominatingSession(data: { year: number }) {
-  const res = await api('/nominating/sessions', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function getDistrictRotations(limit?: number, offset?: number) {
+  return paginated('/district/rotations', limit, offset);
 }
 
-export async function createNominatingRole(data: { sessionId: string; roleType: string }) {
-  const res = await api('/nominating/roles', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function createDistrictRotation(data: { congregationId: string; date: string; preacherId: string; topic: string }) {
+  return post('/district/rotations', data);
 }
 
-// Health (issue 013)
-export async function getHealthEvents(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/health/events${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function getDistrictVisits(limit?: number, offset?: number) {
+  return paginated('/district/visits', limit, offset);
 }
 
-// Households (issue 014)
-export async function getHouseholds(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/households${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function createDistrictVisit(data: { householdId: string; pastorId: string; date: string; purpose: string; notes: string }) {
+  return post('/district/visits', data);
 }
 
-export async function createHousehold(data: { name: string }) {
-  const res = await api('/households', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function getFacilityBookings(limit?: number, offset?: number) {
+  return paginated('/facilities/bookings', limit, offset);
 }
 
-// Candidacies (issue 014)
-export async function getCandidacies(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.set("limit", String(limit));
-  if (offset !== undefined) params.set("offset", String(offset));
-  const qs = params.toString();
-  const res = await api(`/candidacies${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function createFacilityBooking(data: { date: string; timeStart: string; timeEnd: string; purpose: string }) {
+  return post('/facilities/bookings', data);
 }
 
-export async function createCandidacy(data: { personId: string; stage: string; startDate: string }) {
-  const res = await api('/candidacies', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function getCrisisAssets(limit?: number, offset?: number) {
+  return paginated('/crisis/assets', limit, offset);
 }
 
-export async function getConferenceStats(quarterStart?: string, quarterEnd?: string) {
-  const params = new URLSearchParams();
-  if (quarterStart) params.set("quarterStart", quarterStart);
-  if (quarterEnd) params.set("quarterEnd", quarterEnd);
-  const qs = params.toString();
-  const res = await api(`/conference/stats${qs ? `?${qs}` : ""}`);
-  return res.json();
+export function createCrisisAsset(data: { type: string; description: string; status?: string }) {
+  return post('/crisis/assets', data);
 }
 
-export async function getConferenceExport(quarterStart?: string, quarterEnd?: string) {
-  const params = new URLSearchParams({ format: "csv" });
-  if (quarterStart) params.set("quarterStart", quarterStart);
-  if (quarterEnd) params.set("quarterEnd", quarterEnd);
-  const res = await api(`/conference/export?${params.toString()}`);
-  return res.text();
+export function getTransfers(limit?: number, offset?: number) {
+  return paginated('/transfers', limit, offset);
 }
 
-export async function getCongregation(id: string) {
-  const res = await api(`/congregations/${id}`);
-  return res.json();
+export function createTransfer(data: { memberId: string; toCongregationId: string }) {
+  return post('/transfers', data);
 }
 
-export async function createCongregation(data: {
+export function updateTransferStatus(id: string, status: string) {
+  return patch(`/transfers/${id}`, { status });
+}
+
+export function getNominatingSessions() {
+  return get('/nominating/sessions');
+}
+
+export function createNominatingSession(data: { year: number }) {
+  return post('/nominating/sessions', data);
+}
+
+export function getNominatingRoles(sessionId: string) {
+  return get(`/nominating/roles?sessionId=${encodeURIComponent(sessionId)}`);
+}
+
+export function createNominatingRole(data: { sessionId: string; roleType: string }) {
+  return post('/nominating/roles', data);
+}
+
+export function getNominatingCandidates(roleId: string) {
+  return get(`/nominating/candidates?roleId=${encodeURIComponent(roleId)}`);
+}
+
+export function createNominatingCandidate(data: { roleId: string; personId: string }) {
+  return post('/nominating/candidates', data);
+}
+
+export function updateNominatingCandidate(id: string, status: string) {
+  return patch(`/nominating/candidates/${id}`, { status });
+}
+
+export function deleteNominatingSession(id: string) {
+  return del(`/nominating/sessions/${id}`);
+}
+
+export function deleteNominatingRole(id: string) {
+  return del(`/nominating/roles/${id}`);
+}
+
+export function deleteNominatingCandidate(id: string) {
+  return del(`/nominating/candidates/${id}`);
+}
+
+export function castBallot(data: { sessionId: string; roleId: string; candidateId: string }) {
+  return post('/nominating/ballots', data);
+}
+
+export function getTally(sessionId: string) {
+  return get(`/nominating/tally/${encodeURIComponent(sessionId)}`);
+}
+
+export function closeVoting(sessionId: string) {
+  return post(`/nominating/sessions/${encodeURIComponent(sessionId)}/close`);
+}
+
+export function getHouseholds(limit?: number, offset?: number) {
+  return paginated('/households', limit, offset);
+}
+
+export function createHousehold(data: { name: string }) {
+  return post('/households', data);
+}
+
+export function getHouseholdMembers(householdId: string) {
+  return get(`/households/${encodeURIComponent(householdId)}/members`);
+}
+
+export function addHouseholdMember(householdId: string, data: { personId: string; relationship: string }) {
+  return post(`/households/${encodeURIComponent(householdId)}/members`, data);
+}
+
+export function removeHouseholdMember(memberId: string) {
+  return del(`/household-members/${encodeURIComponent(memberId)}`);
+}
+
+export function getCandidacies(limit?: number, offset?: number) {
+  return paginated('/candidacies', limit, offset);
+}
+
+export function createCandidacy(data: { personId: string; stage: string; startDate: string }) {
+  return post('/candidacies', data);
+}
+
+export function updateCandidacy(id: string, data: { stage?: string; decisionDate?: string; decisionType?: string }) {
+  return patch(`/candidacies/${id}`, data);
+}
+
+export function getPersons(congregationId?: string) {
+  const params = congregationId ? `?congregationId=${encodeURIComponent(congregationId)}` : '';
+  return get(`/persons${params}`);
+}
+
+export function createPerson(data: { firstName: string; lastName: string; email?: string; phone?: string; isMember?: boolean }) {
+  return post('/persons', data);
+}
+
+export function updatePerson(id: string, data: { firstName?: string; lastName?: string; email?: string; phone?: string; isMember?: boolean }) {
+  return patch(`/persons/${id}`, data);
+}
+
+export function assignRole(data: { personId: string; congregationId: string; roleType: string }) {
+  return post('/roles', data);
+}
+
+export function removeRole(roleId: string) {
+  return del(`/roles/${roleId}`);
+}
+
+export function getCongregation(id: string) {
+  return get(`/congregations/${id}`);
+}
+
+export function createCongregation(data: {
   name: string;
   type: string;
   timezone?: string;
@@ -428,221 +410,54 @@ export async function createCongregation(data: {
   parentType?: string;
   organizationId?: string;
 }) {
-  const res = await api('/congregations', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+  return post('/congregations', data);
 }
 
-export async function inviteOfficer(congregationId: string, data: { email: string; role: string }) {
-  const res = await api(`/congregations/${congregationId}/invite`, {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
-  return res.json();
+export function inviteOfficer(congregationId: string, data: { email: string; role: string }) {
+  return post(`/congregations/${congregationId}/invite`, data);
 }
 
-export async function importMembers(congregationId: string, csv: string) {
-  const res = await api(`/congregations/${congregationId}/members/import`, {
-    method: 'POST',
-    body: JSON.stringify({ csv }),
-  });
-  return res.json();
+export function importMembers(congregationId: string, csv: string) {
+  return post(`/congregations/${congregationId}/members/import`, { csv });
 }
 
-export async function createRotaSlot(data: { date: string; role: string; volunteerId?: string }) {
-  const res = await api('/rota/slots', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function getCongregationMembers(congregationId: string) {
+  return get(`/congregations/${encodeURIComponent(congregationId)}/members`);
 }
 
-export async function updateRotaSlot(id: string, data: { volunteerId?: string; status?: string }) {
-  const res = await api(`/rota/slots/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
-  return res.json();
+export function getBankAccount(congregationId: string) {
+  return get(`/congregations/${encodeURIComponent(congregationId)}/bank-account`);
 }
 
-export async function deleteRotaSlot(id: string) {
-  await api(`/rota/slots/${id}`, { method: 'DELETE' });
+export function saveBankAccount(congregationId: string, data: { bankName: string; accountName: string; accountNumber: string }) {
+  return post(`/congregations/${encodeURIComponent(congregationId)}/bank-account`, data);
 }
 
-export async function getNominatingSessions() {
-  const res = await api('/nominating/sessions');
-  return res.json();
+export function getSafetyClearances(limit?: number, offset?: number) {
+  return paginated('/safety-clearances', limit, offset);
 }
 
-export async function getNominatingRoles(sessionId: string) {
-  const res = await api(`/nominating/roles?sessionId=${encodeURIComponent(sessionId)}`);
-  return res.json();
+export function createSafetyClearance(data: { volunteerId: string; type: string; issuedDate: string; expiryDate: string }) {
+  return post('/safety-clearances', data);
 }
 
-export async function getNominatingCandidates(roleId: string) {
-  const res = await api(`/nominating/candidates?roleId=${encodeURIComponent(roleId)}`);
-  return res.json();
+export function deleteSafetyClearance(id: string) {
+  return del(`/safety-clearances/${id}`);
 }
 
-export async function createNominatingCandidate(data: { roleId: string; personId: string }) {
-  const res = await api('/nominating/candidates', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function getConferenceStats(quarterStart?: string, quarterEnd?: string) {
+  return get(`/conference/stats${qs({ quarterStart, quarterEnd })}`);
 }
 
-export async function updateNominatingCandidate(id: string, status: string) {
-  const res = await api(`/nominating/candidates/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) });
-  return res.json();
+export function getConferenceExport(quarterStart?: string, quarterEnd?: string) {
+  return api(`/conference/export?${qs({ format: 'csv', quarterStart, quarterEnd }).slice(1)}`).then(r => r.text());
 }
 
-export async function deleteNominatingSession(id: string) {
-  await api(`/nominating/sessions/${id}`, { method: 'DELETE' });
+export function getConferenceFullExport() {
+  return get('/conference/export/full');
 }
 
-export async function deleteNominatingRole(id: string) {
-  await api(`/nominating/roles/${id}`, { method: 'DELETE' });
-}
-
-export async function deleteNominatingCandidate(id: string) {
-  await api(`/nominating/candidates/${id}`, { method: 'DELETE' });
-}
-
-export async function getSafetyClearances(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit) params.set('limit', String(limit));
-  if (offset) params.set('offset', String(offset));
-  const qs = params.toString();
-  const res = await api(`/safety-clearances${qs ? `?${qs}` : ''}`);
-  return res.json();
-}
-
-export async function createSafetyClearance(data: { volunteerId: string; type: string; issuedDate: string; expiryDate: string }) {
-  const res = await api('/safety-clearances', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
-}
-
-export async function getHouseholdMembers(householdId: string) {
-  const res = await api(`/households/${encodeURIComponent(householdId)}/members`);
-  return res.json();
-}
-
-export async function addHouseholdMember(householdId: string, data: { personId: string; relationship: string }) {
-  const res = await api(`/households/${encodeURIComponent(householdId)}/members`, { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
-}
-
-export async function removeHouseholdMember(memberId: string) {
-  await api(`/household-members/${encodeURIComponent(memberId)}`, { method: 'DELETE' });
-}
-
-export async function getBoardMinutes(meetingId: string) {
-  const res = await api(`/board/meetings/${encodeURIComponent(meetingId)}/minutes`);
-  return res.json();
-}
-
-export async function createBoardMinute(meetingId: string, content: string) {
-  const res = await api(`/board/meetings/${encodeURIComponent(meetingId)}/minutes`, { method: 'POST', body: JSON.stringify({ content }) });
-  return res.json();
-}
-
-export async function updateCandidacy(id: string, data: { stage?: string; decisionDate?: string; decisionType?: string }) {
-  const res = await api(`/candidacies/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
-  return res.json();
-}
-
-export async function getAuditLog(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit) params.set('limit', String(limit));
-  if (offset) params.set('offset', String(offset));
-  const qs = params.toString();
-  const res = await api(`/audit${qs ? `?${qs}` : ''}`);
-  return res.json();
-}
-
-export async function updateBoardMinute(id: string, content: string) {
-  const res = await api(`/board/minutes/${id}`, { method: 'PATCH', body: JSON.stringify({ content }) });
-  return res.json();
-}
-
-export async function deleteBoardMinute(id: string) {
-  await api(`/board/minutes/${id}`, { method: 'DELETE' });
-}
-
-export async function deleteSafetyClearance(id: string) {
-  await api(`/safety-clearances/${id}`, { method: 'DELETE' });
-}
-
-export async function getCongregationMembers(congregationId: string) {
-  const res = await api(`/congregations/${encodeURIComponent(congregationId)}/members`);
-  return res.json();
-}
-
-export async function getDistrictVisits(limit?: number, offset?: number) {
-  const params = new URLSearchParams();
-  if (limit) params.set('limit', String(limit));
-  if (offset) params.set('offset', String(offset));
-  const qs = params.toString();
-  const res = await api(`/district/visits${qs ? `?${qs}` : ''}`);
-  return res.json();
-}
-
-export async function createPerson(data: { firstName: string; lastName: string; email?: string; phone?: string; isMember?: boolean }) {
-  const res = await api('/persons', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
-}
-
-export async function updatePerson(id: string, data: { firstName?: string; lastName?: string; email?: string; phone?: string; isMember?: boolean }) {
-  const res = await api(`/persons/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
-  return res.json();
-}
-
-export async function assignRole(data: { personId: string; congregationId: string; roleType: string }) {
-  const res = await api('/roles', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
-}
-
-export async function removeRole(roleId: string) {
-  await api(`/roles/${roleId}`, { method: 'DELETE' });
-}
-
-export async function getReceiptsByStatus(status: string, limit?: number) {
-  const params = new URLSearchParams();
-  if (status) params.set('status', status);
-  if (limit) params.set('limit', String(limit));
-  const res = await api(`/receipts?${params.toString()}`);
-  return res.json();
-}
-
-export async function getConferenceFullExport() {
-  const res = await api('/conference/export/full');
-  return res.json();
-}
-
-export async function updateAVSlide(date: string, slideIndex: number) {
-  const res = await api('/av/order-of-service/slide', { method: 'POST', body: JSON.stringify({ date, slideIndex }) });
-  return res.json();
-}
-
-export async function getPersons(congregationId?: string) {
-  const params = congregationId ? `?congregationId=${encodeURIComponent(congregationId)}` : '';
-  const res = await api(`/persons${params}`);
-  return res.json();
-}
-
-export async function castBallot(data: { sessionId: string; roleId: string; candidateId: string }) {
-  const res = await api('/nominating/ballots', { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
-}
-
-export async function getTally(sessionId: string) {
-  const res = await api(`/nominating/tally/${encodeURIComponent(sessionId)}`);
-  return res.json();
-}
-
-export async function closeVoting(sessionId: string) {
-  const res = await api(`/nominating/sessions/${encodeURIComponent(sessionId)}/close`, { method: 'POST' });
-  return res.json();
-}
-
-export async function getBankAccount(congregationId: string) {
-  const res = await api(`/congregations/${encodeURIComponent(congregationId)}/bank-account`);
-  return res.json();
-}
-
-export async function saveBankAccount(congregationId: string, data: { bankName: string; accountName: string; accountNumber: string }) {
-  const res = await api(`/congregations/${encodeURIComponent(congregationId)}/bank-account`, { method: 'POST', body: JSON.stringify(data) });
-  return res.json();
+export function getAuditLog(limit?: number, offset?: number) {
+  return paginated('/audit', limit, offset);
 }
 

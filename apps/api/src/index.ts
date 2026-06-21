@@ -21,7 +21,7 @@ import { registerConferenceRoutes } from "./routes/conference";
 import { registerDisciplineRoutes } from "./routes/discipline";
 import { registerOrganizationRoutes } from "./routes/organization";
 import { registerPersonRoutes } from "./routes/persons";
-import { registerAuditRoutes } from "./middleware/audit";
+import { registerAuditRoutes } from "./routes/audit";
 import { rateLimiter } from "./middleware/rate-limit";
 import { securityHeaders, csrfProtection } from "./middleware/security";
 import { policyGuardian } from "./middleware/policy-compliance";

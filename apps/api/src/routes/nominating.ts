@@ -107,7 +107,8 @@ export function registerNominatingRoutes(app: AppType) {
   function getNominatingDO(c: any, sessionId: string) {
     const ns = c.env?.NOMINATING_DO as DurableObjectNamespace | undefined;
     if (!ns) return null;
-    return ns.get(ns.idFromName(sessionId)) as any as {
+    const stub = ns.get(ns.idFromName(sessionId));
+    return stub as unknown as {
       castBallot(sessionId: string, roleId: string, candidateId: string, voterId: string): Promise<{ ok: boolean; error?: string }>;
       getTally(sessionId: string): Promise<{ tally: Record<string, number>; totalVotes: number }>;
       closeVoting(sessionId: string): Promise<{ ok: boolean }>;
