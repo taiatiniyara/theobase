@@ -24,11 +24,14 @@
   "migrations": [
     {
       "tag": "v1",
-      "new_classes": ["CongregationDO", "NominatingDO"]
+      "new_classes": ["CongregationDO"]
+    },
+    {
+      "tag": "v2",
+      "new_classes": ["NominatingDO"]
     }
   ],
   "observability": {
     "enabled": true
   }
 }
-
