@@ -14,6 +14,7 @@ export type Variables = {
   userId: string;
   congregationId?: string;
   userRoles: string[];
+  correlationId: string;
 };
 
 export type AppType = Hono<{ Bindings: Bindings; Variables: Variables }>;

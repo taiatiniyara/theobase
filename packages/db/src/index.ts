@@ -1,2 +1,7 @@
 export * from "./schema";
-export { applyMigrations, MIGRATION_STATEMENTS } from "./migrate";
+export {
+  applyMigrations,
+  rollbackMigrations,
+  MIGRATION_STATEMENTS,
+  ROLLBACK_STATEMENTS,
+} from "./migrate";

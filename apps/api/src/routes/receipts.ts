@@ -13,48 +13,67 @@ export function registerReceiptRoutes(app: AppType) {
     fundSplit: z.record(z.string(), z.number().int().nonnegative()),
   });
 
-  app.post("/receipts", requireAuth(), loadRoles(), requireWriteAccess("clerk", "treasurer", "member"), async (c) => {
-    const db = getDb(c);
-    const body = await c.req.json();
-    const parsed = createReceiptSchema.safeParse(body);
-    if (!parsed.success) {
-      return c.json({ error: parsed.error.issues }, 400);
+  app.post(
+    "/receipts",
+    requireAuth(),
+    loadRoles(),
+    requireWriteAccess("clerk", "treasurer", "member"),
+    async (c) => {
+      const db = getDb(c);
+      const body = await c.req.json();
+      const parsed = createReceiptSchema.safeParse(body);
+      if (!parsed.success) {
+        return c.json({ error: parsed.error.issues }, 400);
+      }
+
+      const splitTotal = Object.values(parsed.data.fundSplit).reduce(
+        (sum, v) => sum + v,
+        0
+      );
+      if (splitTotal !== parsed.data.amount) {
+        return c.json(
+          { error: "Fund split total does not match receipt amount" },
+          400
+        );
+      }
+
+      const userId = c.get("userId");
+      const congregationId = c.get("congregationId");
+      if (!congregationId) return c.json({ error: "No congregation" }, 400);
+
+      const [user] = await db
+        .select({ personId: schema.user.personId })
+        .from(schema.user)
+        .where(eq(schema.user.id, userId));
+
+      if (!user?.personId) return c.json({ error: "No profile linked" }, 400);
+
+      const id = generateId();
+      const now = new Date().toISOString();
+
+      await db.insert(schema.receipt).values({
+        id,
+        congregationId,
+        memberId: user.personId,
+        amount: parsed.data.amount,
+        fundSplit: parsed.data.fundSplit,
+        status: "pending",
+        createdAt: now,
+      });
+
+      await recordAudit(db, userId, congregationId, {
+        action: "receipt.create",
+        resourceType: "receipt",
+        resourceId: id,
+      });
+
+      const [created] = await db
+        .select()
+        .from(schema.receipt)
+        .where(eq(schema.receipt.id, id));
+      return c.json(created, 201);
     }
-
-    const splitTotal = Object.values(parsed.data.fundSplit).reduce((sum, v) => sum + v, 0);
-    if (splitTotal !== parsed.data.amount) {
-      return c.json({ error: "Fund split total does not match receipt amount" }, 400);
-    }
-
-    const userId = c.get("userId");
-    const congregationId = c.get("congregationId");
-    if (!congregationId) return c.json({ error: "No congregation" }, 400);
-
-    const [user] = await db
-      .select({ personId: schema.user.personId })
-      .from(schema.user)
-      .where(eq(schema.user.id, userId));
-
-    if (!user?.personId) return c.json({ error: "No profile linked" }, 400);
-
-    const id = generateId();
-    const now = new Date().toISOString();
-
-    await db.insert(schema.receipt).values({
-      id,
-      congregationId,
-      memberId: user.personId,
-      amount: parsed.data.amount,
-      fundSplit: parsed.data.fundSplit,
-      status: "pending",
-      createdAt: now,
-    });
-
-    await recordAudit(db, userId, congregationId, { action: "receipt.create", resourceType: "receipt", resourceId: id });
-
-    const [created] = await db.select().from(schema.receipt).where(eq(schema.receipt.id, id));
-    return c.json(created, 201);
-  });
+  );
 
   app.get("/receipts", requireAuth(), async (c) => {
     const db = getDb(c);
@@ -66,7 +85,8 @@ export function registerReceiptRoutes(app: AppType) {
     const statusFilter = c.req.query("status");
 
     const conditions = [eq(schema.receipt.congregationId, congregationId)];
-    if (statusFilter) conditions.push(eq(schema.receipt.status, statusFilter as any));
+    if (statusFilter)
+      conditions.push(eq(schema.receipt.status, statusFilter as any));
 
     const receipts = await db
       .select()
@@ -79,66 +99,106 @@ export function registerReceiptRoutes(app: AppType) {
     return c.json(receipts);
   });
 
-  app.post("/receipts/:id/verify", requireAuth(), loadRoles(), requireWriteAccess("clerk", "treasurer"), async (c) => {
-    const db = getDb(c);
-    const { approved, note } = await c.req.json<{ approved: boolean; note?: string }>();
-    const recId = c.req.param("id");
+  app.post(
+    "/receipts/:id/verify",
+    requireAuth(),
+    loadRoles(),
+    requireWriteAccess("clerk", "treasurer"),
+    async (c) => {
+      const db = getDb(c);
+      const { approved, note } = await c.req.json<{
+        approved: boolean;
+        note?: string;
+      }>();
+      const recId = c.req.param("id");
+      const congregationId = c.get("congregationId")!;
 
-    const [rec] = await db.select().from(schema.receipt).where(eq(schema.receipt.id, recId));
-    if (!rec) return c.json({ error: "Not found" }, 404);
+      const [rec] = await db
+        .select()
+        .from(schema.receipt)
+        .where(
+          and(
+            eq(schema.receipt.id, recId),
+            eq(schema.receipt.congregationId, congregationId)
+          )
+        );
+      if (!rec) return c.json({ error: "Not found" }, 404);
 
-    if (rec.status !== "pending") {
-      return c.json({ error: "Receipt already processed" }, 400);
+      if (rec.status !== "pending") {
+        return c.json({ error: "Receipt already processed" }, 400);
+      }
+
+      const userId = c.get("userId");
+      const [verifier] = await db
+        .select({ personId: schema.user.personId })
+        .from(schema.user)
+        .where(eq(schema.user.id, userId));
+
+      if (!verifier?.personId)
+        return c.json({ error: "No profile linked" }, 400);
+
+      const now = new Date().toISOString();
+      const status = approved ? "approved" : "rejected";
+
+      await db
+        .update(schema.receipt)
+        .set({
+          status,
+          verifiedById: verifier.personId,
+          verifiedAt: now,
+          rejectionNote: approved ? null : note || null,
+        })
+        .where(eq(schema.receipt.id, recId));
+
+      await recordAudit(db, userId, c.get("congregationId") || "", {
+        action: approved ? "receipt.approve" : "receipt.reject",
+        resourceType: "receipt",
+        resourceId: recId,
+        details: note ? JSON.stringify({ note }) : undefined,
+      });
+
+      const [updated] = await db
+        .select()
+        .from(schema.receipt)
+        .where(eq(schema.receipt.id, recId));
+      return c.json(updated);
     }
+  );
 
-    const userId = c.get("userId");
-    const [verifier] = await db
-      .select({ personId: schema.user.personId })
-      .from(schema.user)
-      .where(eq(schema.user.id, userId));
+  app.post(
+    "/receipts/:id/upload",
+    requireAuth(),
+    loadRoles(),
+    requireWriteAccess("clerk", "treasurer"),
+    async (c) => {
+      const db = getDb(c);
+      const recId = c.req.param("id");
 
-    if (!verifier?.personId) return c.json({ error: "No profile linked" }, 400);
+      const [rec] = await db
+        .select()
+        .from(schema.receipt)
+        .where(eq(schema.receipt.id, recId));
+      if (!rec) return c.json({ error: "Not found" }, 404);
 
-    const now = new Date().toISOString();
-    const status = approved ? "approved" : "rejected";
+      const formData = await c.req.formData();
+      const file = formData.get("file");
+      if (!file || !(file instanceof File)) {
+        return c.json({ error: "No file uploaded" }, 400);
+      }
 
-    await db.update(schema.receipt).set({
-      status,
-      verifiedById: verifier.personId,
-      verifiedAt: now,
-      rejectionNote: approved ? null : (note || null),
-    }).where(eq(schema.receipt.id, recId));
+      const key = `receipts/${recId}/${Date.now()}-${(file as File).name || "receipt.png"}`;
+      await c.env.STORAGE.put(key, (file as File).stream());
 
-    await recordAudit(db, userId, c.get("congregationId") || "", {
-      action: approved ? "receipt.approve" : "receipt.reject",
-      resourceType: "receipt",
-      resourceId: recId,
-      details: note ? JSON.stringify({ note }) : undefined,
-    });
+      await db
+        .update(schema.receipt)
+        .set({ imageKey: key })
+        .where(eq(schema.receipt.id, recId));
 
-    const [updated] = await db.select().from(schema.receipt).where(eq(schema.receipt.id, recId));
-    return c.json(updated);
-  });
-
-  app.post("/receipts/:id/upload", requireAuth(), loadRoles(), requireWriteAccess("clerk", "treasurer"), async (c) => {
-    const db = getDb(c);
-    const recId = c.req.param("id");
-
-    const [rec] = await db.select().from(schema.receipt).where(eq(schema.receipt.id, recId));
-    if (!rec) return c.json({ error: "Not found" }, 404);
-
-    const formData = await c.req.formData();
-    const file = formData.get("file");
-    if (!file || !(file instanceof File)) {
-      return c.json({ error: "No file uploaded" }, 400);
+      const [updated] = await db
+        .select()
+        .from(schema.receipt)
+        .where(eq(schema.receipt.id, recId));
+      return c.json(updated, 200);
     }
-
-    const key = `receipts/${recId}/${Date.now()}-${(file as File).name || "receipt.png"}`;
-    await c.env.STORAGE.put(key, (file as File).stream());
-
-    await db.update(schema.receipt).set({ imageKey: key }).where(eq(schema.receipt.id, recId));
-
-    const [updated] = await db.select().from(schema.receipt).where(eq(schema.receipt.id, recId));
-    return c.json(updated, 200);
-  });
+  );
 }

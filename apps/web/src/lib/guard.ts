@@ -1,16 +1,10 @@
-import { getMe, getToken } from "./api";
+import { getMe } from "./api";
 import { goto } from "$app/navigation";
 
 let cachedRoles: string[] | null = null;
 let fetchPromise: Promise<string[]> | null = null;
 
 export async function getRoles(): Promise<string[]> {
-  const token = getToken();
-  if (!token) {
-    cachedRoles = null;
-    return [];
-  }
-
   if (cachedRoles) return cachedRoles;
 
   if (fetchPromise) {
@@ -19,7 +13,7 @@ export async function getRoles(): Promise<string[]> {
 
   fetchPromise = (async () => {
     try {
-      const profile = await getMe() as Record<string, unknown> | null;
+      const profile = (await getMe()) as Record<string, unknown> | null;
       const roles: string[] = (profile?.roles as string[]) || [];
       cachedRoles = roles;
       return roles;
@@ -39,13 +33,9 @@ export function clearRoles() {
   fetchPromise = null;
 }
 
-export async function requireRole(...requiredRoles: string[]): Promise<boolean> {
-  const token = getToken();
-  if (!token) {
-    goto("/");
-    return false;
-  }
-
+export async function requireRole(
+  ...requiredRoles: string[]
+): Promise<boolean> {
   try {
     const roles = await getRoles();
     if (roles.length === 0) {
@@ -65,5 +55,3 @@ export async function requireRole(...requiredRoles: string[]): Promise<boolean> 
     return false;
   }
 }
-
-

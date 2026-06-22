@@ -68,10 +68,14 @@ export const navigation: NavSection[] = [
       { labelKey: "nav.boardroom", href: "/boardroom", icon: Gavel },
       { labelKey: "nav.duty_rota", href: "/rota", icon: CalendarCheck },
       { labelKey: "nav.congregation", href: "/congregation", icon: Church },
-      { labelKey: "nav.church_setup", href: "/setup", icon: Rocket },
+      { labelKey: "nav.congregation_setup", href: "/setup", icon: Rocket },
       { labelKey: "nav.pathfinders", href: "/pathfinders", icon: Compass },
       { labelKey: "nav.welfare", href: "/welfare", icon: HeartHandshake },
-      { labelKey: "nav.sabbath_school", href: "/sabbath-school", icon: GraduationCap },
+      {
+        labelKey: "nav.sabbath_school",
+        href: "/sabbath-school",
+        icon: GraduationCap,
+      },
       { labelKey: "nav.health_ministry", href: "/health", icon: HeartPulse },
       { labelKey: "nav.communion", href: "/communion", icon: Wine },
       { labelKey: "nav.av_sync", href: "/av", icon: MonitorPlay },
@@ -80,7 +84,11 @@ export const navigation: NavSection[] = [
       { labelKey: "nav.crisis_assets", href: "/crisis", icon: AlertTriangle },
       { labelKey: "nav.transfers", href: "/transfers", icon: ArrowRightLeft },
       { labelKey: "nav.households", href: "/households", icon: Home },
-      { labelKey: "nav.candidacies", href: "/candidacies", icon: ClipboardCheck },
+      {
+        labelKey: "nav.candidacies",
+        href: "/candidacies",
+        icon: ClipboardCheck,
+      },
       { labelKey: "nav.nominating", href: "/nominating", icon: Vote },
       { labelKey: "nav.discipline", href: "/discipline", icon: Scale },
       { labelKey: "nav.safety", href: "/safety", icon: ShieldCheck },
@@ -93,7 +101,11 @@ export const navigation: NavSection[] = [
     roles: ["treasurer"],
     items: [
       { labelKey: "nav.treasury", href: "/treasury", icon: Landmark },
-      { labelKey: "nav.conference_report", href: "/conference", icon: Presentation },
+      {
+        labelKey: "nav.conference_report",
+        href: "/conference",
+        icon: Presentation,
+      },
     ],
   },
 ];
@@ -105,7 +117,7 @@ export function visibleSections(roles: string[]): NavSection[] {
       return {
         ...section,
         items: section.items.filter(
-          (item) => !item.roles || item.roles.some((r) => roles.includes(r)),
+          (item) => !item.roles || item.roles.some((r) => roles.includes(r))
         ),
       };
     })

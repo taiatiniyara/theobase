@@ -9,6 +9,58 @@ export async function applyMigrations(
   }
 }
 
+export async function rollbackMigrations(db: D1Database): Promise<void> {
+  for (const stmt of ROLLBACK_STATEMENTS) {
+    await db.exec(stmt);
+  }
+}
+
+export const ROLLBACK_STATEMENTS = [
+  "DROP TABLE IF EXISTS nominating_ballot",
+  "DROP TABLE IF EXISTS nominating_candidate",
+  "DROP TABLE IF EXISTS nominating_role",
+  "DROP TABLE IF EXISTS nominating_session",
+  "DROP TABLE IF EXISTS audit_log",
+  "DROP TABLE IF EXISTS discipline_case",
+  "DROP TABLE IF EXISTS bank_account",
+  "DROP TABLE IF EXISTS transfer_request",
+  "DROP TABLE IF EXISTS congregation_asset",
+  "DROP TABLE IF EXISTS facility_booking",
+  "DROP TABLE IF EXISTS pastoral_visit",
+  "DROP TABLE IF EXISTS preaching_rotation",
+  "DROP TABLE IF EXISTS district_congregation",
+  "DROP TABLE IF EXISTS district",
+  "DROP TABLE IF EXISTS av_order_of_service",
+  "DROP TABLE IF EXISTS communion_inventory",
+  "DROP TABLE IF EXISTS communion_room",
+  "DROP TABLE IF EXISTS communion_service",
+  "DROP TABLE IF EXISTS candidacy",
+  "DROP TABLE IF EXISTS household_member",
+  "DROP TABLE IF EXISTS household",
+  "DROP TABLE IF EXISTS health_contact",
+  "DROP TABLE IF EXISTS health_event",
+  "DROP TABLE IF EXISTS pantry_item",
+  "DROP TABLE IF EXISTS welfare_case",
+  "DROP TABLE IF EXISTS sabbath_school_attendance",
+  "DROP TABLE IF EXISTS sabbath_school_class",
+  "DROP TABLE IF EXISTS pathfinder_honor",
+  "DROP TABLE IF EXISTS pathfinder_progress",
+  "DROP TABLE IF EXISTS expense",
+  "DROP TABLE IF EXISTS safety_clearance",
+  "DROP TABLE IF EXISTS duty_slot",
+  "DROP TABLE IF EXISTS board_decision",
+  "DROP TABLE IF EXISTS board_minute",
+  "DROP TABLE IF EXISTS board_meeting",
+  "DROP TABLE IF EXISTS receipt",
+  "DROP TABLE IF EXISTS role",
+  "DROP TABLE IF EXISTS department",
+  "DROP TABLE IF EXISTS person",
+  "DROP TABLE IF EXISTS congregation",
+  "DROP TABLE IF EXISTS organization",
+  "DROP TABLE IF EXISTS auth_token",
+  'DROP TABLE IF EXISTS "user"',
+];
+
 export const MIGRATION_STATEMENTS: string[] = [
   `CREATE TABLE IF NOT EXISTS auth_token (id text PRIMARY KEY NOT NULL, email text NOT NULL, token text NOT NULL, expires_at text NOT NULL, used_at text, two_factor_code text, two_factor_expires_at text, created_at text NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS organization (id text PRIMARY KEY NOT NULL, name text NOT NULL, type text NOT NULL, parent_id text, created_at text NOT NULL)`,

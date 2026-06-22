@@ -10,7 +10,8 @@
     "test:all": "vitest run && vitest run --config vitest.do.config.ts && vitest run --config vitest.relay.config.ts",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.8",
@@ -18,7 +19,10 @@
     "@eslint/js": "^10.0.1",
     "@types/better-sqlite3": "^7.6.13",
     "eslint": "^10.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8",
     "miniflare": "^4.20260617.0",
+    "prettier": "^3.8.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.1",
     "vitest": "^3.0"

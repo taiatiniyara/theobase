@@ -60,7 +60,9 @@ export function registerAuthRoutes(app: AppType) {
     const [found] = await db
       .select()
       .from(schema.authToken)
-      .where(and(eq(schema.authToken.token, token), isNull(schema.authToken.usedAt)));
+      .where(
+        and(eq(schema.authToken.token, token), isNull(schema.authToken.usedAt))
+      );
 
     if (!found || found.expiresAt < now) {
       return c.json({ error: "Invalid or expired token" }, 401);
@@ -84,14 +86,23 @@ export function registerAuthRoutes(app: AppType) {
         email: found.email,
         createdAt: now,
       });
-      user = { id, email: found.email, personId: null, congregationId: null, createdAt: now };
+      user = {
+        id,
+        email: found.email,
+        personId: null,
+        congregationId: null,
+        createdAt: now,
+      };
     }
 
     if (!user.congregationId) {
       let personId = user.personId;
       if (!personId) {
         const [person] = await db
-          .select({ id: schema.person.id, congregationId: schema.person.congregationId })
+          .select({
+            id: schema.person.id,
+            congregationId: schema.person.congregationId,
+          })
           .from(schema.person)
           .where(eq(schema.person.email, found.email));
         if (person) {
@@ -115,10 +126,12 @@ export function registerAuthRoutes(app: AppType) {
           const pendingRoles = await db
             .select()
             .from(schema.role)
-            .where(and(
-              eq(schema.role.congregationId, person.congregationId),
-              isNull(schema.role.personId)
-            ));
+            .where(
+              and(
+                eq(schema.role.congregationId, person.congregationId),
+                isNull(schema.role.personId)
+              )
+            );
 
           for (const role of pendingRoles) {
             await db
@@ -143,18 +156,21 @@ export function registerAuthRoutes(app: AppType) {
       getSecret(c)
     );
 
-    const sensitiveRoles = ["clerk", "treasurer"];
+    const sensitiveRoles = ["clerk", "treasurer", "nominating_committee"];
     if (user.congregationId) {
       const userRoles = await db
         .select()
         .from(schema.role)
-        .where(and(
-          eq(schema.role.congregationId, user.congregationId),
-          eq(schema.role.personId, user.personId ?? "")
-        ));
+        .where(
+          and(
+            eq(schema.role.congregationId, user.congregationId),
+            eq(schema.role.personId, user.personId ?? "")
+          )
+        );
 
-      const hasSensitiveRole = userRoles.some((r: typeof schema.role.$inferSelect) =>
-        sensitiveRoles.includes(r.roleType)
+      const hasSensitiveRole = userRoles.some(
+        (r: typeof schema.role.$inferSelect) =>
+          sensitiveRoles.includes(r.roleType)
       );
 
       if (hasSensitiveRole) {
@@ -182,7 +198,10 @@ export function registerAuthRoutes(app: AppType) {
       }
     }
 
-    c.header("Set-Cookie", `token=${jwt}; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=86400`);
+    c.header(
+      "Set-Cookie",
+      `token=${jwt}; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=86400`
+    );
     return c.json({ ok: true, userId: user.id, token: jwt });
   });
 
@@ -230,7 +249,10 @@ export function registerAuthRoutes(app: AppType) {
       { userId: user.id, congregationId: user.congregationId ?? undefined },
       getSecret(c)
     );
-    c.header("Set-Cookie", `token=${jwt}; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=86400`);
+    c.header(
+      "Set-Cookie",
+      `token=${jwt}; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=86400`
+    );
     return c.json({ ok: true, userId: user.id, token: jwt });
   });
 }

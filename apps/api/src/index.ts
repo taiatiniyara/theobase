@@ -25,12 +25,14 @@ import { registerAuditRoutes } from "./routes/audit";
 import { rateLimiter } from "./middleware/rate-limit";
 import { securityHeaders, csrfProtection } from "./middleware/security";
 import { policyGuardian } from "./middleware/policy-compliance";
+import { correlationId } from "./middleware/correlation-id";
 import type { Bindings, Variables } from "./types";
 import { Hono } from "hono";
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 app.use("*", securityHeaders());
+app.use("*", correlationId());
 
 app.use("*", async (c, next) => {
   if (c.req.method === "OPTIONS") {
@@ -52,7 +54,21 @@ app.use("*", rateLimiter(100, 60));
 app.use("*", csrfProtection());
 app.use("*", policyGuardian());
 
-app.get("/health", (c) => c.json({ ok: true, timestamp: new Date().toISOString() }));
+app.get("/health", async (c) => {
+  let db: string;
+  try {
+    const result = await c.env.DB.prepare("SELECT 1").first();
+    db = result ? "connected" : "disconnected";
+  } catch {
+    db = "disconnected";
+  }
+  return c.json({
+    ok: db === "connected",
+    status: db === "connected" ? "healthy" : "degraded",
+    db,
+    timestamp: new Date().toISOString(),
+  });
+});
 
 registerAuthRoutes(app);
 registerMeRoutes(app);

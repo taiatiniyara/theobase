@@ -1,6 +1,6 @@
 # Passwordless email authentication
 
-## Status: Accepted (partial — 2FA escalation not yet implemented)
+## Status: Accepted
 
 Users log in with a magic link or one-time code sent to their email address. No
 passwords are stored. The platform issues a short-lived JWT in an httpOnly
@@ -14,9 +14,9 @@ checks. No password database eliminates an entire class of security
 vulnerabilities.
 
 **Future:** A second email code escalation for roles handling financial or
-confidential data (treasurers, clerks, nominating committee members) is planned
-but not yet implemented. Currently, all roles receive immediate session issuance
-upon magic-link verification.
+confidential data (clerks, treasurers, nominating committee members) is
+implemented. Currently, all roles except these sensitive ones receive immediate
+session issuance upon magic-link verification.
 
 **Rejected:** Username/password (accessibility and security burden).
 Federated/Google sign-in (not universal; many volunteers don't have Google

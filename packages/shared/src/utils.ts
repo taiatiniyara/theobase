@@ -10,9 +10,3 @@ export function sanitizeHtml(input: string): string {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
-
-export function sanitizeText(input: string): string {
-  return input.replace(/<[^>]*>/g, "").trim();
-}
-
-export const READ_ONLY_ROLES = new Set(["pastor", "elder", "member"]);

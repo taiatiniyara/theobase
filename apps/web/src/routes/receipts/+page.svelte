@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getReceipts, createReceipt, getToken, API_URL } from "$lib/api";
+  import { getReceipts, createReceipt, API_URL } from "$lib/api";
   import { requireRole } from "$lib/guard";
   import { onMount } from "svelte";
   import { toast } from "$lib/toast";
@@ -99,7 +99,7 @@
         formData.append("file", file);
         await fetch(`${API_URL}/receipts/${result.id}/upload`, {
           method: "POST",
-          headers: { Authorization: `Bearer ${getToken()}` },
+          credentials: "include",
           body: formData,
         });
         file = null;

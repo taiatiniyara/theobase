@@ -13,7 +13,7 @@ import { recordAudit } from "../middleware/audit";
 export function registerCongregationRoutes(app: AppType) {
   const createCongregationSchema = z.object({
     name: z.string().min(2).max(200),
-    type: z.enum(["church", "company", "branch"]),
+    type: z.enum(["local_church", "company", "branch"]),
     timezone: z.string().default("UTC"),
     parentId: z.string().optional(),
     parentType: z.enum(["congregation", "organization"]).optional(),
@@ -76,172 +76,250 @@ export function registerCongregationRoutes(app: AppType) {
     return c.json(cong);
   });
 
-  app.get("/congregations/:id/members", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
-    const db = getDb(c);
-    const congId = c.req.param("id");
-    const persons = await db.select().from(schema.person).where(eq(schema.person.congregationId, congId));
-    const roles = await db.select().from(schema.role).where(eq(schema.role.congregationId, congId));
-    return c.json({ persons, roles });
-  });
-
-  app.patch("/congregations/:id", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
-    const db = getDb(c);
-    const body = await c.req.json();
-    const parsed = updateCongregationSchema.safeParse(body);
-    if (!parsed.success) {
-      return c.json({ error: parsed.error.issues }, 400);
+  app.get(
+    "/congregations/:id/members",
+    requireAuth(),
+    loadRoles(),
+    requireRole("clerk"),
+    async (c) => {
+      const db = getDb(c);
+      const congId = c.req.param("id");
+      const persons = await db
+        .select()
+        .from(schema.person)
+        .where(eq(schema.person.congregationId, congId));
+      const roles = await db
+        .select()
+        .from(schema.role)
+        .where(eq(schema.role.congregationId, congId));
+      return c.json({ persons, roles });
     }
+  );
 
-    const congId = c.req.param("id");
-    const updates: Record<string, any> = {};
-    if (parsed.data.name !== undefined) updates.name = parsed.data.name;
-    if (parsed.data.timezone !== undefined) updates.timezone = parsed.data.timezone;
-    if (parsed.data.organizationId !== undefined) updates.organizationId = parsed.data.organizationId;
-
-    if (Object.keys(updates).length > 0) {
-      await db.update(schema.congregation).set(updates).where(eq(schema.congregation.id, congId));
-    }
-
-    const [updated] = await db
-      .select()
-      .from(schema.congregation)
-      .where(eq(schema.congregation.id, congId));
-
-    if (!updated) return c.json({ error: "Not found" }, 404);
-    return c.json(updated);
-  });
-
-  app.post("/congregations/:id/invite", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
-    const body = await c.req.json();
-    const parsed = inviteSchema.safeParse(body);
-    if (!parsed.success) {
-      return c.json({ error: parsed.error.issues }, 400);
-    }
-
-    const db = getDb(c);
-    const congId = c.req.param("id");
-    const { email, role } = parsed.data;
-
-    const existingRoles = await db
-      .select()
-      .from(schema.role)
-      .where(eq(schema.role.congregationId, congId));
-
-    const roleExists = existingRoles.some((r: any) => r.roleType === role && r.personId === null);
-    if (!roleExists) {
-      await db.insert(schema.role).values({
-        id: generateId(),
-        personId: null,
-        congregationId: congId,
-        roleType: role as any,
-        createdAt: new Date().toISOString(),
-      });
-    }
-
-    const token = generateToken();
-    const now = new Date().toISOString();
-    await db.insert(schema.authToken).values({
-      id: generateId(),
-      email: email.toLowerCase(),
-      token,
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      createdAt: now,
-    });
-
-    const sendEmail = getEmailSender(c);
-    const appUrl = (c.env as any).APP_URL || "https://theobase.app";
-    await sendEmail({
-      to: email,
-      subject: "You've been invited to Theobase",
-      html: renderInviteEmail({
-        role,
-        joinUrl: `${appUrl}/join?congregation=${congId}&role=${role}&token=${token}`,
-      }),
-    });
-
-    await recordAudit(db, c.get("userId"), c.get("congregationId") || "", {
-      action: "congregation.invite_officer",
-      resourceType: "role",
-      details: JSON.stringify({ email: email.toLowerCase(), role }),
-    });
-
-    return c.json({ ok: true });
-  });
-
-  app.post("/congregations/:id/members/import", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
-    const db = getDb(c);
-    const body = await c.req.json();
-    const parsed = importMemberSchema.safeParse(body);
-    if (!parsed.success) {
-      return c.json({ error: parsed.error.issues }, 400);
-    }
-
-    const congId = c.req.param("id");
-    const lines = parsed.data.csv.trim().split("\n");
-    if (lines.length < 2) {
-      return c.json({ error: "CSV must have header and at least one row" }, 400);
-    }
-
-    const headers = lines[0].split(",").map((h) => h.trim());
-    const rows = lines.slice(1).map((l) => l.split(",").map((c) => c.trim()));
-
-    const now = new Date().toISOString();
-    const personIds: string[] = [];
-    const errors: { row: number; message: string }[] = [];
-
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      const record: Record<string, string> = {};
-      for (let j = 0; j < headers.length; j++) {
-        record[headers[j]] = row[j] || "";
+  app.patch(
+    "/congregations/:id",
+    requireAuth(),
+    loadRoles(),
+    requireRole("clerk"),
+    async (c) => {
+      const db = getDb(c);
+      const body = await c.req.json();
+      const parsed = updateCongregationSchema.safeParse(body);
+      if (!parsed.success) {
+        return c.json({ error: parsed.error.issues }, 400);
       }
 
-      const firstName = record["firstName"] || "";
-      const lastName = record["lastName"] || "";
-      const email = record["email"] || "";
+      const congId = c.req.param("id");
+      const updates: Record<string, any> = {};
+      if (parsed.data.name !== undefined) updates.name = parsed.data.name;
+      if (parsed.data.timezone !== undefined)
+        updates.timezone = parsed.data.timezone;
+      if (parsed.data.organizationId !== undefined)
+        updates.organizationId = parsed.data.organizationId;
 
-      if (!firstName || !lastName) {
-        errors.push({ row: i + 2, message: "Missing firstName or lastName" });
-        continue;
+      if (Object.keys(updates).length > 0) {
+        await db
+          .update(schema.congregation)
+          .set(updates)
+          .where(eq(schema.congregation.id, congId));
       }
 
-      const id = generateId();
-      try {
-        await db.insert(schema.person).values({
-          id,
+      const [updated] = await db
+        .select()
+        .from(schema.congregation)
+        .where(eq(schema.congregation.id, congId));
+
+      if (!updated) return c.json({ error: "Not found" }, 404);
+      return c.json(updated);
+    }
+  );
+
+  app.post(
+    "/congregations/:id/invite",
+    requireAuth(),
+    loadRoles(),
+    requireRole("clerk"),
+    async (c) => {
+      const body = await c.req.json();
+      const parsed = inviteSchema.safeParse(body);
+      if (!parsed.success) {
+        return c.json({ error: parsed.error.issues }, 400);
+      }
+
+      const db = getDb(c);
+      const congId = c.req.param("id");
+      const { email, role } = parsed.data;
+
+      const existingRoles = await db
+        .select()
+        .from(schema.role)
+        .where(eq(schema.role.congregationId, congId));
+
+      const roleExists = existingRoles.some(
+        (r: any) => r.roleType === role && r.personId === null
+      );
+      if (!roleExists) {
+        await db.insert(schema.role).values({
+          id: generateId(),
+          personId: null,
           congregationId: congId,
-          firstName,
-          lastName,
-          email: email || null,
-          phone: record["phone"] || null,
-          isMember: record["isMember"]?.toLowerCase() === "true",
-          createdAt: now,
-          updatedAt: now,
+          roleType: role as any,
+          createdAt: new Date().toISOString(),
         });
-        personIds.push(id);
-      } catch (err: any) {
-        errors.push({ row: i + 2, message: err.message || "Failed to insert" });
       }
+
+      const token = generateToken();
+      const now = new Date().toISOString();
+      await db.insert(schema.authToken).values({
+        id: generateId(),
+        email: email.toLowerCase(),
+        token,
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        createdAt: now,
+      });
+
+      const sendEmail = getEmailSender(c);
+      const appUrl = (c.env as any).APP_URL || "https://theobase.app";
+      await sendEmail({
+        to: email,
+        subject: "You've been invited to Theobase",
+        html: renderInviteEmail({
+          role,
+          joinUrl: `${appUrl}/join?congregation=${congId}&role=${role}&token=${token}`,
+        }),
+      });
+
+      await recordAudit(db, c.get("userId"), c.get("congregationId") || "", {
+        action: "congregation.invite_officer",
+        resourceType: "role",
+        details: JSON.stringify({ email: email.toLowerCase(), role }),
+      });
+
+      return c.json({ ok: true });
     }
+  );
 
-    return c.json({ imported: personIds.length, errors, personIds }, personIds.length > 0 ? 201 : 200);
-  });
+  app.post(
+    "/congregations/:id/members/import",
+    requireAuth(),
+    loadRoles(),
+    requireRole("clerk"),
+    async (c) => {
+      const db = getDb(c);
+      const body = await c.req.json();
+      const parsed = importMemberSchema.safeParse(body);
+      if (!parsed.success) {
+        return c.json({ error: parsed.error.issues }, 400);
+      }
 
-  app.post("/congregations/:id/bank-account", requireAuth(), loadRoles(), requireRole("clerk"), async (c) => {
-    const db = getDb(c);
-    const { bankName, accountName, accountNumber } = await c.req.json();
-    const id = generateId();
-    const now = new Date().toISOString();
-    await db.insert(schema.bankAccount).values({ id, congregationId: c.req.param("id"), bankName, accountName, accountNumber, createdAt: now });
-    const [r] = await db.select().from(schema.bankAccount).where(eq(schema.bankAccount.id, id));
-    await recordAudit(db, c.get("userId"), c.get("congregationId") || "", { action: "bank_account.create", resourceType: "bank_account", resourceId: id });
-    return c.json(r, 201);
-  });
+      const congId = c.req.param("id");
+      const lines = parsed.data.csv.trim().split("\n");
+      if (lines.length < 2) {
+        return c.json(
+          { error: "CSV must have header and at least one row" },
+          400
+        );
+      }
 
-  app.get("/congregations/:id/bank-account", requireAuth(), loadRoles(), requireRole("clerk", "treasurer"), async (c) => {
-    const congId = c.req.param("id");
-    if (c.get("congregationId") !== congId) return c.json({ error: "Access denied" }, 403);
-    const [r] = await getDb(c).select().from(schema.bankAccount).where(eq(schema.bankAccount.congregationId, congId));
-    return c.json(r || null);
-  });
+      const headers = lines[0].split(",").map((h) => h.trim());
+      const rows = lines.slice(1).map((l) => l.split(",").map((c) => c.trim()));
+
+      const now = new Date().toISOString();
+      const personIds: string[] = [];
+      const errors: { row: number; message: string }[] = [];
+
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const record: Record<string, string> = {};
+        for (let j = 0; j < headers.length; j++) {
+          record[headers[j]] = row[j] || "";
+        }
+
+        const firstName = record["firstName"] || "";
+        const lastName = record["lastName"] || "";
+        const email = record["email"] || "";
+
+        if (!firstName || !lastName) {
+          errors.push({ row: i + 2, message: "Missing firstName or lastName" });
+          continue;
+        }
+
+        const id = generateId();
+        try {
+          await db.insert(schema.person).values({
+            id,
+            congregationId: congId,
+            firstName,
+            lastName,
+            email: email || null,
+            phone: record["phone"] || null,
+            isMember: record["isMember"]?.toLowerCase() === "true",
+            createdAt: now,
+            updatedAt: now,
+          });
+          personIds.push(id);
+        } catch (err: any) {
+          errors.push({
+            row: i + 2,
+            message: err.message || "Failed to insert",
+          });
+        }
+      }
+
+      return c.json(
+        { imported: personIds.length, errors, personIds },
+        personIds.length > 0 ? 201 : 200
+      );
+    }
+  );
+
+  app.post(
+    "/congregations/:id/bank-account",
+    requireAuth(),
+    loadRoles(),
+    requireRole("clerk"),
+    async (c) => {
+      const db = getDb(c);
+      const { bankName, accountName, accountNumber } = await c.req.json();
+      const id = generateId();
+      const now = new Date().toISOString();
+      await db
+        .insert(schema.bankAccount)
+        .values({
+          id,
+          congregationId: c.req.param("id"),
+          bankName,
+          accountName,
+          accountNumber,
+          createdAt: now,
+        });
+      const [r] = await db
+        .select()
+        .from(schema.bankAccount)
+        .where(eq(schema.bankAccount.id, id));
+      await recordAudit(db, c.get("userId"), c.get("congregationId") || "", {
+        action: "bank_account.create",
+        resourceType: "bank_account",
+        resourceId: id,
+      });
+      return c.json(r, 201);
+    }
+  );
+
+  app.get(
+    "/congregations/:id/bank-account",
+    requireAuth(),
+    loadRoles(),
+    requireRole("clerk", "treasurer"),
+    async (c) => {
+      const congId = c.req.param("id");
+      if (c.get("congregationId") !== congId)
+        return c.json({ error: "Access denied" }, 403);
+      const [r] = await getDb(c)
+        .select()
+        .from(schema.bankAccount)
+        .where(eq(schema.bankAccount.congregationId, congId));
+      return c.json(r || null);
+    }
+  );
 }

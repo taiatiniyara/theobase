@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { api, getToken, API_URL } from '$lib/api';
+  import { api, API_URL } from '$lib/api';
   import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
@@ -23,8 +23,7 @@
   async function load() {
     loading = true;
     try {
-      const token = getToken();
-      const res = await fetch(`${API_URL}/discipline/cases`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+      const res = await fetch(`${API_URL}/discipline/cases`, { credentials: "include" });
       cases = await res.json();
     } catch { cases = []; }
     loading = false;
@@ -34,9 +33,8 @@
     if (!formPersonId || !formDesc) return;
     submitting = true;
     try {
-      const token = getToken();
       await fetch(`${API_URL}/discipline/cases`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: "include",
         body: JSON.stringify({ personId: formPersonId, caseType: formType, description: formDesc, boardMeetingId: formMeetingId || undefined }),
       });
       showForm = false; formPersonId = ''; formDesc = ''; formMeetingId = '';
@@ -47,9 +45,8 @@
 
   async function resolveCase(id: string, status: string, resolution: string) {
     try {
-      const token = getToken();
       await fetch(`${API_URL}/discipline/cases/${id}/resolve`, {
-        method: 'PATCH', headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' }, credentials: "include",
         body: JSON.stringify({ status, resolution }),
       });
       await load();

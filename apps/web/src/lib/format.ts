@@ -25,5 +25,3 @@ export function csvEscape(value: string | number): string {
   }
   return str;
 }
-
-export { sanitizeHtml as escapeHtml } from "@theobase/shared";
