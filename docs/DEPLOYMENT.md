@@ -17,8 +17,8 @@ GitHub Actions handles all deployments:
 
 | Workflow     | Trigger                           | Action                                                        |
 | ------------ | --------------------------------- | ------------------------------------------------------------- |
-| `ci.yml`     | Push to `main`, PR                | Typecheck → Lint → Test (all 7 suites)                        |
-| `deploy.yml` | Push to `main` (api/do/web paths) | Typecheck → Lint → Test → Deploy API → Deploy DO → Deploy Web |
+| `ci.yml`     | Push to `main`, PR                | Typecheck → Lint → Test (8 suites)                            |
+| `deploy.yml` | Push to `main` (api/do/web paths) | Typecheck → Lint → Test → Deploy DO → Deploy Web → Deploy API |
 | `backup.yml` | Daily 4am UTC, manual             | D1 backup → SQL dump → Artifact (90-day retention)            |
 
 ### Required Secrets

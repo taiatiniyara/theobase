@@ -82,18 +82,20 @@ receipt images to board decisions and bank statements for audit readiness.
 
 ### Monorepo Structure
 
-Three apps and four packages in a pnpm workspace:
+Four apps and four packages in a pnpm workspace:
+
 - `apps/api` — Hono Workers (REST endpoints, D1 queries, email dispatch)
 - `apps/do` — Durable Objects (multiplexed WebSocket, alarm scheduling, write RPC)
 - `apps/web` — SvelteKit PWA (Service Worker, IndexedDB, deployed to Cloudflare Pages)
+- `apps/relay` — Node.js SMTP relay (proxies HTTPS requests to Hostinger SMTP)
 - `packages/db` — Drizzle schemas, migrations, shared D1 connection utility
 - `packages/email` — `sendEmail()` interface dispatching to SMTP relay over HTTPS
 - `packages/auth` — Magic link generation, JWT validation, session middleware
-- `packages/shared` — Zod validation schemas, TypeScript types, CRDT implementations
+- `packages/shared` — Zod validation schemas, TypeScript types, revision fork detection
 
 ### Database: Multi-Tenant D1 per Division
 
-One D1 database per SDA world division, with `church_id` on every row. The Hono
+One D1 database per SDA world division, with `congregation_id` on every row. The Hono
 middleware injects `church_id` from the session JWT; no raw query runs without
 it. Migrations run via a CI Worker that iterates division D1 bindings.
 
@@ -206,6 +208,7 @@ in-process during tests with test-mode logging.
 ## Further Notes
 
 The platform is built in four phases matching the Rollout Plan:
+
 - Phase 0: Pilot with 3–5 test churches, onboarding tooling, migration CSV
   templates
 - Phase 1: Weekly essentials (auth, profiles, scheduling, board meetings, giving)

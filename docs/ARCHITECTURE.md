@@ -78,21 +78,35 @@ without native app complexity.
 3. **Notification path:** Channel A (WebSocket: instant in-app toasts via DO).
    Channel B (email: POST to SMTP relay → Hostinger SMTP). Every notification
    dispatches on both channels (ADR 0008).
-4. **Alarm path:** DO alarm fires → broadcasts WebSocket reminder + (planned)
-   dispatches email.
+4. **Alarm path:** DO alarm fires → broadcasts WebSocket reminder + dispatches email
+   via SMTP relay.
 
 ## Multi-Tenancy
 
 One D1 database per SDA world division. Every multi-tenant row carries
 `congregation_id`. The auth middleware extracts `congregationId` from the session
-JWT and injects it via Hono context. Every query must include `WHERE
-congregation_id = ?` — enforced by convention (not yet by query builder
-middleware).
+JWT and injects it via Hono context. Every read and write query includes
+`WHERE congregation_id = ?` — enforced in each route handler.
 
 **Rationale (ADR 0002):** Per-division databases satisfy regional data
 sovereignty (GDPR, LGPD, NDPR, etc.) while enabling cross-congregation features
 (District Hub, Conference Report Generator) that per-church databases would make
 prohibitively expensive.
+
+## Middleware Stack
+
+Every request passes through, in order:
+
+| Middleware             | Purpose                                                               |
+| ---------------------- | --------------------------------------------------------------------- |
+| `securityHeaders()`    | HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy        |
+| `correlationId()`      | Injects `x-correlation-id` header and structured JSON log per request |
+| `corsMiddleware`       | Handles OPTIONS preflight, sets Access-Control-Allow-Origin           |
+| `rateLimiter(100, 60)` | Global rate limit: 100 requests per 60 seconds per IP+path            |
+| `csrfProtection()`     | Blocks non-JSON POST/PATCH/DELETE outside auth/health paths           |
+| `policyGuardian()`     | Enforces Church Manual compliance rules                               |
+| `requireAuth()`        | JWT validation via httpOnly cookie (per-route, not global)            |
+| `loadRoles()`          | Resolves user roles from D1 (per-route)                               |
 
 ## API Contracts
 
@@ -128,9 +142,11 @@ One DO per congregation. 4 multiplexed WebSocket channels:
 | `av`            | Pulpit-to-AV slide sync              |
 | `notifications` | In-app toast dispatch                |
 
-RPC methods (10 total): `onBoardUpdate`, `onRotaChange`, `onAVUpdate`,
-`sendNotification`, `subscribeChannel`, `unsubscribeChannel`, plus alarm
-scheduling and state hydration.
+RPC methods exposed by the DO:
+`meetingUpdated`, `decisionRecorded`, `rotaUpdated`, `slotAssigned`,
+`slotSwapRequested`, `orderUpdated`, `slideChanged`, `notifyUser`,
+`notifyCongregation`, `connectedCount`. Each broadcasts an event on the
+appropriate channel to all connected clients.
 
 ### SMTP Relay (outbound email)
 
@@ -152,9 +168,9 @@ no retry logic in the relay itself.
 
 ### Congregation type discriminator (ADR 0004)
 
-Single `congregation` table with `type` column (`'church' | 'company' | 'branch'`)
+Single `congregation` table with `type` column (`'local_church' | 'company' | 'branch'`)
 and self-referencing `parent_id`. Separate tables rejected because Branch →
-Company → Church status changes would require data migration; the three types
+Company → Local Church status changes would require data migration; the three types
 share identical feature schemas (members, leaders, departments, finances).
 
 ### CRDT strategy for offline writes (ADR 0007)
@@ -162,10 +178,11 @@ share identical feature schemas (members, leaders, departments, finances).
 | Data type                                            | Strategy                  | Rationale                              |
 | ---------------------------------------------------- | ------------------------- | -------------------------------------- |
 | Scalar fields (phone, uniform size, inventory count) | Last-writer-wins register | No semantic merge needed               |
-| Duty rota slot assignments                           | Observed-Remove Set       | Prevents double-assignment             |
+| Duty rota slot assignments                           | Direct D1 insert          | Single-coordinator model               |
 | Board minutes                                        | Revision-based merge      | Preserves edit history, surfaces forks |
 
-Implemented in `packages/shared/src/crdt.ts` (LWW, OR-Set).
+`detectRevisionFork` in `packages/shared/src/crdt.ts` is the primary CRDT
+primitive in use, handling concurrent board minute edits.
 
 ## Auth Model
 
@@ -173,7 +190,7 @@ Implemented in `packages/shared/src/crdt.ts` (LWW, OR-Set).
 2. User clicks link → `GET /auth/verify?token=<jwt>` → httpOnly session cookie set
 3. Cookie carries JWT with: `{ sub: userId, congregationId, role }`
 4. Hono middleware extracts congregation ID, injects into context
-5. 2FA escalation (second email code) planned for treasurer/clerk/nominating roles
+5. 2FA escalation (second email code) implemented for clerk, treasurer, and nominating committee roles
 
 ## Delivery Model
 
@@ -187,11 +204,23 @@ silently. Notifications via WebSocket (in-app) + email (guaranteed delivery).
 | ------------- | ------------------------------------------ | ----------------------------------------- |
 | PWA           | Cloudflare Pages (`theobase.app`)          | GitHub Actions `deploy.yml`               |
 | API Worker    | Cloudflare Workers (`api.theobase.net`)    | GitHub Actions `deploy.yml`               |
-| SMTP Relay    | Docker on micro VPS (`relay.theobase.net`) | GitHub Actions `deploy-relay`             |
+| SMTP Relay    | Docker on micro VPS (`relay.theobase.net`) | Manual (Docker Compose)                   |
 | D1 Migrations | Per-division D1 bindings                   | Manual via `wrangler d1 migrations apply` |
 
 The relay VPS is exposed via Cloudflare Tunnel — no open ports, authenticated
 with pre-shared token.
+
+## Observability
+
+- **Health check:** `GET /health` on the API Worker verifies D1 connectivity,
+  returning `{ ok: boolean, status: "healthy" | "degraded", db: "connected" | "disconnected", timestamp }`.
+  The SMTP relay exposes `GET /health` returning `{ status: "ok" }`.
+- **Structured logging:** The `correlationId()` middleware emits a JSON log line
+  per request: `{ correlation_id, method, path, status, duration_ms, timestamp }`.
+- **Error tracking:** Cloudflare Observability enabled on both Workers
+  (`apps/api/wrangler.jsonc` and `apps/do/wrangler.jsonc`).
+- **Backup:** Daily D1 backup via GitHub Actions (`backup.yml`) with 90-day
+  artifact retention. Cloudflare-managed backups also active.
 
 ## Out of Scope
 
