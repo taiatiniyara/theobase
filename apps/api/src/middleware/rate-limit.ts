@@ -5,11 +5,24 @@ interface RateLimitEntry {
   resetAt: number;
 }
 
-export function rateLimiter(limit: number = 10, windowSeconds: number = 60): MiddlewareHandler {
+const RATE_LIMIT_EXEMPT_PATHS = ["/health"];
+
+export function rateLimiter(
+  limit: number = 10,
+  windowSeconds: number = 60
+): MiddlewareHandler {
   const store = new Map<string, RateLimitEntry>();
 
   return async (c, next) => {
-    const ip = c.req.header("CF-Connecting-IP") || c.req.header("X-Forwarded-For") || "unknown";
+    if (RATE_LIMIT_EXEMPT_PATHS.some((p) => c.req.path === p)) {
+      await next();
+      return;
+    }
+
+    const ip =
+      c.req.header("CF-Connecting-IP") ||
+      c.req.header("X-Forwarded-For") ||
+      "unknown";
     const key = `${ip}:${c.req.path}`;
     const now = Date.now();
 
@@ -26,7 +39,10 @@ export function rateLimiter(limit: number = 10, windowSeconds: number = 60): Mid
     c.header("X-RateLimit-Reset", String(Math.ceil(entry.resetAt / 1000)));
 
     if (entry.count > limit) {
-      return c.json({ error: "Too many requests. Please try again later." }, 429);
+      return c.json(
+        { error: "Too many requests. Please try again later." },
+        429
+      );
     }
 
     await next();

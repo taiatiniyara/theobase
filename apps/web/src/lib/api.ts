@@ -6,6 +6,10 @@ export const WS_URL =
   (typeof import.meta !== "undefined" &&
     (import.meta as any).env?.VITE_WS_URL) ||
   "wss://api.theobase.net";
+export const STRIPE_PUBLISHABLE_KEY =
+  (typeof import.meta !== "undefined" &&
+    (import.meta as any).env?.VITE_STRIPE_PUBLISHABLE_KEY) ||
+  "pk_test_placeholder";
 
 let _token: string | null = null;
 
@@ -599,6 +603,54 @@ export function saveBankAccount(
   );
 }
 
+export function createOrganization(data: {
+  name: string;
+  type: string;
+  parentId?: string;
+}) {
+  return post("/organizations", data);
+}
+
+export function getOrganizations(type?: string) {
+  return get(`/organizations${qs({ ...(type ? { type } : {}) })}`);
+}
+
+export function getDistricts(organizationId?: string) {
+  return get(
+    `/districts${qs({ ...(organizationId ? { organizationId } : {}) })}`
+  );
+}
+
+export function createDistrict(data: {
+  name: string;
+  organizationId?: string;
+}) {
+  return post("/districts", data);
+}
+
+export function linkCongregationToDistrict(
+  districtId: string,
+  congregationId: string
+) {
+  return post(`/districts/${districtId}/congregations`, { congregationId });
+}
+
+export function getInviteCode(congregationId: string) {
+  return get(
+    `/congregations/${encodeURIComponent(congregationId)}/invite-code`
+  );
+}
+
+export function regenerateInviteCode(congregationId: string) {
+  return post(
+    `/congregations/${encodeURIComponent(congregationId)}/regenerate-code`
+  );
+}
+
+export function joinCongregationByCode(code: string) {
+  return post("/congregations/join", { code });
+}
+
 export function getSafetyClearances(limit?: number, offset?: number) {
   return paginated("/safety-clearances", limit, offset);
 }
@@ -635,4 +687,20 @@ export function getConferenceFullExport() {
 
 export function getAuditLog(limit?: number, offset?: number) {
   return paginated("/audit", limit, offset);
+}
+
+export function getBillingPlans() {
+  return get("/billing/plans");
+}
+
+export function getBillingSubscription() {
+  return get("/billing/subscription");
+}
+
+export function createCheckoutSession(planId: string) {
+  return post("/billing/checkout", { planId });
+}
+
+export function createPortalSession() {
+  return post("/billing/portal");
 }

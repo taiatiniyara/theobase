@@ -21,6 +21,7 @@ import { registerConferenceRoutes } from "./routes/conference";
 import { registerDisciplineRoutes } from "./routes/discipline";
 import { registerOrganizationRoutes } from "./routes/organization";
 import { registerPersonRoutes } from "./routes/persons";
+import { registerBillingRoutes } from "./routes/billing";
 import { registerAuditRoutes } from "./routes/audit";
 import { rateLimiter } from "./middleware/rate-limit";
 import { securityHeaders, csrfProtection } from "./middleware/security";
@@ -31,23 +32,58 @@ import { Hono } from "hono";
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
+app.onError((err, c) => {
+  const correlationId = c.get("correlationId") || "unknown";
+  console.error(
+    JSON.stringify({
+      correlation_id: correlationId,
+      method: c.req.method,
+      path: c.req.path,
+      error: err.message,
+      stack: err.stack,
+      timestamp: new Date().toISOString(),
+    })
+  );
+  return c.json(
+    { error: "Internal server error", correlation_id: correlationId },
+    500
+  );
+});
+
 app.use("*", securityHeaders());
 app.use("*", correlationId());
 
 app.use("*", async (c, next) => {
+  const appUrl = c.env.APP_URL || "https://theobase.app";
+  const isDev =
+    c.env.APP_URL === "" || new URL(appUrl).hostname === "localhost";
+  const allowed = isDev
+    ? ["http://localhost:5173", "http://localhost:8787"]
+    : [appUrl];
+
   if (c.req.method === "OPTIONS") {
+    const requestOrigin = c.req.header("Origin");
+    const allowOrigin =
+      requestOrigin && allowed.includes(requestOrigin)
+        ? requestOrigin
+        : allowed[0];
     return new Response(null, {
       status: 204,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": allowOrigin,
         "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Credentials": "true",
         "Access-Control-Max-Age": "86400",
       },
     });
   }
   await next();
-  c.header("Access-Control-Allow-Origin", "*");
+  const requestOrigin = c.req.header("Origin");
+  if (requestOrigin && allowed.includes(requestOrigin)) {
+    c.header("Access-Control-Allow-Origin", requestOrigin);
+    c.header("Access-Control-Allow-Credentials", "true");
+  }
 });
 
 app.use("*", rateLimiter(100, 60));
@@ -55,17 +91,35 @@ app.use("*", csrfProtection());
 app.use("*", policyGuardian());
 
 app.get("/health", async (c) => {
-  let db: string;
+  let db = "disconnected";
   try {
     const result = await c.env.DB.prepare("SELECT 1").first();
     db = result ? "connected" : "disconnected";
   } catch {
-    db = "disconnected";
+    /* db unavailable */
   }
+
+  let r2 = "unchecked";
+  try {
+    if (c.env.STORAGE) r2 = "available";
+  } catch {
+    r2 = "unavailable";
+  }
+
+  let durableObjects = "unchecked";
+  try {
+    if (c.env.CONGREGATION_DO) durableObjects = "available";
+  } catch {
+    durableObjects = "unavailable";
+  }
+
+  const healthy = db === "connected";
   return c.json({
-    ok: db === "connected",
-    status: db === "connected" ? "healthy" : "degraded",
+    ok: healthy,
+    status: healthy ? "healthy" : "degraded",
     db,
+    r2,
+    durableObjects,
     timestamp: new Date().toISOString(),
   });
 });
@@ -93,6 +147,7 @@ registerConferenceRoutes(app);
 registerDisciplineRoutes(app);
 registerOrganizationRoutes(app);
 registerPersonRoutes(app);
+registerBillingRoutes(app);
 registerAuditRoutes(app);
 
 export default app;

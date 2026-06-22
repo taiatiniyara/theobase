@@ -18,6 +18,7 @@ export const congregation = sqliteTable("congregation", {
   parentType: text("parent_type", { enum: ["congregation", "organization"] }),
   organizationId: text("organization_id").references(() => organization.id),
   timezone: text("timezone").notNull().default("UTC"),
+  inviteCode: text("invite_code").notNull().default(""),
   createdAt: text("created_at").notNull(),
 });
 
@@ -648,6 +649,55 @@ export const bankAccount = sqliteTable("bank_account", {
   createdAt: text("created_at").notNull(),
 });
 
+export const subscriptionPlan = sqliteTable("subscription_plan", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  stripePriceId: text("stripe_price_id").notNull().unique(),
+  stripeProductId: text("stripe_product_id").notNull(),
+  amount: integer("amount").notNull(),
+  currency: text("currency").notNull().default("usd"),
+  interval: text("interval", { enum: ["month", "year"] }).notNull(),
+  features: text("features", { mode: "json" }).$type<string[]>(),
+  active: integer("active", { mode: "boolean" }).notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: text("created_at").notNull(),
+});
+
+export const subscription = sqliteTable("subscription", {
+  id: text("id").primaryKey(),
+  congregationId: text("congregation_id")
+    .references(() => congregation.id)
+    .notNull()
+    .unique(),
+  stripeSubscriptionId: text("stripe_subscription_id").notNull().unique(),
+  stripeCustomerId: text("stripe_customer_id").notNull(),
+  planId: text("plan_id").references(() => subscriptionPlan.id),
+  status: text("status", {
+    enum: [
+      "active",
+      "past_due",
+      "canceled",
+      "incomplete",
+      "incomplete_expired",
+      "trialing",
+      "unpaid",
+      "paused",
+    ],
+  }).notNull(),
+  currentPeriodStart: text("current_period_start").notNull(),
+  currentPeriodEnd: text("current_period_end").notNull(),
+  cancelAtPeriodEnd: integer("cancel_at_period_end", {
+    mode: "boolean",
+  })
+    .notNull()
+    .default(false),
+  canceledAt: text("canceled_at"),
+  trialEnd: text("trial_end"),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
 export const disciplineCase = sqliteTable("discipline_case", {
   id: text("id").primaryKey(),
   congregationId: text("congregation_id")
@@ -734,3 +784,16 @@ export const auditLogCongregationIdx = index("audit_log_congregation_idx").on(
 export const auditLogActorIdx = index("audit_log_actor_idx").on(
   auditLog.actorId
 );
+export const subscriptionCongregationIdx = index(
+  "subscription_congregation_idx"
+).on(subscription.congregationId);
+export const subscriptionStripeIdx = index("subscription_stripe_idx").on(
+  subscription.stripeSubscriptionId
+);
+
+export const webhookEvent = sqliteTable("webhook_event", {
+  id: text("id").primaryKey(),
+  stripeEventId: text("stripe_event_id").notNull().unique(),
+  eventType: text("event_type").notNull(),
+  processedAt: text("processed_at").notNull(),
+});

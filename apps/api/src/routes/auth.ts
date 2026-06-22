@@ -202,7 +202,12 @@ export function registerAuthRoutes(app: AppType) {
       "Set-Cookie",
       `token=${jwt}; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=86400`
     );
-    return c.json({ ok: true, userId: user.id, token: jwt });
+    return c.json({
+      ok: true,
+      userId: user.id,
+      token: jwt,
+      hasCongregation: !!user.congregationId,
+    });
   });
 
   app.post("/auth/verify-2fa", authRateLimiter(), async (c) => {
@@ -253,6 +258,11 @@ export function registerAuthRoutes(app: AppType) {
       "Set-Cookie",
       `token=${jwt}; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=86400`
     );
-    return c.json({ ok: true, userId: user.id, token: jwt });
+    return c.json({
+      ok: true,
+      userId: user.id,
+      token: jwt,
+      hasCongregation: !!user.congregationId,
+    });
   });
 }

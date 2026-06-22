@@ -22,7 +22,19 @@ export async function recordAudit(
     .limit(1);
 
   const actorId = userRow[0]?.personId;
-  if (!actorId) return;
+  if (!actorId) {
+    console.error(
+      JSON.stringify({
+        message: "audit: skipping — user has no linked person record",
+        userId,
+        action: entry.action,
+        resourceType: entry.resourceType,
+        resourceId: entry.resourceId,
+        timestamp: new Date().toISOString(),
+      })
+    );
+    return;
+  }
 
   const id = crypto.randomUUID();
   const createdAt = new Date().toISOString();

@@ -62,6 +62,7 @@ const en = {
     treasurer: "Treasurer",
     treasury: "Treasury",
     conference_report: "Conference Report",
+    billing: "Billing",
   },
   layout: {
     offline: "Offline — changes queued",

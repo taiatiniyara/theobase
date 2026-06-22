@@ -5,20 +5,18 @@ on:
   push:
     branches: [main]
     paths:
-      - 'apps/api/**'
-      - 'apps/do/**'
-      - 'apps/web/**'
-      - 'packages/**'
+      - "apps/api/**"
+      - "apps/do/**"
+      - "apps/web/**"
+      - "packages/**"
 
 jobs:
   typecheck-lint:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -33,21 +31,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: npx vitest run --config vitest.shared.config.ts
-      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/auth.test.ts
-      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/congregation.test.ts
-      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/departments.test.ts
-      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/finance.test.ts
-      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/governance.test.ts
-      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/member.test.ts
-      - run: npx vitest run --config vitest.config.ts apps/api/src/__tests__/operations.test.ts
+      - run: pnpm test:all
 
   deploy-api:
     needs: [test, deploy-do]
@@ -55,8 +44,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -74,8 +61,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -93,8 +78,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 22

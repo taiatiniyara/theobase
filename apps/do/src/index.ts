@@ -1,6 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
 import { createEmailSender, renderRotaAssignmentEmail } from "@theobase/email";
-import { verifyJwt, DEFAULT_SECRET } from "@theobase/auth";
+import { verifyJwt } from "@theobase/auth";
 
 export default {
   async fetch(_request: Request): Promise<Response> {
@@ -32,7 +32,7 @@ export class CongregationDO extends DurableObject {
 
     if (request.headers.get("Upgrade") === "websocket") {
       const channel = url.searchParams.get("channel") || "board";
-      if (!CHANNELS.includes(channel as typeof CHANNELS[number])) {
+      if (!CHANNELS.includes(channel as (typeof CHANNELS)[number])) {
         return new Response("Invalid channel", { status: 400 });
       }
       const pair = new WebSocketPair();
@@ -45,11 +45,18 @@ export class CongregationDO extends DurableObject {
     return new Response("Congregation DO", { status: 200 });
   }
 
-  async meetingUpdated(meeting: { id: string; status: string; date: string }): Promise<void> {
+  async meetingUpdated(meeting: {
+    id: string;
+    status: string;
+    date: string;
+  }): Promise<void> {
     this.broadcast("board", { type: "meeting_updated", meeting });
   }
 
-  async decisionRecorded(meetingId: string, decision: { id: string; title: string; voteOutcome: string }): Promise<void> {
+  async decisionRecorded(
+    meetingId: string,
+    decision: { id: string; title: string; voteOutcome: string }
+  ): Promise<void> {
     this.broadcast("board", { type: "decision_recorded", meetingId, decision });
   }
 
@@ -57,11 +64,20 @@ export class CongregationDO extends DurableObject {
     this.broadcast("rota", { type: "rota_updated", date, slots });
   }
 
-  async slotAssigned(slot: { id: string; role: string; volunteerId: string; date: string }): Promise<void> {
+  async slotAssigned(slot: {
+    id: string;
+    role: string;
+    volunteerId: string;
+    date: string;
+  }): Promise<void> {
     this.broadcast("rota", { type: "slot_assigned", slot });
   }
 
-  async slotSwapRequested(slot: { id: string; fromVolunteerId: string; date: string }): Promise<void> {
+  async slotSwapRequested(slot: {
+    id: string;
+    fromVolunteerId: string;
+    date: string;
+  }): Promise<void> {
     this.broadcast("rota", { type: "swap_requested", slot });
   }
 
@@ -74,38 +90,64 @@ export class CongregationDO extends DurableObject {
   }
 
   async notifyUser(userId: string, message: string): Promise<void> {
-    this.broadcast("notifications", { type: "notification", userId, message, timestamp: Date.now() });
+    this.broadcast("notifications", {
+      type: "notification",
+      userId,
+      message,
+      timestamp: Date.now(),
+    });
   }
 
   async notifyCongregation(message: string): Promise<void> {
-    this.broadcast("notifications", { type: "congregation_notification", message, timestamp: Date.now() });
+    this.broadcast("notifications", {
+      type: "congregation_notification",
+      message,
+      timestamp: Date.now(),
+    });
   }
 
-  async scheduleReminder(at: number, data: { date: string; role: string; volunteerId: string; email?: string }): Promise<void> {
+  async scheduleReminder(
+    at: number,
+    data: { date: string; role: string; volunteerId: string; email?: string }
+  ): Promise<void> {
     await this.ctx.storage.setAlarm(at);
     await this.ctx.storage.put("pendingReminder", data);
   }
 
   override async alarm(): Promise<void> {
-    const data = await this.ctx.storage.get<{ date: string; role: string; volunteerId: string; email?: string }>("pendingReminder");
+    const data = await this.ctx.storage.get<{
+      date: string;
+      role: string;
+      volunteerId: string;
+      email?: string;
+    }>("pendingReminder");
     if (data) {
       this.broadcast("notifications", {
-        type: "duty_reminder", date: data.date, role: data.role,
-        volunteerId: data.volunteerId, timestamp: Date.now(),
+        type: "duty_reminder",
+        date: data.date,
+        role: data.role,
+        volunteerId: data.volunteerId,
+        timestamp: Date.now(),
       });
 
       if (data.email) {
         const env = this.env as Env;
         if (env.SMTP_RELAY_URL && env.SMTP_RELAY_TOKEN) {
-          const sendEmail = createEmailSender({ relayUrl: env.SMTP_RELAY_URL, relayToken: env.SMTP_RELAY_TOKEN });
+          const sendEmail = createEmailSender({
+            relayUrl: env.SMTP_RELAY_URL,
+            relayToken: env.SMTP_RELAY_TOKEN,
+          });
           const result = await sendEmail({
-              to: data.email,
-              subject: `Duty Reminder: ${data.role} on ${data.date}`,
-              html: renderRotaAssignmentEmail({ role: data.role, date: data.date }),
-            });
-            if (!result.success) {
-              console.error("[do] Email reminder failed:", result.error);
-            }
+            to: data.email,
+            subject: `Duty Reminder: ${data.role} on ${data.date}`,
+            html: renderRotaAssignmentEmail({
+              role: data.role,
+              date: data.date,
+            }),
+          });
+          if (!result.success) {
+            console.error("[do] Email reminder failed:", result.error);
+          }
         }
       }
 
@@ -137,35 +179,70 @@ export class CongregationDO extends DurableObject {
     if (!clients) return;
     const msg = JSON.stringify(data);
     for (const ws of clients) {
-      try { ws.send(msg); } catch { /* disconnected */ }
+      try {
+        ws.send(msg);
+      } catch {
+        /* disconnected */
+      }
     }
   }
 
-  override async webSocketMessage(ws: WebSocket, message: string): Promise<void> {
+  override async webSocketMessage(
+    ws: WebSocket,
+    message: string
+  ): Promise<void> {
     try {
-      const data = JSON.parse(message) as { type: string; channel?: string; token?: string };
+      const data = JSON.parse(message) as {
+        type: string;
+        channel?: string;
+        token?: string;
+      };
 
       if (data.type === "auth" && data.token) {
         const env = this.env as Env;
-        const secret = env.JWT_SECRET || DEFAULT_SECRET;
+        const secret = env.JWT_SECRET;
+        if (!secret) {
+          ws.send(
+            JSON.stringify({
+              type: "auth_error",
+              message: "Server configuration error",
+            })
+          );
+          ws.close(1008, "Server config error");
+          return;
+        }
         const payload = await verifyJwt(data.token, secret);
         if ("error" in payload) {
-          ws.send(JSON.stringify({ type: "auth_error", message: payload.error }));
+          ws.send(
+            JSON.stringify({ type: "auth_error", message: payload.error })
+          );
           ws.close(1008, "Auth failed");
         } else {
-          ws.serializeAttachment({ userId: payload.userId, congregationId: payload.congregationId, authenticated: true });
+          ws.serializeAttachment({
+            userId: payload.userId,
+            congregationId: payload.congregationId,
+            authenticated: true,
+          });
           ws.send(JSON.stringify({ type: "authenticated" }));
         }
         return;
       }
 
-      const attachment = ws.deserializeAttachment() as { authenticated?: boolean } | undefined;
+      const attachment = ws.deserializeAttachment() as
+        | { authenticated?: boolean }
+        | undefined;
       if (!attachment?.authenticated) {
-        ws.send(JSON.stringify({ type: "auth_error", message: "Not authenticated" }));
+        ws.send(
+          JSON.stringify({ type: "auth_error", message: "Not authenticated" })
+        );
         return;
       }
 
-      if (data.type === "subscribe" && data.channel && CHANNELS.includes(data.channel as typeof CHANNELS[number])) {
+      if (
+        data.type === "subscribe" &&
+        data.channel &&
+        CHANNELS.includes(data.channel as (typeof CHANNELS)[number])
+      ) {
         this.removeClient(ws);
         this.addClient(data.channel, ws);
         ws.send(JSON.stringify({ type: "subscribed", channel: data.channel }));

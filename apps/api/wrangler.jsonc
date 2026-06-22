@@ -5,42 +5,44 @@
   "compatibility_date": "2025-06-19",
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
-    "APP_URL": "https://theobase.app"
+    "APP_URL": "https://theobase.app",
+    "STRIPE_SECRET_KEY": "",
+    "STRIPE_WEBHOOK_SECRET": "",
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "theobase-spd",
-      "database_id": "f0498166-49c6-448f-8148-cb9790a8d558"
-    }
+      "database_id": "f0498166-49c6-448f-8148-cb9790a8d558",
+    },
   ],
   "r2_buckets": [
     {
       "binding": "STORAGE",
-      "bucket_name": "theobase-receipts"
-    }
+      "bucket_name": "theobase-receipts",
+    },
   ],
   "durable_objects": {
     "bindings": [
       {
         "name": "CONGREGATION_DO",
         "class_name": "CongregationDO",
-        "script_name": "theobase-do"
+        "script_name": "theobase-do",
       },
       {
         "name": "NOMINATING_DO",
         "class_name": "NominatingDO",
-        "script_name": "theobase-do"
-      }
-    ]
+        "script_name": "theobase-do",
+      },
+    ],
   },
   "send_email": [
     {
       "name": "THEOBASE_EMAIL",
-      "destination_address": "messenger@theobase.net"
-    }
+      "destination_address": "messenger@theobase.net",
+    },
   ],
   "observability": {
-    "enabled": true
-  }
+    "enabled": true,
+  },
 }

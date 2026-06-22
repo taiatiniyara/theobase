@@ -234,6 +234,7 @@
     "/audit": "nav.audit",
     "/conference": "nav.conference_report",
     "/setup": "nav.church_setup",
+    "/billing": "nav.billing",
     "/help": "nav.help_center",
     "/join": "Join",
   };

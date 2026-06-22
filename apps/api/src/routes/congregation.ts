@@ -2,7 +2,7 @@ import type { AppType } from "../types";
 import { eq } from "drizzle-orm";
 import * as schema from "@theobase/db";
 import { generateId, z } from "@theobase/shared";
-import { requireAuth, requireRole } from "@theobase/auth";
+import { requireAuth, requireRole, createJwt } from "@theobase/auth";
 import { loadRoles } from "../middleware/load-roles";
 import { getDb } from "../middleware/get-db";
 import { getEmailSender } from "../middleware/get-email";
@@ -30,6 +30,12 @@ export function registerCongregationRoutes(app: AppType) {
     csv: z.string().min(1),
   });
 
+  const bankAccountSchema = z.object({
+    bankName: z.string().min(1).max(200),
+    accountName: z.string().min(1).max(200),
+    accountNumber: z.string().min(1).max(100),
+  });
+
   const inviteSchema = z.object({
     email: z.string().email(),
     role: z.string().min(1),
@@ -54,8 +60,56 @@ export function registerCongregationRoutes(app: AppType) {
       parentId: parsed.data.parentId ?? null,
       parentType: parsed.data.parentType ?? null,
       organizationId: parsed.data.organizationId ?? null,
+      inviteCode: String(Math.floor(10000000 + Math.random() * 90000000)),
       createdAt: now,
     });
+
+    const userId = c.get("userId");
+    const [creator] = await db
+      .select({
+        email: schema.user.email,
+        personId: schema.user.personId,
+        congregationId: schema.user.congregationId,
+      })
+      .from(schema.user)
+      .where(eq(schema.user.id, userId));
+
+    if (creator && !creator.personId) {
+      const personId = generateId();
+      const emailPrefix = (creator.email || "clerk").split("@")[0];
+
+      await db.insert(schema.person).values({
+        id: personId,
+        congregationId: id,
+        firstName: emailPrefix,
+        lastName: "Clerk",
+        email: creator.email,
+        createdAt: now,
+        updatedAt: now,
+      });
+
+      await db.insert(schema.role).values({
+        id: generateId(),
+        personId,
+        congregationId: id,
+        roleType: "clerk",
+        createdAt: now,
+      });
+
+      await db
+        .update(schema.user)
+        .set({ personId, congregationId: id })
+        .where(eq(schema.user.id, userId));
+
+      const jwt = await createJwt(
+        { userId, congregationId: id },
+        (c.env as any).JWT_SECRET
+      );
+      c.header(
+        "Set-Cookie",
+        `token=${jwt}; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=86400`
+      );
+    }
 
     const [created] = await db
       .select()
@@ -280,19 +334,22 @@ export function registerCongregationRoutes(app: AppType) {
     requireRole("clerk"),
     async (c) => {
       const db = getDb(c);
-      const { bankName, accountName, accountNumber } = await c.req.json();
+      const body = await c.req.json();
+      const parsed = bankAccountSchema.safeParse(body);
+      if (!parsed.success) {
+        return c.json({ error: parsed.error.issues }, 400);
+      }
+      const { bankName, accountName, accountNumber } = parsed.data;
       const id = generateId();
       const now = new Date().toISOString();
-      await db
-        .insert(schema.bankAccount)
-        .values({
-          id,
-          congregationId: c.req.param("id"),
-          bankName,
-          accountName,
-          accountNumber,
-          createdAt: now,
-        });
+      await db.insert(schema.bankAccount).values({
+        id,
+        congregationId: c.req.param("id"),
+        bankName,
+        accountName,
+        accountNumber,
+        createdAt: now,
+      });
       const [r] = await db
         .select()
         .from(schema.bankAccount)
@@ -322,4 +379,108 @@ export function registerCongregationRoutes(app: AppType) {
       return c.json(r || null);
     }
   );
+
+  app.get(
+    "/congregations/:id/invite-code",
+    requireAuth(),
+    loadRoles(),
+    requireRole("clerk"),
+    async (c) => {
+      const db = getDb(c);
+      const congId = c.req.param("id");
+      const [cong] = await db
+        .select({ inviteCode: schema.congregation.inviteCode })
+        .from(schema.congregation)
+        .where(eq(schema.congregation.id, congId));
+      if (!cong) return c.json({ error: "Not found" }, 404);
+      return c.json({ inviteCode: cong.inviteCode });
+    }
+  );
+
+  app.post(
+    "/congregations/:id/regenerate-code",
+    requireAuth(),
+    loadRoles(),
+    requireRole("clerk"),
+    async (c) => {
+      const db = getDb(c);
+      const congId = c.req.param("id");
+      const newCode = String(Math.floor(10000000 + Math.random() * 90000000));
+      await db
+        .update(schema.congregation)
+        .set({ inviteCode: newCode })
+        .where(eq(schema.congregation.id, congId));
+      return c.json({ inviteCode: newCode });
+    }
+  );
+
+  app.post("/congregations/join", requireAuth(), async (c) => {
+    const db = getDb(c);
+    const { code } = await c.req.json<{ code: string }>();
+
+    if (!code || code.length !== 8 || !/^\d{8}$/.test(code)) {
+      return c.json({ error: "Invalid invite code. Must be 8 digits." }, 400);
+    }
+
+    const [cong] = await db
+      .select()
+      .from(schema.congregation)
+      .where(eq(schema.congregation.inviteCode, code));
+
+    if (!cong) {
+      return c.json({ error: "Invalid invite code." }, 404);
+    }
+
+    const userId = c.get("userId");
+    const [user] = await db
+      .select()
+      .from(schema.user)
+      .where(eq(schema.user.id, userId));
+
+    if (!user) {
+      return c.json({ error: "User not found" }, 404);
+    }
+
+    if (user.congregationId) {
+      return c.json({ error: "You already belong to a congregation." }, 409);
+    }
+
+    const now = new Date().toISOString();
+    const personId = generateId();
+
+    await db.insert(schema.person).values({
+      id: personId,
+      congregationId: cong.id,
+      firstName: user.email.split("@")[0],
+      lastName: "Member",
+      email: user.email,
+      isMember: true,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    await db.insert(schema.role).values({
+      id: generateId(),
+      personId,
+      congregationId: cong.id,
+      roleType: "member",
+      createdAt: now,
+    });
+
+    await db
+      .update(schema.user)
+      .set({ personId, congregationId: cong.id })
+      .where(eq(schema.user.id, userId));
+
+    const jwt = await createJwt(
+      { userId, congregationId: cong.id },
+      (c.env as any).JWT_SECRET
+    );
+    c.header(
+      "Set-Cookie",
+      `token=${jwt}; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=86400`
+    );
+
+    return c.json({ ok: true, congregationName: cong.name });
+  });
 }

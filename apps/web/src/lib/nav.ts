@@ -24,6 +24,7 @@ import HelpCircle from "@lucide/svelte/icons/help-circle";
 import ShieldCheck from "@lucide/svelte/icons/shield-check";
 import History from "@lucide/svelte/icons/history";
 import Rocket from "@lucide/svelte/icons/rocket";
+import CreditCard from "@lucide/svelte/icons/credit-card";
 
 import type { Component } from "svelte";
 
@@ -107,6 +108,12 @@ export const navigation: NavSection[] = [
         icon: Presentation,
       },
     ],
+  },
+  {
+    labelKey: "nav.billing",
+    icon: CreditCard,
+    roles: ["clerk", "treasurer"],
+    items: [{ labelKey: "nav.billing", href: "/billing", icon: CreditCard }],
   },
 ];
 

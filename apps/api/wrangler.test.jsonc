@@ -5,19 +5,22 @@
   "compatibility_date": "2025-06-19",
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
-    "JWT_SECRET": "theobase-dev-secret-change-in-production"
+    "APP_URL": "",
+    "JWT_SECRET": "theobase-test-secret-32chars-min",
+    "STRIPE_SECRET_KEY": "",
+    "STRIPE_WEBHOOK_SECRET": "",
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "theobase-spd",
-      "database_id": "f0498166-49c6-448f-8148-cb9790a8d558"
-    }
+      "database_id": "f0498166-49c6-448f-8148-cb9790a8d558",
+    },
   ],
   "r2_buckets": [
     {
       "binding": "STORAGE",
-      "bucket_name": "theobase-receipts"
-    }
-  ]
+      "bucket_name": "theobase-receipts",
+    },
+  ],
 }

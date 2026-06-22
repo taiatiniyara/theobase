@@ -5,6 +5,9 @@ export type Bindings = {
   JWT_SECRET: string;
   SMTP_RELAY_URL: string;
   SMTP_RELAY_TOKEN: string;
+  STRIPE_SECRET_KEY: string;
+  STRIPE_WEBHOOK_SECRET: string;
+  APP_URL: string;
   CONGREGATION_DO: DurableObjectNamespace;
   NOMINATING_DO: DurableObjectNamespace;
   STORAGE: R2Bucket;

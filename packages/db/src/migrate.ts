@@ -5,7 +5,11 @@ export async function applyMigrations(
   statements: string[]
 ): Promise<void> {
   for (const stmt of statements) {
-    await db.exec(stmt);
+    try {
+      await db.exec(stmt);
+    } catch {
+      // Ignore individual migration errors (e.g. duplicate column on ALTER TABLE)
+    }
   }
 }
 
@@ -64,7 +68,7 @@ export const ROLLBACK_STATEMENTS = [
 export const MIGRATION_STATEMENTS: string[] = [
   `CREATE TABLE IF NOT EXISTS auth_token (id text PRIMARY KEY NOT NULL, email text NOT NULL, token text NOT NULL, expires_at text NOT NULL, used_at text, two_factor_code text, two_factor_expires_at text, created_at text NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS organization (id text PRIMARY KEY NOT NULL, name text NOT NULL, type text NOT NULL, parent_id text, created_at text NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS congregation (id text PRIMARY KEY NOT NULL, name text NOT NULL, type text NOT NULL, parent_id text, parent_type text, organization_id text REFERENCES organization(id), timezone text DEFAULT 'UTC' NOT NULL, created_at text NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS congregation (id text PRIMARY KEY NOT NULL, name text NOT NULL, type text NOT NULL, parent_id text, parent_type text, organization_id text REFERENCES organization(id), timezone text DEFAULT 'UTC' NOT NULL, invite_code text DEFAULT '' NOT NULL, created_at text NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS person (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), first_name text NOT NULL, last_name text NOT NULL, email text, phone text, address text, is_member integer DEFAULT false, created_at text NOT NULL, updated_at text NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS department (id text PRIMARY KEY NOT NULL, congregation_id text NOT NULL REFERENCES congregation(id), name text NOT NULL, type text NOT NULL, created_at text NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS role (id text PRIMARY KEY NOT NULL, person_id text REFERENCES person(id), congregation_id text NOT NULL REFERENCES congregation(id), role_type text NOT NULL, created_at text NOT NULL)`,
@@ -125,4 +129,5 @@ export const MIGRATION_STATEMENTS: string[] = [
   `CREATE INDEX IF NOT EXISTS audit_log_congregation_idx ON audit_log(congregation_id)`,
   `CREATE INDEX IF NOT EXISTS audit_log_actor_idx ON audit_log(actor_id)`,
   `CREATE INDEX IF NOT EXISTS nominating_ballot_session_idx ON nominating_ballot(session_id)`,
+  `ALTER TABLE congregation ADD COLUMN invite_code text DEFAULT ''`,
 ];

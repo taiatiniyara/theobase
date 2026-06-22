@@ -1,8 +1,18 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { createJwt, verifyJwt } from "@theobase/auth";
 import {
-  jwt, env, createExecutionContext, waitOnExecutionContext,
-  worker, runMigrations, setupEmails, getEmails, getLastToken, authRequest, authVerify,
+  jwt,
+  TEST_SECRET,
+  env,
+  createExecutionContext,
+  waitOnExecutionContext,
+  worker,
+  runMigrations,
+  setupEmails,
+  getEmails,
+  getLastToken,
+  authRequest,
+  authVerify,
 } from "./test-helpers";
 
 describe("auth", () => {
@@ -67,7 +77,8 @@ describe("auth", () => {
     const ctx = createExecutionContext();
     const res = await worker.fetch(
       new Request("http://localhost/me", { method: "GET" }),
-      env, ctx,
+      env,
+      ctx
     );
     await waitOnExecutionContext(ctx);
     expect(res.status).toBe(401);
@@ -87,7 +98,8 @@ describe("auth", () => {
         method: "GET",
         headers: { Cookie: cookie.split(";")[0] },
       }),
-      env, ctx,
+      env,
+      ctx
     );
     await waitOnExecutionContext(ctx);
     expect(meRes.status).toBe(200);
@@ -103,15 +115,20 @@ describe("auth", () => {
         method: "GET",
         headers: { Cookie: `token=${expiredJwt}` },
       }),
-      env, ctx,
+      env,
+      ctx
     );
     await waitOnExecutionContext(ctx);
     expect(res.status).toBe(401);
   });
 
   it("verifyJwt rejects expired tokens", async () => {
-    const expiredJwt = await createJwt({ userId: "test-user" }, -1);
-    const result = await verifyJwt(expiredJwt);
+    const expiredJwt = await createJwt(
+      { userId: "test-user" },
+      TEST_SECRET,
+      -1
+    );
+    const result = await verifyJwt(expiredJwt, TEST_SECRET);
     expect("error" in result).toBe(true);
   });
 });

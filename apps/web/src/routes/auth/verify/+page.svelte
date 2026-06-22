@@ -21,7 +21,11 @@
       const res = await verifyToken(token);
       if (res.ok && res.token) {
         setToken(res.token);
-        goto("/dashboard");
+        if (res.hasCongregation) {
+          goto("/dashboard");
+        } else {
+          goto("/join");
+        }
       } else {
         status = "error";
         error = res.error || "Invalid or expired token.";

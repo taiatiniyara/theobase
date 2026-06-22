@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getCongregation, inviteOfficer, importMembers, getMe, getCongregationMembers, createPerson, updatePerson, assignRole, removeRole } from '$lib/api';
+  import { getCongregation, inviteOfficer, importMembers, getMe, getCongregationMembers, createPerson, updatePerson, assignRole, removeRole, getInviteCode, regenerateInviteCode } from '$lib/api';
   import { requireRole } from "$lib/guard";
   import { onMount } from 'svelte';
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
@@ -12,6 +12,7 @@
   import { Building2, Mail, Upload, Send, Users, Plus, Edit3, Trash2, X } from "@lucide/svelte";
 
   let congregation = $state<any>(null);
+  let inviteCode = $state("");
   let loading = $state(true);
   let loadError = $state("");
   let inviteEmail = $state('');
@@ -70,8 +71,20 @@
   async function loadCongregation(id: string) {
     try {
       congregation = await getCongregation(id);
+      try {
+        const codeData = await getInviteCode(id);
+        inviteCode = codeData?.inviteCode || "";
+      } catch { inviteCode = ""; }
     } catch { loadError = "Failed to load congregation."; }
     loading = false;
+  }
+
+  async function regenerateCode() {
+    if (!congregation) return;
+    try {
+      const data = await regenerateInviteCode(congregation.id);
+      inviteCode = data?.inviteCode || "";
+    } catch {}
   }
 
   async function sendInvite() {
@@ -165,6 +178,26 @@
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Timezone</p>
           <p class="text-slate-900">{congregation.timezone}</p>
         </div>
+      </CardContent>
+    </Card>
+
+    <Card>
+      <CardHeader>
+        <CardTitle class="flex items-center gap-2">
+          <Building2 class="size-5" /> Invite Code
+        </CardTitle>
+        <CardDescription>Share this 8-digit code so members can join</CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-3">
+        <div class="flex items-center gap-3">
+          <code class="flex-1 rounded-lg bg-slate-100 px-4 py-3 text-center text-2xl font-mono tracking-[0.3em] text-slate-900 dark:bg-slate-800 dark:text-slate-100">
+            {inviteCode || "—"}
+          </code>
+        </div>
+        <Button variant="outline" size="sm" onclick={regenerateCode}>
+          Regenerate Code
+        </Button>
+        <p class="text-xs text-muted-foreground">Regenerating the code invalidates the previous one.</p>
       </CardContent>
     </Card>
 

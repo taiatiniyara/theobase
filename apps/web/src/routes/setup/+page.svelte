@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { createCongregation, importMembers, inviteOfficer, api } from "$lib/api";
+  import { createCongregation, importMembers, inviteOfficer, api, getOrganizations, createOrganization, getDistricts, createDistrict, linkCongregationToDistrict } from "$lib/api";
   import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "$lib/components/ui/card";
   import { Button } from "$lib/components/ui/button";
   import { Badge } from "$lib/components/ui/badge";
@@ -23,8 +23,31 @@
   let churchName = $state("");
   let churchType = $state("church");
   let address = $state("");
-  let conference = $state("");
   let timezone = $state("");
+
+  let conferences = $state<{ id: string; name: string }[]>([]);
+  let conferenceId = $state("");
+  let conferenceName = $state("");
+  let showNewConference = $state(false);
+  let newConferenceName = $state("");
+
+  let unions = $state<{ id: string; name: string }[]>([]);
+  let unionId = $state("");
+  let unionName = $state("");
+  let showNewUnion = $state(false);
+  let newUnionName = $state("");
+
+  let divisions = $state<{ id: string; name: string }[]>([]);
+  let divisionId = $state("");
+  let divisionName = $state("");
+  let showNewDivision = $state(false);
+  let newDivisionName = $state("");
+
+  let districts = $state<{ id: string; name: string; organizationId: string | null }[]>([]);
+  let districtId = $state("");
+  let districtName = $state("");
+  let showNewDistrict = $state(false);
+  let newDistrictName = $state("");
 
   let csvContent = $state("");
 
@@ -50,10 +73,148 @@
   const completed = $derived(Array.from({ length: currentStep }, (_, i) => i));
   const isLastStep = $derived(currentStep === STEPS.length - 1);
 
+  $effect(() => {
+    getOrganizations("conference").then((data: any) => {
+      conferences = Array.isArray(data) ? data : [];
+    }).catch(() => {});
+    getOrganizations("union").then((data: any) => {
+      unions = Array.isArray(data) ? data : [];
+    }).catch(() => {});
+    getOrganizations("division").then((data: any) => {
+      divisions = Array.isArray(data) ? data : [];
+    }).catch(() => {});
+  });
+
+  $effect(() => {
+    if (conferenceId) {
+      getDistricts(conferenceId).then((data: any) => {
+        districts = Array.isArray(data) ? data : [];
+      }).catch(() => {});
+    } else {
+      districts = [];
+    }
+  });
+
+  $effect(() => {
+    if (conferenceId === "__new__") {
+      showNewConference = true;
+      conferenceId = "";
+    }
+    if (conferenceId && conferenceId !== "__new__") {
+      conferenceName = "";
+      unionName = "";
+      unionId = "";
+      divisionName = "";
+      divisionId = "";
+    }
+  });
+
+  $effect(() => {
+    if (unionId === "__new__") {
+      showNewUnion = true;
+      unionId = "";
+    }
+    if (unionId && unionId !== "__new__") {
+      unionName = "";
+    }
+  });
+
+  $effect(() => {
+    if (divisionId === "__new__") {
+      showNewDivision = true;
+      divisionId = "";
+    }
+    if (divisionId && divisionId !== "__new__") {
+      divisionName = "";
+    }
+  });
+
+  $effect(() => {
+    if (districtId === "__new__") {
+      showNewDistrict = true;
+      districtId = "";
+    }
+    if (districtId && districtId !== "__new__") {
+      districtName = "";
+    }
+  });
+
+  function confirmNewConference() {
+    if (!newConferenceName.trim()) return;
+    conferenceName = newConferenceName.trim();
+    conferenceId = "";
+    showNewConference = false;
+    newConferenceName = "";
+    districtId = "";
+    districtName = "";
+    unionId = "";
+    unionName = "";
+    divisionId = "";
+    divisionName = "";
+  }
+
+  function clearNewConference() {
+    conferenceName = "";
+    conferenceId = "";
+    unionId = "";
+    unionName = "";
+    divisionId = "";
+    divisionName = "";
+    districtId = "";
+    districtName = "";
+  }
+
+  function confirmNewUnion() {
+    if (!newUnionName.trim()) return;
+    unionName = newUnionName.trim();
+    unionId = "";
+    showNewUnion = false;
+    newUnionName = "";
+    divisionId = "";
+    divisionName = "";
+  }
+
+  function clearNewUnion() {
+    unionName = "";
+    unionId = "";
+    divisionId = "";
+    divisionName = "";
+  }
+
+  function confirmNewDivision() {
+    if (!newDivisionName.trim()) return;
+    divisionName = newDivisionName.trim();
+    divisionId = "";
+    showNewDivision = false;
+    newDivisionName = "";
+  }
+
+  function clearNewDivision() {
+    divisionName = "";
+    divisionId = "";
+  }
+
+  function confirmNewDistrict() {
+    if (!newDistrictName.trim()) return;
+    districtName = newDistrictName.trim();
+    districtId = "";
+    showNewDistrict = false;
+    newDistrictName = "";
+  }
+
+  function clearNewDistrict() {
+    districtName = "";
+    districtId = "";
+  }
+
   function validateStep(): boolean {
     stepError = "";
     if (currentStep === 0 && !churchName.trim()) {
       stepError = "Church Name is required.";
+      return false;
+    }
+    if (currentStep === 0 && showNewConference && !newConferenceName.trim()) {
+      stepError = "Please enter or select a conference.";
       return false;
     }
     return true;
@@ -63,10 +224,63 @@
     submitting = true;
     submitError = "";
     try {
+      let orgId: string | undefined;
+
+      if (conferenceId) {
+        orgId = conferenceId;
+      } else if (conferenceName) {
+        let parentId: string | undefined;
+
+        if (unionId) {
+          parentId = unionId;
+        } else if (unionName) {
+          let divisionParentId: string | undefined;
+          if (divisionId) {
+            divisionParentId = divisionId;
+          } else if (divisionName) {
+            const div: any = await createOrganization({
+              name: divisionName,
+              type: "division",
+            });
+            if (div.error) {
+              submitError = `Could not create division: ${div.error}`;
+              submitting = false;
+              return;
+            }
+            divisionParentId = div.id;
+          }
+
+          const union: any = await createOrganization({
+            name: unionName,
+            type: "union",
+            parentId: divisionParentId,
+          });
+          if (union.error) {
+            submitError = `Could not create union: ${union.error}`;
+            submitting = false;
+            return;
+          }
+          parentId = union.id;
+        }
+
+        const created: any = await createOrganization({
+          name: conferenceName,
+          type: "conference",
+          parentId,
+        });
+        if (created.error) {
+          submitError = created.error;
+          submitting = false;
+          return;
+        }
+        orgId = created.id;
+      }
+
       const result = await createCongregation({
         name: churchName.trim(),
         type: churchType,
         timezone: timezone || undefined,
+        organizationId: orgId,
       });
 
       if (result.error) {
@@ -77,6 +291,26 @@
 
       const congregationId = result.id;
 
+      let distId: string | undefined;
+      if (districtId) {
+        distId = districtId;
+      } else if (districtName) {
+        const created: any = await createDistrict({
+          name: districtName,
+          organizationId: orgId,
+        });
+        if (created.error) {
+          submitError = created.error;
+          submitting = false;
+          return;
+        }
+        distId = created.id;
+      }
+
+      if (distId) {
+        await linkCongregationToDistrict(distId, congregationId);
+      }
+
       if (csvContent.trim()) {
         try {
           await importMembers(congregationId, csvContent.trim());
@@ -84,12 +318,10 @@
       }
 
       for (const invite of pendingInvites) {
-        try {
-          await inviteOfficer(congregationId, {
-            email: invite.email,
-            role: invite.role,
-          });
-        } catch { /* non-fatal */ }
+        await inviteOfficer(congregationId, {
+          email: invite.email,
+          role: invite.role,
+        });
       }
 
       const deptMap: Record<string, string> = {
@@ -101,17 +333,13 @@
         "Facilities": "other",
       };
       for (const deptName of selectedDepartments) {
-        try {
-          await api('/departments', { method: 'POST', body: JSON.stringify({ name: deptName, type: deptMap[deptName] || "other" }) });
-        } catch { /* non-fatal */ }
+        await api('/departments', { method: 'POST', body: JSON.stringify({ name: deptName, type: deptMap[deptName] || "other" }) });
       }
 
       if (bankName && accountName && accountNumber) {
-        try {
-          await api(`/congregations/${congregationId}/bank-account`, {
-            method: 'POST', body: JSON.stringify({ bankName, accountName, accountNumber }),
-          });
-        } catch { /* non-fatal */ }
+        await api(`/congregations/${congregationId}/bank-account`, {
+          method: 'POST', body: JSON.stringify({ bankName, accountName, accountNumber }),
+        });
       }
 
       showCelebration = true;
@@ -213,20 +441,193 @@
             placeholder="e.g. 123 Main Street"
             oninput={(e) => address = (e.target as HTMLInputElement).value}
           />
-          <div class="grid grid-cols-2 gap-4">
-            <FormField
-              label="Conference/Union"
-              value={conference}
-              placeholder="e.g. Nairobi Conference"
-              oninput={(e) => conference = (e.target as HTMLInputElement).value}
-            />
-            <FormField
-              label="Time Zone"
-              value={timezone}
-              placeholder="e.g. Africa/Nairobi"
-              oninput={(e) => timezone = (e.target as HTMLInputElement).value}
-            />
+
+          <div>
+            <Label for="conference" class="mb-2 block">Conference / Mission</Label>
+            {#if showNewConference}
+              <div class="flex items-center gap-2">
+                <input
+                  type="text"
+                  class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  placeholder="Enter conference name"
+                  value={newConferenceName}
+                  oninput={(e) => newConferenceName = (e.target as HTMLInputElement).value}
+                  onkeydown={(e) => { if (e.key === 'Enter') confirmNewConference(); }}
+                />
+                <Button variant="outline" size="sm" onclick={confirmNewConference}>Add</Button>
+                <Button variant="ghost" size="icon-sm" onclick={() => { showNewConference = false; newConferenceName = ''; }} aria-label="Cancel">
+                  <X class="size-4" />
+                </Button>
+              </div>
+            {:else if conferenceName && !conferenceId}
+              <div class="flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm">
+                <span class="text-muted-foreground">
+                  <Badge variant="secondary" class="mr-2">New</Badge>
+                  {conferenceName}
+                </span>
+                <Button variant="ghost" size="icon-xs" onclick={clearNewConference} aria-label="Remove">
+                  <X class="size-3" />
+                </Button>
+              </div>
+            {:else}
+              <Select bind:value={conferenceId}>
+                <SelectTrigger id="conference">
+                  <SelectValue placeholder="Select a conference" />
+                </SelectTrigger>
+                <SelectContent>
+                  {#each conferences as conf}
+                    <SelectItem value={conf.id}>{conf.name}</SelectItem>
+                  {/each}
+                  <SelectItem value="__new__">+ Create new conference...</SelectItem>
+                </SelectContent>
+              </Select>
+            {/if}
           </div>
+
+          {#if conferenceName && !conferenceId}
+            <div>
+              <Label for="union" class="mb-2 block">Parent Union</Label>
+              {#if showNewUnion}
+                <div class="flex items-center gap-2">
+                  <input
+                    type="text"
+                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    placeholder="Enter union name"
+                    value={newUnionName}
+                    oninput={(e) => newUnionName = (e.target as HTMLInputElement).value}
+                    onkeydown={(e) => { if (e.key === 'Enter') confirmNewUnion(); }}
+                  />
+                  <Button variant="outline" size="sm" onclick={confirmNewUnion}>Add</Button>
+                  <Button variant="ghost" size="icon-sm" onclick={() => { showNewUnion = false; newUnionName = ''; }} aria-label="Cancel">
+                    <X class="size-4" />
+                  </Button>
+                </div>
+              {:else if unionName && !unionId}
+                <div class="flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm">
+                  <span class="text-muted-foreground">
+                    <Badge variant="secondary" class="mr-2">New</Badge>
+                    {unionName}
+                  </span>
+                  <Button variant="ghost" size="icon-xs" onclick={clearNewUnion} aria-label="Remove">
+                    <X class="size-3" />
+                  </Button>
+                </div>
+              {:else}
+                <Select bind:value={unionId}>
+                  <SelectTrigger id="union">
+                    <SelectValue placeholder="Select a union (optional)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {#each unions as u}
+                      <SelectItem value={u.id}>{u.name}</SelectItem>
+                    {/each}
+                    <SelectItem value="__new__">+ Create new union...</SelectItem>
+                  </SelectContent>
+                </Select>
+              {/if}
+              <p class="mt-1 text-xs text-muted-foreground">Optional — the union your new conference belongs to.</p>
+            </div>
+
+            {#if unionName && !unionId}
+              <div>
+                <Label for="division" class="mb-2 block">Parent Division</Label>
+                {#if showNewDivision}
+                  <div class="flex items-center gap-2">
+                    <input
+                      type="text"
+                      class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      placeholder="Enter division name"
+                      value={newDivisionName}
+                      oninput={(e) => newDivisionName = (e.target as HTMLInputElement).value}
+                      onkeydown={(e) => { if (e.key === 'Enter') confirmNewDivision(); }}
+                    />
+                    <Button variant="outline" size="sm" onclick={confirmNewDivision}>Add</Button>
+                    <Button variant="ghost" size="icon-sm" onclick={() => { showNewDivision = false; newDivisionName = ''; }} aria-label="Cancel">
+                      <X class="size-4" />
+                    </Button>
+                  </div>
+                {:else if divisionName && !divisionId}
+                  <div class="flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm">
+                    <span class="text-muted-foreground">
+                      <Badge variant="secondary" class="mr-2">New</Badge>
+                      {divisionName}
+                    </span>
+                    <Button variant="ghost" size="icon-xs" onclick={clearNewDivision} aria-label="Remove">
+                      <X class="size-3" />
+                    </Button>
+                  </div>
+                {:else}
+                  <Select bind:value={divisionId}>
+                    <SelectTrigger id="division">
+                      <SelectValue placeholder="Select a division (optional)" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {#each divisions as div}
+                        <SelectItem value={div.id}>{div.name}</SelectItem>
+                      {/each}
+                      <SelectItem value="__new__">+ Create new division...</SelectItem>
+                    </SelectContent>
+                  </Select>
+                {/if}
+                <p class="mt-1 text-xs text-muted-foreground">Optional — the division your new union belongs to.</p>
+              </div>
+            {/if}
+          {/if}
+              <p class="mt-1 text-xs text-muted-foreground">Optional — the union/conference your new conference belongs to.</p>
+            </div>
+          {/if}
+
+          {#if conferenceId || conferenceName}
+            <div>
+              <Label for="district" class="mb-2 block">District</Label>
+              {#if showNewDistrict}
+                <div class="flex items-center gap-2">
+                  <input
+                    type="text"
+                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    placeholder="Enter district name"
+                    value={newDistrictName}
+                    oninput={(e) => newDistrictName = (e.target as HTMLInputElement).value}
+                    onkeydown={(e) => { if (e.key === 'Enter') confirmNewDistrict(); }}
+                  />
+                  <Button variant="outline" size="sm" onclick={confirmNewDistrict}>Add</Button>
+                  <Button variant="ghost" size="icon-sm" onclick={() => { showNewDistrict = false; newDistrictName = ''; }} aria-label="Cancel">
+                    <X class="size-4" />
+                  </Button>
+                </div>
+              {:else if districtName && !districtId}
+                <div class="flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm">
+                  <span class="text-muted-foreground">
+                    <Badge variant="secondary" class="mr-2">New</Badge>
+                    {districtName}
+                  </span>
+                  <Button variant="ghost" size="icon-xs" onclick={clearNewDistrict} aria-label="Remove">
+                    <X class="size-3" />
+                  </Button>
+                </div>
+              {:else}
+                <Select bind:value={districtId}>
+                  <SelectTrigger id="district">
+                    <SelectValue placeholder="Select a district (optional)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {#each districts as dist}
+                      <SelectItem value={dist.id}>{dist.name}</SelectItem>
+                    {/each}
+                    <SelectItem value="__new__">+ Create new district...</SelectItem>
+                  </SelectContent>
+                </Select>
+              {/if}
+              <p class="mt-1 text-xs text-muted-foreground">Optional — churches sharing a pastor usually belong to the same district.</p>
+            </div>
+          {/if}
+
+          <FormField
+            label="Time Zone"
+            value={timezone}
+            placeholder="e.g. Africa/Nairobi"
+            oninput={(e) => timezone = (e.target as HTMLInputElement).value}
+          />
         </div>
 
       {:else if currentStep === 1}
