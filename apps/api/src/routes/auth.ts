@@ -39,11 +39,19 @@ export function registerAuthRoutes(app: AppType) {
     const magicLink = `${appUrl}/auth/verify?token=${token}`;
 
     const sendEmail = getEmailSender(c);
-    await sendEmail({
+    const result = await sendEmail({
       to: email,
       subject: "Sign in to Theobase",
       html: renderMagicLinkEmail({ magicLink }),
     });
+
+    if (!result.success) {
+      console.error("[auth] Failed to send magic link:", result.error);
+      return c.json(
+        { error: "Failed to send sign-in email. Please try again later." },
+        500
+      );
+    }
 
     return c.json({ ok: true });
   });
