@@ -573,9 +573,6 @@
               </div>
             {/if}
           {/if}
-              <p class="mt-1 text-xs text-muted-foreground">Optional — the union/conference your new conference belongs to.</p>
-            </div>
-          {/if}
 
           {#if conferenceId || conferenceName}
             <div>
