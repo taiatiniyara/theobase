@@ -6,21 +6,26 @@
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
     "SMTP_RELAY_URL": "https://relay.test",
-    "SMTP_RELAY_TOKEN": "test-token",
-    "JWT_SECRET": "test-secret"
+    "SMTP_RELAY_PIN": "test-pin",
+    "SMTP_HOST": "localhost",
+    "SMTP_PORT": "587",
+    "SMTP_USER": "test@example.com",
+    "SMTP_PASS": "test-pass",
+    "SMTP_FROM": "test@example.com",
+    "JWT_SECRET": "test-secret",
   },
   "durable_objects": {
     "bindings": [
       {
         "name": "CONGREGATION_DO",
-        "class_name": "CongregationDO"
-      }
-    ]
+        "class_name": "CongregationDO",
+      },
+    ],
   },
   "migrations": [
     {
       "tag": "v1",
-      "new_classes": ["CongregationDO"]
-    }
-  ]
+      "new_classes": ["CongregationDO"],
+    },
+  ],
 }

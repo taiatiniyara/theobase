@@ -13,7 +13,12 @@ export { NominatingDO } from "./nominating";
 interface Env {
   JWT_SECRET?: string;
   SMTP_RELAY_URL?: string;
-  SMTP_RELAY_TOKEN?: string;
+  SMTP_RELAY_PIN?: string;
+  SMTP_HOST?: string;
+  SMTP_PORT?: string;
+  SMTP_USER?: string;
+  SMTP_PASS?: string;
+  SMTP_FROM?: string;
 }
 
 const CHANNELS = ["board", "rota", "av", "notifications"] as const;
@@ -108,7 +113,13 @@ export class CongregationDO extends DurableObject {
 
   async scheduleReminder(
     at: number,
-    data: { date: string; role: string; volunteerId: string; email?: string }
+    data: {
+      date: string;
+      role: string;
+      volunteerId: string;
+      email?: string;
+      congregationName?: string;
+    }
   ): Promise<void> {
     await this.ctx.storage.setAlarm(at);
     await this.ctx.storage.put("pendingReminder", data);
@@ -120,6 +131,7 @@ export class CongregationDO extends DurableObject {
       role: string;
       volunteerId: string;
       email?: string;
+      congregationName?: string;
     }>("pendingReminder");
     if (data) {
       this.broadcast("notifications", {
@@ -132,10 +144,20 @@ export class CongregationDO extends DurableObject {
 
       if (data.email) {
         const env = this.env as Env;
-        if (env.SMTP_RELAY_URL && env.SMTP_RELAY_TOKEN) {
+        if (env.SMTP_RELAY_URL && env.SMTP_RELAY_PIN) {
           const sendEmail = createEmailSender({
             relayUrl: env.SMTP_RELAY_URL,
-            relayToken: env.SMTP_RELAY_TOKEN,
+            relayPin: env.SMTP_RELAY_PIN,
+            smtp: {
+              host: env.SMTP_HOST || "",
+              port: parseInt(env.SMTP_PORT || "465"),
+              secure: true,
+              auth: {
+                user: env.SMTP_USER || "",
+                pass: env.SMTP_PASS || "",
+              },
+            },
+            from: env.SMTP_FROM || "",
           });
           const result = await sendEmail({
             to: data.email,
@@ -144,6 +166,7 @@ export class CongregationDO extends DurableObject {
               role: data.role,
               date: data.date,
             }),
+            fromName: data.congregationName,
           });
           if (!result.success) {
             console.error("[do] Email reminder failed:", result.error);

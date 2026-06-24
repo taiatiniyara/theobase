@@ -4,15 +4,15 @@ A global church utility platform for local Seventh-day Adventist congregations �
 
 ## Stack
 
-| Layer     | Technology                                |
-| --------- | ----------------------------------------- |
-| Frontend  | SvelteKit (PWA) → Cloudflare Pages        |
-| Backend   | Hono → Cloudflare Workers                 |
-| Database  | Cloudflare D1 (SQLite) + Drizzle ORM      |
-| Real-time | Cloudflare Durable Objects (WebSocket)    |
-| Storage   | Cloudflare R2                             |
-| Email     | Node.js SMTP relay (VPS) → Hostinger SMTP |
-| Tests     | Vitest + Miniflare 3                      |
+| Layer     | Technology                                       |
+| --------- | ------------------------------------------------ |
+| Frontend  | SvelteKit (PWA) → Cloudflare Pages               |
+| Backend   | Hono → Cloudflare Workers                        |
+| Database  | Cloudflare D1 (SQLite) + Drizzle ORM             |
+| Real-time | Cloudflare Durable Objects (WebSocket)           |
+| Storage   | Cloudflare R2                                    |
+| Email     | @taiatiniyara/smtp-relay-client → Hostinger SMTP |
+| Tests     | Vitest + Miniflare 3                             |
 
 ## Getting Started
 
@@ -65,11 +65,10 @@ apps/
   api/      Hono Worker — 60+ REST endpoints across 24 route modules
   do/       CongregationDO — 10 RPC methods, 4-channel multiplexing, alarms
   web/      SvelteKit PWA — 26 pages, offline-first (IndexedDB + outbox)
-  relay/    SMTP relay (Node.js, deploys to VPS)
 packages/
   auth/     JWT + magic link + RLS middleware
   db/       44 Drizzle tables, migration runner
-  email/    Email sender (relay transport)
+  email/    Email sender (@taiatiniyara/smtp-relay-client transport)
   shared/   Zod schemas, revision fork detection, sabbath timing, crypto
 docs/
   SESSION.md      Phase tracker (Platform Lifecycle Orchestrator)
@@ -87,8 +86,7 @@ docs/
 
 ## Domains
 
-| URL                  | Routes to                              |
-| -------------------- | -------------------------------------- |
-| `theobase.app`       | PWA (Cloudflare Pages)                 |
-| `api.theobase.net`   | API (Cloudflare Workers)               |
-| `relay.theobase.net` | SMTP relay (VPS via Cloudflare Tunnel) |
+| URL                | Routes to                |
+| ------------------ | ------------------------ |
+| `theobase.app`     | PWA (Cloudflare Pages)   |
+| `api.theobase.net` | API (Cloudflare Workers) |

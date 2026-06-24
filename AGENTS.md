@@ -1,5 +1,26 @@
 # Agents
 
+## Lifecycle
+
+This project is governed by the **platform-builder** skill — a 7-phase lifecycle
+orchestrator. Phase 7 is complete; ongoing work uses the **Feature Loop**.
+
+On every entry, load the platform-builder skill. It reads `docs/SESSION.md` to
+determine the current phase and next step. Do not start coding without it.
+
+Key deliverables:
+
+```
+CONTEXT.md                         ← domain glossary
+docs/
+  SESSION.md                       ← phase tracker
+  ARCHITECTURE.md                  ← stack & topology decisions
+  ISSUES.md                        ← backlog dependency graph
+  DEPLOYMENT.md                    ← deployment guide
+  adr/                             ← architectural decision records
+.scratch/<feature-slug>/issue.md   ← individual work items
+```
+
 ## Agent skills
 
 ### Issue tracker

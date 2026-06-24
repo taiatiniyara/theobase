@@ -2,7 +2,7 @@ name: D1 Backup
 
 on:
   schedule:
-    - cron: '0 4 * * *'  # Daily at 4 AM UTC
+    - cron: "0 4 * * *" # Daily at 4 AM UTC
   workflow_dispatch:
 
 jobs:
@@ -34,17 +34,18 @@ jobs:
       - name: Export D1 data as SQL dump
         run: |
           pnpm exec wrangler d1 export theobase-spd \
+            --remote \
             --output /tmp/theobase-backup.sql \
-            --no-schema 2>&1 || echo "D1 export not available, relying on Cloudflare-managed backup only"
+            --no-schema
         working-directory: apps/api
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Upload backup artifact
-        if: hashFiles('/tmp/theobase-backup.sql') != ''
         uses: actions/upload-artifact@v4
         with:
           name: theobase-d1-backup-${{ github.run_id }}
           path: /tmp/theobase-backup.sql
           retention-days: 90
+          if-no-files-found: warn

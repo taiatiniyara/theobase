@@ -13,7 +13,7 @@
 | Real-time      | Cloudflare Durable Objects (WebSocket + alarms)  | 0001, 0003 |
 | Blob storage   | Cloudflare R2 (receipt images, exports)          | 0001       |
 | Inbound email  | Cloudflare Email Routing                         | 0001       |
-| Outbound email | Node.js SMTP relay on micro VPS → Hostinger SMTP | 0009       |
+| Outbound email | @taiatiniyara/smtp-relay-client → Hostinger SMTP | 0009       |
 | Auth           | Passwordless magic-link + JWT (httpOnly cookie)  | 0005       |
 | Testing        | Vitest + Miniflare 3                             | —          |
 | Monorepo       | pnpm workspaces (apps/ + packages/)              | —          |
@@ -59,11 +59,10 @@ without native app complexity.
                       └──────────┘ └─────────────┘
 
 ┌─────────────────────────────────────────────────┐
-│  Micro VPS (SMTP Relay)                          │
+│  SMTP Relay Server                               │
 │  ┌──────────────────────────────────────────┐   │
-│  │  Node.js relay (Docker)                  │   │
-│  │  POST /send  ──►  Hostinger SMTP         │   │
-│  │  Cloudflare Tunnel (no open ports)       │   │
+│  │  @taiatiniyara/smtp-relay               │   │
+│  │  (stateless, credential-free)            │   │
 │  └──────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────┘
 ```
@@ -76,7 +75,7 @@ without native app complexity.
    broadcast change over WebSocket to connected clients. If offline, write goes
    to IndexedDB outbox → flushes on reconnect.
 3. **Notification path:** Channel A (WebSocket: instant in-app toasts via DO).
-   Channel B (email: POST to SMTP relay → Hostinger SMTP). Every notification
+   Channel B (email: SmtpRelayClient.send() → SMTP relay → Hostinger SMTP). Every notification
    dispatches on both channels (ADR 0008).
 4. **Alarm path:** DO alarm fires → broadcasts WebSocket reminder + dispatches email
    via SMTP relay.
@@ -150,19 +149,18 @@ appropriate channel to all connected clients.
 
 ### SMTP Relay (outbound email)
 
-`POST https://relay.theobase.net/send` with JSON body:
+`POST https://relay.example.com` with JSON body (via `@taiatiniyara/smtp-relay-client`):
 
-```json
-{
-  "to": "clerk@church.org",
-  "subject": "Magic link for Theobase",
-  "html": "<a href=\"...\">Sign in</a>"
-}
+```ts
+await relay.send(
+  { host, port, secure, auth: { user, pass } }, // SMTP config (sent per-request)
+  { from, to, subject, html } // email payload
+);
 ```
 
-Authenticated via pre-shared token in `Authorization` header. Relay unwraps and
-forwards to Hostinger SMTP (`messenger@theobase.net`). Stateless — no queuing,
-no retry logic in the relay itself.
+Authenticated via shared PIN in request body. Relay forwards to configured SMTP
+server (e.g. Hostinger). SMTP credentials are stored as Cloudflare Worker secrets
+and passed through — the relay itself is credential-free.
 
 ## Data Model
 
@@ -200,12 +198,12 @@ silently. Notifications via WebSocket (in-app) + email (guaranteed delivery).
 
 ## Deployment
 
-| Component     | Target                                     | CI/CD                                     |
-| ------------- | ------------------------------------------ | ----------------------------------------- |
-| PWA           | Cloudflare Pages (`theobase.app`)          | GitHub Actions `deploy.yml`               |
-| API Worker    | Cloudflare Workers (`api.theobase.net`)    | GitHub Actions `deploy.yml`               |
-| SMTP Relay    | Docker on micro VPS (`relay.theobase.net`) | Manual (Docker Compose)                   |
-| D1 Migrations | Per-division D1 bindings                   | Manual via `wrangler d1 migrations apply` |
+| Component     | Target                                  | CI/CD                                     |
+| ------------- | --------------------------------------- | ----------------------------------------- |
+| PWA           | Cloudflare Pages (`theobase.app`)       | GitHub Actions `deploy.yml`               |
+| API Worker    | Cloudflare Workers (`api.theobase.net`) | GitHub Actions `deploy.yml`               |
+| SMTP Relay    | `@taiatiniyara/smtp-relay`              | 0009                                      |
+| D1 Migrations | Per-division D1 bindings                | Manual via `wrangler d1 migrations apply` |
 
 The relay VPS is exposed via Cloudflare Tunnel — no open ports, authenticated
 with pre-shared token.

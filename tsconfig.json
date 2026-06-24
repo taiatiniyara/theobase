@@ -19,7 +19,6 @@
     "apps/api/src/index.ts",
     "apps/api/src/__tests__",
     "apps/do/src/__tests__",
-    "apps/relay/src/__tests__",
     "drizzle"
   ]
 }

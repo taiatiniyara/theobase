@@ -17,15 +17,6 @@ gh secret set CLOUDFLARE_API_TOKEN --body "your-token-here"
 gh secret set CLOUDFLARE_ACCOUNT_ID --body "your-account-id-here"
 ```
 
-## SMTP Relay VPS
-
-The SMTP relay is deployed manually via Docker Compose. See `docs/DEPLOYMENT.md`.
-
-Secrets set directly on the VPS, not in GitHub:
-
-- `SMTP_PASS` — Hostinger SMTP password
-- `RELAY_TOKEN` — Pre-shared auth token for the HTTPS endpoint
-
 ## Auto-provided
 
 | Secret         | Provided by                                                        |

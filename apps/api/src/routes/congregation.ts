@@ -232,7 +232,7 @@ export function registerCongregationRoutes(app: AppType) {
         createdAt: now,
       });
 
-      const sendEmail = getEmailSender(c);
+      const sendEmail = await getEmailSender(c);
       const appUrl = (c.env as any).APP_URL || "https://theobase.app";
       await sendEmail({
         to: email,

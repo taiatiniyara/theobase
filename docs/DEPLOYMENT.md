@@ -2,14 +2,14 @@
 
 ## Components
 
-| Component         | Target             | URL                  | Config                    |
-| ----------------- | ------------------ | -------------------- | ------------------------- |
-| PWA (SvelteKit)   | Cloudflare Pages   | `theobase.app`       | `apps/web/vite.config.ts` |
-| API (Hono Worker) | Cloudflare Workers | `api.theobase.net`   | `apps/api/wrangler.jsonc` |
-| Durable Objects   | Cloudflare Workers | (internal)           | `apps/do/wrangler.jsonc`  |
-| D1 Database       | Cloudflare D1      | (internal)           | `apps/api/wrangler.jsonc` |
-| R2 Storage        | Cloudflare R2      | (internal)           | `apps/api/wrangler.jsonc` |
-| SMTP Relay        | Docker on VPS      | `relay.theobase.net` | `docker-compose.yml`      |
+| Component         | Target                     | URL                  | Config                    |
+| ----------------- | -------------------------- | -------------------- | ------------------------- |
+| PWA (SvelteKit)   | Cloudflare Pages           | `theobase.app`       | `apps/web/vite.config.ts` |
+| API (Hono Worker) | Cloudflare Workers         | `api.theobase.net`   | `apps/api/wrangler.jsonc` |
+| Durable Objects   | Cloudflare Workers         | (internal)           | `apps/do/wrangler.jsonc`  |
+| D1 Database       | Cloudflare D1              | (internal)           | `apps/api/wrangler.jsonc` |
+| R2 Storage        | Cloudflare R2              | (internal)           | `apps/api/wrangler.jsonc` |
+| SMTP Relay        | `@taiatiniyara/smtp-relay` | `relay.theobase.net` | —                         |
 
 ## CI/CD
 
@@ -56,7 +56,7 @@ Requires:
 
 - DO class `CongregationDO` (migration tag `v1`)
 - DO class `NominatingDO` (migration tag `v2`)
-- Environment: `SMTP_RELAY_URL`, `SMTP_RELAY_TOKEN`, `JWT_SECRET`
+- Environment: `SMTP_RELAY_URL`, `SMTP_RELAY_PIN`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `JWT_SECRET`
 - Observability: enabled
 
 ### PWA (Cloudflare Pages)
@@ -77,80 +77,45 @@ npx wrangler d1 migrations apply theobase-spd --config apps/api/wrangler.jsonc
 npx wrangler d1 migrations list theobase-spd --config apps/api/wrangler.jsonc
 ```
 
-## SMTP Relay (VPS)
+## SMTP Relay
 
-The relay is a stateless Node.js HTTP server that proxies email requests from
-Cloudflare Workers to Hostinger SMTP. It runs in Docker, behind Nginx, exposed
-via Cloudflare Tunnel.
-
-### Quick start (dev)
-
-```bash
-docker compose up relay
-```
-
-Access on `http://localhost:3113/health` → `{"status":"ok"}`.
-
-### Production
-
-```bash
-# First-time SSL certificate
-docker compose --profile prod run --rm certbot
-
-# Full stack (relay + nginx + SSL)
-SMTP_PASS=your_hostinger_password \
-RELAY_TOKEN=your_shared_token \
-docker compose --profile prod up -d
-```
-
-### Verify
-
-```bash
-# Health check (no auth required)
-curl https://relay.theobase.net/health
-# → {"status":"ok"}
-
-# Send test email (requires token)
-curl -X POST https://relay.theobase.net/send \
-  -H "Authorization: Bearer $RELAY_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"to":"test@example.com","subject":"Test","html":"<p>Hello</p>"}'
-# → {"ok":true}
-```
+The Workers use `@taiatiniyara/smtp-relay-client` to forward email requests to
+a stateless SMTP relay server. SMTP credentials are sent with each request; the
+relay itself is credential-free. See [@taiatiniyara/smtp-relay](https://github.com/taiatiniyara/smtp-relay).
 
 ## Environment Variables
 
-### SMTP Relay (`apps/relay`)
-
-| Variable      | Description           | Default                           |
-| ------------- | --------------------- | --------------------------------- |
-| `PORT`        | Listen port           | `3113`                            |
-| `RELAY_TOKEN` | Pre-shared auth token | (dev: `theobase-relay-dev-token`) |
-| `SMTP_HOST`   | Hostinger SMTP host   | `smtp.hostinger.com`              |
-| `SMTP_PORT`   | SMTP port             | `465`                             |
-| `SMTP_USER`   | From address          | `messenger@theobase.net`          |
-| `SMTP_PASS`   | SMTP password         | (required)                        |
-
 ### API Worker (`apps/api`)
 
-| Variable  | Description                |
-| --------- | -------------------------- | ---------------------- |
-| `APP_URL` | PWA origin for magic links | `https://theobase.app` |
+| Variable         | Description                | Default                |
+| ---------------- | -------------------------- | ---------------------- |
+| `APP_URL`        | PWA origin for magic links | `https://theobase.app` |
+| `SMTP_RELAY_URL` | SMTP relay endpoint        | (secret)               |
+| `SMTP_RELAY_PIN` | Relay shared PIN           | (secret)               |
+| `SMTP_HOST`      | SMTP server hostname       | (secret)               |
+| `SMTP_PORT`      | SMTP server port           | `465`                  |
+| `SMTP_USER`      | SMTP auth username         | (secret)               |
+| `SMTP_PASS`      | SMTP auth password         | (secret)               |
+| `SMTP_FROM`      | From address for emails    | (secret)               |
 
 ### DO Worker (`apps/do`)
 
-| Variable           | Description        |
-| ------------------ | ------------------ | ---------------------------- |
-| `SMTP_RELAY_URL`   | Relay endpoint     | `https://relay.theobase.net` |
-| `SMTP_RELAY_TOKEN` | Relay auth token   | (secret)                     |
-| `JWT_SECRET`       | JWT signing secret | (secret)                     |
+| Variable         | Description             |
+| ---------------- | ----------------------- |
+| `SMTP_RELAY_URL` | SMTP relay endpoint     |
+| `SMTP_RELAY_PIN` | Relay shared PIN        |
+| `SMTP_HOST`      | SMTP server hostname    |
+| `SMTP_PORT`      | SMTP server port        |
+| `SMTP_USER`      | SMTP auth username      |
+| `SMTP_PASS`      | SMTP auth password      |
+| `SMTP_FROM`      | From address for emails |
+| `JWT_SECRET`     | JWT signing secret      |
 
 ## Data Survivability
 
 - **D1**: Cloudflare-managed backups + daily SQL dump workflow (90-day retention)
 - **R2**: Receipt images are stored with no single-point-of-failure (Cloudflare R2)
 - **DO State**: In-memory only; hydrated from D1 on wake. No persistent DO storage.
-- **Relay**: Stateless. Deploy a replacement image to a new VPS if the current host fails.
 
 ## Rollback
 
@@ -164,8 +129,4 @@ npx wrangler rollback --config apps/do/wrangler.jsonc
 # PWA
 npx wrangler pages deployment list --project-name theobase-web
 npx wrangler pages deployment rollback --project-name theobase-web
-
-# Relay (via Docker)
-git checkout <last-stable-tag>
-docker compose up -d relay
 ```

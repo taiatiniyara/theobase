@@ -87,9 +87,9 @@ Four apps and four packages in a pnpm workspace:
 - `apps/api` — Hono Workers (REST endpoints, D1 queries, email dispatch)
 - `apps/do` — Durable Objects (multiplexed WebSocket, alarm scheduling, write RPC)
 - `apps/web` — SvelteKit PWA (Service Worker, IndexedDB, deployed to Cloudflare Pages)
-- `apps/relay` — Node.js SMTP relay (proxies HTTPS requests to Hostinger SMTP)
+- `apps/relay` — SMTP relay client (@taiatiniyara/smtp-relay-client)
 - `packages/db` — Drizzle schemas, migrations, shared D1 connection utility
-- `packages/email` — `sendEmail()` interface dispatching to SMTP relay over HTTPS
+- `packages/email` — `sendEmail()` interface using @taiatiniyara/smtp-relay-client
 - `packages/auth` — Magic link generation, JWT validation, session middleware
 - `packages/shared` — Zod validation schemas, TypeScript types, revision fork detection
 
@@ -135,9 +135,9 @@ resolution.
 
 ### Outbound Email
 
-A lightweight Node.js SMTP relay on a micro VPS proxies HTTPS requests from
-Workers to Hostinger SMTP (`messenger@theobase.net`). The relay is stateless,
-exposed via Cloudflare Tunnel, authenticated with a pre-shared token.
+Uses `@taiatiniyara/smtp-relay-client` to send emails via a stateless SMTP relay.
+SMTP credentials are sent per-request from the Workers; the relay itself is
+credential-free.
 
 ### Tech Stack Summary
 
@@ -173,16 +173,14 @@ details:
    in test mode) → token extracted → token exchanged for JWT → JWT used on
    subsequent requests → JWT expiry → 401.
 
-5. **Email seam.** Tests POST to the relay's HTTPS endpoint, assert the relay
-   successfully unwraps and queues the delivery. In test mode, the relay logs the
-   email body instead of connecting to Hostinger SMTP. A separate integration
-   test periodically validates the full relay → Hostinger path.
+5. **Email seam.** Tests capture emails in a global array for assertion.
+   The `createEmailSender` factory detects test mode via `globalThis.__testEmails`
+   and skips actual relay calls.
 
 ### Test Environment
 
 Miniflare 3 simulates the entire Cloudflare stack locally (Workers, D1, DO, R2).
-No external services needed for the vast majority of tests. The SMTP relay runs
-in-process during tests with test-mode logging.
+No external services needed for the vast majority of tests.
 
 ## Out of Scope
 

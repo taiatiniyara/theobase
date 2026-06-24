@@ -87,17 +87,15 @@ export function registerRotaRoutes(app: AppType) {
 
       const id = generateId();
       const now = new Date().toISOString();
-      await db
-        .insert(schema.dutySlot)
-        .values({
-          id,
-          congregationId,
-          date: parsed.data.date,
-          role: parsed.data.role,
-          volunteerId: parsed.data.volunteerId || null,
-          status: parsed.data.volunteerId ? "assigned" : "open",
-          createdAt: now,
-        });
+      await db.insert(schema.dutySlot).values({
+        id,
+        congregationId,
+        date: parsed.data.date,
+        role: parsed.data.role,
+        volunteerId: parsed.data.volunteerId || null,
+        status: parsed.data.volunteerId ? "assigned" : "open",
+        createdAt: now,
+      });
 
       if (parsed.data.volunteerId) {
         const [volunteer] = await db
@@ -106,7 +104,10 @@ export function registerRotaRoutes(app: AppType) {
           .where(eq(schema.person.id, parsed.data.volunteerId));
         if (volunteer?.email) {
           const [cong] = await db
-            .select({ timezone: schema.congregation.timezone })
+            .select({
+              timezone: schema.congregation.timezone,
+              name: schema.congregation.name,
+            })
             .from(schema.congregation)
             .where(eq(schema.congregation.id, congregationId));
           if (cong?.timezone && isDuringSabbathHours(cong.timezone)) {
@@ -117,9 +118,10 @@ export function registerRotaRoutes(app: AppType) {
                 role: parsed.data.role,
                 volunteerId: parsed.data.volunteerId!,
                 email: volunteer.email,
+                congregationName: cong?.name,
               });
           } else {
-            const sendEmail = getEmailSender(c);
+            const sendEmail = await getEmailSender(c);
             await sendEmail({
               to: volunteer.email,
               subject: `You've been assigned: ${parsed.data.role} on ${parsed.data.date}`,
@@ -233,14 +235,12 @@ export function registerRotaRoutes(app: AppType) {
       if (!parsed.success) return c.json({ error: parsed.error.issues }, 400);
       const id = generateId();
       const now = new Date().toISOString();
-      await db
-        .insert(schema.safetyClearance)
-        .values({
-          id,
-          congregationId: c.get("congregationId")!,
-          ...parsed.data,
-          createdAt: now,
-        });
+      await db.insert(schema.safetyClearance).values({
+        id,
+        congregationId: c.get("congregationId")!,
+        ...parsed.data,
+        createdAt: now,
+      });
       const [r] = await db
         .select()
         .from(schema.safetyClearance)

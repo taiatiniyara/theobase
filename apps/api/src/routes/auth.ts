@@ -38,11 +38,12 @@ export function registerAuthRoutes(app: AppType) {
     const appUrl = (globalThis as any).APP_URL || "https://theobase.app";
     const magicLink = `${appUrl}/auth/verify?token=${token}`;
 
-    const sendEmail = getEmailSender(c);
+    const sendEmail = await getEmailSender(c);
     const result = await sendEmail({
       to: email,
       subject: "Sign in to Theobase",
       html: renderMagicLinkEmail({ magicLink }),
+      fromName: "Theobase",
     });
 
     if (!result.success) {
@@ -190,7 +191,7 @@ export function registerAuthRoutes(app: AppType) {
           .set({ twoFactorCode: code, twoFactorExpiresAt: codeExpiry })
           .where(eq(schema.authToken.id, found.id));
 
-        const sendEmail = getEmailSender(c);
+        const sendEmail = await getEmailSender(c);
         await sendEmail({
           to: found.email,
           subject: "Your Theobase verification code",
@@ -200,6 +201,7 @@ export function registerAuthRoutes(app: AppType) {
             <div style="font-size:32px;font-weight:bold;letter-spacing:4px;text-align:center;padding:16px;background:#f0f4f8;border-radius:8px;margin:16px 0">${code}</div>
             <p style="color:#64748b;font-size:14px">This code expires in 10 minutes. If you did not request this, you can ignore this email.</p>
           </div>`,
+          fromName: "Theobase",
         });
 
         return c.json({ requires2FA: true, token: found.token });
