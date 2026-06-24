@@ -23,6 +23,8 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+        env:
+          PNPM_VERIFY_DEPS_BEFORE_RUN: "false"
 
       - run: pnpm typecheck
 
@@ -43,5 +45,7 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+        env:
+          PNPM_VERIFY_DEPS_BEFORE_RUN: "false"
 
       - run: pnpm test:all
