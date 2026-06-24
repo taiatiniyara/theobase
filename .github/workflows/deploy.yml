@@ -21,9 +21,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
-        env:
-          PNPM_MINIMUM_RELEASE_AGE: "0"
+      - run: pnpm install
       - run: pnpm typecheck
       - run: pnpm lint
 
@@ -37,9 +35,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
-        env:
-          PNPM_MINIMUM_RELEASE_AGE: "0"
+      - run: pnpm install
       - run: pnpm test:all
 
   deploy-api:
@@ -52,9 +48,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
-        env:
-          PNPM_MINIMUM_RELEASE_AGE: "0"
+      - run: pnpm install
       - run: pnpm exec wrangler deploy
         working-directory: apps/api
         env:
@@ -71,9 +65,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
-        env:
-          PNPM_MINIMUM_RELEASE_AGE: "0"
+      - run: pnpm install
       - run: pnpm exec wrangler deploy
         working-directory: apps/do
         env:
@@ -90,9 +82,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
-        env:
-          PNPM_MINIMUM_RELEASE_AGE: "0"
+      - run: pnpm install
       - run: pnpm --filter @theobase/web run build
       - run: pnpm exec wrangler pages deploy .svelte-kit/cloudflare --project-name theobase-web
         working-directory: apps/web
