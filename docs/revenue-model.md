@@ -28,8 +28,8 @@ There are two paths:
 1. A local church signs up and gets a **6-month free pilot** with full access — no credit card required.
 2. The conference sees a dashboard: "12 of your churches are in pilot. 87 days remaining."
 3. Before the pilot expires, the conference commits to covering those churches at $3/month each.
-4. The conference receives a monthly invoice: "47 churches × $3 = $141. Bank transfer details below."
-5. The conference pays via bank transfer. No Stripe, no per-church payment logistics.
+4. The conference receives a monthly invoice: "47 churches × $3 = $141." Payment is processed via Stripe.
+5. The conference pays via Stripe. No per-church payment logistics.
 6. If the conference does not commit before the pilot expires, the churches are prompted to switch to direct payment (Path 2) or their access becomes read-only.
 
 ### Path 2: Direct Subscription (fallback)
