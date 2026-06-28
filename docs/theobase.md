@@ -55,7 +55,7 @@ Theobase does not aim to replace existing enterprise systems; it acts as a **mid
 
 ## 3. Existing System Coverage Map
 
-Theobase must avoid opposing or displacing systems that already serve the SDA ecosystem effectively. Its role is **middleware**: it bridges the grassroots-to-institution gap that existing systems were never architected to fill. Below is the full landscape.
+Theobase must avoid opposing or displacing systems that already serve the SDA ecosystem effectively. But it also should not hesitate to replace tools that keep local churches data-blind. Its role is **middleware with teeth**: it bridges the grassroots-to-institution gap, and where local-church workflows are broken, it replaces the broken tooling outright. Below is the full landscape, with an explicit posture for each system.
 
 ### 3.1 Global Enterprise Systems (GC / Multi-Division)
 
@@ -69,13 +69,13 @@ These are official denominational systems that Theobase must **integrate with, n
 
 ### 3.2 Division-Specific Platforms
 
-These systems serve specific divisions or regions. Theobase should **integrate where they exist, fill the gap where they don't**:
+These systems serve specific divisions. Theobase **functionally subsumes** them — it covers the same workflows and more — but the political reality of replacing an official division system requires care:
 
 | System | Division | Scope | Theobase Relationship |
 |---|---|---|---|
-| **eAdventist** | North American Division | Church membership management, email/SMS messaging, **myEADVENTIST** mobile app for members | **Overlap awareness required.** eAdventist provides membership lookups and messaging for NAD churches — functionality that overlaps with Theobase's Membership Hub and Communications Hub. Strategy: Theobase should integrate (read from / write to eAdventist APIs) rather than duplicate. Outside NAD, Theobase provides the same capability natively. |
-| **Ministry Development Portal (MD / MD Lite)** | South Pacific Division | Pastor activity logging, ministry reporting, resource access; built for offline/low-data settings | **Direct overlap.** MD/MDLite already serves SPD pastors with activity logging and reporting — the same functional area as Theobase's Ministry Reporter and Pastoral Reporting modules. Strategy: In SPD territory, investigate whether Theobase integrates with or complements MD. Outside SPD, Theobase fills the gap. |
-| **Thrive Platform** | South Pacific Division | Member engagement, visitor follow-up, relationship building, discipleship journey tracking | **Direct overlap on discipleship.** Thrive addresses member follow-up and engagement — overlapping with Theobase's discipleship/retention tracking. Strategy: Same as MD — integrate within SPD, fill the gap elsewhere. |
+| **eAdventist** | North American Division | Church membership management, email/SMS messaging, **myEADVENTIST** mobile app for members | **Functionally replaceable.** eAdventist provides membership lookups, messaging, and a mobile app for NAD churches — all workflows Theobase covers (plus finances, governance, ministry, safety). Strategy: offer eAdventist as an integration source (read/write APIs) in NAD territory; provide Theobase natively everywhere else. If a NAD church prefers Theobase alone, migration is supported. |
+| **Ministry Development Portal (MD / MD Lite)** | South Pacific Division | Pastor activity logging, ministry reporting, resource access; built for offline/low-data settings | **Functionally replaceable.** MD/MDLite serves SPD pastors with activity logging and reporting — fully subsumed by Theobase's Ministry Reporter and Pastoral Reporting. Strategy: import MD historical data into Theobase; offer MD as a legacy parallel system during transition. Outside SPD, Theobase fills the gap. |
+| **Thrive Platform** | South Pacific Division | Member engagement, visitor follow-up, relationship building, discipleship journey tracking | **Functionally replaceable.** Thrive handles member follow-up and engagement — fully subsumed by Theobase's discipleship/retention tracking and attendance analytics. Strategy: same as MD — import Thrive data; offer Thrive as a parallel system during transition. |
 
 ### 3.3 Complementary Institutions & Ministries
 
@@ -100,13 +100,29 @@ Local SDA churches commonly use these generic tools. Theobase aims to provide a 
 | **Google Sheets / Microsoft Excel** | Membership lists, financial tracking, attendance records, budgeting | **Primary replacement target.** Spreadsheets are the main "competitor." Theobase replaces them for all covered workflows with structured, policy-embedded tooling that eliminates errors and generates institutional reports as a byproduct. |
 | **Paper (binders, notebooks, filing cabinets)** | Board minutes, baptismal records, financial receipts, training certificates | **Primary replacement target.** The physical-to-digital bridge is Theobase's core value proposition. |
 
-### 3.5 The Integration Posture
+### 3.5 System Replacement Classification
+
+| System | Posture | Rationale |
+|---|---|---|
+| **Paper, spreadsheets, WhatsApp** | **Replace aggressively** | These are the primary competition. Every Theobase workflow eliminates paper, spreadsheets, and informal messaging for church operations. |
+| **Google Sheets / Excel** | **Replace** | Spreadsheets create fragmentation, duplication, and reporting burden. Theobase converts spreadsheet workflows into structured, policy-embedded tooling. |
+| **Tithe.ly / Breeze / Elvanto** | **Offer migration** | Third-party church management tools some SDA churches use. Theobase is a denomination-specific substitute with superior institutional integration. Migration tools and parallel-run periods lower the switching cost. |
+| **eAdventist (NAD)** | **Functionally replaceable** | Theobase covers all eAdventist workflows (membership, messaging, mobile app) plus finances, governance, and ministry. Politically sensitive; offer API integration path as a bridge strategy. |
+| **MD / MD Lite (SPD)** | **Functionally replaceable** | Theobase's Ministry Reporter and Pastoral Reporting fully subsume MD's scope. Import historical data; offer parallel operation during transition. |
+| **Thrive (SPD)** | **Functionally replaceable** | Theobase's discipleship tracking and engagement analytics cover Thrive's scope. Same migration strategy as MD. |
+| **AdventistGiving** | **Do not replace** | Member-facing giving is complementary to Theobase's local-treasury workflows. Theobase handles the counting and receipting side; AdventistGiving handles the member's online giving. These are two halves of the same coin. |
+| **ACMS** | **Do not replace** | ACMS is the canonical institutional membership store. Replacing it would fragment the global membership record. Theobase pushes clean data upstream. |
+| **SunPlus** | **Do not replace** | SunPlus is the canonical institutional financial ledger. Replacing it would fragment the global financial record. Theobase feeds it structured reports. |
+| **Adsafe / ALC** | **Link, don't absorb** | These are training content providers. Theobase verifies completion via API/portal integration but does not re-host their accredited content. |
+| **Adventist Technology (SPD)** | **Collaborate, don't compete** | Adventist Technology provides the IT infrastructure Theobase runs on. The two are complementary layers in the stack. |
+
+### 3.6 The Integration Posture
 
 ```
           +------------------------------------------+
           |         INSTITUTIONAL TIER                |
           |  ACMS  |  SunPlus  |  AdventistGiving     |
-          |  (Do not replace -- push data upstream)   |
+          |      (Do not replace -- feed data)        |
           +------------------------------------------+
                            ^
                      Reports & data extracts
@@ -116,25 +132,27 @@ Local SDA churches commonly use these generic tools. Theobase aims to provide a 
           |  (Middleware -- local ops -> institutional |
           |   reports as a natural byproduct)         |
           +------------------------------------------+
-                           ^
-                     Daily operations
-                           |
-     +---------------------+---------------------+
-     |                     |                     |
-     v                     v                     v
-+---------+    +--------------+    +------------------+
-|Paper &   |    | Division     |    | Third-party      |
-|spread-   |    | platforms    |    | tools            |
-|sheets    |    | (eAdventist, |    | (Tithely,        |
-|(replace) |    |  MD, Thrive) |    |  Planning Center)|
-+---------+    | (integrate/  |    | (offer migration)|
-               |  complement) |    +------------------+
-               +--------------+
+              |              ^              ^
+      (replace)    (subsume)     (offer migration)
+              |              |              |
+              v              |              |
+     +---------+    +--------------+    +------------------+
+     |Paper &   |    | Division     |    | Third-party      |
+     |spread-   |    | platforms    |    | tools            |
+     |sheets    |    | (eAdventist, |    | (Tithely,        |
+     |          |    |  MD, Thrive) |    |  Planning Center)|
+     +---------+    +--------------+    +------------------+
+
+   Links to, doesn't absorb:
+   Adsafe (training)  |  ALC (courses)
+
+   Infrastructure partner (not competitor):
+   Adventist Technology
 ```
 
-**Core rule:** Theobase never seeks to replace a denominational system that serves the institutional tier (ACMS, SunPlus, AdventistGiving). It provides the grassroots operational layer that feeds them. For division-specific platforms (eAdventist, MD/MDLite, Thrive), Theobase integrates where they exist and fills the functional gap where they don't. For third-party tools, Theobase offers a denomination-specific alternative with superior institutional integration, and provides migration paths.
+**Core rule:** Theobase replaces paper, spreadsheets, and WhatsApp — aggressively. It offers migration from third-party tools (Tithely, Planning Center). It functionally subsumes division platforms (eAdventist, MD, Thrive) but provides integration paths for political sensitivity. It never replaces the institutional canonical systems (ACMS, SunPlus, AdventistGiving). It links to, but does not absorb, training content providers (Adsafe, ALC).
 
-### 3.6 Tag Legend
+### 3.7 Tag Legend
 
 In the gap catalog and quick-reference table below, each entry is tagged with one of the following:
 
