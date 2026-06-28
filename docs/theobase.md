@@ -103,33 +103,33 @@ Local SDA churches commonly use these generic tools. Theobase aims to provide a 
 ### 3.5 The Integration Posture
 
 ```
-          ┌──────────────────────────────────────────┐
-          │         INSTITUTIONAL TIER                │
-          │  ACMS  │  SunPlus  │  AdventistGiving     │
-          │  (Do not replace — push data upstream)    │
-          └──────────────────────────────────────────┘
-                           ▲
+          +------------------------------------------+
+          |         INSTITUTIONAL TIER                |
+          |  ACMS  |  SunPlus  |  AdventistGiving     |
+          |  (Do not replace -- push data upstream)   |
+          +------------------------------------------+
+                           ^
                      Reports & data extracts
-                           │
-          ┌──────────────────────────────────────────┐
-          │            THEOBASE                       │
-          │  (Middleware — local ops → institutional  │
-          │   reports as a natural byproduct)         │
-          └──────────────────────────────────────────┘
-                           ▲
-                    Daily operations
-                           │
-     ┌─────────────────────┼─────────────────────┐
-     │                     │                     │
-     ▼                     ▼                     ▼
-┌─────────┐    ┌──────────────┐    ┌──────────────────┐
-│Paper &   │    │ Division     │    │ Third-party      │
-│spread-   │    │ platforms    │    │ tools            │
-│sheets    │    │ (eAdventist, │    │ (Tithely,        │
-│(replace) │    │  MD, Thrive) │    │  Planning Center)│
-└─────────┘    │ (integrate/  │    │ (offer migration)│
-               │  complement) │    └──────────────────┘
-               └──────────────┘
+                           |
+          +------------------------------------------+
+          |            THEOBASE                       |
+          |  (Middleware -- local ops -> institutional |
+          |   reports as a natural byproduct)         |
+          +------------------------------------------+
+                           ^
+                     Daily operations
+                           |
+     +---------------------+---------------------+
+     |                     |                     |
+     v                     v                     v
++---------+    +--------------+    +------------------+
+|Paper &   |    | Division     |    | Third-party      |
+|spread-   |    | platforms    |    | tools            |
+|sheets    |    | (eAdventist, |    | (Tithely,        |
+|(replace) |    |  MD, Thrive) |    |  Planning Center)|
++---------+    | (integrate/  |    | (offer migration)|
+               |  complement) |    +------------------+
+               +--------------+
 ```
 
 **Core rule:** Theobase never seeks to replace a denominational system that serves the institutional tier (ACMS, SunPlus, AdventistGiving). It provides the grassroots operational layer that feeds them. For division-specific platforms (eAdventist, MD/MDLite, Thrive), Theobase integrates where they exist and fills the functional gap where they don't. For third-party tools, Theobase offers a denomination-specific alternative with superior institutional integration, and provides migration paths.
