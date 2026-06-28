@@ -55,61 +55,96 @@ Theobase does not aim to replace existing enterprise systems; it acts as a **mid
 
 ## 3. Existing System Coverage Map
 
-The SDA Church already operates two enterprise systems that serve the institutional tier:
+Theobase must avoid opposing or displacing systems that already serve the SDA ecosystem effectively. Its role is **middleware**: it bridges the grassroots-to-institution gap that existing systems were never architected to fill. Below is the full landscape.
 
-| System | Scope | User | Coverage |
+### 3.1 Global Enterprise Systems (GC / Multi-Division)
+
+These are official denominational systems that Theobase must **integrate with, not replace or duplicate**:
+
+| System | Owner | Scope | Theobase Relationship |
 |---|---|---|---|
-| **ACMS** (Adventist Church Management System) | Membership, transfers, statistical reports, some departmental reporting | Conference/mission/union clerks | Handles the *institutional* membership database — but local churches only contribute data; they do not operate the system. |
-| **SunPlus** | General ledger, fund accounting, institutional budgeting, remittance intake, audit trails | Conference/mission/union treasury | Handles the *institutional* financial ledger — but local church treasurers work outside the system, submitting paper or spreadsheet reports. |
+| **ACMS** (Adventist Church Management System) | General Conference / multi-division | Membership database, transfers, statistical reports, some departmental reporting | **Upstream data consumer.** Theobase generates the membership events (baptisms, transfers, attendance) locally; ACMS is the institutional canonical store. Local churches are data *providers* to ACMS, not users of it. |
+| **SunPlus** | General Conference / multi-division | General ledger, fund accounting, institutional budgeting, payroll, remittance intake, audit trails | **Upstream data consumer.** Theobase captures local offering counts, receipts, and treasury transactions; SunPlus ingests the aggregated reports at the conference/mission level. Local treasurers are data *providers*, not users. |
+| **AdventistGiving** | North American Division (used globally) | Online tithe and offering platform for members; mobile, web, text giving; recurring donations | **Parallel channel — do not conflict.** Members use AdventistGiving to return tithe/offerings online. Theobase handles the *local church treasury* (counting physical offerings, receipting, petty cash). These are complementary: AdventistGiving is member-to-God giving; Theobase is officer-to-institution stewardship. |
 
-### What existing systems do NOT cover
+### 3.2 Division-Specific Platforms
 
-Both systems were architected for top-down institutional compliance. They were never designed to serve the local church as a user. This leaves **every local-church operational workflow** uncovered:
+These systems serve specific divisions or regions. Theobase should **integrate where they exist, fill the gap where they don't**:
 
-- **Local financial counting and controls** — The offering-count process, petty cash, receipt generation, and local treasury operations happen entirely outside SunPlus. The local treasurer is a data provider, not a user.
-- **Board governance and minutes** — No existing system touches local church governance workflows.
-- **Ministry activity logging** — Department secretaries (AY, Sabbath School, PM, Health, Dorcas) have no digital tooling. ACMS receives only aggregated statistical summaries.
-- **Officer training and onboarding** — No platform for structured onboarding, certification tracking, or renewal management.
-- **Child safety and compliance** — Background checks, training records, and incident workflows are entirely manual.
-- **Communication and coordination** — WhatsApp, Facebook, and paper announcements fill the gap.
-- **Asset, inventory, and logistics management** — Church buildings, vehicles, equipment, and supplies are untracked.
-- **Volunteer and HR management** — No roster, skills database, or workload visibility exists.
-- **Offline-first operation** — Both ACMS and SunPlus require connectivity and institutional access; they are unusable in disconnected local-church settings.
-- **Every technology, legal, adoption, and analytics concern** — Data residency, encryption, API governance, digital literacy support, funding models, and mission-impact measurement are platform-level concerns outside the scope of existing systems.
+| System | Division | Scope | Theobase Relationship |
+|---|---|---|---|
+| **eAdventist** | North American Division | Church membership management, email/SMS messaging, **myEADVENTIST** mobile app for members | **Overlap awareness required.** eAdventist provides membership lookups and messaging for NAD churches — functionality that overlaps with Theobase's Membership Hub and Communications Hub. Strategy: Theobase should integrate (read from / write to eAdventist APIs) rather than duplicate. Outside NAD, Theobase provides the same capability natively. |
+| **Ministry Development Portal (MD / MD Lite)** | South Pacific Division | Pastor activity logging, ministry reporting, resource access; built for offline/low-data settings | **Direct overlap.** MD/MDLite already serves SPD pastors with activity logging and reporting — the same functional area as Theobase's Ministry Reporter and Pastoral Reporting modules. Strategy: In SPD territory, investigate whether Theobase integrates with or complements MD. Outside SPD, Theobase fills the gap. |
+| **Thrive Platform** | South Pacific Division | Member engagement, visitor follow-up, relationship building, discipleship journey tracking | **Direct overlap on discipleship.** Thrive addresses member follow-up and engagement — overlapping with Theobase's discipleship/retention tracking. Strategy: Same as MD — integrate within SPD, fill the gap elsewhere. |
 
-### The coverage pattern
+### 3.3 Complementary Institutions & Ministries
+
+These are SDA-affiliated organizations with their own digital platforms. Theobase should **link, not absorb**:
+
+| Organization | Scope | Theobase Relationship |
+|---|---|---|
+| **Adsafe** (SPD) | Child safety training (e-learning portal), safeguarding compliance, survivor services, incident reporting, compliance schedules | **Training provider — integrate, don't duplicate.** Adsafe runs the accredited child-safety e-learning. Theobase's Safety Vault should link to Adsafe's training portal to verify completion, not re-host the training content. Adsafe's incident-reporting forms can be a destination for Theobase-generated incident reports. |
+| **Adventist Technology** (SPD) | IT support, cybersecurity, technology governance, device management, enterprise solutions, vendor licensing | **Infrastructure partner — not a competitor.** Adventist Technology provides the IT backbone (networks, devices, cloud, security) that Theobase runs on. Theobase is a software application; Adventist Technology is the IT operations layer. The two are complementary. |
+| **Adventist Risk Management (ARM)** | Insurance, liability coverage, risk assessments for NAD churches | **Risk partner.** Theobase's risk-management module should reference ARM policies and feed incident data where appropriate. |
+| **Adventist Learning Community (ALC)** | Online courses, officer training, certifications | **Training content provider.** Theobase's Training Hub can link to ALC courses for officer certification. Theobase tracks completion; ALC delivers the content. |
+
+### 3.4 Third-Party Tools in Common Use
+
+Local SDA churches commonly use these generic tools. Theobase aims to provide a better, integrated alternative for covered workflows — but should not force abandonment where churches have invested deeply:
+
+| Tool | Common Usage | Theobase Posture |
+|---|---|---|
+| **Tithe.ly / Breeze / Elvanto** | Third-party church management: online giving, member database, service planning, church apps | **Competitive alternative.** These are general-market products that some SDA churches use. Theobase offers a denomination-specific alternative with policy embedding and institutional integration. Migration tools should be provided. |
+| **Planning Center** | Service planning, volunteer scheduling, check-in | **Partial overlap on volunteer scheduling and check-in.** Theobase provides volunteer management and attendance check-in natively; churches using Planning Center can choose to migrate or keep both. |
+| **WhatsApp / Facebook / Signal** | Informal church communication, announcement groups, coordination | **Complement then replace.** Theobase's Communications Hub provides a canonical source of truth (calendar, announcements, archive) that WhatsApp groups can't offer — but Theobase should provide a WhatsApp bridge during transition so groups don't fragment. |
+| **Google Sheets / Microsoft Excel** | Membership lists, financial tracking, attendance records, budgeting | **Primary replacement target.** Spreadsheets are the main "competitor." Theobase replaces them for all covered workflows with structured, policy-embedded tooling that eliminates errors and generates institutional reports as a byproduct. |
+| **Paper (binders, notebooks, filing cabinets)** | Board minutes, baptismal records, financial receipts, training certificates | **Primary replacement target.** The physical-to-digital bridge is Theobase's core value proposition. |
+
+### 3.5 The Integration Posture
 
 ```
-                    ACMS                SunPlus
-Membership DB        ████████            ░░░░░░░░
-Transfers            ████████            ░░░░░░░░
-Statistical reports  ████████            ░░░░░░░░
-Institutional GL     ░░░░░░░░            ████████
-Fund accounting      ░░░░░░░░            ████████
-Institutional budget ░░░░░░░░            ████████
-Remittance intake    ░░░░░░░░            ████████
-─────────────────────────────────────────────────
-Local counting       ░░░░░░░░            ░░░░░░░░  ← THEOBASE
-Board minutes        ░░░░░░░░            ░░░░░░░░  ← THEOBASE
-Ministry logging     ░░░░░░░░            ░░░░░░░░  ← THEOBASE
-Officer training     ░░░░░░░░            ░░░░░░░░  ← THEOBASE
-Child safety         ░░░░░░░░            ░░░░░░░░  ← THEOBASE
-Communication        ░░░░░░░░            ░░░░░░░░  ← THEOBASE
-Asset management     ░░░░░░░░            ░░░░░░░░  ← THEOBASE
-Volunteer mgmt       ░░░░░░░░            ░░░░░░░░  ← THEOBASE
-Offline operation    ░░░░░░░░            ░░░░░░░░  ← THEOBASE
+          ┌──────────────────────────────────────────┐
+          │         INSTITUTIONAL TIER                │
+          │  ACMS  │  SunPlus  │  AdventistGiving     │
+          │  (Do not replace — push data upstream)    │
+          └──────────────────────────────────────────┘
+                           ▲
+                     Reports & data extracts
+                           │
+          ┌──────────────────────────────────────────┐
+          │            THEOBASE                       │
+          │  (Middleware — local ops → institutional  │
+          │   reports as a natural byproduct)         │
+          └──────────────────────────────────────────┘
+                           ▲
+                    Daily operations
+                           │
+     ┌─────────────────────┼─────────────────────┐
+     │                     │                     │
+     ▼                     ▼                     ▼
+┌─────────┐    ┌──────────────┐    ┌──────────────────┐
+│Paper &   │    │ Division     │    │ Third-party      │
+│spread-   │    │ platforms    │    │ tools            │
+│sheets    │    │ (eAdventist, │    │ (Tithely,        │
+│(replace) │    │  MD, Thrive) │    │  Planning Center)│
+└─────────┘    │ (integrate/  │    │ (offer migration)│
+               │  complement) │    └──────────────────┘
+               └──────────────┘
 ```
 
-**The integration model:** Theobase sits below the institutional line. It empowers local officers to do their daily work digitally, then generates the reports and data extracts that ACMS and SunPlus expect — eliminating the manual re-keying step at the conference office and producing higher-fidelity data as a natural byproduct.
+**Core rule:** Theobase never seeks to replace a denominational system that serves the institutional tier (ACMS, SunPlus, AdventistGiving). It provides the grassroots operational layer that feeds them. For division-specific platforms (eAdventist, MD/MDLite, Thrive), Theobase integrates where they exist and fills the functional gap where they don't. For third-party tools, Theobase offers a denomination-specific alternative with superior institutional integration, and provides migration paths.
 
-In the gap catalog and quick-reference table below, each entry is tagged with its existing system coverage:
+### 3.6 Tag Legend
+
+In the gap catalog and quick-reference table below, each entry is tagged with one of the following:
 
 | Tag | Meaning |
 |---|---|
-| `None` | No existing system addresses this at any level. |
-| `ACMS (inst.)` | ACMS covers this at the institutional level, but the local church has no tooling. |
-| `SunPlus (inst.)` | SunPlus covers this at the institutional level, but the local church has no tooling. |
-| `Partially` | Some aspect has institutional tooling, but significant gaps remain at all levels. |
+| `None` | No existing denominational system addresses this at any level. |
+| `ACMS (inst.)` | ACMS covers this at the institutional level only. The local church is the data provider, not a user. |
+| `SunPlus (inst.)` | SunPlus covers this at the institutional level only. The local church is the data provider, not a user. |
+| `Partially` | Some aspect has institutional or division-level tooling, but significant gaps remain at the local church level. |
+| `Division platform exists` | A division-specific system (eAdventist, MD/MDLite, Thrive) covers some of this in a specific region. Theobase integrates there, fills the gap elsewhere. |
 
 ---
 
@@ -1092,7 +1127,7 @@ Capabilities that round out the platform for long-term sustainability, global co
 ## 6. Gap-to-Metric Quick-Reference
 
 | # | Gap | Legacy Coverage | Success Metric (Target State) | Phase |
-|---|---|---|---|---|---|
+|---|---|---|---|---|
 | 1 | Membership records | ACMS (inst.) | >95% churches digital, transfer latency <48h | P1 |
 | 2 | Financial transparency | SunPlus (inst.) | Remittance <7d, audit trail >99% | P1 |
 | 3 | Board governance | None | Minutes >95% complete, action closure >80% | P1 |
@@ -1164,4 +1199,4 @@ Capabilities that round out the platform for long-term sustainability, global co
 
 ---
 
-*Document version: v2.1 — added existing system coverage mapping (Section 3), Legacy Coverage tags on all gaps, and coverage column in quick-reference. All additions are grounded in Theobase's stated architectural strategy of middleware, policy encapsulation, and telemetry as an operational byproduct.*
+*Document version: v2.2 — expanded Section 3 with full system landscape: global enterprise systems (ACMS, SunPlus, AdventistGiving), division-specific platforms (eAdventist, MD/MDLite, Thrive), complementary ministries (Adsafe, Adventist Technology, ARM, ALC), third-party tools, and explicit integration posture per system tier.*
