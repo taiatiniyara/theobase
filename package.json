@@ -1,0 +1,29 @@
+{
+  "name": "theobase",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "worker",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w frontend & npm run dev -w worker",
+    "lint": "npm run lint -w frontend && npm run lint -w worker",
+    "typecheck": "npm run typecheck -w frontend && npm run typecheck -w worker",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "test": "echo 'No tests yet — add tests in Phase 3'",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8",
+    "prettier": "^3.5.3"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.1": true,
+    "workerd@1.20260625.1": true,
+    "sharp@0.34.5": true
+  }
+}
