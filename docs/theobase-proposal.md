@@ -1,8 +1,7 @@
 # Theobase Pilot Proposal
 
 **Prepared by:** Taia Tiniyara  
-**Date:** June 2026  
-**Status:** Draft — for discussion
+**Date:** June 2026
 
 ---
 
