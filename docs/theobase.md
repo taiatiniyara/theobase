@@ -171,7 +171,7 @@ In the gap catalog and quick-reference table below, each entry is tagged with on
 Each gap in the catalog is structured as:
 
 | Field | Purpose |
-|---|---|---|
+|---|---|
 | **Current Pain** | What the gap looks like on the ground today. |
 | **Legacy Coverage** | Whether ACMS or SunPlus already addresses this gap (see [Section 3](#3-existing-system-coverage-map)). |
 | **Theobase Response** | How the middleware architecture addresses this gap. |
