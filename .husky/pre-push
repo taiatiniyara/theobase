@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+# Block force-push to main/master
+protected_branches="main master"
+current_branch=$(git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f3-)
+
+for branch in $protected_branches; do
+  if [ "$current_branch" = "$branch" ]; then
+    if git rev-parse --verify "refs/heads/$branch" >/dev/null 2>&1; then
+      if [ "$(git rev-parse --verify "refs/heads/$branch")" != "$(git merge-base HEAD "refs/heads/$branch" 2>/dev/null)" ]; then
+        echo "ERROR: Force push to $branch is not allowed"
+        exit 1
+      fi
+    fi
+  fi
+done
+
+# Run full test suite
+npm run typecheck
+npm run lint
+npm test
