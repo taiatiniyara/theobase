@@ -1,0 +1,46 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_packages_shared_src_index_ts",
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\packages\\shared\\src\\index.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_index_church",
+      "label": "Church",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\packages\\shared\\src\\index.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_index_member",
+      "label": "Member",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\packages\\shared\\src\\index.ts",
+      "source_location": "L8"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_packages_shared_src_index_ts",
+      "target": "src_index_church",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\packages\\shared\\src\\index.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_packages_shared_src_index_ts",
+      "target": "src_index_member",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\packages\\shared\\src\\index.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": []
+}

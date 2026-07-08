@@ -4,7 +4,7 @@ Information system for the Seventh-day Adventist Church — collecting data from
 
 ## Status
 
-Early development — Phase 0 (Bootstrap) in progress.
+Phase 2 — Backlog defined (33 issues). Scaffold in place. Ready for implementation.
 
 ## Stack
 

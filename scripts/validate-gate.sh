@@ -67,8 +67,9 @@ check_table_rows() {
     error "Missing file: $file"
     return 1
   fi
-  # Count lines with | that aren't just headers (contain actual data)
-  local row_count=$(grep -E '^\|[^-]+\|' "$file" | grep -v '^\|[-:]+\|' | wc -l)
+  # Count lines with | that aren't just headers or separators (contain actual data)
+  # Exclude lines that are mostly dashes/colons/spaces (separator lines)
+  local row_count=$(grep -E '^\|[^-]+\|' "$file" | grep -vE '^\|[-: ]+\|$' | wc -l)
   if [[ $row_count -lt $min_rows ]]; then
     error "File $file has only $row_count table rows (expected at least $min_rows)"
     return 1
@@ -86,7 +87,29 @@ check_section_content() {
     return 1
   fi
   # Extract section content (from header to next header or EOF)
-  local content=$(awk "/^#+ .*${section}/,/^#+ /" "$file" | head -n -1)
+  # Skip the header line itself, capture until next header or EOF
+  # Remove all spaces for matching (UI/UX vs UI / UX)
+  local content=$(awk -v section="$section" '
+    {
+      line = $0
+      # Remove all spaces for comparison
+      normalized_line = line
+      gsub(/ /, "", normalized_line)
+      normalized_section = section
+      gsub(/ /, "", normalized_section)
+      
+      if (line ~ /^#+ /) {
+        # Check if this line contains the section name (normalized)
+        if (index(normalized_line, normalized_section) > 0) {
+          found=1
+          next
+        } else if (found) {
+          found=0
+        }
+      }
+      if (found) print
+    }
+  ' "$file")
   local char_count=$(echo "$content" | wc -c)
   if [[ $char_count -lt $min_chars ]]; then
     error "Section '$section' in $file has only $char_count chars (expected at least $min_chars)"

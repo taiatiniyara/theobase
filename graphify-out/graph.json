@@ -1,0 +1,3080 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "commitlint.config.js",
+      "file_type": "code",
+      "source_file": "commitlint.config.js",
+      "source_location": "L1",
+      "id": "commitlint_config_js",
+      "community": 19,
+      "norm_label": "commitlint.config.js"
+    },
+    {
+      "label": "eslint.config.js",
+      "file_type": "code",
+      "source_file": "eslint.config.js",
+      "source_location": "L1",
+      "id": "eslint_config_js",
+      "community": 20,
+      "norm_label": "eslint.config.js"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "apps/api/src/index.ts",
+      "source_location": "L1",
+      "id": "apps_api_src_index_ts",
+      "community": 17,
+      "norm_label": "index.ts"
+    },
+    {
+      "label": "app",
+      "file_type": "code",
+      "source_file": "apps/api/src/index.ts",
+      "source_location": "L3",
+      "id": "src_index_app",
+      "community": 17,
+      "norm_label": "app"
+    },
+    {
+      "label": "vite.config.ts",
+      "file_type": "code",
+      "source_file": "apps/web/vite.config.ts",
+      "source_location": "L1",
+      "id": "apps_web_vite_config_ts",
+      "community": 21,
+      "norm_label": "vite.config.ts"
+    },
+    {
+      "label": "main.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/src/main.tsx",
+      "source_location": "L1",
+      "id": "apps_web_src_main_tsx",
+      "community": 8,
+      "norm_label": "main.tsx"
+    },
+    {
+      "label": "queryClient",
+      "file_type": "code",
+      "source_file": "apps/web/src/main.tsx",
+      "source_location": "L7",
+      "id": "src_main_queryclient",
+      "community": 8,
+      "norm_label": "queryclient"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "apps/web/src/main.tsx",
+      "source_location": "L9",
+      "id": "src_main_router",
+      "community": 8,
+      "norm_label": "router"
+    },
+    {
+      "label": "Register",
+      "file_type": "code",
+      "source_file": "apps/web/src/main.tsx",
+      "source_location": "L12",
+      "id": "src_main_register",
+      "community": 8,
+      "norm_label": "register"
+    },
+    {
+      "label": "routes.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/src/routes.tsx",
+      "source_location": "L1",
+      "id": "apps_web_src_routes_tsx",
+      "community": 8,
+      "norm_label": "routes.tsx"
+    },
+    {
+      "label": "rootRoute",
+      "file_type": "code",
+      "source_file": "apps/web/src/routes.tsx",
+      "source_location": "L3",
+      "id": "src_routes_rootroute",
+      "community": 8,
+      "norm_label": "rootroute"
+    },
+    {
+      "label": "indexRoute",
+      "file_type": "code",
+      "source_file": "apps/web/src/routes.tsx",
+      "source_location": "L11",
+      "id": "src_routes_indexroute",
+      "community": 8,
+      "norm_label": "indexroute"
+    },
+    {
+      "label": "routeTree",
+      "file_type": "code",
+      "source_file": "apps/web/src/routes.tsx",
+      "source_location": "L24",
+      "id": "src_routes_routetree",
+      "community": 8,
+      "norm_label": "routetree"
+    },
+    {
+      "label": "index.test.ts",
+      "file_type": "code",
+      "source_file": "packages/shared/src/index.test.ts",
+      "source_location": "L1",
+      "id": "packages_shared_src_index_test_ts",
+      "community": 22,
+      "norm_label": "index.test.ts"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L1",
+      "id": "packages_shared_src_index_ts",
+      "community": 16,
+      "norm_label": "index.ts"
+    },
+    {
+      "label": "Church",
+      "file_type": "code",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L1",
+      "id": "src_index_church",
+      "community": 16,
+      "norm_label": "church"
+    },
+    {
+      "label": "Member",
+      "file_type": "code",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L8",
+      "id": "src_index_member",
+      "community": 16,
+      "norm_label": "member"
+    },
+    {
+      "label": "AGENTS.md",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "id": "agents_md",
+      "community": 11,
+      "norm_label": "agents.md"
+    },
+    {
+      "label": "Agent Configuration",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "id": "theobase_agents_agent_configuration",
+      "community": 11,
+      "norm_label": "agent configuration"
+    },
+    {
+      "label": "Agent skills",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L3",
+      "id": "theobase_agents_agent_skills",
+      "community": 11,
+      "norm_label": "agent skills"
+    },
+    {
+      "label": "Issue tracker",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L5",
+      "id": "theobase_agents_issue_tracker",
+      "community": 11,
+      "norm_label": "issue tracker"
+    },
+    {
+      "label": "Triage labels",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L9",
+      "id": "theobase_agents_triage_labels",
+      "community": 11,
+      "norm_label": "triage labels"
+    },
+    {
+      "label": "Domain docs",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L13",
+      "id": "theobase_agents_domain_docs",
+      "community": 11,
+      "norm_label": "domain docs"
+    },
+    {
+      "label": "CHANGELOG.md",
+      "file_type": "document",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L1",
+      "id": "changelog_md",
+      "community": 15,
+      "norm_label": "changelog.md"
+    },
+    {
+      "label": "Changelog",
+      "file_type": "document",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L1",
+      "id": "theobase_changelog_changelog",
+      "community": 15,
+      "norm_label": "changelog"
+    },
+    {
+      "label": "[Unreleased]",
+      "file_type": "document",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L8",
+      "id": "theobase_changelog_unreleased",
+      "community": 15,
+      "norm_label": "[unreleased]"
+    },
+    {
+      "label": "Added",
+      "file_type": "document",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L10",
+      "id": "theobase_changelog_added",
+      "community": 15,
+      "norm_label": "added"
+    },
+    {
+      "label": "CONTEXT.md",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "L1",
+      "id": "context_md",
+      "community": 14,
+      "norm_label": "context.md"
+    },
+    {
+      "label": "Domain Glossary",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "L1",
+      "id": "theobase_context_domain_glossary",
+      "community": 14,
+      "norm_label": "domain glossary"
+    },
+    {
+      "label": "Terms",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "L5",
+      "id": "theobase_context_terms",
+      "community": 14,
+      "norm_label": "terms"
+    },
+    {
+      "label": "Relationships",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "L30",
+      "id": "theobase_context_relationships",
+      "community": 14,
+      "norm_label": "relationships"
+    },
+    {
+      "label": "Example Dialogue",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "L46",
+      "id": "theobase_context_example_dialogue",
+      "community": 14,
+      "norm_label": "example dialogue"
+    },
+    {
+      "label": "CONTRIBUTING.md",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L1",
+      "id": "contributing_md",
+      "community": 2,
+      "norm_label": "contributing.md"
+    },
+    {
+      "label": "Contributing",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L1",
+      "id": "theobase_contributing_contributing",
+      "community": 2,
+      "norm_label": "contributing"
+    },
+    {
+      "label": "Setup",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L3",
+      "id": "theobase_contributing_setup",
+      "community": 2,
+      "norm_label": "setup"
+    },
+    {
+      "label": "code:bash (git clone https://github.com/taiatiniyara/theobase.git)",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L7",
+      "id": "theobase_contributing_codeblock_1",
+      "community": 2,
+      "norm_label": "code:bash (git clone https://github.com/taiatiniyara/theobase.git)"
+    },
+    {
+      "label": "Development",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L14",
+      "id": "theobase_contributing_development",
+      "community": 2,
+      "norm_label": "development"
+    },
+    {
+      "label": "code:bash (# Run all dev servers)",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L16",
+      "id": "theobase_contributing_codeblock_2",
+      "community": 2,
+      "norm_label": "code:bash (# run all dev servers)"
+    },
+    {
+      "label": "Branching",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L33",
+      "id": "theobase_contributing_branching",
+      "community": 2,
+      "norm_label": "branching"
+    },
+    {
+      "label": "Commit Convention",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L40",
+      "id": "theobase_contributing_commit_convention",
+      "community": 2,
+      "norm_label": "commit convention"
+    },
+    {
+      "label": "code:block3 (<type>(<scope>): <description>)",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L45",
+      "id": "theobase_contributing_codeblock_3",
+      "community": 2,
+      "norm_label": "code:block3 (<type>(<scope>): <description>)"
+    },
+    {
+      "label": "Git Hooks",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L63",
+      "id": "theobase_contributing_git_hooks",
+      "community": 2,
+      "norm_label": "git hooks"
+    },
+    {
+      "label": "Signing",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L74",
+      "id": "theobase_contributing_signing",
+      "community": 2,
+      "norm_label": "signing"
+    },
+    {
+      "label": "code:bash (git config commit.gpgsign true)",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L78",
+      "id": "theobase_contributing_codeblock_4",
+      "community": 2,
+      "norm_label": "code:bash (git config commit.gpgsign true)"
+    },
+    {
+      "label": "CI",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L82",
+      "id": "theobase_contributing_ci",
+      "community": 2,
+      "norm_label": "ci"
+    },
+    {
+      "label": "Releases",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L93",
+      "id": "theobase_contributing_releases",
+      "community": 2,
+      "norm_label": "releases"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "id": "readme_md",
+      "community": 9,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "Theobase",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "id": "theobase_readme_theobase",
+      "community": 9,
+      "norm_label": "theobase"
+    },
+    {
+      "label": "Status",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "id": "theobase_readme_status",
+      "community": 9,
+      "norm_label": "status"
+    },
+    {
+      "label": "Stack",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L9",
+      "id": "theobase_readme_stack",
+      "community": 9,
+      "norm_label": "stack"
+    },
+    {
+      "label": "Development",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L15",
+      "id": "theobase_readme_development",
+      "community": 9,
+      "norm_label": "development"
+    },
+    {
+      "label": "code:bash (npm install)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L17",
+      "id": "theobase_readme_codeblock_1",
+      "community": 9,
+      "norm_label": "code:bash (npm install)"
+    },
+    {
+      "label": "Documentation",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L22",
+      "id": "theobase_readme_documentation",
+      "community": 9,
+      "norm_label": "documentation"
+    },
+    {
+      "label": "ARCHITECTURE.md",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L1",
+      "id": "docs_architecture_md",
+      "community": 0,
+      "norm_label": "architecture.md"
+    },
+    {
+      "label": "Architecture",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L1",
+      "id": "docs_architecture_architecture",
+      "community": 0,
+      "norm_label": "architecture"
+    },
+    {
+      "label": "Stack",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L3",
+      "id": "docs_architecture_stack",
+      "community": 0,
+      "norm_label": "stack"
+    },
+    {
+      "label": "System Topology",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L17",
+      "id": "docs_architecture_system_topology",
+      "community": 0,
+      "norm_label": "system topology"
+    },
+    {
+      "label": "API / IPC Contracts",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L35",
+      "id": "docs_architecture_api_ipc_contracts",
+      "community": 0,
+      "norm_label": "api / ipc contracts"
+    },
+    {
+      "label": "code:json ({)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L57",
+      "id": "docs_architecture_codeblock_1",
+      "community": 0,
+      "norm_label": "code:json ({)"
+    },
+    {
+      "label": "code:json ({)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L65",
+      "id": "docs_architecture_codeblock_2",
+      "community": 0,
+      "norm_label": "code:json ({)"
+    },
+    {
+      "label": "Multi-Tenancy Strategy",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L78",
+      "id": "docs_architecture_multi_tenancy_strategy",
+      "community": 0,
+      "norm_label": "multi-tenancy strategy"
+    },
+    {
+      "label": "Internationalization (i18n) Posture",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L93",
+      "id": "docs_architecture_internationalization_i18n_posture",
+      "community": 0,
+      "norm_label": "internationalization (i18n) posture"
+    },
+    {
+      "label": "Compliance Posture",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L106",
+      "id": "docs_architecture_compliance_posture",
+      "community": 0,
+      "norm_label": "compliance posture"
+    },
+    {
+      "label": "Cost Model",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L126",
+      "id": "docs_architecture_cost_model",
+      "community": 0,
+      "norm_label": "cost model"
+    },
+    {
+      "label": "Documentation Posture",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L145",
+      "id": "docs_architecture_documentation_posture",
+      "community": 0,
+      "norm_label": "documentation posture"
+    },
+    {
+      "label": "UI / UX",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L169",
+      "id": "docs_architecture_ui_ux",
+      "community": 0,
+      "norm_label": "ui / ux"
+    },
+    {
+      "label": "Design Tokens",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L181",
+      "id": "docs_architecture_design_tokens",
+      "community": 0,
+      "norm_label": "design tokens"
+    },
+    {
+      "label": "Component Library",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L207",
+      "id": "docs_architecture_component_library",
+      "community": 0,
+      "norm_label": "component library"
+    },
+    {
+      "label": "Layout",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L223",
+      "id": "docs_architecture_layout",
+      "community": 0,
+      "norm_label": "layout"
+    },
+    {
+      "label": "UX Patterns",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L230",
+      "id": "docs_architecture_ux_patterns",
+      "community": 0,
+      "norm_label": "ux patterns"
+    },
+    {
+      "label": "Information Architecture",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L241",
+      "id": "docs_architecture_information_architecture",
+      "community": 0,
+      "norm_label": "information architecture"
+    },
+    {
+      "label": "Accessibility Baseline",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L250",
+      "id": "docs_architecture_accessibility_baseline",
+      "community": 0,
+      "norm_label": "accessibility baseline"
+    },
+    {
+      "label": "ISSUES.md",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L1",
+      "id": "docs_issues_md",
+      "community": 1,
+      "norm_label": "issues.md"
+    },
+    {
+      "label": "Issue Tracker",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L1",
+      "id": "docs_issues_issue_tracker",
+      "community": 1,
+      "norm_label": "issue tracker"
+    },
+    {
+      "label": "Dependency Graph",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L5",
+      "id": "docs_issues_dependency_graph",
+      "community": 1,
+      "norm_label": "dependency graph"
+    },
+    {
+      "label": "code:block1 (Issue 1: Add First Member (TRACER BULLET))",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L7",
+      "id": "docs_issues_codeblock_1",
+      "community": 1,
+      "norm_label": "code:block1 (issue 1: add first member (tracer bullet))"
+    },
+    {
+      "label": "Implementation Order",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L24",
+      "id": "docs_issues_implementation_order",
+      "community": 1,
+      "norm_label": "implementation order"
+    },
+    {
+      "label": "Issues",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L37",
+      "id": "docs_issues_issues",
+      "community": 1,
+      "norm_label": "issues"
+    },
+    {
+      "label": "Issue 1: Add First Member (TRACER BULLET)",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L39",
+      "id": "docs_issues_issue_1_add_first_member_tracer_bullet",
+      "community": 1,
+      "norm_label": "issue 1: add first member (tracer bullet)"
+    },
+    {
+      "label": "Issue 2: View Member List",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L53",
+      "id": "docs_issues_issue_2_view_member_list",
+      "community": 1,
+      "norm_label": "issue 2: view member list"
+    },
+    {
+      "label": "Issue 3: Edit Member Details",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L67",
+      "id": "docs_issues_issue_3_edit_member_details",
+      "community": 1,
+      "norm_label": "issue 3: edit member details"
+    },
+    {
+      "label": "Issue 4: Transfer Member Between Churches",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L81",
+      "id": "docs_issues_issue_4_transfer_member_between_churches",
+      "community": 1,
+      "norm_label": "issue 4: transfer member between churches"
+    },
+    {
+      "label": "Issue 5: Quarterly Membership Report",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L95",
+      "id": "docs_issues_issue_5_quarterly_membership_report",
+      "community": 1,
+      "norm_label": "issue 5: quarterly membership report"
+    },
+    {
+      "label": "Issue 6: Financial Tracking",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L109",
+      "id": "docs_issues_issue_6_financial_tracking",
+      "community": 1,
+      "norm_label": "issue 6: financial tracking"
+    },
+    {
+      "label": "Issue 7: Ministry Participation",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L123",
+      "id": "docs_issues_issue_7_ministry_participation",
+      "community": 1,
+      "norm_label": "issue 7: ministry participation"
+    },
+    {
+      "label": "Issue 8: Hierarchical Data Aggregation",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L137",
+      "id": "docs_issues_issue_8_hierarchical_data_aggregation",
+      "community": 1,
+      "norm_label": "issue 8: hierarchical data aggregation"
+    },
+    {
+      "label": "Issue 9: User Roles and Permissions",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L151",
+      "id": "docs_issues_issue_9_user_roles_and_permissions",
+      "community": 1,
+      "norm_label": "issue 9: user roles and permissions"
+    },
+    {
+      "label": "Issue 10: Dashboard and Navigation",
+      "file_type": "document",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L165",
+      "id": "docs_issues_issue_10_dashboard_and_navigation",
+      "community": 1,
+      "norm_label": "issue 10: dashboard and navigation"
+    },
+    {
+      "label": "SESSION.md",
+      "file_type": "document",
+      "source_file": "docs/SESSION.md",
+      "source_location": "L1",
+      "id": "docs_session_md",
+      "community": 12,
+      "norm_label": "session.md"
+    },
+    {
+      "label": "Session",
+      "file_type": "document",
+      "source_file": "docs/SESSION.md",
+      "source_location": "L1",
+      "id": "docs_session_session",
+      "community": 12,
+      "norm_label": "session"
+    },
+    {
+      "label": "Phase Checklist",
+      "file_type": "document",
+      "source_file": "docs/SESSION.md",
+      "source_location": "L7",
+      "id": "docs_session_phase_checklist",
+      "community": 12,
+      "norm_label": "phase checklist"
+    },
+    {
+      "label": "Phase 0",
+      "file_type": "document",
+      "source_file": "docs/SESSION.md",
+      "source_location": "L9",
+      "id": "docs_session_phase_0",
+      "community": 12,
+      "norm_label": "phase 0"
+    },
+    {
+      "label": "Phase 1",
+      "file_type": "document",
+      "source_file": "docs/SESSION.md",
+      "source_location": "L27",
+      "id": "docs_session_phase_1",
+      "community": 12,
+      "norm_label": "phase 1"
+    },
+    {
+      "label": "Phase 2",
+      "file_type": "document",
+      "source_file": "docs/SESSION.md",
+      "source_location": "L82",
+      "id": "docs_session_phase_2",
+      "community": 12,
+      "norm_label": "phase 2"
+    },
+    {
+      "label": "0001-hierarchical-organizational-model.md",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L1",
+      "id": "docs_adr_0001_hierarchical_organizational_model_md",
+      "community": 3,
+      "norm_label": "0001-hierarchical-organizational-model.md"
+    },
+    {
+      "label": "ADR 0001: Hierarchical Organizational Model",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L1",
+      "id": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "community": 3,
+      "norm_label": "adr 0001: hierarchical organizational model"
+    },
+    {
+      "label": "Status",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L3",
+      "id": "adr_0001_hierarchical_organizational_model_status",
+      "community": 3,
+      "norm_label": "status"
+    },
+    {
+      "label": "Context",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L6",
+      "id": "adr_0001_hierarchical_organizational_model_context",
+      "community": 3,
+      "norm_label": "context"
+    },
+    {
+      "label": "Decision",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L12",
+      "id": "adr_0001_hierarchical_organizational_model_decision",
+      "community": 3,
+      "norm_label": "decision"
+    },
+    {
+      "label": "Alternatives Considered",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L22",
+      "id": "adr_0001_hierarchical_organizational_model_alternatives_considered",
+      "community": 3,
+      "norm_label": "alternatives considered"
+    },
+    {
+      "label": "Flat organization with tags",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L24",
+      "id": "adr_0001_hierarchical_organizational_model_flat_organization_with_tags",
+      "community": 3,
+      "norm_label": "flat organization with tags"
+    },
+    {
+      "label": "Graph-based organization",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L28",
+      "id": "adr_0001_hierarchical_organizational_model_graph_based_organization",
+      "community": 3,
+      "norm_label": "graph-based organization"
+    },
+    {
+      "label": "Self-referential hierarchy (single table with parent_id)",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L32",
+      "id": "adr_0001_hierarchical_organizational_model_self_referential_hierarchy_single_table_with_parent_id",
+      "community": 3,
+      "norm_label": "self-referential hierarchy (single table with parent_id)"
+    },
+    {
+      "label": "Consequences",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L36",
+      "id": "adr_0001_hierarchical_organizational_model_consequences",
+      "community": 3,
+      "norm_label": "consequences"
+    },
+    {
+      "label": "Positive",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L38",
+      "id": "adr_0001_hierarchical_organizational_model_positive",
+      "community": 3,
+      "norm_label": "positive"
+    },
+    {
+      "label": "Negative",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L45",
+      "id": "adr_0001_hierarchical_organizational_model_negative",
+      "community": 3,
+      "norm_label": "negative"
+    },
+    {
+      "label": "Related Decisions",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L50",
+      "id": "adr_0001_hierarchical_organizational_model_related_decisions",
+      "community": 3,
+      "norm_label": "related decisions"
+    },
+    {
+      "label": "0002-deferred-institutions.md",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L1",
+      "id": "docs_adr_0002_deferred_institutions_md",
+      "community": 7,
+      "norm_label": "0002-deferred-institutions.md"
+    },
+    {
+      "label": "ADR 0002: Deferred Institutions",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L1",
+      "id": "adr_0002_deferred_institutions_adr_0002_deferred_institutions",
+      "community": 7,
+      "norm_label": "adr 0002: deferred institutions"
+    },
+    {
+      "label": "Status",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L3",
+      "id": "adr_0002_deferred_institutions_status",
+      "community": 7,
+      "norm_label": "status"
+    },
+    {
+      "label": "Context",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L6",
+      "id": "adr_0002_deferred_institutions_context",
+      "community": 7,
+      "norm_label": "context"
+    },
+    {
+      "label": "Decision",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L13",
+      "id": "adr_0002_deferred_institutions_decision",
+      "community": 7,
+      "norm_label": "decision"
+    },
+    {
+      "label": "Alternatives Considered",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L22",
+      "id": "adr_0002_deferred_institutions_alternatives_considered",
+      "community": 7,
+      "norm_label": "alternatives considered"
+    },
+    {
+      "label": "Include institutions from the start",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L24",
+      "id": "adr_0002_deferred_institutions_include_institutions_from_the_start",
+      "community": 7,
+      "norm_label": "include institutions from the start"
+    },
+    {
+      "label": "Model institutions as a generic \"Organization\" entity",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L28",
+      "id": "adr_0002_deferred_institutions_model_institutions_as_a_generic_organization_entity",
+      "community": 7,
+      "norm_label": "model institutions as a generic \"organization\" entity"
+    },
+    {
+      "label": "Consequences",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L32",
+      "id": "adr_0002_deferred_institutions_consequences",
+      "community": 7,
+      "norm_label": "consequences"
+    },
+    {
+      "label": "Positive",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L34",
+      "id": "adr_0002_deferred_institutions_positive",
+      "community": 7,
+      "norm_label": "positive"
+    },
+    {
+      "label": "Negative",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L40",
+      "id": "adr_0002_deferred_institutions_negative",
+      "community": 7,
+      "norm_label": "negative"
+    },
+    {
+      "label": "Related Decisions",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L45",
+      "id": "adr_0002_deferred_institutions_related_decisions",
+      "community": 7,
+      "norm_label": "related decisions"
+    },
+    {
+      "label": "0003-authentication-approach.md",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L1",
+      "id": "docs_adr_0003_authentication_approach_md",
+      "community": 4,
+      "norm_label": "0003-authentication-approach.md"
+    },
+    {
+      "label": "ADR 0003: Authentication Approach",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L1",
+      "id": "adr_0003_authentication_approach_adr_0003_authentication_approach",
+      "community": 4,
+      "norm_label": "adr 0003: authentication approach"
+    },
+    {
+      "label": "Status",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L3",
+      "id": "adr_0003_authentication_approach_status",
+      "community": 4,
+      "norm_label": "status"
+    },
+    {
+      "label": "Context",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L6",
+      "id": "adr_0003_authentication_approach_context",
+      "community": 4,
+      "norm_label": "context"
+    },
+    {
+      "label": "Decision",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L9",
+      "id": "adr_0003_authentication_approach_decision",
+      "community": 4,
+      "norm_label": "decision"
+    },
+    {
+      "label": "Alternatives Considered",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L17",
+      "id": "adr_0003_authentication_approach_alternatives_considered",
+      "community": 4,
+      "norm_label": "alternatives considered"
+    },
+    {
+      "label": "Password-only authentication",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L19",
+      "id": "adr_0003_authentication_approach_password_only_authentication",
+      "community": 4,
+      "norm_label": "password-only authentication"
+    },
+    {
+      "label": "Magic links only (fully passwordless)",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L23",
+      "id": "adr_0003_authentication_approach_magic_links_only_fully_passwordless",
+      "community": 4,
+      "norm_label": "magic links only (fully passwordless)"
+    },
+    {
+      "label": "SSO only",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L27",
+      "id": "adr_0003_authentication_approach_sso_only",
+      "community": 4,
+      "norm_label": "sso only"
+    },
+    {
+      "label": "Consequences",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L31",
+      "id": "adr_0003_authentication_approach_consequences",
+      "community": 4,
+      "norm_label": "consequences"
+    },
+    {
+      "label": "Positive",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L33",
+      "id": "adr_0003_authentication_approach_positive",
+      "community": 4,
+      "norm_label": "positive"
+    },
+    {
+      "label": "Negative",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L40",
+      "id": "adr_0003_authentication_approach_negative",
+      "community": 4,
+      "norm_label": "negative"
+    },
+    {
+      "label": "Related Decisions",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L46",
+      "id": "adr_0003_authentication_approach_related_decisions",
+      "community": 4,
+      "norm_label": "related decisions"
+    },
+    {
+      "label": "0004-rbac-row-level-security.md",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L1",
+      "id": "docs_adr_0004_rbac_row_level_security_md",
+      "community": 5,
+      "norm_label": "0004-rbac-row-level-security.md"
+    },
+    {
+      "label": "ADR 0004: RBAC with Row-Level Security",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L1",
+      "id": "adr_0004_rbac_row_level_security_adr_0004_rbac_with_row_level_security",
+      "community": 5,
+      "norm_label": "adr 0004: rbac with row-level security"
+    },
+    {
+      "label": "Status",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L3",
+      "id": "adr_0004_rbac_row_level_security_status",
+      "community": 5,
+      "norm_label": "status"
+    },
+    {
+      "label": "Context",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L6",
+      "id": "adr_0004_rbac_row_level_security_context",
+      "community": 5,
+      "norm_label": "context"
+    },
+    {
+      "label": "Decision",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L13",
+      "id": "adr_0004_rbac_row_level_security_decision",
+      "community": 5,
+      "norm_label": "decision"
+    },
+    {
+      "label": "Alternatives Considered",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L21",
+      "id": "adr_0004_rbac_row_level_security_alternatives_considered",
+      "community": 5,
+      "norm_label": "alternatives considered"
+    },
+    {
+      "label": "Separate databases per tenant",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L23",
+      "id": "adr_0004_rbac_row_level_security_separate_databases_per_tenant",
+      "community": 5,
+      "norm_label": "separate databases per tenant"
+    },
+    {
+      "label": "Application-level filtering only",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L27",
+      "id": "adr_0004_rbac_row_level_security_application_level_filtering_only",
+      "community": 5,
+      "norm_label": "application-level filtering only"
+    },
+    {
+      "label": "Graph-based permissions",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L31",
+      "id": "adr_0004_rbac_row_level_security_graph_based_permissions",
+      "community": 5,
+      "norm_label": "graph-based permissions"
+    },
+    {
+      "label": "Consequences",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L35",
+      "id": "adr_0004_rbac_row_level_security_consequences",
+      "community": 5,
+      "norm_label": "consequences"
+    },
+    {
+      "label": "Positive",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L37",
+      "id": "adr_0004_rbac_row_level_security_positive",
+      "community": 5,
+      "norm_label": "positive"
+    },
+    {
+      "label": "Negative",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L44",
+      "id": "adr_0004_rbac_row_level_security_negative",
+      "community": 5,
+      "norm_label": "negative"
+    },
+    {
+      "label": "Related Decisions",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L50",
+      "id": "adr_0004_rbac_row_level_security_related_decisions",
+      "community": 5,
+      "norm_label": "related decisions"
+    },
+    {
+      "label": "0005-mobile-first-pwa.md",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L1",
+      "id": "docs_adr_0005_mobile_first_pwa_md",
+      "community": 6,
+      "norm_label": "0005-mobile-first-pwa.md"
+    },
+    {
+      "label": "ADR 0005: Mobile-First PWA",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L1",
+      "id": "adr_0005_mobile_first_pwa_adr_0005_mobile_first_pwa",
+      "community": 6,
+      "norm_label": "adr 0005: mobile-first pwa"
+    },
+    {
+      "label": "Status",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L3",
+      "id": "adr_0005_mobile_first_pwa_status",
+      "community": 6,
+      "norm_label": "status"
+    },
+    {
+      "label": "Context",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L6",
+      "id": "adr_0005_mobile_first_pwa_context",
+      "community": 6,
+      "norm_label": "context"
+    },
+    {
+      "label": "Decision",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L9",
+      "id": "adr_0005_mobile_first_pwa_decision",
+      "community": 6,
+      "norm_label": "decision"
+    },
+    {
+      "label": "Alternatives Considered",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L21",
+      "id": "adr_0005_mobile_first_pwa_alternatives_considered",
+      "community": 6,
+      "norm_label": "alternatives considered"
+    },
+    {
+      "label": "Desktop-first web app",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L23",
+      "id": "adr_0005_mobile_first_pwa_desktop_first_web_app",
+      "community": 6,
+      "norm_label": "desktop-first web app"
+    },
+    {
+      "label": "Native mobile apps (iOS/Android)",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L27",
+      "id": "adr_0005_mobile_first_pwa_native_mobile_apps_ios_android",
+      "community": 6,
+      "norm_label": "native mobile apps (ios/android)"
+    },
+    {
+      "label": "Responsive web app (desktop-first, then mobile)",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L31",
+      "id": "adr_0005_mobile_first_pwa_responsive_web_app_desktop_first_then_mobile",
+      "community": 6,
+      "norm_label": "responsive web app (desktop-first, then mobile)"
+    },
+    {
+      "label": "Consequences",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L35",
+      "id": "adr_0005_mobile_first_pwa_consequences",
+      "community": 6,
+      "norm_label": "consequences"
+    },
+    {
+      "label": "Positive",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L37",
+      "id": "adr_0005_mobile_first_pwa_positive",
+      "community": 6,
+      "norm_label": "positive"
+    },
+    {
+      "label": "Negative",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L45",
+      "id": "adr_0005_mobile_first_pwa_negative",
+      "community": 6,
+      "norm_label": "negative"
+    },
+    {
+      "label": "Related Decisions",
+      "file_type": "document",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L51",
+      "id": "adr_0005_mobile_first_pwa_related_decisions",
+      "community": 6,
+      "norm_label": "related decisions"
+    },
+    {
+      "label": "domain.md",
+      "file_type": "document",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L1",
+      "id": "docs_agents_domain_md",
+      "community": 10,
+      "norm_label": "domain.md"
+    },
+    {
+      "label": "Domain Docs",
+      "file_type": "document",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L1",
+      "id": "agents_domain_domain_docs",
+      "community": 10,
+      "norm_label": "domain docs"
+    },
+    {
+      "label": "Before exploring, read these",
+      "file_type": "document",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L5",
+      "id": "agents_domain_before_exploring_read_these",
+      "community": 10,
+      "norm_label": "before exploring, read these"
+    },
+    {
+      "label": "File structure",
+      "file_type": "document",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L12",
+      "id": "agents_domain_file_structure",
+      "community": 10,
+      "norm_label": "file structure"
+    },
+    {
+      "label": "code:block1 (/)",
+      "file_type": "document",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L16",
+      "id": "agents_domain_codeblock_1",
+      "community": 10,
+      "norm_label": "code:block1 (/)"
+    },
+    {
+      "label": "Use the glossary's vocabulary",
+      "file_type": "document",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L25",
+      "id": "agents_domain_use_the_glossary_s_vocabulary",
+      "community": 10,
+      "norm_label": "use the glossary's vocabulary"
+    },
+    {
+      "label": "Flag ADR conflicts",
+      "file_type": "document",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L29",
+      "id": "agents_domain_flag_adr_conflicts",
+      "community": 10,
+      "norm_label": "flag adr conflicts"
+    },
+    {
+      "label": "issue-tracker.md",
+      "file_type": "document",
+      "source_file": "docs/agents/issue-tracker.md",
+      "source_location": "L1",
+      "id": "docs_agents_issue_tracker_md",
+      "community": 13,
+      "norm_label": "issue-tracker.md"
+    },
+    {
+      "label": "Issue tracker: GitHub",
+      "file_type": "document",
+      "source_file": "docs/agents/issue-tracker.md",
+      "source_location": "L1",
+      "id": "agents_issue_tracker_issue_tracker_github",
+      "community": 13,
+      "norm_label": "issue tracker: github"
+    },
+    {
+      "label": "Conventions",
+      "file_type": "document",
+      "source_file": "docs/agents/issue-tracker.md",
+      "source_location": "L5",
+      "id": "agents_issue_tracker_conventions",
+      "community": 13,
+      "norm_label": "conventions"
+    },
+    {
+      "label": "Pull requests as a triage surface",
+      "file_type": "document",
+      "source_file": "docs/agents/issue-tracker.md",
+      "source_location": "L16",
+      "id": "agents_issue_tracker_pull_requests_as_a_triage_surface",
+      "community": 13,
+      "norm_label": "pull requests as a triage surface"
+    },
+    {
+      "label": "When a skill says \"publish to the issue tracker\"",
+      "file_type": "document",
+      "source_file": "docs/agents/issue-tracker.md",
+      "source_location": "L20",
+      "id": "agents_issue_tracker_when_a_skill_says_publish_to_the_issue_tracker",
+      "community": 13,
+      "norm_label": "when a skill says \"publish to the issue tracker\""
+    },
+    {
+      "label": "When a skill says \"fetch the relevant ticket\"",
+      "file_type": "document",
+      "source_file": "docs/agents/issue-tracker.md",
+      "source_location": "L24",
+      "id": "agents_issue_tracker_when_a_skill_says_fetch_the_relevant_ticket",
+      "community": 13,
+      "norm_label": "when a skill says \"fetch the relevant ticket\""
+    },
+    {
+      "label": "triage-labels.md",
+      "file_type": "document",
+      "source_file": "docs/agents/triage-labels.md",
+      "source_location": "L1",
+      "id": "docs_agents_triage_labels_md",
+      "community": 18,
+      "norm_label": "triage-labels.md"
+    },
+    {
+      "label": "Triage Labels",
+      "file_type": "document",
+      "source_file": "docs/agents/triage-labels.md",
+      "source_location": "L1",
+      "id": "agents_triage_labels_triage_labels",
+      "community": 18,
+      "norm_label": "triage labels"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/index.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_api_src_index_ts",
+      "target": "src_index_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/main.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "apps_web_src_main_tsx",
+      "target": "apps_web_src_routes_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/main.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "apps_web_src_main_tsx",
+      "target": "src_routes_routetree",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/main.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "apps_web_src_main_tsx",
+      "target": "src_main_queryclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/main.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "apps_web_src_main_tsx",
+      "target": "src_main_router",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/main.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "apps_web_src_main_tsx",
+      "target": "src_main_register",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/routes.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_src_routes_tsx",
+      "target": "src_routes_rootroute",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/routes.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "apps_web_src_routes_tsx",
+      "target": "src_routes_indexroute",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/routes.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "apps_web_src_routes_tsx",
+      "target": "src_routes_routetree",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "packages_shared_src_index_ts",
+      "target": "src_index_church",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "packages_shared_src_index_ts",
+      "target": "src_index_member",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agents_md",
+      "target": "theobase_agents_agent_configuration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "theobase_agents_agent_configuration",
+      "target": "theobase_agents_agent_skills",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "theobase_agents_agent_skills",
+      "target": "theobase_agents_issue_tracker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "theobase_agents_agent_skills",
+      "target": "theobase_agents_triage_labels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "theobase_agents_agent_skills",
+      "target": "theobase_agents_domain_docs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "changelog_md",
+      "target": "theobase_changelog_changelog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "theobase_changelog_changelog",
+      "target": "theobase_changelog_unreleased",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "theobase_changelog_unreleased",
+      "target": "theobase_changelog_added",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTEXT.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "context_md",
+      "target": "theobase_context_domain_glossary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTEXT.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "theobase_context_domain_glossary",
+      "target": "theobase_context_terms",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTEXT.md",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "theobase_context_domain_glossary",
+      "target": "theobase_context_relationships",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTEXT.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "theobase_context_domain_glossary",
+      "target": "theobase_context_example_dialogue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "contributing_md",
+      "target": "theobase_contributing_contributing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "theobase_contributing_contributing",
+      "target": "theobase_contributing_setup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "theobase_contributing_contributing",
+      "target": "theobase_contributing_development",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "theobase_contributing_contributing",
+      "target": "theobase_contributing_branching",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "theobase_contributing_contributing",
+      "target": "theobase_contributing_commit_convention",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "theobase_contributing_contributing",
+      "target": "theobase_contributing_git_hooks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "theobase_contributing_contributing",
+      "target": "theobase_contributing_signing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "theobase_contributing_contributing",
+      "target": "theobase_contributing_ci",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L93",
+      "weight": 1.0,
+      "source": "theobase_contributing_contributing",
+      "target": "theobase_contributing_releases",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "theobase_contributing_setup",
+      "target": "theobase_contributing_codeblock_1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "theobase_contributing_development",
+      "target": "theobase_contributing_codeblock_2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "theobase_contributing_commit_convention",
+      "target": "theobase_contributing_codeblock_3",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "theobase_contributing_signing",
+      "target": "theobase_contributing_codeblock_4",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "readme_md",
+      "target": "theobase_readme_theobase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "theobase_readme_theobase",
+      "target": "theobase_readme_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "theobase_readme_theobase",
+      "target": "theobase_readme_stack",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "theobase_readme_theobase",
+      "target": "theobase_readme_development",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "theobase_readme_theobase",
+      "target": "theobase_readme_documentation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "theobase_readme_development",
+      "target": "theobase_readme_codeblock_1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_architecture_md",
+      "target": "docs_architecture_architecture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "docs_architecture_architecture",
+      "target": "docs_architecture_stack",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "docs_architecture_architecture",
+      "target": "docs_architecture_system_topology",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "docs_architecture_architecture",
+      "target": "docs_architecture_api_ipc_contracts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "docs_architecture_architecture",
+      "target": "docs_architecture_multi_tenancy_strategy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L93",
+      "weight": 1.0,
+      "source": "docs_architecture_architecture",
+      "target": "docs_architecture_internationalization_i18n_posture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L106",
+      "weight": 1.0,
+      "source": "docs_architecture_architecture",
+      "target": "docs_architecture_compliance_posture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "docs_architecture_architecture",
+      "target": "docs_architecture_cost_model",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "docs_architecture_architecture",
+      "target": "docs_architecture_documentation_posture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L169",
+      "weight": 1.0,
+      "source": "docs_architecture_architecture",
+      "target": "docs_architecture_ui_ux",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "docs_architecture_api_ipc_contracts",
+      "target": "docs_architecture_codeblock_1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "docs_architecture_api_ipc_contracts",
+      "target": "docs_architecture_codeblock_2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L181",
+      "weight": 1.0,
+      "source": "docs_architecture_ui_ux",
+      "target": "docs_architecture_design_tokens",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L207",
+      "weight": 1.0,
+      "source": "docs_architecture_ui_ux",
+      "target": "docs_architecture_component_library",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L223",
+      "weight": 1.0,
+      "source": "docs_architecture_ui_ux",
+      "target": "docs_architecture_layout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L230",
+      "weight": 1.0,
+      "source": "docs_architecture_ui_ux",
+      "target": "docs_architecture_ux_patterns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L241",
+      "weight": 1.0,
+      "source": "docs_architecture_ui_ux",
+      "target": "docs_architecture_information_architecture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L250",
+      "weight": 1.0,
+      "source": "docs_architecture_ui_ux",
+      "target": "docs_architecture_accessibility_baseline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_issues_md",
+      "target": "docs_issues_issue_tracker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "docs_issues_issue_tracker",
+      "target": "docs_issues_dependency_graph",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "docs_issues_issue_tracker",
+      "target": "docs_issues_implementation_order",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "docs_issues_issue_tracker",
+      "target": "docs_issues_issues",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "docs_issues_dependency_graph",
+      "target": "docs_issues_codeblock_1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "docs_issues_issues",
+      "target": "docs_issues_issue_1_add_first_member_tracer_bullet",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "docs_issues_issues",
+      "target": "docs_issues_issue_2_view_member_list",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "docs_issues_issues",
+      "target": "docs_issues_issue_3_edit_member_details",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "docs_issues_issues",
+      "target": "docs_issues_issue_4_transfer_member_between_churches",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "docs_issues_issues",
+      "target": "docs_issues_issue_5_quarterly_membership_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "docs_issues_issues",
+      "target": "docs_issues_issue_6_financial_tracking",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "docs_issues_issues",
+      "target": "docs_issues_issue_7_ministry_participation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "docs_issues_issues",
+      "target": "docs_issues_issue_8_hierarchical_data_aggregation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "docs_issues_issues",
+      "target": "docs_issues_issue_9_user_roles_and_permissions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ISSUES.md",
+      "source_location": "L165",
+      "weight": 1.0,
+      "source": "docs_issues_issues",
+      "target": "docs_issues_issue_10_dashboard_and_navigation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_session_md",
+      "target": "docs_session_session",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "docs_session_session",
+      "target": "docs_session_phase_checklist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "docs_session_phase_checklist",
+      "target": "docs_session_phase_0",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "docs_session_phase_checklist",
+      "target": "docs_session_phase_1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION.md",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "docs_session_phase_checklist",
+      "target": "docs_session_phase_2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_adr_0001_hierarchical_organizational_model_md",
+      "target": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "target": "adr_0001_hierarchical_organizational_model_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "target": "adr_0001_hierarchical_organizational_model_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "target": "adr_0001_hierarchical_organizational_model_decision",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "target": "adr_0001_hierarchical_organizational_model_alternatives_considered",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "target": "adr_0001_hierarchical_organizational_model_consequences",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "target": "adr_0001_hierarchical_organizational_model_related_decisions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "adr_0001_hierarchical_organizational_model_alternatives_considered",
+      "target": "adr_0001_hierarchical_organizational_model_flat_organization_with_tags",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "adr_0001_hierarchical_organizational_model_alternatives_considered",
+      "target": "adr_0001_hierarchical_organizational_model_graph_based_organization",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "adr_0001_hierarchical_organizational_model_alternatives_considered",
+      "target": "adr_0001_hierarchical_organizational_model_self_referential_hierarchy_single_table_with_parent_id",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "adr_0001_hierarchical_organizational_model_consequences",
+      "target": "adr_0001_hierarchical_organizational_model_positive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0001-hierarchical-organizational-model.md",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "adr_0001_hierarchical_organizational_model_consequences",
+      "target": "adr_0001_hierarchical_organizational_model_negative",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_adr_0002_deferred_institutions_md",
+      "target": "adr_0002_deferred_institutions_adr_0002_deferred_institutions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "adr_0002_deferred_institutions_adr_0002_deferred_institutions",
+      "target": "adr_0002_deferred_institutions_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "adr_0002_deferred_institutions_adr_0002_deferred_institutions",
+      "target": "adr_0002_deferred_institutions_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "adr_0002_deferred_institutions_adr_0002_deferred_institutions",
+      "target": "adr_0002_deferred_institutions_decision",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "adr_0002_deferred_institutions_adr_0002_deferred_institutions",
+      "target": "adr_0002_deferred_institutions_alternatives_considered",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "adr_0002_deferred_institutions_adr_0002_deferred_institutions",
+      "target": "adr_0002_deferred_institutions_consequences",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "adr_0002_deferred_institutions_adr_0002_deferred_institutions",
+      "target": "adr_0002_deferred_institutions_related_decisions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "adr_0002_deferred_institutions_alternatives_considered",
+      "target": "adr_0002_deferred_institutions_include_institutions_from_the_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "adr_0002_deferred_institutions_alternatives_considered",
+      "target": "adr_0002_deferred_institutions_model_institutions_as_a_generic_organization_entity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "adr_0002_deferred_institutions_consequences",
+      "target": "adr_0002_deferred_institutions_positive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0002-deferred-institutions.md",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "adr_0002_deferred_institutions_consequences",
+      "target": "adr_0002_deferred_institutions_negative",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_adr_0003_authentication_approach_md",
+      "target": "adr_0003_authentication_approach_adr_0003_authentication_approach",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "adr_0003_authentication_approach_adr_0003_authentication_approach",
+      "target": "adr_0003_authentication_approach_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "adr_0003_authentication_approach_adr_0003_authentication_approach",
+      "target": "adr_0003_authentication_approach_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "adr_0003_authentication_approach_adr_0003_authentication_approach",
+      "target": "adr_0003_authentication_approach_decision",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "adr_0003_authentication_approach_adr_0003_authentication_approach",
+      "target": "adr_0003_authentication_approach_alternatives_considered",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "adr_0003_authentication_approach_adr_0003_authentication_approach",
+      "target": "adr_0003_authentication_approach_consequences",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "adr_0003_authentication_approach_adr_0003_authentication_approach",
+      "target": "adr_0003_authentication_approach_related_decisions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "adr_0003_authentication_approach_alternatives_considered",
+      "target": "adr_0003_authentication_approach_password_only_authentication",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "adr_0003_authentication_approach_alternatives_considered",
+      "target": "adr_0003_authentication_approach_magic_links_only_fully_passwordless",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "adr_0003_authentication_approach_alternatives_considered",
+      "target": "adr_0003_authentication_approach_sso_only",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "adr_0003_authentication_approach_consequences",
+      "target": "adr_0003_authentication_approach_positive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0003-authentication-approach.md",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "adr_0003_authentication_approach_consequences",
+      "target": "adr_0003_authentication_approach_negative",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_adr_0004_rbac_row_level_security_md",
+      "target": "adr_0004_rbac_row_level_security_adr_0004_rbac_with_row_level_security",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "adr_0004_rbac_row_level_security_adr_0004_rbac_with_row_level_security",
+      "target": "adr_0004_rbac_row_level_security_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "adr_0004_rbac_row_level_security_adr_0004_rbac_with_row_level_security",
+      "target": "adr_0004_rbac_row_level_security_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "adr_0004_rbac_row_level_security_adr_0004_rbac_with_row_level_security",
+      "target": "adr_0004_rbac_row_level_security_decision",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "adr_0004_rbac_row_level_security_adr_0004_rbac_with_row_level_security",
+      "target": "adr_0004_rbac_row_level_security_alternatives_considered",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "adr_0004_rbac_row_level_security_adr_0004_rbac_with_row_level_security",
+      "target": "adr_0004_rbac_row_level_security_consequences",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "adr_0004_rbac_row_level_security_adr_0004_rbac_with_row_level_security",
+      "target": "adr_0004_rbac_row_level_security_related_decisions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "adr_0004_rbac_row_level_security_alternatives_considered",
+      "target": "adr_0004_rbac_row_level_security_separate_databases_per_tenant",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "adr_0004_rbac_row_level_security_alternatives_considered",
+      "target": "adr_0004_rbac_row_level_security_application_level_filtering_only",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "adr_0004_rbac_row_level_security_alternatives_considered",
+      "target": "adr_0004_rbac_row_level_security_graph_based_permissions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "adr_0004_rbac_row_level_security_consequences",
+      "target": "adr_0004_rbac_row_level_security_positive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0004-rbac-row-level-security.md",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "adr_0004_rbac_row_level_security_consequences",
+      "target": "adr_0004_rbac_row_level_security_negative",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_adr_0005_mobile_first_pwa_md",
+      "target": "adr_0005_mobile_first_pwa_adr_0005_mobile_first_pwa",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "adr_0005_mobile_first_pwa_adr_0005_mobile_first_pwa",
+      "target": "adr_0005_mobile_first_pwa_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "adr_0005_mobile_first_pwa_adr_0005_mobile_first_pwa",
+      "target": "adr_0005_mobile_first_pwa_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "adr_0005_mobile_first_pwa_adr_0005_mobile_first_pwa",
+      "target": "adr_0005_mobile_first_pwa_decision",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "adr_0005_mobile_first_pwa_adr_0005_mobile_first_pwa",
+      "target": "adr_0005_mobile_first_pwa_alternatives_considered",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "adr_0005_mobile_first_pwa_adr_0005_mobile_first_pwa",
+      "target": "adr_0005_mobile_first_pwa_consequences",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "adr_0005_mobile_first_pwa_adr_0005_mobile_first_pwa",
+      "target": "adr_0005_mobile_first_pwa_related_decisions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "adr_0005_mobile_first_pwa_alternatives_considered",
+      "target": "adr_0005_mobile_first_pwa_desktop_first_web_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "adr_0005_mobile_first_pwa_alternatives_considered",
+      "target": "adr_0005_mobile_first_pwa_native_mobile_apps_ios_android",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "adr_0005_mobile_first_pwa_alternatives_considered",
+      "target": "adr_0005_mobile_first_pwa_responsive_web_app_desktop_first_then_mobile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "adr_0005_mobile_first_pwa_consequences",
+      "target": "adr_0005_mobile_first_pwa_positive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/adr/0005-mobile-first-pwa.md",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "adr_0005_mobile_first_pwa_consequences",
+      "target": "adr_0005_mobile_first_pwa_negative",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_agents_domain_md",
+      "target": "agents_domain_domain_docs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "agents_domain_domain_docs",
+      "target": "agents_domain_before_exploring_read_these",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "agents_domain_domain_docs",
+      "target": "agents_domain_file_structure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "agents_domain_domain_docs",
+      "target": "agents_domain_use_the_glossary_s_vocabulary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "agents_domain_domain_docs",
+      "target": "agents_domain_flag_adr_conflicts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "agents_domain_file_structure",
+      "target": "agents_domain_codeblock_1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/agents/issue-tracker.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_agents_issue_tracker_md",
+      "target": "agents_issue_tracker_issue_tracker_github",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/agents/issue-tracker.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "agents_issue_tracker_issue_tracker_github",
+      "target": "agents_issue_tracker_conventions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/agents/issue-tracker.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "agents_issue_tracker_issue_tracker_github",
+      "target": "agents_issue_tracker_pull_requests_as_a_triage_surface",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/agents/issue-tracker.md",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "agents_issue_tracker_issue_tracker_github",
+      "target": "agents_issue_tracker_when_a_skill_says_publish_to_the_issue_tracker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/agents/issue-tracker.md",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "agents_issue_tracker_issue_tracker_github",
+      "target": "agents_issue_tracker_when_a_skill_says_fetch_the_relevant_ticket",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/agents/triage-labels.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_agents_triage_labels_md",
+      "target": "agents_triage_labels_triage_labels",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "2f18c787df1cf14181e1acd585e2f3b8f05928ad"
+}

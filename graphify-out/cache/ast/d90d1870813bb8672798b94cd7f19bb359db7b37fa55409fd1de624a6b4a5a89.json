@@ -1,0 +1,111 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_md",
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "theobase_readme_theobase",
+      "label": "Theobase",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "theobase_readme_status",
+      "label": "Status",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L5"
+    },
+    {
+      "id": "theobase_readme_stack",
+      "label": "Stack",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L9"
+    },
+    {
+      "id": "theobase_readme_development",
+      "label": "Development",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L15"
+    },
+    {
+      "id": "theobase_readme_codeblock_1",
+      "label": "code:bash (npm install)",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L17"
+    },
+    {
+      "id": "theobase_readme_documentation",
+      "label": "Documentation",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L22"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_md",
+      "target": "theobase_readme_theobase",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "theobase_readme_theobase",
+      "target": "theobase_readme_status",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "theobase_readme_theobase",
+      "target": "theobase_readme_stack",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "theobase_readme_theobase",
+      "target": "theobase_readme_development",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "theobase_readme_development",
+      "target": "theobase_readme_codeblock_1",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "theobase_readme_theobase",
+      "target": "theobase_readme_documentation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md",
+      "source_location": "L22",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

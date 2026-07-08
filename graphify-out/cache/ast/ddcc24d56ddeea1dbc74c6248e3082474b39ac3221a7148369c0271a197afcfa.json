@@ -1,0 +1,207 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_adr_0001_hierarchical_organizational_model_md",
+      "label": "0001-hierarchical-organizational-model.md",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "label": "ADR 0001: Hierarchical Organizational Model",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "adr_0001_hierarchical_organizational_model_status",
+      "label": "Status",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "adr_0001_hierarchical_organizational_model_context",
+      "label": "Context",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L6"
+    },
+    {
+      "id": "adr_0001_hierarchical_organizational_model_decision",
+      "label": "Decision",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L12"
+    },
+    {
+      "id": "adr_0001_hierarchical_organizational_model_alternatives_considered",
+      "label": "Alternatives Considered",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L22"
+    },
+    {
+      "id": "adr_0001_hierarchical_organizational_model_flat_organization_with_tags",
+      "label": "Flat organization with tags",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L24"
+    },
+    {
+      "id": "adr_0001_hierarchical_organizational_model_graph_based_organization",
+      "label": "Graph-based organization",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L28"
+    },
+    {
+      "id": "adr_0001_hierarchical_organizational_model_self_referential_hierarchy_single_table_with_parent_id",
+      "label": "Self-referential hierarchy (single table with parent_id)",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L32"
+    },
+    {
+      "id": "adr_0001_hierarchical_organizational_model_consequences",
+      "label": "Consequences",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L36"
+    },
+    {
+      "id": "adr_0001_hierarchical_organizational_model_positive",
+      "label": "Positive",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L38"
+    },
+    {
+      "id": "adr_0001_hierarchical_organizational_model_negative",
+      "label": "Negative",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L45"
+    },
+    {
+      "id": "adr_0001_hierarchical_organizational_model_related_decisions",
+      "label": "Related Decisions",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L50"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_adr_0001_hierarchical_organizational_model_md",
+      "target": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "target": "adr_0001_hierarchical_organizational_model_status",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "target": "adr_0001_hierarchical_organizational_model_context",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "target": "adr_0001_hierarchical_organizational_model_decision",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "target": "adr_0001_hierarchical_organizational_model_alternatives_considered",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "adr_0001_hierarchical_organizational_model_alternatives_considered",
+      "target": "adr_0001_hierarchical_organizational_model_flat_organization_with_tags",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "adr_0001_hierarchical_organizational_model_alternatives_considered",
+      "target": "adr_0001_hierarchical_organizational_model_graph_based_organization",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "adr_0001_hierarchical_organizational_model_alternatives_considered",
+      "target": "adr_0001_hierarchical_organizational_model_self_referential_hierarchy_single_table_with_parent_id",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "target": "adr_0001_hierarchical_organizational_model_consequences",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "adr_0001_hierarchical_organizational_model_consequences",
+      "target": "adr_0001_hierarchical_organizational_model_positive",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "adr_0001_hierarchical_organizational_model_consequences",
+      "target": "adr_0001_hierarchical_organizational_model_negative",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L45",
+      "weight": 1.0
+    },
+    {
+      "source": "adr_0001_hierarchical_organizational_model_adr_0001_hierarchical_organizational_model",
+      "target": "adr_0001_hierarchical_organizational_model_related_decisions",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-hierarchical-organizational-model.md",
+      "source_location": "L50",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}
