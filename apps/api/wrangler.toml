@@ -1,6 +1,0 @@
-name = "theobase-api"
-main = "src/index.ts"
-compatibility_date = "2025-07-07"
-
-[vars]
-ENVIRONMENT = "development"
