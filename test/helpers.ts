@@ -63,6 +63,10 @@ export function createMockEnv(): Env {
                 const remittances = tables.get('remittances') || [];
                 return { results: remittances as T[] };
               }
+              if (query.includes('SELECT') && query.includes('FROM audit_log')) {
+                const logs = tables.get('audit_log') || [];
+                return { results: logs as T[] };
+              }
               return { results: [] };
             },
             run: async () => {
@@ -168,6 +172,21 @@ export function createMockEnv(): Env {
                   created_at: params[9],
                 });
                 tables.set('remittances', remittances);
+              }
+              if (query.includes('INSERT INTO audit_log')) {
+                const logs = tables.get('audit_log') || [];
+                logs.push({
+                  id: params[0],
+                  tenant_id: params[1],
+                  entity_type: params[2],
+                  entity_id: params[3],
+                  action: params[4],
+                  user_id: params[5],
+                  before_values: params[6] || null,
+                  after_values: params[7] || null,
+                  created_at: params[8],
+                });
+                tables.set('audit_log', logs);
               }
               if (query.includes('UPDATE balances')) {
                 const balances = tables.get('balances') || [];

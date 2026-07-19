@@ -4,6 +4,7 @@ import { authMiddleware } from '../middleware/auth';
 import { tenantMiddleware, getTenantId } from '../middleware/tenant';
 import { permissionMiddleware } from '../middleware/permission';
 import { allocateTithe, allocateOffering, getAllocationsForTransaction } from '../lib/allocation';
+import { writeAuditLog } from '../lib/audit';
 
 type Variables = {
   auth: AuthPayload;
@@ -113,6 +114,16 @@ transactionRoutes.post('/', async (c) => {
   } catch (err) {
     return c.json({ error: `Allocation failed: ${(err as Error).message}` }, 500);
   }
+
+  // Write audit log
+  await writeAuditLog(c.env.DB, {
+    tenantId,
+    entityType: 'transaction',
+    entityId: transaction.id,
+    action: 'create',
+    userId: auth.userId,
+    afterValues: { amount, fund_type, member_id: member_id || null, organization_id: auth.organizationId },
+  });
 
   return c.json(transaction, 201);
 });

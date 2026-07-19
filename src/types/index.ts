@@ -101,6 +101,30 @@ export interface Balance {
   updated_at: string;
 }
 
+export type AuditEntityType = 'transaction' | 'remittance' | 'member' | 'organization';
+export type AuditAction = 'create' | 'update' | 'delete';
+
+export interface AuditLog {
+  id: string;
+  tenant_id: string;
+  entity_type: AuditEntityType;
+  entity_id: string;
+  action: AuditAction;
+  user_id: string;
+  before_values: string | null;
+  after_values: string | null;
+  created_at: string;
+}
+
+export interface GivingHistory {
+  member_id: string;
+  member_name: string;
+  year: number;
+  fund_type: FundType;
+  total: number;
+  transaction_count: number;
+}
+
 export interface SyncPayload {
   transactions: Omit<Transaction, 'id' | 'tenant_id' | 'created_at' | 'updated_at'>[];
 }
