@@ -16,6 +16,38 @@ transactionRoutes.use('*', authMiddleware);
 transactionRoutes.use('*', tenantMiddleware);
 transactionRoutes.use('*', permissionMiddleware);
 
+// Validation helpers
+function validateFundType(fund_type: string): fund_type is FundType {
+  return fund_type === 'tithe' || fund_type === 'offering';
+}
+
+function validateAmount(amount: unknown): amount is number {
+  return typeof amount === 'number' && amount > 0;
+}
+
+function validateDate(date: string): boolean {
+  const parsed = new Date(date);
+  return !isNaN(parsed.getTime()) && date.match(/^\d{4}-\d{2}-\d{2}$/) !== null;
+}
+
+async function validateMemberExists(db: D1Database, tenantId: string, memberId: string): Promise<boolean> {
+  const member = await db.prepare(
+    'SELECT id FROM members WHERE id = ? AND tenant_id = ?'
+  )
+    .bind(memberId, tenantId)
+    .first();
+  return !!member;
+}
+
+async function validateOrganizationExists(db: D1Database, tenantId: string, orgId: string): Promise<boolean> {
+  const org = await db.prepare(
+    'SELECT id FROM organizations WHERE id = ? AND tenant_id = ?'
+  )
+    .bind(orgId, tenantId)
+    .first();
+  return !!org;
+}
+
 // Create a single transaction
 transactionRoutes.post('/', async (c) => {
   const auth = c.get('auth');
@@ -23,24 +55,30 @@ transactionRoutes.post('/', async (c) => {
   const { member_id, fund_type, amount, transaction_date, notes } = await c.req.json();
 
   // Validate amount
-  if (!amount || amount <= 0) {
-    return c.json({ error: 'Amount must be greater than 0' }, 400);
+  if (!validateAmount(amount)) {
+    return c.json({ error: 'Amount must be a positive number' }, 400);
   }
 
   // Validate fund_type
-  if (fund_type !== 'tithe' && fund_type !== 'offering') {
+  if (!validateFundType(fund_type)) {
     return c.json({ error: 'Invalid fund type' }, 400);
+  }
+
+  // Validate date
+  if (!validateDate(transaction_date)) {
+    return c.json({ error: 'Invalid date format (YYYY-MM-DD)' }, 400);
+  }
+
+  // Validate organization exists
+  const orgExists = await validateOrganizationExists(c.env.DB, tenantId, auth.organizationId);
+  if (!orgExists) {
+    return c.json({ error: 'Organization not found' }, 400);
   }
 
   // Validate member exists (if provided)
   if (member_id) {
-    const member = await c.env.DB.prepare(
-      'SELECT id FROM members WHERE id = ? AND tenant_id = ?'
-    )
-      .bind(member_id, tenantId)
-      .first();
-
-    if (!member) {
+    const memberExists = await validateMemberExists(c.env.DB, tenantId, member_id);
+    if (!memberExists) {
       return c.json({ error: 'Member not found' }, 400);
     }
   }
@@ -76,13 +114,34 @@ transactionRoutes.post('/batch', async (c) => {
     return c.json({ error: 'Transactions array is required' }, 400);
   }
 
+  // Validate organization exists
+  const orgExists = await validateOrganizationExists(c.env.DB, tenantId, auth.organizationId);
+  if (!orgExists) {
+    return c.json({ error: 'Organization not found' }, 400);
+  }
+
   // Validate all transactions first
-  for (const txn of transactions) {
-    if (!txn.amount || txn.amount <= 0) {
-      return c.json({ error: 'All amounts must be greater than 0' }, 400);
+  for (let i = 0; i < transactions.length; i++) {
+    const txn = transactions[i];
+    
+    if (!validateAmount(txn.amount)) {
+      return c.json({ error: `Transaction ${i + 1}: amount must be a positive number` }, 400);
     }
-    if (txn.fund_type !== 'tithe' && txn.fund_type !== 'offering') {
-      return c.json({ error: 'Invalid fund type' }, 400);
+    
+    if (!validateFundType(txn.fund_type)) {
+      return c.json({ error: `Transaction ${i + 1}: invalid fund type` }, 400);
+    }
+    
+    if (!validateDate(txn.transaction_date)) {
+      return c.json({ error: `Transaction ${i + 1}: invalid date format` }, 400);
+    }
+    
+    // Validate member if provided
+    if (txn.member_id) {
+      const memberExists = await validateMemberExists(c.env.DB, tenantId, txn.member_id);
+      if (!memberExists) {
+        return c.json({ error: `Transaction ${i + 1}: member not found` }, 400);
+      }
     }
   }
 
@@ -97,7 +156,7 @@ transactionRoutes.post('/batch', async (c) => {
       `INSERT INTO transactions (id, tenant_id, organization_id, member_id, fund_type, amount, transaction_date, notes, created_at, updated_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
-      .bind(id, tenantId, auth.organizationId, null, txn.fund_type, txn.amount, txn.transaction_date, txn.notes || null, now, now)
+      .bind(id, tenantId, auth.organizationId, txn.member_id || null, txn.fund_type, txn.amount, txn.transaction_date, txn.notes || null, now, now)
       .run();
 
     const transaction = await c.env.DB.prepare(
@@ -115,10 +174,13 @@ transactionRoutes.post('/batch', async (c) => {
 });
 
 // List transactions for the authenticated user's organization
+// For hierarchical access, this should be extended to include child organizations
 transactionRoutes.get('/', async (c) => {
   const auth = c.get('auth');
   const tenantId = getTenantId(c);
 
+  // TODO: For Mission/Conference treasurers, this should include child organizations
+  // Current implementation only returns transactions for the user's direct organization
   const transactions = await c.env.DB.prepare(
     'SELECT * FROM transactions WHERE tenant_id = ? AND organization_id = ? ORDER BY transaction_date DESC'
   )
