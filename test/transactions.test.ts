@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Hono } from 'hono';
 import { transactionRoutes } from '../src/api/transactions';
-import { createMockEnv, seedTestMember, seedTestOrganization } from './helpers';
+import { createMockEnv, seedTestMember, seedTestOrganization, seedTestOfferingPlan } from './helpers';
 import { signJwt } from '../src/lib/crypto';
 
 describe('Financial Pipeline Seam', () => {
@@ -14,12 +14,20 @@ describe('Financial Pipeline Seam', () => {
     app = new Hono();
     app.route('/transactions', transactionRoutes);
 
-    // Seed test data
+    // Seed hierarchy: Mission -> Church
+    await seedTestOrganization(env, {
+      tenantId: 'tenant-1',
+      organizationId: 'mission-1',
+      name: 'Fiji Mission',
+      type: 'mission',
+    });
+
     await seedTestOrganization(env, {
       tenantId: 'tenant-1',
       organizationId: 'church-1',
       name: 'Test Church',
       type: 'local_church',
+      parentId: 'mission-1',
     });
 
     await seedTestMember(env, {
@@ -29,6 +37,17 @@ describe('Financial Pipeline Seam', () => {
       password: 'password123',
       role: 'treasurer',
       organizationId: 'church-1',
+    });
+
+    // Seed offering plan
+    await seedTestOfferingPlan(env, {
+      tenantId: 'tenant-1',
+      offeringPlanId: 'plan-1',
+      name: 'Combined Offering Plan',
+      localPercent: 60,
+      conferencePercent: 0,
+      unionPercent: 20,
+      gcPercent: 20,
     });
 
     // Generate auth token

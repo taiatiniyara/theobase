@@ -30,6 +30,11 @@ export function createMockEnv(): Env {
                 const plan = plans.find(p => p.tenant_id === params[0]);
                 return (plan as T) || null;
               }
+              if (query.includes('SELECT') && query.includes('FROM remittances')) {
+                const remittances = tables.get('remittances') || [];
+                const remittance = remittances.find(r => r.id === params[0]);
+                return (remittance as T) || null;
+              }
               if (query.includes('SELECT') && query.includes('FROM balances')) {
                 const balances = tables.get('balances') || [];
                 const balance = balances.find(b => 

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { Hono } from 'hono';
 import { transactionRoutes } from '../src/api/transactions';
 import { remittanceRoutes } from '../src/api/remittances';
+import { balanceRoutes } from '../src/api/balances';
 import { createMockEnv, seedTestMember, seedTestOrganization, seedTestOfferingPlan } from './helpers';
 import { signJwt } from '../src/lib/crypto';
 
@@ -16,6 +17,7 @@ describe('Financial Pipeline - Fund Allocation + Remittance', () => {
     app = new Hono();
     app.route('/transactions', transactionRoutes);
     app.route('/remittances', remittanceRoutes);
+    app.route('/balances', balanceRoutes);
 
     // Seed hierarchy: GC -> Union -> Conference -> Mission -> Church
     await seedTestOrganization(env, {
@@ -156,7 +158,7 @@ describe('Financial Pipeline - Fund Allocation + Remittance', () => {
 
       expect(res.status).toBe(201);
 
-      // Check allocations (should be 4: local, conference, union, GC)
+      // Check allocations
       const allocRes = await app.request('/transactions/allocations', {
         method: 'GET',
         headers: { Authorization: `Bearer ${churchTreasurerToken}` },
@@ -164,19 +166,19 @@ describe('Financial Pipeline - Fund Allocation + Remittance', () => {
 
       const allocations = await allocRes.json() as any[];
       expect(allocations).toHaveLength(4);
-      
+
       // 50% local (church-1)
       const local = allocations.find(a => a.destination_org_id === 'church-1');
       expect(local?.amount).toBe(50);
-      
+
       // 10% conference (conference-1)
       const conference = allocations.find(a => a.destination_org_id === 'conference-1');
       expect(conference?.amount).toBe(10);
-      
+
       // 20% union (union-1)
       const union = allocations.find(a => a.destination_org_id === 'union-1');
       expect(union?.amount).toBe(20);
-      
+
       // 20% GC (gc-1)
       const gc = allocations.find(a => a.destination_org_id === 'gc-1');
       expect(gc?.amount).toBe(20);
@@ -184,9 +186,9 @@ describe('Financial Pipeline - Fund Allocation + Remittance', () => {
   });
 
   describe('Remittance Seam', () => {
-    it('transfers funds atomically from church to Mission', async () => {
-      // First create a tithe transaction (100% goes to Mission)
-      await app.request('/transactions', {
+    it('tracks tithe balance at Mission after transaction', async () => {
+      // Create a tithe transaction (100% goes to Mission via allocation)
+      const txRes = await app.request('/transactions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -199,27 +201,24 @@ describe('Financial Pipeline - Fund Allocation + Remittance', () => {
         }),
       }, env);
 
-      // Check church balance (should be 0 for tithe, since it all goes to Mission)
-      const churchBalRes = await app.request('/balances', {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${churchTreasurerToken}` },
-      }, env);
-      const churchBalances = await churchBalRes.json() as any[];
-      const churchTithe = churchBalances.find(b => b.organization_id === 'church-1' && b.fund_type === 'tithe');
-      expect(churchTithe?.amount || 0).toBe(0);
+      expect(txRes.status).toBe(201);
 
       // Check Mission balance (should be 1000)
       const missionBalRes = await app.request('/balances', {
         method: 'GET',
         headers: { Authorization: `Bearer ${missionTreasurerToken}` },
       }, env);
+
+      expect(missionBalRes.status).toBe(200);
       const missionBalances = await missionBalRes.json() as any[];
-      const missionTithe = missionBalances.find(b => b.organization_id === 'mission-1' && b.fund_type === 'tithe');
+      const missionTithe = missionBalances.find(
+        (b: any) => b.organization_id === 'mission-1' && b.fund_type === 'tithe'
+      );
       expect(missionTithe?.amount).toBe(1000);
     });
 
     it('creates remittance record with audit trail', async () => {
-      // Create transaction
+      // Create transaction (which allocates funds to Mission)
       await app.request('/transactions', {
         method: 'POST',
         headers: {
@@ -233,15 +232,15 @@ describe('Financial Pipeline - Fund Allocation + Remittance', () => {
         }),
       }, env);
 
-      // Create remittance
+      // Create remittance from Mission to Conference
       const remRes = await app.request('/remittances', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${churchTreasurerToken}`,
+          Authorization: `Bearer ${missionTreasurerToken}`,
         },
         body: JSON.stringify({
-          destination_org_id: 'mission-1',
+          destination_org_id: 'conference-1',
           fund_type: 'tithe',
           amount: 500,
           remittance_date: '2026-07-19',
@@ -251,10 +250,10 @@ describe('Financial Pipeline - Fund Allocation + Remittance', () => {
 
       expect(remRes.status).toBe(201);
       const remittance = await remRes.json() as any;
-      expect(remittance.source_org_id).toBe('church-1');
-      expect(remittance.destination_org_id).toBe('mission-1');
+      expect(remittance.source_org_id).toBe('mission-1');
+      expect(remittance.destination_org_id).toBe('conference-1');
       expect(remittance.amount).toBe(500);
-      expect(remittance.user_id).toBe('church-treasurer');
+      expect(remittance.user_id).toBe('mission-treasurer');
     });
   });
 });

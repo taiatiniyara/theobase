@@ -1,8 +1,9 @@
 import { Hono } from 'hono';
-import type { Env, AuthPayload, Transaction, FundType } from '../types';
+import type { Env, AuthPayload, Transaction, FundType, FundAllocation } from '../types';
 import { authMiddleware } from '../middleware/auth';
 import { tenantMiddleware, getTenantId } from '../middleware/tenant';
 import { permissionMiddleware } from '../middleware/permission';
+import { allocateTithe, allocateOffering, getAllocationsForTransaction } from '../lib/allocation';
 
 type Variables = {
   auth: AuthPayload;
@@ -11,12 +12,10 @@ type Variables = {
 
 export const transactionRoutes = new Hono<{ Bindings: Env; Variables: Variables }>();
 
-// Apply middleware
 transactionRoutes.use('*', authMiddleware);
 transactionRoutes.use('*', tenantMiddleware);
 transactionRoutes.use('*', permissionMiddleware);
 
-// Validation helpers
 function validateFundType(fund_type: string): fund_type is FundType {
   return fund_type === 'tithe' || fund_type === 'offering';
 }
@@ -31,51 +30,67 @@ function validateDate(date: string): boolean {
 }
 
 async function validateMemberExists(db: D1Database, tenantId: string, memberId: string): Promise<boolean> {
-  const member = await db.prepare(
-    'SELECT id FROM members WHERE id = ? AND tenant_id = ?'
-  )
+  const member = await db.prepare('SELECT id FROM members WHERE id = ? AND tenant_id = ?')
     .bind(memberId, tenantId)
     .first();
   return !!member;
 }
 
 async function validateOrganizationExists(db: D1Database, tenantId: string, orgId: string): Promise<boolean> {
-  const org = await db.prepare(
-    'SELECT id FROM organizations WHERE id = ? AND tenant_id = ?'
-  )
+  const org = await db.prepare('SELECT id FROM organizations WHERE id = ? AND tenant_id = ?')
     .bind(orgId, tenantId)
     .first();
   return !!org;
 }
 
-// Create a single transaction
+async function createTransactionRecord(
+  db: D1Database,
+  tenantId: string,
+  orgId: string,
+  memberId: string | null,
+  fundType: FundType,
+  amount: number,
+  transactionDate: string,
+  notes: string | null
+): Promise<Transaction> {
+  const id = crypto.randomUUID();
+  const now = new Date().toISOString();
+
+  await db.prepare(
+    `INSERT INTO transactions (id, tenant_id, organization_id, member_id, fund_type, amount, transaction_date, notes, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  )
+    .bind(id, tenantId, orgId, memberId, fundType, amount, transactionDate, notes, now, now)
+    .run();
+
+  const transaction = await db.prepare('SELECT * FROM transactions WHERE id = ?')
+    .bind(id)
+    .first<Transaction>();
+
+  return transaction!;
+}
+
+// Create a single transaction (with automatic fund allocation)
 transactionRoutes.post('/', async (c) => {
   const auth = c.get('auth');
   const tenantId = getTenantId(c);
   const { member_id, fund_type, amount, transaction_date, notes } = await c.req.json();
 
-  // Validate amount
   if (!validateAmount(amount)) {
     return c.json({ error: 'Amount must be a positive number' }, 400);
   }
-
-  // Validate fund_type
   if (!validateFundType(fund_type)) {
     return c.json({ error: 'Invalid fund type' }, 400);
   }
-
-  // Validate date
   if (!validateDate(transaction_date)) {
     return c.json({ error: 'Invalid date format (YYYY-MM-DD)' }, 400);
   }
 
-  // Validate organization exists
   const orgExists = await validateOrganizationExists(c.env.DB, tenantId, auth.organizationId);
   if (!orgExists) {
     return c.json({ error: 'Organization not found' }, 400);
   }
 
-  // Validate member exists (if provided)
   if (member_id) {
     const memberExists = await validateMemberExists(c.env.DB, tenantId, member_id);
     if (!memberExists) {
@@ -84,22 +99,20 @@ transactionRoutes.post('/', async (c) => {
   }
 
   // Create transaction
-  const id = crypto.randomUUID();
-  const now = new Date().toISOString();
+  const transaction = await createTransactionRecord(
+    c.env.DB, tenantId, auth.organizationId, member_id || null, fund_type, amount, transaction_date, notes || null
+  );
 
-  await c.env.DB.prepare(
-    `INSERT INTO transactions (id, tenant_id, organization_id, member_id, fund_type, amount, transaction_date, notes, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  )
-    .bind(id, tenantId, auth.organizationId, member_id || null, fund_type, amount, transaction_date, notes || null, now, now)
-    .run();
-
-  // Fetch and return the created transaction
-  const transaction = await c.env.DB.prepare(
-    'SELECT * FROM transactions WHERE id = ?'
-  )
-    .bind(id)
-    .first<Transaction>();
+  // Auto-allocate funds
+  try {
+    if (fund_type === 'tithe') {
+      await allocateTithe(c.env.DB, tenantId, transaction.id, amount, auth.organizationId);
+    } else if (fund_type === 'offering') {
+      await allocateOffering(c.env.DB, tenantId, transaction.id, amount, auth.organizationId);
+    }
+  } catch (err) {
+    return c.json({ error: `Allocation failed: ${(err as Error).message}` }, 500);
+  }
 
   return c.json(transaction, 201);
 });
@@ -114,29 +127,22 @@ transactionRoutes.post('/batch', async (c) => {
     return c.json({ error: 'Transactions array is required' }, 400);
   }
 
-  // Validate organization exists
   const orgExists = await validateOrganizationExists(c.env.DB, tenantId, auth.organizationId);
   if (!orgExists) {
     return c.json({ error: 'Organization not found' }, 400);
   }
 
-  // Validate all transactions first
   for (let i = 0; i < transactions.length; i++) {
     const txn = transactions[i];
-    
     if (!validateAmount(txn.amount)) {
       return c.json({ error: `Transaction ${i + 1}: amount must be a positive number` }, 400);
     }
-    
     if (!validateFundType(txn.fund_type)) {
       return c.json({ error: `Transaction ${i + 1}: invalid fund type` }, 400);
     }
-    
     if (!validateDate(txn.transaction_date)) {
       return c.json({ error: `Transaction ${i + 1}: invalid date format` }, 400);
     }
-    
-    // Validate member if provided
     if (txn.member_id) {
       const memberExists = await validateMemberExists(c.env.DB, tenantId, txn.member_id);
       if (!memberExists) {
@@ -145,42 +151,35 @@ transactionRoutes.post('/batch', async (c) => {
     }
   }
 
-  const now = new Date().toISOString();
   const createdTransactions: Transaction[] = [];
 
-  // Insert all transactions
   for (const txn of transactions) {
-    const id = crypto.randomUUID();
-    
-    await c.env.DB.prepare(
-      `INSERT INTO transactions (id, tenant_id, organization_id, member_id, fund_type, amount, transaction_date, notes, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    )
-      .bind(id, tenantId, auth.organizationId, txn.member_id || null, txn.fund_type, txn.amount, txn.transaction_date, txn.notes || null, now, now)
-      .run();
+    const transaction = await createTransactionRecord(
+      c.env.DB, tenantId, auth.organizationId, txn.member_id || null,
+      txn.fund_type, txn.amount, txn.transaction_date, txn.notes || null
+    );
 
-    const transaction = await c.env.DB.prepare(
-      'SELECT * FROM transactions WHERE id = ?'
-    )
-      .bind(id)
-      .first<Transaction>();
-
-    if (transaction) {
-      createdTransactions.push(transaction);
+    try {
+      if (txn.fund_type === 'tithe') {
+        await allocateTithe(c.env.DB, tenantId, transaction.id, txn.amount, auth.organizationId);
+      } else if (txn.fund_type === 'offering') {
+        await allocateOffering(c.env.DB, tenantId, transaction.id, txn.amount, auth.organizationId);
+      }
+    } catch (err) {
+      return c.json({ error: `Allocation failed for transaction: ${(err as Error).message}` }, 500);
     }
+
+    createdTransactions.push(transaction);
   }
 
   return c.json({ count: createdTransactions.length, transactions: createdTransactions }, 201);
 });
 
-// List transactions for the authenticated user's organization
-// For hierarchical access, this should be extended to include child organizations
+// List transactions
 transactionRoutes.get('/', async (c) => {
   const auth = c.get('auth');
   const tenantId = getTenantId(c);
 
-  // TODO: For Mission/Conference treasurers, this should include child organizations
-  // Current implementation only returns transactions for the user's direct organization
   const transactions = await c.env.DB.prepare(
     'SELECT * FROM transactions WHERE tenant_id = ? AND organization_id = ? ORDER BY transaction_date DESC'
   )
@@ -188,4 +187,31 @@ transactionRoutes.get('/', async (c) => {
     .all<Transaction>();
 
   return c.json(transactions.results);
+});
+
+// Get allocations for the most recent transaction (for testing/demo)
+transactionRoutes.get('/allocations', async (c) => {
+  const auth = c.get('auth');
+  const tenantId = getTenantId(c);
+
+  // Get the most recent transaction for this org
+  const transactions = await c.env.DB.prepare(
+    'SELECT * FROM transactions WHERE tenant_id = ? AND organization_id = ? ORDER BY created_at DESC LIMIT 1'
+  )
+    .bind(tenantId, auth.organizationId)
+    .all<Transaction>();
+
+  if (transactions.results.length === 0) {
+    return c.json([]);
+  }
+
+  const allocations = await getAllocationsForTransaction(c.env.DB, transactions.results[0].id);
+  return c.json(allocations);
+});
+
+// Get allocations for a specific transaction
+transactionRoutes.get('/:id/allocations', async (c) => {
+  const transactionId = c.req.param('id');
+  const allocations = await getAllocationsForTransaction(c.env.DB, transactionId);
+  return c.json(allocations);
 });
