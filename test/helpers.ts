@@ -20,6 +20,65 @@ export function createMockEnv(): Env {
                 const org = orgs.find(o => o.id === params[0]);
                 return (org as T) || null;
               }
+              // Handle aggregate queries (SUM, COALESCE) for transactions
+              if ((query.includes('COALESCE(SUM') || query.includes('SUM(')) && query.includes('FROM transactions')) {
+                const transactions = tables.get('transactions') || [];
+                let filtered = [...transactions];
+                const parts = query.split('WHERE')[1]?.split('ORDER BY')[0]?.trim() || '';
+                let paramIndex = 0;
+                const conditions = parts.split('AND').map(c => c.trim());
+                for (const cond of conditions) {
+                  if (cond.includes('tenant_id = ?')) {
+                    filtered = filtered.filter((t: any) => t.tenant_id === params[paramIndex]);
+                    paramIndex++;
+                  } else if (cond.includes('organization_id = ?')) {
+                    filtered = filtered.filter((t: any) => t.organization_id === params[paramIndex]);
+                    paramIndex++;
+                  } else if (cond.includes("fund_type = 'tithe'")) {
+                    filtered = filtered.filter((t: any) => t.fund_type === 'tithe');
+                  } else if (cond.includes("fund_type = 'offering'")) {
+                    filtered = filtered.filter((t: any) => t.fund_type === 'offering');
+                  } else if (cond.includes('transaction_date >= ?')) {
+                    const startDate = params[paramIndex];
+                    filtered = filtered.filter((t: any) => t.transaction_date >= startDate);
+                    paramIndex++;
+                  } else if (cond.includes('transaction_date < ?')) {
+                    const endDate = params[paramIndex];
+                    filtered = filtered.filter((t: any) => t.transaction_date < endDate);
+                    paramIndex++;
+                  } else if (cond.includes('transaction_date = ?')) {
+                    filtered = filtered.filter((t: any) => t.transaction_date === params[paramIndex]);
+                    paramIndex++;
+                  }
+                }
+                const sum = filtered.reduce((acc: number, t: any) => acc + (t.amount || 0), 0);
+                return { total: sum } as T;
+              }
+              // Handle ORDER BY ... LIMIT 1 for transactions 
+              if (query.includes('FROM transactions') && query.includes('ORDER BY') && query.includes('LIMIT 1')) {
+                const transactions = tables.get('transactions') || [];
+                let filtered = [...transactions];
+                const whereClause = query.split('ORDER BY')[0];
+                const parts = whereClause.split('WHERE')[1]?.trim() || '';
+                let paramIndex = 0;
+                const conditions = parts.split('AND').map(c => c.trim());
+                for (const cond of conditions) {
+                  if (cond.includes('tenant_id = ?')) {
+                    filtered = filtered.filter((t: any) => t.tenant_id === params[paramIndex]);
+                    paramIndex++;
+                  } else if (cond.includes('organization_id = ?')) {
+                    filtered = filtered.filter((t: any) => t.organization_id === params[paramIndex]);
+                    paramIndex++;
+                  }
+                }
+                if (filtered.length > 0) {
+                  filtered.sort((a: any, b: any) => {
+                    if (query.includes('DESC')) return b.transaction_date?.localeCompare(a.transaction_date);
+                    return a.transaction_date?.localeCompare(b.transaction_date);
+                  });
+                  return filtered[0] as T;
+                }
+              }
               if (query.includes('SELECT') && query.includes('FROM transactions')) {
                 const transactions = tables.get('transactions') || [];
                 const transaction = transactions.find(t => t.id === params[0]);
@@ -44,6 +103,66 @@ export function createMockEnv(): Env {
                 );
                 return (balance as T) || null;
               }
+              // Handle aggregate queries (SUM, COALESCE) for transactions
+              if ((query.includes('COALESCE(SUM') || query.includes('SUM(')) && query.includes('FROM transactions')) {
+                const transactions = tables.get('transactions') || [];
+                let filtered = [...transactions];
+                const parts = query.split('WHERE')[1]?.split('ORDER BY')[0]?.trim() || '';
+                // Match ? placeholders to params in order
+                let paramIndex = 0;
+                const conditions = parts.split('AND').map(c => c.trim());
+                for (const cond of conditions) {
+                  if (cond.includes('tenant_id = ?')) {
+                    filtered = filtered.filter((t: any) => t.tenant_id === params[paramIndex]);
+                    paramIndex++;
+                  } else if (cond.includes('organization_id = ?')) {
+                    filtered = filtered.filter((t: any) => t.organization_id === params[paramIndex]);
+                    paramIndex++;
+                  } else if (cond.includes("fund_type = 'tithe'")) {
+                    filtered = filtered.filter((t: any) => t.fund_type === 'tithe');
+                  } else if (cond.includes("fund_type = 'offering'")) {
+                    filtered = filtered.filter((t: any) => t.fund_type === 'offering');
+                  } else if (cond.includes('transaction_date >= ?')) {
+                    const startDate = params[paramIndex];
+                    filtered = filtered.filter((t: any) => t.transaction_date >= startDate);
+                    paramIndex++;
+                  } else if (cond.includes('transaction_date < ?')) {
+                    const endDate = params[paramIndex];
+                    filtered = filtered.filter((t: any) => t.transaction_date < endDate);
+                    paramIndex++;
+                  } else if (cond.includes('transaction_date = ?')) {
+                    filtered = filtered.filter((t: any) => t.transaction_date === params[paramIndex]);
+                    paramIndex++;
+                  }
+                }
+                const sum = filtered.reduce((acc: number, t: any) => acc + (t.amount || 0), 0);
+                return { total: sum } as T;
+              }
+              // Handle ORDER BY ... LIMIT 1 for transactions 
+              if (query.includes('FROM transactions') && query.includes('ORDER BY') && query.includes('LIMIT 1')) {
+                const transactions = tables.get('transactions') || [];
+                let filtered = [...transactions];
+                const whereClause = query.split('ORDER BY')[0];
+                const parts = whereClause.split('WHERE')[1]?.trim() || '';
+                let paramIndex = 0;
+                const conditions = parts.split('AND').map(c => c.trim());
+                for (const cond of conditions) {
+                  if (cond.includes('tenant_id = ?')) {
+                    filtered = filtered.filter((t: any) => t.tenant_id === params[paramIndex]);
+                    paramIndex++;
+                  } else if (cond.includes('organization_id = ?')) {
+                    filtered = filtered.filter((t: any) => t.organization_id === params[paramIndex]);
+                    paramIndex++;
+                  }
+                }
+                if (filtered.length > 0) {
+                  filtered.sort((a: any, b: any) => {
+                    if (query.includes('DESC')) return b.transaction_date?.localeCompare(a.transaction_date);
+                    return a.transaction_date?.localeCompare(b.transaction_date);
+                  });
+                  return filtered[0] as T;
+                }
+              }
               return null;
             },
             all: async <T = any>(): Promise<{ results: T[] }> => {
@@ -66,6 +185,21 @@ export function createMockEnv(): Env {
               if (query.includes('SELECT') && query.includes('FROM audit_log')) {
                 const logs = tables.get('audit_log') || [];
                 return { results: logs as T[] };
+              }
+              if (query.includes('SELECT') && query.includes('FROM organizations')) {
+                const orgs = tables.get('organizations') || [];
+                let filtered = orgs as any[];
+                // Handle simple WHERE filters
+                if (query.includes('WHERE') && params.length > 0) {
+                  filtered = filtered.filter(o => o.tenant_id === params[0]);
+                }
+                if (query.includes("type = 'local_church'")) {
+                  filtered = filtered.filter(o => o.type === 'local_church');
+                }
+                if (query.includes('parent_id = ?') && params.length > 1) {
+                  filtered = filtered.filter(o => o.parent_id === params[1]);
+                }
+                return { results: filtered as T[] };
               }
               return { results: [] };
             },

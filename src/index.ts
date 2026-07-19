@@ -7,6 +7,8 @@ import { remittanceRoutes } from './api/remittances';
 import { balanceRoutes } from './api/balances';
 import { memberRoutes } from './api/members';
 import { auditRoutes } from './api/audit';
+import { dashboardRoutes } from './api/dashboard';
+import { reportRoutes } from './api/reports';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -20,6 +22,8 @@ app.route('/remittances', remittanceRoutes);
 app.route('/balances', balanceRoutes);
 app.route('/members', memberRoutes);
 app.route('/audit', auditRoutes);
+app.route('/dashboard', dashboardRoutes);
+app.route('/reports', reportRoutes);
 
 // Health check
 app.get('/', (c) => {
