@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ES2022",
     "moduleResolution": "bundler",
-    "lib": ["ES2022"],
-    "types": ["@cloudflare/workers-types", "vitest/globals"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -13,11 +12,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "test/**/*", "shared/**/*"],
-  "exclude": ["node_modules", "client"]
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

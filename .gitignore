@@ -3,4 +3,9 @@ dist
 .wrangler
 .dev.vars
 *.log
+*.tsbuildinfo
 .DS_Store
+client/dist
+client/src/routeTree.gen.ts
+client/vite.config.d.ts
+client/vite.config.js
