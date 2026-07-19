@@ -37,7 +37,7 @@ describe('Polish: Excel Export, Sync, Admin Health', () => {
     });
     await seedTestMember(env, {
       tenantId: 'tenant-1', memberId: 'admin-1', email: 'admin@test.com',
-      password: 'pass', role: 'administrator', organizationId: 'mission-1',
+      password: 'pass', role: 'super_admin', organizationId: 'mission-1',
     });
     await seedTestMember(env, {
       tenantId: 'tenant-1', memberId: 'church-treasurer', email: 'church-t@test.com',
@@ -58,7 +58,7 @@ describe('Polish: Excel Export, Sync, Admin Health', () => {
       'test-secret'
     );
     adminToken = await signJwt(
-      { userId: 'admin-1', tenantId: 'tenant-1', role: 'administrator', organizationId: 'mission-1' },
+      { userId: 'admin-1', tenantId: 'tenant-1', role: 'super_admin', organizationId: 'mission-1' },
       'test-secret'
     );
     churchToken = await signJwt(
@@ -155,7 +155,7 @@ describe('Polish: Excel Export, Sync, Admin Health', () => {
       expect(res.status).toBe(403);
     });
 
-    it('allows administrator access', async () => {
+    it('allows super_admin access', async () => {
       const res = await app.request('/admin/health', {
         method: 'GET',
         headers: { Authorization: `Bearer ${adminToken}` },

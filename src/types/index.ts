@@ -4,6 +4,7 @@ export type OrganizationType =
   | 'mission'
   | 'conference'
   | 'union'
+  | 'division'
   | 'general_conference';
 
 export interface Organization {
@@ -12,19 +13,42 @@ export interface Organization {
   name: string;
   type: OrganizationType;
   parent_id: string | null;
+  address: string | null;
+  phone: string | null;
+  email: string | null;
+  service_times: string | null;
+  pastor_name: string | null;
   created_at: string;
   updated_at: string;
 }
 
-export type MemberRole = 'treasurer' | 'pastor' | 'executive_committee' | 'administrator';
+export type MemberRole = 'clerk' | 'treasurer' | 'pastor' | 'head_elder' | 'mission_admin' | 'super_admin';
+
+export type MembershipStatus = 'active' | 'inactive' | 'transferred_out' | 'deceased' | 'removed';
 
 export interface Member {
   id: string;
   tenant_id: string;
-  email: string;
-  password_hash: string;
-  role: MemberRole;
   organization_id: string;
+  first_name: string;
+  last_name: string;
+  date_of_birth: string | null;
+  gender: 'male' | 'female' | null;
+  phone: string | null;
+  address: string | null;
+  email: string | null;
+  password_hash: string | null;
+  email_verified: boolean;
+  reset_token: string | null;
+  reset_token_expires: string | null;
+  verification_token: string | null;
+  membership_status: MembershipStatus;
+  baptism_date: string | null;
+  profession_of_faith_date: string | null;
+  original_join_date: string | null;
+  role: MemberRole | null;
+  guardian_id: string | null;
+  household_id: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -51,9 +75,13 @@ export interface Transaction {
   organization_id: string;
   member_id: string | null;
   fund_type: FundType;
+  offering_sub_category: string | null;
   amount: number;
   transaction_date: string;
   notes: string | null;
+  created_by: string | null;
+  batch_id: string | null;
+  is_synced: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -70,47 +98,129 @@ export interface OfferingPlan {
   updated_at: string;
 }
 
+export type FundAllocationFundType = 'tithe' | 'offering' | 'restricted';
+
 export interface FundAllocation {
   id: string;
   transaction_id: string;
-  fund_type: FundType;
-  amount: number;
   destination_org_id: string;
+  amount: number;
+  percentage: number | null;
   created_at: string;
 }
+
+export type RemittanceStatus = 'draft' | 'submitted' | 'confirmed';
 
 export interface Remittance {
   id: string;
   tenant_id: string;
   source_org_id: string;
   destination_org_id: string;
-  fund_type: FundType;
-  amount: number;
-  user_id: string;
-  remittance_date: string;
-  notes: string | null;
+  period_start: string;
+  period_end: string;
+  total_amount: number;
+  status: RemittanceStatus;
+  submitted_by: string | null;
+  submitted_at: string | null;
+  confirmed_at: string | null;
   created_at: string;
+  updated_at: string;
 }
+
+export type BalanceFundType = 'tithe' | 'offering_local' | 'offering_district' | 'offering_mission' | 'offering_conference' | 'offering_union' | 'offering_division' | 'offering_gc' | 'restricted';
 
 export interface Balance {
   id: string;
-  tenant_id: string;
   organization_id: string;
-  fund_type: FundType;
+  fund_type: BalanceFundType;
   amount: number;
   updated_at: string;
 }
 
-export type AuditEntityType = 'transaction' | 'remittance' | 'member' | 'organization';
+export interface Household {
+  id: string;
+  tenant_id: string;
+  organization_id: string;
+  name: string;
+  head_of_household_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export type TransferStatus = 'pending_sending_approval' | 'pending_receiving_approval' | 'accepted' | 'rejected';
+
+export interface MemberTransfer {
+  id: string;
+  tenant_id: string;
+  member_id: string;
+  sending_org_id: string;
+  receiving_org_id: string;
+  status: TransferStatus;
+  sending_board_vote_date: string | null;
+  receiving_board_vote_date: string | null;
+  initiated_by: string;
+  rejection_reason: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ExpenseCategory {
+  id: string;
+  tenant_id: string;
+  name: string;
+  code: string | null;
+  parent_id: string | null;
+  created_at: string;
+}
+
+export interface Expense {
+  id: string;
+  tenant_id: string;
+  organization_id: string;
+  category_id: string | null;
+  amount: number;
+  payee: string;
+  expense_date: string;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RemittanceItem {
+  id: string;
+  remittance_id: string;
+  fund_type: string;
+  amount_collected: number;
+  amount_retained: number;
+  amount_remitted: number;
+  created_at: string;
+}
+
+export interface TenantSignup {
+  id: string;
+  church_name: string;
+  church_type: OrganizationType;
+  parent_mission_id: string;
+  clerk_name: string;
+  clerk_email: string;
+  status: 'pending' | 'approved' | 'declined';
+  decline_reason: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export type AuditEntityType = 'transaction' | 'remittance' | 'member' | 'organization' | 'transfer' | 'expense' | 'tenant';
 export type AuditAction = 'create' | 'update' | 'delete';
 
 export interface AuditLog {
   id: string;
   tenant_id: string;
-  entity_type: AuditEntityType;
-  entity_id: string;
+  organization_id: string | null;
+  actor_id: string | null;
   action: AuditAction;
-  user_id: string;
+  entity_type: AuditEntityType;
+  entity_id: string | null;
   before_values: string | null;
   after_values: string | null;
   created_at: string;

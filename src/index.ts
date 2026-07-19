@@ -11,6 +11,9 @@ import { dashboardRoutes } from './api/dashboard';
 import { reportRoutes } from './api/reports';
 import { syncRoutes } from './api/sync';
 import { adminRoutes } from './api/admin';
+import { householdRoutes } from './api/households';
+import { transferRoutes } from './api/transfers';
+import { expenseRoutes } from './api/expenses';
 import { sendMonthlyReminders } from './lib/reminders';
 import { serveStatic, serveStyles, serveAppJs, serveSwJs } from './frontend/serve';
 
@@ -37,6 +40,9 @@ app.route('/dashboard', dashboardRoutes);
 app.route('/reports', reportRoutes);
 app.route('/sync', syncRoutes);
 app.route('/admin', adminRoutes);
+app.route('/households', householdRoutes);
+app.route('/transfers', transferRoutes);
+app.route('/expenses', expenseRoutes);
 
 // Health check
 app.get('/', (c) => {

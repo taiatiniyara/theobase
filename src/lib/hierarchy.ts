@@ -6,6 +6,7 @@ export interface OrgHierarchy {
   mission: Organization | null;
   conference: Organization | null;
   union: Organization | null;
+  division: Organization | null;
   general_conference: Organization | null;
 }
 
@@ -24,6 +25,7 @@ export async function getOrgHierarchy(
     mission: null,
     conference: null,
     union: null,
+    division: null,
     general_conference: null,
   };
 

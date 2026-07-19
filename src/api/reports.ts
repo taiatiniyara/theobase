@@ -10,6 +10,54 @@ export const reportRoutes = new Hono<{ Bindings: Env; Variables: Variables }>();
 reportRoutes.use('*', authMiddleware);
 reportRoutes.use('*', tenantMiddleware);
 
+reportRoutes.get('/receipts/:memberId', async (c) => {
+  const auth = c.get('auth');
+  const tenantId = getTenantId(c);
+  const memberId = c.req.param('memberId');
+  const year = c.req.query('year') || String(new Date().getFullYear());
+
+  const member = await c.env.DB.prepare(
+    'SELECT id, first_name, last_name, organization_id FROM members WHERE id = ? AND tenant_id = ?'
+  )
+    .bind(memberId, tenantId)
+    .first<{ id: string; first_name: string; last_name: string; organization_id: string }>();
+
+  if (!member) {
+    return c.json({ error: 'Member not found' }, 404);
+  }
+
+  const org = await c.env.DB.prepare(
+    'SELECT name FROM organizations WHERE id = ? AND tenant_id = ?'
+  )
+    .bind(member.organization_id, tenantId)
+    .first<{ name: string }>();
+
+  const transactions = await c.env.DB.prepare(
+    `SELECT fund_type, amount, transaction_date, offering_sub_category
+     FROM transactions
+     WHERE tenant_id = ? AND member_id = ?
+     AND transaction_date >= ? AND transaction_date < ?
+     ORDER BY transaction_date DESC`
+  )
+    .bind(tenantId, memberId, `${year}-01-01`, `${parseInt(year) + 1}-01-01`)
+    .all<{ fund_type: string; amount: number; transaction_date: string; offering_sub_category: string | null }>();
+
+  const totals: Record<string, number> = {};
+  for (const txn of transactions.results) {
+    const key = txn.offering_sub_category ? `${txn.fund_type}:${txn.offering_sub_category}` : txn.fund_type;
+    totals[key] = (totals[key] || 0) + txn.amount;
+  }
+
+  return c.json({
+    church_name: org?.name || 'Unknown',
+    member_name: [member.first_name, member.last_name].filter(Boolean).join(' '),
+    year,
+    transactions: transactions.results,
+    totals_by_fund: totals,
+    generated_at: new Date().toISOString(),
+  });
+});
+
 async function requireMissionLevel(c: Context<{ Bindings: Env; Variables: Variables }>, next: Next) {
   const auth = c.get('auth');
   const userOrg = await c.env.DB.prepare(

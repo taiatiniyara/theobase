@@ -227,3 +227,16 @@ export const auditLog = sqliteTable('audit_log', {
   after_values: text('after_values'),
   created_at: text('created_at').notNull().default("(datetime('now'))"),
 });
+
+export const tenantSignups = sqliteTable('tenant_signups', {
+  id: text('id').primaryKey(),
+  church_name: text('church_name').notNull(),
+  church_type: text('church_type').notNull(),
+  parent_mission_id: text('parent_mission_id').notNull().references(() => organizations.id),
+  clerk_name: text('clerk_name').notNull(),
+  clerk_email: text('clerk_email').notNull(),
+  status: text('status', { enum: ['pending', 'approved', 'declined'] }).notNull().default('pending'),
+  decline_reason: text('decline_reason'),
+  created_at: text('created_at').notNull().default("(datetime('now'))"),
+  updated_at: text('updated_at').notNull().default("(datetime('now'))"),
+});

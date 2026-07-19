@@ -81,9 +81,9 @@ organizationRoutes.get('/:id/children', async (c) => {
   const tenantId = getTenantId(c);
 
   const children = await c.env.DB.prepare(
-    'SELECT * FROM organizations WHERE parent_id = ? AND tenant_id = ?'
+    'SELECT * FROM organizations WHERE tenant_id = ? AND parent_id = ?'
   )
-    .bind(id, tenantId)
+    .bind(tenantId, id)
     .all<Organization>();
 
   return c.json(children.results);

@@ -1,7 +1,6 @@
 import { SignJWT, jwtVerify } from 'jose';
 
 export async function hashPassword(password: string): Promise<string> {
-  // Simple SHA-256 hash for foundation - use bcrypt/argon2 in production
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -29,4 +28,11 @@ export async function verifyJwt(token: string, secret: string): Promise<Record<s
   } catch {
     return null;
   }
+}
+
+export function generateToken(length = 32): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const bytes = new Uint8Array(length);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => chars[b % chars.length]).join('');
 }

@@ -8,10 +8,12 @@ type Variables = {
 
 // Define which roles can access which organization types
 const ROLE_HIERARCHY: Record<MemberRole, OrganizationType[]> = {
-  treasurer: ['local_church', 'district', 'mission', 'conference', 'union', 'general_conference'],
-  pastor: ['local_church', 'district', 'mission', 'conference', 'union', 'general_conference'],
-  executive_committee: ['local_church', 'district', 'mission', 'conference', 'union', 'general_conference'],
-  administrator: ['local_church', 'district', 'mission', 'conference', 'union', 'general_conference'],
+  clerk: ['local_church'],
+  treasurer: ['local_church'],
+  pastor: ['local_church', 'district'],
+  head_elder: ['local_church'],
+  mission_admin: ['local_church', 'district', 'mission'],
+  super_admin: ['local_church', 'district', 'mission', 'conference', 'union', 'division', 'general_conference'],
 };
 
 // Define visibility rules: which orgs can a user at a given level see?
@@ -21,8 +23,19 @@ const VISIBILITY_RULES: Record<OrganizationType, OrganizationType[]> = {
   mission: ['local_church', 'district', 'mission'],
   conference: ['local_church', 'district', 'mission', 'conference'],
   union: ['local_church', 'district', 'mission', 'conference', 'union'],
-  general_conference: ['local_church', 'district', 'mission', 'conference', 'union', 'general_conference'],
+  division: ['local_church', 'district', 'mission', 'conference', 'union', 'division'],
+  general_conference: ['local_church', 'district', 'mission', 'conference', 'union', 'division', 'general_conference'],
 };
+
+// Extract organization id from path like /organizations/:id or /organizations/:id/children
+function extractOrgIdFromPath(path: string): string | undefined {
+  const parts = path.split('/').filter(Boolean);
+  if (parts[0] !== 'organizations') return undefined;
+  if (parts.length >= 2 && parts[1] && parts[1] !== 'children') {
+    return parts[1];
+  }
+  return undefined;
+}
 
 export async function permissionMiddleware(c: Context<{ Bindings: Env; Variables: Variables }>, next: Next) {
   const auth = c.get('auth');
@@ -31,8 +44,7 @@ export async function permissionMiddleware(c: Context<{ Bindings: Env; Variables
     return c.json({ error: 'Authentication required' }, 401);
   }
 
-  // Get the organization being accessed (from route params or context)
-  const targetOrgId = c.req.param('org_id') || c.req.param('id');
+  const targetOrgId = extractOrgIdFromPath(c.req.path);
   
   if (targetOrgId) {
     // Fetch the target organization
@@ -69,8 +81,8 @@ export async function permissionMiddleware(c: Context<{ Bindings: Env; Variables
       return c.json({ error: 'Permission denied: cannot access organizations at this level' }, 403);
     }
 
-    // For treasurer/pastor at local_church level: can only access their own church
-    if (userOrg.type === 'local_church' && (auth.role === 'treasurer' || auth.role === 'pastor')) {
+    // For clerk/treasurer/head_elder at local_church level: can only access their own church
+    if (userOrg.type === 'local_church' && ['clerk', 'treasurer', 'head_elder'].includes(auth.role)) {
       if (org.id !== auth.organizationId) {
         return c.json({ error: 'Permission denied: can only access your own organization' }, 403);
       }
@@ -100,8 +112,8 @@ export function canAccessOrganization(
     return false;
   }
 
-  // Local church treasurer/pastor can only access their own organization
-  if (userOrgType === 'local_church' && (userRole === 'treasurer' || userRole === 'pastor')) {
+  // Local church clerk/treasurer/head_elder can only access their own organization
+  if (userOrgType === 'local_church' && ['clerk', 'treasurer', 'head_elder'].includes(userRole)) {
     return userOrgId === targetOrgId;
   }
 

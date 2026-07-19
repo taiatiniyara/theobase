@@ -46,9 +46,29 @@ export function createMockEnv(): Env {
                 }
                 return { count: filtered.length } as T;
               }
+              if (query.includes('SELECT') && query.includes('FROM expenses')) {
+                const expenses = tables.get('expenses') || [];
+                const expense = expenses.find(e => e.id === params[0]);
+                return (expense as T) || null;
+              }
+              if (query.includes('SELECT') && query.includes('FROM member_transfers')) {
+                const transfers = tables.get('member_transfers') || [];
+                const transfer = transfers.find(t => t.id === params[0]);
+                return (transfer as T) || null;
+              }
+              if (query.includes('SELECT') && query.includes('FROM households')) {
+                const households = tables.get('households') || [];
+                const household = households.find(h => h.id === params[0]);
+                return (household as T) || null;
+              }
               if (query.includes('SELECT') && query.includes('FROM organizations')) {
                 const orgs = tables.get('organizations') || [];
-                const org = orgs.find(o => o.id === params[0]);
+                const org = orgs.find(o => {
+                  if (params.length >= 2) {
+                    return o.id === params[0] && o.tenant_id === params[1];
+                  }
+                  return o.id === params[0];
+                });
                 return (org as T) || null;
               }
               // Handle aggregate queries (SUM, COALESCE) for transactions
@@ -119,7 +139,13 @@ export function createMockEnv(): Env {
               }
               if (query.includes('SELECT') && query.includes('FROM members')) {
                 const members = tables.get('members') || [];
-                const member = members.find(m => m.email === params[0] || m.id === params[0]);
+                const member = members.find(m => {
+                  const matches = m.email === params[0] || m.id === params[0];
+                  if (params.length >= 2) {
+                    return matches && m.tenant_id === params[1];
+                  }
+                  return matches;
+                });
                 return (member as T) || null;
               }
               if (query.includes('SELECT') && query.includes('FROM offering_plans')) {
@@ -174,6 +200,34 @@ export function createMockEnv(): Env {
                 const transactions = tables.get('transactions') || [];
                 return { results: transactions as T[] };
               }
+              if (query.includes('SELECT') && query.includes('FROM expenses')) {
+                const expenses = tables.get('expenses') || [];
+                return { results: expenses as T[] };
+              }
+              if (query.includes('SELECT') && query.includes('FROM expense_categories')) {
+                const categories = tables.get('expense_categories') || [];
+                return { results: categories as T[] };
+              }
+              if (query.includes('SELECT') && query.includes('FROM member_transfers')) {
+                const transfers = tables.get('member_transfers') || [];
+                let filtered = transfers as any[];
+                if (query.includes('WHERE') && params.length > 0) {
+                  if (query.includes('sending_org_id') && query.includes('receiving_org_id')) {
+                    filtered = filtered.filter(t => t.tenant_id === params[0] && (t.sending_org_id === params[1] || t.receiving_org_id === params[2]));
+                  } else if (query.includes('tenant_id')) {
+                    filtered = filtered.filter(t => t.tenant_id === params[0]);
+                  }
+                }
+                return { results: filtered as T[] };
+              }
+              if (query.includes('SELECT') && query.includes('FROM households')) {
+                const households = tables.get('households') || [];
+                let filtered = households as any[];
+                if (query.includes('WHERE') && params.length > 0) {
+                  filtered = filtered.filter(h => h.tenant_id === params[0] && h.organization_id === params[1]);
+                }
+                return { results: filtered as T[] };
+              }
               if (query.includes('SELECT') && query.includes('FROM fund_allocations')) {
                 const allocations = tables.get('fund_allocations') || [];
                 let filtered = [...allocations];
@@ -205,6 +259,18 @@ export function createMockEnv(): Env {
                 const remittances = tables.get('remittances') || [];
                 return { results: remittances as T[] };
               }
+              if (query.includes('SELECT') && query.includes('FROM members')) {
+                const members = tables.get('members') || [];
+                let filtered = members as any[];
+                if (query.includes('WHERE') && params.length > 0) {
+                  if (query.includes('tenant_id') && query.includes('organization_id')) {
+                    filtered = filtered.filter(m => m.tenant_id === params[0] && m.organization_id === params[1]);
+                  } else if (query.includes('tenant_id')) {
+                    filtered = filtered.filter(m => m.tenant_id === params[0]);
+                  }
+                }
+                return { results: filtered as T[] };
+              }
               if (query.includes('SELECT') && query.includes('FROM audit_log')) {
                 const logs = tables.get('audit_log') || [];
                 return { results: logs as T[] };
@@ -229,14 +295,61 @@ export function createMockEnv(): Env {
             run: async () => {
               if (query.includes('INSERT INTO members')) {
                 const members = tables.get('members') || [];
-                members.push({
-                  id: params[0],
-                  tenant_id: params[1],
-                  email: params[2],
-                  password_hash: params[3],
-                  role: params[4],
-                  organization_id: params[5],
-                });
+                if (query.includes('first_name') && query.includes('last_name')) {
+                  members.push({
+                    id: params[0],
+                    tenant_id: params[1],
+                    organization_id: params[2],
+                    first_name: params[3],
+                    last_name: params[4],
+                    date_of_birth: params[5] || null,
+                    gender: params[6] || null,
+                    phone: params[7] || null,
+                    address: params[8] || null,
+                    email: params[9] || null,
+                    membership_status: 'active',
+                    baptism_date: params[11] || null,
+                    profession_of_faith_date: params[12] || null,
+                    original_join_date: params[13] || null,
+                    password_hash: null,
+                    role: null,
+                    email_verified: false,
+                    verification_token: null,
+                    reset_token: null,
+                    reset_token_expires: null,
+                    guardian_id: null,
+                    household_id: null,
+                    created_at: params[14],
+                    updated_at: params[15],
+                  });
+                } else {
+                  members.push({
+                    id: params[0],
+                    tenant_id: params[1],
+                    email: params[2],
+                    password_hash: params[3],
+                    role: params[4],
+                    organization_id: params[5],
+                    email_verified: true,
+                    first_name: '',
+                    last_name: '',
+                    membership_status: 'active',
+                    date_of_birth: null,
+                    gender: null,
+                    phone: null,
+                    address: null,
+                    baptism_date: null,
+                    profession_of_faith_date: null,
+                    original_join_date: null,
+                    verification_token: null,
+                    reset_token: null,
+                    reset_token_expires: null,
+                    guardian_id: null,
+                    household_id: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                  });
+                }
                 tables.set('members', members);
               }
               if (query.includes('INSERT INTO tenants')) {
@@ -351,6 +464,123 @@ export function createMockEnv(): Env {
                 if (balance) {
                   balance.amount = params[0];
                   balance.updated_at = params[2];
+                }
+              }
+              if (query.includes('UPDATE members')) {
+                const members = tables.get('members') || [];
+                if (query.includes('email_verified')) {
+                  const member = members.find(m => m.id === params[3]);
+                  if (member) { member.email_verified = params[0]; member.verification_token = params[1]; }
+                } else if (query.includes('reset_token') && !query.includes('password_hash')) {
+                  const member = members.find(m => m.id === params[3]);
+                  if (member) { member.reset_token = params[0]; member.reset_token_expires = params[1]; }
+                } else if (query.includes('password_hash')) {
+                  const member = members.find(m => m.id === params[3]);
+                  if (member) { member.password_hash = params[0]; member.reset_token = params[1]; member.reset_token_expires = params[2]; }
+                } else if (query.includes('membership_status')) {
+                  const member = members.find(m => m.id === params[2]);
+                  if (member) { member.membership_status = params[0]; }
+                } else {
+                  const setClause = query.split('SET')[1]?.split('WHERE')[0] || '';
+                  const fieldPairs = setClause.split(',').map(s => s.trim());
+                  const member = members.find(m => m.id === params[params.length - 2] && m.tenant_id === params[params.length - 1]);
+                  if (member) {
+                    for (let i = 0; i < fieldPairs.length - 1; i++) {
+                      const fieldName = fieldPairs[i].split('=')[0].trim();
+                      if (fieldName !== 'updated_at') {
+                        member[fieldName] = params[i];
+                      }
+                    }
+                  }
+                }
+              }
+              if (query.includes('INSERT INTO tenant_signups')) {
+                const signups = tables.get('tenant_signups') || [];
+                signups.push({
+                  id: params[0],
+                  church_name: params[1],
+                  church_type: params[2],
+                  parent_mission_id: params[3],
+                  clerk_name: params[4],
+                  clerk_email: params[5],
+                  status: 'pending',
+                  decline_reason: null,
+                  created_at: params[7],
+                  updated_at: params[8],
+                });
+                tables.set('tenant_signups', signups);
+              }
+              if (query.includes('UPDATE tenant_signups')) {
+                const signups = tables.get('tenant_signups') || [];
+                if (query.includes("status = 'approved'")) {
+                  const su = signups.find(s => s.id === params[1]);
+                  if (su) su.status = 'approved';
+                } else if (query.includes("status = 'declined'")) {
+                  const su = signups.find(s => s.id === params[2]);
+                  if (su) { su.status = 'declined'; su.decline_reason = params[0] || null; }
+                }
+              }
+              if (query.includes('INSERT INTO expenses')) {
+                const expenses = tables.get('expenses') || [];
+                expenses.push({
+                  id: params[0],
+                  tenant_id: params[1],
+                  organization_id: params[2],
+                  category_id: params[3] || null,
+                  amount: params[4],
+                  payee: params[5],
+                  expense_date: params[6],
+                  notes: params[7] || null,
+                  created_by: params[8] || null,
+                  created_at: params[9],
+                  updated_at: params[10],
+                });
+                tables.set('expenses', expenses);
+              }
+              if (query.includes('INSERT INTO households')) {
+                const households = tables.get('households') || [];
+                households.push({
+                  id: params[0],
+                  tenant_id: params[1],
+                  organization_id: params[2],
+                  name: params[3],
+                  head_of_household_id: params[4] || null,
+                  created_at: params[5],
+                  updated_at: params[6],
+                });
+                tables.set('households', households);
+              }
+              if (query.includes('INSERT INTO member_transfers')) {
+                const transfers = tables.get('member_transfers') || [];
+                transfers.push({
+                  id: params[0],
+                  tenant_id: params[1],
+                  member_id: params[2],
+                  sending_org_id: params[3],
+                  receiving_org_id: params[4],
+                  status: params[5],
+                  initiated_by: params[6],
+                  created_at: params[7],
+                  updated_at: params[8],
+                  sending_board_vote_date: null,
+                  receiving_board_vote_date: null,
+                  rejection_reason: null,
+                });
+                tables.set('member_transfers', transfers);
+              }
+              if (query.includes('UPDATE member_transfers')) {
+                const transfers = tables.get('member_transfers') || [];
+                const transfer = transfers.find(t => t.id === params[3]);
+                if (transfer) {
+                  if (query.includes('pending_receiving_approval')) {
+                    transfer.status = 'pending_receiving_approval';
+                  } else if (query.includes("status = 'accepted'")) {
+                    transfer.status = 'accepted';
+                    transfer.receiving_board_vote_date = params[1];
+                  } else if (query.includes("status = 'rejected'")) {
+                    transfer.status = 'rejected';
+                    transfer.rejection_reason = params[0] || null;
+                  }
                 }
               }
               return { success: true };
