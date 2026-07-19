@@ -10,10 +10,38 @@ export function createMockEnv(): Env {
         return {
           bind: (...params: any[]) => ({
             first: async <T = any>(): Promise<T | null> => {
-              if (query.includes('SELECT') && query.includes('FROM members')) {
-                const members = tables.get('members') || [];
-                const member = members.find(m => m.email === params[0] || m.id === params[0]);
-                return (member as T) || null;
+              // Handle COUNT(*) queries (must come before other FROM handlers)
+              if (query.includes('COUNT(*)')) {
+                const match = query.match(/FROM\s+(\w+)/);
+                const tableName = match ? match[1] : '';
+                const rows = tables.get(tableName) || [];
+                let filtered = [...rows];
+                const whereClause = query.split('WHERE')[1]?.split('ORDER BY')[0]?.split('GROUP BY')[0]?.trim();
+                if (whereClause && params.length > 0) {
+                  let paramIndex = 0;
+                  const conditions = whereClause.split('AND').map((c: string) => c.trim());
+                  for (const cond of conditions) {
+                    if (cond.includes('tenant_id = ?')) {
+                      filtered = filtered.filter((r: any) => r.tenant_id === params[paramIndex]);
+                      paramIndex++;
+                    } else if (cond.includes('user_id = ?') && query.includes('DISTINCT')) {
+                      filtered = filtered.filter((r: any) => r.user_id === params[paramIndex]);
+                      paramIndex++;
+                    } else if (cond.includes('action = ?')) {
+                      filtered = filtered.filter((r: any) => r.action === params[paramIndex]);
+                      paramIndex++;
+                    } else if (cond.includes("type = 'local_church'")) {
+                      filtered = filtered.filter((r: any) => r.type === 'local_church');
+                    } else if (cond.includes('parent_id = ?')) {
+                      filtered = filtered.filter((r: any) => r.parent_id === params[paramIndex]);
+                      paramIndex++;
+                    }
+                  }
+                }
+                if (query.includes('DISTINCT')) {
+                  return { count: new Set(filtered.map((r: any) => r.user_id)).size } as T;
+                }
+                return { count: filtered.length } as T;
               }
               if (query.includes('SELECT') && query.includes('FROM organizations')) {
                 const orgs = tables.get('organizations') || [];
@@ -84,6 +112,11 @@ export function createMockEnv(): Env {
                 const transaction = transactions.find(t => t.id === params[0]);
                 return (transaction as T) || null;
               }
+              if (query.includes('SELECT') && query.includes('FROM members')) {
+                const members = tables.get('members') || [];
+                const member = members.find(m => m.email === params[0] || m.id === params[0]);
+                return (member as T) || null;
+              }
               if (query.includes('SELECT') && query.includes('FROM offering_plans')) {
                 const plans = tables.get('offering_plans') || [];
                 const plan = plans.find(p => p.tenant_id === params[0]);
@@ -102,66 +135,6 @@ export function createMockEnv(): Env {
                   b.tenant_id === params[2]
                 );
                 return (balance as T) || null;
-              }
-              // Handle aggregate queries (SUM, COALESCE) for transactions
-              if ((query.includes('COALESCE(SUM') || query.includes('SUM(')) && query.includes('FROM transactions')) {
-                const transactions = tables.get('transactions') || [];
-                let filtered = [...transactions];
-                const parts = query.split('WHERE')[1]?.split('ORDER BY')[0]?.trim() || '';
-                // Match ? placeholders to params in order
-                let paramIndex = 0;
-                const conditions = parts.split('AND').map(c => c.trim());
-                for (const cond of conditions) {
-                  if (cond.includes('tenant_id = ?')) {
-                    filtered = filtered.filter((t: any) => t.tenant_id === params[paramIndex]);
-                    paramIndex++;
-                  } else if (cond.includes('organization_id = ?')) {
-                    filtered = filtered.filter((t: any) => t.organization_id === params[paramIndex]);
-                    paramIndex++;
-                  } else if (cond.includes("fund_type = 'tithe'")) {
-                    filtered = filtered.filter((t: any) => t.fund_type === 'tithe');
-                  } else if (cond.includes("fund_type = 'offering'")) {
-                    filtered = filtered.filter((t: any) => t.fund_type === 'offering');
-                  } else if (cond.includes('transaction_date >= ?')) {
-                    const startDate = params[paramIndex];
-                    filtered = filtered.filter((t: any) => t.transaction_date >= startDate);
-                    paramIndex++;
-                  } else if (cond.includes('transaction_date < ?')) {
-                    const endDate = params[paramIndex];
-                    filtered = filtered.filter((t: any) => t.transaction_date < endDate);
-                    paramIndex++;
-                  } else if (cond.includes('transaction_date = ?')) {
-                    filtered = filtered.filter((t: any) => t.transaction_date === params[paramIndex]);
-                    paramIndex++;
-                  }
-                }
-                const sum = filtered.reduce((acc: number, t: any) => acc + (t.amount || 0), 0);
-                return { total: sum } as T;
-              }
-              // Handle ORDER BY ... LIMIT 1 for transactions 
-              if (query.includes('FROM transactions') && query.includes('ORDER BY') && query.includes('LIMIT 1')) {
-                const transactions = tables.get('transactions') || [];
-                let filtered = [...transactions];
-                const whereClause = query.split('ORDER BY')[0];
-                const parts = whereClause.split('WHERE')[1]?.trim() || '';
-                let paramIndex = 0;
-                const conditions = parts.split('AND').map(c => c.trim());
-                for (const cond of conditions) {
-                  if (cond.includes('tenant_id = ?')) {
-                    filtered = filtered.filter((t: any) => t.tenant_id === params[paramIndex]);
-                    paramIndex++;
-                  } else if (cond.includes('organization_id = ?')) {
-                    filtered = filtered.filter((t: any) => t.organization_id === params[paramIndex]);
-                    paramIndex++;
-                  }
-                }
-                if (filtered.length > 0) {
-                  filtered.sort((a: any, b: any) => {
-                    if (query.includes('DESC')) return b.transaction_date?.localeCompare(a.transaction_date);
-                    return a.transaction_date?.localeCompare(b.transaction_date);
-                  });
-                  return filtered[0] as T;
-                }
               }
               return null;
             },

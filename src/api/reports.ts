@@ -127,5 +127,57 @@ reportRoutes.get('/remittance', async (c) => {
     });
   }
 
+  if (format === 'xlsx') {
+    const xml = buildXlsxXml(rows, report.totals, report.mission, report.month);
+    return c.newResponse(xml, 200, {
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'Content-Disposition': `attachment; filename="remittance-${year}-${month}.xlsx"`,
+    });
+  }
+
   return c.json(report);
 });
+
+function buildXlsxXml(
+  rows: { church_name: string; tithe: number; offering: number; total: number }[],
+  totals: { tithe: number; offering: number; total: number },
+  mission: string,
+  month: string
+): string {
+  const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const rowsXml = rows
+    .map(
+      (r) =>
+        `    <Row>\n      <Cell><Data ss:Type="String">${esc(r.church_name)}</Data></Cell>\n      <Cell><Data ss:Type="Number">${r.tithe}</Data></Cell>\n      <Cell><Data ss:Type="Number">${r.offering}</Data></Cell>\n      <Cell><Data ss:Type="Number">${r.total}</Data></Cell>\n    </Row>`
+    )
+    .join('\n');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Title>Remittance Report - ${esc(mission)} - ${esc(month)}</Title>
+ </DocumentProperties>
+ <Worksheet ss:Name="Remittance">
+  <Table>
+   <Row>
+    <Cell><Data ss:Type="String">Church Name</Data></Cell>
+    <Cell><Data ss:Type="String">Tithe</Data></Cell>
+    <Cell><Data ss:Type="String">Offering</Data></Cell>
+    <Cell><Data ss:Type="String">Total</Data></Cell>
+   </Row>
+${rowsXml}
+   <Row>
+    <Cell><Data ss:Type="String">Total</Data></Cell>
+    <Cell><Data ss:Type="Number">${totals.tithe}</Data></Cell>
+    <Cell><Data ss:Type="Number">${totals.offering}</Data></Cell>
+    <Cell><Data ss:Type="Number">${totals.total}</Data></Cell>
+   </Row>
+  </Table>
+ </Worksheet>
+</Workbook>`;
+}
