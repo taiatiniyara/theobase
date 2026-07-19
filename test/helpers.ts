@@ -185,7 +185,17 @@ export function createMockEnv(): Env {
       },
       exec: async (query: string) => ({ success: true }),
       dump: async () => new ArrayBuffer(0),
-      batch: async () => [],
+      batch: async (statements: any[]) => {
+        // Execute each statement in the batch sequentially
+        const results = [];
+        for (const stmt of statements) {
+          if (stmt && typeof stmt.run === 'function') {
+            const result = await stmt.run();
+            results.push(result);
+          }
+        }
+        return results;
+      },
     } as any,
     JWT_SECRET: 'test-secret',
   };

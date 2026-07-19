@@ -54,43 +54,45 @@ remittanceRoutes.post('/', async (c) => {
   const now = new Date().toISOString();
   const remittanceId = crypto.randomUUID();
 
-  // Create remittance record
-  await c.env.DB.prepare(
-    `INSERT INTO remittances (id, tenant_id, source_org_id, destination_org_id, fund_type, amount, user_id, remittance_date, notes, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  )
-    .bind(remittanceId, tenantId, auth.organizationId, destination_org_id, fund_type, amount, auth.userId, remittance_date, notes || null, now)
-    .run();
-
-  // Update source balance (decrease)
+  // Atomic remittance: insert remittance + update both balances in a batch
   const newSourceBalance = sourceBalance.amount - amount;
-  await c.env.DB.prepare(
-    'UPDATE balances SET amount = ?, updated_at = ? WHERE id = ?'
-  )
-    .bind(newSourceBalance, now, sourceBalance.id)
-    .run();
 
-  // Update destination balance (increase)
   const destBalance = await c.env.DB.prepare(
     'SELECT * FROM balances WHERE organization_id = ? AND fund_type = ? AND tenant_id = ?'
   )
     .bind(destination_org_id, fund_type, tenantId)
     .first<Balance>();
 
-  if (destBalance) {
-    const newDestBalance = destBalance.amount + amount;
-    await c.env.DB.prepare(
+  const destBalanceInsertId = crypto.randomUUID();
+  const newDestBalance = destBalance ? destBalance.amount + amount : amount;
+
+  const statements: D1PreparedStatement[] = [
+    // Insert remittance record
+    c.env.DB.prepare(
+      `INSERT INTO remittances (id, tenant_id, source_org_id, destination_org_id, fund_type, amount, user_id, remittance_date, notes, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(remittanceId, tenantId, auth.organizationId, destination_org_id, fund_type, amount, auth.userId, remittance_date, notes || null, now),
+    // Decrease source balance
+    c.env.DB.prepare(
       'UPDATE balances SET amount = ?, updated_at = ? WHERE id = ?'
-    )
-      .bind(newDestBalance, now, destBalance.id)
-      .run();
+    ).bind(newSourceBalance, now, sourceBalance.id),
+  ];
+
+  if (destBalance) {
+    statements.push(
+      c.env.DB.prepare(
+        'UPDATE balances SET amount = ?, updated_at = ? WHERE id = ?'
+      ).bind(newDestBalance, now, destBalance.id)
+    );
   } else {
-    await c.env.DB.prepare(
-      'INSERT INTO balances (id, tenant_id, organization_id, fund_type, amount, updated_at) VALUES (?, ?, ?, ?, ?, ?)'
-    )
-      .bind(crypto.randomUUID(), tenantId, destination_org_id, fund_type, amount, now)
-      .run();
+    statements.push(
+      c.env.DB.prepare(
+        'INSERT INTO balances (id, tenant_id, organization_id, fund_type, amount, updated_at) VALUES (?, ?, ?, ?, ?, ?)'
+      ).bind(destBalanceInsertId, tenantId, destination_org_id, fund_type, amount, now)
+    );
   }
+
+  await c.env.DB.batch(statements);
 
   // Fetch the created remittance
   const remittance = await c.env.DB.prepare(

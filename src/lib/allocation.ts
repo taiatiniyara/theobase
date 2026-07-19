@@ -77,7 +77,7 @@ export async function allocateOffering(
   const allocations: AllocationResult[] = [];
   const now = new Date().toISOString();
 
-  // Calculate splits
+  // Calculate splits with rounding reconciliation
   const splits: { org: Organization | null; percent: number }[] = [
     { org: hierarchy.local_church, percent: plan.local_percent },
     { org: hierarchy.conference, percent: plan.conference_percent },
@@ -85,17 +85,27 @@ export async function allocateOffering(
     { org: hierarchy.general_conference, percent: plan.gc_percent },
   ];
 
-  for (const split of splits) {
-    if (!split.org || split.percent <= 0) continue;
+  // Calculate raw splits
+  const rawSplits = splits
+    .filter(s => s.org && s.percent > 0)
+    .map(s => ({ org: s.org!, amount: Math.round(amount * s.percent / 100) }));
 
-    const splitAmount = Math.round(amount * split.percent / 100);
-    if (splitAmount <= 0) continue;
+  // Reconcile rounding: adjust the largest split to make total match
+  const rawTotal = rawSplits.reduce((sum, s) => sum + s.amount, 0);
+  const diff = amount - rawTotal;
+  if (diff !== 0 && rawSplits.length > 0) {
+    const largest = rawSplits.reduce((max, s) => s.amount > max.amount ? s : max);
+    largest.amount += diff;
+  }
+
+  for (const split of rawSplits) {
+    if (split.amount <= 0) continue;
 
     const allocation: AllocationResult = {
       id: crypto.randomUUID(),
       transaction_id: transactionId,
       fund_type: 'offering',
-      amount: splitAmount,
+      amount: split.amount,
       destination_org_id: split.org.id,
       created_at: now,
     };
@@ -103,11 +113,11 @@ export async function allocateOffering(
     await db.prepare(
       'INSERT INTO fund_allocations (id, transaction_id, fund_type, amount, destination_org_id, created_at) VALUES (?, ?, ?, ?, ?, ?)'
     )
-      .bind(allocation.id, transactionId, 'offering', splitAmount, split.org.id, now)
+      .bind(allocation.id, transactionId, 'offering', split.amount, split.org.id, now)
       .run();
 
     // Update balance
-    await updateBalance(db, tenantId, split.org.id, 'offering', splitAmount);
+    await updateBalance(db, tenantId, split.org.id, 'offering', split.amount);
 
     allocations.push(allocation);
   }
@@ -150,16 +160,17 @@ async function updateBalance(
 }
 
 /**
- * Get all allocations for a transaction.
+ * Get all allocations for a transaction (tenant-scoped).
  */
 export async function getAllocationsForTransaction(
   db: D1Database,
-  transactionId: string
+  transactionId: string,
+  tenantId: string
 ): Promise<FundAllocation[]> {
   const result = await db.prepare(
-    'SELECT * FROM fund_allocations WHERE transaction_id = ?'
+    'SELECT fa.* FROM fund_allocations fa JOIN transactions t ON fa.transaction_id = t.id WHERE fa.transaction_id = ? AND t.tenant_id = ?'
   )
-    .bind(transactionId)
+    .bind(transactionId, tenantId)
     .all<FundAllocation>();
 
   return result.results;

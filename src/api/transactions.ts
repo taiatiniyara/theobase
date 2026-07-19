@@ -205,13 +205,14 @@ transactionRoutes.get('/allocations', async (c) => {
     return c.json([]);
   }
 
-  const allocations = await getAllocationsForTransaction(c.env.DB, transactions.results[0].id);
+  const allocations = await getAllocationsForTransaction(c.env.DB, transactions.results[0].id, tenantId);
   return c.json(allocations);
 });
 
 // Get allocations for a specific transaction
 transactionRoutes.get('/:id/allocations', async (c) => {
   const transactionId = c.req.param('id');
-  const allocations = await getAllocationsForTransaction(c.env.DB, transactionId);
+  const tenantId = getTenantId(c);
+  const allocations = await getAllocationsForTransaction(c.env.DB, transactionId, tenantId);
   return c.json(allocations);
 });
