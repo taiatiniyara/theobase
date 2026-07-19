@@ -43,6 +43,25 @@ export interface AuthPayload {
   organizationId: string;
 }
 
+export type FundType = 'tithe' | 'offering';
+
+export interface Transaction {
+  id: string;
+  tenant_id: string;
+  organization_id: string;
+  member_id: string | null;
+  fund_type: FundType;
+  amount: number;
+  transaction_date: string;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SyncPayload {
+  transactions: Omit<Transaction, 'id' | 'tenant_id' | 'created_at' | 'updated_at'>[];
+}
+
 export interface Env {
   DB: D1Database;
   JWT_SECRET: string;

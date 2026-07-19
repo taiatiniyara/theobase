@@ -1,4 +1,4 @@
-import { Env, Member, MemberRole } from '../src/types';
+import { Env, Member, MemberRole, Organization, OrganizationType } from '../src/types';
 import { hashPassword } from '../src/lib/crypto';
 
 export function createMockEnv(): Env {
@@ -12,10 +12,27 @@ export function createMockEnv(): Env {
             first: async <T = any>(): Promise<T | null> => {
               if (query.includes('SELECT') && query.includes('FROM members')) {
                 const members = tables.get('members') || [];
-                const member = members.find(m => m.email === params[0]);
-                return member as T || null;
+                const member = members.find(m => m.email === params[0] || m.id === params[0]);
+                return (member as T) || null;
+              }
+              if (query.includes('SELECT') && query.includes('FROM organizations')) {
+                const orgs = tables.get('organizations') || [];
+                const org = orgs.find(o => o.id === params[0]);
+                return (org as T) || null;
+              }
+              if (query.includes('SELECT') && query.includes('FROM transactions')) {
+                const transactions = tables.get('transactions') || [];
+                const transaction = transactions.find(t => t.id === params[0]);
+                return (transaction as T) || null;
               }
               return null;
+            },
+            all: async <T = any>(): Promise<{ results: T[] }> => {
+              if (query.includes('SELECT') && query.includes('FROM transactions')) {
+                const transactions = tables.get('transactions') || [];
+                return { results: transactions as T[] };
+              }
+              return { results: [] };
             },
             run: async () => {
               if (query.includes('INSERT INTO members')) {
@@ -32,11 +49,41 @@ export function createMockEnv(): Env {
               }
               if (query.includes('INSERT INTO tenants')) {
                 const tenants = tables.get('tenants') || [];
-                tenants.push({
+                const exists = tenants.find(t => t.id === params[0]);
+                if (!exists) {
+                  tenants.push({
+                    id: params[0],
+                    name: params[1],
+                  });
+                  tables.set('tenants', tenants);
+                }
+              }
+              if (query.includes('INSERT INTO organizations')) {
+                const orgs = tables.get('organizations') || [];
+                orgs.push({
                   id: params[0],
-                  name: params[1],
+                  tenant_id: params[1],
+                  name: params[2],
+                  type: params[3],
+                  parent_id: params[4] || null,
                 });
-                tables.set('tenants', tenants);
+                tables.set('organizations', orgs);
+              }
+              if (query.includes('INSERT INTO transactions')) {
+                const transactions = tables.get('transactions') || [];
+                transactions.push({
+                  id: params[0],
+                  tenant_id: params[1],
+                  organization_id: params[2],
+                  member_id: params[3] || null,
+                  fund_type: params[4],
+                  amount: params[5],
+                  transaction_date: params[6],
+                  notes: params[7] || null,
+                  created_at: params[8],
+                  updated_at: params[9],
+                });
+                tables.set('transactions', transactions);
               }
               return { success: true };
             },
@@ -63,6 +110,7 @@ export async function seedTestMember(
     organizationId: string;
   }
 ) {
+  // Ensure tenant exists
   await env.DB.prepare('INSERT INTO tenants (id, name) VALUES (?, ?)')
     .bind(data.tenantId, 'Test Tenant')
     .run();
@@ -73,5 +121,27 @@ export async function seedTestMember(
     'INSERT INTO members (id, tenant_id, email, password_hash, role, organization_id) VALUES (?, ?, ?, ?, ?, ?)'
   )
     .bind(data.memberId, data.tenantId, data.email, passwordHash, data.role, data.organizationId)
+    .run();
+}
+
+export async function seedTestOrganization(
+  env: Env,
+  data: {
+    tenantId: string;
+    organizationId: string;
+    name: string;
+    type: OrganizationType;
+    parentId?: string;
+  }
+) {
+  // Ensure tenant exists
+  await env.DB.prepare('INSERT INTO tenants (id, name) VALUES (?, ?)')
+    .bind(data.tenantId, 'Test Tenant')
+    .run();
+
+  await env.DB.prepare(
+    'INSERT INTO organizations (id, tenant_id, name, type, parent_id) VALUES (?, ?, ?, ?, ?)'
+  )
+    .bind(data.organizationId, data.tenantId, data.name, data.type, data.parentId || null)
     .run();
 }
