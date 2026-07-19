@@ -5,6 +5,7 @@ import { adminRoutes } from '../src/api/admin';
 import { reportRoutes } from '../src/api/reports';
 import { createMockEnv, seedTestMember, seedTestOrganization, seedTestOfferingPlan } from './helpers';
 import { signJwt } from '../src/lib/crypto';
+import { sendMonthlyReminders } from '../src/lib/reminders';
 
 describe('Polish: Excel Export, Sync, Admin Health', () => {
   let app: Hono;
@@ -175,6 +176,72 @@ describe('Polish: Excel Export, Sync, Admin Health', () => {
       expect(health.members).toBeGreaterThanOrEqual(4);
       expect(health.transactions).toBeGreaterThanOrEqual(0);
       expect(health.checked_at).toBeTruthy();
+    });
+  });
+
+  describe('Email Reminders', () => {
+    let reminderEnv: ReturnType<typeof createMockEnv>;
+
+    beforeEach(async () => {
+      reminderEnv = createMockEnv();
+      await seedTestOrganization(reminderEnv, {
+        tenantId: 'tenant-1', organizationId: 'mission-1', name: 'Fiji Mission', type: 'mission',
+      });
+      await seedTestOrganization(reminderEnv, {
+        tenantId: 'tenant-1', organizationId: 'church-a', name: 'Church A', type: 'local_church', parentId: 'mission-1',
+      });
+      await seedTestOrganization(reminderEnv, {
+        tenantId: 'tenant-1', organizationId: 'church-b', name: 'Church B', type: 'local_church', parentId: 'mission-1',
+      });
+      // Church A treasurer (has submitted)
+      await seedTestMember(reminderEnv, {
+        tenantId: 'tenant-1', memberId: 'treas-a', email: 'treas-a@test.com',
+        password: 'pass', role: 'treasurer', organizationId: 'church-a',
+      });
+      // Church B treasurer (has NOT submitted)
+      await seedTestMember(reminderEnv, {
+        tenantId: 'tenant-1', memberId: 'treas-b', email: 'treas-b@test.com',
+        password: 'pass', role: 'treasurer', organizationId: 'church-b',
+      });
+    });
+
+    it('sends reminders to treasurers who have not submitted this month', async () => {
+      const today = new Date().toISOString().split('T')[0];
+
+      await reminderEnv.DB.prepare(
+        `INSERT INTO transactions (id, tenant_id, organization_id, member_id, fund_type, amount, transaction_date, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      )
+        .bind('txn-sub', 'tenant-1', 'church-a', null, 'tithe', 500, today, new Date().toISOString(), new Date().toISOString())
+        .run();
+
+      const result = await sendMonthlyReminders(reminderEnv.DB, reminderEnv.EMAIL, reminderEnv as any, 'tenant-1');
+
+      expect(result.totalChurches).toBe(2);
+      expect(result.skippedSubmitted).toBe(1);
+      expect(result.remindersSent).toBe(1);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('manual trigger endpoint sends reminders (admin only)', async () => {
+      const res = await app.request('/admin/send-reminders', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${adminToken}` },
+      }, env);
+
+      expect(res.status).toBe(200);
+      const data = await res.json() as any;
+      expect(data.success).toBe(true);
+      expect(data.totalChurches).toBeGreaterThanOrEqual(1);
+    });
+
+    it('blocks non-admin from manual trigger', async () => {
+      const res = await app.request('/admin/send-reminders', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${missionToken}` },
+      }, env);
+
+      expect(res.status).toBe(403);
     });
   });
 });

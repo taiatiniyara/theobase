@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import type { Env, AuthPayload } from '../types';
 import { authMiddleware } from '../middleware/auth';
 import { tenantMiddleware, getTenantId } from '../middleware/tenant';
+import { sendMonthlyReminders } from '../lib/reminders';
 
 type Variables = { auth: AuthPayload; tenantId: string };
 
@@ -72,4 +73,15 @@ adminRoutes.get('/health', async (c) => {
     activity_24h: recentActivity?.count || 0,
     active_members_7d: activeMembers?.count || 0,
   });
+});
+
+adminRoutes.post('/send-reminders', async (c) => {
+  const tenantId = getTenantId(c);
+
+  if (!c.env.EMAIL) {
+    return c.json({ error: 'Email binding not configured' }, 503);
+  }
+
+  const result = await sendMonthlyReminders(c.env.DB, c.env.EMAIL, c.env, tenantId);
+  return c.json({ success: true, ...result });
 });

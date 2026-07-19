@@ -129,7 +129,44 @@ export interface SyncPayload {
   transactions: Omit<Transaction, 'id' | 'tenant_id' | 'created_at' | 'updated_at'>[];
 }
 
+export interface EmailAddress {
+  email: string;
+  name?: string;
+}
+
+export interface EmailAttachment {
+  content: string | ArrayBuffer;
+  filename: string;
+  type: string;
+  disposition?: 'attachment' | 'inline';
+  contentId?: string;
+}
+
+export interface EmailPayload {
+  to: string | string[];
+  from: EmailAddress;
+  subject: string;
+  html?: string;
+  text?: string;
+  cc?: string[];
+  bcc?: string[];
+  replyTo?: string;
+  attachments?: EmailAttachment[];
+  headers?: Record<string, string>;
+}
+
+export interface EmailSendResult {
+  messageId: string;
+}
+
+export interface SendEmail {
+  send(payload: EmailPayload): Promise<EmailSendResult>;
+}
+
 export interface Env {
   DB: D1Database;
   JWT_SECRET: string;
+  EMAIL: SendEmail;
+  EMAIL_FROM_NAME?: string;
+  EMAIL_FROM_ADDRESS?: string;
 }

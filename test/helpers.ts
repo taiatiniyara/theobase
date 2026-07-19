@@ -24,6 +24,9 @@ export function createMockEnv(): Env {
                     if (cond.includes('tenant_id = ?')) {
                       filtered = filtered.filter((r: any) => r.tenant_id === params[paramIndex]);
                       paramIndex++;
+                    } else if (cond.includes('organization_id = ?')) {
+                      filtered = filtered.filter((r: any) => r.organization_id === params[paramIndex]);
+                      paramIndex++;
                     } else if (cond.includes('user_id = ?') && query.includes('DISTINCT')) {
                       filtered = filtered.filter((r: any) => r.user_id === params[paramIndex]);
                       paramIndex++;
@@ -139,13 +142,58 @@ export function createMockEnv(): Env {
               return null;
             },
             all: async <T = any>(): Promise<{ results: T[] }> => {
+              // Handle org+member JOIN queries (for reminders)
+              if (query.includes('FROM organizations') && query.includes('JOIN members')) {
+                const orgs = tables.get('organizations') || [];
+                const members = tables.get('members') || [];
+                let results = orgs.map(o => {
+                  const member = members.find(m => m.organization_id === o.id && m.tenant_id === o.tenant_id);
+                  return member ? { id: o.id, name: o.name, tenant_id: o.tenant_id, email: member.email, member_id: member.id } : null;
+                }).filter(Boolean);
+
+                if (query.includes("o.type = 'local_church'")) {
+                  results = results.filter((r: any) => {
+                    const org = orgs.find(o => o.id === r.id);
+                    return org && org.type === 'local_church';
+                  });
+                }
+                if (query.includes("m.role = 'treasurer'")) {
+                  results = results.filter((r: any) => {
+                    const member = members.find(m => m.id === r.member_id);
+                    return member && member.role === 'treasurer';
+                  });
+                }
+                if (query.includes('o.tenant_id = ?')) {
+                  results = results.filter((r: any) => r.tenant_id === params[0]);
+                }
+                return { results: results as T[] };
+              }
               if (query.includes('SELECT') && query.includes('FROM transactions')) {
                 const transactions = tables.get('transactions') || [];
                 return { results: transactions as T[] };
               }
               if (query.includes('SELECT') && query.includes('FROM fund_allocations')) {
                 const allocations = tables.get('fund_allocations') || [];
-                return { results: allocations as T[] };
+                let filtered = [...allocations];
+                if (query.includes('WHERE') && params.length > 0) {
+                  let paramIndex = 0;
+                  const whereClause = query.split('WHERE')[1]?.split('ORDER BY')[0]?.trim() || '';
+                  const conditions = whereClause.split('AND').map(c => c.trim());
+                  for (const cond of conditions) {
+                    if (cond.includes('fa.transaction_id = ?') || cond.includes('transaction_id = ?')) {
+                      filtered = filtered.filter((a: any) => a.transaction_id === params[paramIndex]);
+                      paramIndex++;
+                    } else if (cond.includes('t.tenant_id = ?') || cond.includes('tenant_id = ?')) {
+                      filtered = filtered.filter((a: any) => {
+                        const txns = tables.get('transactions') || [];
+                        const txn = txns.find((t: any) => t.id === a.transaction_id);
+                        return txn && txn.tenant_id === params[paramIndex];
+                      });
+                      paramIndex++;
+                    }
+                  }
+                }
+                return { results: filtered as T[] };
               }
               if (query.includes('SELECT') && query.includes('FROM balances')) {
                 const balances = tables.get('balances') || [];
@@ -324,6 +372,15 @@ export function createMockEnv(): Env {
       },
     } as any,
     JWT_SECRET: 'test-secret',
+    EMAIL_FROM_NAME: 'Test Theobase',
+    EMAIL_FROM_ADDRESS: 'noreply@test.theobase.org',
+    EMAIL: {
+      sentEmails: [] as Array<{ to: string; subject: string }>,
+      async send(payload: any) {
+        (this as any).sentEmails.push({ to: Array.isArray(payload.to) ? payload.to[0] : payload.to, subject: payload.subject });
+        return { messageId: 'mock-msg-' + Date.now() };
+      },
+    } as any,
   };
 }
 

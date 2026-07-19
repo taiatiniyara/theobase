@@ -7,5 +7,14 @@ binding = "DB"
 database_name = "theobase-db"
 database_id = "placeholder-replace-after-creation"
 
+[[send_email]]
+name = "EMAIL"
+allowed_sender_addresses = ["noreply@theobase.org"]
+
+[triggers]
+crons = ["0 0 25 * *"]
+
 [vars]
 JWT_SECRET = "dev-secret-change-in-production"
+EMAIL_FROM_NAME = "Theobase Reminders"
+EMAIL_FROM_ADDRESS = "noreply@theobase.org"

@@ -11,6 +11,7 @@ import { dashboardRoutes } from './api/dashboard';
 import { reportRoutes } from './api/reports';
 import { syncRoutes } from './api/sync';
 import { adminRoutes } from './api/admin';
+import { sendMonthlyReminders } from './lib/reminders';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -34,4 +35,9 @@ app.get('/', (c) => {
   return c.json({ status: 'ok', service: 'theobase' });
 });
 
-export default app;
+export default {
+  fetch: app.fetch,
+  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
+    ctx.waitUntil(sendMonthlyReminders(env.DB, env.EMAIL, env));
+  },
+};
