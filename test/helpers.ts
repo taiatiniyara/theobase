@@ -1,4 +1,4 @@
-import { Env, Member, MemberRole, Organization, OrganizationType } from '../src/types';
+import { Env, Member, MemberRole, Organization, OrganizationType, OfferingPlan } from '../src/types';
 import { hashPassword } from '../src/lib/crypto';
 
 export function createMockEnv(): Env {
@@ -25,12 +25,38 @@ export function createMockEnv(): Env {
                 const transaction = transactions.find(t => t.id === params[0]);
                 return (transaction as T) || null;
               }
+              if (query.includes('SELECT') && query.includes('FROM offering_plans')) {
+                const plans = tables.get('offering_plans') || [];
+                const plan = plans.find(p => p.tenant_id === params[0]);
+                return (plan as T) || null;
+              }
+              if (query.includes('SELECT') && query.includes('FROM balances')) {
+                const balances = tables.get('balances') || [];
+                const balance = balances.find(b => 
+                  b.organization_id === params[0] && 
+                  b.fund_type === params[1] &&
+                  b.tenant_id === params[2]
+                );
+                return (balance as T) || null;
+              }
               return null;
             },
             all: async <T = any>(): Promise<{ results: T[] }> => {
               if (query.includes('SELECT') && query.includes('FROM transactions')) {
                 const transactions = tables.get('transactions') || [];
                 return { results: transactions as T[] };
+              }
+              if (query.includes('SELECT') && query.includes('FROM fund_allocations')) {
+                const allocations = tables.get('fund_allocations') || [];
+                return { results: allocations as T[] };
+              }
+              if (query.includes('SELECT') && query.includes('FROM balances')) {
+                const balances = tables.get('balances') || [];
+                return { results: balances as T[] };
+              }
+              if (query.includes('SELECT') && query.includes('FROM remittances')) {
+                const remittances = tables.get('remittances') || [];
+                return { results: remittances as T[] };
               }
               return { results: [] };
             },
@@ -85,6 +111,67 @@ export function createMockEnv(): Env {
                 });
                 tables.set('transactions', transactions);
               }
+              if (query.includes('INSERT INTO offering_plans')) {
+                const plans = tables.get('offering_plans') || [];
+                plans.push({
+                  id: params[0],
+                  tenant_id: params[1],
+                  name: params[2],
+                  local_percent: params[3],
+                  conference_percent: params[4],
+                  union_percent: params[5],
+                  gc_percent: params[6],
+                });
+                tables.set('offering_plans', plans);
+              }
+              if (query.includes('INSERT INTO fund_allocations')) {
+                const allocations = tables.get('fund_allocations') || [];
+                allocations.push({
+                  id: params[0],
+                  transaction_id: params[1],
+                  fund_type: params[2],
+                  amount: params[3],
+                  destination_org_id: params[4],
+                  created_at: params[5],
+                });
+                tables.set('fund_allocations', allocations);
+              }
+              if (query.includes('INSERT INTO balances')) {
+                const balances = tables.get('balances') || [];
+                balances.push({
+                  id: params[0],
+                  tenant_id: params[1],
+                  organization_id: params[2],
+                  fund_type: params[3],
+                  amount: params[4],
+                  updated_at: params[5],
+                });
+                tables.set('balances', balances);
+              }
+              if (query.includes('INSERT INTO remittances')) {
+                const remittances = tables.get('remittances') || [];
+                remittances.push({
+                  id: params[0],
+                  tenant_id: params[1],
+                  source_org_id: params[2],
+                  destination_org_id: params[3],
+                  fund_type: params[4],
+                  amount: params[5],
+                  user_id: params[6],
+                  remittance_date: params[7],
+                  notes: params[8] || null,
+                  created_at: params[9],
+                });
+                tables.set('remittances', remittances);
+              }
+              if (query.includes('UPDATE balances')) {
+                const balances = tables.get('balances') || [];
+                const balance = balances.find(b => b.id === params[1]);
+                if (balance) {
+                  balance.amount = params[0];
+                  balance.updated_at = params[2];
+                }
+              }
               return { success: true };
             },
           }),
@@ -110,7 +197,6 @@ export async function seedTestMember(
     organizationId: string;
   }
 ) {
-  // Ensure tenant exists
   await env.DB.prepare('INSERT INTO tenants (id, name) VALUES (?, ?)')
     .bind(data.tenantId, 'Test Tenant')
     .run();
@@ -134,7 +220,6 @@ export async function seedTestOrganization(
     parentId?: string;
   }
 ) {
-  // Ensure tenant exists
   await env.DB.prepare('INSERT INTO tenants (id, name) VALUES (?, ?)')
     .bind(data.tenantId, 'Test Tenant')
     .run();
@@ -143,5 +228,36 @@ export async function seedTestOrganization(
     'INSERT INTO organizations (id, tenant_id, name, type, parent_id) VALUES (?, ?, ?, ?, ?)'
   )
     .bind(data.organizationId, data.tenantId, data.name, data.type, data.parentId || null)
+    .run();
+}
+
+export async function seedTestOfferingPlan(
+  env: Env,
+  data: {
+    tenantId: string;
+    offeringPlanId: string;
+    name: string;
+    localPercent: number;
+    conferencePercent: number;
+    unionPercent: number;
+    gcPercent: number;
+  }
+) {
+  await env.DB.prepare('INSERT INTO tenants (id, name) VALUES (?, ?)')
+    .bind(data.tenantId, 'Test Tenant')
+    .run();
+
+  await env.DB.prepare(
+    'INSERT INTO offering_plans (id, tenant_id, name, local_percent, conference_percent, union_percent, gc_percent) VALUES (?, ?, ?, ?, ?, ?, ?)'
+  )
+    .bind(
+      data.offeringPlanId,
+      data.tenantId,
+      data.name,
+      data.localPercent,
+      data.conferencePercent,
+      data.unionPercent,
+      data.gcPercent
+    )
     .run();
 }

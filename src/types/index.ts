@@ -58,6 +58,49 @@ export interface Transaction {
   updated_at: string;
 }
 
+export interface OfferingPlan {
+  id: string;
+  tenant_id: string;
+  name: string;
+  local_percent: number;
+  conference_percent: number;
+  union_percent: number;
+  gc_percent: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FundAllocation {
+  id: string;
+  transaction_id: string;
+  fund_type: FundType;
+  amount: number;
+  destination_org_id: string;
+  created_at: string;
+}
+
+export interface Remittance {
+  id: string;
+  tenant_id: string;
+  source_org_id: string;
+  destination_org_id: string;
+  fund_type: FundType;
+  amount: number;
+  user_id: string;
+  remittance_date: string;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface Balance {
+  id: string;
+  tenant_id: string;
+  organization_id: string;
+  fund_type: FundType;
+  amount: number;
+  updated_at: string;
+}
+
 export interface SyncPayload {
   transactions: Omit<Transaction, 'id' | 'tenant_id' | 'created_at' | 'updated_at'>[];
 }
