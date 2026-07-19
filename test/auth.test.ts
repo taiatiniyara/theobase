@@ -35,7 +35,7 @@ describe('Auth Seam', () => {
       }, env);
 
       expect(res.status).toBe(200);
-      const data = await res.json();
+      const data = await res.json() as { token: string };
       expect(data.token).toBeDefined();
       expect(typeof data.token).toBe('string');
     });
@@ -51,7 +51,7 @@ describe('Auth Seam', () => {
       }, env);
 
       expect(res.status).toBe(401);
-      const data = await res.json();
+      const data = await res.json() as { error: string };
       expect(data.error).toBe('Invalid credentials');
     });
 
@@ -66,7 +66,7 @@ describe('Auth Seam', () => {
       }, env);
 
       expect(res.status).toBe(401);
-      const data = await res.json();
+      const data = await res.json() as { error: string };
       expect(data.error).toBe('Invalid credentials');
     });
   });
@@ -78,7 +78,7 @@ describe('Auth Seam', () => {
       }, env);
 
       expect(res.status).toBe(200);
-      const data = await res.json();
+      const data = await res.json() as { message: string };
       expect(data.message).toBe('Logged out successfully');
     });
   });

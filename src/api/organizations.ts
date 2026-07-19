@@ -1,10 +1,15 @@
 import { Hono } from 'hono';
-import type { Env, Organization, OrganizationType } from '../types';
+import type { Env, Organization, OrganizationType, AuthPayload } from '../types';
 import { authMiddleware } from '../middleware/auth';
 import { tenantMiddleware, getTenantId } from '../middleware/tenant';
 import { permissionMiddleware } from '../middleware/permission';
 
-export const organizationRoutes = new Hono<{ Bindings: Env }>();
+type Variables = {
+  auth: AuthPayload;
+  tenantId: string;
+};
+
+export const organizationRoutes = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 // Apply auth, tenant, and permission middleware to all routes
 organizationRoutes.use('*', authMiddleware);

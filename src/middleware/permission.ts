@@ -1,6 +1,11 @@
 import { Context, Next } from 'hono';
 import type { Env, AuthPayload, MemberRole, OrganizationType } from '../types';
 
+type Variables = {
+  auth: AuthPayload;
+  tenantId: string;
+};
+
 // Define which roles can access which organization types
 const ROLE_HIERARCHY: Record<MemberRole, OrganizationType[]> = {
   treasurer: ['local_church', 'district', 'mission', 'conference', 'union', 'general_conference'],
@@ -19,8 +24,8 @@ const VISIBILITY_RULES: Record<OrganizationType, OrganizationType[]> = {
   general_conference: ['local_church', 'district', 'mission', 'conference', 'union', 'general_conference'],
 };
 
-export async function permissionMiddleware(c: Context<{ Bindings: Env }>, next: Next) {
-  const auth = c.get('auth') as AuthPayload | undefined;
+export async function permissionMiddleware(c: Context<{ Bindings: Env; Variables: Variables }>, next: Next) {
+  const auth = c.get('auth');
 
   if (!auth) {
     return c.json({ error: 'Authentication required' }, 401);

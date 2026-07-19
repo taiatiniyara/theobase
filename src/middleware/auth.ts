@@ -2,7 +2,11 @@ import { Context, Next } from 'hono';
 import { verifyJwt } from '../lib/crypto';
 import type { Env, AuthPayload } from '../types';
 
-export async function authMiddleware(c: Context<{ Bindings: Env }>, next: Next) {
+type Variables = {
+  auth: AuthPayload;
+};
+
+export async function authMiddleware(c: Context<{ Bindings: Env; Variables: Variables }>, next: Next) {
   const authHeader = c.req.header('Authorization');
   
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -17,7 +21,7 @@ export async function authMiddleware(c: Context<{ Bindings: Env }>, next: Next) 
   }
 
   // Attach auth payload to context
-  c.set('auth', payload as AuthPayload);
+  c.set('auth', payload as unknown as AuthPayload);
 
   await next();
 }

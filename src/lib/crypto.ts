@@ -14,7 +14,7 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
   return passwordHash === hash;
 }
 
-export async function signJwt(payload: object, secret: string): Promise<string> {
+export async function signJwt(payload: Record<string, unknown>, secret: string): Promise<string> {
   const jwt = await new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime('24h')

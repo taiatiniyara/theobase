@@ -40,7 +40,7 @@ authRoutes.post('/login', async (c) => {
     organizationId: member.organization_id,
   };
 
-  const token = await signJwt(payload, env.JWT_SECRET);
+  const token = await signJwt(payload as unknown as Record<string, unknown>, env.JWT_SECRET);
 
   return c.json({ token });
 });

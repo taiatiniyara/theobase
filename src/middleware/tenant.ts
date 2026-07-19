@@ -1,8 +1,13 @@
 import { Context, Next } from 'hono';
 import type { Env, AuthPayload } from '../types';
 
-export async function tenantMiddleware(c: Context<{ Bindings: Env }>, next: Next) {
-  const auth = c.get('auth') as AuthPayload | undefined;
+type Variables = {
+  auth: AuthPayload;
+  tenantId: string;
+};
+
+export async function tenantMiddleware(c: Context<{ Bindings: Env; Variables: Variables }>, next: Next) {
+  const auth = c.get('auth');
 
   if (!auth) {
     return c.json({ error: 'Authentication required' }, 401);
@@ -14,6 +19,6 @@ export async function tenantMiddleware(c: Context<{ Bindings: Env }>, next: Next
   await next();
 }
 
-export function getTenantId(c: Context<{ Bindings: Env }>): string {
+export function getTenantId(c: Context<{ Bindings: Env; Variables: Variables }>): string {
   return c.get('tenantId');
 }
