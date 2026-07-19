@@ -25,7 +25,7 @@ remittanceRoutes.post('/', async (c) => {
   if (!amount || amount <= 0) {
     return c.json({ error: 'Amount must be a positive number' }, 400);
   }
-  if (fund_type !== 'tithe' && fund_type !== 'offering') {
+  if (fund_type !== 'tithe' && fund_type !== 'offering' && fund_type !== 'restricted') {
     return c.json({ error: 'Invalid fund type' }, 400);
   }
 

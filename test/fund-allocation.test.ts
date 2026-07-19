@@ -183,6 +183,35 @@ describe('Financial Pipeline - Fund Allocation + Remittance', () => {
       const gc = allocations.find(a => a.destination_org_id === 'gc-1');
       expect(gc?.amount).toBe(20);
     });
+
+    it('allocates restricted funds 100% to local church', async () => {
+      const res = await app.request('/transactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${churchTreasurerToken}`,
+        },
+        body: JSON.stringify({
+          fund_type: 'restricted',
+          amount: 200,
+          transaction_date: '2026-07-19',
+          notes: 'Building fund',
+        }),
+      }, env);
+
+      expect(res.status).toBe(201);
+
+      const allocRes = await app.request('/transactions/allocations', {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${churchTreasurerToken}` },
+      }, env);
+
+      const allocations = await allocRes.json() as any[];
+      expect(allocations).toHaveLength(1);
+      expect(allocations[0].fund_type).toBe('restricted');
+      expect(allocations[0].amount).toBe(200);
+      expect(allocations[0].destination_org_id).toBe('church-1');
+    });
   });
 
   describe('Remittance Seam', () => {

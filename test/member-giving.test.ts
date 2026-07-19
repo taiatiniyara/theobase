@@ -148,5 +148,68 @@ describe('Member Giving + Audit Trail', () => {
       const logs = await res.json() as any[];
       expect(logs.length).toBeGreaterThanOrEqual(1);
     });
+
+    it('logs transaction edits with before/after values', async () => {
+      const createRes = await app.request('/transactions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${churchTreasurerToken}` },
+        body: JSON.stringify({ member_id: 'giver-1', fund_type: 'tithe', amount: 100, transaction_date: '2026-07-19' }),
+      }, env);
+
+      const created = await createRes.json() as any;
+
+      await app.request(`/transactions/${created.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${churchTreasurerToken}` },
+        body: JSON.stringify({ amount: 150, notes: 'Updated amount' }),
+      }, env);
+
+      const res = await app.request('/audit?entity_type=transaction&action=update', {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${churchTreasurerToken}` },
+      }, env);
+
+      expect(res.status).toBe(200);
+      const logs = await res.json() as any[];
+      expect(logs.length).toBeGreaterThanOrEqual(1);
+      const updateLog = logs.find((l: any) => l.action === 'update');
+      expect(updateLog).toBeDefined();
+      const beforeValues = JSON.parse(updateLog.before_values);
+      expect(beforeValues.amount).toBe(100);
+      const afterValues = JSON.parse(updateLog.after_values);
+      expect(afterValues.amount).toBe(150);
+    });
+  });
+
+  describe('Member Self-Service', () => {
+    it('allows member to view own giving history', async () => {
+      await app.request('/transactions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${churchTreasurerToken}` },
+        body: JSON.stringify({ member_id: 'giver-1', fund_type: 'tithe', amount: 100, transaction_date: '2026-07-19' }),
+      }, env);
+
+      const res = await app.request('/members/me/giving-history', {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${memberToken}` },
+      }, env);
+
+      expect(res.status).toBe(200);
+      const history = await res.json() as any[];
+      expect(history.length).toBeGreaterThanOrEqual(1);
+      expect(history[0].member_id).toBe('giver-1');
+    });
+
+    it('returns member profile for self', async () => {
+      const res = await app.request('/members/me', {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${memberToken}` },
+      }, env);
+
+      expect(res.status).toBe(200);
+      const profile = await res.json() as any;
+      expect(profile.email).toBe('giver@test.com');
+      expect(profile.role).toBe('pastor');
+    });
   });
 });

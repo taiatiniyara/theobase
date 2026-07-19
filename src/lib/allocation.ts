@@ -11,6 +11,38 @@ export interface AllocationResult {
 }
 
 /**
+ * Allocate a restricted fund transaction.
+ * Restricted funds stay 100% at the local church level per donor intent.
+ * Cannot be commingled with general offerings.
+ */
+export async function allocateRestricted(
+  db: D1Database,
+  tenantId: string,
+  transactionId: string,
+  amount: number,
+  churchOrgId: string
+): Promise<AllocationResult[]> {
+  const allocation: AllocationResult = {
+    id: crypto.randomUUID(),
+    transaction_id: transactionId,
+    fund_type: 'restricted',
+    amount,
+    destination_org_id: churchOrgId,
+    created_at: new Date().toISOString(),
+  };
+
+  await db.prepare(
+    'INSERT INTO fund_allocations (id, transaction_id, fund_type, amount, destination_org_id, created_at) VALUES (?, ?, ?, ?, ?, ?)'
+  )
+    .bind(allocation.id, transactionId, 'restricted', amount, churchOrgId, allocation.created_at)
+    .run();
+
+  await updateBalance(db, tenantId, churchOrgId, 'restricted', amount);
+
+  return [allocation];
+}
+
+/**
  * Allocate a tithe transaction.
  * Tithe: 100% flows to the parent Mission.
  * Local church is custodian only.

@@ -43,7 +43,7 @@ export interface AuthPayload {
   organizationId: string;
 }
 
-export type FundType = 'tithe' | 'offering';
+export type FundType = 'tithe' | 'offering' | 'restricted';
 
 export interface Transaction {
   id: string;

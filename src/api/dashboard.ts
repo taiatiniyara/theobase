@@ -1,4 +1,4 @@
-import { Hono } from 'hono';
+import { Hono, Context, Next } from 'hono';
 import type { Env, AuthPayload, Transaction } from '../types';
 import { authMiddleware } from '../middleware/auth';
 import { tenantMiddleware, getTenantId } from '../middleware/tenant';
@@ -10,7 +10,7 @@ export const dashboardRoutes = new Hono<{ Bindings: Env; Variables: Variables }>
 dashboardRoutes.use('*', authMiddleware);
 dashboardRoutes.use('*', tenantMiddleware);
 
-async function requireMissionLevel(c: any, next: any) {
+async function requireMissionLevel(c: Context<{ Bindings: Env; Variables: Variables }>, next: Next) {
   const auth = c.get('auth');
   const userOrg = await c.env.DB.prepare(
     'SELECT type FROM organizations WHERE id = ? AND tenant_id = ?'
@@ -88,6 +88,14 @@ dashboardRoutes.get('/', async (c) => {
         .bind(tenantId, church.id, monthStart, monthEnd)
         .first<{ total: number }>();
 
+      const restrictedResult = await c.env.DB.prepare(
+        `SELECT COALESCE(SUM(amount), 0) as total FROM transactions
+         WHERE tenant_id = ? AND organization_id = ? AND fund_type = 'restricted'
+         AND transaction_date >= ? AND transaction_date < ?`
+      )
+        .bind(tenantId, church.id, monthStart, monthEnd)
+        .first<{ total: number }>();
+
       const lastTxn = await c.env.DB.prepare(
         `SELECT transaction_date FROM transactions
          WHERE tenant_id = ? AND organization_id = ?
@@ -101,6 +109,7 @@ dashboardRoutes.get('/', async (c) => {
         church_name: church.name,
         current_month_tithe: titheResult?.total || 0,
         current_month_offering: offeringResult?.total || 0,
+        current_month_restricted: restrictedResult?.total || 0,
         submission_status: lastTxn ? 'submitted' : 'late',
         last_transaction_date: lastTxn?.transaction_date || null,
       };

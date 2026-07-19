@@ -3,7 +3,7 @@ import type { Env, AuthPayload, Transaction, FundType, FundAllocation } from '..
 import { authMiddleware } from '../middleware/auth';
 import { tenantMiddleware, getTenantId } from '../middleware/tenant';
 import { permissionMiddleware } from '../middleware/permission';
-import { allocateTithe, allocateOffering, getAllocationsForTransaction } from '../lib/allocation';
+import { allocateTithe, allocateOffering, allocateRestricted, getAllocationsForTransaction } from '../lib/allocation';
 import { writeAuditLog } from '../lib/audit';
 
 type Variables = {
@@ -18,7 +18,7 @@ transactionRoutes.use('*', tenantMiddleware);
 transactionRoutes.use('*', permissionMiddleware);
 
 function validateFundType(fund_type: string): fund_type is FundType {
-  return fund_type === 'tithe' || fund_type === 'offering';
+  return fund_type === 'tithe' || fund_type === 'offering' || fund_type === 'restricted';
 }
 
 function validateAmount(amount: unknown): amount is number {
@@ -110,6 +110,8 @@ transactionRoutes.post('/', async (c) => {
       await allocateTithe(c.env.DB, tenantId, transaction.id, amount, auth.organizationId);
     } else if (fund_type === 'offering') {
       await allocateOffering(c.env.DB, tenantId, transaction.id, amount, auth.organizationId);
+    } else if (fund_type === 'restricted') {
+      await allocateRestricted(c.env.DB, tenantId, transaction.id, amount, auth.organizationId);
     }
   } catch (err) {
     return c.json({ error: `Allocation failed: ${(err as Error).message}` }, 500);
@@ -175,6 +177,8 @@ transactionRoutes.post('/batch', async (c) => {
         await allocateTithe(c.env.DB, tenantId, transaction.id, txn.amount, auth.organizationId);
       } else if (txn.fund_type === 'offering') {
         await allocateOffering(c.env.DB, tenantId, transaction.id, txn.amount, auth.organizationId);
+      } else if (txn.fund_type === 'restricted') {
+        await allocateRestricted(c.env.DB, tenantId, transaction.id, txn.amount, auth.organizationId);
       }
     } catch (err) {
       return c.json({ error: `Allocation failed for transaction: ${(err as Error).message}` }, 500);
@@ -226,4 +230,98 @@ transactionRoutes.get('/:id/allocations', async (c) => {
   const tenantId = getTenantId(c);
   const allocations = await getAllocationsForTransaction(c.env.DB, transactionId, tenantId);
   return c.json(allocations);
+});
+
+// Get a single transaction by ID
+transactionRoutes.get('/:id', async (c) => {
+  const auth = c.get('auth');
+  const tenantId = getTenantId(c);
+  const transactionId = c.req.param('id');
+
+  const transaction = await c.env.DB.prepare(
+    'SELECT * FROM transactions WHERE id = ? AND tenant_id = ? AND organization_id = ?'
+  )
+    .bind(transactionId, tenantId, auth.organizationId)
+    .first<Transaction>();
+
+  if (!transaction) {
+    return c.json({ error: 'Transaction not found' }, 404);
+  }
+
+  return c.json(transaction);
+});
+
+// Edit a transaction (with before/after audit)
+transactionRoutes.put('/:id', async (c) => {
+  const auth = c.get('auth');
+  const tenantId = getTenantId(c);
+  const transactionId = c.req.param('id');
+  const { amount, fund_type, transaction_date, notes, member_id } = await c.req.json();
+
+  const existing = await c.env.DB.prepare(
+    'SELECT * FROM transactions WHERE id = ? AND tenant_id = ? AND organization_id = ?'
+  )
+    .bind(transactionId, tenantId, auth.organizationId)
+    .first<Transaction>();
+
+  if (!existing) {
+    return c.json({ error: 'Transaction not found' }, 404);
+  }
+
+  if (amount !== undefined && !validateAmount(amount)) {
+    return c.json({ error: 'Amount must be a positive number' }, 400);
+  }
+  if (fund_type !== undefined && !validateFundType(fund_type)) {
+    return c.json({ error: 'Invalid fund type' }, 400);
+  }
+  if (transaction_date !== undefined && !validateDate(transaction_date)) {
+    return c.json({ error: 'Invalid date format (YYYY-MM-DD)' }, 400);
+  }
+
+  const beforeValues = {
+    amount: existing.amount,
+    fund_type: existing.fund_type,
+    transaction_date: existing.transaction_date,
+    notes: existing.notes,
+    member_id: existing.member_id,
+  };
+
+  const newAmount = amount !== undefined ? amount : existing.amount;
+  const newFundType = fund_type !== undefined ? fund_type : existing.fund_type;
+  const newDate = transaction_date !== undefined ? transaction_date : existing.transaction_date;
+  const newNotes = notes !== undefined ? notes : existing.notes;
+  const newMemberId = member_id !== undefined ? member_id : existing.member_id;
+
+  const now = new Date().toISOString();
+
+  await c.env.DB.prepare(
+    `UPDATE transactions SET amount = ?, fund_type = ?, transaction_date = ?, notes = ?, member_id = ?, updated_at = ?
+     WHERE id = ? AND tenant_id = ? AND organization_id = ?`
+  )
+    .bind(newAmount, newFundType, newDate, newNotes, newMemberId, now, transactionId, tenantId, auth.organizationId)
+    .run();
+
+  const afterValues = {
+    amount: newAmount,
+    fund_type: newFundType,
+    transaction_date: newDate,
+    notes: newNotes,
+    member_id: newMemberId,
+  };
+
+  await writeAuditLog(c.env.DB, {
+    tenantId,
+    entityType: 'transaction',
+    entityId: transactionId,
+    action: 'update',
+    userId: auth.userId,
+    beforeValues,
+    afterValues,
+  });
+
+  const updated = await c.env.DB.prepare('SELECT * FROM transactions WHERE id = ?')
+    .bind(transactionId)
+    .first<Transaction>();
+
+  return c.json(updated);
 });

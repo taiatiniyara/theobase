@@ -69,6 +69,8 @@ export function createMockEnv(): Env {
                     filtered = filtered.filter((t: any) => t.fund_type === 'tithe');
                   } else if (cond.includes("fund_type = 'offering'")) {
                     filtered = filtered.filter((t: any) => t.fund_type === 'offering');
+                  } else if (cond.includes("fund_type = 'restricted'")) {
+                    filtered = filtered.filter((t: any) => t.fund_type === 'restricted');
                   } else if (cond.includes('transaction_date >= ?')) {
                     const startDate = params[paramIndex];
                     filtered = filtered.filter((t: any) => t.transaction_date >= startDate);

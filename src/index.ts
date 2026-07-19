@@ -12,8 +12,16 @@ import { reportRoutes } from './api/reports';
 import { syncRoutes } from './api/sync';
 import { adminRoutes } from './api/admin';
 import { sendMonthlyReminders } from './lib/reminders';
+import { serveStatic, serveStyles, serveAppJs, serveSwJs } from './frontend/serve';
 
 const app = new Hono<{ Bindings: Env }>();
+
+// Static PWA assets
+app.get('/app', (c) => serveStatic('/app')!);
+app.get('/app.js', (c) => serveAppJs());
+app.get('/styles.css', (c) => serveStyles());
+app.get('/sw.js', (c) => serveSwJs());
+app.get('/manifest.json', (c) => serveStatic('/manifest.json')!);
 
 // Public routes
 app.route('/auth', authRoutes);

@@ -3,7 +3,7 @@ import type { Env, AuthPayload, SyncPayload, Transaction, FundType } from '../ty
 import { authMiddleware } from '../middleware/auth';
 import { tenantMiddleware, getTenantId } from '../middleware/tenant';
 import { permissionMiddleware } from '../middleware/permission';
-import { allocateTithe, allocateOffering } from '../lib/allocation';
+import { allocateTithe, allocateOffering, allocateRestricted } from '../lib/allocation';
 import { writeAuditLog } from '../lib/audit';
 
 type Variables = { auth: AuthPayload; tenantId: string };
@@ -15,7 +15,7 @@ syncRoutes.use('*', tenantMiddleware);
 syncRoutes.use('*', permissionMiddleware);
 
 function validateFundType(fund_type: string): fund_type is FundType {
-  return fund_type === 'tithe' || fund_type === 'offering';
+  return fund_type === 'tithe' || fund_type === 'offering' || fund_type === 'restricted';
 }
 
 function validateDate(date: string): boolean {
@@ -77,6 +77,8 @@ syncRoutes.post('/', async (c) => {
         await allocateTithe(c.env.DB, tenantId, id, txn.amount, auth.organizationId);
       } else if (txn.fund_type === 'offering') {
         await allocateOffering(c.env.DB, tenantId, id, txn.amount, auth.organizationId);
+      } else if (txn.fund_type === 'restricted') {
+        await allocateRestricted(c.env.DB, tenantId, id, txn.amount, auth.organizationId);
       }
     } catch (err) {
       errors.push({ index: i, error: `Allocation failed: ${(err as Error).message}` });

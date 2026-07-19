@@ -1,4 +1,4 @@
-import { Hono } from 'hono';
+import { Hono, Context, Next } from 'hono';
 import type { Env, AuthPayload } from '../types';
 import { authMiddleware } from '../middleware/auth';
 import { tenantMiddleware, getTenantId } from '../middleware/tenant';
@@ -11,7 +11,7 @@ export const adminRoutes = new Hono<{ Bindings: Env; Variables: Variables }>();
 adminRoutes.use('*', authMiddleware);
 adminRoutes.use('*', tenantMiddleware);
 
-async function requireAdmin(c: any, next: any) {
+async function requireAdmin(c: Context<{ Bindings: Env; Variables: Variables }>, next: Next) {
   const auth = c.get('auth');
   if (auth.role !== 'administrator') {
     return c.json({ error: 'Access denied: Administrator role required' }, 403);
@@ -42,9 +42,9 @@ adminRoutes.get('/health', async (c) => {
     .bind(tenantId)
     .first<{ count: number }>();
 
-  const recentErrors = await c.env.DB.prepare(
-    `SELECT COUNT(*) as count FROM audit_log
-     WHERE tenant_id = ? AND action = 'delete' AND created_at >= datetime('now', '-7 days')`
+  const txnCountToday = await c.env.DB.prepare(
+    `SELECT COUNT(*) as count FROM transactions
+     WHERE tenant_id = ? AND created_at >= datetime('now', '-24 hours')`
   )
     .bind(tenantId)
     .first<{ count: number }>();
@@ -63,15 +63,57 @@ adminRoutes.get('/health', async (c) => {
     .bind(tenantId)
     .first<{ count: number }>();
 
+  const errorRate = await c.env.DB.prepare(
+    `SELECT COUNT(*) as count FROM audit_log
+     WHERE tenant_id = ? AND action = 'delete' AND created_at >= datetime('now', '-7 days')`
+  )
+    .bind(tenantId)
+    .first<{ count: number }>();
+
+  const churchCount = await c.env.DB.prepare(
+    `SELECT COUNT(*) as count FROM organizations
+     WHERE tenant_id = ? AND type = 'local_church'`
+  )
+    .bind(tenantId)
+    .first<{ count: number }>();
+
+  const totalTithe = await c.env.DB.prepare(
+    `SELECT COALESCE(SUM(amount), 0) as total FROM transactions
+     WHERE tenant_id = ? AND fund_type = 'tithe'`
+  )
+    .bind(tenantId)
+    .first<{ total: number }>();
+
+  const totalOffering = await c.env.DB.prepare(
+    `SELECT COALESCE(SUM(amount), 0) as total FROM transactions
+     WHERE tenant_id = ? AND fund_type = 'offering'`
+  )
+    .bind(tenantId)
+    .first<{ total: number }>();
+
+  const totalRestricted = await c.env.DB.prepare(
+    `SELECT COALESCE(SUM(amount), 0) as total FROM transactions
+     WHERE tenant_id = ? AND fund_type = 'restricted'`
+  )
+    .bind(tenantId)
+    .first<{ total: number }>();
+
   return c.json({
     status: 'ok',
     checked_at: new Date().toISOString(),
     organizations: orgCount?.count || 0,
+    churches: churchCount?.count || 0,
     members: memberCount?.count || 0,
     transactions: txnCount?.count || 0,
-    recent_errors_7d: recentErrors?.count || 0,
+    transactions_24h: txnCountToday?.count || 0,
     activity_24h: recentActivity?.count || 0,
     active_members_7d: activeMembers?.count || 0,
+    error_rate_7d: errorRate?.count || 0,
+    totals: {
+      tithe: totalTithe?.total || 0,
+      offering: totalOffering?.total || 0,
+      restricted: totalRestricted?.total || 0,
+    },
   });
 });
 
