@@ -167,6 +167,25 @@ export function createMockEnv(): Env {
                 );
                 return (balance as T) || null;
               }
+              if (query.includes('FROM tenant_signups')) {
+                const signups = tables.get('tenant_signups') || [];
+                let filtered = signups as any[];
+                if (query.includes('WHERE') && params.length > 0) {
+                  let paramIndex = 0;
+                  const whereClause = query.split('WHERE')[1]?.split('ORDER BY')[0]?.trim() || '';
+                  const conditions = whereClause.split('AND').map(c => c.trim());
+                  for (const cond of conditions) {
+                    if (cond.includes('id = ?')) {
+                      filtered = filtered.filter((s: any) => s.id === params[paramIndex]);
+                      paramIndex++;
+                    } else if (cond.includes('status = ?')) {
+                      filtered = filtered.filter((s: any) => s.status === params[paramIndex]);
+                      paramIndex++;
+                    }
+                  }
+                }
+                return (filtered[0] as T) || null;
+              }
               return null;
             },
             all: async <T = any>(): Promise<{ results: T[] }> => {
@@ -275,6 +294,33 @@ export function createMockEnv(): Env {
                 const logs = tables.get('audit_log') || [];
                 return { results: logs as T[] };
               }
+              if (query.includes('FROM tenant_signups')) {
+                const signups = tables.get('tenant_signups') || [];
+                let filtered = signups as any[];
+                if (query.includes('WHERE') && params.length > 0) {
+                  let paramIndex = 0;
+                  if (query.includes('parent_mission_id IN')) {
+                    const tenantId = params[paramIndex++];
+                    const orgs = tables.get('organizations') || [];
+                    const tenantOrgIds = orgs.filter((o: any) => o.tenant_id === tenantId).map((o: any) => o.id);
+                    filtered = filtered.filter((s: any) => tenantOrgIds.includes(s.parent_mission_id));
+                    if (query.includes('status = ?')) {
+                      filtered = filtered.filter((s: any) => s.status === params[paramIndex++]);
+                    }
+                  } else {
+                    const whereClause = query.split('WHERE')[1]?.split('ORDER BY')[0]?.trim() || '';
+                    const conditions = whereClause.split('AND').map(c => c.trim());
+                    for (const cond of conditions) {
+                      if (cond.includes('tenant_id = ?')) {
+                        filtered = filtered.filter((s: any) => s.tenant_id === params[paramIndex++]);
+                      } else if (cond.includes('status = ?')) {
+                        filtered = filtered.filter((s: any) => s.status === params[paramIndex++]);
+                      }
+                    }
+                  }
+                }
+                return { results: filtered as T[] };
+              }
               if (query.includes('SELECT') && query.includes('FROM organizations')) {
                 const orgs = tables.get('organizations') || [];
                 let filtered = orgs as any[];
@@ -331,7 +377,7 @@ export function createMockEnv(): Env {
                     role: params[4],
                     organization_id: params[5],
                     email_verified: true,
-                    first_name: '',
+                    first_name: params[2].split('@')[0],
                     last_name: '',
                     membership_status: 'active',
                     date_of_birth: null,
@@ -376,17 +422,19 @@ export function createMockEnv(): Env {
               }
               if (query.includes('INSERT INTO transactions')) {
                 const transactions = tables.get('transactions') || [];
+                const hasOfferingSubCategory = query.includes('offering_sub_category');
                 transactions.push({
                   id: params[0],
                   tenant_id: params[1],
                   organization_id: params[2],
                   member_id: params[3] || null,
                   fund_type: params[4],
-                  amount: params[5],
-                  transaction_date: params[6],
-                  notes: params[7] || null,
-                  created_at: params[8],
-                  updated_at: params[9],
+                  offering_sub_category: hasOfferingSubCategory ? (params[5] || null) : null,
+                  amount: params[hasOfferingSubCategory ? 6 : 5],
+                  transaction_date: params[hasOfferingSubCategory ? 7 : 6],
+                  notes: params[hasOfferingSubCategory ? 8 : 7] || null,
+                  created_at: params[hasOfferingSubCategory ? 9 : 8],
+                  updated_at: params[hasOfferingSubCategory ? 10 : 9],
                 });
                 tables.set('transactions', transactions);
               }

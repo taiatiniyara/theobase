@@ -100,6 +100,21 @@ adminRoutes.get('/health', async (c) => {
     .bind(tenantId)
     .first<{ total: number }>();
 
+  const expenseCount = await c.env.DB.prepare(
+    'SELECT COUNT(*) as count FROM expenses WHERE tenant_id = ?'
+  )
+    .bind(tenantId)
+    .first<{ count: number }>();
+
+  const auditLogCount = await c.env.DB.prepare(
+    'SELECT COUNT(*) as count FROM audit_log WHERE tenant_id = ?'
+  )
+    .bind(tenantId)
+    .first<{ count: number }>();
+
+  const totalRows = (memberCount?.count || 0) + (txnCount?.count || 0) + (expenseCount?.count || 0) + (auditLogCount?.count || 0);
+  const estimatedStorageBytes = totalRows * 500;
+
   return c.json({
     status: 'ok',
     checked_at: new Date().toISOString(),
@@ -108,9 +123,15 @@ adminRoutes.get('/health', async (c) => {
     members: memberCount?.count || 0,
     transactions: txnCount?.count || 0,
     transactions_24h: txnCountToday?.count || 0,
+    expenses: expenseCount?.count || 0,
+    audit_entries: auditLogCount?.count || 0,
     activity_24h: recentActivity?.count || 0,
     active_members_7d: activeMembers?.count || 0,
     error_rate_7d: errorRate?.count || 0,
+    storage: {
+      total_rows: totalRows,
+      estimated_bytes: estimatedStorageBytes,
+    },
     totals: {
       tithe: totalTithe?.total || 0,
       offering: totalOffering?.total || 0,

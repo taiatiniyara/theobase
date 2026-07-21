@@ -10,6 +10,73 @@ export const reportRoutes = new Hono<{ Bindings: Env; Variables: Variables }>();
 reportRoutes.use('*', authMiddleware);
 reportRoutes.use('*', tenantMiddleware);
 
+// Batch receipts: generate annual contribution receipts for all members
+reportRoutes.get('/receipts', async (c) => {
+  const tenantId = getTenantId(c);
+  const year = c.req.query('year') || String(new Date().getFullYear());
+  const yearStart = `${year}-01-01`;
+  const yearEnd = `${parseInt(year) + 1}-01-01`;
+
+  const transactions = await c.env.DB.prepare(
+    `SELECT id, member_id, fund_type, offering_sub_category, amount, transaction_date
+     FROM transactions
+     WHERE tenant_id = ? AND member_id IS NOT NULL
+     AND transaction_date >= ? AND transaction_date < ?
+     ORDER BY member_id, transaction_date DESC`
+  )
+    .bind(tenantId, yearStart, yearEnd)
+    .all<{ id: string; member_id: string; fund_type: string; offering_sub_category: string | null; amount: number; transaction_date: string }>();
+
+  const memberTxns = new Map<string, { fund_type: string; offering_sub_category: string | null; amount: number; transaction_date: string }[]>();
+  for (const txn of transactions.results) {
+    if (!memberTxns.has(txn.member_id)) {
+      memberTxns.set(txn.member_id, []);
+    }
+    memberTxns.get(txn.member_id)!.push(txn);
+  }
+
+  const receipts = [];
+  for (const [memberId, txns] of memberTxns) {
+    const member = await c.env.DB.prepare(
+      'SELECT id, first_name, last_name, organization_id FROM members WHERE id = ? AND tenant_id = ?'
+    )
+      .bind(memberId, tenantId)
+      .first<{ id: string; first_name: string; last_name: string; organization_id: string }>();
+
+    if (!member) continue;
+
+    const org = await c.env.DB.prepare(
+      'SELECT name FROM organizations WHERE id = ? AND tenant_id = ?'
+    )
+      .bind(member.organization_id, tenantId)
+      .first<{ name: string }>();
+
+    const totals: Record<string, number> = {};
+    for (const txn of txns) {
+      const key = txn.offering_sub_category ? `${txn.fund_type}:${txn.offering_sub_category}` : txn.fund_type;
+      totals[key] = (totals[key] || 0) + txn.amount;
+    }
+
+    const grandTotal = Object.values(totals).reduce((sum, v) => sum + v, 0);
+
+    receipts.push({
+      member_id: member.id,
+      member_name: [member.first_name, member.last_name].filter(Boolean).join(' '),
+      church_name: org?.name || 'Unknown',
+      transaction_count: txns.length,
+      totals_by_fund: totals,
+      grand_total: grandTotal,
+    });
+  }
+
+  return c.json({
+    year,
+    receipt_count: receipts.length,
+    receipts,
+    generated_at: new Date().toISOString(),
+  });
+});
+
 reportRoutes.get('/receipts/:memberId', async (c) => {
   const auth = c.get('auth');
   const tenantId = getTenantId(c);
@@ -79,6 +146,131 @@ async function requireMissionLevel(c: Context<{ Bindings: Env; Variables: Variab
 }
 
 reportRoutes.use('*', requireMissionLevel);
+
+// Annual statistical report: membership counts, accessions, losses, transfers
+reportRoutes.get('/statistical', async (c) => {
+  const auth = c.get('auth');
+  const tenantId = getTenantId(c);
+  const year = c.req.query('year') || String(new Date().getFullYear());
+  const format = c.req.query('format') || 'json';
+  const yearStart = `${year}-01-01`;
+  const yearEnd = `${parseInt(year) + 1}-01-01`;
+
+  const userOrg = await c.env.DB.prepare(
+    'SELECT type, id, name FROM organizations WHERE id = ? AND tenant_id = ?'
+  )
+    .bind(auth.organizationId, tenantId)
+    .first<{ type: string; id: string; name: string }>();
+
+  if (!userOrg) {
+    return c.json({ error: 'Organization not found' }, 404);
+  }
+
+  const beginningMemberCount = await c.env.DB.prepare(
+    `SELECT COUNT(*) as count FROM members
+     WHERE tenant_id = ? AND membership_status = 'active'`
+  )
+    .bind(tenantId)
+    .first<{ count: number }>();
+
+  const endingMemberCount = await c.env.DB.prepare(
+    `SELECT COUNT(*) as count FROM members WHERE tenant_id = ?`
+  )
+    .bind(tenantId)
+    .first<{ count: number }>();
+
+  const baptisms = await c.env.DB.prepare(
+    `SELECT COUNT(*) as count FROM members
+     WHERE tenant_id = ? AND baptism_date >= ? AND baptism_date < ? AND membership_status = 'active'`
+  )
+    .bind(tenantId, yearStart, yearEnd)
+    .first<{ count: number }>();
+
+  const professionsOfFaith = await c.env.DB.prepare(
+    `SELECT COUNT(*) as count FROM members
+     WHERE tenant_id = ? AND profession_of_faith_date >= ? AND profession_of_faith_date < ? AND membership_status = 'active'`
+  )
+    .bind(tenantId, yearStart, yearEnd)
+    .first<{ count: number }>();
+
+  const totalAccessions = (baptisms?.count || 0) + (professionsOfFaith?.count || 0);
+
+  const transfersIn = await c.env.DB.prepare(
+    `SELECT COUNT(*) as count FROM member_transfers
+     WHERE tenant_id = ? AND status = 'accepted'
+     AND created_at >= ? AND created_at < ?`
+  )
+    .bind(tenantId, yearStart, yearEnd)
+    .first<{ count: number }>();
+
+  const transfersOut = await c.env.DB.prepare(
+    `SELECT COUNT(*) as count FROM members
+     WHERE tenant_id = ? AND membership_status = 'transferred_out'`
+  )
+    .bind(tenantId)
+    .first<{ count: number }>();
+
+  const deaths = await c.env.DB.prepare(
+    `SELECT COUNT(*) as count FROM members
+     WHERE tenant_id = ? AND membership_status = 'deceased'`
+  )
+    .bind(tenantId)
+    .first<{ count: number }>();
+
+  const removed = await c.env.DB.prepare(
+    `SELECT COUNT(*) as count FROM members
+     WHERE tenant_id = ? AND membership_status = 'removed'`
+  )
+    .bind(tenantId)
+    .first<{ count: number }>();
+
+  const totalLosses = (deaths?.count || 0) + (removed?.count || 0);
+  const netChange = totalAccessions + (transfersIn?.count || 0) - (transfersOut?.count || 0) - totalLosses;
+
+  const report = {
+    mission: userOrg.name,
+    year,
+    beginning_count: (beginningMemberCount?.count || 0) - totalAccessions - (transfersIn?.count || 0) + (transfersOut?.count || 0) + totalLosses,
+    end_count: endingMemberCount?.count || 0,
+    accessions: totalAccessions,
+    baptisms: baptisms?.count || 0,
+    professions_of_faith: professionsOfFaith?.count || 0,
+    transfers_in: transfersIn?.count || 0,
+    transfers_out: transfersOut?.count || 0,
+    losses: totalLosses,
+    deaths: deaths?.count || 0,
+    removed: removed?.count || 0,
+    net_change: netChange,
+    generated_at: new Date().toISOString(),
+  };
+
+  if (format === 'csv') {
+    const header = 'Metric,Value\n';
+    const rows = [
+      `Mission,"${report.mission}"`,
+      `Year,${report.year}`,
+      `Beginning Count,${report.beginning_count}`,
+      `End Count,${report.end_count}`,
+      `Accessions,${report.accessions}`,
+      `Baptisms,${report.baptisms}`,
+      `Professions of Faith,${report.professions_of_faith}`,
+      `Transfers In,${report.transfers_in}`,
+      `Transfers Out,${report.transfers_out}`,
+      `Losses,${report.losses}`,
+      `Deaths,${report.deaths}`,
+      `Removed,${report.removed}`,
+      `Net Change,${report.net_change}`,
+    ].join('\n');
+    const csv = `\uFEFF${header}${rows}\n`;
+
+    return c.newResponse(csv, 200, {
+      'Content-Type': 'text/csv; charset=utf-8',
+      'Content-Disposition': `attachment; filename="statistical-report-${year}.csv"`,
+    });
+  }
+
+  return c.json(report);
+});
 
 // Monthly remittance report: totals by church and fund type
 reportRoutes.get('/remittance', async (c) => {

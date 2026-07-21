@@ -63,12 +63,12 @@ syncRoutes.post('/', async (c) => {
     const now = new Date().toISOString();
 
     await c.env.DB.prepare(
-      `INSERT INTO transactions (id, tenant_id, organization_id, member_id, fund_type, amount, transaction_date, notes, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO transactions (id, tenant_id, organization_id, member_id, fund_type, offering_sub_category, amount, transaction_date, notes, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
       .bind(
         id, tenantId, auth.organizationId, txn.member_id || null,
-        txn.fund_type, txn.amount, txn.transaction_date, txn.notes || null, now, now
+        txn.fund_type, txn.offering_sub_category || null, txn.amount, txn.transaction_date, txn.notes || null, now, now
       )
       .run();
 
