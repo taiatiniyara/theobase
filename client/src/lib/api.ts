@@ -91,3 +91,80 @@ export async function createOrg(data: {
   }
   return (await res.json()).org;
 }
+
+export interface Member {
+  id: string;
+  orgId: string;
+  firstName: string;
+  lastName: string;
+  email: string | null;
+  phone: string | null;
+  address: string | null;
+  status: string;
+  baptismDate: string | null;
+  transferRequestId: string | null;
+  householdId: string | null;
+}
+
+interface MembersResponse {
+  members: Member[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export async function fetchMembers(
+  churchId: string,
+  params?: { status?: string; search?: string; page?: number },
+): Promise<MembersResponse> {
+  const searchParams = new URLSearchParams();
+  if (params?.status) searchParams.set("status", params.status);
+  if (params?.search) searchParams.set("search", params.search);
+  if (params?.page) searchParams.set("page", String(params.page));
+
+  const qs = searchParams.toString();
+  const res = await apiFetch(
+    `/churches/${churchId}/members${qs ? `?${qs}` : ""}`,
+  );
+  if (!res.ok) throw new Error("Failed to fetch members");
+  return res.json();
+}
+
+export async function createMember(
+  churchId: string,
+  data: {
+    firstName: string;
+    lastName: string;
+    email?: string;
+    phone?: string;
+    address?: string;
+    baptismDate?: string;
+    status?: string;
+  },
+): Promise<Member> {
+  const res = await apiFetch(`/churches/${churchId}/members`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message ?? "Failed to create member");
+  }
+  return (await res.json()).member;
+}
+
+export async function updateMember(
+  churchId: string,
+  id: string,
+  data: Partial<Member>,
+): Promise<Member> {
+  const res = await apiFetch(`/churches/${churchId}/members/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message ?? "Failed to update member");
+  }
+  return (await res.json()).member;
+}
