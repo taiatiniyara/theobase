@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Login from "./pages/Login";
 import Orgs from "./pages/Orgs";
 import Members from "./pages/Members";
+import Finance from "./pages/Finance";
 import { getAccessToken, clearTokens } from "./lib/api";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -29,6 +30,9 @@ export default function App() {
               </a>
               <a href="/members" className="text-sm hover:underline">
                 Members
+              </a>
+              <a href="/finance" className="text-sm hover:underline">
+                Finance
               </a>
               <button
                 onClick={() => {
@@ -60,6 +64,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Members />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/finance"
+            element={
+              <ProtectedRoute>
+                <Finance />
               </ProtectedRoute>
             }
           />

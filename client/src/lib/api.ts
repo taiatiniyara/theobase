@@ -168,3 +168,88 @@ export async function updateMember(
   }
   return (await res.json()).member;
 }
+
+export interface Transaction {
+  id: string;
+  orgId: string;
+  fund: string;
+  amount: number;
+  type: string;
+  description: string | null;
+  donorId: string | null;
+  verified: number;
+  verifiedBy: string | null;
+  createdBy: string;
+  proxyFor: string | null;
+  createdAt: string;
+}
+
+interface TransactionsResponse {
+  transactions: Transaction[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export const FUNDS = [
+  "tithe",
+  "local-church-budget",
+  "conference-advance",
+  "world-budget",
+  "special-projects",
+  "building-fund",
+  "ingathering",
+  "investment-income",
+  "rental-income",
+] as const;
+
+export async function fetchTransactions(
+  churchId: string,
+  params?: { fund?: string; type?: string; page?: number },
+): Promise<TransactionsResponse> {
+  const sp = new URLSearchParams();
+  if (params?.fund) sp.set("fund", params.fund);
+  if (params?.type) sp.set("type", params.type);
+  if (params?.page) sp.set("page", String(params.page));
+  const qs = sp.toString();
+  const res = await apiFetch(
+    `/churches/${churchId}/transactions${qs ? `?${qs}` : ""}`,
+  );
+  if (!res.ok) throw new Error("Failed to fetch transactions");
+  return res.json();
+}
+
+export async function createTransaction(
+  churchId: string,
+  data: {
+    fund: string;
+    amount: number;
+    type: string;
+    description?: string;
+    donorId?: string;
+  },
+): Promise<Transaction> {
+  const res = await apiFetch(`/churches/${churchId}/transactions`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message ?? "Failed to create transaction");
+  }
+  return (await res.json()).transaction;
+}
+
+export async function verifyTransaction(
+  churchId: string,
+  id: string,
+): Promise<Transaction> {
+  const res = await apiFetch(
+    `/churches/${churchId}/transactions/${id}/verify`,
+    {
+      method: "POST",
+    },
+  );
+  if (!res.ok) throw new Error("Failed to verify transaction");
+  return (await res.json()).transaction;
+}

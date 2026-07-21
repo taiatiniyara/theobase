@@ -7,6 +7,13 @@ import {
   createMember,
   updateMember,
 } from "./modules/member/handler";
+import {
+  listTransactions,
+  createTransaction,
+  getTransaction,
+  verifyTransaction,
+  transactionStats,
+} from "./modules/finance/handler";
 import { authMiddleware } from "./modules/middleware/auth";
 
 addRoute("POST", "/api/v1/auth/register", register);
@@ -28,6 +35,28 @@ addRoute("GET", "/api/v1/churches/:churchId/members/:id", getMember, [
   authMiddleware,
 ]);
 addRoute("PATCH", "/api/v1/churches/:churchId/members/:id", updateMember, [
+  authMiddleware,
+]);
+
+addRoute(
+  "GET",
+  "/api/v1/churches/:churchId/transactions/stats",
+  transactionStats,
+  [authMiddleware],
+);
+addRoute("GET", "/api/v1/churches/:churchId/transactions", listTransactions, [
+  authMiddleware,
+]);
+addRoute("POST", "/api/v1/churches/:churchId/transactions", createTransaction, [
+  authMiddleware,
+]);
+addRoute(
+  "POST",
+  "/api/v1/churches/:churchId/transactions/:id/verify",
+  verifyTransaction,
+  [authMiddleware],
+);
+addRoute("GET", "/api/v1/churches/:churchId/transactions/:id", getTransaction, [
   authMiddleware,
 ]);
 
