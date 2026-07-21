@@ -55,6 +55,12 @@ export async function listTransactions(ctx: RouterContext): Promise<Response> {
     query += " AND type = ?";
     params.push(type);
   }
+  const verified = url.searchParams.get("verified");
+  if (verified === "0" || verified === "false") {
+    query += " AND verified = 0";
+  } else if (verified === "1" || verified === "true") {
+    query += " AND verified = 1";
+  }
 
   const countResult = await ctx.db
     .prepare(query.replace("SELECT *", "SELECT COUNT(*) as total"))

@@ -8,6 +8,13 @@ import {
   updateMember,
 } from "./modules/member/handler";
 import {
+  getMe,
+  updateMe,
+  submitGiving,
+  requestTransfer,
+  rollConfirm,
+} from "./modules/member/self-service";
+import {
   listTransactions,
   createTransaction,
   getTransaction,
@@ -31,10 +38,28 @@ addRoute("GET", "/api/v1/churches/:churchId/members", listMembers, [
 addRoute("POST", "/api/v1/churches/:churchId/members", createMember, [
   authMiddleware,
 ]);
+addRoute("GET", "/api/v1/churches/:churchId/members/me", getMe, [
+  authMiddleware,
+]);
+addRoute("PATCH", "/api/v1/churches/:churchId/members/me", updateMe, [
+  authMiddleware,
+]);
 addRoute("GET", "/api/v1/churches/:churchId/members/:id", getMember, [
   authMiddleware,
 ]);
 addRoute("PATCH", "/api/v1/churches/:churchId/members/:id", updateMember, [
+  authMiddleware,
+]);
+addRoute("POST", "/api/v1/churches/:churchId/giving", submitGiving, [
+  authMiddleware,
+]);
+addRoute(
+  "POST",
+  "/api/v1/churches/:churchId/members/:id/transfer-request",
+  requestTransfer,
+  [authMiddleware],
+);
+addRoute("POST", "/api/v1/churches/:churchId/roll-confirm", rollConfirm, [
   authMiddleware,
 ]);
 
