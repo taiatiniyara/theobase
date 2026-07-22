@@ -61,6 +61,13 @@ import {
   handleGetMonthlyReport,
 } from "./routes/finance";
 import { handleGetAuditLog, handleGetAuditByEntity } from "./routes/audit";
+import { handleGetQuarterlyReport } from "./routes/reports";
+import {
+  handleGetConferenceTithe,
+  handleReceiveTithe,
+  handleChurchBalance,
+  handleTitheReport,
+} from "./routes/reconciliation";
 
 export { ChurchSyncDO, ConferenceDO };
 
@@ -293,6 +300,23 @@ export default {
     // Finance — reports
     if (path === "/api/finance/report/monthly" && request.method === "GET") {
       return handleGetMonthlyReport(request, env);
+    }
+    if (path === "/api/report/quarterly" && request.method === "GET") {
+      return handleGetQuarterlyReport(request, env);
+    }
+
+    // Reconciliation routes
+    if (path === "/api/conference/tithe" && request.method === "GET") {
+      return handleGetConferenceTithe(request, env);
+    }
+    if (path === "/api/conference/tithe/receive" && request.method === "POST") {
+      return handleReceiveTithe(request, env);
+    }
+    if (path === "/api/conference/tithe/report" && request.method === "GET") {
+      return handleTitheReport(request, env);
+    }
+    if (path === "/api/church/balance" && (request.method === "GET" || request.method === "POST")) {
+      return handleChurchBalance(request, env);
     }
 
     // Audit routes

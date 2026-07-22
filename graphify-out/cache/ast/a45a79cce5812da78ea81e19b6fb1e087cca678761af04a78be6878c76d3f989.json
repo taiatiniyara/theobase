@@ -1,0 +1,974 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "label": "FinancePage.tsx",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_financepage_tab",
+      "label": "Tab",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L14"
+    },
+    {
+      "id": "routes_financepage_financepage",
+      "label": "FinancePage()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L16"
+    },
+    {
+      "id": "routes_financepage_overviewtab",
+      "label": "OverviewTab()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L85"
+    },
+    {
+      "id": "routes_financepage_batchsummary",
+      "label": "BatchSummary()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L149"
+    },
+    {
+      "id": "routes_financepage_batchestab",
+      "label": "BatchesTab()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L217"
+    },
+    {
+      "id": "routes_financepage_batchdetailview",
+      "label": "BatchDetailView()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L432"
+    },
+    {
+      "id": "routes_financepage_transactionstab",
+      "label": "TransactionsTab()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L651"
+    },
+    {
+      "id": "routes_financepage_budgetstab",
+      "label": "BudgetsTab()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L905"
+    },
+    {
+      "id": "routes_financepage_reportstab",
+      "label": "ReportsTab()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1135"
+    },
+    {
+      "id": "routes_financepage_setuptab",
+      "label": "SetupTab()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1301"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_auth_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "lib_auth_useauth",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_api_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "lib_api_financeapi",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "lib_api_fund",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "lib_api_expensecategory",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "lib_api_batch",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "lib_api_batchdetail",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "lib_api_transaction",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "lib_api_budget",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "lib_api_monthlyreport",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "routes_financepage_tab",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "routes_financepage_financepage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "routes_financepage_overviewtab",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L85",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "routes_financepage_batchsummary",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L149",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "routes_financepage_batchestab",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L217",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "routes_financepage_batchdetailview",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L432",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "routes_financepage_transactionstab",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L651",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "routes_financepage_budgetstab",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L905",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "routes_financepage_reportstab",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1135",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "target": "routes_financepage_setuptab",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1301",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_financepage_financepage",
+      "callee": "useAuth",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "routes_financepage_financepage",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "routes_financepage_financepage",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L19"
+    },
+    {
+      "caller_nid": "routes_financepage_financepage",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L48"
+    },
+    {
+      "caller_nid": "routes_financepage_overviewtab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L94"
+    },
+    {
+      "caller_nid": "routes_financepage_overviewtab",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L96"
+    },
+    {
+      "caller_nid": "routes_financepage_overviewtab",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L109"
+    },
+    {
+      "caller_nid": "routes_financepage_overviewtab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L123"
+    },
+    {
+      "caller_nid": "routes_financepage_batchsummary",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L150"
+    },
+    {
+      "caller_nid": "routes_financepage_batchsummary",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L151"
+    },
+    {
+      "caller_nid": "routes_financepage_batchsummary",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L153"
+    },
+    {
+      "caller_nid": "routes_financepage_batchsummary",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L167"
+    },
+    {
+      "caller_nid": "routes_financepage_batchsummary",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L189"
+    },
+    {
+      "caller_nid": "routes_financepage_batchestab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L226"
+    },
+    {
+      "caller_nid": "routes_financepage_batchestab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L227"
+    },
+    {
+      "caller_nid": "routes_financepage_batchestab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L228"
+    },
+    {
+      "caller_nid": "routes_financepage_batchestab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L229"
+    },
+    {
+      "caller_nid": "routes_financepage_batchestab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L230"
+    },
+    {
+      "caller_nid": "routes_financepage_batchestab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L231"
+    },
+    {
+      "caller_nid": "routes_financepage_batchestab",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L233"
+    },
+    {
+      "caller_nid": "routes_financepage_batchestab",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L248"
+    },
+    {
+      "caller_nid": "routes_financepage_batchestab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L391"
+    },
+    {
+      "caller_nid": "routes_financepage_batchdetailview",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L443"
+    },
+    {
+      "caller_nid": "routes_financepage_batchdetailview",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L444"
+    },
+    {
+      "caller_nid": "routes_financepage_batchdetailview",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L445"
+    },
+    {
+      "caller_nid": "routes_financepage_batchdetailview",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L446"
+    },
+    {
+      "caller_nid": "routes_financepage_batchdetailview",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L447"
+    },
+    {
+      "caller_nid": "routes_financepage_batchdetailview",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L448"
+    },
+    {
+      "caller_nid": "routes_financepage_batchdetailview",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L450"
+    },
+    {
+      "caller_nid": "routes_financepage_batchdetailview",
+      "callee": "toLocaleString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L516"
+    },
+    {
+      "caller_nid": "routes_financepage_batchdetailview",
+      "callee": "toLocaleString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L525"
+    },
+    {
+      "caller_nid": "routes_financepage_batchdetailview",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L565"
+    },
+    {
+      "caller_nid": "routes_financepage_batchdetailview",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L631"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L660"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L661"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L662"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L663"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L664"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L665"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L666"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L667"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L668"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L669"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L670"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L672"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L688"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L692"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L779"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "filter",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L779"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L796"
+    },
+    {
+      "caller_nid": "routes_financepage_transactionstab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L865"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L914"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L915"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L916"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "getFullYear",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L916"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L917"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L918"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L919"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L920"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L921"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L922"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L923"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L924"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L926"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L942"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L946"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1028"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1044"
+    },
+    {
+      "caller_nid": "routes_financepage_budgetstab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1112"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1144"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1145"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1146"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "getFullYear",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1146"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1147"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "getMonth",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1147"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1148"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1195"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "from",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1195"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "toLocaleString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1215"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "toLocaleString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1225"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "toLocaleString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1231"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "toLocaleString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1237"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1253"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1274"
+    },
+    {
+      "caller_nid": "routes_financepage_reportstab",
+      "callee": "toLocaleString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1292"
+    },
+    {
+      "caller_nid": "routes_financepage_setuptab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1308"
+    },
+    {
+      "caller_nid": "routes_financepage_setuptab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1309"
+    },
+    {
+      "caller_nid": "routes_financepage_setuptab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1310"
+    },
+    {
+      "caller_nid": "routes_financepage_setuptab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1311"
+    },
+    {
+      "caller_nid": "routes_financepage_setuptab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1312"
+    },
+    {
+      "caller_nid": "routes_financepage_setuptab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1313"
+    },
+    {
+      "caller_nid": "routes_financepage_setuptab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1314"
+    },
+    {
+      "caller_nid": "routes_financepage_setuptab",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1315"
+    },
+    {
+      "caller_nid": "routes_financepage_setuptab",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1317"
+    },
+    {
+      "caller_nid": "routes_financepage_setuptab",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1332"
+    },
+    {
+      "caller_nid": "routes_financepage_setuptab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1421"
+    },
+    {
+      "caller_nid": "routes_financepage_setuptab",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx",
+      "source_location": "L1459"
+    }
+  ]
+}

@@ -18,6 +18,7 @@ import MembersPage from "./routes/MembersPage";
 import ReportsPage from "./routes/ReportsPage";
 import SettingsPage from "./routes/SettingsPage";
 import AuditPage from "./routes/AuditPage";
+import ReconciliationPage from "./routes/ReconciliationPage";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -110,6 +111,12 @@ const auditRoute = createRoute({
   component: AuditPage,
 });
 
+const reconciliationRoute = createRoute({
+  getParentRoute: () => dashboardLayout,
+  path: "/reconciliation",
+  component: ReconciliationPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
@@ -124,6 +131,7 @@ const routeTree = rootRoute.addChildren([
     reportsRoute,
     settingsRoute,
     auditRoute,
+    reconciliationRoute,
   ]),
 ]);
 

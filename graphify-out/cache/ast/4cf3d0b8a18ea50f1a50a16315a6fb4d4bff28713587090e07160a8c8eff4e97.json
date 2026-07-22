@@ -1,0 +1,852 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "label": "users.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_users_json",
+      "label": "json()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L7"
+    },
+    {
+      "id": "routes_users_handleinviteuser",
+      "label": "handleInviteUser()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L17"
+    },
+    {
+      "id": "routes_users_handlegetusers",
+      "label": "handleGetUsers()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L96"
+    },
+    {
+      "id": "routes_users_handlebulkinviteusers",
+      "label": "handleBulkInviteUsers()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L125"
+    },
+    {
+      "id": "routes_users_handlegetme",
+      "label": "handleGetMe()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L220"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_auth_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "lib_auth_hashpassword",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "lib_auth_generateresettoken",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_middleware_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "lib_middleware_authenticate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "lib_middleware_authorize",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "lib_roles_permissions",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "lib_roles_roles",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_csv_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "lib_csv_parsecsv",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "lib_csv_validatecsvheaders",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_audit_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "lib_audit_logaudit",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "lib_audit_getdeviceinfo",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "routes_users_json",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "routes_users_handleinviteuser",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "routes_users_handlegetusers",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "routes_users_handlebulkinviteusers",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L125",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_users_ts",
+      "target": "routes_users_handlegetme",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L220",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_users_handleinviteuser",
+      "target": "routes_users_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_users_handlegetusers",
+      "target": "routes_users_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L122",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_users_handlebulkinviteusers",
+      "target": "routes_users_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L134",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_users_handlegetme",
+      "target": "routes_users_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L237",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_users_json",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L8"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L21"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "values",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "includes",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L42"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "join",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "first",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L47"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "toLowerCase",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L47"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "slice",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L53"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "generateResetToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L53"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "hashPassword",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L54"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "await env.DB.prepare(\n    `INSERT INTO users (email, password_hash, role, conference_id, member_id)\n     VALUES (?, ?, ?, ?, ?) RETURNING id`\n  )\n    .bind(\n      body.email.toLowerCase().trim(),\n      passwordHash,\n      body.role,\n      body.conferenceId ?? auth.conferenceId ?? null,\n      body.memberId ?? null\n    )\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L56"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L56"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L56"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L61"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "toLowerCase",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L61"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "logAudit",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L73"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L74"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L79"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L79"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "toLowerCase",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L79"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "getDeviceInfo",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L81"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L87"
+    },
+    {
+      "caller_nid": "routes_users_handleinviteuser",
+      "callee": "toLowerCase",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L87"
+    },
+    {
+      "caller_nid": "routes_users_handlegetusers",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L97"
+    },
+    {
+      "caller_nid": "routes_users_handlegetusers",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L100"
+    },
+    {
+      "caller_nid": "routes_users_handlegetusers",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L104"
+    },
+    {
+      "caller_nid": "routes_users_handlegetusers",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "routes_users_handlegetusers",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "routes_users_handlegetusers",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "routes_users_handlegetusers",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L113"
+    },
+    {
+      "caller_nid": "routes_users_handlegetusers",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "routes_users_handlegetusers",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L126"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L129"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "parseCsv",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L143"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "validateCsvHeaders",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L148"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "toLowerCase",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L158"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L158"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "toLowerCase",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L159"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L159"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L160"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L163"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "values",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L167"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "includes",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L168"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L169"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "first",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L173"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L173"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L173"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L177"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "await env.DB.prepare(\n        \"SELECT id FROM churches WHERE name = ? AND parent_type = 'conference' AND parent_id = ?\"\n      )\n        .bind(churchName, body.conferenceId)\n        .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L183"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L183"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L183"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "await env.DB.prepare(\n          \"SELECT id FROM members WHERE church_id = ? AND email = ? LIMIT 1\"\n        )\n          .bind(church.id, email)\n          .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L189"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L189"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L189"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "slice",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L200"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "generateResetToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L200"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "hashPassword",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L201"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "await env.DB.prepare(\n      `INSERT INTO users (email, password_hash, role, conference_id, member_id)\n       VALUES (?, ?, ?, ?, ?) RETURNING id`\n    )\n      .bind(email, passwordHash, role, body.conferenceId, memberId)\n      .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L203"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L203"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L203"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L211"
+    },
+    {
+      "caller_nid": "routes_users_handlebulkinviteusers",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L213"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L221"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "await env.DB.prepare(\n    \"SELECT id, email, role, conference_id, member_id FROM users WHERE id = ?\"\n  )\n    .bind(Number(auth.userId))\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L224"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L224"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L224"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L227"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "first",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L244"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L244"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L244"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "await env.DB.prepare(\"SELECT church_id FROM members WHERE id = ?\")\n      .bind(user.member_id)\n      .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L250"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L250"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L250"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "first",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L254"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L254"
+    },
+    {
+      "caller_nid": "routes_users_handlegetme",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts",
+      "source_location": "L254"
+    }
+  ]
+}

@@ -1,0 +1,1724 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "label": "finance.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_finance_json",
+      "label": "json()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L4"
+    },
+    {
+      "id": "routes_finance_uuid",
+      "label": "uuid()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L14"
+    },
+    {
+      "id": "routes_finance_fund_types",
+      "label": "FUND_TYPES",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L18"
+    },
+    {
+      "id": "routes_finance_forwarding_rules",
+      "label": "FORWARDING_RULES",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L19"
+    },
+    {
+      "id": "routes_finance_handlegetfunds",
+      "label": "handleGetFunds()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L23"
+    },
+    {
+      "id": "routes_finance_handlecreatefund",
+      "label": "handleCreateFund()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L49"
+    },
+    {
+      "id": "routes_finance_handlegetexpensecategories",
+      "label": "handleGetExpenseCategories()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L102"
+    },
+    {
+      "id": "routes_finance_handlecreateexpensecategory",
+      "label": "handleCreateExpenseCategory()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L128"
+    },
+    {
+      "id": "routes_finance_handlegetbatches",
+      "label": "handleGetBatches()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L169"
+    },
+    {
+      "id": "routes_finance_handlegetbatch",
+      "label": "handleGetBatch()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L216"
+    },
+    {
+      "id": "routes_finance_handlecreatebatch",
+      "label": "handleCreateBatch()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L259"
+    },
+    {
+      "id": "routes_finance_handleconfirmbatch",
+      "label": "handleConfirmBatch()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L297"
+    },
+    {
+      "id": "routes_finance_handlegettransactions",
+      "label": "handleGetTransactions()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L365"
+    },
+    {
+      "id": "routes_finance_handlecreatetransaction",
+      "label": "handleCreateTransaction()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L427"
+    },
+    {
+      "id": "routes_finance_handlecreateexpense",
+      "label": "handleCreateExpense()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L491"
+    },
+    {
+      "id": "routes_finance_handlegetbudgets",
+      "label": "handleGetBudgets()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L552"
+    },
+    {
+      "id": "routes_finance_handlecreatebudget",
+      "label": "handleCreateBudget()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L592"
+    },
+    {
+      "id": "routes_finance_handlegetmonthlyreport",
+      "label": "handleGetMonthlyReport()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L645"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_middleware_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "lib_middleware_authenticate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "lib_middleware_authorize",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "lib_roles_permissions",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_json",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_uuid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_fund_types",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_forwarding_rules",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlegetfunds",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlecreatefund",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlegetexpensecategories",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L102",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlecreateexpensecategory",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L128",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlegetbatches",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L169",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlegetbatch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L216",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlecreatebatch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L259",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handleconfirmbatch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L297",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlegettransactions",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L365",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlecreatetransaction",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L427",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlecreateexpense",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L491",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlegetbudgets",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L552",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlecreatebudget",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L592",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_finance_ts",
+      "target": "routes_finance_handlegetmonthlyreport",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L645",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlegetfunds",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlecreatefund",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlegetexpensecategories",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L125",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlecreateexpensecategory",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L137",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlegetbatches",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L213",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlegetbatch",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L240",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlecreatebatch",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L268",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handleconfirmbatch",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L320",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlegettransactions",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L424",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlecreatetransaction",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L442",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlecreatetransaction",
+      "target": "routes_finance_uuid",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L476",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlecreateexpense",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L507",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlecreateexpense",
+      "target": "routes_finance_uuid",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L526",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlegetbudgets",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L589",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlecreatebudget",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L607",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_finance_handlegetmonthlyreport",
+      "target": "routes_finance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L658",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_finance_json",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L5"
+    },
+    {
+      "caller_nid": "routes_finance_uuid",
+      "callee": "randomUUID",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L15"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetfunds",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetfunds",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L27"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetfunds",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetfunds",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetfunds",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetfunds",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L42"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetfunds",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L42"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetfunds",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L42"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatefund",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L50"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatefund",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L53"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatefund",
+      "callee": "includes",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L72"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatefund",
+      "callee": "join",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L73"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatefund",
+      "callee": "includes",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L75"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatefund",
+      "callee": "join",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L76"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatefund",
+      "callee": "await env.DB.prepare(\n      `INSERT INTO funds (name, type, forwarding_rule, conference_id) VALUES (?, ?, ?, ?) RETURNING id`\n    )\n      .bind(body.name, body.type, body.forwardingRule, body.conferenceId)\n      .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L80"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatefund",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L80"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatefund",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L80"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatefund",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L92"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatefund",
+      "callee": "includes",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L93"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetexpensecategories",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L103"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetexpensecategories",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L106"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetexpensecategories",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetexpensecategories",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L117"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetexpensecategories",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L117"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetexpensecategories",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L121"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetexpensecategories",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L121"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetexpensecategories",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L121"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpensecategory",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L129"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpensecategory",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L132"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpensecategory",
+      "callee": "await env.DB.prepare(\n      `INSERT INTO expense_categories (name, conference_id) VALUES (?, ?) RETURNING id`\n    )\n      .bind(body.name, body.conferenceId)\n      .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L147"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpensecategory",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L147"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpensecategory",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L147"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpensecategory",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L159"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpensecategory",
+      "callee": "includes",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L160"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatches",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L170"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatches",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L173"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatches",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L177"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatches",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L178"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatches",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L179"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatches",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L197"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatches",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L197"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatches",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L201"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatches",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L205"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatches",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L209"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatches",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L209"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatches",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L209"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatch",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L221"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatch",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L224"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatch",
+      "callee": "first",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L227"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatch",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L227"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatch",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L227"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatch",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L243"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatch",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L243"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbatch",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L243"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebatch",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L260"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebatch",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L263"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebatch",
+      "callee": "first",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L277"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebatch",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L277"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebatch",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L277"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebatch",
+      "callee": "await env.DB.prepare(\n    `INSERT INTO offering_batches (church_id, sabbath_date) VALUES (?, ?) RETURNING id`\n  )\n    .bind(body.churchId, body.sabbathDate)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L284"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebatch",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L284"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebatch",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L284"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L302"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L305"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "await env.DB.prepare(\n    `SELECT id, status, confirmed_by_1, confirmed_by_2 FROM offering_batches WHERE id = ?`\n  )\n    .bind(batchId)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L308"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L308"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L308"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L326"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L332"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L332"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L332"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L344"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L344"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L344"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L350"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L350"
+    },
+    {
+      "caller_nid": "routes_finance_handleconfirmbatch",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L350"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L366"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L369"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L373"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L374"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L375"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L376"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L377"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L378"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L396"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L396"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L400"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L400"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L404"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L408"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L408"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L412"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L416"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L420"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L420"
+    },
+    {
+      "caller_nid": "routes_finance_handlegettransactions",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L420"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatetransaction",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L428"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatetransaction",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L431"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatetransaction",
+      "callee": "await env.DB.prepare(\n    \"SELECT id, church_id, status FROM offering_batches WHERE id = ?\"\n  )\n    .bind(body.batchId)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L454"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatetransaction",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L454"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatetransaction",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L454"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatetransaction",
+      "callee": "first",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L469"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatetransaction",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L469"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatetransaction",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L469"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatetransaction",
+      "callee": "await env.DB.prepare(\n    `INSERT INTO transactions (church_id, fund_id, type, amount, description, batch_id, created_by, uuid)\n     VALUES (?, ?, 'income', ?, ?, ?, ?, ?) RETURNING id`\n  )\n    .bind(body.churchId, body.fundId, body.amount, body.description ?? null, body.batchId, Number(auth.userId), txnUuid)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L477"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatetransaction",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L477"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatetransaction",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L477"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatetransaction",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L481"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpense",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L492"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpense",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L495"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpense",
+      "callee": "first",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L519"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpense",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L519"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpense",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L519"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpense",
+      "callee": "await env.DB.prepare(\n    `INSERT INTO transactions (church_id, fund_id, type, amount, description, category_id, budget_ref, created_by, uuid)\n     VALUES (?, ?, 'expense', ?, ?, ?, ?, ?, ?) RETURNING id`\n  )\n    .bind(\n      body.churchId,\n      body.fundId,\n      body.amount,\n      body.description ?? null,\n      body.categoryId ?? null,\n      body.budgetRef ?? null,\n      Number(auth.userId),\n      txnUuid\n    )\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L527"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpense",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L527"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpense",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L527"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreateexpense",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L538"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbudgets",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L553"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbudgets",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L556"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbudgets",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L560"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbudgets",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L561"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbudgets",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L577"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbudgets",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L577"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbudgets",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L581"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbudgets",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L581"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbudgets",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L585"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbudgets",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L585"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetbudgets",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L585"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebudget",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L593"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebudget",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L596"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebudget",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L617"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebudget",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L617"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebudget",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L617"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebudget",
+      "callee": "await env.DB.prepare(\"SELECT last_insert_rowid() as id\").first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L628"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebudget",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L628"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebudget",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L635"
+    },
+    {
+      "caller_nid": "routes_finance_handlecreatebudget",
+      "callee": "includes",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L636"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L646"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L649"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L653"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L654"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L655"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L661"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L662"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "padStart",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L663"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L663"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "padStart",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L664"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L664"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END), 0) as balance\n     FROM transactions\n     WHERE church_id = ? AND created_at < ? AND (confirmed_by IS NOT NULL OR type = 'expense')`\n  )\n    .bind(Number(churchId), periodStart)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L666"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L666"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L666"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L671"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L674"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L674"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L674"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L684"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L684"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L687"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L687"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L687"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L699"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L699"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L699"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END), 0) as balance\n     FROM transactions\n     WHERE church_id = ? AND created_at < ? AND (confirmed_by IS NOT NULL OR type = 'expense')`\n  )\n    .bind(Number(churchId), nextMonth)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L702"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L702"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L702"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L707"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L721"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "reduce",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L726"
+    },
+    {
+      "caller_nid": "routes_finance_handlegetmonthlyreport",
+      "callee": "reduce",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts",
+      "source_location": "L727"
+    }
+  ]
+}

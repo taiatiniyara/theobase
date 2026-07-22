@@ -108,6 +108,14 @@ export const MODULE_GROUPS: ModuleGroup[] = [
         roles: ["sysadmin", "president", "secretary", "treasurer", "auditor", "pastor"],
         icon: "chart",
       },
+      {
+        id: "reconciliation",
+        label: "Reconciliation",
+        path: "/app/reconciliation",
+        permission: "finance:read",
+        roles: ["sysadmin", "president", "treasurer", "auditor"],
+        icon: "currency",
+      },
     ],
   },
   {

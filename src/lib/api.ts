@@ -383,6 +383,29 @@ export interface MonthlyReport {
   closingBalance: number;
 }
 
+export interface QuarterlyReport {
+  churchId: number;
+  period: { year: number; quarter: number };
+  membership: {
+    opening: number;
+    baptisms: number;
+    professions: number;
+    transfersIn: number;
+    transfersOut: number;
+    deaths: number;
+    removals: number;
+    closing: number;
+  };
+  finance: {
+    titheForwarded: number;
+    localBudgetIncome: number;
+    localBudgetExpenses: number;
+    localBudgetBalance: number;
+    sabbathSchoolForwarded: number;
+  };
+  officers: { memberName: string; positionName: string }[];
+}
+
 export const financeApi = {
   getFunds: (conferenceId?: number) => {
     const qs = conferenceId ? `?conference_id=${conferenceId}` : "";
@@ -471,6 +494,10 @@ export const financeApi = {
     api.get<{ report: MonthlyReport }>(
       `/finance/report/monthly?church_id=${churchId}&year=${year}&month=${month}`
     ),
+  getQuarterlyReport: (churchId: number, year: number, quarter: number) =>
+    api.get<{ report: QuarterlyReport }>(
+      `/report/quarterly?church_id=${churchId}&year=${year}&quarter=${quarter}`
+    ),
 };
 
 export interface AuditLogEntry {
@@ -531,4 +558,67 @@ export const auditApi = {
     const q = qs.toString();
     return api.get<AuditLogResponse>(`/audit/${entityType}/${entityId}${q ? `?${q}` : ""}`);
   },
+};
+
+export interface TitheEntry {
+  churchId: number;
+  churchName: string;
+  forwardedAmount: number;
+  status: string;
+  receivedAmount: number;
+  note: string | null;
+}
+
+export interface TitheReportEntry {
+  churchId: number;
+  churchName: string;
+  forwarded: number;
+  received: number;
+  difference: number;
+  status: string;
+}
+
+export interface ChurchBalance {
+  id: number;
+  churchId?: number;
+  year: number;
+  month: number;
+  bankBalance: number;
+  systemBalance: number;
+  bankDiscrepancy: number;
+  bankNote: string | null;
+  titheStatus: string;
+  receivedTithe: number;
+  forwardedTithe: number;
+}
+
+export const reconciliationApi = {
+  getConferenceTithe: (year: number, month: number) =>
+    api.get<{ tithe: TitheEntry[] }>(`/conference/tithe?year=${year}&month=${month}`),
+  receiveTithe: (data: {
+    churchId: number;
+    year: number;
+    month: number;
+    receivedAmount?: number;
+    note?: string;
+  }) =>
+    api.post<{
+      reconciliation: { titheStatus: string; titheDiscrepancy: number };
+    }>(`/conference/tithe/receive`, data),
+  getTitheReport: (year: number, month: number) =>
+    api.get<{ report: TitheReportEntry[] }>(`/conference/tithe/report?year=${year}&month=${month}`),
+  getChurchBalance: (churchId: number, year: number, month: number) =>
+    api.get<{ reconciliation: ChurchBalance | null }>(
+      `/church/balance?church_id=${churchId}&year=${year}&month=${month}`
+    ),
+  recordChurchBalance: (data: {
+    churchId: number;
+    year: number;
+    month: number;
+    bankBalance: number;
+    note?: string;
+  }) =>
+    api.post<{
+      reconciliation: { bankBalance: number; systemBalance: number; bankDiscrepancy: number };
+    }>(`/church/balance`, data),
 };
