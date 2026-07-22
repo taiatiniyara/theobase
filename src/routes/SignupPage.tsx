@@ -33,6 +33,7 @@ export default function SignupPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
+        <img src="/icon.svg" alt="Theobase" className="mx-auto mb-4 h-10 w-auto" />
         <h1 className="mb-2 text-center text-3xl font-bold text-gray-900">Theobase</h1>
         <p className="mb-6 text-center text-sm text-gray-600">Create your Conference account</p>
         {error && <div className="mb-4 rounded bg-red-50 p-3 text-sm text-red-600">{error}</div>}

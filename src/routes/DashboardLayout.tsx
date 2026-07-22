@@ -14,7 +14,7 @@ export default function DashboardLayout() {
     <div className="flex min-h-screen bg-gray-50">
       <aside className="flex w-64 flex-col bg-gray-900 text-white">
         <div className="border-b border-gray-700 p-4">
-          <h1 className="text-xl font-bold">Theobase</h1>
+          <img src="/logo-light.svg" alt="Theobase" className="h-8 w-auto" />
           {user?.conference && <p className="mt-1 text-sm text-gray-400">{user.conference.name}</p>}
           {user?.church && <p className="text-xs text-gray-500">{user.church.name}</p>}
         </div>
@@ -25,7 +25,7 @@ export default function DashboardLayout() {
         <nav className="flex-1 space-y-1 p-2">
           <Link
             to="/app"
-            className="block rounded px-3 py-2 text-sm hover:bg-gray-800 [&.active]:bg-gray-800"
+            className="block rounded px-3 py-2 text-sm hover:bg-gray-800 [&.active]:bg-gray-800 [&.active]:text-brand"
           >
             Dashboard
           </Link>
