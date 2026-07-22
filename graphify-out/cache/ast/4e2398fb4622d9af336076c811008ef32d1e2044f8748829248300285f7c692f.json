@@ -1,0 +1,457 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reports_ts",
+      "label": "reports.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_reports_json",
+      "label": "json()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L4"
+    },
+    {
+      "id": "routes_reports_handlegetquarterlyreport",
+      "label": "handleGetQuarterlyReport()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L14"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reports_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_middleware_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reports_ts",
+      "target": "lib_middleware_authenticate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reports_ts",
+      "target": "lib_middleware_authorize",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reports_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reports_ts",
+      "target": "lib_roles_permissions",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reports_ts",
+      "target": "routes_reports_json",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reports_ts",
+      "target": "routes_reports_handlegetquarterlyreport",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_reports_handlegetquarterlyreport",
+      "target": "routes_reports_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_reports_json",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L5"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L15"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L23"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L30"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "padStart",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "padStart",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L39"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L39"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as count FROM members\n     WHERE church_id = ? AND baptism_type = 'immersion'\n       AND baptism_date >= ? AND baptism_date < ?`\n  )\n    .bind(chId, periodStart, periodEnd)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as count FROM members\n     WHERE church_id = ? AND baptism_type = 'profession_of_faith'\n       AND baptism_date >= ? AND baptism_date < ?`\n  )\n    .bind(chId, periodStart, periodEnd)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L51"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L51"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L51"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as count FROM transfer_requests\n     WHERE to_church_id = ? AND status = 'completed'\n       AND accepted_at >= ? AND accepted_at < ?`\n  )\n    .bind(chId, periodStart, periodEnd)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as count FROM transfer_requests\n     WHERE from_church_id = ? AND status = 'completed'\n       AND accepted_at >= ? AND accepted_at < ?`\n  )\n    .bind(chId, periodStart, periodEnd)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L67"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L67"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L67"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as count FROM members\n     WHERE church_id = ? AND status = 'deceased'\n       AND status_date >= ? AND status_date < ?`\n  )\n    .bind(chId, periodStart, periodEnd)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L75"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L75"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L75"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as count FROM members\n     WHERE church_id = ? AND status = 'removed'\n       AND status_date >= ? AND status_date < ?`\n  )\n    .bind(chId, periodStart, periodEnd)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L83"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L83"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L83"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as count FROM members\n     WHERE church_id = ? AND status = 'active'`\n  )\n    .bind(chId)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L91"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L91"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L91"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COALESCE(SUM(t.amount), 0) as total\n     FROM transactions t\n     JOIN funds f ON t.fund_id = f.id\n     WHERE t.church_id = ? AND t.type = 'income'\n       AND f.type = 'tithe'\n       AND t.created_at >= ? AND t.created_at < ?\n       AND t.confirmed_by IS NOT NULL`\n  )\n    .bind(chId, periodStart, periodEnd)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L111"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L111"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L111"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COALESCE(SUM(t.amount), 0) as total\n     FROM transactions t\n     JOIN funds f ON t.fund_id = f.id\n     WHERE t.church_id = ? AND t.type = 'income'\n       AND f.type = 'local_budget'\n       AND t.created_at >= ? AND t.created_at < ?\n       AND t.confirmed_by IS NOT NULL`\n  )\n    .bind(chId, periodStart, periodEnd)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L123"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L123"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L123"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COALESCE(SUM(t.amount), 0) as total\n     FROM transactions t\n     JOIN funds f ON t.fund_id = f.id\n     WHERE t.church_id = ? AND t.type = 'expense'\n       AND f.type = 'local_budget'\n       AND t.created_at >= ? AND t.created_at < ?`\n  )\n    .bind(chId, periodStart, periodEnd)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L135"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L135"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L135"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "await env.DB.prepare(\n    `SELECT COALESCE(SUM(t.amount), 0) as total\n     FROM transactions t\n     JOIN funds f ON t.fund_id = f.id\n     WHERE t.church_id = ? AND t.type = 'income'\n       AND f.type = 'sabbath_school'\n       AND t.created_at >= ? AND t.created_at < ?\n       AND t.confirmed_by IS NOT NULL`\n  )\n    .bind(chId, periodStart, periodEnd)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L146"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L146"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L146"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L164"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L164"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L164"
+    },
+    {
+      "caller_nid": "routes_reports_handlegetquarterlyreport",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts",
+      "source_location": "L175"
+    }
+  ]
+}

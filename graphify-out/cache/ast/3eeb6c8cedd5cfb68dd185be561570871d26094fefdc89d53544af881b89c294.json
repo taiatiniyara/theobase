@@ -1,0 +1,452 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "label": "routes.tsx",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_routes_rootroute",
+      "label": "rootRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L23"
+    },
+    {
+      "id": "src_routes_indexroute",
+      "label": "indexRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L31"
+    },
+    {
+      "id": "src_routes_loginroute",
+      "label": "loginRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L37"
+    },
+    {
+      "id": "src_routes_signuproute",
+      "label": "signupRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L43"
+    },
+    {
+      "id": "src_routes_forgotpasswordroute",
+      "label": "forgotPasswordRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L49"
+    },
+    {
+      "id": "src_routes_dashboardlayout",
+      "label": "dashboardLayout",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L55"
+    },
+    {
+      "id": "src_routes_dashboardindex",
+      "label": "dashboardIndex",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L66"
+    },
+    {
+      "id": "src_routes_organizationroute",
+      "label": "organizationRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L72"
+    },
+    {
+      "id": "src_routes_usersroute",
+      "label": "usersRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L78"
+    },
+    {
+      "id": "src_routes_financeroute",
+      "label": "financeRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L84"
+    },
+    {
+      "id": "src_routes_membersroute",
+      "label": "membersRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L90"
+    },
+    {
+      "id": "src_routes_reportsroute",
+      "label": "reportsRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L96"
+    },
+    {
+      "id": "src_routes_settingsroute",
+      "label": "settingsRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L102"
+    },
+    {
+      "id": "src_routes_auditroute",
+      "label": "auditRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L108"
+    },
+    {
+      "id": "src_routes_reconciliationroute",
+      "label": "reconciliationRoute",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L114"
+    },
+    {
+      "id": "src_routes_routetree",
+      "label": "routeTree",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L120"
+    },
+    {
+      "id": "src_routes_router",
+      "label": "router",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L138"
+    },
+    {
+      "id": "src_routes_register",
+      "label": "Register",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L141"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "react_router",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_homepage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_loginpage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_signuppage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_forgotpasswordpage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_dashboardlayout_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_dashboardpage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_orgmanagementpage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_userspage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_financepage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_memberspage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_reportspage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_settingspage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_auditpage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_reconciliationpage_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_rootroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_indexroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_loginroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_signuproute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_forgotpasswordroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_dashboardlayout",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L55",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_dashboardindex",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L66",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_organizationroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_usersroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_financeroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L84",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_membersroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L90",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_reportsroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_settingsroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L102",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_auditroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L108",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_reconciliationroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L114",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_routetree",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L120",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_router",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L138",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_tsx",
+      "target": "src_routes_register",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx",
+      "source_location": "L141",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": []
+}
