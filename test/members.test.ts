@@ -10,7 +10,8 @@ const FULL_SCHEMA =
   `CREATE TABLE IF NOT EXISTS positions (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, module TEXT NOT NULL DEFAULT 'core');` +
   `CREATE TABLE IF NOT EXISTS member_positions (member_id INTEGER NOT NULL REFERENCES members(id), position_id INTEGER NOT NULL REFERENCES positions(id), start_date TEXT NOT NULL DEFAULT (datetime('now')), end_date TEXT, PRIMARY KEY (member_id, position_id));` +
   `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, member_id INTEGER REFERENCES members(id), conference_id INTEGER REFERENCES conferences(id), role TEXT NOT NULL CHECK (role IN ('president', 'secretary', 'treasurer', 'auditor', 'sysadmin', 'pastor', 'member')), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS transfer_requests (id INTEGER PRIMARY KEY AUTOINCREMENT, member_id INTEGER NOT NULL REFERENCES members(id), from_church_id INTEGER NOT NULL REFERENCES churches(id), to_church_id INTEGER NOT NULL REFERENCES churches(id), initiated_by INTEGER NOT NULL REFERENCES users(id), initiated_at TEXT NOT NULL DEFAULT (datetime('now')), conference_approved_by INTEGER REFERENCES users(id), conference_approved_at TEXT, accepted_by INTEGER REFERENCES users(id), accepted_at TEXT, status TEXT NOT NULL DEFAULT 'pending_conference' CHECK (status IN ('pending_conference', 'pending_destination', 'completed', 'rejected')));`;
+  `CREATE TABLE IF NOT EXISTS transfer_requests (id INTEGER PRIMARY KEY AUTOINCREMENT, member_id INTEGER NOT NULL REFERENCES members(id), from_church_id INTEGER NOT NULL REFERENCES churches(id), to_church_id INTEGER NOT NULL REFERENCES churches(id), initiated_by INTEGER NOT NULL REFERENCES users(id), initiated_at TEXT NOT NULL DEFAULT (datetime('now')), conference_approved_by INTEGER REFERENCES users(id), conference_approved_at TEXT, accepted_by INTEGER REFERENCES users(id), accepted_at TEXT, rejection_note TEXT, status TEXT NOT NULL DEFAULT 'pending_conference' CHECK (status IN ('pending_conference', 'pending_destination', 'completed', 'rejected')));` +
+  `CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, recipient_user_id INTEGER NOT NULL REFERENCES users(id), type TEXT NOT NULL, entity_type TEXT NOT NULL, entity_id INTEGER NOT NULL, message TEXT NOT NULL, read INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL DEFAULT (datetime('now')));`;
 
 describe("membership API", () => {
   let accessToken: string;
@@ -230,6 +231,12 @@ describe("membership API", () => {
     const t = (await transferRes.json()) as { id: number };
     const transferId = t.id;
 
+    // Notifications should be available via the API
+    const notifRes = await SELF.fetch("http://localhost/api/notifications", {
+      headers: authHeaders(),
+    });
+    expect(notifRes.status).toBe(200);
+
     // Duplicate transfer for same member fails (member is now 'transferred')
     const dupTransferRes = await SELF.fetch("http://localhost/api/transfers", {
       method: "POST",
@@ -254,6 +261,31 @@ describe("membership API", () => {
     const listBody = (await listRes.json()) as { transfers: { status: string }[] };
     expect(listBody.transfers.length).toBe(1);
     expect(listBody.transfers[0]!.status).toBe("completed");
+  });
+
+  it("transfer rejection with note", async () => {
+    memberId = await createMember("Reject Me", { gender: "male" });
+    const transferRes = await SELF.fetch("http://localhost/api/transfers", {
+      method: "POST",
+      headers: jsonAuthHeaders(),
+      body: JSON.stringify({ memberId, toChurchId: churchId2 }),
+    });
+    expect(transferRes.status).toBe(201);
+    const t = (await transferRes.json()) as { id: number };
+
+    const rejectRes = await SELF.fetch(`http://localhost/api/transfers/${t.id}/reject`, {
+      method: "POST",
+      headers: jsonAuthHeaders(),
+      body: JSON.stringify({ note: "Member not eligible" }),
+    });
+    expect(rejectRes.status).toBe(200);
+
+    // Verify member is active again after rejection
+    const detailRes = await SELF.fetch(`http://localhost/api/members/${memberId}`, {
+      headers: authHeaders(),
+    });
+    const detailBody = (await detailRes.json()) as { status: string };
+    expect(detailBody.status).toBe("active");
   });
 
   it("member removal", async () => {

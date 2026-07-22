@@ -8,10 +8,11 @@ const FULL_SCHEMA =
   `CREATE TABLE IF NOT EXISTS members (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), household_id INTEGER, full_name TEXT NOT NULL, preferred_name TEXT, dob TEXT, gender TEXT, baptism_date TEXT, baptism_type TEXT, join_date TEXT, prev_church_id INTEGER REFERENCES churches(id), phone TEXT, email TEXT, address TEXT, marital_status TEXT, status TEXT NOT NULL DEFAULT 'active', status_date TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')), version INTEGER NOT NULL DEFAULT 1);` +
   `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, member_id INTEGER REFERENCES members(id), conference_id INTEGER REFERENCES conferences(id), role TEXT NOT NULL CHECK (role IN ('president', 'secretary', 'treasurer', 'auditor', 'sysadmin', 'pastor', 'member')), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
   `CREATE TABLE IF NOT EXISTS funds (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, type TEXT NOT NULL CHECK (type IN ('tithe', 'local_budget', 'sabbath_school')), forwarding_rule TEXT NOT NULL, conference_id INTEGER NOT NULL REFERENCES conferences(id), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS expense_categories (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, conference_id INTEGER NOT NULL REFERENCES conferences(id), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS offering_batches (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), sabbath_date TEXT NOT NULL, confirmed_by_1 INTEGER REFERENCES users(id), confirmed_at_1 TEXT, confirmed_by_2 INTEGER REFERENCES users(id), confirmed_at_2 TEXT, status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'synced')), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS transactions (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), fund_id INTEGER NOT NULL REFERENCES funds(id), type TEXT NOT NULL CHECK (type IN ('income', 'expense', 'forward')), amount REAL NOT NULL, description TEXT, category_id INTEGER REFERENCES expense_categories(id), budget_ref INTEGER, batch_id INTEGER REFERENCES offering_batches(id), created_by INTEGER NOT NULL REFERENCES users(id), created_at TEXT NOT NULL DEFAULT (datetime('now')), confirmed_by INTEGER REFERENCES users(id), confirmed_at TEXT, uuid TEXT NOT NULL UNIQUE);` +
-  `CREATE TABLE IF NOT EXISTS budgets (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), fund_id INTEGER NOT NULL REFERENCES funds(id), category_id INTEGER NOT NULL REFERENCES expense_categories(id), planned_amount REAL NOT NULL, fiscal_year INTEGER NOT NULL, created_at TEXT NOT NULL DEFAULT (datetime('now')));`;
+  `CREATE TABLE IF NOT EXISTS expense_categories (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, conference_id INTEGER NOT NULL REFERENCES conferences(id), active INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
+  `CREATE TABLE IF NOT EXISTS offering_batches (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), sabbath_date TEXT NOT NULL, confirmed_by_1 INTEGER REFERENCES users(id), confirmed_at_1 TEXT, confirmed_by_2 INTEGER REFERENCES users(id), confirmed_at_2 TEXT, submitted_by INTEGER REFERENCES users(id), submitted_at TEXT, status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'synced')), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
+  `CREATE TABLE IF NOT EXISTS transactions (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), fund_id INTEGER NOT NULL REFERENCES funds(id), type TEXT NOT NULL CHECK (type IN ('income', 'expense', 'forward')), amount REAL NOT NULL, description TEXT, category_id INTEGER REFERENCES expense_categories(id), budget_ref INTEGER, batch_id INTEGER REFERENCES offering_batches(id), envelope_number INTEGER, member_id INTEGER REFERENCES members(id), created_by INTEGER NOT NULL REFERENCES users(id), created_at TEXT NOT NULL DEFAULT (datetime('now')), confirmed_by INTEGER REFERENCES users(id), confirmed_at TEXT, uuid TEXT NOT NULL UNIQUE);` +
+  `CREATE TABLE IF NOT EXISTS budgets (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), fund_id INTEGER NOT NULL REFERENCES funds(id), category_id INTEGER NOT NULL REFERENCES expense_categories(id), planned_amount REAL NOT NULL, fiscal_year INTEGER NOT NULL, approved INTEGER NOT NULL DEFAULT 0, approved_by INTEGER REFERENCES users(id), approved_at TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
+  `CREATE TABLE IF NOT EXISTS budget_templates (id INTEGER PRIMARY KEY AUTOINCREMENT, conference_id INTEGER NOT NULL REFERENCES conferences(id), category_id INTEGER NOT NULL REFERENCES expense_categories(id), fund_id INTEGER NOT NULL REFERENCES funds(id), planned_amount REAL NOT NULL, fiscal_year INTEGER NOT NULL, created_at TEXT NOT NULL DEFAULT (datetime('now')), UNIQUE(conference_id, category_id, fund_id, fiscal_year));`;
 
 describe("finance API", () => {
   let accessToken: string;
@@ -204,9 +205,73 @@ describe("finance API", () => {
       { headers: h() }
     );
     expect(list.status).toBe(200);
-    const lb = (await list.json()) as { budgets: { planned_amount: number }[] };
+    const lb = (await list.json()) as { budgets: { planned_amount: number; id: number }[] };
     expect(lb.budgets.length).toBe(1);
     expect(lb.budgets[0]!.planned_amount).toBe(5000);
+
+    // Approve budget
+    const approveRes = await SELF.fetch(
+      `http://localhost/api/finance/budgets/${lb.budgets[0]!.id}/approve`,
+      { method: "POST", headers: h() }
+    );
+    expect(approveRes.status).toBe(200);
+  });
+
+  it("budget templates", async () => {
+    const r = await SELF.fetch("http://localhost/api/finance/budget-templates", {
+      method: "POST",
+      headers: jh(),
+      body: JSON.stringify({
+        conferenceId,
+        categoryId: catId,
+        fundId: budgetFundId,
+        plannedAmount: 3000,
+        fiscalYear: 2026,
+      }),
+    });
+    expect(r.status).toBe(201);
+
+    const list = await SELF.fetch(
+      `http://localhost/api/finance/budget-templates?conference_id=${conferenceId}&fiscal_year=2026`,
+      { headers: h() }
+    );
+    expect(list.status).toBe(200);
+  });
+
+  it("envelope number uniqueness in batch", async () => {
+    const r = await SELF.fetch("http://localhost/api/finance/batches", {
+      method: "POST",
+      headers: jh(),
+      body: JSON.stringify({ churchId, sabbathDate: "2026-07-25" }),
+    });
+    expect(r.status).toBe(201);
+    const batchId = ((await r.json()) as { id: number }).id;
+
+    const t1 = await SELF.fetch("http://localhost/api/finance/transactions", {
+      method: "POST",
+      headers: jh(),
+      body: JSON.stringify({
+        churchId,
+        fundId: titheFundId,
+        amount: 100,
+        batchId,
+        envelopeNumber: 1,
+      }),
+    });
+    expect(t1.status).toBe(201);
+
+    const t2 = await SELF.fetch("http://localhost/api/finance/transactions", {
+      method: "POST",
+      headers: jh(),
+      body: JSON.stringify({
+        churchId,
+        fundId: budgetFundId,
+        amount: 50,
+        batchId,
+        envelopeNumber: 1,
+      }),
+    });
+    expect(t2.status).toBe(409);
   });
 
   it("monthly treasurer report", async () => {

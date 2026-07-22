@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, type ReactNode } from "react";
 import { Outlet, Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../lib/auth";
+import { notificationApi, type Notification } from "../lib/api";
 import { getVisibleGroups } from "../lib/modules";
 import SyncIndicator from "./SyncIndicator";
 
@@ -109,6 +110,38 @@ export default function DashboardLayout() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  const loadNotifications = useCallback(async () => {
+    try {
+      const data = await notificationApi.getNotifications(true);
+      setUnreadCount(data.notifications.filter((n) => !n.read).length);
+      if (notifOpen) {
+        const all = await notificationApi.getNotifications();
+        setNotifications(all.notifications);
+      }
+    } catch {
+      // ignore
+    }
+  }, [notifOpen]);
+
+  useEffect(() => {
+    loadNotifications();
+    const interval = setInterval(loadNotifications, 30000);
+    return () => clearInterval(interval);
+  }, [loadNotifications]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (!(e.target as HTMLElement).closest("[data-notif-menu]")) {
+        setNotifOpen(false);
+      }
+    }
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -238,13 +271,82 @@ export default function DashboardLayout() {
             <SyncIndicator />
 
             {/* Notification bell */}
-            <button
-              className="relative rounded p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-              aria-label="Notifications"
-              title="No new notifications"
-            >
-              {ICONS.bell}
-            </button>
+            <div className="relative" data-notif-menu>
+              <button
+                className="relative rounded p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                aria-label="Notifications"
+                onClick={() => {
+                  setNotifOpen((v) => !v);
+                  if (!notifOpen) {
+                    notificationApi
+                      .getNotifications()
+                      .then((d) => setNotifications(d.notifications))
+                      .catch(() => {});
+                  }
+                }}
+              >
+                {ICONS.bell}
+                {unreadCount > 0 && (
+                  <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+              {notifOpen && (
+                <div className="absolute right-0 top-full z-50 mt-1 w-80 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+                  <div className="flex items-center justify-between border-b border-gray-100 px-4 py-2">
+                    <span className="text-sm font-medium text-gray-900">Notifications</span>
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={async () => {
+                          await notificationApi.markAllRead();
+                          setUnreadCount(0);
+                          setNotifications((prev) => prev.map((n) => ({ ...n, read: 1 })));
+                        }}
+                        className="text-xs text-brand hover:text-orange-600"
+                      >
+                        Mark all read
+                      </button>
+                    )}
+                  </div>
+                  <div className="max-h-64 overflow-y-auto">
+                    {notifications.length === 0 ? (
+                      <p className="px-4 py-3 text-sm text-gray-500">No notifications</p>
+                    ) : (
+                      notifications.slice(0, 20).map((n) => (
+                        <div
+                          key={n.id}
+                          className={`flex items-start gap-2 px-4 py-2 text-sm hover:bg-gray-50 ${
+                            !n.read ? "bg-orange-50" : ""
+                          }`}
+                        >
+                          <div className="flex-1 min-w-0">
+                            <p className="text-gray-900 truncate">{n.message}</p>
+                            <p className="text-xs text-gray-500">
+                              {new Date(n.created_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                          {!n.read && (
+                            <button
+                              onClick={async () => {
+                                await notificationApi.markRead(n.id);
+                                setNotifications((prev) =>
+                                  prev.map((x) => (x.id === n.id ? { ...x, read: 1 } : x))
+                                );
+                                setUnreadCount((c) => c - 1);
+                              }}
+                              className="shrink-0 text-xs text-brand hover:text-orange-600"
+                            >
+                              Read
+                            </button>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* User menu */}
             <div className="relative" data-user-menu>

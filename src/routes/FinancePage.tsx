@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../lib/auth";
 import {
   financeApi,
+  memberApi,
   type Fund,
   type ExpenseCategory,
   type Batch,
@@ -214,6 +215,14 @@ function BatchSummary({ churchId, setError }: { churchId: number; setError: (e: 
   );
 }
 
+function getLatestSaturday(): string {
+  const d = new Date();
+  const dayOfWeek = d.getDay();
+  const diff = dayOfWeek === 6 ? 0 : dayOfWeek + 1;
+  d.setDate(d.getDate() - diff);
+  return d.toISOString().split("T")[0]!;
+}
+
 function BatchesTab({
   _conferenceId,
   churchId,
@@ -226,7 +235,7 @@ function BatchesTab({
   const [batches, setBatches] = useState<Batch[]>([]);
   const [selectedBatch, setSelectedBatch] = useState<BatchDetail | null>(null);
   const [showCreate, setShowCreate] = useState(false);
-  const [sabbathDate, setSabbathDate] = useState("");
+  const [sabbathDate, setSabbathDate] = useState(getLatestSaturday());
   const [selectedChurchId, setSelectedChurchId] = useState(churchId ?? 0);
   const [submitting, setSubmitting] = useState(false);
 
@@ -442,9 +451,12 @@ function BatchDetailView({
 }) {
   const [showAddTxn, setShowAddTxn] = useState(false);
   const [funds, setFunds] = useState<Fund[]>([]);
+  const [members, setMembers] = useState<{ id: number; full_name: string }[]>([]);
   const [txnFundId, setTxnFundId] = useState(0);
   const [txnAmount, setTxnAmount] = useState("");
   const [txnDesc, setTxnDesc] = useState("");
+  const [txnEnvelope, setTxnEnvelope] = useState("");
+  const [txnMemberId, setTxnMemberId] = useState(0);
   const [submittingTxn, setSubmittingTxn] = useState(false);
 
   useEffect(() => {
@@ -452,7 +464,11 @@ function BatchDetailView({
       .getFunds()
       .then((d) => setFunds(d.funds))
       .catch(() => {});
-  }, []);
+    memberApi
+      .getMembers({ church_id: batch.church_id })
+      .then((d) => setMembers(d.members.map((m) => ({ id: m.id, full_name: m.full_name }))))
+      .catch(() => {});
+  }, [batch.church_id]);
 
   async function addTransaction(e: React.FormEvent) {
     e.preventDefault();
@@ -465,12 +481,14 @@ function BatchDetailView({
         amount: Number(txnAmount),
         description: txnDesc || undefined,
         batchId: batch.id,
+        envelopeNumber: txnEnvelope ? Number(txnEnvelope) : undefined,
+        memberId: txnMemberId || undefined,
       });
       setTxnAmount("");
       setTxnDesc("");
+      setTxnEnvelope("");
+      setTxnMemberId(0);
       setShowAddTxn(false);
-      // Reload batch after adding transaction
-      await financeApi.getBatch(batch.id);
       setError("");
     } catch (err: unknown) {
       setError(
@@ -508,6 +526,9 @@ function BatchDetailView({
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="text-gray-500">Counted By:</span> {batch.submitted_by_email || "—"}
+          </div>
           <div>
             <span className="text-gray-500">Confirmed (1):</span>{" "}
             {batch.confirmed_by_1_email || "—"}
@@ -554,6 +575,31 @@ function BatchDetailView({
             <h4 className="mb-3 text-sm font-medium text-gray-900">Add Contribution</h4>
             <div className="flex flex-wrap gap-3">
               <div>
+                <label className="block text-xs font-medium text-gray-700">Envelope #</label>
+                <input
+                  type="number"
+                  value={txnEnvelope}
+                  onChange={(e) => setTxnEnvelope(e.target.value)}
+                  placeholder="#"
+                  className="mt-1 w-20 rounded-md border border-gray-300 px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700">Member</label>
+                <select
+                  value={txnMemberId}
+                  onChange={(e) => setTxnMemberId(Number(e.target.value))}
+                  className="mt-1 rounded-md border border-gray-300 px-3 py-2 text-sm"
+                >
+                  <option value={0}>Unnamed</option>
+                  {members.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.full_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
                 <label className="block text-xs font-medium text-gray-700">Fund</label>
                 <select
                   required
@@ -586,7 +632,7 @@ function BatchDetailView({
                   type="text"
                   value={txnDesc}
                   onChange={(e) => setTxnDesc(e.target.value)}
-                  placeholder="e.g. Envelope #12"
+                  placeholder="e.g. Cash/Check"
                   className="mt-1 rounded-md border border-gray-300 px-3 py-2 text-sm"
                 />
               </div>
@@ -621,6 +667,8 @@ function BatchDetailView({
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-left text-gray-500">
+                    <th className="pb-2 font-medium">Env</th>
+                    <th className="pb-2 font-medium">Member</th>
                     <th className="pb-2 font-medium">Fund</th>
                     <th className="pb-2 font-medium">Amount</th>
                     <th className="pb-2 font-medium">Description</th>
@@ -630,6 +678,8 @@ function BatchDetailView({
                 <tbody>
                   {batch.transactions.map((t) => (
                     <tr key={t.id} className="border-b last:border-0">
+                      <td className="py-2 text-gray-600">{t.envelope_number ?? "—"}</td>
+                      <td className="py-2 text-gray-900">{t.member_name || "—"}</td>
                       <td className="py-2 text-gray-900">{t.fund_name}</td>
                       <td className="py-2 font-medium text-gray-900">
                         {t.amount.toLocaleString()}
@@ -639,6 +689,17 @@ function BatchDetailView({
                     </tr>
                   ))}
                 </tbody>
+                <tfoot>
+                  <tr className="border-t-2 font-semibold">
+                    <td colSpan={3} className="pt-2 text-right text-gray-700">
+                      Total:
+                    </td>
+                    <td className="pt-2 text-gray-900">
+                      {batch.transactions.reduce((sum, t) => sum + t.amount, 0).toLocaleString()}
+                    </td>
+                    <td colSpan={2}></td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           )}

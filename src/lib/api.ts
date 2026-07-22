@@ -198,7 +198,7 @@ export const memberApi = {
     api.post("/transfers", data),
   approveTransfer: (id: number) => api.post(`/transfers/${id}/approve`),
   acceptTransfer: (id: number) => api.post(`/transfers/${id}/accept`),
-  rejectTransfer: (id: number) => api.post(`/transfers/${id}/reject`),
+  rejectTransfer: (id: number, note?: string) => api.post(`/transfers/${id}/reject`, { note }),
 };
 
 export interface Member {
@@ -265,6 +265,7 @@ export interface Transfer {
   accepted_by: number | null;
   accepted_at: string | null;
   status: string;
+  rejection_note: string | null;
   member_name: string;
   from_church_name: string;
   to_church_name: string;
@@ -304,6 +305,7 @@ export interface ExpenseCategory {
   id: number;
   name: string;
   conference_id: number;
+  active: number;
   created_at: string;
 }
 
@@ -316,10 +318,13 @@ export interface Batch {
   confirmed_at_1: string | null;
   confirmed_by_2: number | null;
   confirmed_at_2: string | null;
+  submitted_by: number | null;
+  submitted_at: string | null;
   created_at: string;
   church_name: string;
   confirmed_by_1_email: string | null;
   confirmed_by_2_email: string | null;
+  submitted_by_email: string | null;
   transaction_count: number;
   total_amount: number;
 }
@@ -338,6 +343,8 @@ export interface Transaction {
   category_id: number | null;
   budget_ref: number | null;
   batch_id: number | null;
+  envelope_number: number | null;
+  member_id: number | null;
   created_by: number;
   created_at: string;
   confirmed_by: number | null;
@@ -349,6 +356,7 @@ export interface Transaction {
   created_by_email: string;
   confirmed_by_email: string | null;
   category_name: string | null;
+  member_name: string | null;
 }
 
 export interface Budget {
@@ -358,6 +366,9 @@ export interface Budget {
   category_id: number;
   planned_amount: number;
   fiscal_year: number;
+  approved: number;
+  approved_by: number | null;
+  approved_at: string | null;
   created_at: string;
   fund_name: string;
   fund_type: string;
@@ -370,7 +381,14 @@ export interface MonthlyReport {
   churchId: number;
   period: { year: number; month: number };
   openingBalance: number;
-  incomeByFund: { id: number; fund_name: string; fund_type: string; total: number }[];
+  incomeByFund: {
+    id: number;
+    fund_name: string;
+    fund_type: string;
+    total: number;
+    forwarded: number;
+    isPassThrough: boolean;
+  }[];
   expensesByCategory: {
     id: number;
     category_name: string;
@@ -406,6 +424,39 @@ export interface QuarterlyReport {
   officers: { memberName: string; positionName: string }[];
 }
 
+export interface Notification {
+  id: number;
+  recipient_user_id: number;
+  type: string;
+  entity_type: string;
+  entity_id: number;
+  message: string;
+  read: number;
+  created_at: string;
+  actor_email: string | null;
+}
+
+export const notificationApi = {
+  getNotifications: (unreadOnly?: boolean) => {
+    const qs = unreadOnly ? "?unread=1" : "";
+    return api.get<{ notifications: Notification[] }>(`/notifications${qs}`);
+  },
+  markRead: (id: number) => api.post(`/notifications/${id}/read`),
+  markAllRead: () => api.post("/notifications/read-all"),
+};
+
+export interface BudgetTemplate {
+  id: number;
+  conference_id: number;
+  category_id: number;
+  fund_id: number;
+  planned_amount: number;
+  fiscal_year: number;
+  created_at: string;
+  category_name: string;
+  fund_name: string;
+}
+
 export const financeApi = {
   getFunds: (conferenceId?: number) => {
     const qs = conferenceId ? `?conference_id=${conferenceId}` : "";
@@ -418,12 +469,19 @@ export const financeApi = {
     conferenceId: number;
   }) => api.post<{ id: number }>("/funds", data),
 
-  getExpenseCategories: (conferenceId?: number) => {
-    const qs = conferenceId ? `?conference_id=${conferenceId}` : "";
-    return api.get<{ expenseCategories: ExpenseCategory[] }>(`/expense-categories${qs}`);
+  getExpenseCategories: (conferenceId?: number, includeInactive?: boolean) => {
+    const qs = new URLSearchParams();
+    if (conferenceId) qs.set("conference_id", String(conferenceId));
+    if (includeInactive) qs.set("include_inactive", "1");
+    const q = qs.toString();
+    return api.get<{ expenseCategories: ExpenseCategory[] }>(
+      `/expense-categories${q ? `?${q}` : ""}`
+    );
   },
   createExpenseCategory: (data: { name: string; conferenceId: number }) =>
     api.post<{ id: number }>("/expense-categories", data),
+  updateExpenseCategory: (id: number, data: { name?: string; active?: boolean }) =>
+    api.patch(`/expense-categories/${id}`, data),
 
   getBatches: (params?: { church_id?: number; status?: string; sabbath_date?: string }) => {
     const qs = new URLSearchParams();
@@ -465,6 +523,8 @@ export const financeApi = {
     amount: number;
     description?: string;
     batchId: number;
+    envelopeNumber?: number;
+    memberId?: number;
   }) => api.post<{ id: number }>("/finance/transactions", data),
   createExpense: (data: {
     churchId: number;
@@ -489,6 +549,23 @@ export const financeApi = {
     plannedAmount: number;
     fiscalYear: number;
   }) => api.post<{ id: number }>("/finance/budgets", data),
+  approveBudget: (id: number) => api.post(`/finance/budgets/${id}/approve`),
+
+  getBudgetTemplates: (conferenceId: number, fiscalYear?: number) => {
+    const qs = new URLSearchParams();
+    qs.set("conference_id", String(conferenceId));
+    if (fiscalYear) qs.set("fiscal_year", String(fiscalYear));
+    return api.get<{ budgetTemplates: BudgetTemplate[] }>(
+      `/finance/budget-templates?${qs.toString()}`
+    );
+  },
+  createBudgetTemplate: (data: {
+    conferenceId: number;
+    categoryId: number;
+    fundId: number;
+    plannedAmount: number;
+    fiscalYear: number;
+  }) => api.post<{ id: number }>("/finance/budget-templates", data),
 
   getMonthlyReport: (churchId: number, year: number, month: number) =>
     api.get<{ report: MonthlyReport }>(

@@ -24,6 +24,8 @@ export default function MembersPage() {
   const [message, setMessage] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [rejectTransferId, setRejectTransferId] = useState<number | null>(null);
+  const [rejectionNote, setRejectionNote] = useState("");
 
   const conferenceId = user?.conference?.id;
 
@@ -210,7 +212,11 @@ export default function MembersPage() {
     try {
       if (action === "approve") await memberApi.approveTransfer(id);
       else if (action === "accept") await memberApi.acceptTransfer(id);
-      else await memberApi.rejectTransfer(id);
+      else {
+        await memberApi.rejectTransfer(id, rejectionNote || undefined);
+        setRejectTransferId(null);
+        setRejectionNote("");
+      }
       setMessage(`Transfer ${action}ed`);
       loadTransfers();
       loadMembers();
@@ -758,41 +764,127 @@ export default function MembersPage() {
                       </div>
                       <div className="text-xs text-gray-500">
                         Initiated: {new Date(t.initiated_at).toLocaleDateString()}
-                      </div>
-                      <div className="space-x-2">
-                        {t.status === "pending_conference" && (
-                          <>
-                            <button
-                              onClick={() => handleTransferAction(t.id, "approve")}
-                              className="rounded bg-green-100 px-2 py-0.5 text-xs text-green-700 hover:bg-green-200"
-                            >
-                              Approve
-                            </button>
-                            <button
-                              onClick={() => handleTransferAction(t.id, "reject")}
-                              className="rounded bg-red-100 px-2 py-0.5 text-xs text-red-700 hover:bg-red-200"
-                            >
-                              Reject
-                            </button>
-                          </>
-                        )}
-                        {t.status === "pending_destination" && (
-                          <>
-                            <button
-                              onClick={() => handleTransferAction(t.id, "accept")}
-                              className="rounded bg-green-100 px-2 py-0.5 text-xs text-green-700 hover:bg-green-200"
-                            >
-                              Accept
-                            </button>
-                            <button
-                              onClick={() => handleTransferAction(t.id, "reject")}
-                              className="rounded bg-red-100 px-2 py-0.5 text-xs text-red-700 hover:bg-red-200"
-                            >
-                              Reject
-                            </button>
-                          </>
+                        {t.rejection_note && (
+                          <span className="ml-2 text-red-500">Note: {t.rejection_note}</span>
                         )}
                       </div>
+                      {rejectTransferId === t.id && (
+                        <div className="mt-2">
+                          <input
+                            type="text"
+                            value={rejectionNote}
+                            onChange={(e) => setRejectionNote(e.target.value)}
+                            placeholder="Reason for rejection (optional)"
+                            className="mr-2 rounded-md border border-gray-300 px-2 py-1 text-sm"
+                          />
+                          <button
+                            onClick={() => handleTransferAction(t.id, "reject")}
+                            className="rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-600"
+                          >
+                            Confirm Reject
+                          </button>
+                          <button
+                            onClick={() => {
+                              setRejectTransferId(null);
+                              setRejectionNote("");
+                            }}
+                            className="ml-1 rounded border px-2 py-1 text-xs text-gray-600 hover:bg-gray-100"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      )}
+                      {rejectTransferId !== t.id && (
+                        <div className="space-x-2">
+                          {t.status === "pending_conference" && (
+                            <>
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    const detail = await memberApi.getMember(t.member_id);
+                                    setSelectedMember(detail as unknown as Member);
+                                  } catch {
+                                    /* ignore */
+                                  }
+                                }}
+                                className="rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-700 hover:bg-blue-200"
+                              >
+                                Review Member
+                              </button>
+                              <button
+                                onClick={() => handleTransferAction(t.id, "approve")}
+                                className="rounded bg-green-100 px-2 py-0.5 text-xs text-green-700 hover:bg-green-200"
+                              >
+                                Approve
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setRejectTransferId(t.id);
+                                  setRejectionNote("");
+                                }}
+                                className="rounded bg-red-100 px-2 py-0.5 text-xs text-red-700 hover:bg-red-200"
+                              >
+                                Reject
+                              </button>
+                            </>
+                          )}
+                          {t.status === "pending_destination" && (
+                            <>
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    const detail = await memberApi.getMember(t.member_id);
+                                    setSelectedMember(detail as unknown as Member);
+                                  } catch {
+                                    /* ignore */
+                                  }
+                                }}
+                                className="rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-700 hover:bg-blue-200"
+                              >
+                                Review Member
+                              </button>
+                              <button
+                                onClick={() => handleTransferAction(t.id, "accept")}
+                                className="rounded bg-green-100 px-2 py-0.5 text-xs text-green-700 hover:bg-green-200"
+                              >
+                                Accept
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setRejectTransferId(t.id);
+                                  setRejectionNote("");
+                                }}
+                                className="rounded bg-red-100 px-2 py-0.5 text-xs text-red-700 hover:bg-red-200"
+                              >
+                                Reject
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      )}
+                      {selectedMember && selectedMember.id === t.member_id && (
+                        <div className="mt-2 rounded border border-gray-200 bg-gray-50 p-3 text-xs">
+                          <p>
+                            <strong>{selectedMember.full_name}</strong>
+                          </p>
+                          {selectedMember.gender && <p>Gender: {selectedMember.gender}</p>}
+                          {selectedMember.dob && <p>DOB: {selectedMember.dob}</p>}
+                          {selectedMember.email && <p>Email: {selectedMember.email}</p>}
+                          {selectedMember.phone && <p>Phone: {selectedMember.phone}</p>}
+                          {selectedMember.baptism_date && (
+                            <p>
+                              Baptized: {selectedMember.baptism_date}
+                              {selectedMember.baptism_type && ` (${selectedMember.baptism_type})`}
+                            </p>
+                          )}
+                          <button
+                            onClick={() => setSelectedMember(null)}
+                            className="mt-1 text-gray-500 hover:text-gray-700"
+                          >
+                            Hide
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

@@ -49,6 +49,7 @@ import {
   handleCreateFund,
   handleGetExpenseCategories,
   handleCreateExpenseCategory,
+  handleUpdateExpenseCategory,
   handleGetBatches,
   handleGetBatch,
   handleCreateBatch,
@@ -58,8 +59,16 @@ import {
   handleCreateExpense,
   handleGetBudgets,
   handleCreateBudget,
+  handleApproveBudget,
+  handleGetBudgetTemplates,
+  handleCreateBudgetTemplate,
   handleGetMonthlyReport,
 } from "./routes/finance";
+import {
+  handleGetNotifications,
+  handleMarkNotificationRead,
+  handleMarkAllRead,
+} from "./routes/notifications";
 import { handleGetAuditLog, handleGetAuditByEntity } from "./routes/audit";
 import { handleGetQuarterlyReport } from "./routes/reports";
 import {
@@ -261,6 +270,10 @@ export default {
     if (path === "/api/expense-categories" && request.method === "POST") {
       return handleCreateExpenseCategory(request, env);
     }
+    const expenseCatMatch = path.match(/^\/api\/expense-categories\/(\d+)$/);
+    if (expenseCatMatch && request.method === "PATCH") {
+      return handleUpdateExpenseCategory(request, env, Number(expenseCatMatch[1]));
+    }
 
     // Finance — offering batches
     if (path === "/api/finance/batches" && request.method === "GET") {
@@ -296,6 +309,18 @@ export default {
     if (path === "/api/finance/budgets" && request.method === "POST") {
       return handleCreateBudget(request, env);
     }
+    const budgetApproveMatch = path.match(/^\/api\/finance\/budgets\/(\d+)\/approve$/);
+    if (budgetApproveMatch && request.method === "POST") {
+      return handleApproveBudget(request, env, Number(budgetApproveMatch[1]));
+    }
+
+    // Finance — budget templates
+    if (path === "/api/finance/budget-templates" && request.method === "GET") {
+      return handleGetBudgetTemplates(request, env);
+    }
+    if (path === "/api/finance/budget-templates" && request.method === "POST") {
+      return handleCreateBudgetTemplate(request, env);
+    }
 
     // Finance — reports
     if (path === "/api/finance/report/monthly" && request.method === "GET") {
@@ -317,6 +342,18 @@ export default {
     }
     if (path === "/api/church/balance" && (request.method === "GET" || request.method === "POST")) {
       return handleChurchBalance(request, env);
+    }
+
+    // Notification routes
+    if (path === "/api/notifications" && request.method === "GET") {
+      return handleGetNotifications(request, env);
+    }
+    if (path === "/api/notifications/read-all" && request.method === "POST") {
+      return handleMarkAllRead(request, env);
+    }
+    const notifMatch = path.match(/^\/api\/notifications\/(\d+)\/read$/);
+    if (notifMatch && request.method === "POST") {
+      return handleMarkNotificationRead(request, env, Number(notifMatch[1]));
     }
 
     // Audit routes

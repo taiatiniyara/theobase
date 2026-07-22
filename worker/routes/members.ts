@@ -1,6 +1,7 @@
 import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { logAudit, getDeviceInfo } from "../lib/audit";
+import { createNotification } from "./notifications";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -861,6 +862,36 @@ export async function handleInitiateTransfer(request: Request, env: Env): Promis
     device_info: getDeviceInfo(request),
   });
 
+  const fromChurch = await env.DB.prepare("SELECT name FROM churches WHERE id = ?")
+    .bind(member.church_id)
+    .first<{ name: string }>();
+  const toChurchName = await env.DB.prepare("SELECT name FROM churches WHERE id = ?")
+    .bind(body.toChurchId)
+    .first<{ name: string }>();
+
+  const memberName = await env.DB.prepare("SELECT full_name FROM members WHERE id = ?")
+    .bind(body.memberId)
+    .first<{ full_name: string }>();
+
+  const confUsers = await env.DB.prepare(
+    `SELECT u.id FROM users u
+     JOIN churches c ON c.parent_id = u.conference_id AND c.parent_type = 'conference'
+     WHERE c.id = ? AND u.role IN ('secretary', 'president')`
+  )
+    .bind(member.church_id)
+    .all<{ id: number }>();
+
+  for (const u of confUsers.results) {
+    await createNotification(
+      env,
+      u.id,
+      "transfer_initiated",
+      "transfer",
+      result.id,
+      `Transfer requested: ${memberName?.full_name ?? "Member"} from ${fromChurch?.name ?? "source"} to ${toChurchName?.name ?? "destination"}`
+    );
+  }
+
   return json({ id: result.id, memberId: body.memberId, status: "pending_conference" }, 201);
 }
 
@@ -903,6 +934,44 @@ export async function handleApproveTransfer(
     module: "members",
     device_info: getDeviceInfo(request),
   });
+
+  const tr = await env.DB.prepare(
+    `SELECT tr.member_id, tr.to_church_id, m.full_name, fc.name as from_church, tc.name as to_church
+     FROM transfer_requests tr
+     JOIN members m ON tr.member_id = m.id
+     JOIN churches fc ON tr.from_church_id = fc.id
+     JOIN churches tc ON tr.to_church_id = tc.id
+     WHERE tr.id = ?`
+  )
+    .bind(transferId)
+    .first<{
+      member_id: number;
+      to_church_id: number;
+      full_name: string;
+      from_church: string;
+      to_church: string;
+    }>();
+
+  if (tr) {
+    const destUsers = await env.DB.prepare(
+      `SELECT u.id FROM users u
+       JOIN members m ON u.member_id = m.id AND m.church_id = ?
+       WHERE u.role IN ('secretary', 'pastor')`
+    )
+      .bind(tr.to_church_id)
+      .all<{ id: number }>();
+
+    for (const u of destUsers.results) {
+      await createNotification(
+        env,
+        u.id,
+        "transfer_approved",
+        "transfer",
+        transferId,
+        `Incoming transfer: ${tr.full_name} from ${tr.from_church} to ${tr.to_church}`
+      );
+    }
+  }
 
   return json({ success: true, status: "pending_destination" });
 }
@@ -957,6 +1026,36 @@ export async function handleAcceptTransfer(
     device_info: getDeviceInfo(request),
   });
 
+  const tr = await env.DB.prepare(
+    `SELECT tr.member_id, tr.from_church_id, m.full_name
+     FROM transfer_requests tr
+     JOIN members m ON tr.member_id = m.id
+     WHERE tr.id = ?`
+  )
+    .bind(transferId)
+    .first<{ member_id: number; from_church_id: number; full_name: string }>();
+
+  if (tr) {
+    const srcUsers = await env.DB.prepare(
+      `SELECT u.id FROM users u
+       JOIN members m ON u.member_id = m.id AND m.church_id = ?
+       WHERE u.role IN ('secretary', 'pastor')`
+    )
+      .bind(tr.from_church_id)
+      .all<{ id: number }>();
+
+    for (const u of srcUsers.results) {
+      await createNotification(
+        env,
+        u.id,
+        "transfer_completed",
+        "transfer",
+        transferId,
+        `Transfer completed: ${tr.full_name} has been received`
+      );
+    }
+  }
+
   return json({ success: true, status: "completed" });
 }
 
@@ -971,11 +1070,23 @@ export async function handleRejectTransfer(
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
+  let body: { note?: string } = {};
+  try {
+    body = await request.json();
+  } catch {
+    // Body is optional for reject
+  }
+
   const transfer = await env.DB.prepare(
-    "SELECT id, member_id, status FROM transfer_requests WHERE id = ?"
+    "SELECT id, member_id, from_church_id, status FROM transfer_requests WHERE id = ?"
   )
     .bind(transferId)
-    .first<{ id: number; member_id: number; status: string }>();
+    .first<{
+      id: number;
+      member_id: number;
+      from_church_id: number;
+      status: string;
+    }>();
   if (!transfer) {
     return json({ error: "Transfer not found" }, 404);
   }
@@ -983,8 +1094,11 @@ export async function handleRejectTransfer(
     return json({ error: "Transfer cannot be rejected in its current state" }, 400);
   }
 
-  await env.DB.prepare("UPDATE transfer_requests SET status = 'rejected' WHERE id = ?")
-    .bind(transferId)
+  const note = body.note ?? null;
+  await env.DB.prepare(
+    "UPDATE transfer_requests SET status = 'rejected', rejection_note = ? WHERE id = ?"
+  )
+    .bind(note, transferId)
     .run();
 
   await env.DB.prepare(
@@ -1000,10 +1114,38 @@ export async function handleRejectTransfer(
     entity_type: "transfer",
     entity_id: transferId,
     prev_state: JSON.stringify({ status: transfer.status }),
-    new_state: JSON.stringify({ status: "rejected" }),
+    new_state: JSON.stringify({ status: "rejected", note }),
     module: "members",
     device_info: getDeviceInfo(request),
   });
+
+  const tr = await env.DB.prepare(
+    `SELECT m.full_name FROM transfer_requests tr
+     JOIN members m ON tr.member_id = m.id
+     WHERE tr.id = ?`
+  )
+    .bind(transferId)
+    .first<{ full_name: string }>();
+
+  // Notify the initiator's church clerk
+  const srcUsers = await env.DB.prepare(
+    `SELECT u.id FROM users u
+     JOIN members m ON u.member_id = m.id AND m.church_id = ?
+     WHERE u.role IN ('secretary', 'pastor')`
+  )
+    .bind(transfer.from_church_id)
+    .all<{ id: number }>();
+
+  for (const u of srcUsers.results) {
+    await createNotification(
+      env,
+      u.id,
+      "transfer_rejected",
+      "transfer",
+      transferId,
+      `Transfer rejected for ${tr?.full_name ?? "member"}${note ? `: ${note}` : ""}`
+    );
+  }
 
   return json({ success: true, status: "rejected" });
 }
