@@ -2,18 +2,18 @@
 
 ## Corpus Check
 
-- 64 files · ~105,872 words
+- 75 files · ~111,855 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 
-- 431 nodes · 983 edges · 43 communities (30 shown, 13 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 26 edges (avg confidence: 0.75)
+- 521 nodes · 1163 edges · 45 communities (32 shown, 13 thin omitted)
+- Extraction: 97% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 29 edges (avg confidence: 0.76)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
 
-- Built from commit: `9c3878f6`
+- Built from commit: `7469f188`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -56,17 +56,19 @@
 - [[_COMMUNITY_Community 34|Community 34]]
 - [[_COMMUNITY_Community 35|Community 35]]
 - [[_COMMUNITY_Community 36|Community 36]]
-- [[_COMMUNITY_Community 41|Community 41]]
-- [[_COMMUNITY_Community 42|Community 42]]
+- [[_COMMUNITY_Community 37|Community 37]]
+- [[_COMMUNITY_Community 38|Community 38]]
+- [[_COMMUNITY_Community 43|Community 43]]
+- [[_COMMUNITY_Community 44|Community 44]]
 
 ## God Nodes (most connected - your core abstractions)
 
-1. `authenticate()` - 69 edges
-2. `fetch()` - 67 edges
-3. `authorize()` - 62 edges
+1. `authenticate()` - 73 edges
+2. `fetch()` - 71 edges
+3. `authorize()` - 66 edges
 4. `logAudit()` - 37 edges
 5. `getDeviceInfo()` - 37 edges
-6. `useAuth()` - 21 edges
+6. `useAuth()` - 27 edges
 7. `json()` - 19 edges
 8. `json()` - 18 edges
 9. `json()` - 11 edges
@@ -76,14 +78,14 @@
 
 - `request()` --calls--> `fetch()` [INFERRED]
   src/lib/api.ts → worker/index.ts
+- `apiFetch()` --calls--> `fetch()` [INFERRED]
+  src/lib/sync-manager.ts → worker/index.ts
 - `Vite Build Configuration` --conceptually_related_to--> `Worker Fetch Handler` [INFERRED]
   vite.config.ts → worker/index.ts
 - `Vitest Test Configuration` --conceptually_related_to--> `Worker Fetch Handler` [INFERRED]
   vitest.config.ts → worker/index.ts
 - `Serif Affinity Designer` --exported--> `Theobase Icon (Shield Mark)` [INFERRED]
   branding/theobase.af → branding/icon.svg
-- `Theobase React Entry Point` --conceptually_related_to--> `Theobase Platform` [INFERRED]
-  index.html → CONTEXT.md
 
 ## Hyperedges (group relationships)
 
@@ -92,42 +94,42 @@
 - **Cloudflare Workers Durable Object Architecture** — worker_entry, ChurchSyncDO, ConferenceDO, worker_env_types [INFERRED 0.75]
 - **Dev Proxy and Test Pipeline** — vite_config, vitest_config, worker_entry, smoke_test [INFERRED 0.75]
 
-## Communities (43 total, 13 thin omitted)
+## Communities (45 total, 13 thin omitted)
 
 ### Community 0 - "Community 0"
 
-Cohesion: 0.13
-Nodes (74): AuditEntry, getDeviceInfo(), logAudit(), AuthContext, authenticate(), authorize(), extractToken(), json() (+66 more)
+Cohesion: 0.11
+Nodes (84): AuditEntry, getDeviceInfo(), logAudit(), AuthContext, authenticate(), authorize(), extractToken(), json() (+76 more)
 
 ### Community 1 - "Community 1"
+
+Cohesion: 0.06
+Nodes (44): clearTokens(), getRefreshToken(), getToken(), inferQueueType(), isOnline(), queueOffline(), request(), setTokens() (+36 more)
+
+### Community 2 - "Community 2"
+
+Cohesion: 0.07
+Nodes (27): AuthResponse, Batch, BatchDetail, Budget, BudgetTemplate, ChurchBalance, CreateMemberData, ExpenseCategory (+19 more)
+
+### Community 3 - "Community 3"
 
 Cohesion: 0.07
 Nodes (38): ADR-0001: Append-Only Immutable Finance, SDA Church Manual, Cloudflare D1, ADR-0002: Per-Conference D1 Tenancy, Dexie.js, IndexedDB Operation-Log, ADR-0003: Offline-First PWA Architecture, Versioned Optimistic Locking (+30 more)
 
-### Community 2 - "Community 2"
-
-Cohesion: 0.18
-Nodes (23): generateResetToken(), getKey(), hashPassword(), signAccessToken(), signRefreshToken(), verifyPassword(), verifyToken(), CsvParseResult (+15 more)
-
-### Community 3 - "Community 3"
-
-Cohesion: 0.1
-Nodes (17): auditApi, AuditLogEntry, AuditLogResponse, authApi, AuthResponse, BudgetTemplate, ChurchBalance, CreateMemberData (+9 more)
-
 ### Community 4 - "Community 4"
 
-Cohesion: 0.1
-Nodes (17): auditRoute, dashboardIndex, dashboardLayout, financeRoute, forgotPasswordRoute, indexRoute, loginRoute, membersRoute (+9 more)
+Cohesion: 0.14
+Nodes (28): generateResetToken(), getKey(), hashPassword(), signAccessToken(), signRefreshToken(), verifyPassword(), verifyToken(), CsvParseResult (+20 more)
 
 ### Community 5 - "Community 5"
 
-Cohesion: 0.15
-Nodes (13): api, userApi, useAuth(), DashboardPage(), ROLE_DEFAULTS, FinancePage(), LoginPage(), SettingsPage() (+5 more)
+Cohesion: 0.09
+Nodes (18): api, useAuth(), ChurchMetric, ConferenceDashboard(), ConferenceSummary, District, DashboardPage(), ROLE_DEFAULTS (+10 more)
 
 ### Community 6 - "Community 6"
 
-Cohesion: 0.12
-Nodes (10): Batch, BatchDetail, Budget, ExpenseCategory, Fund, MonthlyReport, Transaction, BatchesTab() (+2 more)
+Cohesion: 0.09
+Nodes (20): auditRoute, conferenceDashboardRoute, dashboardIndex, dashboardLayout, districtDashboardRoute, financeRoute, forgotPasswordRoute, globalDashboardRoute (+12 more)
 
 ### Community 7 - "Community 7"
 
@@ -136,28 +138,28 @@ Nodes (13): c1Body, c2Body, createMember(), detailBody, filterBody, hh, JH(), js
 
 ### Community 8 - "Community 8"
 
-Cohesion: 0.2
-Nodes (11): CHURCH_ROLES, CONFERENCE_ROLES, PERMISSIONS, Role, ROLE_LABELS, ROLES, handleGetAuditByEntity(), handleGetAuditLog() (+3 more)
+Cohesion: 0.14
+Nodes (10): authApi, userApi, AuthContext, AuthContextType, AuthProvider(), User, UserRecord, UsersPage() (+2 more)
 
 ### Community 9 - "Community 9"
-
-Cohesion: 0.19
-Nodes (11): clearTokens(), getRefreshToken(), getToken(), request(), setTokens(), AuthContext, AuthContextType, AuthProvider() (+3 more)
-
-### Community 10 - "Community 10"
 
 Cohesion: 0.23
 Nodes (12): Church Sync Durable Object, Conference Durable Object, Home Page Component, React Application Entry Point, Initial Database Schema Migration, TanStack Router Configuration, Worker Smoke Tests, Test Environment Type Declarations (+4 more)
 
-### Community 11 - "Community 11"
+### Community 10 - "Community 10"
 
 Cohesion: 0.22
 Nodes (8): Notification, notificationApi, getVisibleGroups(), Module, MODULE_GROUPS, ModuleGroup, DashboardLayout(), ICONS
 
-### Community 12 - "Community 12"
+### Community 11 - "Community 11"
 
 Cohesion: 0.22
 Nodes (8): b, b2, churchA, churchB, eps, hh, mb, sb
+
+### Community 13 - "Community 13"
+
+Cohesion: 0.25
+Nodes (7): b, hh, mb, md, now, pb, sb
 
 ### Community 14 - "Community 14"
 
@@ -167,7 +169,7 @@ Nodes (7): Before exploring, read these, code:block1 (/), code:block2 (/), Domai
 ### Community 15 - "Community 15"
 
 Cohesion: 0.29
-Nodes (6): Household, Member, memberApi, Position, Transfer, MembersPage()
+Nodes (5): auditApi, AuditLogEntry, AuditLogResponse, ACTIONS, ENTITY_TYPES
 
 ### Community 16 - "Community 16"
 
@@ -191,13 +193,13 @@ Nodes (7): Agent Skills Configuration, Domain Documentation Layout, GitHub Issue
 
 ### Community 20 - "Community 20"
 
-Cohesion: 0.33
-Nodes (7): Brand Orange (rgb 249,115,22), Branding Directory, Logo Light SVG, 512x512 Bounding Rect (fill:none), T Icon Glyph, Theobase Brand, Wordmark Text Paths
+Cohesion: 0.29
+Nodes (7): Theobase Brand Palette: Orange #F97316 + Gray #6B7280, Affinity Designer Source File, Theobase Brand Color Palette: Orange #F97316 + Gray #6B7280, Theobase Brand Cover Image (1640x720 OpenGraph/Social Share), Flame/Torch Icon â€” primary brand mark of Theobase, Theobase Profile Picture (flame/torch icon in orange #F97316), Theobase SDA Church Administration Platform
 
 ### Community 21 - "Community 21"
 
-Cohesion: 0.29
-Nodes (7): Theobase Brand Palette: Orange #F97316 + Gray #6B7280, Affinity Designer Source File, Theobase Brand Color Palette: Orange #F97316 + Gray #6B7280, Theobase Brand Cover Image (1640x720 OpenGraph/Social Share), Flame/Torch Icon â€” primary brand mark of Theobase, Theobase Profile Picture (flame/torch icon in orange #F97316), Theobase SDA Church Administration Platform
+Cohesion: 0.33
+Nodes (7): Brand Orange (rgb 249,115,22), Branding Directory, Logo Light SVG, 512x512 Bounding Rect (fill:none), T Icon Glyph, Theobase Brand, Wordmark Text Paths
 
 ### Community 22 - "Community 22"
 
@@ -221,6 +223,16 @@ Nodes (5): Finance, Membership, Organization, Reporting, Theobase
 
 ### Community 27 - "Community 27"
 
+Cohesion: 0.6
+Nodes (4): useOfflineInit(), useSyncState(), SyncIndicator(), SyncState
+
+### Community 28 - "Community 28"
+
+Cohesion: 0.5
+Nodes (3): ASSETS_TO_CACHE, fetchPromise, url
+
+### Community 29 - "Community 29"
+
 Cohesion: 1.0
 Nodes (4): Serif Affinity Designer, Theobase Icon (Shield Mark), Theobase Logo Light (Icon + Wordmark), Theobase Project
 
@@ -231,7 +243,7 @@ Nodes (4): Serif Affinity Designer, Theobase Icon (Shield Mark), Theobase Logo L
 
 ## Knowledge Gaps
 
-- **144 isolated node(s):** `queryClient`, `rootRoute`, `indexRoute`, `loginRoute`, `signupRoute` (+139 more)
+- **178 isolated node(s):** `ASSETS_TO_CACHE`, `url`, `fetchPromise`, `queryClient`, `rootRoute` (+173 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -241,15 +253,15 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **What is the exact relationship between `TanStack Router Configuration` and `Home Page Component`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `fetch()` connect `Community 0` to `Community 8`, `Community 9`, `Community 2`?**
-  _High betweenness centrality (0.189) - this node is a cross-community bridge._
-- **Why does `request()` connect `Community 9` to `Community 0`, `Community 3`?**
-  _High betweenness centrality (0.179) - this node is a cross-community bridge._
-- **Why does `ChurchSyncDO` connect `Community 13` to `Community 0`?**
-  _High betweenness centrality (0.017) - this node is a cross-community bridge._
-- **What connects `queryClient`, `rootRoute`, `indexRoute` to the rest of the system?**
-  _144 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `fetch()` connect `Community 0` to `Community 1`, `Community 4`?**
+  _High betweenness centrality (0.212) - this node is a cross-community bridge._
+- **Why does `request()` connect `Community 1` to `Community 0`, `Community 2`?**
+  _High betweenness centrality (0.154) - this node is a cross-community bridge._
+- **Why does `apiFetch()` connect `Community 1` to `Community 0`?**
+  _High betweenness centrality (0.050) - this node is a cross-community bridge._
+- **Are the 2 inferred relationships involving `fetch()` (e.g. with `request()` and `apiFetch()`) actually correct?**
+  _`fetch()` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **What connects `ASSETS_TO_CACHE`, `url`, `fetchPromise` to the rest of the system?**
+  _178 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.13 - nodes in this community are weakly interconnected._
-- **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.07 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11 - nodes in this community are weakly interconnected._

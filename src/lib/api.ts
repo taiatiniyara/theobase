@@ -4,6 +4,8 @@ function getToken(): string | null {
   return localStorage.getItem("accessToken");
 }
 
+export { getToken };
+
 export function setTokens(accessToken: string, refreshToken: string): void {
   localStorage.setItem("accessToken", accessToken);
   localStorage.setItem("refreshToken", refreshToken);
@@ -18,6 +20,38 @@ export function getRefreshToken(): string | null {
   return localStorage.getItem("refreshToken");
 }
 
+function isOnline(): boolean {
+  return typeof navigator !== "undefined" ? navigator.onLine : true;
+}
+
+function inferQueueType(path: string, method: string): string {
+  if (path.startsWith("/finance/batches") && method === "POST") return "finance:createBatch";
+  if (path.startsWith("/finance/transactions") && method === "POST")
+    return "finance:createTransaction";
+  if (path.startsWith("/finance/expenses") && method === "POST") return "finance:createExpense";
+  if (path.startsWith("/members") && method === "POST") return "member:create";
+  if (path.startsWith("/members") && method === "PATCH") return "member:update";
+  return "generic";
+}
+
+async function queueOffline(
+  path: string,
+  options: RequestInit
+): Promise<{ queued: boolean; clientUuid: string; id?: number }> {
+  const { queueOperation } = await import("./offline-db");
+  const { triggerSync } = await import("./sync-manager");
+  let payload: unknown = null;
+  try {
+    payload = options.body ? JSON.parse(options.body as string) : null;
+  } catch {
+    payload = options.body;
+  }
+  const type = inferQueueType(path, options.method ?? "POST");
+  const op = await queueOperation(type, path, options.method ?? "POST", payload);
+  triggerSync();
+  return { queued: true, clientUuid: op.clientUuid };
+}
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {
@@ -26,6 +60,11 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   };
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const method = (options.method || "GET").toUpperCase();
+  if (!isOnline() && method !== "GET") {
+    return queueOffline(path, options) as unknown as T;
   }
 
   const res = await fetch(`${API_BASE}${path}`, {

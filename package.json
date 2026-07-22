@@ -17,12 +17,13 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "jose": "^6.0.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
     "@tanstack/react-query": "^5.75.0",
     "@tanstack/react-router": "^1.116.0",
-    "@tanstack/react-table": "^8.21.0"
+    "@tanstack/react-table": "^8.21.0",
+    "dexie": "^4.4.4",
+    "jose": "^6.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.8.0",

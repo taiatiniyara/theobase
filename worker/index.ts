@@ -77,6 +77,11 @@ import {
   handleChurchBalance,
   handleTitheReport,
 } from "./routes/reconciliation";
+import {
+  handleConferenceDashboard,
+  handleDistrictDashboard,
+  handleGlobalDashboard,
+} from "./routes/conference";
 
 export { ChurchSyncDO, ConferenceDO };
 
@@ -368,6 +373,17 @@ export default {
         auditEntityMatch[1]!,
         Number(auditEntityMatch[2])
       );
+    }
+
+    // Conference dashboard routes
+    if (path === "/api/conference/dashboard" && request.method === "GET") {
+      return handleConferenceDashboard(request, env);
+    }
+    if (path === "/api/conference/district-dashboard" && request.method === "GET") {
+      return handleDistrictDashboard(request, env);
+    }
+    if (path === "/api/conference/global-dashboard" && request.method === "GET") {
+      return handleGlobalDashboard(request, env);
     }
 
     // DO routes (existing)

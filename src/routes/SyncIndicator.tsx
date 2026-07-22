@@ -1,77 +1,66 @@
-import { useEffect, useState } from "react";
 import { useAuth } from "../lib/auth";
-import { api } from "../lib/api";
-
-interface SyncState {
-  lastSync: string | null;
-  pendingOps: number;
-}
+import { useSyncState, useOfflineInit } from "../lib/useSync";
+import { triggerSync, getOnlineStatus } from "../lib/sync-manager";
 
 export default function SyncIndicator() {
   const { user } = useAuth();
-  const [state, setState] = useState<SyncState | null>(null);
-  const [error, setError] = useState(false);
+  const syncState = useSyncState();
+  useOfflineInit();
 
   const churchId = user?.church?.id;
 
-  useEffect(() => {
-    if (!churchId) return;
+  if (!churchId) return null;
 
-    let cancelled = false;
+  const isOnline = getOnlineStatus();
 
-    async function poll() {
-      try {
-        const data = await api.get<SyncState>(`/sync/state?church_id=${churchId}`);
-        if (!cancelled) {
-          setState(data);
-          setError(false);
-        }
-      } catch {
-        if (!cancelled) setError(true);
-      }
+  let dotColor = "bg-green-500";
+  let label = "Online";
+  let progressBar = null;
+
+  if (syncState.status === "syncing") {
+    dotColor = "bg-yellow-500 animate-pulse";
+    label = syncState.label || "Syncing...";
+    if (syncState.total > 1) {
+      label = `${syncState.label} ${syncState.current} of ${syncState.total}`;
     }
-
-    poll();
-    const interval = setInterval(poll, 30000);
-
-    return () => {
-      cancelled = true;
-      clearInterval(interval);
-    };
-  }, [churchId]);
-
-  if (!churchId || !state) return null;
-
-  const isSynced = state.pendingOps === 0 && state.lastSync !== null;
-  const label = isSynced
-    ? "Synced"
-    : state.pendingOps > 0
-      ? `${state.pendingOps} pending`
-      : error
-        ? "Offline"
-        : "Connecting...";
+    progressBar = (
+      <div
+        className="absolute -bottom-1 left-0 h-0.5 bg-yellow-500 transition-all"
+        style={{ width: `${(syncState.current / syncState.total) * 100}%` }}
+      />
+    );
+  } else if (!isOnline) {
+    dotColor = "bg-yellow-500";
+    label = "Offline";
+  } else if (syncState.status === "error") {
+    dotColor = "bg-red-500";
+    label = "Sync error";
+  } else if (syncState.status === "conflict") {
+    dotColor = "bg-red-500";
+    label = "Conflict";
+  } else if (syncState.lastSync) {
+    dotColor = "bg-green-500";
+    const time = new Date(syncState.lastSync);
+    label = `Synced ${time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+  }
 
   return (
     <div
-      className="flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium"
-      title={
-        state.lastSync
-          ? `Last synced: ${new Date(state.lastSync).toLocaleString()}`
-          : "Never synced"
-      }
+      className="relative flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium"
+      title={label}
     >
-      <span
-        className={`h-2 w-2 rounded-full ${
-          error
-            ? "bg-red-500"
-            : isSynced
-              ? "bg-green-500"
-              : state.pendingOps > 0
-                ? "bg-yellow-500 animate-pulse"
-                : "bg-gray-400"
-        }`}
-      />
+      <span className={`h-2 w-2 rounded-full ${dotColor}`} />
       <span className="text-gray-600">{label}</span>
+      {syncState.status === "error" && (
+        <button
+          onClick={() => triggerSync()}
+          className="ml-1 text-brand hover:text-orange-600 font-bold"
+          title="Retry sync"
+        >
+          Retry
+        </button>
+      )}
+      {progressBar}
     </div>
   );
 }

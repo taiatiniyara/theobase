@@ -50,7 +50,7 @@
       "source_file": "eslint.config.js",
       "source_location": "L1",
       "id": "eslint_config_js",
-      "community": 37,
+      "community": 39,
       "norm_label": "eslint.config.js"
     },
     {
@@ -59,7 +59,7 @@
       "source_file": "vite.config.ts",
       "source_location": "L1",
       "id": "vite_config_ts",
-      "community": 38,
+      "community": 40,
       "norm_label": "vite.config.ts"
     },
     {
@@ -68,8 +68,44 @@
       "source_file": "vitest.config.ts",
       "source_location": "L1",
       "id": "vitest_config_ts",
-      "community": 39,
+      "community": 41,
       "norm_label": "vitest.config.ts"
+    },
+    {
+      "label": "sw.js",
+      "file_type": "code",
+      "source_file": "public/sw.js",
+      "source_location": "L1",
+      "id": "public_sw_js",
+      "community": 28,
+      "norm_label": "sw.js"
+    },
+    {
+      "label": "ASSETS_TO_CACHE",
+      "file_type": "code",
+      "source_file": "public/sw.js",
+      "source_location": "L2",
+      "id": "public_sw_assets_to_cache",
+      "community": 28,
+      "norm_label": "assets_to_cache"
+    },
+    {
+      "label": "url",
+      "file_type": "code",
+      "source_file": "public/sw.js",
+      "source_location": "L25",
+      "id": "public_sw_url",
+      "community": 28,
+      "norm_label": "url"
+    },
+    {
+      "label": "fetchPromise",
+      "file_type": "code",
+      "source_file": "public/sw.js",
+      "source_location": "L31",
+      "id": "public_sw_fetchpromise",
+      "community": 28,
+      "norm_label": "fetchpromise"
     },
     {
       "label": "main.tsx",
@@ -77,7 +113,7 @@
       "source_file": "src/main.tsx",
       "source_location": "L1",
       "id": "src_main_tsx",
-      "community": 9,
+      "community": 8,
       "norm_label": "main.tsx"
     },
     {
@@ -86,7 +122,7 @@
       "source_file": "src/main.tsx",
       "source_location": "L9",
       "id": "src_main_queryclient",
-      "community": 9,
+      "community": 8,
       "norm_label": "queryclient"
     },
     {
@@ -95,169 +131,196 @@
       "source_file": "src/routes.tsx",
       "source_location": "L1",
       "id": "src_routes_tsx",
-      "community": 4,
+      "community": 6,
       "norm_label": "routes.tsx"
     },
     {
       "label": "rootRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L23",
+      "source_location": "L26",
       "id": "src_routes_rootroute",
-      "community": 4,
+      "community": 6,
       "norm_label": "rootroute"
     },
     {
       "label": "indexRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L31",
+      "source_location": "L34",
       "id": "src_routes_indexroute",
-      "community": 4,
+      "community": 6,
       "norm_label": "indexroute"
     },
     {
       "label": "loginRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L37",
+      "source_location": "L40",
       "id": "src_routes_loginroute",
-      "community": 4,
+      "community": 6,
       "norm_label": "loginroute"
     },
     {
       "label": "signupRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L43",
+      "source_location": "L46",
       "id": "src_routes_signuproute",
-      "community": 4,
+      "community": 6,
       "norm_label": "signuproute"
     },
     {
       "label": "forgotPasswordRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L49",
+      "source_location": "L52",
       "id": "src_routes_forgotpasswordroute",
-      "community": 4,
+      "community": 6,
       "norm_label": "forgotpasswordroute"
     },
     {
       "label": "dashboardLayout",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L55",
+      "source_location": "L58",
       "id": "src_routes_dashboardlayout",
-      "community": 4,
+      "community": 6,
       "norm_label": "dashboardlayout"
     },
     {
       "label": "dashboardIndex",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L66",
+      "source_location": "L69",
       "id": "src_routes_dashboardindex",
-      "community": 4,
+      "community": 6,
       "norm_label": "dashboardindex"
     },
     {
       "label": "organizationRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L72",
+      "source_location": "L75",
       "id": "src_routes_organizationroute",
-      "community": 4,
+      "community": 6,
       "norm_label": "organizationroute"
     },
     {
       "label": "usersRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L78",
+      "source_location": "L81",
       "id": "src_routes_usersroute",
-      "community": 4,
+      "community": 6,
       "norm_label": "usersroute"
     },
     {
       "label": "financeRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L84",
+      "source_location": "L87",
       "id": "src_routes_financeroute",
-      "community": 4,
+      "community": 6,
       "norm_label": "financeroute"
     },
     {
       "label": "membersRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L90",
+      "source_location": "L93",
       "id": "src_routes_membersroute",
-      "community": 4,
+      "community": 6,
       "norm_label": "membersroute"
     },
     {
       "label": "reportsRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L96",
+      "source_location": "L99",
       "id": "src_routes_reportsroute",
-      "community": 4,
+      "community": 6,
       "norm_label": "reportsroute"
     },
     {
       "label": "settingsRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L102",
+      "source_location": "L105",
       "id": "src_routes_settingsroute",
-      "community": 4,
+      "community": 6,
       "norm_label": "settingsroute"
     },
     {
       "label": "auditRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L108",
+      "source_location": "L111",
       "id": "src_routes_auditroute",
-      "community": 4,
+      "community": 6,
       "norm_label": "auditroute"
     },
     {
       "label": "reconciliationRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L114",
+      "source_location": "L117",
       "id": "src_routes_reconciliationroute",
-      "community": 4,
+      "community": 6,
       "norm_label": "reconciliationroute"
+    },
+    {
+      "label": "conferenceDashboardRoute",
+      "file_type": "code",
+      "source_file": "src/routes.tsx",
+      "source_location": "L123",
+      "id": "src_routes_conferencedashboardroute",
+      "community": 6,
+      "norm_label": "conferencedashboardroute"
+    },
+    {
+      "label": "districtDashboardRoute",
+      "file_type": "code",
+      "source_file": "src/routes.tsx",
+      "source_location": "L129",
+      "id": "src_routes_districtdashboardroute",
+      "community": 6,
+      "norm_label": "districtdashboardroute"
+    },
+    {
+      "label": "globalDashboardRoute",
+      "file_type": "code",
+      "source_file": "src/routes.tsx",
+      "source_location": "L135",
+      "id": "src_routes_globaldashboardroute",
+      "community": 6,
+      "norm_label": "globaldashboardroute"
     },
     {
       "label": "routeTree",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L120",
+      "source_location": "L141",
       "id": "src_routes_routetree",
-      "community": 4,
+      "community": 6,
       "norm_label": "routetree"
     },
     {
       "label": "router",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L138",
+      "source_location": "L162",
       "id": "src_routes_router",
-      "community": 9,
+      "community": 8,
       "norm_label": "router"
     },
     {
       "label": "Register",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L141",
+      "source_location": "L165",
       "id": "src_routes_register",
-      "community": 4,
+      "community": 6,
       "norm_label": "register"
     },
     {
@@ -266,7 +329,7 @@
       "source_file": "src/vite-env.d.ts",
       "source_location": "L1",
       "id": "src_vite_env_d_ts",
-      "community": 40,
+      "community": 42,
       "norm_label": "vite-env.d.ts"
     },
     {
@@ -275,7 +338,7 @@
       "source_file": "src/lib/api.ts",
       "source_location": "L1",
       "id": "src_lib_api_ts",
-      "community": 3,
+      "community": 2,
       "norm_label": "api.ts"
     },
     {
@@ -284,50 +347,77 @@
       "source_file": "src/lib/api.ts",
       "source_location": "L3",
       "id": "lib_api_gettoken",
-      "community": 9,
+      "community": 1,
       "norm_label": "gettoken()"
     },
     {
       "label": "setTokens()",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L7",
+      "source_location": "L9",
       "id": "lib_api_settokens",
-      "community": 9,
+      "community": 1,
       "norm_label": "settokens()"
     },
     {
       "label": "clearTokens()",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L12",
+      "source_location": "L14",
       "id": "lib_api_cleartokens",
-      "community": 9,
+      "community": 1,
       "norm_label": "cleartokens()"
     },
     {
       "label": "getRefreshToken()",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L17",
+      "source_location": "L19",
       "id": "lib_api_getrefreshtoken",
-      "community": 9,
+      "community": 1,
       "norm_label": "getrefreshtoken()"
+    },
+    {
+      "label": "isOnline()",
+      "file_type": "code",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L23",
+      "id": "lib_api_isonline",
+      "community": 1,
+      "norm_label": "isonline()"
+    },
+    {
+      "label": "inferQueueType()",
+      "file_type": "code",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L27",
+      "id": "lib_api_inferqueuetype",
+      "community": 1,
+      "norm_label": "inferqueuetype()"
+    },
+    {
+      "label": "queueOffline()",
+      "file_type": "code",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L36",
+      "id": "lib_api_queueoffline",
+      "community": 1,
+      "norm_label": "queueoffline()"
     },
     {
       "label": "request()",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L21",
+      "source_location": "L51",
       "id": "lib_api_request",
-      "community": 9,
+      "community": 1,
       "norm_label": "request()"
     },
     {
       "label": "api",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L70",
+      "source_location": "L105",
       "id": "lib_api_api",
       "community": 5,
       "norm_label": "api"
@@ -336,25 +426,25 @@
       "label": "AuthResponse",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L79",
+      "source_location": "L114",
       "id": "lib_api_authresponse",
-      "community": 3,
+      "community": 2,
       "norm_label": "authresponse"
     },
     {
       "label": "authApi",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L89",
+      "source_location": "L124",
       "id": "lib_api_authapi",
-      "community": 3,
+      "community": 8,
       "norm_label": "authapi"
     },
     {
       "label": "orgApi",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L107",
+      "source_location": "L142",
       "id": "lib_api_orgapi",
       "community": 22,
       "norm_label": "orgapi"
@@ -363,252 +453,252 @@
       "label": "userApi",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L144",
+      "source_location": "L179",
       "id": "lib_api_userapi",
-      "community": 5,
+      "community": 8,
       "norm_label": "userapi"
     },
     {
       "label": "memberApi",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L155",
+      "source_location": "L190",
       "id": "lib_api_memberapi",
-      "community": 15,
+      "community": 2,
       "norm_label": "memberapi"
     },
     {
       "label": "Member",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L205",
+      "source_location": "L239",
       "id": "lib_api_member",
-      "community": 15,
+      "community": 2,
       "norm_label": "member"
     },
     {
       "label": "MemberDetail",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L224",
+      "source_location": "L258",
       "id": "lib_api_memberdetail",
-      "community": 3,
+      "community": 2,
       "norm_label": "memberdetail"
     },
     {
       "label": "Household",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L240",
+      "source_location": "L274",
       "id": "lib_api_household",
-      "community": 15,
+      "community": 2,
       "norm_label": "household"
     },
     {
       "label": "Position",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L251",
+      "source_location": "L285",
       "id": "lib_api_position",
-      "community": 15,
+      "community": 2,
       "norm_label": "position"
     },
     {
       "label": "Transfer",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L257",
+      "source_location": "L291",
       "id": "lib_api_transfer",
-      "community": 15,
+      "community": 2,
       "norm_label": "transfer"
     },
     {
       "label": "CreateMemberData",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L275",
+      "source_location": "L309",
       "id": "lib_api_creatememberdata",
-      "community": 3,
+      "community": 2,
       "norm_label": "creatememberdata"
     },
     {
       "label": "UpdateMemberData",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L292",
+      "source_location": "L326",
       "id": "lib_api_updatememberdata",
-      "community": 3,
+      "community": 2,
       "norm_label": "updatememberdata"
     },
     {
       "label": "Fund",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L296",
+      "source_location": "L330",
       "id": "lib_api_fund",
-      "community": 6,
+      "community": 2,
       "norm_label": "fund"
     },
     {
       "label": "ExpenseCategory",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L305",
+      "source_location": "L339",
       "id": "lib_api_expensecategory",
-      "community": 6,
+      "community": 2,
       "norm_label": "expensecategory"
     },
     {
       "label": "Batch",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L313",
+      "source_location": "L347",
       "id": "lib_api_batch",
-      "community": 6,
+      "community": 2,
       "norm_label": "batch"
     },
     {
       "label": "BatchDetail",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L333",
+      "source_location": "L367",
       "id": "lib_api_batchdetail",
-      "community": 6,
+      "community": 2,
       "norm_label": "batchdetail"
     },
     {
       "label": "Transaction",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L337",
+      "source_location": "L371",
       "id": "lib_api_transaction",
-      "community": 6,
+      "community": 2,
       "norm_label": "transaction"
     },
     {
       "label": "Budget",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L363",
+      "source_location": "L397",
       "id": "lib_api_budget",
-      "community": 6,
+      "community": 2,
       "norm_label": "budget"
     },
     {
       "label": "MonthlyReport",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L381",
+      "source_location": "L415",
       "id": "lib_api_monthlyreport",
-      "community": 6,
+      "community": 2,
       "norm_label": "monthlyreport"
     },
     {
       "label": "QuarterlyReport",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L405",
+      "source_location": "L439",
       "id": "lib_api_quarterlyreport",
-      "community": 3,
+      "community": 2,
       "norm_label": "quarterlyreport"
     },
     {
       "label": "Notification",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L428",
+      "source_location": "L462",
       "id": "lib_api_notification",
-      "community": 11,
+      "community": 10,
       "norm_label": "notification"
     },
     {
       "label": "notificationApi",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L440",
+      "source_location": "L474",
       "id": "lib_api_notificationapi",
-      "community": 11,
+      "community": 10,
       "norm_label": "notificationapi"
     },
     {
       "label": "BudgetTemplate",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L449",
+      "source_location": "L483",
       "id": "lib_api_budgettemplate",
-      "community": 3,
+      "community": 2,
       "norm_label": "budgettemplate"
     },
     {
       "label": "financeApi",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L461",
+      "source_location": "L495",
       "id": "lib_api_financeapi",
-      "community": 3,
+      "community": 2,
       "norm_label": "financeapi"
     },
     {
       "label": "AuditLogEntry",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L579",
+      "source_location": "L615",
       "id": "lib_api_auditlogentry",
-      "community": 3,
+      "community": 15,
       "norm_label": "auditlogentry"
     },
     {
       "label": "AuditLogResponse",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L593",
+      "source_location": "L629",
       "id": "lib_api_auditlogresponse",
-      "community": 3,
+      "community": 15,
       "norm_label": "auditlogresponse"
     },
     {
       "label": "auditApi",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L601",
+      "source_location": "L637",
       "id": "lib_api_auditapi",
-      "community": 3,
+      "community": 15,
       "norm_label": "auditapi"
     },
     {
       "label": "TitheEntry",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L639",
+      "source_location": "L675",
       "id": "lib_api_titheentry",
-      "community": 3,
+      "community": 2,
       "norm_label": "titheentry"
     },
     {
       "label": "TitheReportEntry",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L648",
+      "source_location": "L684",
       "id": "lib_api_tithereportentry",
-      "community": 3,
+      "community": 2,
       "norm_label": "tithereportentry"
     },
     {
       "label": "ChurchBalance",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L657",
+      "source_location": "L693",
       "id": "lib_api_churchbalance",
-      "community": 3,
+      "community": 2,
       "norm_label": "churchbalance"
     },
     {
       "label": "reconciliationApi",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L671",
+      "source_location": "L707",
       "id": "lib_api_reconciliationapi",
-      "community": 3,
+      "community": 2,
       "norm_label": "reconciliationapi"
     },
     {
@@ -617,7 +707,7 @@
       "source_file": "src/lib/auth.tsx",
       "source_location": "L1",
       "id": "src_lib_auth_tsx",
-      "community": 9,
+      "community": 8,
       "norm_label": "auth.tsx"
     },
     {
@@ -626,7 +716,7 @@
       "source_file": "src/lib/auth.tsx",
       "source_location": "L4",
       "id": "lib_auth_user",
-      "community": 9,
+      "community": 8,
       "norm_label": "user"
     },
     {
@@ -635,7 +725,7 @@
       "source_file": "src/lib/auth.tsx",
       "source_location": "L12",
       "id": "lib_auth_authcontexttype",
-      "community": 9,
+      "community": 8,
       "norm_label": "authcontexttype"
     },
     {
@@ -644,7 +734,7 @@
       "source_file": "src/lib/auth.tsx",
       "source_location": "L25",
       "id": "lib_auth_authcontext",
-      "community": 9,
+      "community": 8,
       "norm_label": "authcontext"
     },
     {
@@ -653,7 +743,7 @@
       "source_file": "src/lib/auth.tsx",
       "source_location": "L27",
       "id": "lib_auth_authprovider",
-      "community": 9,
+      "community": 8,
       "norm_label": "authprovider()"
     },
     {
@@ -671,7 +761,7 @@
       "source_file": "src/lib/modules.ts",
       "source_location": "L1",
       "id": "src_lib_modules_ts",
-      "community": 11,
+      "community": 10,
       "norm_label": "modules.ts"
     },
     {
@@ -680,7 +770,7 @@
       "source_file": "src/lib/modules.ts",
       "source_location": "L1",
       "id": "lib_modules_module",
-      "community": 11,
+      "community": 10,
       "norm_label": "module"
     },
     {
@@ -689,7 +779,7 @@
       "source_file": "src/lib/modules.ts",
       "source_location": "L10",
       "id": "lib_modules_modulegroup",
-      "community": 11,
+      "community": 10,
       "norm_label": "modulegroup"
     },
     {
@@ -698,26 +788,449 @@
       "source_file": "src/lib/modules.ts",
       "source_location": "L18",
       "id": "lib_modules_module_groups",
-      "community": 11,
+      "community": 10,
       "norm_label": "module_groups"
     },
     {
       "label": "isModuleVisible()",
       "file_type": "code",
       "source_file": "src/lib/modules.ts",
-      "source_location": "L139",
+      "source_location": "L163",
       "id": "lib_modules_ismodulevisible",
-      "community": 11,
+      "community": 10,
       "norm_label": "ismodulevisible()"
     },
     {
       "label": "getVisibleGroups()",
       "file_type": "code",
       "source_file": "src/lib/modules.ts",
-      "source_location": "L143",
+      "source_location": "L167",
       "id": "lib_modules_getvisiblegroups",
-      "community": 11,
+      "community": 10,
       "norm_label": "getvisiblegroups()"
+    },
+    {
+      "label": "offline-api.ts",
+      "file_type": "code",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L1",
+      "id": "src_lib_offline_api_ts",
+      "community": 1,
+      "norm_label": "offline-api.ts"
+    },
+    {
+      "label": "stripApiBase()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L6",
+      "id": "lib_offline_api_stripapibase",
+      "community": 1,
+      "norm_label": "stripapibase()"
+    },
+    {
+      "label": "offlineSafeRequest()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L10",
+      "id": "lib_offline_api_offlinesaferequest",
+      "community": 1,
+      "norm_label": "offlinesaferequest()"
+    },
+    {
+      "label": "inferOperationType()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L41",
+      "id": "lib_offline_api_inferoperationtype",
+      "community": 1,
+      "norm_label": "inferoperationtype()"
+    },
+    {
+      "label": "pullFreshData()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L50",
+      "id": "lib_offline_api_pullfreshdata",
+      "community": 1,
+      "norm_label": "pullfreshdata()"
+    },
+    {
+      "label": "offline-db.ts",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L1",
+      "id": "src_lib_offline_db_ts",
+      "community": 1,
+      "norm_label": "offline-db.ts"
+    },
+    {
+      "label": "QueuedOperation",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L3",
+      "id": "lib_offline_db_queuedoperation",
+      "community": 1,
+      "norm_label": "queuedoperation"
+    },
+    {
+      "label": "CachedMember",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L15",
+      "id": "lib_offline_db_cachedmember",
+      "community": 1,
+      "norm_label": "cachedmember"
+    },
+    {
+      "label": "CachedResponse",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L23",
+      "id": "lib_offline_db_cachedresponse",
+      "community": 1,
+      "norm_label": "cachedresponse"
+    },
+    {
+      "label": "db",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L29",
+      "id": "lib_offline_db_db",
+      "community": 1,
+      "norm_label": "db"
+    },
+    {
+      "label": "OfflineDB",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L42",
+      "id": "lib_offline_db_offlinedb",
+      "community": 1,
+      "norm_label": "offlinedb"
+    },
+    {
+      "label": "generateClientUuid()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L44",
+      "id": "lib_offline_db_generateclientuuid",
+      "community": 1,
+      "norm_label": "generateclientuuid()"
+    },
+    {
+      "label": "PRIORITY_MAP",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L52",
+      "id": "lib_offline_db_priority_map",
+      "community": 1,
+      "norm_label": "priority_map"
+    },
+    {
+      "label": "getOperationPriority()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L59",
+      "id": "lib_offline_db_getoperationpriority",
+      "community": 1,
+      "norm_label": "getoperationpriority()"
+    },
+    {
+      "label": "queueOperation()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L67",
+      "id": "lib_offline_db_queueoperation",
+      "community": 1,
+      "norm_label": "queueoperation()"
+    },
+    {
+      "label": "getPendingOperations()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L87",
+      "id": "lib_offline_db_getpendingoperations",
+      "community": 1,
+      "norm_label": "getpendingoperations()"
+    },
+    {
+      "label": "markOperationSynced()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L95",
+      "id": "lib_offline_db_markoperationsynced",
+      "community": 1,
+      "norm_label": "markoperationsynced()"
+    },
+    {
+      "label": "cacheMembers()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L99",
+      "id": "lib_offline_db_cachemembers",
+      "community": 1,
+      "norm_label": "cachemembers()"
+    },
+    {
+      "label": "getCachedMembers()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L114",
+      "id": "lib_offline_db_getcachedmembers",
+      "community": 1,
+      "norm_label": "getcachedmembers()"
+    },
+    {
+      "label": "cacheResponse()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L119",
+      "id": "lib_offline_db_cacheresponse",
+      "community": 1,
+      "norm_label": "cacheresponse()"
+    },
+    {
+      "label": "getCachedResponse()",
+      "file_type": "code",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L127",
+      "id": "lib_offline_db_getcachedresponse",
+      "community": 1,
+      "norm_label": "getcachedresponse()"
+    },
+    {
+      "label": "sync-manager.ts",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L1",
+      "id": "src_lib_sync_manager_ts",
+      "community": 1,
+      "norm_label": "sync-manager.ts"
+    },
+    {
+      "label": "SyncStatus",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L8",
+      "id": "lib_sync_manager_syncstatus",
+      "community": 1,
+      "norm_label": "syncstatus"
+    },
+    {
+      "label": "SyncProgress",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L10",
+      "id": "lib_sync_manager_syncprogress",
+      "community": 1,
+      "norm_label": "syncprogress"
+    },
+    {
+      "label": "onSyncProgress()",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L19",
+      "id": "lib_sync_manager_onsyncprogress",
+      "community": 1,
+      "norm_label": "onsyncprogress()"
+    },
+    {
+      "label": "emit()",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L23",
+      "id": "lib_sync_manager_emit",
+      "community": 1,
+      "norm_label": "emit()"
+    },
+    {
+      "label": "getOnlineStatus()",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L30",
+      "id": "lib_sync_manager_getonlinestatus",
+      "community": 1,
+      "norm_label": "getonlinestatus()"
+    },
+    {
+      "label": "initSyncManager()",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L34",
+      "id": "lib_sync_manager_initsyncmanager",
+      "community": 1,
+      "norm_label": "initsyncmanager()"
+    },
+    {
+      "label": "apiFetch()",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L55",
+      "id": "lib_sync_manager_apifetch",
+      "community": 1,
+      "norm_label": "apifetch()"
+    },
+    {
+      "label": "startSync()",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L85",
+      "id": "lib_sync_manager_startsync",
+      "community": 1,
+      "norm_label": "startsync()"
+    },
+    {
+      "label": "formatLabel()",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L137",
+      "id": "lib_sync_manager_formatlabel",
+      "community": 1,
+      "norm_label": "formatlabel()"
+    },
+    {
+      "label": "onConflict()",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L148",
+      "id": "lib_sync_manager_onconflict",
+      "community": 1,
+      "norm_label": "onconflict()"
+    },
+    {
+      "label": "emitConflict()",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L154",
+      "id": "lib_sync_manager_emitconflict",
+      "community": 1,
+      "norm_label": "emitconflict()"
+    },
+    {
+      "label": "triggerSync()",
+      "file_type": "code",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L158",
+      "id": "lib_sync_manager_triggersync",
+      "community": 1,
+      "norm_label": "triggersync()"
+    },
+    {
+      "label": "useSync.ts",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L1",
+      "id": "src_lib_usesync_ts",
+      "community": 1,
+      "norm_label": "usesync.ts"
+    },
+    {
+      "label": "SyncState",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L5",
+      "id": "lib_usesync_syncstate",
+      "community": 1,
+      "norm_label": "syncstate"
+    },
+    {
+      "label": "gState",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L13",
+      "id": "lib_usesync_gstate",
+      "community": 1,
+      "norm_label": "gstate"
+    },
+    {
+      "label": "listeners",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L14",
+      "id": "lib_usesync_listeners",
+      "community": 1,
+      "norm_label": "listeners"
+    },
+    {
+      "label": "setGState()",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L16",
+      "id": "lib_usesync_setgstate",
+      "community": 1,
+      "norm_label": "setgstate()"
+    },
+    {
+      "label": "ConflictInfo",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L21",
+      "id": "lib_usesync_conflictinfo",
+      "community": 1,
+      "norm_label": "conflictinfo"
+    },
+    {
+      "label": "conflictListeners",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L30",
+      "id": "lib_usesync_conflictlisteners",
+      "community": 1,
+      "norm_label": "conflictlisteners"
+    },
+    {
+      "label": "setConflict()",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L32",
+      "id": "lib_usesync_setconflict",
+      "community": 1,
+      "norm_label": "setconflict()"
+    },
+    {
+      "label": "localPayload",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L46",
+      "id": "lib_usesync_localpayload",
+      "community": 1,
+      "norm_label": "localpayload"
+    },
+    {
+      "label": "ci",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L49",
+      "id": "lib_usesync_ci",
+      "community": 1,
+      "norm_label": "ci"
+    },
+    {
+      "label": "useSyncState()",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L59",
+      "id": "lib_usesync_usesyncstate",
+      "community": 27,
+      "norm_label": "usesyncstate()"
+    },
+    {
+      "label": "useConflictState()",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L68",
+      "id": "lib_usesync_useconflictstate",
+      "community": 1,
+      "norm_label": "useconflictstate()"
+    },
+    {
+      "label": "useOfflineInit()",
+      "file_type": "code",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L121",
+      "id": "lib_usesync_useofflineinit",
+      "community": 27,
+      "norm_label": "useofflineinit()"
     },
     {
       "label": "AuditPage.tsx",
@@ -725,7 +1238,7 @@
       "source_file": "src/routes/AuditPage.tsx",
       "source_location": "L1",
       "id": "src_routes_auditpage_tsx",
-      "community": 3,
+      "community": 15,
       "norm_label": "auditpage.tsx"
     },
     {
@@ -734,7 +1247,7 @@
       "source_file": "src/routes/AuditPage.tsx",
       "source_location": "L4",
       "id": "routes_auditpage_entity_types",
-      "community": 3,
+      "community": 15,
       "norm_label": "entity_types"
     },
     {
@@ -743,7 +1256,7 @@
       "source_file": "src/routes/AuditPage.tsx",
       "source_location": "L22",
       "id": "routes_auditpage_actions",
-      "community": 3,
+      "community": 15,
       "norm_label": "actions"
     },
     {
@@ -752,8 +1265,98 @@
       "source_file": "src/routes/AuditPage.tsx",
       "source_location": "L37",
       "id": "routes_auditpage_auditpage",
-      "community": 3,
+      "community": 15,
       "norm_label": "auditpage()"
+    },
+    {
+      "label": "ConferenceDashboard.tsx",
+      "file_type": "code",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L1",
+      "id": "src_routes_conferencedashboard_tsx",
+      "community": 5,
+      "norm_label": "conferencedashboard.tsx"
+    },
+    {
+      "label": "ChurchMetric",
+      "file_type": "code",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L5",
+      "id": "routes_conferencedashboard_churchmetric",
+      "community": 5,
+      "norm_label": "churchmetric"
+    },
+    {
+      "label": "ConferenceSummary",
+      "file_type": "code",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L15",
+      "id": "routes_conferencedashboard_conferencesummary",
+      "community": 5,
+      "norm_label": "conferencesummary"
+    },
+    {
+      "label": "District",
+      "file_type": "code",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L22",
+      "id": "routes_conferencedashboard_district",
+      "community": 5,
+      "norm_label": "district"
+    },
+    {
+      "label": "ConferenceDashboard()",
+      "file_type": "code",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L27",
+      "id": "routes_conferencedashboard_conferencedashboard",
+      "community": 5,
+      "norm_label": "conferencedashboard()"
+    },
+    {
+      "label": "SummaryCard()",
+      "file_type": "code",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L164",
+      "id": "routes_conferencedashboard_summarycard",
+      "community": 5,
+      "norm_label": "summarycard()"
+    },
+    {
+      "label": "SortHeader()",
+      "file_type": "code",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L173",
+      "id": "routes_conferencedashboard_sortheader",
+      "community": 5,
+      "norm_label": "sortheader()"
+    },
+    {
+      "label": "ConflictResolver.tsx",
+      "file_type": "code",
+      "source_file": "src/routes/ConflictResolver.tsx",
+      "source_location": "L1",
+      "id": "src_routes_conflictresolver_tsx",
+      "community": 1,
+      "norm_label": "conflictresolver.tsx"
+    },
+    {
+      "label": "ConflictResolver()",
+      "file_type": "code",
+      "source_file": "src/routes/ConflictResolver.tsx",
+      "source_location": "L3",
+      "id": "routes_conflictresolver_conflictresolver",
+      "community": 1,
+      "norm_label": "conflictresolver()"
+    },
+    {
+      "label": "DiffView()",
+      "file_type": "code",
+      "source_file": "src/routes/ConflictResolver.tsx",
+      "source_location": "L55",
+      "id": "routes_conflictresolver_diffview",
+      "community": 1,
+      "norm_label": "diffview()"
     },
     {
       "label": "DashboardLayout.tsx",
@@ -761,25 +1364,25 @@
       "source_file": "src/routes/DashboardLayout.tsx",
       "source_location": "L1",
       "id": "src_routes_dashboardlayout_tsx",
-      "community": 11,
+      "community": 10,
       "norm_label": "dashboardlayout.tsx"
     },
     {
       "label": "ICONS",
       "file_type": "code",
       "source_file": "src/routes/DashboardLayout.tsx",
-      "source_location": "L8",
+      "source_location": "L9",
       "id": "routes_dashboardlayout_icons",
-      "community": 11,
+      "community": 10,
       "norm_label": "icons"
     },
     {
       "label": "DashboardLayout()",
       "file_type": "code",
       "source_file": "src/routes/DashboardLayout.tsx",
-      "source_location": "L108",
+      "source_location": "L109",
       "id": "routes_dashboardlayout_dashboardlayout",
-      "community": 11,
+      "community": 10,
       "norm_label": "dashboardlayout()"
     },
     {
@@ -810,12 +1413,57 @@
       "norm_label": "dashboardpage()"
     },
     {
+      "label": "DistrictDashboard.tsx",
+      "file_type": "code",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L1",
+      "id": "src_routes_districtdashboard_tsx",
+      "community": 5,
+      "norm_label": "districtdashboard.tsx"
+    },
+    {
+      "label": "ChurchMetric",
+      "file_type": "code",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L5",
+      "id": "routes_districtdashboard_churchmetric",
+      "community": 5,
+      "norm_label": "churchmetric"
+    },
+    {
+      "label": "DistrictSummary",
+      "file_type": "code",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L14",
+      "id": "routes_districtdashboard_districtsummary",
+      "community": 5,
+      "norm_label": "districtsummary"
+    },
+    {
+      "label": "DistrictDashboard()",
+      "file_type": "code",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L21",
+      "id": "routes_districtdashboard_districtdashboard",
+      "community": 5,
+      "norm_label": "districtdashboard()"
+    },
+    {
+      "label": "SummaryCard()",
+      "file_type": "code",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L119",
+      "id": "routes_districtdashboard_summarycard",
+      "community": 5,
+      "norm_label": "summarycard()"
+    },
+    {
       "label": "FinancePage.tsx",
       "file_type": "code",
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L1",
       "id": "src_routes_financepage_tsx",
-      "community": 6,
+      "community": 2,
       "norm_label": "financepage.tsx"
     },
     {
@@ -824,7 +1472,7 @@
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L15",
       "id": "routes_financepage_tab",
-      "community": 6,
+      "community": 2,
       "norm_label": "tab"
     },
     {
@@ -842,7 +1490,7 @@
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L86",
       "id": "routes_financepage_overviewtab",
-      "community": 6,
+      "community": 2,
       "norm_label": "overviewtab()"
     },
     {
@@ -851,7 +1499,7 @@
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L150",
       "id": "routes_financepage_batchsummary",
-      "community": 6,
+      "community": 2,
       "norm_label": "batchsummary()"
     },
     {
@@ -860,7 +1508,7 @@
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L218",
       "id": "routes_financepage_getlatestsaturday",
-      "community": 6,
+      "community": 2,
       "norm_label": "getlatestsaturday()"
     },
     {
@@ -869,7 +1517,7 @@
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L226",
       "id": "routes_financepage_batchestab",
-      "community": 6,
+      "community": 2,
       "norm_label": "batchestab()"
     },
     {
@@ -878,43 +1526,43 @@
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L441",
       "id": "routes_financepage_batchdetailview",
-      "community": 6,
+      "community": 2,
       "norm_label": "batchdetailview()"
     },
     {
       "label": "TransactionsTab()",
       "file_type": "code",
       "source_file": "src/routes/FinancePage.tsx",
-      "source_location": "L717",
+      "source_location": "L712",
       "id": "routes_financepage_transactionstab",
-      "community": 6,
+      "community": 2,
       "norm_label": "transactionstab()"
     },
     {
       "label": "BudgetsTab()",
       "file_type": "code",
       "source_file": "src/routes/FinancePage.tsx",
-      "source_location": "L971",
+      "source_location": "L966",
       "id": "routes_financepage_budgetstab",
-      "community": 6,
+      "community": 2,
       "norm_label": "budgetstab()"
     },
     {
       "label": "ReportsTab()",
       "file_type": "code",
       "source_file": "src/routes/FinancePage.tsx",
-      "source_location": "L1201",
+      "source_location": "L1196",
       "id": "routes_financepage_reportstab",
-      "community": 6,
+      "community": 2,
       "norm_label": "reportstab()"
     },
     {
       "label": "SetupTab()",
       "file_type": "code",
       "source_file": "src/routes/FinancePage.tsx",
-      "source_location": "L1367",
+      "source_location": "L1362",
       "id": "routes_financepage_setuptab",
-      "community": 6,
+      "community": 2,
       "norm_label": "setuptab()"
     },
     {
@@ -923,7 +1571,7 @@
       "source_file": "src/routes/ForgotPasswordPage.tsx",
       "source_location": "L1",
       "id": "src_routes_forgotpasswordpage_tsx",
-      "community": 3,
+      "community": 8,
       "norm_label": "forgotpasswordpage.tsx"
     },
     {
@@ -932,8 +1580,53 @@
       "source_file": "src/routes/ForgotPasswordPage.tsx",
       "source_location": "L4",
       "id": "routes_forgotpasswordpage_forgotpasswordpage",
-      "community": 3,
+      "community": 8,
       "norm_label": "forgotpasswordpage()"
+    },
+    {
+      "label": "GlobalDashboard.tsx",
+      "file_type": "code",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L1",
+      "id": "src_routes_globaldashboard_tsx",
+      "community": 5,
+      "norm_label": "globaldashboard.tsx"
+    },
+    {
+      "label": "GlobalSummary",
+      "file_type": "code",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L5",
+      "id": "routes_globaldashboard_globalsummary",
+      "community": 5,
+      "norm_label": "globalsummary"
+    },
+    {
+      "label": "MonthlyTrend",
+      "file_type": "code",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L13",
+      "id": "routes_globaldashboard_monthlytrend",
+      "community": 5,
+      "norm_label": "monthlytrend"
+    },
+    {
+      "label": "GlobalDashboard()",
+      "file_type": "code",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L18",
+      "id": "routes_globaldashboard_globaldashboard",
+      "community": 5,
+      "norm_label": "globaldashboard()"
+    },
+    {
+      "label": "SummaryCard()",
+      "file_type": "code",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L104",
+      "id": "routes_globaldashboard_summarycard",
+      "community": 5,
+      "norm_label": "summarycard()"
     },
     {
       "label": "HomePage.tsx",
@@ -941,7 +1634,7 @@
       "source_file": "src/routes/HomePage.tsx",
       "source_location": "L1",
       "id": "src_routes_homepage_tsx",
-      "community": 4,
+      "community": 6,
       "norm_label": "homepage.tsx"
     },
     {
@@ -950,7 +1643,7 @@
       "source_file": "src/routes/HomePage.tsx",
       "source_location": "L3",
       "id": "routes_homepage_homepage",
-      "community": 4,
+      "community": 6,
       "norm_label": "homepage()"
     },
     {
@@ -977,7 +1670,7 @@
       "source_file": "src/routes/MembersPage.tsx",
       "source_location": "L1",
       "id": "src_routes_memberspage_tsx",
-      "community": 15,
+      "community": 2,
       "norm_label": "memberspage.tsx"
     },
     {
@@ -986,7 +1679,7 @@
       "source_file": "src/routes/MembersPage.tsx",
       "source_location": "L12",
       "id": "routes_memberspage_memberspage",
-      "community": 15,
+      "community": 2,
       "norm_label": "memberspage()"
     },
     {
@@ -1040,7 +1733,7 @@
       "source_file": "src/routes/ReconciliationPage.tsx",
       "source_location": "L1",
       "id": "src_routes_reconciliationpage_tsx",
-      "community": 3,
+      "community": 2,
       "norm_label": "reconciliationpage.tsx"
     },
     {
@@ -1049,7 +1742,7 @@
       "source_file": "src/routes/ReconciliationPage.tsx",
       "source_location": "L4",
       "id": "routes_reconciliationpage_reconciliationpage",
-      "community": 3,
+      "community": 2,
       "norm_label": "reconciliationpage()"
     },
     {
@@ -1058,7 +1751,7 @@
       "source_file": "src/routes/ReportsPage.tsx",
       "source_location": "L1",
       "id": "src_routes_reportspage_tsx",
-      "community": 3,
+      "community": 2,
       "norm_label": "reportspage.tsx"
     },
     {
@@ -1067,7 +1760,7 @@
       "source_file": "src/routes/ReportsPage.tsx",
       "source_location": "L4",
       "id": "routes_reportspage_reportspage",
-      "community": 3,
+      "community": 2,
       "norm_label": "reportspage()"
     },
     {
@@ -1112,25 +1805,16 @@
       "source_file": "src/routes/SyncIndicator.tsx",
       "source_location": "L1",
       "id": "src_routes_syncindicator_tsx",
-      "community": 5,
+      "community": 27,
       "norm_label": "syncindicator.tsx"
-    },
-    {
-      "label": "SyncState",
-      "file_type": "code",
-      "source_file": "src/routes/SyncIndicator.tsx",
-      "source_location": "L5",
-      "id": "routes_syncindicator_syncstate",
-      "community": 5,
-      "norm_label": "syncstate"
     },
     {
       "label": "SyncIndicator()",
       "file_type": "code",
       "source_file": "src/routes/SyncIndicator.tsx",
-      "source_location": "L10",
+      "source_location": "L5",
       "id": "routes_syncindicator_syncindicator",
-      "community": 5,
+      "community": 27,
       "norm_label": "syncindicator()"
     },
     {
@@ -1139,7 +1823,7 @@
       "source_file": "src/routes/UsersPage.tsx",
       "source_location": "L1",
       "id": "src_routes_userspage_tsx",
-      "community": 5,
+      "community": 8,
       "norm_label": "userspage.tsx"
     },
     {
@@ -1148,7 +1832,7 @@
       "source_file": "src/routes/UsersPage.tsx",
       "source_location": "L5",
       "id": "routes_userspage_userrecord",
-      "community": 5,
+      "community": 8,
       "norm_label": "userrecord"
     },
     {
@@ -1157,7 +1841,7 @@
       "source_file": "src/routes/UsersPage.tsx",
       "source_location": "L12",
       "id": "routes_userspage_userspage",
-      "community": 5,
+      "community": 8,
       "norm_label": "userspage()"
     },
     {
@@ -1215,12 +1899,84 @@
       "norm_label": "forgotbody"
     },
     {
+      "label": "conference.test.ts",
+      "file_type": "code",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L1",
+      "id": "test_conference_test_ts",
+      "community": 13,
+      "norm_label": "conference.test.ts"
+    },
+    {
+      "label": "sb",
+      "file_type": "code",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L35",
+      "id": "test_conference_test_sb",
+      "community": 13,
+      "norm_label": "sb"
+    },
+    {
+      "label": "mb",
+      "file_type": "code",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L41",
+      "id": "test_conference_test_mb",
+      "community": 13,
+      "norm_label": "mb"
+    },
+    {
+      "label": "hh",
+      "file_type": "code",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L65",
+      "id": "test_conference_test_hh",
+      "community": 13,
+      "norm_label": "hh"
+    },
+    {
+      "label": "now",
+      "file_type": "code",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L79",
+      "id": "test_conference_test_now",
+      "community": 13,
+      "norm_label": "now"
+    },
+    {
+      "label": "pb",
+      "file_type": "code",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L107",
+      "id": "test_conference_test_pb",
+      "community": 13,
+      "norm_label": "pb"
+    },
+    {
+      "label": "md",
+      "file_type": "code",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L113",
+      "id": "test_conference_test_md",
+      "community": 13,
+      "norm_label": "md"
+    },
+    {
+      "label": "b",
+      "file_type": "code",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L126",
+      "id": "test_conference_test_b",
+      "community": 13,
+      "norm_label": "b"
+    },
+    {
       "label": "csv.test.ts",
       "file_type": "code",
       "source_file": "test/csv.test.ts",
       "source_location": "L1",
       "id": "test_csv_test_ts",
-      "community": 2,
+      "community": 4,
       "norm_label": "csv.test.ts"
     },
     {
@@ -1229,7 +1985,7 @@
       "source_file": "test/csv.test.ts",
       "source_location": "L6",
       "id": "test_csv_test_result",
-      "community": 2,
+      "community": 4,
       "norm_label": "result"
     },
     {
@@ -1238,7 +1994,7 @@
       "source_file": "test/env.d.ts",
       "source_location": "L1",
       "id": "test_env_d_ts",
-      "community": 29,
+      "community": 31,
       "norm_label": "env.d.ts"
     },
     {
@@ -1247,7 +2003,7 @@
       "source_file": "test/env.d.ts",
       "source_location": "L2",
       "id": "test_env_d_providedenv",
-      "community": 29,
+      "community": 31,
       "norm_label": "providedenv"
     },
     {
@@ -1445,7 +2201,7 @@
       "source_file": "test/org.test.ts",
       "source_location": "L1",
       "id": "test_org_test_ts",
-      "community": 28,
+      "community": 30,
       "norm_label": "org.test.ts"
     },
     {
@@ -1454,7 +2210,7 @@
       "source_file": "test/org.test.ts",
       "source_location": "L31",
       "id": "test_org_test_body",
-      "community": 28,
+      "community": 30,
       "norm_label": "body"
     },
     {
@@ -1463,7 +2219,7 @@
       "source_file": "test/org.test.ts",
       "source_location": "L37",
       "id": "test_org_test_me",
-      "community": 28,
+      "community": 30,
       "norm_label": "me"
     },
     {
@@ -1472,7 +2228,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L1",
       "id": "test_reconciliation_test_ts",
-      "community": 12,
+      "community": 11,
       "norm_label": "reconciliation.test.ts"
     },
     {
@@ -1481,7 +2237,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L36",
       "id": "test_reconciliation_test_sb",
-      "community": 12,
+      "community": 11,
       "norm_label": "sb"
     },
     {
@@ -1490,7 +2246,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L42",
       "id": "test_reconciliation_test_mb",
-      "community": 12,
+      "community": 11,
       "norm_label": "mb"
     },
     {
@@ -1499,7 +2255,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L112",
       "id": "test_reconciliation_test_b",
-      "community": 12,
+      "community": 11,
       "norm_label": "b"
     },
     {
@@ -1508,7 +2264,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L116",
       "id": "test_reconciliation_test_churcha",
-      "community": 12,
+      "community": 11,
       "norm_label": "churcha"
     },
     {
@@ -1517,7 +2273,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L117",
       "id": "test_reconciliation_test_churchb",
-      "community": 12,
+      "community": 11,
       "norm_label": "churchb"
     },
     {
@@ -1526,7 +2282,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L124",
       "id": "test_reconciliation_test_hh",
-      "community": 12,
+      "community": 11,
       "norm_label": "hh"
     },
     {
@@ -1535,7 +2291,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L149",
       "id": "test_reconciliation_test_b2",
-      "community": 12,
+      "community": 11,
       "norm_label": "b2"
     },
     {
@@ -1544,7 +2300,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L210",
       "id": "test_reconciliation_test_eps",
-      "community": 12,
+      "community": 11,
       "norm_label": "eps"
     },
     {
@@ -1616,7 +2372,7 @@
       "source_file": "test/smoke.test.ts",
       "source_location": "L1",
       "id": "test_smoke_test_ts",
-      "community": 30,
+      "community": 32,
       "norm_label": "smoke.test.ts"
     },
     {
@@ -1625,7 +2381,7 @@
       "source_file": "test/smoke.test.ts",
       "source_location": "L6",
       "id": "test_smoke_test_request",
-      "community": 30,
+      "community": 32,
       "norm_label": "request"
     },
     {
@@ -1634,7 +2390,7 @@
       "source_file": "worker/env.d.ts",
       "source_location": "L1",
       "id": "worker_env_d_ts",
-      "community": 31,
+      "community": 33,
       "norm_label": "env.d.ts"
     },
     {
@@ -1643,7 +2399,7 @@
       "source_file": "worker/env.d.ts",
       "source_location": "L1",
       "id": "worker_env_d_env",
-      "community": 31,
+      "community": 33,
       "norm_label": "env"
     },
     {
@@ -1659,7 +2415,7 @@
       "label": "json()",
       "file_type": "code",
       "source_file": "worker/index.ts",
-      "source_location": "L83",
+      "source_location": "L88",
       "id": "worker_index_json",
       "community": 0,
       "norm_label": "json()"
@@ -1668,7 +2424,7 @@
       "label": "fetch()",
       "file_type": "code",
       "source_file": "worker/index.ts",
-      "source_location": "L94",
+      "source_location": "L99",
       "id": "worker_index_fetch",
       "community": 0,
       "norm_label": "fetch()"
@@ -1679,7 +2435,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L1",
       "id": "worker_durables_churchsyncdo_ts",
-      "community": 13,
+      "community": 12,
       "norm_label": "churchsyncdo.ts"
     },
     {
@@ -1688,7 +2444,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L3",
       "id": "durables_churchsyncdo_offlineoperation",
-      "community": 13,
+      "community": 12,
       "norm_label": "offlineoperation"
     },
     {
@@ -1697,7 +2453,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L9",
       "id": "durables_churchsyncdo_churchsyncdo",
-      "community": 13,
+      "community": 12,
       "norm_label": "churchsyncdo"
     },
     {
@@ -1706,7 +2462,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L12",
       "id": "durables_churchsyncdo_churchsyncdo_constructor",
-      "community": 13,
+      "community": 12,
       "norm_label": ".constructor()"
     },
     {
@@ -1715,7 +2471,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L37",
       "id": "durables_churchsyncdo_churchsyncdo_getactivesyncsessions",
-      "community": 13,
+      "community": 12,
       "norm_label": ".getactivesyncsessions()"
     },
     {
@@ -1724,7 +2480,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L47",
       "id": "durables_churchsyncdo_churchsyncdo_registersync",
-      "community": 13,
+      "community": 12,
       "norm_label": ".registersync()"
     },
     {
@@ -1733,7 +2489,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L57",
       "id": "durables_churchsyncdo_churchsyncdo_applyofflineoperation",
-      "community": 13,
+      "community": 12,
       "norm_label": ".applyofflineoperation()"
     },
     {
@@ -1742,7 +2498,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L83",
       "id": "durables_churchsyncdo_churchsyncdo_getunsyncedoperations",
-      "community": 13,
+      "community": 12,
       "norm_label": ".getunsyncedoperations()"
     },
     {
@@ -1751,7 +2507,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L97",
       "id": "durables_churchsyncdo_churchsyncdo_getsyncstate",
-      "community": 13,
+      "community": 12,
       "norm_label": ".getsyncstate()"
     },
     {
@@ -1850,7 +2606,7 @@
       "source_file": "worker/lib/auth.ts",
       "source_location": "L1",
       "id": "worker_lib_auth_ts",
-      "community": 2,
+      "community": 4,
       "norm_label": "auth.ts"
     },
     {
@@ -1859,7 +2615,7 @@
       "source_file": "worker/lib/auth.ts",
       "source_location": "L6",
       "id": "lib_auth_getkey",
-      "community": 2,
+      "community": 4,
       "norm_label": "getkey()"
     },
     {
@@ -1868,7 +2624,7 @@
       "source_file": "worker/lib/auth.ts",
       "source_location": "L10",
       "id": "lib_auth_signaccesstoken",
-      "community": 2,
+      "community": 4,
       "norm_label": "signaccesstoken()"
     },
     {
@@ -1877,7 +2633,7 @@
       "source_file": "worker/lib/auth.ts",
       "source_location": "L21",
       "id": "lib_auth_signrefreshtoken",
-      "community": 2,
+      "community": 4,
       "norm_label": "signrefreshtoken()"
     },
     {
@@ -1886,7 +2642,7 @@
       "source_file": "worker/lib/auth.ts",
       "source_location": "L29",
       "id": "lib_auth_verifytoken",
-      "community": 2,
+      "community": 4,
       "norm_label": "verifytoken()"
     },
     {
@@ -1895,7 +2651,7 @@
       "source_file": "worker/lib/auth.ts",
       "source_location": "L43",
       "id": "lib_auth_hashpassword",
-      "community": 2,
+      "community": 4,
       "norm_label": "hashpassword()"
     },
     {
@@ -1904,7 +2660,7 @@
       "source_file": "worker/lib/auth.ts",
       "source_location": "L73",
       "id": "lib_auth_verifypassword",
-      "community": 2,
+      "community": 4,
       "norm_label": "verifypassword()"
     },
     {
@@ -1913,7 +2669,7 @@
       "source_file": "worker/lib/auth.ts",
       "source_location": "L101",
       "id": "lib_auth_generateresettoken",
-      "community": 2,
+      "community": 4,
       "norm_label": "generateresettoken()"
     },
     {
@@ -1922,7 +2678,7 @@
       "source_file": "worker/lib/csv.ts",
       "source_location": "L1",
       "id": "worker_lib_csv_ts",
-      "community": 2,
+      "community": 4,
       "norm_label": "csv.ts"
     },
     {
@@ -1931,7 +2687,7 @@
       "source_file": "worker/lib/csv.ts",
       "source_location": "L1",
       "id": "lib_csv_csvparseresult",
-      "community": 2,
+      "community": 4,
       "norm_label": "csvparseresult"
     },
     {
@@ -1940,7 +2696,7 @@
       "source_file": "worker/lib/csv.ts",
       "source_location": "L6",
       "id": "lib_csv_parsecsv",
-      "community": 2,
+      "community": 4,
       "norm_label": "parsecsv()"
     },
     {
@@ -1949,7 +2705,7 @@
       "source_file": "worker/lib/csv.ts",
       "source_location": "L43",
       "id": "lib_csv_validatecsvheaders",
-      "community": 2,
+      "community": 4,
       "norm_label": "validatecsvheaders()"
     },
     {
@@ -2021,7 +2777,7 @@
       "source_file": "worker/lib/roles.ts",
       "source_location": "L1",
       "id": "worker_lib_roles_ts",
-      "community": 8,
+      "community": 4,
       "norm_label": "roles.ts"
     },
     {
@@ -2030,7 +2786,7 @@
       "source_file": "worker/lib/roles.ts",
       "source_location": "L1",
       "id": "lib_roles_roles",
-      "community": 8,
+      "community": 4,
       "norm_label": "roles"
     },
     {
@@ -2039,7 +2795,7 @@
       "source_file": "worker/lib/roles.ts",
       "source_location": "L11",
       "id": "lib_roles_role",
-      "community": 8,
+      "community": 4,
       "norm_label": "role"
     },
     {
@@ -2048,7 +2804,7 @@
       "source_file": "worker/lib/roles.ts",
       "source_location": "L13",
       "id": "lib_roles_role_labels",
-      "community": 8,
+      "community": 4,
       "norm_label": "role_labels"
     },
     {
@@ -2057,7 +2813,7 @@
       "source_file": "worker/lib/roles.ts",
       "source_location": "L23",
       "id": "lib_roles_conference_roles",
-      "community": 8,
+      "community": 4,
       "norm_label": "conference_roles"
     },
     {
@@ -2066,7 +2822,7 @@
       "source_file": "worker/lib/roles.ts",
       "source_location": "L31",
       "id": "lib_roles_church_roles",
-      "community": 8,
+      "community": 4,
       "norm_label": "church_roles"
     },
     {
@@ -2075,7 +2831,7 @@
       "source_file": "worker/lib/roles.ts",
       "source_location": "L33",
       "id": "lib_roles_permissions",
-      "community": 8,
+      "community": 4,
       "norm_label": "permissions"
     },
     {
@@ -2084,7 +2840,7 @@
       "source_file": "worker/routes/audit.ts",
       "source_location": "L1",
       "id": "worker_routes_audit_ts",
-      "community": 8,
+      "community": 0,
       "norm_label": "audit.ts"
     },
     {
@@ -2093,7 +2849,7 @@
       "source_file": "worker/routes/audit.ts",
       "source_location": "L4",
       "id": "routes_audit_json",
-      "community": 8,
+      "community": 0,
       "norm_label": "json()"
     },
     {
@@ -2102,7 +2858,7 @@
       "source_file": "worker/routes/audit.ts",
       "source_location": "L14",
       "id": "routes_audit_handlegetauditlog",
-      "community": 8,
+      "community": 0,
       "norm_label": "handlegetauditlog()"
     },
     {
@@ -2111,7 +2867,7 @@
       "source_file": "worker/routes/audit.ts",
       "source_location": "L91",
       "id": "routes_audit_handlegetauditbyentity",
-      "community": 8,
+      "community": 0,
       "norm_label": "handlegetauditbyentity()"
     },
     {
@@ -2120,7 +2876,7 @@
       "source_file": "worker/routes/auth.ts",
       "source_location": "L1",
       "id": "worker_routes_auth_ts",
-      "community": 2,
+      "community": 4,
       "norm_label": "auth.ts"
     },
     {
@@ -2129,7 +2885,7 @@
       "source_file": "worker/routes/auth.ts",
       "source_location": "L12",
       "id": "routes_auth_json",
-      "community": 2,
+      "community": 4,
       "norm_label": "json()"
     },
     {
@@ -2138,7 +2894,7 @@
       "source_file": "worker/routes/auth.ts",
       "source_location": "L22",
       "id": "routes_auth_handleauthsignup",
-      "community": 2,
+      "community": 4,
       "norm_label": "handleauthsignup()"
     },
     {
@@ -2147,7 +2903,7 @@
       "source_file": "worker/routes/auth.ts",
       "source_location": "L96",
       "id": "routes_auth_handleauthlogin",
-      "community": 2,
+      "community": 4,
       "norm_label": "handleauthlogin()"
     },
     {
@@ -2156,7 +2912,7 @@
       "source_file": "worker/routes/auth.ts",
       "source_location": "L159",
       "id": "routes_auth_handleauthrefresh",
-      "community": 2,
+      "community": 4,
       "norm_label": "handleauthrefresh()"
     },
     {
@@ -2165,7 +2921,7 @@
       "source_file": "worker/routes/auth.ts",
       "source_location": "L217",
       "id": "routes_auth_handleforgotpassword",
-      "community": 2,
+      "community": 4,
       "norm_label": "handleforgotpassword()"
     },
     {
@@ -2174,8 +2930,53 @@
       "source_file": "worker/routes/auth.ts",
       "source_location": "L250",
       "id": "routes_auth_handleresetpassword",
-      "community": 2,
+      "community": 4,
       "norm_label": "handleresetpassword()"
+    },
+    {
+      "label": "conference.ts",
+      "file_type": "code",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L1",
+      "id": "worker_routes_conference_ts",
+      "community": 0,
+      "norm_label": "conference.ts"
+    },
+    {
+      "label": "json()",
+      "file_type": "code",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L4",
+      "id": "routes_conference_json",
+      "community": 0,
+      "norm_label": "json()"
+    },
+    {
+      "label": "handleConferenceDashboard()",
+      "file_type": "code",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L14",
+      "id": "routes_conference_handleconferencedashboard",
+      "community": 0,
+      "norm_label": "handleconferencedashboard()"
+    },
+    {
+      "label": "handleDistrictDashboard()",
+      "file_type": "code",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L133",
+      "id": "routes_conference_handledistrictdashboard",
+      "community": 0,
+      "norm_label": "handledistrictdashboard()"
+    },
+    {
+      "label": "handleGlobalDashboard()",
+      "file_type": "code",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L234",
+      "id": "routes_conference_handleglobaldashboard",
+      "community": 0,
+      "norm_label": "handleglobaldashboard()"
     },
     {
       "label": "finance.ts",
@@ -2262,7 +3063,7 @@
       "label": "handleCreateExpenseCategory()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L212",
+      "source_location": "L208",
       "id": "routes_finance_handlecreateexpensecategory",
       "community": 0,
       "norm_label": "handlecreateexpensecategory()"
@@ -2271,7 +3072,7 @@
       "label": "handleGetBatches()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L264",
+      "source_location": "L260",
       "id": "routes_finance_handlegetbatches",
       "community": 0,
       "norm_label": "handlegetbatches()"
@@ -2280,7 +3081,7 @@
       "label": "handleGetBatch()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L314",
+      "source_location": "L310",
       "id": "routes_finance_handlegetbatch",
       "community": 0,
       "norm_label": "handlegetbatch()"
@@ -2289,7 +3090,7 @@
       "label": "handleCreateBatch()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L359",
+      "source_location": "L355",
       "id": "routes_finance_handlecreatebatch",
       "community": 0,
       "norm_label": "handlecreatebatch()"
@@ -2298,7 +3099,7 @@
       "label": "handleConfirmBatch()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L409",
+      "source_location": "L405",
       "id": "routes_finance_handleconfirmbatch",
       "community": 0,
       "norm_label": "handleconfirmbatch()"
@@ -2307,7 +3108,7 @@
       "label": "handleGetTransactions()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L519",
+      "source_location": "L526",
       "id": "routes_finance_handlegettransactions",
       "community": 0,
       "norm_label": "handlegettransactions()"
@@ -2316,7 +3117,7 @@
       "label": "handleCreateTransaction()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L583",
+      "source_location": "L590",
       "id": "routes_finance_handlecreatetransaction",
       "community": 0,
       "norm_label": "handlecreatetransaction()"
@@ -2325,7 +3126,7 @@
       "label": "handleCreateExpense()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L688",
+      "source_location": "L695",
       "id": "routes_finance_handlecreateexpense",
       "community": 0,
       "norm_label": "handlecreateexpense()"
@@ -2334,7 +3135,7 @@
       "label": "handleGetBudgets()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L758",
+      "source_location": "L765",
       "id": "routes_finance_handlegetbudgets",
       "community": 0,
       "norm_label": "handlegetbudgets()"
@@ -2343,7 +3144,7 @@
       "label": "handleCreateBudget()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L798",
+      "source_location": "L805",
       "id": "routes_finance_handlecreatebudget",
       "community": 0,
       "norm_label": "handlecreatebudget()"
@@ -2352,7 +3153,7 @@
       "label": "handleGetBudgetTemplates()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L871",
+      "source_location": "L878",
       "id": "routes_finance_handlegetbudgettemplates",
       "community": 0,
       "norm_label": "handlegetbudgettemplates()"
@@ -2361,7 +3162,7 @@
       "label": "handleCreateBudgetTemplate()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L906",
+      "source_location": "L913",
       "id": "routes_finance_handlecreatebudgettemplate",
       "community": 0,
       "norm_label": "handlecreatebudgettemplate()"
@@ -2370,7 +3171,7 @@
       "label": "handleApproveBudget()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L973",
+      "source_location": "L980",
       "id": "routes_finance_handleapprovebudget",
       "community": 0,
       "norm_label": "handleapprovebudget()"
@@ -2379,7 +3180,7 @@
       "label": "handleGetMonthlyReport()",
       "file_type": "code",
       "source_file": "worker/routes/finance.ts",
-      "source_location": "L1016",
+      "source_location": "L1023",
       "id": "routes_finance_handlegetmonthlyreport",
       "community": 0,
       "norm_label": "handlegetmonthlyreport()"
@@ -2568,7 +3369,7 @@
       "label": "handleAcceptTransfer()",
       "file_type": "code",
       "source_file": "worker/routes/members.ts",
-      "source_location": "L973",
+      "source_location": "L979",
       "id": "routes_members_handleaccepttransfer",
       "community": 0,
       "norm_label": "handleaccepttransfer()"
@@ -2577,7 +3378,7 @@
       "label": "handleRejectTransfer()",
       "file_type": "code",
       "source_file": "worker/routes/members.ts",
-      "source_location": "L1056",
+      "source_location": "L1062",
       "id": "routes_members_handlerejecttransfer",
       "community": 0,
       "norm_label": "handlerejecttransfer()"
@@ -2622,7 +3423,7 @@
       "label": "handleMarkAllRead()",
       "file_type": "code",
       "source_file": "worker/routes/notifications.ts",
-      "source_location": "L66",
+      "source_location": "L64",
       "id": "routes_notifications_handlemarkallread",
       "community": 0,
       "norm_label": "handlemarkallread()"
@@ -2631,7 +3432,7 @@
       "label": "createNotification()",
       "file_type": "code",
       "source_file": "worker/routes/notifications.ts",
-      "source_location": "L79",
+      "source_location": "L75",
       "id": "routes_notifications_createnotification",
       "community": 0,
       "norm_label": "createnotification()"
@@ -2741,7 +3542,7 @@
       "source_file": "worker/routes/org.ts",
       "source_location": "L454",
       "id": "routes_org_handlebulkcreatechurches",
-      "community": 2,
+      "community": 0,
       "norm_label": "handlebulkcreatechurches()"
     },
     {
@@ -2804,7 +3605,7 @@
       "source_file": "worker/routes/reports.ts",
       "source_location": "L1",
       "id": "worker_routes_reports_ts",
-      "community": 8,
+      "community": 0,
       "norm_label": "reports.ts"
     },
     {
@@ -2813,7 +3614,7 @@
       "source_file": "worker/routes/reports.ts",
       "source_location": "L4",
       "id": "routes_reports_json",
-      "community": 8,
+      "community": 0,
       "norm_label": "json()"
     },
     {
@@ -2822,7 +3623,7 @@
       "source_file": "worker/routes/reports.ts",
       "source_location": "L14",
       "id": "routes_reports_handlegetquarterlyreport",
-      "community": 8,
+      "community": 0,
       "norm_label": "handlegetquarterlyreport()"
     },
     {
@@ -2831,7 +3632,7 @@
       "source_file": "worker/routes/users.ts",
       "source_location": "L1",
       "id": "worker_routes_users_ts",
-      "community": 2,
+      "community": 4,
       "norm_label": "users.ts"
     },
     {
@@ -2840,7 +3641,7 @@
       "source_file": "worker/routes/users.ts",
       "source_location": "L7",
       "id": "routes_users_json",
-      "community": 2,
+      "community": 4,
       "norm_label": "json()"
     },
     {
@@ -2849,7 +3650,7 @@
       "source_file": "worker/routes/users.ts",
       "source_location": "L17",
       "id": "routes_users_handleinviteuser",
-      "community": 2,
+      "community": 4,
       "norm_label": "handleinviteuser()"
     },
     {
@@ -2858,7 +3659,7 @@
       "source_file": "worker/routes/users.ts",
       "source_location": "L96",
       "id": "routes_users_handlegetusers",
-      "community": 2,
+      "community": 4,
       "norm_label": "handlegetusers()"
     },
     {
@@ -2867,7 +3668,7 @@
       "source_file": "worker/routes/users.ts",
       "source_location": "L125",
       "id": "routes_users_handlebulkinviteusers",
-      "community": 2,
+      "community": 4,
       "norm_label": "handlebulkinviteusers()"
     },
     {
@@ -2876,7 +3677,7 @@
       "source_file": "worker/routes/users.ts",
       "source_location": "L220",
       "id": "routes_users_handlegetme",
-      "community": 2,
+      "community": 4,
       "norm_label": "handlegetme()"
     },
     {
@@ -2993,7 +3794,7 @@
       "source_file": "docs/adr/0001-append-only-immutable-finance.md",
       "source_location": "L1",
       "id": "docs_adr_0001_append_only_immutable_finance_md",
-      "community": 32,
+      "community": 34,
       "norm_label": "0001-append-only-immutable-finance.md"
     },
     {
@@ -3002,7 +3803,7 @@
       "source_file": "docs/adr/0001-append-only-immutable-finance.md",
       "source_location": "L1",
       "id": "adr_0001_append_only_immutable_finance_append_only_immutable_finance",
-      "community": 32,
+      "community": 34,
       "norm_label": "append-only immutable finance"
     },
     {
@@ -3011,7 +3812,7 @@
       "source_file": "docs/adr/0002-per-conference-d1-tenancy.md",
       "source_location": "L1",
       "id": "docs_adr_0002_per_conference_d1_tenancy_md",
-      "community": 33,
+      "community": 35,
       "norm_label": "0002-per-conference-d1-tenancy.md"
     },
     {
@@ -3020,7 +3821,7 @@
       "source_file": "docs/adr/0002-per-conference-d1-tenancy.md",
       "source_location": "L1",
       "id": "adr_0002_per_conference_d1_tenancy_per_conference_d1_tenancy",
-      "community": 33,
+      "community": 35,
       "norm_label": "per-conference d1 tenancy"
     },
     {
@@ -3029,7 +3830,7 @@
       "source_file": "docs/adr/0003-offline-first-pwa.md",
       "source_location": "L1",
       "id": "docs_adr_0003_offline_first_pwa_md",
-      "community": 34,
+      "community": 36,
       "norm_label": "0003-offline-first-pwa.md"
     },
     {
@@ -3038,7 +3839,7 @@
       "source_file": "docs/adr/0003-offline-first-pwa.md",
       "source_location": "L1",
       "id": "adr_0003_offline_first_pwa_offline_first_pwa_architecture",
-      "community": 34,
+      "community": 36,
       "norm_label": "offline-first pwa architecture"
     },
     {
@@ -3047,7 +3848,7 @@
       "source_file": "docs/adr/0004-modular-package-architecture.md",
       "source_location": "L1",
       "id": "docs_adr_0004_modular_package_architecture_md",
-      "community": 35,
+      "community": 37,
       "norm_label": "0004-modular-package-architecture.md"
     },
     {
@@ -3056,7 +3857,7 @@
       "source_file": "docs/adr/0004-modular-package-architecture.md",
       "source_location": "L1",
       "id": "adr_0004_modular_package_architecture_modular_architecture_with_package_based_registry",
-      "community": 35,
+      "community": 37,
       "norm_label": "modular architecture with package-based registry"
     },
     {
@@ -3200,7 +4001,7 @@
       "source_file": "docs/agents/triage-labels.md",
       "source_location": "L1",
       "id": "docs_agents_triage_labels_md",
-      "community": 36,
+      "community": 38,
       "norm_label": "triage-labels.md"
     },
     {
@@ -3209,8 +4010,17 @@
       "source_file": "docs/agents/triage-labels.md",
       "source_location": "L1",
       "id": "agents_triage_labels_triage_labels",
-      "community": 36,
+      "community": 38,
       "norm_label": "triage labels"
+    },
+    {
+      "label": "SyncState",
+      "file_type": "code",
+      "source_file": "src/routes/SyncIndicator.tsx",
+      "source_location": "L5",
+      "community": 27,
+      "norm_label": "syncstate",
+      "id": "routes_syncindicator_syncstate"
     },
     {
       "label": "H()",
@@ -3292,7 +4102,7 @@
       "author": null,
       "contributor": null,
       "rationale": "A platform for Seventh-day Adventist church administration covering operations from Conference down to Member, with read-only aggregated reporting up to General Conference level. Modular by design with Finance, Membership, Organization Structure, Auth/Roles, and Audit/Reports as initial modules.",
-      "community": 1,
+      "community": 3,
       "norm_label": "theobase platform",
       "id": "contextmd_theobase"
     },
@@ -3305,7 +4115,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "conference",
       "id": "contextmd_conference"
     },
@@ -3318,7 +4128,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "district",
       "id": "contextmd_district"
     },
@@ -3331,7 +4141,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "church",
       "id": "contextmd_church"
     },
@@ -3344,7 +4154,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "member",
       "id": "contextmd_member"
     },
@@ -3357,7 +4167,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "household",
       "id": "contextmd_household"
     },
@@ -3370,7 +4180,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "position / office",
       "id": "contextmd_position_office"
     },
@@ -3383,7 +4193,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "tithe",
       "id": "contextmd_tithe"
     },
@@ -3396,7 +4206,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "local church budget",
       "id": "contextmd_local_church_budget"
     },
@@ -3409,7 +4219,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "sabbath school offering",
       "id": "contextmd_sabbath_school_offering"
     },
@@ -3422,7 +4232,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "fund",
       "id": "contextmd_fund"
     },
@@ -3435,7 +4245,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "offering batch",
       "id": "contextmd_offering_batch"
     },
@@ -3448,7 +4258,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "dual-custody",
       "id": "contextmd_dual_custody"
     },
@@ -3461,7 +4271,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "expense category",
       "id": "contextmd_expense_category"
     },
@@ -3474,7 +4284,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "budget",
       "id": "contextmd_budget"
     },
@@ -3487,7 +4297,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "forwarding",
       "id": "contextmd_forwarding"
     },
@@ -3500,7 +4310,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "baptism",
       "id": "contextmd_baptism"
     },
@@ -3513,7 +4323,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "transfer",
       "id": "contextmd_transfer"
     },
@@ -3526,7 +4336,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "removal",
       "id": "contextmd_removal"
     },
@@ -3539,7 +4349,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "activity log",
       "id": "contextmd_activity_log"
     },
@@ -3552,7 +4362,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "monthly treasurer report",
       "id": "contextmd_monthly_treasurer_report"
     },
@@ -3565,7 +4375,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "quarterly business meeting report",
       "id": "contextmd_quarterly_business_meeting_report"
     },
@@ -3578,7 +4388,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "audit trail",
       "id": "contextmd_audit_trail"
     },
@@ -3591,7 +4401,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "reconciliation",
       "id": "contextmd_reconciliation"
     },
@@ -3604,7 +4414,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "theobase react entry point",
       "id": "indexhtml_theobase_entry"
     },
@@ -3618,7 +4428,7 @@
       "author": null,
       "contributor": null,
       "rationale": "The SDA Church Manual requires dual-custody on all funds and annual audit of church records. An editable financial ledger would undermine the audit trail because a bad actor could silently modify past entries. Append-only guarantees that every action leaves a permanent, verifiable record. Rejected mutable transactions with soft-delete because: (a) the audit log could be tampered with in the same mutable system, (b) the dual-custody requirement implies finality once two people confirm a batch, and (c) append-only is simpler with fewer code paths to secure.",
-      "community": 1,
+      "community": 3,
       "norm_label": "adr-0001: append-only immutable finance",
       "id": "adr0001_append_only_finance"
     },
@@ -3631,7 +4441,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "sda church manual",
       "id": "adr0001_sda_church_manual"
     },
@@ -3645,7 +4455,7 @@
       "author": null,
       "contributor": null,
       "rationale": "A Conference is the natural administrative boundary \u00e2\u20ac\u201d Conference officers see all their churches' data; members and churches in different Conferences never interact. Per-Conference isolation simplifies access control (row-level security per church_id within the database rather than cross-tenant filters), limits blast radius, and maps to D1's horizontal scaling model (thousands of small databases are free; one massive database hits the 10GB ceiling). A typical 500-church Conference with 10 years of transactions fits in under 1GB. Rejected per-church D1 (N\u00c3\u2014 complexity for cross-church operations) and single global D1 (D1 single-threaded throughput limits and 10GB ceiling).",
-      "community": 1,
+      "community": 3,
       "norm_label": "adr-0002: per-conference d1 tenancy",
       "id": "adr0002_per_conference_d1_tenancy"
     },
@@ -3658,7 +4468,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "cloudflare d1",
       "id": "adr0002_cloudflare_d1"
     },
@@ -3672,7 +4482,7 @@
       "author": null,
       "contributor": null,
       "rationale": "Many SDA churches operate in rural areas with intermittent or no internet during Sabbath services \u00e2\u20ac\u201d exactly when financial data is collected. An online-only app would be unusable at the moment of highest need. The PWA model allows installation on any device without an app store, critical for global reach across 215+ countries. Trade-offs accepted: added complexity from conflict resolution and dual-custody enforcement across disconnected clients, eventual consistency with stale data until sync completes, and no native mobile app in MVP. Rejected online-only SaaS with optimistic UI because it is unusable in the primary deployment environment.",
-      "community": 1,
+      "community": 3,
       "norm_label": "adr-0003: offline-first pwa architecture",
       "id": "adr0003_offline_first_pwa"
     },
@@ -3685,7 +4495,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "indexeddb operation-log",
       "id": "adr0003_indexeddb_operation_log"
     },
@@ -3698,7 +4508,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "dexie.js",
       "id": "adr0003_dexie_js"
     },
@@ -3711,7 +4521,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "versioned optimistic locking",
       "id": "adr0003_versioned_optimistic_locking"
     },
@@ -3725,7 +4535,7 @@
       "author": null,
       "contributor": null,
       "rationale": "The initial scope is Finance + Membership + Organization + Auth + Audit, but the SDA church has many more departments (Sabbath School, Pathfinders, Health Ministries, Youth, Evangelism, ADRA, Family Ministries, Music, Communication, etc.). A monolith would accumulate all of these in one ever-growing codebase. Modules allow each department to be developed and deployed independently, sharing only the core layer (auth, org hierarchy, member records, audit trail). Modules are composed at build time, not hot-plugged at runtime, which is simpler and sufficient for single-tenant deploy. The shared core is a hard dependency \u00e2\u20ac\u201d a breaking change to core affects all modules, but the core is small and stable.",
-      "community": 1,
+      "community": 3,
       "norm_label": "adr-0004: modular package architecture",
       "id": "adr0004_modular_package_architecture"
     },
@@ -3738,7 +4548,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "platform core",
       "id": "adr0004_platform_core"
     },
@@ -3751,7 +4561,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "module contract",
       "id": "adr0004_module_contract"
     },
@@ -3764,7 +4574,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "tanstack router",
       "id": "adr0004_tanstack_router"
     },
@@ -3777,7 +4587,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 3,
       "norm_label": "domain docs agent instructions",
       "id": "domainmd_domain_docs_instructions"
     },
@@ -3829,7 +4639,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 41,
+      "community": 43,
       "norm_label": "eslint configuration",
       "id": "eslint_config"
     },
@@ -3842,7 +4652,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 9,
       "norm_label": "vite build configuration",
       "id": "vite_config"
     },
@@ -3855,7 +4665,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 9,
       "norm_label": "vitest test configuration",
       "id": "vitest_config"
     },
@@ -3868,7 +4678,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 9,
       "norm_label": "initial database schema migration",
       "id": "migration_0001_initial"
     },
@@ -3881,7 +4691,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 9,
       "norm_label": "react application entry point",
       "id": "main_entry"
     },
@@ -3894,7 +4704,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 9,
       "norm_label": "tanstack router configuration",
       "id": "routes_config"
     },
@@ -3907,7 +4717,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 42,
+      "community": 44,
       "norm_label": "vite client type declarations",
       "id": "vite_env_types"
     },
@@ -3920,7 +4730,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 9,
       "norm_label": "home page component",
       "id": "HomePage"
     },
@@ -3933,7 +4743,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 9,
       "norm_label": "test environment type declarations",
       "id": "test_env_types"
     },
@@ -3946,7 +4756,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 9,
       "norm_label": "worker smoke tests",
       "id": "smoke_test"
     },
@@ -3959,7 +4769,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 9,
       "norm_label": "worker environment bindings",
       "id": "worker_env_types"
     },
@@ -3972,7 +4782,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 9,
       "norm_label": "worker fetch handler",
       "id": "worker_entry"
     },
@@ -3985,7 +4795,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 9,
       "norm_label": "church sync durable object",
       "id": "ChurchSyncDO"
     },
@@ -3998,7 +4808,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 9,
       "norm_label": "conference durable object",
       "id": "ConferenceDO"
     },
@@ -4012,7 +4822,7 @@
       "author": null,
       "contributor": null,
       "rationale": "1640x720 PNG image in branding directory for Theobase, the Seventh-day Adventist church administration platform. Dimensions match standard Open Graph / social share cover image (2:1 aspect ratio). Companion files in the same directory: logo-light.svg (orange #F97316 + gray #6B7280 wordmark), icon.svg (flame/torch icon in orange), favicon.ico, profile-picture.png, and theobase.af (Affinity Designer source). Actual visual content of cover.png is AMBIGUOUS \u00e2\u20ac\u201d model cannot view images.",
-      "community": 21,
+      "community": 20,
       "norm_label": "theobase brand cover image (1640x720 opengraph/social share)",
       "id": "coverpng_brand_cover_image"
     },
@@ -4026,7 +4836,7 @@
       "author": null,
       "contributor": null,
       "rationale": "Brand colors extracted from companion SVG files in the same branding directory. Logo-light.svg uses fill:rgb(249,115,22) for the icon and fill:rgb(107,114,128) for the wordmark text. The icon.svg uses fill:rgb(249,115,22) exclusively.",
-      "community": 21,
+      "community": 20,
       "norm_label": "theobase brand color palette: orange #f97316 + gray #6b7280",
       "id": "branding_brand_palette"
     },
@@ -4040,7 +4850,7 @@
       "author": null,
       "contributor": null,
       "rationale": "Theobase is a platform for Seventh-day Adventist church administration from Conference down to Member level, with modular architecture (Finance, Membership, Organization Structure, Auth/Roles, Audit/Reports). Built with React, TanStack Router, Vite, D1 (SQLite), and Cloudflare Workers.",
-      "community": 21,
+      "community": 20,
       "norm_label": "theobase sda church administration platform",
       "id": "theobase_platform"
     },
@@ -4054,7 +4864,7 @@
       "author": null,
       "contributor": null,
       "rationale": "The file theobase.af in the branding directory is an Affinity Designer source file that likely contains the source art for the cover image and other branding assets.",
-      "community": 21,
+      "community": 20,
       "norm_label": "affinity designer source file",
       "id": "branding_affinity_source"
     },
@@ -4067,7 +4877,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 29,
       "norm_label": "theobase icon (shield mark)",
       "id": "theobase_icon"
     },
@@ -4080,7 +4890,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 29,
       "norm_label": "theobase logo light (icon + wordmark)",
       "id": "theobase_logo_light"
     },
@@ -4093,7 +4903,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 29,
       "norm_label": "theobase project",
       "id": "theobase_project"
     },
@@ -4106,7 +4916,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 29,
       "norm_label": "serif affinity designer",
       "id": "serif_affinity_designer"
     },
@@ -4119,7 +4929,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 21,
       "norm_label": "logo light svg",
       "id": "logo_light_svg"
     },
@@ -4132,7 +4942,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 21,
       "norm_label": "theobase brand",
       "id": "theobase_brand"
     },
@@ -4145,7 +4955,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 21,
       "norm_label": "t icon glyph",
       "id": "t_icon"
     },
@@ -4158,7 +4968,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 21,
       "norm_label": "wordmark text paths",
       "id": "wordmark_text"
     },
@@ -4171,7 +4981,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 21,
       "norm_label": "brand orange (rgb 249,115,22)",
       "id": "brand_orange"
     },
@@ -4184,7 +4994,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 21,
       "norm_label": "branding directory",
       "id": "branding_directory"
     },
@@ -4197,7 +5007,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 21,
       "norm_label": "512x512 bounding rect (fill:none)",
       "id": "raw_rect_512x512"
     },
@@ -4211,7 +5021,7 @@
       "author": null,
       "contributor": null,
       "rationale": "PNG image in branding directory alongside logo-light.svg, icon.svg, favicon.ico, cover.png, and theobase.af (Affinity Designer source). Companion icon.svg depicts a flame/torch icon in orange (#F97316) \u00e2\u20ac\u201d the profile picture likely derives from the same icon asset. Serves as the application avatar/profile image for Theobase, a Seventh-day Adventist church administration platform spanning Conference \u00e2\u2020\u2019 District \u00e2\u2020\u2019 Church \u00e2\u2020\u2019 Member levels.",
-      "community": 21,
+      "community": 20,
       "norm_label": "theobase profile picture (flame/torch icon in orange #f97316)",
       "id": "profile_picture_brand_asset"
     },
@@ -4225,7 +5035,7 @@
       "author": null,
       "contributor": null,
       "rationale": "Brand colors extracted from companion SVG files. Logo-light.svg uses fill:rgb(249,115,22) for the flame/torch icon and fill:rgb(107,114,128) for the wordmark. The profile picture likely uses the same orange (#F97316) flame/torch icon.",
-      "community": 21,
+      "community": 20,
       "norm_label": "theobase brand palette: orange #f97316 + gray #6b7280",
       "id": "brand_palette_orange_gray"
     },
@@ -4239,12 +5049,42 @@
       "author": null,
       "contributor": null,
       "rationale": "The companion icon.svg file depicts a flame/torch icon rendered in orange (#F97316). This icon serves as the primary brand mark across favicon.ico, logos, and the profile picture. The name 'Theobase' (theo = God) pairs with the flame as a symbol of the Holy Spirit / divine presence \u00e2\u20ac\u201d thematically aligned with Seventh-day Adventist theology.",
-      "community": 21,
+      "community": 20,
       "norm_label": "flame/torch icon a\u20ac\u201d primary brand mark of theobase",
       "id": "flame_torch_icon"
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "public/sw.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "public_sw_js",
+      "target": "public_sw_assets_to_cache",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "public/sw.js",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "public_sw_js",
+      "target": "public_sw_url",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "public/sw.js",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "public_sw_js",
+      "target": "public_sw_fetchpromise",
+      "confidence_score": 1.0
+    },
     {
       "relation": "imports_from",
       "context": "import",
@@ -4454,6 +5294,39 @@
       "target": "src_routes_reconciliationpage_tsx"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "src_routes_tsx",
+      "target": "src_routes_conferencedashboard_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "src_routes_tsx",
+      "target": "src_routes_districtdashboard_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "src_routes_tsx",
+      "target": "src_routes_globaldashboard_tsx",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/routes.tsx",
@@ -4607,6 +5480,36 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/routes.tsx",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "src_routes_tsx",
+      "target": "src_routes_conferencedashboardroute",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes.tsx",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "src_routes_tsx",
+      "target": "src_routes_districtdashboardroute",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes.tsx",
+      "source_location": "L135",
+      "weight": 1.0,
+      "source": "src_routes_tsx",
+      "target": "src_routes_globaldashboardroute",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes.tsx",
       "source_location": "L18",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -4672,6 +5575,36 @@
       "confidence_score": 1.0,
       "source": "src_lib_api_ts",
       "target": "lib_api_getrefreshtoken"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "src_lib_api_ts",
+      "target": "lib_api_isonline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "src_lib_api_ts",
+      "target": "lib_api_inferqueuetype",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "src_lib_api_ts",
+      "target": "lib_api_queueoffline",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4899,9 +5832,9 @@
       "source_file": "src/lib/api.ts",
       "source_location": "L428",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_api_ts",
-      "target": "lib_api_notification",
-      "confidence_score": 1.0
+      "target": "lib_api_notification"
     },
     {
       "relation": "contains",
@@ -4909,9 +5842,9 @@
       "source_file": "src/lib/api.ts",
       "source_location": "L440",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_api_ts",
-      "target": "lib_api_notificationapi",
-      "confidence_score": 1.0
+      "target": "lib_api_notificationapi"
     },
     {
       "relation": "contains",
@@ -4919,9 +5852,9 @@
       "source_file": "src/lib/api.ts",
       "source_location": "L449",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_api_ts",
-      "target": "lib_api_budgettemplate",
-      "confidence_score": 1.0
+      "target": "lib_api_budgettemplate"
     },
     {
       "relation": "contains",
@@ -5016,6 +5949,37 @@
     },
     {
       "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "lib_offline_api_offlinesaferequest",
+      "target": "src_lib_api_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "lib_offline_api_pullfreshdata",
+      "target": "src_lib_api_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "src_lib_api_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/routes/AuditPage.tsx",
@@ -5029,10 +5993,32 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_conferencedashboard_tsx",
+      "target": "src_lib_api_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/routes/DashboardLayout.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_dashboardlayout_tsx",
+      "target": "src_lib_api_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_districtdashboard_tsx",
       "target": "src_lib_api_ts",
       "confidence_score": 1.0
     },
@@ -5057,6 +6043,17 @@
       "confidence_score": 1.0,
       "source": "src_routes_forgotpasswordpage_tsx",
       "target": "src_lib_api_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_globaldashboard_tsx",
+      "target": "src_lib_api_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -5117,22 +6114,22 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/routes/SyncIndicator.tsx",
+      "source_file": "src/routes/UsersPage.tsx",
       "source_location": "L3",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "src_routes_syncindicator_tsx",
+      "source": "src_routes_userspage_tsx",
       "target": "src_lib_api_ts"
     },
     {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/routes/UsersPage.tsx",
+      "source_file": "src/routes/SyncIndicator.tsx",
       "source_location": "L3",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "src_routes_userspage_tsx",
+      "source": "src_routes_syncindicator_tsx",
       "target": "src_lib_api_ts"
     },
     {
@@ -5144,6 +6141,28 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "lib_api_request",
+      "target": "lib_api_gettoken"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_api_gettoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "lib_sync_manager_apifetch",
       "target": "lib_api_gettoken"
     },
     {
@@ -5169,6 +6188,28 @@
       "target": "lib_api_settokens"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_api_settokens",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "lib_sync_manager_apifetch",
+      "target": "lib_api_settokens"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -5188,6 +6229,28 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_lib_auth_tsx",
+      "target": "lib_api_cleartokens"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_api_cleartokens",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L77",
+      "weight": 1.0,
+      "source": "lib_sync_manager_apifetch",
       "target": "lib_api_cleartokens"
     },
     {
@@ -5213,6 +6276,103 @@
       "target": "lib_api_getrefreshtoken"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_api_getrefreshtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "lib_sync_manager_apifetch",
+      "target": "lib_api_getrefreshtoken"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "lib_api_request",
+      "target": "lib_api_isonline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "lib_api_queueoffline",
+      "target": "lib_api_inferqueuetype",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "lib_api_queueoffline",
+      "target": "src_lib_offline_db_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "lib_api_queueoffline",
+      "target": "src_lib_sync_manager_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "lib_api_request",
+      "target": "lib_api_queueoffline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/lib/api.ts",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "lib_api_queueoffline",
+      "target": "lib_offline_db_queueoperation"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/lib/api.ts",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "lib_api_queueoffline",
+      "target": "lib_sync_manager_triggersync"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "INFERRED",
@@ -5222,6 +6382,39 @@
       "weight": 1.0,
       "source": "lib_api_request",
       "target": "worker_index_fetch"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_conferencedashboard_tsx",
+      "target": "lib_api_api",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_districtdashboard_tsx",
+      "target": "lib_api_api",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_globaldashboard_tsx",
+      "target": "lib_api_api",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -5307,9 +6500,9 @@
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_financepage_tsx",
-      "target": "lib_api_memberapi",
-      "confidence_score": 1.0
+      "target": "lib_api_memberapi"
     },
     {
       "relation": "imports",
@@ -5461,9 +6654,9 @@
       "source_file": "src/routes/DashboardLayout.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_dashboardlayout_tsx",
-      "target": "lib_api_notification",
-      "confidence_score": 1.0
+      "target": "lib_api_notification"
     },
     {
       "relation": "imports",
@@ -5472,9 +6665,9 @@
       "source_file": "src/routes/DashboardLayout.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_dashboardlayout_tsx",
-      "target": "lib_api_notificationapi",
-      "confidence_score": 1.0
+      "target": "lib_api_notificationapi"
     },
     {
       "relation": "imports",
@@ -5618,6 +6811,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_routes_conferencedashboard_tsx",
+      "target": "src_lib_auth_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/routes/DashboardLayout.tsx",
       "source_location": "L2",
       "weight": 1.0,
@@ -5640,12 +6844,34 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_routes_districtdashboard_tsx",
+      "target": "src_lib_auth_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L2",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_routes_financepage_tsx",
       "target": "src_lib_auth_tsx"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_routes_globaldashboard_tsx",
+      "target": "src_lib_auth_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -5728,6 +6954,17 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_routes_conferencedashboard_tsx",
+      "target": "lib_auth_useauth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/routes/DashboardLayout.tsx",
       "source_location": "L2",
       "weight": 1.0,
@@ -5750,12 +6987,34 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_routes_districtdashboard_tsx",
+      "target": "lib_auth_useauth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L2",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_routes_financepage_tsx",
       "target": "lib_auth_useauth"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_routes_globaldashboard_tsx",
+      "target": "lib_auth_useauth",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -5832,6 +7091,17 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_routes_userspage_tsx",
+      "target": "lib_auth_useauth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "routes_conferencedashboard_conferencedashboard",
       "target": "lib_auth_useauth"
     },
     {
@@ -5861,10 +7131,32 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "routes_districtdashboard_districtdashboard",
+      "target": "lib_auth_useauth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L8",
       "weight": 1.0,
       "source": "routes_financepage_financepage",
+      "target": "lib_auth_useauth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "routes_globaldashboard_globaldashboard",
       "target": "lib_auth_useauth"
     },
     {
@@ -6028,6 +7320,909 @@
       "target": "lib_modules_getvisiblegroups"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_lib_offline_api_ts",
+      "target": "src_lib_sync_manager_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_lib_offline_api_ts",
+      "target": "lib_sync_manager_getonlinestatus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_lib_offline_api_ts",
+      "target": "lib_sync_manager_triggersync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_lib_offline_api_ts",
+      "target": "src_lib_offline_db_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_lib_offline_api_ts",
+      "target": "lib_offline_db_queueoperation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_lib_offline_api_ts",
+      "target": "lib_offline_api_stripapibase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_lib_offline_api_ts",
+      "target": "lib_offline_api_offlinesaferequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "src_lib_offline_api_ts",
+      "target": "lib_offline_api_inferoperationtype",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "src_lib_offline_api_ts",
+      "target": "lib_offline_api_pullfreshdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "lib_offline_api_offlinesaferequest",
+      "target": "lib_offline_api_stripapibase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "lib_offline_api_offlinesaferequest",
+      "target": "lib_offline_api_inferoperationtype",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "lib_offline_api_offlinesaferequest",
+      "target": "lib_sync_manager_getonlinestatus"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "lib_offline_api_offlinesaferequest",
+      "target": "lib_offline_db_queueoperation"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/lib/offline-api.ts",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "lib_offline_api_offlinesaferequest",
+      "target": "lib_sync_manager_triggersync"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_queuedoperation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_cachedmember",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_cachedresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_offlinedb",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_generateclientuuid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_priority_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_getoperationpriority",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_queueoperation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_getpendingoperations",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_markoperationsynced",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L99",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_cachemembers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_getcachedmembers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_cacheresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "src_lib_offline_db_ts",
+      "target": "lib_offline_db_getcachedresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "src_lib_offline_db_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "src_lib_offline_db_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_offline_db_queuedoperation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_offline_db_queuedoperation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "lib_offline_db_queueoperation",
+      "target": "lib_offline_db_generateclientuuid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/offline-db.ts",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "lib_offline_db_queueoperation",
+      "target": "lib_offline_db_getoperationpriority",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_offline_db_getpendingoperations",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "lib_sync_manager_startsync",
+      "target": "lib_offline_db_getpendingoperations"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_offline_db_markoperationsynced",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "lib_sync_manager_startsync",
+      "target": "lib_offline_db_markoperationsynced"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_syncstatus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_syncprogress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_onsyncprogress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_emit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_getonlinestatus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_initsyncmanager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_apifetch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_startsync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_formatlabel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_onconflict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_emitconflict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L158",
+      "weight": 1.0,
+      "source": "src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_triggersync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "src_lib_sync_manager_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/SyncIndicator.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_syncindicator_tsx",
+      "target": "src_lib_sync_manager_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_sync_manager_onsyncprogress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "lib_sync_manager_startsync",
+      "target": "lib_sync_manager_emit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/SyncIndicator.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_syncindicator_tsx",
+      "target": "lib_sync_manager_getonlinestatus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/routes/SyncIndicator.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "routes_syncindicator_syncindicator",
+      "target": "lib_sync_manager_getonlinestatus"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "lib_sync_manager_initsyncmanager",
+      "target": "lib_sync_manager_startsync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_sync_manager_initsyncmanager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "lib_sync_manager_startsync",
+      "target": "lib_sync_manager_apifetch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "lib_sync_manager_apifetch",
+      "target": "worker_index_fetch"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "lib_sync_manager_startsync",
+      "target": "lib_sync_manager_formatlabel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/sync-manager.ts",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "lib_sync_manager_startsync",
+      "target": "lib_sync_manager_emitconflict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_sync_manager_startsync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_sync_manager_onconflict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/SyncIndicator.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_syncindicator_tsx",
+      "target": "lib_sync_manager_triggersync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_usesync_syncstate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_usesync_gstate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_usesync_listeners",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_usesync_setgstate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_usesync_conflictinfo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_usesync_conflictlisteners",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_usesync_setconflict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_usesync_localpayload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_usesync_ci",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_usesync_usesyncstate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_usesync_useconflictstate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/useSync.ts",
+      "source_location": "L121",
+      "weight": 1.0,
+      "source": "src_lib_usesync_ts",
+      "target": "lib_usesync_useofflineinit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConflictResolver.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_routes_conflictresolver_tsx",
+      "target": "src_lib_usesync_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/SyncIndicator.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_routes_syncindicator_tsx",
+      "target": "src_lib_usesync_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/SyncIndicator.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_routes_syncindicator_tsx",
+      "target": "lib_usesync_usesyncstate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/routes/SyncIndicator.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "routes_syncindicator_syncindicator",
+      "target": "lib_usesync_usesyncstate"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConflictResolver.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_routes_conflictresolver_tsx",
+      "target": "lib_usesync_useconflictstate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/routes/ConflictResolver.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "routes_conflictresolver_conflictresolver",
+      "target": "lib_usesync_useconflictstate"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/SyncIndicator.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_routes_syncindicator_tsx",
+      "target": "lib_usesync_useofflineinit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/routes/SyncIndicator.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "routes_syncindicator_syncindicator",
+      "target": "lib_usesync_useofflineinit"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/routes/AuditPage.tsx",
@@ -6056,6 +8251,97 @@
       "confidence_score": 1.0,
       "source": "src_routes_auditpage_tsx",
       "target": "routes_auditpage_auditpage"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_routes_conferencedashboard_tsx",
+      "target": "routes_conferencedashboard_churchmetric",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "src_routes_conferencedashboard_tsx",
+      "target": "routes_conferencedashboard_conferencesummary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "src_routes_conferencedashboard_tsx",
+      "target": "routes_conferencedashboard_district",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "src_routes_conferencedashboard_tsx",
+      "target": "routes_conferencedashboard_conferencedashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L164",
+      "weight": 1.0,
+      "source": "src_routes_conferencedashboard_tsx",
+      "target": "routes_conferencedashboard_summarycard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConferenceDashboard.tsx",
+      "source_location": "L173",
+      "weight": 1.0,
+      "source": "src_routes_conferencedashboard_tsx",
+      "target": "routes_conferencedashboard_sortheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConflictResolver.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_conflictresolver_tsx",
+      "target": "routes_conflictresolver_conflictresolver",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ConflictResolver.tsx",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "src_routes_conflictresolver_tsx",
+      "target": "routes_conflictresolver_diffview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/DashboardLayout.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_routes_dashboardlayout_tsx",
+      "target": "src_routes_conflictresolver_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -6111,6 +8397,46 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_routes_districtdashboard_tsx",
+      "target": "routes_districtdashboard_churchmetric",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "src_routes_districtdashboard_tsx",
+      "target": "routes_districtdashboard_districtsummary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "src_routes_districtdashboard_tsx",
+      "target": "routes_districtdashboard_districtdashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/DistrictDashboard.tsx",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "src_routes_districtdashboard_tsx",
+      "target": "routes_districtdashboard_summarycard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L5",
       "weight": 1.0,
@@ -6154,9 +8480,9 @@
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L218",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_financepage_tsx",
-      "target": "routes_financepage_getlatestsaturday",
-      "confidence_score": 1.0
+      "target": "routes_financepage_getlatestsaturday"
     },
     {
       "relation": "contains",
@@ -6225,9 +8551,9 @@
       "source_file": "src/routes/FinancePage.tsx",
       "source_location": "L238",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_financepage_batchestab",
-      "target": "routes_financepage_getlatestsaturday",
-      "confidence_score": 1.0
+      "target": "routes_financepage_getlatestsaturday"
     },
     {
       "relation": "contains",
@@ -6238,6 +8564,46 @@
       "confidence_score": 1.0,
       "source": "src_routes_forgotpasswordpage_tsx",
       "target": "routes_forgotpasswordpage_forgotpasswordpage"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_routes_globaldashboard_tsx",
+      "target": "routes_globaldashboard_globalsummary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "src_routes_globaldashboard_tsx",
+      "target": "routes_globaldashboard_monthlytrend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "src_routes_globaldashboard_tsx",
+      "target": "routes_globaldashboard_globaldashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/GlobalDashboard.tsx",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "src_routes_globaldashboard_tsx",
+      "target": "routes_globaldashboard_summarycard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -6353,21 +8719,21 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/routes/SyncIndicator.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_routes_syncindicator_tsx",
-      "target": "routes_syncindicator_syncstate"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/routes/SyncIndicator.tsx",
       "source_location": "L10",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_routes_syncindicator_tsx",
       "target": "routes_syncindicator_syncindicator"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/SyncIndicator.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_routes_syncindicator_tsx",
+      "target": "routes_syncindicator_syncstate"
     },
     {
       "relation": "contains",
@@ -6438,6 +8804,76 @@
       "confidence_score": 1.0,
       "source": "test_auth_test_ts",
       "target": "test_auth_test_forgotbody"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "test_conference_test_ts",
+      "target": "test_conference_test_sb",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "test_conference_test_ts",
+      "target": "test_conference_test_mb",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L171",
+      "weight": 1.0,
+      "source": "test_conference_test_ts",
+      "target": "test_conference_test_hh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "test_conference_test_ts",
+      "target": "test_conference_test_now",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "test_conference_test_ts",
+      "target": "test_conference_test_pb",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "test_conference_test_ts",
+      "target": "test_conference_test_md",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/conference.test.ts",
+      "source_location": "L176",
+      "weight": 1.0,
+      "source": "test_conference_test_ts",
+      "target": "test_conference_test_b",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -7450,9 +9886,9 @@
       "source_file": "worker/index.ts",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_index_ts",
-      "target": "routes_finance_handleupdateexpensecategory",
-      "confidence_score": 1.0
+      "target": "routes_finance_handleupdateexpensecategory"
     },
     {
       "relation": "imports",
@@ -7560,9 +9996,9 @@
       "source_file": "worker/index.ts",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_index_ts",
-      "target": "routes_finance_handleapprovebudget",
-      "confidence_score": 1.0
+      "target": "routes_finance_handleapprovebudget"
     },
     {
       "relation": "imports",
@@ -7571,9 +10007,9 @@
       "source_file": "worker/index.ts",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_index_ts",
-      "target": "routes_finance_handlegetbudgettemplates",
-      "confidence_score": 1.0
+      "target": "routes_finance_handlegetbudgettemplates"
     },
     {
       "relation": "imports",
@@ -7582,9 +10018,9 @@
       "source_file": "worker/index.ts",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_index_ts",
-      "target": "routes_finance_handlecreatebudgettemplate",
-      "confidence_score": 1.0
+      "target": "routes_finance_handlecreatebudgettemplate"
     },
     {
       "relation": "imports",
@@ -7604,9 +10040,9 @@
       "source_file": "worker/index.ts",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_index_ts",
-      "target": "worker_routes_notifications_ts",
-      "confidence_score": 1.0
+      "target": "worker_routes_notifications_ts"
     },
     {
       "relation": "imports",
@@ -7615,9 +10051,9 @@
       "source_file": "worker/index.ts",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_index_ts",
-      "target": "routes_notifications_handlegetnotifications",
-      "confidence_score": 1.0
+      "target": "routes_notifications_handlegetnotifications"
     },
     {
       "relation": "imports",
@@ -7626,9 +10062,9 @@
       "source_file": "worker/index.ts",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_index_ts",
-      "target": "routes_notifications_handlemarknotificationread",
-      "confidence_score": 1.0
+      "target": "routes_notifications_handlemarknotificationread"
     },
     {
       "relation": "imports",
@@ -7637,9 +10073,9 @@
       "source_file": "worker/index.ts",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_index_ts",
-      "target": "routes_notifications_handlemarkallread",
-      "confidence_score": 1.0
+      "target": "routes_notifications_handlemarkallread"
     },
     {
       "relation": "imports_from",
@@ -7750,6 +10186,50 @@
       "confidence_score": 1.0,
       "source": "worker_index_ts",
       "target": "routes_reconciliation_handletithereport"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/index.ts",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "worker_index_ts",
+      "target": "worker_routes_conference_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/index.ts",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "worker_index_ts",
+      "target": "routes_conference_handleconferencedashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/index.ts",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "worker_index_ts",
+      "target": "routes_conference_handledistrictdashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/index.ts",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "worker_index_ts",
+      "target": "routes_conference_handleglobaldashboard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8485,6 +10965,39 @@
       "weight": 1.0,
       "source": "worker_index_fetch",
       "target": "routes_audit_handlegetauditbyentity"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/index.ts",
+      "source_location": "L380",
+      "weight": 1.0,
+      "source": "worker_index_fetch",
+      "target": "routes_conference_handleconferencedashboard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/index.ts",
+      "source_location": "L383",
+      "weight": 1.0,
+      "source": "worker_index_fetch",
+      "target": "routes_conference_handledistrictdashboard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/index.ts",
+      "source_location": "L386",
+      "weight": 1.0,
+      "source": "worker_index_fetch",
+      "target": "routes_conference_handleglobaldashboard"
     },
     {
       "relation": "contains",
@@ -10119,6 +12632,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "worker_routes_conference_ts",
+      "target": "worker_lib_middleware_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "worker/routes/finance.ts",
       "source_location": "L1",
       "weight": 1.0,
@@ -10144,9 +12668,9 @@
       "source_file": "worker/routes/notifications.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_notifications_ts",
-      "target": "worker_lib_middleware_ts",
-      "confidence_score": 1.0
+      "target": "worker_lib_middleware_ts"
     },
     {
       "relation": "imports_from",
@@ -10229,6 +12753,17 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "worker_routes_conference_ts",
+      "target": "lib_middleware_authenticate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "worker/routes/finance.ts",
       "source_location": "L1",
       "weight": 1.0,
@@ -10254,9 +12789,9 @@
       "source_file": "worker/routes/notifications.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_notifications_ts",
-      "target": "lib_middleware_authenticate",
-      "confidence_score": 1.0
+      "target": "lib_middleware_authenticate"
     },
     {
       "relation": "imports",
@@ -10322,6 +12857,39 @@
       "source_location": "L99",
       "weight": 1.0,
       "source": "routes_audit_handlegetauditbyentity",
+      "target": "lib_middleware_authenticate"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "routes_conference_handleconferencedashboard",
+      "target": "lib_middleware_authenticate"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L134",
+      "weight": 1.0,
+      "source": "routes_conference_handledistrictdashboard",
+      "target": "lib_middleware_authenticate"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L235",
+      "weight": 1.0,
+      "source": "routes_conference_handleglobaldashboard",
       "target": "lib_middleware_authenticate"
     },
     {
@@ -10955,6 +13523,17 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "worker_routes_conference_ts",
+      "target": "lib_middleware_authorize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "worker/routes/finance.ts",
       "source_location": "L1",
       "weight": 1.0,
@@ -11037,6 +13616,39 @@
       "source_location": "L102",
       "weight": 1.0,
       "source": "routes_audit_handlegetauditbyentity",
+      "target": "lib_middleware_authorize"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "routes_conference_handleconferencedashboard",
+      "target": "lib_middleware_authorize"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "routes_conference_handledistrictdashboard",
+      "target": "lib_middleware_authorize"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L238",
+      "weight": 1.0,
+      "source": "routes_conference_handleglobaldashboard",
       "target": "lib_middleware_authorize"
     },
     {
@@ -11730,6 +14342,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "worker_routes_conference_ts",
+      "target": "worker_lib_roles_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "worker/routes/finance.ts",
       "source_location": "L2",
       "weight": 1.0,
@@ -11824,6 +14447,17 @@
       "confidence_score": 1.0,
       "source": "worker_routes_audit_ts",
       "target": "lib_roles_permissions"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "worker_routes_conference_ts",
+      "target": "lib_roles_permissions",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -12061,6 +14695,79 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "worker_routes_conference_ts",
+      "target": "routes_conference_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "worker_routes_conference_ts",
+      "target": "routes_conference_handleconferencedashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "worker_routes_conference_ts",
+      "target": "routes_conference_handledistrictdashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L234",
+      "weight": 1.0,
+      "source": "worker_routes_conference_ts",
+      "target": "routes_conference_handleglobaldashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "routes_conference_handleconferencedashboard",
+      "target": "routes_conference_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L143",
+      "weight": 1.0,
+      "source": "routes_conference_handledistrictdashboard",
+      "target": "routes_conference_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/conference.ts",
+      "source_location": "L295",
+      "weight": 1.0,
+      "source": "routes_conference_handleglobaldashboard",
+      "target": "routes_conference_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "worker/routes/finance.ts",
       "source_location": "L4",
       "weight": 1.0,
@@ -12134,9 +14841,9 @@
       "source_file": "worker/routes/finance.ts",
       "source_location": "L148",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_finance_ts",
-      "target": "routes_finance_handleupdateexpensecategory",
-      "confidence_score": 1.0
+      "target": "routes_finance_handleupdateexpensecategory"
     },
     {
       "relation": "contains",
@@ -12244,9 +14951,9 @@
       "source_file": "worker/routes/finance.ts",
       "source_location": "L871",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_finance_ts",
-      "target": "routes_finance_handlegetbudgettemplates",
-      "confidence_score": 1.0
+      "target": "routes_finance_handlegetbudgettemplates"
     },
     {
       "relation": "contains",
@@ -12254,9 +14961,9 @@
       "source_file": "worker/routes/finance.ts",
       "source_location": "L906",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_finance_ts",
-      "target": "routes_finance_handlecreatebudgettemplate",
-      "confidence_score": 1.0
+      "target": "routes_finance_handlecreatebudgettemplate"
     },
     {
       "relation": "contains",
@@ -12264,9 +14971,9 @@
       "source_file": "worker/routes/finance.ts",
       "source_location": "L973",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_finance_ts",
-      "target": "routes_finance_handleapprovebudget",
-      "confidence_score": 1.0
+      "target": "routes_finance_handleapprovebudget"
     },
     {
       "relation": "contains",
@@ -12318,9 +15025,9 @@
       "source_file": "worker/routes/finance.ts",
       "source_location": "L161",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_finance_handleupdateexpensecategory",
-      "target": "routes_finance_json",
-      "confidence_score": 1.0
+      "target": "routes_finance_json"
     },
     {
       "relation": "calls",
@@ -12439,9 +15146,9 @@
       "source_file": "worker/routes/finance.ts",
       "source_location": "L883",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_finance_handlegetbudgettemplates",
-      "target": "routes_finance_json",
-      "confidence_score": 1.0
+      "target": "routes_finance_json"
     },
     {
       "relation": "calls",
@@ -12450,9 +15157,9 @@
       "source_file": "worker/routes/finance.ts",
       "source_location": "L921",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_finance_handlecreatebudgettemplate",
-      "target": "routes_finance_json",
-      "confidence_score": 1.0
+      "target": "routes_finance_json"
     },
     {
       "relation": "calls",
@@ -12461,9 +15168,9 @@
       "source_file": "worker/routes/finance.ts",
       "source_location": "L988",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_finance_handleapprovebudget",
-      "target": "routes_finance_json",
-      "confidence_score": 1.0
+      "target": "routes_finance_json"
     },
     {
       "relation": "calls",
@@ -12483,9 +15190,9 @@
       "source_file": "worker/routes/finance.ts",
       "source_location": "L496",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_finance_handleconfirmbatch",
-      "target": "routes_finance_uuid",
-      "confidence_score": 1.0
+      "target": "routes_finance_uuid"
     },
     {
       "relation": "calls",
@@ -12516,9 +15223,9 @@
       "source_file": "worker/routes/members.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_members_ts",
-      "target": "worker_routes_notifications_ts",
-      "confidence_score": 1.0
+      "target": "worker_routes_notifications_ts"
     },
     {
       "relation": "imports",
@@ -12527,9 +15234,9 @@
       "source_file": "worker/routes/members.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_members_ts",
-      "target": "routes_notifications_createnotification",
-      "confidence_score": 1.0
+      "target": "routes_notifications_createnotification"
     },
     {
       "relation": "contains",
@@ -13011,9 +15718,9 @@
       "source_file": "worker/routes/notifications.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_notifications_ts",
-      "target": "routes_notifications_json",
-      "confidence_score": 1.0
+      "target": "routes_notifications_json"
     },
     {
       "relation": "contains",
@@ -13021,9 +15728,9 @@
       "source_file": "worker/routes/notifications.ts",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_notifications_ts",
-      "target": "routes_notifications_handlegetnotifications",
-      "confidence_score": 1.0
+      "target": "routes_notifications_handlegetnotifications"
     },
     {
       "relation": "contains",
@@ -13031,9 +15738,9 @@
       "source_file": "worker/routes/notifications.ts",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_notifications_ts",
-      "target": "routes_notifications_handlemarknotificationread",
-      "confidence_score": 1.0
+      "target": "routes_notifications_handlemarknotificationread"
     },
     {
       "relation": "contains",
@@ -13041,9 +15748,9 @@
       "source_file": "worker/routes/notifications.ts",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_notifications_ts",
-      "target": "routes_notifications_handlemarkallread",
-      "confidence_score": 1.0
+      "target": "routes_notifications_handlemarkallread"
     },
     {
       "relation": "contains",
@@ -13051,9 +15758,9 @@
       "source_file": "worker/routes/notifications.ts",
       "source_location": "L79",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_notifications_ts",
-      "target": "routes_notifications_createnotification",
-      "confidence_score": 1.0
+      "target": "routes_notifications_createnotification"
     },
     {
       "relation": "calls",
@@ -13062,9 +15769,9 @@
       "source_file": "worker/routes/notifications.ts",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_notifications_handlegetnotifications",
-      "target": "routes_notifications_json",
-      "confidence_score": 1.0
+      "target": "routes_notifications_json"
     },
     {
       "relation": "calls",
@@ -13073,9 +15780,9 @@
       "source_file": "worker/routes/notifications.ts",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_notifications_handlemarknotificationread",
-      "target": "routes_notifications_json",
-      "confidence_score": 1.0
+      "target": "routes_notifications_json"
     },
     {
       "relation": "calls",
@@ -13084,9 +15791,9 @@
       "source_file": "worker/routes/notifications.ts",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_notifications_handlemarkallread",
-      "target": "routes_notifications_json",
-      "confidence_score": 1.0
+      "target": "routes_notifications_json"
     },
     {
       "relation": "contains",
@@ -14750,5 +17457,5 @@
       "source_file": ""
     }
   ],
-  "built_at_commit": "9c3878f69feb66b6dd7e290d97689c80f4f1abd5"
+  "built_at_commit": "7469f18837c12baf66a0b804e64ff2fb6506b644"
 }

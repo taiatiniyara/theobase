@@ -27,49 +27,85 @@
     "mtime": 1784761965.2050164,
     "hash": "ea8eedea1f5ac8481fb0edc106def454"
   },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\public\\sw.js": {
+    "mtime": 1784763775.349224,
+    "hash": "12b79c2c3bec2c564e58bafbf23955db"
+  },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\main.tsx": {
-    "mtime": 1784748488.5093262,
-    "hash": "9d798a80af0ff15f23395357ad5d6b9d"
+    "mtime": 1784763854.4232311,
+    "hash": "663e1fc5b3fcf184f2686f287e11ce50"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx": {
-    "mtime": 1784761170.4492517,
-    "hash": "dce27e650f49d8c52460cbd839ba2124"
+    "mtime": 1784764140.129955,
+    "hash": "45359afec6f940831b69f3b97171d635"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\vite-env.d.ts": {
     "mtime": 1784744755.3020525,
     "hash": "0352474ba2918efe13895edbc3780d94"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\api.ts": {
-    "mtime": 1784762451.6486988,
-    "hash": "6f23fcad88787b7c5f9d409ad48dd738"
+    "mtime": 1784764524.2669816,
+    "hash": "dc844bd792ca71688ddf6c5bf2a1a747"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\auth.tsx": {
     "mtime": 1784749564.442271,
     "hash": "40ced6110e44faa9b52ba780113b3848"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\modules.ts": {
-    "mtime": 1784761185.9252608,
-    "hash": "8fd53b0a46db5506fbaaaa7a4bc7c818"
+    "mtime": 1784764154.5683575,
+    "hash": "0380276e8356fa711ef1aa4dda2e0980"
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-api.ts": {
+    "mtime": 1784764241.4208477,
+    "hash": "d99b570fc62b969c7f2350a15a34b848"
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts": {
+    "mtime": 1784764283.502381,
+    "hash": "cd1a5f922bab398aaeacd741a60fe3d4"
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts": {
+    "mtime": 1784764319.5809317,
+    "hash": "d9a9deaf1572745aba549d834fa7ea65"
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\useSync.ts": {
+    "mtime": 1784764526.212368,
+    "hash": "53076490755aaad70d448a1b110d2a52"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\AuditPage.tsx": {
     "mtime": 1784758661.2742488,
     "hash": "e57e309ceea4138061b60a049fc474e9"
   },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\ConferenceDashboard.tsx": {
+    "mtime": 1784764084.9757135,
+    "hash": "123a8382dccad9d607605d88c8ee26d6"
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\ConflictResolver.tsx": {
+    "mtime": 1784763840.6639402,
+    "hash": "4497cf98b3ee505028ecf6119fa3a2e6"
+  },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DashboardLayout.tsx": {
-    "mtime": 1784762878.9647362,
-    "hash": "1be0a6bbdc952ac92cf66ac419581a6e"
+    "mtime": 1784763887.0366292,
+    "hash": "0c12d94b79eff7ab8318263e121fb6e0"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DashboardPage.tsx": {
     "mtime": 1784757685.2785873,
     "hash": "17310ab8dee7d13e4d45451ec32600d7"
   },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx": {
+    "mtime": 1784764094.8720722,
+    "hash": "60d32342d3452611ce366530e2fbf4ba"
+  },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\FinancePage.tsx": {
-    "mtime": 1784762804.1356394,
-    "hash": "804e739bf306c87672bac0982d610ac0"
+    "mtime": 1784763229.879758,
+    "hash": "506a4f40dda944218db2f4f809a15443"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\ForgotPasswordPage.tsx": {
     "mtime": 1784753957.2078648,
     "hash": "2f252b8124b0c00dd7ca398784528bda"
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx": {
+    "mtime": 1784764104.0066428,
+    "hash": "b6ec9b3b91f7f7656810fb675f700c48"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\HomePage.tsx": {
     "mtime": 1784753919.494921,
@@ -80,8 +116,8 @@
     "hash": "9e7b8f98e93d7ae2b0941c5ce6032af5"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\MembersPage.tsx": {
-    "mtime": 1784762639.1605659,
-    "hash": "1a7269eaddce16891da1cfee2024adca"
+    "mtime": 1784763229.9337986,
+    "hash": "fb9bf6298e4a2b779c6cc08d9ab47baa"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx": {
     "mtime": 1784749564.5697944,
@@ -104,8 +140,8 @@
     "hash": "817b06f3fa83a85d20bbf678275a331d"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\SyncIndicator.tsx": {
-    "mtime": 1784758661.3302968,
-    "hash": "c226396ef0cccc92c1433b120691ad82"
+    "mtime": 1784764527.7365067,
+    "hash": "08f56bc7b213ce7e2c90896c80c2d46e"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\UsersPage.tsx": {
     "mtime": 1784749564.5993214,
@@ -114,6 +150,10 @@
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\auth.test.ts": {
     "mtime": 1784749469.368893,
     "hash": "7746d302efe2ca9ae2302ec5545a96cb"
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\conference.test.ts": {
+    "mtime": 1784764461.5088842,
+    "hash": "bedc34a0564d96cc497bd2c91f1975f0"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\csv.test.ts": {
     "mtime": 1784748880.6582592,
@@ -124,8 +164,8 @@
     "hash": "8cb5e1dc5369a7288b35a3981480d2c8"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\finance.test.ts": {
-    "mtime": 1784763119.2065473,
-    "hash": "2d78cd9f8e0a96c553b0949e1d6d57c7"
+    "mtime": 1784763229.9587948,
+    "hash": "c6844295c065a2cd22fcb3e968444a2f"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\members.test.ts": {
     "mtime": 1784763132.1813548,
@@ -152,8 +192,8 @@
     "hash": "f9f218d8522ddd8fb986b40ace43ae90"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\index.ts": {
-    "mtime": 1784762283.4001093,
-    "hash": "ea9607fed55340ee616bb7ea9e39866d"
+    "mtime": 1784764057.4122975,
+    "hash": "09e0577b8f1b8765a670d05e381957fa"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts": {
     "mtime": 1784745840.531474,
@@ -191,17 +231,21 @@
     "mtime": 1784758087.0380533,
     "hash": "02d2e11d5a319534d73a709e492ac0af"
   },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts": {
+    "mtime": 1784763983.2109485,
+    "hash": "94a5520aa0700f20af668e13cfb6c021"
+  },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts": {
-    "mtime": 1784762228.5812993,
-    "hash": "30f9207af566df0a53322e106ef1c1ed"
+    "mtime": 1784763230.0503457,
+    "hash": "bb807e18f6e7b5bd2a9132004e9c1710"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\members.ts": {
-    "mtime": 1784762521.415154,
-    "hash": "bd4f79d1cb41d80b70481da55a02ce8a"
+    "mtime": 1784763230.1119351,
+    "hash": "382f34664c16592342579b5ad1a711f0"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts": {
-    "mtime": 1784761996.1727552,
-    "hash": "cba9eef8a2926346a4f33124f582eca8"
+    "mtime": 1784763230.1209235,
+    "hash": "d63918db1a6cb899a8f5ede27d45ba08"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\org.ts": {
     "mtime": 1784758193.0762568,
@@ -228,8 +272,8 @@
     "hash": "34175466ead2b9d244c75795baaa0e80"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\index.html": {
-    "mtime": 1784753913.0899484,
-    "hash": "0c731a1bccc7ec96e0c963a7574c88e9"
+    "mtime": 1784763855.6097026,
+    "hash": "3743c902514ce47da4f3e992440a1562"
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-append-only-immutable-finance.md": {
     "mtime": 1784721206.0301616,

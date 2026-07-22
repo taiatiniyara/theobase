@@ -4,6 +4,7 @@ import { useAuth } from "../lib/auth";
 import { notificationApi, type Notification } from "../lib/api";
 import { getVisibleGroups } from "../lib/modules";
 import SyncIndicator from "./SyncIndicator";
+import ConflictResolver from "./ConflictResolver";
 
 const ICONS: Record<string, ReactNode> = {
   home: (
@@ -422,6 +423,7 @@ export default function DashboardLayout() {
           <Outlet />
         </main>
       </div>
+      <ConflictResolver />
     </div>
   );
 }
