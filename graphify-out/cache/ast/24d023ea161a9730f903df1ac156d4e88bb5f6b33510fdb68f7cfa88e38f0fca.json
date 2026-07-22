@@ -1,0 +1,110 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "label": "roles.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "lib_roles_roles",
+      "label": "ROLES",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "lib_roles_role",
+      "label": "Role",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L11"
+    },
+    {
+      "id": "lib_roles_role_labels",
+      "label": "ROLE_LABELS",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L13"
+    },
+    {
+      "id": "lib_roles_conference_roles",
+      "label": "CONFERENCE_ROLES",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L23"
+    },
+    {
+      "id": "lib_roles_church_roles",
+      "label": "CHURCH_ROLES",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L31"
+    },
+    {
+      "id": "lib_roles_permissions",
+      "label": "PERMISSIONS",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L33"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "target": "lib_roles_roles",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "target": "lib_roles_role",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "target": "lib_roles_role_labels",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "target": "lib_roles_conference_roles",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "target": "lib_roles_church_roles",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "target": "lib_roles_permissions",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts",
+      "source_location": "L33",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": []
+}

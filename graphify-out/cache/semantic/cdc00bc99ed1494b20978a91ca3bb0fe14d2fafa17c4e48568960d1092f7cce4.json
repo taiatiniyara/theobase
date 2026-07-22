@@ -1,0 +1,38 @@
+{
+  "nodes": [
+    {
+      "id": "ConferenceDO",
+      "label": "Conference Durable Object",
+      "file_type": "code",
+      "source_file": "worker/durables/ConferenceDO.ts",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "ConferenceDO",
+      "target": "worker_env_types",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/durables/ConferenceDO.ts",
+      "source_location": "line 6",
+      "weight": 1.0
+    },
+    {
+      "source": "ConferenceDO",
+      "target": "migration_0001_initial",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.6,
+      "source_file": "worker/durables/ConferenceDO.ts",
+      "source_location": "lines 8-17",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

@@ -1,0 +1,102 @@
+{
+  "nodes": [
+    {
+      "id": "adr0003_offline_first_pwa",
+      "label": "ADR-0003: Offline-First PWA Architecture",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-offline-first-pwa.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Many SDA churches operate in rural areas with intermittent or no internet during Sabbath services \u00e2\u20ac\u201d exactly when financial data is collected. An online-only app would be unusable at the moment of highest need. The PWA model allows installation on any device without an app store, critical for global reach across 215+ countries. Trade-offs accepted: added complexity from conflict resolution and dual-custody enforcement across disconnected clients, eventual consistency with stale data until sync completes, and no native mobile app in MVP. Rejected online-only SaaS with optimistic UI because it is unusable in the primary deployment environment."
+    },
+    {
+      "id": "adr0003_indexeddb_operation_log",
+      "label": "IndexedDB Operation-Log",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-offline-first-pwa.md",
+      "source_location": "13",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "adr0003_dexie_js",
+      "label": "Dexie.js",
+      "file_type": "document",
+      "source_file": "docs/adr/0003-offline-first-pwa.md",
+      "source_location": "13",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "adr0003_versioned_optimistic_locking",
+      "label": "Versioned Optimistic Locking",
+      "file_type": "rationale",
+      "source_file": "docs/adr/0003-offline-first-pwa.md",
+      "source_location": "13",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "adr0003_offline_first_pwa",
+      "target": "adr0001_append_only_finance",
+      "relation": "cites",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0003-offline-first-pwa.md",
+      "source_location": "13",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0003_offline_first_pwa",
+      "target": "adr0003_indexeddb_operation_log",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0003-offline-first-pwa.md",
+      "source_location": "13",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0003_offline_first_pwa",
+      "target": "adr0003_versioned_optimistic_locking",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0003-offline-first-pwa.md",
+      "source_location": "13",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0003_indexeddb_operation_log",
+      "target": "adr0003_dexie_js",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0003-offline-first-pwa.md",
+      "source_location": "13",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0003_offline_first_pwa",
+      "target": "contextmd_offering_batch",
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "docs/adr/0003-offline-first-pwa.md",
+      "source_location": "5",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

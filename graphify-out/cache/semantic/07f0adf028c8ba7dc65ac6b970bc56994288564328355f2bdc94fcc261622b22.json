@@ -1,0 +1,83 @@
+{
+  "nodes": [
+    {
+      "id": "theobase_logo_light",
+      "label": "Theobase Logo Light (Icon + Wordmark)",
+      "file_type": "image",
+      "source_file": "branding/logo-light.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo_light_svg",
+      "label": "Logo Light SVG",
+      "file_type": "image",
+      "source_file": "branding/logo-light.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "theobase_brand",
+      "label": "Theobase Brand",
+      "file_type": "image",
+      "source_file": "branding/logo-light.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "t_icon",
+      "label": "T Icon Glyph",
+      "file_type": "image",
+      "source_file": "branding/logo-light.svg",
+      "source_location": "path (853.701,1208.43) through (933.358,1426.36)",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "wordmark_text",
+      "label": "Wordmark Text Paths",
+      "file_type": "image",
+      "source_file": "branding/logo-light.svg",
+      "source_location": "second g transform group",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "brand_orange",
+      "label": "Brand Orange (rgb 249,115,22)",
+      "file_type": "image",
+      "source_file": "branding/logo-light.svg",
+      "source_location": "fill:rgb(249,115,22)",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "raw_rect_512x512",
+      "label": "512x512 Bounding Rect (fill:none)",
+      "file_type": "image",
+      "source_file": "branding/logo-light.svg",
+      "source_location": "line 6 rect",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

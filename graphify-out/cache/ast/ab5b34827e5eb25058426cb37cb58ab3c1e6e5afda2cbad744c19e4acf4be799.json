@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_adr_0004_modular_package_architecture_md",
+      "label": "0004-modular-package-architecture.md",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0004-modular-package-architecture.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "adr_0004_modular_package_architecture_modular_architecture_with_package_based_registry",
+      "label": "Modular architecture with package-based registry",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0004-modular-package-architecture.md",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_adr_0004_modular_package_architecture_md",
+      "target": "adr_0004_modular_package_architecture_modular_architecture_with_package_based_registry",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0004-modular-package-architecture.md",
+      "source_location": "L1",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

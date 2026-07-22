@@ -1,0 +1,70 @@
+{
+  "nodes": [
+    {
+      "id": "adr0001_append_only_finance",
+      "label": "ADR-0001: Append-Only Immutable Finance",
+      "file_type": "document",
+      "source_file": "docs/adr/0001-append-only-immutable-finance.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "The SDA Church Manual requires dual-custody on all funds and annual audit of church records. An editable financial ledger would undermine the audit trail because a bad actor could silently modify past entries. Append-only guarantees that every action leaves a permanent, verifiable record. Rejected mutable transactions with soft-delete because: (a) the audit log could be tampered with in the same mutable system, (b) the dual-custody requirement implies finality once two people confirm a batch, and (c) append-only is simpler with fewer code paths to secure."
+    },
+    {
+      "id": "adr0001_sda_church_manual",
+      "label": "SDA Church Manual",
+      "file_type": "paper",
+      "source_file": "docs/adr/0001-append-only-immutable-finance.md",
+      "source_location": "5",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "adr0001_append_only_finance",
+      "target": "adr0001_sda_church_manual",
+      "relation": "cites",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0001-append-only-immutable-finance.md",
+      "source_location": "5",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0001_append_only_finance",
+      "target": "contextmd_dual_custody",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0001-append-only-immutable-finance.md",
+      "source_location": "5",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0001_append_only_finance",
+      "target": "contextmd_offering_batch",
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/adr/0001-append-only-immutable-finance.md",
+      "source_location": "3",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0001_append_only_finance",
+      "target": "contextmd_audit_trail",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0001-append-only-immutable-finance.md",
+      "source_location": "5",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

@@ -1,0 +1,28 @@
+{
+  "nodes": [
+    {
+      "id": "smoke_test",
+      "label": "Worker Smoke Tests",
+      "file_type": "code",
+      "source_file": "test/smoke.test.ts",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "smoke_test",
+      "target": "worker_entry",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "test/smoke.test.ts",
+      "source_location": "lines 5-19",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

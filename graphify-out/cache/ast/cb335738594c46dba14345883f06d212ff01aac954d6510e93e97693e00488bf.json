@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_adr_0003_offline_first_pwa_md",
+      "label": "0003-offline-first-pwa.md",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0003-offline-first-pwa.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "adr_0003_offline_first_pwa_offline_first_pwa_architecture",
+      "label": "Offline-first PWA architecture",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0003-offline-first-pwa.md",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_adr_0003_offline_first_pwa_md",
+      "target": "adr_0003_offline_first_pwa_offline_first_pwa_architecture",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0003-offline-first-pwa.md",
+      "source_location": "L1",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

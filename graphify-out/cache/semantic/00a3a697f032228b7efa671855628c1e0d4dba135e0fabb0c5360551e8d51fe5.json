@@ -1,0 +1,552 @@
+{
+  "nodes": [
+    {
+      "id": "contextmd_theobase",
+      "label": "Theobase Platform",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A platform for Seventh-day Adventist church administration covering operations from Conference down to Member, with read-only aggregated reporting up to General Conference level. Modular by design with Finance, Membership, Organization Structure, Auth/Roles, and Audit/Reports as initial modules."
+    },
+    {
+      "id": "contextmd_conference",
+      "label": "Conference",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "7",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_district",
+      "label": "District",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "11",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_church",
+      "label": "Church",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "15",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_member",
+      "label": "Member",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "23",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_household",
+      "label": "Household",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "27",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_position_office",
+      "label": "Position / Office",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "31",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_tithe",
+      "label": "Tithe",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "37",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_local_church_budget",
+      "label": "Local Church Budget",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "41",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_sabbath_school_offering",
+      "label": "Sabbath School Offering",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "45",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_fund",
+      "label": "Fund",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "49",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_offering_batch",
+      "label": "Offering Batch",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "53",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_dual_custody",
+      "label": "Dual-Custody",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "57",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_expense_category",
+      "label": "Expense Category",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "61",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_budget",
+      "label": "Budget",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "65",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_forwarding",
+      "label": "Forwarding",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "69",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_baptism",
+      "label": "Baptism",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "75",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_transfer",
+      "label": "Transfer",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "79",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_removal",
+      "label": "Removal",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "83",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_activity_log",
+      "label": "Activity Log",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "87",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_monthly_treasurer_report",
+      "label": "Monthly Treasurer Report",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "93",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_quarterly_business_meeting_report",
+      "label": "Quarterly Business Meeting Report",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "97",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_audit_trail",
+      "label": "Audit Trail",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "101",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "contextmd_reconciliation",
+      "label": "Reconciliation",
+      "file_type": "document",
+      "source_file": "CONTEXT.md",
+      "source_location": "105",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "contextmd_theobase",
+      "target": "contextmd_conference",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "3",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_conference",
+      "target": "contextmd_church",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "7",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_conference",
+      "target": "contextmd_district",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "11",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_district",
+      "target": "contextmd_church",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "12",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_church",
+      "target": "contextmd_member",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "23",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_member",
+      "target": "contextmd_household",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "28",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_member",
+      "target": "contextmd_position_office",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "31",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_tithe",
+      "target": "contextmd_fund",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "50",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_local_church_budget",
+      "target": "contextmd_fund",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "50",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_sabbath_school_offering",
+      "target": "contextmd_fund",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "50",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_offering_batch",
+      "target": "contextmd_dual_custody",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "54",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_dual_custody",
+      "target": "contextmd_forwarding",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "70",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_fund",
+      "target": "contextmd_forwarding",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "50",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_budget",
+      "target": "contextmd_expense_category",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "65",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_monthly_treasurer_report",
+      "target": "contextmd_budget",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "94",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_monthly_treasurer_report",
+      "target": "contextmd_fund",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "94",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_quarterly_business_meeting_report",
+      "target": "contextmd_member",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "98",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_quarterly_business_meeting_report",
+      "target": "contextmd_fund",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "98",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_baptism",
+      "target": "contextmd_member",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "75",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_transfer",
+      "target": "contextmd_member",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "79",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_transfer",
+      "target": "contextmd_conference",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "80",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_removal",
+      "target": "contextmd_member",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "83",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_activity_log",
+      "target": "contextmd_member",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "88",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_activity_log",
+      "target": "contextmd_audit_trail",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "88",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_reconciliation",
+      "target": "contextmd_conference",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "106",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_audit_trail",
+      "target": "contextmd_conference",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md",
+      "source_location": "102",
+      "weight": 1.0
+    },
+    {
+      "source": "contextmd_activity_log",
+      "target": "contextmd_audit_trail",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "CONTEXT.md",
+      "source_location": "87",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "financial_custody_workflow",
+      "label": "Financial Custody Workflow",
+      "nodes": ["contextmd_offering_batch", "contextmd_dual_custody", "contextmd_forwarding"],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTEXT.md"
+    }
+  ]
+}

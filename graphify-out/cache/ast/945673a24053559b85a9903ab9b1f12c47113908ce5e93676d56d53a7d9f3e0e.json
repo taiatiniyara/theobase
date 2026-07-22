@@ -1,0 +1,286 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_durables_churchsyncdo_ts",
+      "label": "ChurchSyncDO.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "durables_churchsyncdo_offlineoperation",
+      "label": "OfflineOperation",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "durables_churchsyncdo_churchsyncdo",
+      "label": "ChurchSyncDO",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L9"
+    },
+    {
+      "id": "durables_churchsyncdo_churchsyncdo_constructor",
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L12"
+    },
+    {
+      "id": "durables_churchsyncdo_churchsyncdo_getactivesyncsessions",
+      "label": ".getActiveSyncSessions()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L37"
+    },
+    {
+      "id": "durables_churchsyncdo_churchsyncdo_registersync",
+      "label": ".registerSync()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L47"
+    },
+    {
+      "id": "durables_churchsyncdo_churchsyncdo_applyofflineoperation",
+      "label": ".applyOfflineOperation()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L57"
+    },
+    {
+      "id": "durables_churchsyncdo_churchsyncdo_getunsyncedoperations",
+      "label": ".getUnsyncedOperations()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L83"
+    },
+    {
+      "id": "durables_churchsyncdo_churchsyncdo_getsyncstate",
+      "label": ".getSyncState()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L97"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_durables_churchsyncdo_ts",
+      "target": "cloudflare_workers",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_durables_churchsyncdo_ts",
+      "target": "durables_churchsyncdo_offlineoperation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_durables_churchsyncdo_ts",
+      "target": "durables_churchsyncdo_churchsyncdo",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "durables_churchsyncdo_churchsyncdo",
+      "target": "durables_churchsyncdo_churchsyncdo_constructor",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "durables_churchsyncdo_churchsyncdo",
+      "target": "durables_churchsyncdo_churchsyncdo_getactivesyncsessions",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "durables_churchsyncdo_churchsyncdo",
+      "target": "durables_churchsyncdo_churchsyncdo_registersync",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "durables_churchsyncdo_churchsyncdo",
+      "target": "durables_churchsyncdo_churchsyncdo_applyofflineoperation",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "durables_churchsyncdo_churchsyncdo",
+      "target": "durables_churchsyncdo_churchsyncdo_getunsyncedoperations",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L83",
+      "weight": 1.0
+    },
+    {
+      "source": "durables_churchsyncdo_churchsyncdo",
+      "target": "durables_churchsyncdo_churchsyncdo_getsyncstate",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L97",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_constructor",
+      "callee": "super",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L13"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_constructor",
+      "callee": "exec",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L14"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_constructor",
+      "callee": "exec",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getactivesyncsessions",
+      "callee": "exec",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getactivesyncsessions",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getactivesyncsessions",
+      "callee": "toArray",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_registersync",
+      "callee": "exec",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L48"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_applyofflineoperation",
+      "callee": "exec",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L62"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_applyofflineoperation",
+      "callee": "exec",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L70"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getunsyncedoperations",
+      "callee": "exec",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L86"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getunsyncedoperations",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L90"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getunsyncedoperations",
+      "callee": "toArray",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L90"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getsyncstate",
+      "callee": "exec",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L101"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getsyncstate",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L106"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getsyncstate",
+      "callee": "one",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L106"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getsyncstate",
+      "callee": "toISOString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L106"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getsyncstate",
+      "callee": "exec",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getsyncstate",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L115"
+    },
+    {
+      "caller_nid": "durables_churchsyncdo_churchsyncdo_getsyncstate",
+      "callee": "one",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts",
+      "source_location": "L115"
+    }
+  ]
+}

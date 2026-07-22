@@ -1,0 +1,54 @@
+{
+  "nodes": [
+    {
+      "id": "profile_picture_brand_asset",
+      "label": "Theobase Profile Picture (flame/torch icon in orange #F97316)",
+      "file_type": "image",
+      "source_file": "branding/profile-picture.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "PNG image in branding directory alongside logo-light.svg, icon.svg, favicon.ico, cover.png, and theobase.af (Affinity Designer source). Companion icon.svg depicts a flame/torch icon in orange (#F97316) \u00e2\u20ac\u201d the profile picture likely derives from the same icon asset. Serves as the application avatar/profile image for Theobase, a Seventh-day Adventist church administration platform spanning Conference \u00e2\u2020\u2019 District \u00e2\u2020\u2019 Church \u00e2\u2020\u2019 Member levels."
+    },
+    {
+      "id": "branding_affinity_source",
+      "label": "Affinity Designer Source File (theobase.af)",
+      "file_type": "image",
+      "source_file": "branding/profile-picture.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Theobase brand assets were created in Affinity Designer. The theobase.af source file in the same branding directory likely contains the profile picture as an artboard or export slice."
+    },
+    {
+      "id": "brand_palette_orange_gray",
+      "label": "Theobase Brand Palette: Orange #F97316 + Gray #6B7280",
+      "file_type": "image",
+      "source_file": "branding/profile-picture.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Brand colors extracted from companion SVG files. Logo-light.svg uses fill:rgb(249,115,22) for the flame/torch icon and fill:rgb(107,114,128) for the wordmark. The profile picture likely uses the same orange (#F97316) flame/torch icon."
+    },
+    {
+      "id": "flame_torch_icon",
+      "label": "Flame/Torch Icon \u00e2\u20ac\u201d primary brand mark of Theobase",
+      "file_type": "image",
+      "source_file": "branding/profile-picture.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "The companion icon.svg file depicts a flame/torch icon rendered in orange (#F97316). This icon serves as the primary brand mark across favicon.ico, logos, and the profile picture. The name 'Theobase' (theo = God) pairs with the flame as a symbol of the Holy Spirit / divine presence \u00e2\u20ac\u201d thematically aligned with Seventh-day Adventist theology."
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

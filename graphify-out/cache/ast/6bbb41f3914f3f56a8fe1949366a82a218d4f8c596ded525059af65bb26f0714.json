@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_adr_0001_append_only_immutable_finance_md",
+      "label": "0001-append-only-immutable-finance.md",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-append-only-immutable-finance.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "adr_0001_append_only_immutable_finance_append_only_immutable_finance",
+      "label": "Append-only immutable finance",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-append-only-immutable-finance.md",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_adr_0001_append_only_immutable_finance_md",
+      "target": "adr_0001_append_only_immutable_finance_append_only_immutable_finance",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0001-append-only-immutable-finance.md",
+      "source_location": "L1",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

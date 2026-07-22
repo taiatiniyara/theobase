@@ -1,0 +1,28 @@
+{
+  "nodes": [
+    {
+      "id": "triagelabelsmd_triage_labels_mapping",
+      "label": "Triage Label Mapping",
+      "file_type": "document",
+      "source_file": "docs/agents/triage-labels.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "triagelabelsmd_triage_labels_mapping",
+      "target": "agentsmd_triage_labels_system",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/agents/triage-labels.md",
+      "source_location": "3",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

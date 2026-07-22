@@ -1,0 +1,54 @@
+{
+  "nodes": [
+    {
+      "id": "coverpng_brand_cover_image",
+      "label": "Theobase Brand Cover Image (1640x720 OpenGraph/Social Share)",
+      "file_type": "image",
+      "source_file": "branding/cover.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "1640x720 PNG image in branding directory for Theobase, the Seventh-day Adventist church administration platform. Dimensions match standard Open Graph / social share cover image (2:1 aspect ratio). Companion files in the same directory: logo-light.svg (orange #F97316 + gray #6B7280 wordmark), icon.svg (flame/torch icon in orange), favicon.ico, profile-picture.png, and theobase.af (Affinity Designer source). Actual visual content of cover.png is AMBIGUOUS \u00e2\u20ac\u201d model cannot view images."
+    },
+    {
+      "id": "branding_brand_palette",
+      "label": "Theobase Brand Color Palette: Orange #F97316 + Gray #6B7280",
+      "file_type": "image",
+      "source_file": "branding/cover.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Brand colors extracted from companion SVG files in the same branding directory. Logo-light.svg uses fill:rgb(249,115,22) for the icon and fill:rgb(107,114,128) for the wordmark text. The icon.svg uses fill:rgb(249,115,22) exclusively."
+    },
+    {
+      "id": "theobase_platform",
+      "label": "Theobase SDA Church Administration Platform",
+      "file_type": "image",
+      "source_file": "branding/cover.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Theobase is a platform for Seventh-day Adventist church administration from Conference down to Member level, with modular architecture (Finance, Membership, Organization Structure, Auth/Roles, Audit/Reports). Built with React, TanStack Router, Vite, D1 (SQLite), and Cloudflare Workers."
+    },
+    {
+      "id": "branding_affinity_source",
+      "label": "Affinity Designer Source File",
+      "file_type": "image",
+      "source_file": "branding/cover.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "The file theobase.af in the branding directory is an Affinity Designer source file that likely contains the source art for the cover image and other branding assets."
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

@@ -73,6 +73,7 @@ export const api = {
     request<T>(path, { method: "POST", body: JSON.stringify(body) }),
   patch: <T>(path: string, body?: unknown) =>
     request<T>(path, { method: "PATCH", body: JSON.stringify(body) }),
+  del: <T>(path: string) => request<T>(path, { method: "DELETE" }),
 };
 
 interface AuthResponse {
@@ -150,3 +151,142 @@ export const userApi = {
   bulkInvite: (conferenceId: number, csv: string) =>
     api.post("/users/bulk-invite", { conferenceId, csv }),
 };
+
+export const memberApi = {
+  getMembers: (params?: { church_id?: number; status?: string; search?: string }) => {
+    const qs = new URLSearchParams();
+    if (params?.church_id) qs.set("church_id", String(params.church_id));
+    if (params?.status) qs.set("status", params.status);
+    if (params?.search) qs.set("search", params.search);
+    const q = qs.toString();
+    return api.get<{ members: Member[] }>(`/members${q ? `?${q}` : ""}`);
+  },
+  getMember: (id: number) => api.get<MemberDetail>(`/members/${id}`),
+  createMember: (data: CreateMemberData) => api.post<{ id: number }>("/members", data),
+  updateMember: (id: number, data: UpdateMemberData) => api.patch(`/members/${id}`, data),
+  removeMember: (id: number, data: { reason: string; date?: string }) =>
+    api.post(`/members/${id}/remove`, data),
+
+  getHouseholds: (churchId?: number) =>
+    api.get<{ households: Household[] }>(`/households${churchId ? `?church_id=${churchId}` : ""}`),
+  createHousehold: (data: {
+    churchId: number;
+    name: string;
+    address?: string;
+    headMemberId?: number;
+  }) => api.post("/households", data),
+  updateHousehold: (
+    id: number,
+    data: { name?: string; address?: string; headMemberId?: number | null }
+  ) => api.patch(`/households/${id}`, data),
+
+  getPositions: () => api.get<{ positions: Position[] }>("/positions"),
+  createPosition: (data: { name: string; module?: string }) => api.post("/positions", data),
+  assignPosition: (memberId: number, positionId: number, startDate?: string) =>
+    api.post(`/members/${memberId}/positions`, { positionId, startDate }),
+  removePosition: (memberId: number, positionId: number) =>
+    api.del(`/members/${memberId}/positions/${positionId}`),
+
+  getTransfers: (params?: { church_id?: number; status?: string }) => {
+    const qs = new URLSearchParams();
+    if (params?.church_id) qs.set("church_id", String(params.church_id));
+    if (params?.status) qs.set("status", params.status);
+    const q = qs.toString();
+    return api.get<{ transfers: Transfer[] }>(`/transfers${q ? `?${q}` : ""}`);
+  },
+  initiateTransfer: (data: { memberId: number; toChurchId: number }) =>
+    api.post("/transfers", data),
+  approveTransfer: (id: number) => api.post(`/transfers/${id}/approve`),
+  acceptTransfer: (id: number) => api.post(`/transfers/${id}/accept`),
+  rejectTransfer: (id: number) => api.post(`/transfers/${id}/reject`),
+};
+
+export interface Member {
+  id: number;
+  church_id: number;
+  household_id: number | null;
+  full_name: string;
+  preferred_name: string | null;
+  dob: string | null;
+  gender: string | null;
+  baptism_date: string | null;
+  baptism_type: string | null;
+  join_date: string | null;
+  phone: string | null;
+  email: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  version: number;
+}
+
+export interface MemberDetail extends Member {
+  prev_church_id: number | null;
+  address: string | null;
+  marital_status: string | null;
+  status_date: string | null;
+  church_name: string | null;
+  household_name: string | null;
+  positions: {
+    id: number;
+    name: string;
+    module: string;
+    start_date: string;
+    end_date: string | null;
+  }[];
+}
+
+export interface Household {
+  id: number;
+  church_id: number;
+  head_member_id: number | null;
+  name: string;
+  address: string | null;
+  created_at: string;
+  head_member_name: string | null;
+  member_count: number;
+}
+
+export interface Position {
+  id: number;
+  name: string;
+  module: string;
+}
+
+export interface Transfer {
+  id: number;
+  member_id: number;
+  from_church_id: number;
+  to_church_id: number;
+  initiated_by: number;
+  initiated_at: string;
+  conference_approved_by: number | null;
+  conference_approved_at: string | null;
+  accepted_by: number | null;
+  accepted_at: string | null;
+  status: string;
+  member_name: string;
+  from_church_name: string;
+  to_church_name: string;
+}
+
+export interface CreateMemberData {
+  churchId: number;
+  householdId?: number;
+  fullName: string;
+  preferredName?: string;
+  dob?: string;
+  gender?: string;
+  baptismDate?: string;
+  baptismType?: string;
+  joinDate?: string;
+  prevChurchId?: number;
+  phone?: string;
+  email?: string;
+  address?: string;
+  maritalStatus?: string;
+}
+
+export interface UpdateMemberData extends Partial<CreateMemberData> {
+  version: number;
+}

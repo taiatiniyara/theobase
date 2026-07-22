@@ -1,0 +1,220 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_orgmanagementpage_tsx",
+      "label": "OrgManagementPage.tsx",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_orgmanagementpage_conference",
+      "label": "Conference",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L5"
+    },
+    {
+      "id": "routes_orgmanagementpage_district",
+      "label": "District",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L13"
+    },
+    {
+      "id": "routes_orgmanagementpage_church",
+      "label": "Church",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L19"
+    },
+    {
+      "id": "routes_orgmanagementpage_orgmanagementpage",
+      "label": "OrgManagementPage()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L27"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_orgmanagementpage_tsx",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_orgmanagementpage_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_auth_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_orgmanagementpage_tsx",
+      "target": "lib_auth_useauth",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_orgmanagementpage_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_api_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_orgmanagementpage_tsx",
+      "target": "lib_api_orgapi",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_orgmanagementpage_tsx",
+      "target": "routes_orgmanagementpage_conference",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_orgmanagementpage_tsx",
+      "target": "routes_orgmanagementpage_district",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_orgmanagementpage_tsx",
+      "target": "routes_orgmanagementpage_church",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_orgmanagementpage_tsx",
+      "target": "routes_orgmanagementpage_orgmanagementpage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L27",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "useAuth",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L28"
+    },
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L29"
+    },
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L32"
+    },
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L34"
+    },
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L36"
+    },
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L172"
+    },
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L268"
+    },
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L314"
+    },
+    {
+      "caller_nid": "routes_orgmanagementpage_orgmanagementpage",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\OrgManagementPage.tsx",
+      "source_location": "L342"
+    }
+  ]
+}

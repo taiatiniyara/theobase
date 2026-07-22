@@ -25,6 +25,25 @@ import {
   handleBulkInviteUsers,
   handleGetMe,
 } from "./routes/users";
+import {
+  handleGetMembers,
+  handleGetMember,
+  handleCreateMember,
+  handleUpdateMember,
+  handleRemoveMember,
+  handleGetHouseholds,
+  handleCreateHousehold,
+  handleUpdateHousehold,
+  handleGetPositions,
+  handleCreatePosition,
+  handleAssignPosition,
+  handleRemovePosition,
+  handleGetTransfers,
+  handleInitiateTransfer,
+  handleApproveTransfer,
+  handleAcceptTransfer,
+  handleRejectTransfer,
+} from "./routes/members";
 
 export { ChurchSyncDO, ConferenceDO };
 
@@ -127,6 +146,80 @@ export default {
     }
     if (path === "/api/users/bulk-invite" && request.method === "POST") {
       return handleBulkInviteUsers(request, env);
+    }
+
+    // Member routes
+    if (path === "/api/members" && request.method === "GET") {
+      return handleGetMembers(request, env);
+    }
+    if (path === "/api/members" && request.method === "POST") {
+      return handleCreateMember(request, env);
+    }
+    const memberMatch = path.match(/^\/api\/members\/(\d+)$/);
+    if (memberMatch && request.method === "GET") {
+      return handleGetMember(request, env, Number(memberMatch[1]));
+    }
+    if (memberMatch && request.method === "PATCH") {
+      return handleUpdateMember(request, env, Number(memberMatch[1]));
+    }
+    const removeMemberMatch = path.match(/^\/api\/members\/(\d+)\/remove$/);
+    if (removeMemberMatch && request.method === "POST") {
+      return handleRemoveMember(request, env, Number(removeMemberMatch[1]));
+    }
+
+    // Household routes
+    if (path === "/api/households" && request.method === "GET") {
+      return handleGetHouseholds(request, env);
+    }
+    if (path === "/api/households" && request.method === "POST") {
+      return handleCreateHousehold(request, env);
+    }
+    const householdMatch = path.match(/^\/api\/households\/(\d+)$/);
+    if (householdMatch && request.method === "PATCH") {
+      return handleUpdateHousehold(request, env, Number(householdMatch[1]));
+    }
+
+    // Position routes
+    if (path === "/api/positions" && request.method === "GET") {
+      return handleGetPositions(request, env);
+    }
+    if (path === "/api/positions" && request.method === "POST") {
+      return handleCreatePosition(request, env);
+    }
+
+    // Member position routes
+    const memberPosMatch = path.match(/^\/api\/members\/(\d+)\/positions$/);
+    if (memberPosMatch && request.method === "POST") {
+      return handleAssignPosition(request, env, Number(memberPosMatch[1]));
+    }
+    const memberPosDelMatch = path.match(/^\/api\/members\/(\d+)\/positions\/(\d+)$/);
+    if (memberPosDelMatch && request.method === "DELETE") {
+      return handleRemovePosition(
+        request,
+        env,
+        Number(memberPosDelMatch[1]),
+        Number(memberPosDelMatch[2])
+      );
+    }
+
+    // Transfer routes
+    if (path === "/api/transfers" && request.method === "GET") {
+      return handleGetTransfers(request, env);
+    }
+    if (path === "/api/transfers" && request.method === "POST") {
+      return handleInitiateTransfer(request, env);
+    }
+    const transferApproveMatch = path.match(/^\/api\/transfers\/(\d+)\/approve$/);
+    if (transferApproveMatch && request.method === "POST") {
+      return handleApproveTransfer(request, env, Number(transferApproveMatch[1]));
+    }
+    const transferAcceptMatch = path.match(/^\/api\/transfers\/(\d+)\/accept$/);
+    if (transferAcceptMatch && request.method === "POST") {
+      return handleAcceptTransfer(request, env, Number(transferAcceptMatch[1]));
+    }
+    const transferRejectMatch = path.match(/^\/api\/transfers\/(\d+)\/reject$/);
+    if (transferRejectMatch && request.method === "POST") {
+      return handleRejectTransfer(request, env, Number(transferRejectMatch[1]));
     }
 
     // DO routes (existing)

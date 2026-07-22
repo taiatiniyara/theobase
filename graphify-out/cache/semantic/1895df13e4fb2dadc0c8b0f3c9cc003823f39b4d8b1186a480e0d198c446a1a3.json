@@ -1,0 +1,48 @@
+{
+  "nodes": [
+    {
+      "id": "worker_entry",
+      "label": "Worker Fetch Handler",
+      "file_type": "code",
+      "source_file": "worker/index.ts",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "worker_entry",
+      "target": "ChurchSyncDO",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/index.ts",
+      "source_location": "lines 24-38",
+      "weight": 1.0
+    },
+    {
+      "source": "worker_entry",
+      "target": "ConferenceDO",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/index.ts",
+      "source_location": "lines 41-49",
+      "weight": 1.0
+    },
+    {
+      "source": "worker_entry",
+      "target": "worker_env_types",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/index.ts",
+      "source_location": "line 17",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

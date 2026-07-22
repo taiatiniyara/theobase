@@ -1,0 +1,38 @@
+{
+  "nodes": [
+    {
+      "id": "domainmd_domain_docs_instructions",
+      "label": "Domain Docs Agent Instructions",
+      "file_type": "document",
+      "source_file": "docs/agents/domain.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "domainmd_domain_docs_instructions",
+      "target": "contextmd_theobase",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/agents/domain.md",
+      "source_location": "7",
+      "weight": 1.0
+    },
+    {
+      "source": "domainmd_domain_docs_instructions",
+      "target": "adr0001_append_only_finance",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/agents/domain.md",
+      "source_location": "9",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

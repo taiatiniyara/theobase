@@ -1,0 +1,60 @@
+{
+  "nodes": [
+    {
+      "id": "adr0002_per_conference_d1_tenancy",
+      "label": "ADR-0002: Per-Conference D1 Tenancy",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-per-conference-d1-tenancy.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A Conference is the natural administrative boundary \u00e2\u20ac\u201d Conference officers see all their churches' data; members and churches in different Conferences never interact. Per-Conference isolation simplifies access control (row-level security per church_id within the database rather than cross-tenant filters), limits blast radius, and maps to D1's horizontal scaling model (thousands of small databases are free; one massive database hits the 10GB ceiling). A typical 500-church Conference with 10 years of transactions fits in under 1GB. Rejected per-church D1 (N\u00c3\u2014 complexity for cross-church operations) and single global D1 (D1 single-threaded throughput limits and 10GB ceiling)."
+    },
+    {
+      "id": "adr0002_cloudflare_d1",
+      "label": "Cloudflare D1",
+      "file_type": "document",
+      "source_file": "docs/adr/0002-per-conference-d1-tenancy.md",
+      "source_location": "3",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "adr0002_per_conference_d1_tenancy",
+      "target": "adr0002_cloudflare_d1",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0002-per-conference-d1-tenancy.md",
+      "source_location": "3",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0002_per_conference_d1_tenancy",
+      "target": "contextmd_conference",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0002-per-conference-d1-tenancy.md",
+      "source_location": "5",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "per_conference_isolation_pattern",
+      "label": "Per-Conference Data Isolation Pattern",
+      "nodes": ["contextmd_conference", "adr0002_cloudflare_d1", "adr0004_platform_core"],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "docs/adr/0002-per-conference-d1-tenancy.md"
+    }
+  ]
+}

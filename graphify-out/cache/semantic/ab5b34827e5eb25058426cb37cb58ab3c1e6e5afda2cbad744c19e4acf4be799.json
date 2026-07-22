@@ -1,0 +1,122 @@
+{
+  "nodes": [
+    {
+      "id": "adr0004_modular_package_architecture",
+      "label": "ADR-0004: Modular Package Architecture",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-modular-package-architecture.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "The initial scope is Finance + Membership + Organization + Auth + Audit, but the SDA church has many more departments (Sabbath School, Pathfinders, Health Ministries, Youth, Evangelism, ADRA, Family Ministries, Music, Communication, etc.). A monolith would accumulate all of these in one ever-growing codebase. Modules allow each department to be developed and deployed independently, sharing only the core layer (auth, org hierarchy, member records, audit trail). Modules are composed at build time, not hot-plugged at runtime, which is simpler and sufficient for single-tenant deploy. The shared core is a hard dependency \u00e2\u20ac\u201d a breaking change to core affects all modules, but the core is small and stable."
+    },
+    {
+      "id": "adr0004_platform_core",
+      "label": "Platform Core",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-modular-package-architecture.md",
+      "source_location": "6",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "adr0004_module_contract",
+      "label": "Module Contract",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-modular-package-architecture.md",
+      "source_location": "7",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "adr0004_tanstack_router",
+      "label": "TanStack Router",
+      "file_type": "document",
+      "source_file": "docs/adr/0004-modular-package-architecture.md",
+      "source_location": "9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "adr0004_modular_package_architecture",
+      "target": "adr0004_platform_core",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0004-modular-package-architecture.md",
+      "source_location": "6",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0004_modular_package_architecture",
+      "target": "adr0004_module_contract",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0004-modular-package-architecture.md",
+      "source_location": "7",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0004_modular_package_architecture",
+      "target": "contextmd_theobase",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0004-modular-package-architecture.md",
+      "source_location": "3",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0004_module_contract",
+      "target": "adr0004_tanstack_router",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/adr/0004-modular-package-architecture.md",
+      "source_location": "9",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0004_platform_core",
+      "target": "contextmd_conference",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/adr/0004-modular-package-architecture.md",
+      "source_location": "6",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0004_platform_core",
+      "target": "contextmd_member",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/adr/0004-modular-package-architecture.md",
+      "source_location": "6",
+      "weight": 1.0
+    },
+    {
+      "source": "adr0004_platform_core",
+      "target": "contextmd_audit_trail",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/adr/0004-modular-package-architecture.md",
+      "source_location": "19",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

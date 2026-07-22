@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_adr_0002_per_conference_d1_tenancy_md",
+      "label": "0002-per-conference-d1-tenancy.md",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0002-per-conference-d1-tenancy.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "adr_0002_per_conference_d1_tenancy_per_conference_d1_tenancy",
+      "label": "Per-Conference D1 tenancy",
+      "file_type": "document",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0002-per-conference-d1-tenancy.md",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_adr_0002_per_conference_d1_tenancy_md",
+      "target": "adr_0002_per_conference_d1_tenancy_per_conference_d1_tenancy",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\adr\\0002-per-conference-d1-tenancy.md",
+      "source_location": "L1",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

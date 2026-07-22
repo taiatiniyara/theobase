@@ -1,0 +1,38 @@
+{
+  "nodes": [
+    {
+      "id": "ChurchSyncDO",
+      "label": "Church Sync Durable Object",
+      "file_type": "code",
+      "source_file": "worker/durables/ChurchSyncDO.ts",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "ChurchSyncDO",
+      "target": "worker_env_types",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/durables/ChurchSyncDO.ts",
+      "source_location": "line 12",
+      "weight": 1.0
+    },
+    {
+      "source": "ChurchSyncDO",
+      "target": "migration_0001_initial",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "worker/durables/ChurchSyncDO.ts",
+      "source_location": "lines 14-23",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}
