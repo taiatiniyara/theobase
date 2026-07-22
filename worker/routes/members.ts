@@ -1,5 +1,6 @@
 import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
+import { logAudit, getDeviceInfo } from "../lib/audit";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -211,6 +212,17 @@ export async function handleCreateMember(request: Request, env: Env): Promise<Re
     return json({ error: "Failed to create member" }, 500);
   }
 
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "create",
+    entity_type: "member",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({ ...body, id: result.id }),
+    module: "members",
+    device_info: getDeviceInfo(request),
+  });
+
   return json({ id: result.id, ...body }, 201);
 }
 
@@ -256,15 +268,21 @@ export async function handleUpdateMember(
     if (err) return json({ error: err }, 400);
   }
 
-  const existing = await env.DB.prepare("SELECT version FROM members WHERE id = ?")
+  const existing = await env.DB.prepare(
+    `SELECT church_id, household_id, full_name, preferred_name, dob, gender,
+     baptism_date, baptism_type, join_date, phone, email, address, marital_status, status, version
+     FROM members WHERE id = ?`
+  )
     .bind(memberId)
-    .first<{ version: number }>();
+    .first<Record<string, unknown>>();
   if (!existing) {
     return json({ error: "Member not found" }, 404);
   }
-  if (existing.version !== body.version) {
+  if ((existing.version as number) !== body.version) {
     return json({ error: "Conflict: member has been modified. Refresh and try again." }, 409);
   }
+
+  const prevState = JSON.stringify(existing);
 
   const updates: string[] = [];
   const params: unknown[] = [];
@@ -336,6 +354,17 @@ export async function handleUpdateMember(
 
   const updated = await env.DB.prepare("SELECT * FROM members WHERE id = ?").bind(memberId).first();
 
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "update",
+    entity_type: "member",
+    entity_id: memberId,
+    prev_state: prevState,
+    new_state: JSON.stringify(updated),
+    module: "members",
+    device_info: getDeviceInfo(request),
+  });
+
   return json({ member: updated });
 }
 
@@ -367,12 +396,28 @@ export async function handleRemoveMember(
   const newStatus = body.reason === "deceased" ? "deceased" : "removed";
   const statusDate = body.date || new Date().toISOString();
 
+  const prevMember = await env.DB.prepare("SELECT * FROM members WHERE id = ?")
+    .bind(memberId)
+    .first();
+  const prevState = prevMember ? JSON.stringify(prevMember) : null;
+
   await env.DB.prepare(
     `UPDATE members SET status = ?, status_date = ?, updated_at = datetime('now'), version = version + 1
      WHERE id = ?`
   )
     .bind(newStatus, statusDate, memberId)
     .run();
+
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "remove",
+    entity_type: "member",
+    entity_id: memberId,
+    prev_state: prevState,
+    new_state: JSON.stringify({ status: newStatus, statusDate, reason: body.reason }),
+    module: "members",
+    device_info: getDeviceInfo(request),
+  });
 
   return json({ success: true, status: newStatus, statusDate });
 }
@@ -436,6 +481,17 @@ export async function handleCreateHousehold(request: Request, env: Env): Promise
     return json({ error: "Failed to create household" }, 500);
   }
 
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "create",
+    entity_type: "household",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({ ...body, id: result.id }),
+    module: "members",
+    device_info: getDeviceInfo(request),
+  });
+
   return json({ id: result.id, ...body }, 201);
 }
 
@@ -457,12 +513,14 @@ export async function handleUpdateHousehold(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const existing = await env.DB.prepare("SELECT id FROM households WHERE id = ?")
+  const existing = await env.DB.prepare("SELECT * FROM households WHERE id = ?")
     .bind(householdId)
     .first();
   if (!existing) {
     return json({ error: "Household not found" }, 404);
   }
+
+  const prevState = JSON.stringify(existing);
 
   const updates: string[] = [];
   const params: unknown[] = [];
@@ -485,6 +543,17 @@ export async function handleUpdateHousehold(
     await env.DB.prepare(`UPDATE households SET ${updates.join(", ")} WHERE id = ?`)
       .bind(...params)
       .run();
+
+    await logAudit(env, {
+      actor_id: Number(auth.userId),
+      action: "update",
+      entity_type: "household",
+      entity_id: householdId,
+      prev_state: prevState,
+      new_state: JSON.stringify(body),
+      module: "members",
+      device_info: getDeviceInfo(request),
+    });
   }
 
   return json({ success: true });
@@ -550,6 +619,17 @@ export async function handleCreatePosition(request: Request, env: Env): Promise<
     return json({ error: "Failed to create position" }, 500);
   }
 
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "create",
+    entity_type: "position",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({ name: body.name, module: body.module ?? "core" }),
+    module: "members",
+    device_info: getDeviceInfo(request),
+  });
+
   return json({ id: result.id, name: body.name, module: body.module ?? "core" }, 201);
 }
 
@@ -603,6 +683,17 @@ export async function handleAssignPosition(
     .bind(memberId, body.positionId, body.startDate ?? new Date().toISOString())
     .run();
 
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "assign",
+    entity_type: "member_position",
+    entity_id: memberId,
+    prev_state: null,
+    new_state: JSON.stringify({ memberId, positionId: body.positionId }),
+    module: "members",
+    device_info: getDeviceInfo(request),
+  });
+
   return json({ success: true }, 201);
 }
 
@@ -633,6 +724,17 @@ export async function handleRemovePosition(
   )
     .bind(memberId, positionId)
     .run();
+
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "remove",
+    entity_type: "member_position",
+    entity_id: memberId,
+    prev_state: JSON.stringify({ memberId, positionId }),
+    new_state: JSON.stringify({ endDate: new Date().toISOString() }),
+    module: "members",
+    device_info: getDeviceInfo(request),
+  });
 
   return json({ success: true });
 }
@@ -744,6 +846,21 @@ export async function handleInitiateTransfer(request: Request, env: Env): Promis
     .bind(body.memberId)
     .run();
 
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "initiate",
+    entity_type: "transfer",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({
+      memberId: body.memberId,
+      fromChurchId: member.church_id,
+      toChurchId: body.toChurchId,
+    }),
+    module: "members",
+    device_info: getDeviceInfo(request),
+  });
+
   return json({ id: result.id, memberId: body.memberId, status: "pending_conference" }, 201);
 }
 
@@ -775,6 +892,17 @@ export async function handleApproveTransfer(
   )
     .bind(Number(auth.userId), transferId)
     .run();
+
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "approve",
+    entity_type: "transfer",
+    entity_id: transferId,
+    prev_state: JSON.stringify({ status: "pending_conference" }),
+    new_state: JSON.stringify({ status: "pending_destination" }),
+    module: "members",
+    device_info: getDeviceInfo(request),
+  });
 
   return json({ success: true, status: "pending_destination" });
 }
@@ -818,6 +946,17 @@ export async function handleAcceptTransfer(
     .bind(transfer.to_church_id, transferId, transfer.member_id)
     .run();
 
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "accept",
+    entity_type: "transfer",
+    entity_id: transferId,
+    prev_state: JSON.stringify({ status: "pending_destination" }),
+    new_state: JSON.stringify({ status: "completed", newChurchId: transfer.to_church_id }),
+    module: "members",
+    device_info: getDeviceInfo(request),
+  });
+
   return json({ success: true, status: "completed" });
 }
 
@@ -854,6 +993,17 @@ export async function handleRejectTransfer(
   )
     .bind(transfer.member_id)
     .run();
+
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "reject",
+    entity_type: "transfer",
+    entity_id: transferId,
+    prev_state: JSON.stringify({ status: transfer.status }),
+    new_state: JSON.stringify({ status: "rejected" }),
+    module: "members",
+    device_info: getDeviceInfo(request),
+  });
 
   return json({ success: true, status: "rejected" });
 }

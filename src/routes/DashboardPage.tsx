@@ -1,7 +1,28 @@
+import { useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useAuth } from "../lib/auth";
+
+const ROLE_DEFAULTS: Record<string, string> = {
+  treasurer: "/app/finance",
+  secretary: "/app/members",
+  pastor: "/app/members",
+  auditor: "/app/audit",
+  president: "/app/reports",
+};
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user?.role && ROLE_DEFAULTS[user.role]) {
+      navigate({ to: ROLE_DEFAULTS[user.role]!, replace: true });
+    }
+  }, [user, navigate]);
+
+  if (user?.role && ROLE_DEFAULTS[user.role]) {
+    return null;
+  }
 
   return (
     <div>

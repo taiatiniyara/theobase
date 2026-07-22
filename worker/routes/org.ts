@@ -1,6 +1,7 @@
 import { authenticate, authorize, requireConference } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { parseCsv, validateCsvHeaders } from "../lib/csv";
+import { logAudit, getDeviceInfo } from "../lib/audit";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -61,6 +62,17 @@ export async function handleCreateConference(request: Request, env: Env): Promis
     return json({ error: "Failed to create conference" }, 500);
   }
 
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "create",
+    entity_type: "conference",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({ ...body, id: result.id }),
+    module: "org",
+    device_info: getDeviceInfo(request),
+  });
+
   return json({ id: result.id, ...body }, 201);
 }
 
@@ -85,12 +97,14 @@ export async function handleUpdateConference(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const existing = await env.DB.prepare("SELECT id FROM conferences WHERE id = ?")
+  const existing = await env.DB.prepare("SELECT * FROM conferences WHERE id = ?")
     .bind(conferenceId)
     .first();
   if (!existing) {
     return json({ error: "Conference not found" }, 404);
   }
+
+  const prevState = JSON.stringify(existing);
 
   const updates: string[] = [];
   const params: unknown[] = [];
@@ -117,6 +131,17 @@ export async function handleUpdateConference(
     await env.DB.prepare(`UPDATE conferences SET ${updates.join(", ")} WHERE id = ?`)
       .bind(...params)
       .run();
+
+    await logAudit(env, {
+      actor_id: Number(auth.userId),
+      action: "update",
+      entity_type: "conference",
+      entity_id: conferenceId,
+      prev_state: prevState,
+      new_state: JSON.stringify(body),
+      module: "org",
+      device_info: getDeviceInfo(request),
+    });
   }
 
   return json({ success: true });
@@ -176,6 +201,17 @@ export async function handleCreateDistrict(
     return json({ error: "Failed to create district" }, 500);
   }
 
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "create",
+    entity_type: "district",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({ ...body, id: result.id, conferenceId }),
+    module: "org",
+    device_info: getDeviceInfo(request),
+  });
+
   return json({ id: result.id, ...body, conferenceId }, 201);
 }
 
@@ -197,12 +233,14 @@ export async function handleUpdateDistrict(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const existing = await env.DB.prepare("SELECT id FROM districts WHERE id = ?")
+  const existing = await env.DB.prepare("SELECT * FROM districts WHERE id = ?")
     .bind(districtId)
     .first();
   if (!existing) {
     return json({ error: "District not found" }, 404);
   }
+
+  const prevState = JSON.stringify(existing);
 
   const updates: string[] = [];
   const params: unknown[] = [];
@@ -221,6 +259,17 @@ export async function handleUpdateDistrict(
     await env.DB.prepare(`UPDATE districts SET ${updates.join(", ")} WHERE id = ?`)
       .bind(...params)
       .run();
+
+    await logAudit(env, {
+      actor_id: Number(auth.userId),
+      action: "update",
+      entity_type: "district",
+      entity_id: districtId,
+      prev_state: prevState,
+      new_state: JSON.stringify(body),
+      module: "org",
+      device_info: getDeviceInfo(request),
+    });
   }
 
   return json({ success: true });
@@ -301,6 +350,17 @@ export async function handleCreateChurch(request: Request, env: Env): Promise<Re
     return json({ error: "Failed to create church" }, 500);
   }
 
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "create",
+    entity_type: "church",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({ ...body, id: result.id, code: churchCode }),
+    module: "org",
+    device_info: getDeviceInfo(request),
+  });
+
   return json({ id: result.id, ...body, code: churchCode }, 201);
 }
 
@@ -329,12 +389,14 @@ export async function handleUpdateChurch(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const existing = await env.DB.prepare("SELECT id FROM churches WHERE id = ?")
+  const existing = await env.DB.prepare("SELECT * FROM churches WHERE id = ?")
     .bind(churchId)
     .first();
   if (!existing) {
     return json({ error: "Church not found" }, 404);
   }
+
+  const prevState = JSON.stringify(existing);
 
   if (body.type && !["organized", "company", "branch"].includes(body.type)) {
     return json({ error: "type must be organized, company, or branch" }, 400);
@@ -373,6 +435,17 @@ export async function handleUpdateChurch(
     await env.DB.prepare(`UPDATE churches SET ${updates.join(", ")} WHERE id = ?`)
       .bind(...params)
       .run();
+
+    await logAudit(env, {
+      actor_id: Number(auth.userId),
+      action: "update",
+      entity_type: "church",
+      entity_id: churchId,
+      prev_state: prevState,
+      new_state: JSON.stringify(body),
+      module: "org",
+      device_info: getDeviceInfo(request),
+    });
   }
 
   return json({ success: true });

@@ -7,6 +7,7 @@ import {
   generateResetToken,
 } from "../lib/auth";
 import { ROLES } from "../lib/roles";
+import { logAudit, getDeviceInfo } from "../lib/audit";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -64,6 +65,17 @@ export async function handleAuthSignup(request: Request, env: Env): Promise<Resp
   if (!result) {
     return json({ error: "Failed to create user" }, 500);
   }
+
+  await logAudit(env, {
+    actor_id: result.id,
+    action: "create",
+    entity_type: "user",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({ email: body.email.toLowerCase().trim(), role: ROLES.sysadmin }),
+    module: "auth",
+    device_info: getDeviceInfo(request),
+  });
 
   const userId = String(result.id);
   const accessToken = await signAccessToken(
@@ -266,6 +278,17 @@ export async function handleResetPassword(request: Request, env: Env): Promise<R
   )
     .bind(passwordHash, user.id)
     .run();
+
+  await logAudit(env, {
+    actor_id: user.id,
+    action: "reset_password",
+    entity_type: "user",
+    entity_id: user.id,
+    prev_state: null,
+    new_state: JSON.stringify({ reset: true }),
+    module: "auth",
+    device_info: getDeviceInfo(request),
+  });
 
   return json({ message: "Password reset successfully" });
 }

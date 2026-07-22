@@ -1,5 +1,6 @@
 import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
+import { logAudit, getDeviceInfo } from "../lib/audit";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -87,6 +88,17 @@ export async function handleCreateFund(request: Request, env: Env): Promise<Resp
       return json({ error: "Failed to create fund" }, 500);
     }
 
+    await logAudit(env, {
+      actor_id: Number(auth.userId),
+      action: "create",
+      entity_type: "fund",
+      entity_id: result.id,
+      prev_state: null,
+      new_state: JSON.stringify({ ...body, id: result.id }),
+      module: "finance",
+      device_info: getDeviceInfo(request),
+    });
+
     return json({ id: result.id, ...body }, 201);
   } catch (err: unknown) {
     const msg = String(err);
@@ -153,6 +165,17 @@ export async function handleCreateExpenseCategory(request: Request, env: Env): P
     if (!result) {
       return json({ error: "Failed to create expense category" }, 500);
     }
+
+    await logAudit(env, {
+      actor_id: Number(auth.userId),
+      action: "create",
+      entity_type: "expense_category",
+      entity_id: result.id,
+      prev_state: null,
+      new_state: JSON.stringify({ ...body, id: result.id }),
+      module: "finance",
+      device_info: getDeviceInfo(request),
+    });
 
     return json({ id: result.id, ...body }, 201);
   } catch (err: unknown) {
@@ -291,6 +314,17 @@ export async function handleCreateBatch(request: Request, env: Env): Promise<Res
     return json({ error: "Failed to create batch" }, 500);
   }
 
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "create",
+    entity_type: "offering_batch",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({ ...body, id: result.id, status: "pending" }),
+    module: "finance",
+    device_info: getDeviceInfo(request),
+  });
+
   return json({ id: result.id, ...body, status: "pending" }, 201);
 }
 
@@ -334,6 +368,18 @@ export async function handleConfirmBatch(
     )
       .bind(userId, batchId)
       .run();
+
+    await logAudit(env, {
+      actor_id: Number(auth.userId),
+      action: "confirm_1",
+      entity_type: "offering_batch",
+      entity_id: batchId,
+      prev_state: JSON.stringify({ status: batch.status }),
+      new_state: JSON.stringify({ confirmedBy: 1 }),
+      module: "finance",
+      device_info: getDeviceInfo(request),
+    });
+
     return json({ confirmedBy: 1, batchId });
   }
 
@@ -353,6 +399,17 @@ export async function handleConfirmBatch(
     )
       .bind(userId, batchId)
       .run();
+
+    await logAudit(env, {
+      actor_id: Number(auth.userId),
+      action: "confirm_2",
+      entity_type: "offering_batch",
+      entity_id: batchId,
+      prev_state: JSON.stringify({ status: batch.status }),
+      new_state: JSON.stringify({ confirmedBy: 2, status: "confirmed" }),
+      module: "finance",
+      device_info: getDeviceInfo(request),
+    });
 
     return json({ confirmedBy: 2, status: "confirmed", batchId });
   }
@@ -491,6 +548,17 @@ export async function handleCreateTransaction(request: Request, env: Env): Promi
     return json({ error: "Failed to create transaction" }, 500);
   }
 
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "create",
+    entity_type: "transaction",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({ ...body, id: result.id, type: "income", uuid: txnUuid }),
+    module: "finance",
+    device_info: getDeviceInfo(request),
+  });
+
   return json({ id: result.id, ...body, type: "income", uuid: txnUuid }, 201);
 }
 
@@ -547,6 +615,17 @@ export async function handleCreateExpense(request: Request, env: Env): Promise<R
   if (!result) {
     return json({ error: "Failed to create expense" }, 500);
   }
+
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "create",
+    entity_type: "transaction",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({ ...body, id: result.id, type: "expense", uuid: txnUuid }),
+    module: "finance",
+    device_info: getDeviceInfo(request),
+  });
 
   return json({ id: result.id, ...body, type: "expense", uuid: txnUuid }, 201);
 }
@@ -642,6 +721,17 @@ export async function handleCreateBudget(request: Request, env: Env): Promise<Re
     if (!result) {
       return json({ error: `Failed to create budget: last_insert_rowid returned null` }, 500);
     }
+
+    await logAudit(env, {
+      actor_id: Number(auth.userId),
+      action: "create",
+      entity_type: "budget",
+      entity_id: result.id,
+      prev_state: null,
+      new_state: JSON.stringify({ ...body, id: result.id }),
+      module: "finance",
+      device_info: getDeviceInfo(request),
+    });
 
     return json({ id: result.id, ...body }, 201);
   } catch (err: unknown) {

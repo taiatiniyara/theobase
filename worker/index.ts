@@ -60,6 +60,7 @@ import {
   handleCreateBudget,
   handleGetMonthlyReport,
 } from "./routes/finance";
+import { handleGetAuditLog, handleGetAuditByEntity } from "./routes/audit";
 
 export { ChurchSyncDO, ConferenceDO };
 
@@ -292,6 +293,20 @@ export default {
     // Finance — reports
     if (path === "/api/finance/report/monthly" && request.method === "GET") {
       return handleGetMonthlyReport(request, env);
+    }
+
+    // Audit routes
+    if (path === "/api/audit" && request.method === "GET") {
+      return handleGetAuditLog(request, env);
+    }
+    const auditEntityMatch = path.match(/^\/api\/audit\/(.+)\/(\d+)$/);
+    if (auditEntityMatch && request.method === "GET") {
+      return handleGetAuditByEntity(
+        request,
+        env,
+        auditEntityMatch[1]!,
+        Number(auditEntityMatch[2])
+      );
     }
 
     // DO routes (existing)

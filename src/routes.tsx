@@ -15,6 +15,9 @@ import OrgManagementPage from "./routes/OrgManagementPage";
 import UsersPage from "./routes/UsersPage";
 import FinancePage from "./routes/FinancePage";
 import MembersPage from "./routes/MembersPage";
+import ReportsPage from "./routes/ReportsPage";
+import SettingsPage from "./routes/SettingsPage";
+import AuditPage from "./routes/AuditPage";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -89,6 +92,24 @@ const membersRoute = createRoute({
   component: MembersPage,
 });
 
+const reportsRoute = createRoute({
+  getParentRoute: () => dashboardLayout,
+  path: "/reports",
+  component: ReportsPage,
+});
+
+const settingsRoute = createRoute({
+  getParentRoute: () => dashboardLayout,
+  path: "/settings",
+  component: SettingsPage,
+});
+
+const auditRoute = createRoute({
+  getParentRoute: () => dashboardLayout,
+  path: "/audit",
+  component: AuditPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
@@ -100,6 +121,9 @@ const routeTree = rootRoute.addChildren([
     usersRoute,
     financeRoute,
     membersRoute,
+    reportsRoute,
+    settingsRoute,
+    auditRoute,
   ]),
 ]);
 

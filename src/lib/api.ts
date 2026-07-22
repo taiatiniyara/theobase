@@ -472,3 +472,63 @@ export const financeApi = {
       `/finance/report/monthly?church_id=${churchId}&year=${year}&month=${month}`
     ),
 };
+
+export interface AuditLogEntry {
+  id: number;
+  timestamp: string;
+  actor_id: number | null;
+  action: string;
+  entity_type: string;
+  entity_id: number;
+  prev_state: string | null;
+  new_state: string | null;
+  module: string;
+  device_info: string | null;
+  actor_email: string | null;
+}
+
+export interface AuditLogResponse {
+  entries: AuditLogEntry[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export const auditApi = {
+  getLog: (params?: {
+    entity_type?: string;
+    entity_id?: number;
+    actor_id?: number;
+    action?: string;
+    module?: string;
+    from?: string;
+    to?: string;
+    page?: number;
+    limit?: number;
+  }) => {
+    const qs = new URLSearchParams();
+    if (params?.entity_type) qs.set("entity_type", params.entity_type);
+    if (params?.entity_id) qs.set("entity_id", String(params.entity_id));
+    if (params?.actor_id) qs.set("actor_id", String(params.actor_id));
+    if (params?.action) qs.set("action", params.action);
+    if (params?.module) qs.set("module", params.module);
+    if (params?.from) qs.set("from", params.from);
+    if (params?.to) qs.set("to", params.to);
+    if (params?.page) qs.set("page", String(params.page));
+    if (params?.limit) qs.set("limit", String(params.limit));
+    const q = qs.toString();
+    return api.get<AuditLogResponse>(`/audit${q ? `?${q}` : ""}`);
+  },
+  getEntityLog: (
+    entityType: string,
+    entityId: number,
+    params?: { page?: number; limit?: number }
+  ) => {
+    const qs = new URLSearchParams();
+    if (params?.page) qs.set("page", String(params.page));
+    if (params?.limit) qs.set("limit", String(params.limit));
+    const q = qs.toString();
+    return api.get<AuditLogResponse>(`/audit/${entityType}/${entityId}${q ? `?${q}` : ""}`);
+  },
+};

@@ -2,6 +2,7 @@ import { hashPassword, generateResetToken } from "../lib/auth";
 import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS, ROLES } from "../lib/roles";
 import { parseCsv, validateCsvHeaders } from "../lib/csv";
+import { logAudit, getDeviceInfo } from "../lib/audit";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -68,6 +69,17 @@ export async function handleInviteUser(request: Request, env: Env): Promise<Resp
   if (!result) {
     return json({ error: "Failed to create user" }, 500);
   }
+
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "create",
+    entity_type: "user",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({ email: body.email.toLowerCase().trim(), role: body.role }),
+    module: "users",
+    device_info: getDeviceInfo(request),
+  });
 
   return json(
     {
