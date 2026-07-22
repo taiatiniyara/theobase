@@ -290,3 +290,185 @@ export interface CreateMemberData {
 export interface UpdateMemberData extends Partial<CreateMemberData> {
   version: number;
 }
+
+export interface Fund {
+  id: number;
+  name: string;
+  type: string;
+  forwarding_rule: string;
+  conference_id: number;
+  created_at: string;
+}
+
+export interface ExpenseCategory {
+  id: number;
+  name: string;
+  conference_id: number;
+  created_at: string;
+}
+
+export interface Batch {
+  id: number;
+  church_id: number;
+  sabbath_date: string;
+  status: string;
+  confirmed_by_1: number | null;
+  confirmed_at_1: string | null;
+  confirmed_by_2: number | null;
+  confirmed_at_2: string | null;
+  created_at: string;
+  church_name: string;
+  confirmed_by_1_email: string | null;
+  confirmed_by_2_email: string | null;
+  transaction_count: number;
+  total_amount: number;
+}
+
+export interface BatchDetail extends Batch {
+  transactions: Transaction[];
+}
+
+export interface Transaction {
+  id: number;
+  church_id: number;
+  fund_id: number;
+  type: string;
+  amount: number;
+  description: string | null;
+  category_id: number | null;
+  budget_ref: number | null;
+  batch_id: number | null;
+  created_by: number;
+  created_at: string;
+  confirmed_by: number | null;
+  confirmed_at: string | null;
+  uuid: string;
+  fund_name: string;
+  fund_type: string;
+  church_name: string;
+  created_by_email: string;
+  confirmed_by_email: string | null;
+  category_name: string | null;
+}
+
+export interface Budget {
+  id: number;
+  church_id: number;
+  fund_id: number;
+  category_id: number;
+  planned_amount: number;
+  fiscal_year: number;
+  created_at: string;
+  fund_name: string;
+  fund_type: string;
+  church_name: string;
+  category_name: string;
+  spent_amount: number;
+}
+
+export interface MonthlyReport {
+  churchId: number;
+  period: { year: number; month: number };
+  openingBalance: number;
+  incomeByFund: { id: number; fund_name: string; fund_type: string; total: number }[];
+  expensesByCategory: {
+    id: number;
+    category_name: string;
+    total: number;
+    budgeted: number;
+    remaining: number;
+  }[];
+  totalIncome: number;
+  totalExpenses: number;
+  closingBalance: number;
+}
+
+export const financeApi = {
+  getFunds: (conferenceId?: number) => {
+    const qs = conferenceId ? `?conference_id=${conferenceId}` : "";
+    return api.get<{ funds: Fund[] }>(`/funds${qs}`);
+  },
+  createFund: (data: {
+    name: string;
+    type: string;
+    forwardingRule: string;
+    conferenceId: number;
+  }) => api.post<{ id: number }>("/funds", data),
+
+  getExpenseCategories: (conferenceId?: number) => {
+    const qs = conferenceId ? `?conference_id=${conferenceId}` : "";
+    return api.get<{ expenseCategories: ExpenseCategory[] }>(`/expense-categories${qs}`);
+  },
+  createExpenseCategory: (data: { name: string; conferenceId: number }) =>
+    api.post<{ id: number }>("/expense-categories", data),
+
+  getBatches: (params?: { church_id?: number; status?: string; sabbath_date?: string }) => {
+    const qs = new URLSearchParams();
+    if (params?.church_id) qs.set("church_id", String(params.church_id));
+    if (params?.status) qs.set("status", params.status);
+    if (params?.sabbath_date) qs.set("sabbath_date", params.sabbath_date);
+    const q = qs.toString();
+    return api.get<{ batches: Batch[] }>(`/finance/batches${q ? `?${q}` : ""}`);
+  },
+  getBatch: (id: number) => api.get<BatchDetail>(`/finance/batches/${id}`),
+  createBatch: (data: { churchId: number; sabbathDate: string }) =>
+    api.post<{ id: number }>("/finance/batches", data),
+  confirmBatch: (id: number) =>
+    api.post<{ confirmedBy: number; status?: string; batchId: number }>(
+      `/finance/batches/${id}/confirm`
+    ),
+
+  getTransactions: (params?: {
+    church_id?: number;
+    fund_id?: number;
+    type?: string;
+    batch_id?: number;
+    from?: string;
+    to?: string;
+  }) => {
+    const qs = new URLSearchParams();
+    if (params?.church_id) qs.set("church_id", String(params.church_id));
+    if (params?.fund_id) qs.set("fund_id", String(params.fund_id));
+    if (params?.type) qs.set("type", params.type);
+    if (params?.batch_id) qs.set("batch_id", String(params.batch_id));
+    if (params?.from) qs.set("from", params.from);
+    if (params?.to) qs.set("to", params.to);
+    const q = qs.toString();
+    return api.get<{ transactions: Transaction[] }>(`/finance/transactions${q ? `?${q}` : ""}`);
+  },
+  createTransaction: (data: {
+    churchId: number;
+    fundId: number;
+    amount: number;
+    description?: string;
+    batchId: number;
+  }) => api.post<{ id: number }>("/finance/transactions", data),
+  createExpense: (data: {
+    churchId: number;
+    fundId: number;
+    amount: number;
+    description?: string;
+    categoryId?: number;
+    budgetRef?: number;
+  }) => api.post<{ id: number }>("/finance/expenses", data),
+
+  getBudgets: (params?: { church_id?: number; fiscal_year?: number }) => {
+    const qs = new URLSearchParams();
+    if (params?.church_id) qs.set("church_id", String(params.church_id));
+    if (params?.fiscal_year) qs.set("fiscal_year", String(params.fiscal_year));
+    const q = qs.toString();
+    return api.get<{ budgets: Budget[] }>(`/finance/budgets${q ? `?${q}` : ""}`);
+  },
+  createBudget: (data: {
+    churchId: number;
+    fundId: number;
+    categoryId: number;
+    plannedAmount: number;
+    fiscalYear: number;
+  }) => api.post<{ id: number }>("/finance/budgets", data),
+
+  getMonthlyReport: (churchId: number, year: number, month: number) =>
+    api.get<{ report: MonthlyReport }>(
+      `/finance/report/monthly?church_id=${churchId}&year=${year}&month=${month}`
+    ),
+};

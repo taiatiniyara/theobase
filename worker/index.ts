@@ -44,6 +44,22 @@ import {
   handleAcceptTransfer,
   handleRejectTransfer,
 } from "./routes/members";
+import {
+  handleGetFunds,
+  handleCreateFund,
+  handleGetExpenseCategories,
+  handleCreateExpenseCategory,
+  handleGetBatches,
+  handleGetBatch,
+  handleCreateBatch,
+  handleConfirmBatch,
+  handleGetTransactions,
+  handleCreateTransaction,
+  handleCreateExpense,
+  handleGetBudgets,
+  handleCreateBudget,
+  handleGetMonthlyReport,
+} from "./routes/finance";
 
 export { ChurchSyncDO, ConferenceDO };
 
@@ -220,6 +236,62 @@ export default {
     const transferRejectMatch = path.match(/^\/api\/transfers\/(\d+)\/reject$/);
     if (transferRejectMatch && request.method === "POST") {
       return handleRejectTransfer(request, env, Number(transferRejectMatch[1]));
+    }
+
+    // Finance — funds
+    if (path === "/api/funds" && request.method === "GET") {
+      return handleGetFunds(request, env);
+    }
+    if (path === "/api/funds" && request.method === "POST") {
+      return handleCreateFund(request, env);
+    }
+
+    // Finance — expense categories
+    if (path === "/api/expense-categories" && request.method === "GET") {
+      return handleGetExpenseCategories(request, env);
+    }
+    if (path === "/api/expense-categories" && request.method === "POST") {
+      return handleCreateExpenseCategory(request, env);
+    }
+
+    // Finance — offering batches
+    if (path === "/api/finance/batches" && request.method === "GET") {
+      return handleGetBatches(request, env);
+    }
+    if (path === "/api/finance/batches" && request.method === "POST") {
+      return handleCreateBatch(request, env);
+    }
+    const batchMatch = path.match(/^\/api\/finance\/batches\/(\d+)$/);
+    if (batchMatch && request.method === "GET") {
+      return handleGetBatch(request, env, Number(batchMatch[1]));
+    }
+    const batchConfirmMatch = path.match(/^\/api\/finance\/batches\/(\d+)\/confirm$/);
+    if (batchConfirmMatch && request.method === "POST") {
+      return handleConfirmBatch(request, env, Number(batchConfirmMatch[1]));
+    }
+
+    // Finance — transactions
+    if (path === "/api/finance/transactions" && request.method === "GET") {
+      return handleGetTransactions(request, env);
+    }
+    if (path === "/api/finance/transactions" && request.method === "POST") {
+      return handleCreateTransaction(request, env);
+    }
+    if (path === "/api/finance/expenses" && request.method === "POST") {
+      return handleCreateExpense(request, env);
+    }
+
+    // Finance — budgets
+    if (path === "/api/finance/budgets" && request.method === "GET") {
+      return handleGetBudgets(request, env);
+    }
+    if (path === "/api/finance/budgets" && request.method === "POST") {
+      return handleCreateBudget(request, env);
+    }
+
+    // Finance — reports
+    if (path === "/api/finance/report/monthly" && request.method === "GET") {
+      return handleGetMonthlyReport(request, env);
     }
 
     // DO routes (existing)
