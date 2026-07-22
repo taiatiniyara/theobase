@@ -14,10 +14,11 @@ _Avoid_: Circuit, group
 
 **Church**:
 A local congregation. Has subtypes:
+
 - **Organized Church**: A fully chartered congregation with its own treasury, bank account, membership roll, and church board.
 - **Company**: A pre-church entity under direct Conference supervision. Has its own treasury and membership but hasn't yet met the requirements for full church status.
 - **Branch**: A sub-group operating under a parent Organized Church. Shares the parent's treasury but maintains its own membership roll for tracking.
-_Avoid_: Congregation, assembly, parish
+  _Avoid_: Congregation, assembly, parish
 
 **Member**:
 A baptized Seventh-day Adventist belonging to exactly one church at a time. Has a membership status — active, transferred (in/out), deceased, or removed. Joined via baptism (immersion) or profession of faith (previously baptized in another denomination). Belongs to a household and may hold one or more church positions.

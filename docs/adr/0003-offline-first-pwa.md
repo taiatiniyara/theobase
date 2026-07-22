@@ -5,6 +5,7 @@ Theobase is an offline-first Progressive Web App — every data-entry operation 
 **Why offline-first:** Many SDA churches operate in rural areas with intermittent or no internet during Sabbath services — exactly when financial data is collected. An online-only app would be unusable at the moment of highest need. The PWA model allows installation on any device without an app store, critical for global reach across 215+ countries.
 
 **Trade-offs accepted:**
+
 - **Added complexity.** Conflict resolution (especially for member record edits), sync queue management, and dual-custody enforcement across disconnected clients add significant engineering surface area compared to an online-only app.
 - **Eventual consistency.** Data may be stale until sync completes. Reports show "last synced" timestamps. Conference dashboards may lag behind church-level activity.
 - **No native mobile app in MVP.** PWA was chosen over React Native / Capacitor because it delivers the same installable, offline-capable experience with a single codebase.

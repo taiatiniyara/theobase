@@ -1,0 +1,39 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "theobase",
+  "main": "worker/index.ts",
+  "compatibility_date": "2025-07-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "theobase",
+      "database_id": "theobase-dev",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CHURCH_SYNC_DO",
+        "class_name": "ChurchSyncDO",
+      },
+      {
+        "name": "CONFERENCE_DO",
+        "class_name": "ConferenceDO",
+      },
+    ],
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["ChurchSyncDO", "ConferenceDO"],
+    },
+  ],
+  "vars": {
+    "JWT_SECRET": "",
+  },
+  "observability": {
+    "enabled": true,
+  },
+}
