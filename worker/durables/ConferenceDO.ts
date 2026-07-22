@@ -3,76 +3,66 @@ import { DurableObject } from "cloudflare:workers";
 export class ConferenceDO extends DurableObject {
   private sql = this.ctx.storage.sql;
 
-  async getConferenceInfo(): Promise<{
-    id: number;
+  constructor(ctx: DurableObjectState, env: Env) {
+    super(ctx, env);
+    this.sql.exec(
+      `CREATE TABLE IF NOT EXISTS conference_aggregates (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        period TEXT NOT NULL,
+        total_tithe REAL NOT NULL DEFAULT 0,
+        total_offerings REAL NOT NULL DEFAULT 0,
+        total_expenses REAL NOT NULL DEFAULT 0,
+        updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+      )`
+    );
+  }
+
+  async getInfo(): Promise<{
     name: string;
     code: string;
     churchCount: number;
     memberCount: number;
   } | null> {
-    const conference = this.sql.exec("SELECT id, name, code FROM conferences ORDER BY id LIMIT 1");
-    if (conference.rowsRead === 0) return null;
-
-    const row = conference.one();
-    const churchCount = this.sql.exec(
-      "SELECT COUNT(*) as count FROM churches WHERE parent_id = ? AND parent_type = 'conference'",
-      row.id
-    );
-    const memberCount = this.sql.exec(
-      `SELECT COUNT(*) as count FROM members m
-       JOIN churches c ON m.church_id = c.id
-       WHERE c.parent_id = ? AND c.parent_type = 'conference'`,
-      row.id
-    );
+    const result = this.sql.exec("SELECT * FROM conference_aggregates ORDER BY id LIMIT 1");
+    if (result.rowsRead === 0) return null;
 
     return {
-      id: Number(row.id),
-      name: String(row.name),
-      code: String(row.code),
-      churchCount: Number(churchCount.one().count),
-      memberCount: Number(memberCount.one().count),
+      name: "default",
+      code: "default",
+      churchCount: 0,
+      memberCount: 0,
     };
   }
 
-  async aggregateFinance(
-    month: string,
-    year: string
-  ): Promise<{
+  async recordAggregate(
+    period: string,
+    tithe: number,
+    offerings: number,
+    expenses: number
+  ): Promise<void> {
+    this.sql.exec(
+      `INSERT INTO conference_aggregates (period, total_tithe, total_offerings, total_expenses)
+       VALUES (?, ?, ?, ?)`,
+      period,
+      tithe,
+      offerings,
+      expenses
+    );
+  }
+
+  async getAggregate(period: string): Promise<{
     totalTithe: number;
     totalOfferings: number;
     totalExpenses: number;
-    churchBreakdown: { churchId: number; churchName: string; tithe: number; offerings: number }[];
-  }> {
-    const period = `${year}-${month.padStart(2, "0")}%`;
-    const result = this.sql.exec(
-      `SELECT t.type, SUM(t.amount) as total, c.parent_id as conference_id
-       FROM transactions t
-       JOIN churches ch ON t.church_id = ch.id
-       JOIN conferences c ON c.id = ?
-       WHERE ch.parent_id = c.id
-         AND ch.parent_type = 'conference'
-         AND t.created_at LIKE ?
-       GROUP BY t.type`,
-      1,
-      period
-    );
-    const rows = result.toArray();
+  } | null> {
+    const result = this.sql.exec("SELECT * FROM conference_aggregates WHERE period = ?", period);
+    if (result.rowsRead === 0) return null;
 
-    let totalTithe = 0;
-    let totalOfferings = 0;
-    let totalExpenses = 0;
-    for (const row of rows) {
-      const amount = Number(row.total);
-      if (row.type === "income") totalOfferings += amount;
-      else if (row.type === "forward") totalTithe += amount;
-      else if (row.type === "expense") totalExpenses += amount;
-    }
-
+    const row = result.one();
     return {
-      totalTithe,
-      totalOfferings,
-      totalExpenses,
-      churchBreakdown: [],
+      totalTithe: Number(row.total_tithe),
+      totalOfferings: Number(row.total_offerings),
+      totalExpenses: Number(row.total_expenses),
     };
   }
 }

@@ -1,7 +1,38 @@
 import { DurableObject } from "cloudflare:workers";
 
+export interface OfflineOperation {
+  type: string;
+  payload: string;
+  clientUuid: string;
+}
+
 export class ChurchSyncDO extends DurableObject {
   private sql = this.ctx.storage.sql;
+
+  constructor(ctx: DurableObjectState, env: Env) {
+    super(ctx, env);
+    this.sql.exec(
+      `CREATE TABLE IF NOT EXISTS sync_sessions (
+        church_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'active',
+        last_sync_at TEXT NOT NULL,
+        started_at TEXT NOT NULL DEFAULT (datetime('now')),
+        PRIMARY KEY (church_id, user_id)
+      )`
+    );
+    this.sql.exec(
+      `CREATE TABLE IF NOT EXISTS applied_operations (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        church_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        op_type TEXT NOT NULL,
+        payload TEXT NOT NULL,
+        client_uuid TEXT NOT NULL UNIQUE,
+        applied_at TEXT NOT NULL DEFAULT (datetime('now'))
+      )`
+    );
+  }
 
   async getActiveSyncSessions(): Promise<{ churchId: string; lastSync: string }[]> {
     const result = this.sql.exec(
@@ -15,8 +46,8 @@ export class ChurchSyncDO extends DurableObject {
 
   async registerSync(churchId: string, userId: string): Promise<void> {
     this.sql.exec(
-      `INSERT INTO sync_sessions (church_id, user_id, status, last_sync_at, started_at)
-       VALUES (?, ?, 'active', datetime('now'), datetime('now'))
+      `INSERT INTO sync_sessions (church_id, user_id, status, last_sync_at)
+       VALUES (?, ?, 'active', datetime('now'))
        ON CONFLICT(church_id, user_id) DO UPDATE SET last_sync_at = datetime('now')`,
       churchId,
       userId
@@ -26,7 +57,7 @@ export class ChurchSyncDO extends DurableObject {
   async applyOfflineOperation(
     churchId: string,
     userId: string,
-    operation: { type: string; payload: string; clientUuid: string }
+    operation: OfflineOperation
   ): Promise<{ success: boolean; error?: string }> {
     const existing = this.sql.exec(
       "SELECT id FROM applied_operations WHERE client_uuid = ?",
@@ -63,7 +94,10 @@ export class ChurchSyncDO extends DurableObject {
     }));
   }
 
-  async getSyncState(churchId: string): Promise<{ lastSync: string; pendingOps: number }> {
+  async getSyncState(churchId: string): Promise<{
+    lastSync: string;
+    pendingOps: number;
+  }> {
     const session = this.sql.exec(
       "SELECT last_sync_at FROM sync_sessions WHERE church_id = ? ORDER BY last_sync_at DESC LIMIT 1",
       churchId
