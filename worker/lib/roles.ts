@@ -62,4 +62,14 @@ export const PERMISSIONS: Record<string, Role[]> = {
   ],
   "audit:read": [ROLES.sysadmin, ROLES.auditor, ROLES.president],
   "users:invite": [ROLES.sysadmin, ROLES.secretary],
+  "attendance:write": [ROLES.sysadmin, ROLES.secretary, ROLES.pastor],
+  "attendance:read": [
+    ROLES.sysadmin,
+    ROLES.president,
+    ROLES.secretary,
+    ROLES.treasurer,
+    ROLES.auditor,
+    ROLES.pastor,
+    ROLES.member,
+  ],
 };

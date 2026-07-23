@@ -82,6 +82,11 @@ import {
   handleDistrictDashboard,
   handleGlobalDashboard,
 } from "./routes/conference";
+import {
+  handleRecordAttendance,
+  handleGetAttendance,
+  handleGetAttendanceStats,
+} from "./routes/attendance";
 
 export { ChurchSyncDO, ConferenceDO };
 
@@ -373,6 +378,17 @@ export default {
         auditEntityMatch[1]!,
         Number(auditEntityMatch[2])
       );
+    }
+
+    // Attendance routes
+    if (path === "/api/attendance" && request.method === "POST") {
+      return handleRecordAttendance(request, env);
+    }
+    if (path === "/api/attendance" && request.method === "GET") {
+      return handleGetAttendance(request, env);
+    }
+    if (path === "/api/attendance/stats" && request.method === "GET") {
+      return handleGetAttendanceStats(request, env);
     }
 
     // Conference dashboard routes

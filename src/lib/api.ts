@@ -738,3 +738,57 @@ export const reconciliationApi = {
       reconciliation: { bankBalance: number; systemBalance: number; bankDiscrepancy: number };
     }>(`/church/balance`, data),
 };
+
+export interface AttendanceRecord {
+  id: number;
+  church_id: number;
+  date: string;
+  count: number;
+  category: string;
+  created_by: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AttendanceStats {
+  category: string;
+  average: number | null;
+  weeks: number;
+  min: number | null;
+  max: number | null;
+}
+
+export interface AttendanceTrendPoint {
+  date: string;
+  count: number;
+  category: string;
+}
+
+export const attendanceApi = {
+  record: (data: {
+    churchId: number;
+    date: string;
+    count: number;
+    category: string;
+    memberIds?: number[];
+  }) => api.post<{ id: number; updated: boolean }>("/attendance", data),
+  list: (params?: { church_id?: number; from?: string; to?: string; category?: string }) => {
+    const qs = new URLSearchParams();
+    if (params?.church_id) qs.set("church_id", String(params.church_id));
+    if (params?.from) qs.set("from", params.from);
+    if (params?.to) qs.set("to", params.to);
+    if (params?.category) qs.set("category", params.category);
+    const q = qs.toString();
+    return api.get<{ attendance: AttendanceRecord[] }>(`/attendance${q ? `?${q}` : ""}`);
+  },
+  stats: (params: { church_id: number; from?: string; to?: string; category?: string }) => {
+    const qs = new URLSearchParams();
+    qs.set("church_id", String(params.church_id));
+    if (params.from) qs.set("from", params.from);
+    if (params.to) qs.set("to", params.to);
+    if (params.category) qs.set("category", params.category);
+    return api.get<{ stats: AttendanceStats[]; trend: AttendanceTrendPoint[] }>(
+      `/attendance/stats?${qs.toString()}`
+    );
+  },
+};

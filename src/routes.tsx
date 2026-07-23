@@ -22,6 +22,7 @@ import ReconciliationPage from "./routes/ReconciliationPage";
 import ConferenceDashboard from "./routes/ConferenceDashboard";
 import DistrictDashboard from "./routes/DistrictDashboard";
 import GlobalDashboard from "./routes/GlobalDashboard";
+import AttendancePage from "./routes/AttendancePage";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -138,6 +139,12 @@ const globalDashboardRoute = createRoute({
   component: GlobalDashboard,
 });
 
+const attendanceRoute = createRoute({
+  getParentRoute: () => dashboardLayout,
+  path: "/attendance",
+  component: AttendancePage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
@@ -156,6 +163,7 @@ const routeTree = rootRoute.addChildren([
     conferenceDashboardRoute,
     districtDashboardRoute,
     globalDashboardRoute,
+    attendanceRoute,
   ]),
 ]);
 

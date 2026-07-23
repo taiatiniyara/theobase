@@ -92,6 +92,14 @@ export const MODULE_GROUPS: ModuleGroup[] = [
         roles: ["sysadmin", "president", "secretary", "treasurer", "auditor", "pastor", "member"],
         icon: "person",
       },
+      {
+        id: "attendance",
+        label: "Attendance",
+        path: "/app/attendance",
+        permission: "attendance:read",
+        roles: ["sysadmin", "president", "secretary", "treasurer", "auditor", "pastor", "member"],
+        icon: "chart",
+      },
     ],
   },
   {
