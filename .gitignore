@@ -3,4 +3,5 @@ dist
 .wrangler
 .husky/_
 .env
+.dev.vars
 *.log

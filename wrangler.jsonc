@@ -30,9 +30,6 @@
       "new_classes": ["ChurchSyncDO", "ConferenceDO"],
     },
   ],
-  "vars": {
-    "JWT_SECRET": "theobase-dev-jwt-secret-change-in-production",
-  },
   "observability": {
     "enabled": true,
   },
