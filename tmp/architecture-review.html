@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theobase — Architecture Review</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: '#f97316',
+          'brand-dark': '#ea580c',
+        }
+      }
+    }
+  };
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  body { font-family: 'Inter', sans-serif; }
+  .badge-strong { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+  .badge-explore { background: #fefce8; color: #ca8a04; border: 1px solid #fef08a; }
+  .badge-speculative { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+  .card-hover { transition: box-shadow 0.2s, transform 0.2s; }
+  .card-hover:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+  .mermaid-wrapper { background: #f8fafc; border-radius: 12px; padding: 20px; }
+  .mermaid-wrapper svg { max-width: 100%; }
+  .arrow { color: #f97316; font-weight: bold; }
+  pre { background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .tag-locality { background: #e0e7ff; color: #4338ca; }
+  .tag-leverage { background: #fce7f3; color: #be185d; }
+  .tag-test { background: #d1fae5; color: #065f46; }
+  .tag-seam { background: #fef3c7; color: #92400e; }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- Header -->
+<header class="bg-white border-b border-gray-200">
+  <div class="max-w-5xl mx-auto px-6 py-8">
+    <div class="flex items-center gap-3 mb-2">
+      <div class="w-10 h-10 rounded-lg bg-brand flex items-center justify-center text-white font-bold text-lg">T</div>
+      <h1 class="text-3xl font-bold tracking-tight">Theobase Architecture Review</h1>
+    </div>
+    <p class="text-gray-500 text-lg mt-2">
+      Deepening opportunities for the SDA church administration platform.
+      <span class="text-gray-400 ml-2">July 23, 2026</span>
+    </p>
+    <div class="flex gap-4 mt-4 text-sm text-gray-500">
+      <span>627 nodes in knowledge graph</span>
+      <span>&middot;</span>
+      <span>1398 edges</span>
+      <span>&middot;</span>
+      <span>51 communities</span>
+      <span>&middot;</span>
+      <span>84/84 tests passing</span>
+    </div>
+  </div>
+</header>
+
+<!-- Summary -->
+<section class="max-w-5xl mx-auto px-6 py-10">
+  <h2 class="text-xl font-semibold mb-6">Summary</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+      <div class="text-3xl font-bold text-brand mb-1">72</div>
+      <div class="text-sm text-gray-500">route handlers in 12 files</div>
+    </div>
+    <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+      <div class="text-3xl font-bold text-brand mb-1">~130</div>
+      <div class="text-sm text-gray-500">raw SQL queries inline in routes</div>
+    </div>
+    <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+      <div class="text-3xl font-bold text-brand mb-1">55+</div>
+      <div class="text-sm text-gray-500">repeated auth-gate blocks</div>
+    </div>
+  </div>
+
+  <p class="mt-6 text-gray-600 leading-relaxed">
+    Theobase was built fast — 30+ commits across T1–T14 and the #-series, all features landed, 
+    all tests green. But that velocity came at a cost: the codebase accumulated patterns that 
+    make the next feature harder than the last. Below are five deepening opportunities, ranked 
+    by impact on testability and agent-navigability.
+  </p>
+</section>
+
+<!-- Candidate 1: Data Access Layer -->
+<section class="max-w-5xl mx-auto px-6 py-8" id="candidate-1">
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 card-hover">
+    <div class="flex items-start justify-between mb-4">
+      <div>
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Candidate 1</span>
+        <h3 class="text-xl font-bold mt-1">Extract a Data Access Layer</h3>
+        <p class="text-sm text-gray-500 mt-1">
+          worker/routes/*.ts (all 12 files), worker/index.ts
+        </p>
+      </div>
+      <span class="badge-strong text-xs font-semibold px-3 py-1 rounded-full">Strong</span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+      <div>
+        <h4 class="font-semibold text-gray-700 mb-2">Problem</h4>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Every route handler mixes HTTP concerns (request parsing, response building, 
+          permission checks) with raw D1 SQL. <code>members.ts</code> is 1,803 lines with 
+          22 handlers each writing their own queries. There is zero separation between 
+          "what the caller asked for" and "how it's stored." 
+        </p>
+        <ul class="mt-3 text-sm text-gray-600 space-y-1 list-disc pl-5">
+          <li>~130 <code>env.DB.prepare()</code> calls scattered across 12 files</li>
+          <li>Repeated existence checks ("does this church exist?") in dozens of handlers</li>
+          <li>Dynamic query building (string concatenation of WHERE clauses) in 6 handlers</li>
+          <li>Business logic (e.g., tithe forwarding rules) interleaved with INSERT statements</li>
+        </ul>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <span class="tag tag-locality">improves locality</span>
+          <span class="tag tag-test">enables unit tests</span>
+          <span class="tag tag-seam">new seam</span>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold text-gray-700 mb-2">Solution</h4>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Introduce per-entity repository modules behind a consistent interface. Each repository 
+          encapsulates all SQL for one domain entity (Member, Church, Transaction, etc.) and 
+          returns typed objects — not raw D1 results. Route handlers call repository methods 
+          and focus purely on HTTP concerns.
+        </p>
+        <pre class="mt-3">// Before: inline SQL in route handler
+const result = await env.DB.prepare(
+  "SELECT m.*, h.name as household_name FROM members m LEFT JOIN households h ON m.household_id = h.id WHERE m.church_id = ? AND m.status = ?"
+).bind(churchId, status).all();
+
+// After: repository call
+const members = await memberRepo.findByChurch(churchId, { status });</pre>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <h4 class="font-semibold text-gray-700 mb-3">Before / After</h4>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="mermaid-wrapper">
+          <div class="text-xs font-semibold text-gray-400 mb-2">BEFORE — SQL smeared across routes</div>
+          <pre class="mermaid">
+graph TB
+    R1["handleGetMembers<br/>SELECT ... FROM members ..."]
+    R2["handleCreateMember<br/>INSERT INTO members ..."]
+    R3["handleUpdateMember<br/>UPDATE members SET ..."]
+    R4["handleGetHouseholds<br/>SELECT ... FROM households ..."]
+    R5["handleGetPositions<br/>SELECT ... FROM positions ..."]
+    DB[("D1 Database")]
+    R1 --> DB
+    R2 --> DB
+    R3 --> DB
+    R4 --> DB
+    R5 --> DB
+    style R1 fill:#fee2e2,stroke:#dc2626
+    style R2 fill:#fee2e2,stroke:#dc2626
+    style R3 fill:#fee2e2,stroke:#dc2626
+    style R4 fill:#fee2e2,stroke:#dc2626
+    style R5 fill:#fee2e2,stroke:#dc2626
+          </pre>
+        </div>
+        <div class="mermaid-wrapper">
+          <div class="text-xs font-semibold text-gray-400 mb-2">AFTER — routes call repositories</div>
+          <pre class="mermaid">
+graph TB
+    R1["handleGetMembers"]
+    R2["handleCreateMember"]
+    R3["handleUpdateMember"]
+    R4["handleGetHouseholds"]
+    R5["handleGetPositions"]
+    subgraph DAL ["Data Access Layer"]
+      MR["MemberRepo<br/>findAll / create / update"]
+      HR["HouseholdRepo<br/>findByChurch / create"]
+      PR["PositionRepo<br/>findByMember / assign"]
+    end
+    DB[("D1 Database")]
+    R1 --> MR
+    R2 --> MR
+    R3 --> MR
+    R4 --> HR
+    R5 --> PR
+    MR --> DB
+    HR --> DB
+    PR --> DB
+    style R1 fill:#dbeafe,stroke:#2563eb
+    style R2 fill:#dbeafe,stroke:#2563eb
+    style R3 fill:#dbeafe,stroke:#2563eb
+    style R4 fill:#dbeafe,stroke:#2563eb
+    style R5 fill:#dbeafe,stroke:#2563eb
+    style MR fill:#fef3c7,stroke:#ca8a04
+    style HR fill:#fef3c7,stroke:#ca8a04
+    style PR fill:#fef3c7,stroke:#ca8a04
+          </pre>
+        </div>
+      </div>
+    </div>
+
+    <h4 class="font-semibold text-gray-700 mt-6 mb-2">Benefits</h4>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+      <div class="bg-gray-50 rounded-lg p-3">
+        <div class="font-semibold text-gray-800 mb-1">Locality</div>
+        <p class="text-gray-600">All member queries live in one repository. Change the query shape once. The deletion test: removing MemberRepo spreads 22 queries across 12 files.</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3">
+        <div class="font-semibold text-gray-800 mb-1">Leverage</div>
+        <p class="text-gray-600">Every route handler gets simpler — one repository method call instead of raw SQL + bind + all + map. Conference-wide queries benefit from shared indexing.</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3">
+        <div class="font-semibold text-gray-800 mb-1">Testability</div>
+        <p class="text-gray-600">Repositories are testable with an in-memory SQLite adapter. Route handlers test with a fake repository — no D1 needed in unit tests.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Candidate 2: Router -->
+<section class="max-w-5xl mx-auto px-6 py-8" id="candidate-2">
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 card-hover">
+    <div class="flex items-start justify-between mb-4">
+      <div>
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Candidate 2</span>
+        <h3 class="text-xl font-bold mt-1">Request Pipeline Router</h3>
+        <p class="text-sm text-gray-500 mt-1">
+          worker/index.ts (536 lines, ~100 if-blocks)
+        </p>
+      </div>
+      <span class="badge-explore text-xs font-semibold px-3 py-1 rounded-full">Worth Exploring</span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+      <div>
+        <h4 class="font-semibold text-gray-700 mb-2">Problem</h4>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          The router is a flat imperative if/else chain — no prefix grouping, no middleware 
+          pipeline, no parameter extraction standard. Rate-limiting is the only "middleware" 
+          and it's called manually per-route. Every new route adds more lines to one function. 
+        </p>
+        <ul class="mt-3 text-sm text-gray-600 space-y-1 list-disc pl-5">
+          <li>536-line <code>fetch()</code> handler with ~100 if-blocks</li>
+          <li>Route parameters extracted via regex capture groups, cast to Number()</li>
+          <li>No way to apply middleware to a group (e.g., "all /api/members/* needs members:read")</li>
+          <li>CORS handled once at top, everything else is manual</li>
+        </ul>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <span class="tag tag-leverage">improves leverage</span>
+          <span class="tag tag-seam">new seam</span>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold text-gray-700 mb-2">Solution</h4>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          A lightweight composable router (no framework dependency — ~80 lines of code) that 
+          supports prefix grouping, method dispatch, parameter extraction, and middleware chains. 
+          Built around a <code>Router</code> class with <code>.use()</code> for middleware and 
+          <code>.get()/.post()/.patch()</code> for handlers.
+        </p>
+        <pre class="mt-3">// Before: flat if/else
+if (path === "/api/v1/finance/batches" && request.method === "GET") {
+  const auth = await authenticate(request, env);
+  if (auth instanceof Response) return auth;
+  const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
+  if (forbidden) return forbidden;
+  return handleGetBatches(request, env);
+}
+
+// After: composable router
+router.group("/api/v1/finance", [authenticate, authorize("finance:read")], (r) => {
+  r.get("/batches", handleGetBatches);
+  r.get("/batches/:id", handleGetBatch);
+  r.post("/batches", handleCreateBatch);
+  r.post("/batches/:id/confirm", handleConfirmBatch);
+});</pre>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <h4 class="font-semibold text-gray-700 mb-3">Before / After</h4>
+      <div class="mermaid-wrapper">
+        <div class="text-xs font-semibold text-gray-400 mb-2">ROUTER STRUCTURE</div>
+        <pre class="mermaid">
+graph LR
+    subgraph BEFORE ["index.ts: flat if/else chain"]
+      F1["if path===/api/auth/login"]
+      F2["if path===/api/auth/signup"]
+      F3["if path===/api/v1/members"]
+      F4["if path===/api/v1/members/:id"]
+      F5["if path===/api/v1/finance/batches"]
+      F6["...~100 more blocks..."]
+      F1 --> F2 --> F3 --> F4 --> F5 --> F6
+    end
+
+    subgraph AFTER ["Composable Router"]
+      R0["router.group('/api')"]
+      R1["r.group('/auth', [rateLimit])"]
+      R2["r.group('/v1/members', [auth('members:read')])"]
+      R3["r.group('/v1/finance', [auth('finance:read')])"]
+      R0 --> R1
+      R0 --> R2
+      R0 --> R3
+    end
+    style BEFORE fill:#fee2e2,stroke:#dc2626
+    style AFTER fill:#d1fae5,stroke:#16a34a
+        </pre>
+      </div>
+    </div>
+
+    <h4 class="font-semibold text-gray-700 mt-6 mb-2">Benefits</h4>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+      <div class="bg-gray-50 rounded-lg p-3">
+        <div class="font-semibold text-gray-800 mb-1">Locality</div>
+        <p class="text-gray-600">Middleware for a group lives at the group level — no repeating auth gates 55 times. Add a new middleware once, apply to all routes in a group.</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3">
+        <div class="font-semibold text-gray-800 mb-1">Leverage</div>
+        <p class="text-gray-600">Route parameters are automatically extracted and passed to handlers. No more regex capture groups and Number() casts in the router body.</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3">
+        <div class="font-semibold text-gray-800 mb-1">Testability</div>
+        <p class="text-gray-600">Router is an isolated module — test route matching and middleware execution without starting the worker.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Candidate 3: Frontend Component Library -->
+<section class="max-w-5xl mx-auto px-6 py-8" id="candidate-3">
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 card-hover">
+    <div class="flex items-start justify-between mb-4">
+      <div>
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Candidate 3</span>
+        <h3 class="text-xl font-bold mt-1">Frontend Shared Component Library</h3>
+        <p class="text-sm text-gray-500 mt-1">
+          src/routes/*.tsx (22 page files, ~5,800 lines)
+        </p>
+      </div>
+      <span class="badge-explore text-xs font-semibold px-3 py-1 rounded-full">Worth Exploring</span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+      <div>
+        <h4 class="font-semibold text-gray-700 mb-2">Problem</h4>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          There is no <code>src/components/</code> directory. Every page builds its UI from raw 
+          Tailwind classes repeated inline. The same tab row, form field, status badge, error 
+          alert, and table pattern is re-implemented in every file that needs it.
+        </p>
+        <ul class="mt-3 text-sm text-gray-600 space-y-1 list-disc pl-5">
+          <li><code>SummaryCard</code> duplicated identically across 3 dashboard pages (14 lines each)</li>
+          <li>Tab-switching UI duplicated in 5 pages (identical CSS, just different tab labels)</li>
+          <li>Error/message alert divs duplicated ~35 times</li>
+          <li>Same form input styling block repeated in every single form field</li>
+          <li>No shared table component — same header/body/empty-state pattern in 6 files</li>
+        </ul>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <span class="tag tag-locality">improves locality</span>
+          <span class="tag tag-leverage">improves leverage</span>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold text-gray-700 mb-2">Solution</h4>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Extract shared UI primitives into <code>src/components/</code> — small, composable 
+          modules with a minimal interface. Each component handles one responsibility: display 
+          states, styling, and accessibility. Pages compose them.
+        </p>
+        <pre class="mt-3">// Components to extract:
+src/components/
+  SummaryCard.tsx      // KPI card with label + value
+  TabRow.tsx           // Tab switcher with active state
+  DataTable.tsx        // Table with loading/empty/error states
+  FormField.tsx        // Label + input with error message
+  Alert.tsx            // Blue/red message banner
+  StatusBadge.tsx      // Colored rounded pill
+  LoadingState.tsx     // Centered "Loading..." with optional skeleton</pre>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <h4 class="font-semibold text-gray-700 mb-3">Before / After — SummaryCard Example</h4>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-sm">
+        <div class="bg-red-50 rounded-lg p-4 border border-red-100">
+          <div class="font-semibold text-red-700 mb-2">BEFORE: Copied 3 times</div>
+          <pre class="text-xs" style="background:#fff5f5; color:#7f1d1d;">// In ConferenceDashboard.tsx (lines 30-43)
+function SummaryCard({ label, value }: { label: string; value: string }) {
+  return (
+    &lt;div className="rounded-lg bg-white p-4 shadow"&gt;
+      &lt;div className="text-sm text-gray-500"&gt;{label}&lt;/div&gt;
+      &lt;div className="mt-1 text-2xl font-bold"&gt;{value}&lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Identical copy in DistrictDashboard.tsx
+// Identical copy in GlobalDashboard.tsx</pre>
+        </div>
+        <div class="bg-green-50 rounded-lg p-4 border border-green-100">
+          <div class="font-semibold text-green-700 mb-2">AFTER: Shared module</div>
+          <pre class="text-xs" style="background:#f0fdf4; color:#14532d;">// In src/components/SummaryCard.tsx
+export function SummaryCard({ label, value, trend }: { 
+  label: string; value: string; trend?: "up" | "down" | "flat";
+}) { ... }
+
+// In ConferenceDashboard.tsx
+import { SummaryCard } from "../components/SummaryCard";
+&lt;SummaryCard label="Total Members" value="1,247" trend="up" /&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+    <h4 class="font-semibold text-gray-700 mt-6 mb-2">Benefits</h4>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+      <div class="bg-gray-50 rounded-lg p-3">
+        <div class="font-semibold text-gray-800 mb-1">Locality</div>
+        <p class="text-gray-600">Changing the look of a status badge updates one file, not all 6 table pages. The deletion test: removing SummaryCard breaks 3 dashboards.</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3">
+        <div class="font-semibold text-gray-800 mb-1">Leverage</div>
+        <p class="text-gray-600">New pages compose from existing primitives. A new dashboard gets SummaryCard for free. Forms get consistent validation display.</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3">
+        <div class="font-semibold text-gray-800 mb-1">Testability</div>
+        <p class="text-gray-600">Components are independently testable — render with different props and assert output. No page-level setup needed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Candidate 4: json helper -->
+<section class="max-w-5xl mx-auto px-6 py-8" id="candidate-4">
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 card-hover">
+    <div class="flex items-start justify-between mb-4">
+      <div>
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Candidate 4</span>
+        <h3 class="text-xl font-bold mt-1">Unify the json() Response Helper</h3>
+        <p class="text-sm text-gray-500 mt-1">
+          All 13 files that define json() identically
+        </p>
+      </div>
+      <span class="badge-strong text-xs font-semibold px-3 py-1 rounded-full">Strong</span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+      <div>
+        <h4 class="font-semibold text-gray-700 mb-2">Problem</h4>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          The <code>json()</code> helper — a 5-line function that wraps <code>Response</code> 
+          with JSON content-type and CORS headers — is defined identically in 12 route files 
+          plus index.ts. This is the clearest DRY violation in the codebase. Changing CORS 
+          behavior or adding a header to all responses requires touching 13 files.
+        </p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <span class="tag tag-locality">improves locality</span>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold text-gray-700 mb-2">Solution</h4>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Move <code>json()</code> into <code>worker/lib/</code> alongside the other shared 
+          utilities. All 13 call sites import it instead of defining their own copy.
+        </p>
+        <pre class="mt-3">// Move to worker/lib/response.ts
+export function json(data: unknown, status = 200): Response {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+  });
+}
+
+// Routes import it:
+import { json } from "../lib/response";</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Candidate 5: DO Stubs -->
+<section class="max-w-5xl mx-auto px-6 py-8" id="candidate-5">
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 card-hover">
+    <div class="flex items-start justify-between mb-4">
+      <div>
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Candidate 5</span>
+        <h3 class="text-xl font-bold mt-1">Complete Durable Object Implementations</h3>
+        <p class="text-sm text-gray-500 mt-1">
+          worker/durables/ConferenceDO.ts, worker/durables/ChurchSyncDO.ts
+        </p>
+      </div>
+      <span class="badge-speculative text-xs font-semibold px-3 py-1 rounded-full">Speculative</span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+      <div>
+        <h4 class="font-semibold text-gray-700 mb-2">Problem</h4>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          <code>ConferenceDO.getInfo()</code> returns hardcoded <code>"default"</code> values — 
+          it doesn't actually aggregate data from child churches. <code>ChurchSyncDO</code> 
+          stores operation payloads as opaque strings without understanding their semantics. 
+          Both DOs exist and are registered but are effectively stubs.
+        </p>
+        <ul class="mt-3 text-sm text-gray-600 space-y-1 list-disc pl-5">
+          <li><code>getInfo()</code> returns <code>{ name: "default", code: "default", churchCount: 0, memberCount: 0 }</code> regardless of actual data</li>
+          <li><code>applyOfflineOperation()</code> deduplicates by UUID but never validates the payload against the schema</li>
+          <li>No integration between ConferenceDO aggregates and the route-level reporting queries</li>
+        </ul>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <span class="tag tag-seam">completes seam</span>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold text-gray-700 mb-2">Solution</h4>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Wire <code>ConferenceDO.getInfo()</code> to query the D1 database for real church 
+          counts and member counts in the conference. Enhance <code>applyOfflineOperation()</code> 
+          to validate operation types against a known set and parse payloads before storing. 
+          This is speculative because the current architecture already handles these concerns 
+          through routes — the DOs would optimize rather than enable.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Top Recommendation -->
+<section class="max-w-5xl mx-auto px-6 py-10">
+  <div class="bg-gradient-to-r from-brand to-brand-dark rounded-2xl p-8 text-white">
+    <h2 class="text-xl font-bold mb-4">Top Recommendation</h2>
+    <h3 class="text-2xl font-bold mb-4">Candidate 1: Extract a Data Access Layer</h3>
+    <p class="text-white/90 leading-relaxed mb-6">
+      This is the highest-leverage deepening opportunity. The current architecture has
+      <strong class="text-white">zero separation</strong> between HTTP handling and data access — 
+      every one of 72 route handlers mixes parsing, validation, authorization, SQL, and response 
+      formatting into a single function. Extracting repositories behind a clean interface would:
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white/10 rounded-lg p-4">
+        <div class="font-semibold text-white mb-1">Reduce route complexity</div>
+        <p class="text-white/70 text-sm">Handlers drop from ~150 lines to ~40 lines. Focus on "what was asked" and "what to return" — not "which table and which columns."</p>
+      </div>
+      <div class="bg-white/10 rounded-lg p-4">
+        <div class="font-semibold text-white mb-1">Enable targeted testing</div>
+        <p class="text-white/70 text-sm">Repositories testable with an in-memory SQLite adapter. Route handlers testable with a fake. Currently: only integration tests against full miniflare runtime.</p>
+      </div>
+      <div class="bg-white/10 rounded-lg p-4">
+        <div class="font-semibold text-white mb-1">Unblock Candidates 2–5</div>
+        <p class="text-white/70 text-sm">A router makes more sense when handlers are 40 lines, not 400. Components make more sense when pages compose repositories, not raw SQL.</p>
+      </div>
+    </div>
+    <p class="text-white/70 text-sm mt-6">
+      Start with one entity (Member, the largest at 1,803 lines) as a proof of concept. The repository interface becomes the seam — and as the codebase design principle says: 
+      <em>"the interface is the test surface."</em>
+    </p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="max-w-5xl mx-auto px-6 py-8 text-center text-sm text-gray-400">
+  <p>Theobase Architecture Review — 5 candidates across 3 recommendation strengths</p>
+  <p class="mt-1">Vocabulary: <span class="font-medium text-gray-500">Module, Interface, Seam, Depth, Locality, Leverage</span> per codebase-design skill</p>
+</footer>
+
+</body>
+</html>
