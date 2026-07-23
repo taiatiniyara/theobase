@@ -4,6 +4,7 @@
   "main": "worker/index.ts",
   "compatibility_date": "2025-07-22",
   "compatibility_flags": ["nodejs_compat"],
+  "send_email": [{ "name": "EMAIL" }],
   "d1_databases": [
     {
       "binding": "DB",

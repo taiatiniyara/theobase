@@ -72,22 +72,29 @@ describe("auth API", () => {
     const refreshBody = (await refreshRes.json()) as { accessToken: string };
     expect(refreshBody.accessToken).toBeTruthy();
 
-    // Forgot password
+    // Forgot password — no resetToken in response body
     const forgotRes = await SELF.fetch("http://localhost/api/auth/forgot-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: "admin@test.com" }),
     });
     expect(forgotRes.status).toBe(200);
-    const forgotBody = (await forgotRes.json()) as { message: string; resetToken: string };
+    const forgotBody = (await forgotRes.json()) as { message: string; resetToken?: string };
     expect(forgotBody.message).toBeTruthy();
-    expect(forgotBody.resetToken).toBeTruthy();
+    expect(forgotBody.resetToken).toBeUndefined();
+
+    // Get reset token from DB
+    const tokenRow = await env.DB.prepare("SELECT reset_token FROM users WHERE email = ?")
+      .bind("admin@test.com")
+      .first<{ reset_token: string }>();
+    expect(tokenRow).toBeTruthy();
+    const resetToken = tokenRow!.reset_token;
 
     // Reset password
     const resetRes = await SELF.fetch("http://localhost/api/auth/reset-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: forgotBody.resetToken, newPassword: "newpass789" }),
+      body: JSON.stringify({ token: resetToken, newPassword: "newpass789" }),
     });
     expect(resetRes.status).toBe(200);
 

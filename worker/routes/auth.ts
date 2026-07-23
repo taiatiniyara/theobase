@@ -12,6 +12,7 @@ import { createDb } from "../lib/db";
 import { UserRepo } from "../repos/users";
 import { ConferenceRepo } from "../repos/org";
 import { MemberRepo } from "../repos/members";
+import { sendResetEmail } from "../lib/email";
 import { json } from "../lib/response";
 
 export async function handleAuthSignup(request: Request, env: Env): Promise<Response> {
@@ -216,9 +217,10 @@ export async function handleForgotPassword(request: Request, env: Env): Promise<
 
   await userRepo.update(user.id, { resetToken, resetTokenExpires: expiresAt });
 
+  await sendResetEmail(env, user.email, resetToken);
+
   return json({
     message: "If the email exists, a reset link has been sent",
-    resetToken,
   });
 }
 
