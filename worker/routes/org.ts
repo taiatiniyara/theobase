@@ -54,7 +54,7 @@ export async function handleGetConferences(request: Request, env: Env): Promise<
   const forbidden = authorize(auth, PERMISSIONS["org:read"]!);
   if (forbidden) return forbidden;
 
-  const confRepo = new ConferenceRepo(createDb(env));
+  const confRepo = new ConferenceRepo(createDb(env, auth.conferenceId));
   const conferences = await confRepo.findAll();
 
   return json({ conferences: conferences.map(toConferenceResponse) });
@@ -78,7 +78,7 @@ export async function handleCreateConference(request: Request, env: Env): Promis
     return json({ error: "name and code are required" }, 400);
   }
 
-  const confRepo = new ConferenceRepo(createDb(env));
+  const confRepo = new ConferenceRepo(createDb(env, auth.conferenceId));
 
   const existing = await confRepo.findByCode(body.code);
   if (existing) {
@@ -127,7 +127,7 @@ export async function handleUpdateConference(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const confRepo = new ConferenceRepo(createDb(env));
+  const confRepo = new ConferenceRepo(createDb(env, auth.conferenceId));
   const existing = await confRepo.findById(conferenceId);
   if (!existing) {
     return json({ error: "Conference not found" }, 404);
@@ -202,7 +202,7 @@ export async function handleCreateDistrict(
     return json({ error: "name is required" }, 400);
   }
 
-  const districtRepo = new DistrictRepo(createDb(env));
+  const districtRepo = new DistrictRepo(createDb(env, auth.conferenceId));
   const result = await districtRepo.create({
     name: body.name,
     conferenceId,
@@ -241,7 +241,7 @@ export async function handleUpdateDistrict(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const districtRepo = new DistrictRepo(createDb(env));
+  const districtRepo = new DistrictRepo(createDb(env, auth.conferenceId));
   const existing = await districtRepo.findById(districtId);
   if (!existing) {
     return json({ error: "District not found" }, 404);
@@ -333,7 +333,7 @@ export async function handleCreateChurch(request: Request, env: Env): Promise<Re
     if (body.parentType !== "church") {
       return json({ error: "Branches must be under a parent church" }, 400);
     }
-    const parentRepo = new ChurchRepo(createDb(env));
+    const parentRepo = new ChurchRepo(createDb(env, auth.conferenceId));
     const parent = await parentRepo.findById(body.parentId);
     if (!parent || parent.type !== "organized") {
       return json({ error: "Branch parent must be an Organized Church" }, 400);
@@ -342,7 +342,7 @@ export async function handleCreateChurch(request: Request, env: Env): Promise<Re
 
   const churchCode = body.code || body.name.toLowerCase().replace(/\s+/g, "_");
 
-  const churchRepo = new ChurchRepo(createDb(env));
+  const churchRepo = new ChurchRepo(createDb(env, auth.conferenceId));
   const result = await churchRepo.create({
     name: body.name,
     code: churchCode,
@@ -393,7 +393,7 @@ export async function handleUpdateChurch(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const churchRepo = new ChurchRepo(createDb(env));
+  const churchRepo = new ChurchRepo(createDb(env, auth.conferenceId));
   const existing = await churchRepo.findById(churchId);
   if (!existing) {
     return json({ error: "Church not found" }, 404);
@@ -477,7 +477,7 @@ export async function handleBulkCreateChurches(request: Request, env: Env): Prom
   const created: { name: string; type: string; id: number }[] = [];
   const errors: { row: number; message: string }[] = [];
 
-  const churchRepo = new ChurchRepo(createDb(env));
+  const churchRepo = new ChurchRepo(createDb(env, auth.conferenceId));
 
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i]!;

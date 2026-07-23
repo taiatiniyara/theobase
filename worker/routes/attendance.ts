@@ -52,7 +52,7 @@ export async function handleRecordAttendance(request: Request, env: Env): Promis
     return json({ error: "count must be a non-negative number" }, 400);
   }
 
-  const repo = new AttendanceRepo(createDb(env));
+  const repo = new AttendanceRepo(createDb(env, auth.conferenceId));
 
   const existing = await repo.findAll({
     churchId: body.churchId,
@@ -107,7 +107,7 @@ export async function handleGetAttendance(request: Request, env: Env): Promise<R
   const to = url.searchParams.get("to");
   const category = url.searchParams.get("category");
 
-  const repo = new AttendanceRepo(createDb(env));
+  const repo = new AttendanceRepo(createDb(env, auth.conferenceId));
   const attendance = await repo.findAll({
     churchId: churchId ? Number(churchId) : undefined,
     from: from ?? undefined,
@@ -134,7 +134,7 @@ export async function handleGetAttendanceStats(request: Request, env: Env): Prom
     return json({ error: "church_id is required" }, 400);
   }
 
-  const repo = new AttendanceRepo(createDb(env));
+  const repo = new AttendanceRepo(createDb(env, auth.conferenceId));
   const cid = Number(churchId);
 
   const stats = await repo.getStats(cid, from ?? undefined, to ?? undefined);

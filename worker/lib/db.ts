@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/d1";
 import * as schema from "../schema";
 
-export function createDb(env: Env) {
+export function createDb(env: Env, _conferenceId?: number) {
   return drizzle(env.DB, { schema });
 }
 

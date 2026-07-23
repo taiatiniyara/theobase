@@ -61,7 +61,7 @@ export async function handleGetFunds(request: Request, env: Env): Promise<Respon
     ? Number(url.searchParams.get("conference_id"))
     : undefined;
 
-  const fundRepo = new FundRepo(createDb(env));
+  const fundRepo = new FundRepo(createDb(env, auth.conferenceId));
   const funds = await fundRepo.findAll(conferenceId);
 
   return json({ funds: funds.map(toFundResponse) });
@@ -98,7 +98,7 @@ export async function handleCreateFund(request: Request, env: Env): Promise<Resp
   }
 
   try {
-    const fundRepo = new FundRepo(createDb(env));
+    const fundRepo = new FundRepo(createDb(env, auth.conferenceId));
     const result = await fundRepo.create({
       name: body.name,
       type: body.type,
@@ -151,7 +151,7 @@ export async function handleGetExpenseCategories(request: Request, env: Env): Pr
     : undefined;
   const includeInactive = url.searchParams.get("include_inactive") === "1";
 
-  const categoryRepo = new ExpenseCategoryRepo(createDb(env));
+  const categoryRepo = new ExpenseCategoryRepo(createDb(env, auth.conferenceId));
   const categories = await categoryRepo.findAll(conferenceId, includeInactive ? undefined : true);
 
   return json({ expenseCategories: categories.map(toExpenseCategoryResponse) });
@@ -179,7 +179,7 @@ export async function handleUpdateExpenseCategory(
     return json({ error: "No fields to update" }, 400);
   }
 
-  const categoryRepo = new ExpenseCategoryRepo(createDb(env));
+  const categoryRepo = new ExpenseCategoryRepo(createDb(env, auth.conferenceId));
   const existing = await categoryRepo.findById(categoryId);
   if (!existing) {
     return json({ error: "Expense category not found" }, 404);
@@ -227,7 +227,7 @@ export async function handleCreateExpenseCategory(request: Request, env: Env): P
   }
 
   try {
-    const categoryRepo = new ExpenseCategoryRepo(createDb(env));
+    const categoryRepo = new ExpenseCategoryRepo(createDb(env, auth.conferenceId));
     const result = await categoryRepo.create({
       name: body.name,
       conferenceId: body.conferenceId,
@@ -342,7 +342,7 @@ export async function handleGetBatch(
     return json({ error: "Batch not found" }, 404);
   }
 
-  const batchRepo = new BatchRepo(createDb(env));
+  const batchRepo = new BatchRepo(createDb(env, auth.conferenceId));
   const txns = await batchRepo.getBatchTransactions(batchId);
   const transactions = txns.map((t) => ({
     id: t.id,
@@ -398,7 +398,7 @@ export async function handleCreateBatch(request: Request, env: Env): Promise<Res
 
   const treasuryChurchId = await resolveTreasuryChurchId(env, body.churchId);
 
-  const batchRepo = new BatchRepo(createDb(env));
+  const batchRepo = new BatchRepo(createDb(env, auth.conferenceId));
   const result = await batchRepo.create({
     churchId: treasuryChurchId,
     sabbathDate: body.sabbathDate,
@@ -438,7 +438,7 @@ export async function handleConfirmBatch(
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
-  const db = createDb(env);
+  const db = createDb(env, auth.conferenceId);
   const batchRepo = new BatchRepo(db);
   const batch = await batchRepo.findById(batchId);
 
@@ -850,7 +850,7 @@ export async function handleCreateBudget(request: Request, env: Env): Promise<Re
 
   try {
     const treasuryChurchId = await resolveTreasuryChurchId(env, body.churchId);
-    const budgetRepo = new BudgetRepo(createDb(env));
+    const budgetRepo = new BudgetRepo(createDb(env, auth.conferenceId));
     const result = await budgetRepo.create({
       churchId: treasuryChurchId,
       fundId: body.fundId,
@@ -901,7 +901,7 @@ export async function handleApproveBudget(
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
-  const budgetRepo = new BudgetRepo(createDb(env));
+  const budgetRepo = new BudgetRepo(createDb(env, auth.conferenceId));
   const existing = await budgetRepo.findById(budgetId);
   if (!existing) {
     return json({ error: "Budget not found" }, 404);
@@ -997,7 +997,7 @@ export async function handleCreateBudgetTemplate(request: Request, env: Env): Pr
   }
 
   try {
-    const templateRepo = new BudgetTemplateRepo(createDb(env));
+    const templateRepo = new BudgetTemplateRepo(createDb(env, auth.conferenceId));
     const result = await templateRepo.create({
       conferenceId: body.conferenceId,
       categoryId: body.categoryId,

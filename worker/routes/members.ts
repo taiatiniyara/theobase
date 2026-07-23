@@ -68,7 +68,7 @@ export async function handleGetMembers(request: Request, env: Env): Promise<Resp
   if (forbidden) return forbidden;
 
   const url = new URL(request.url);
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
 
   const members = await memberRepo.findAll({
     churchId: url.searchParams.get("church_id")
@@ -92,7 +92,7 @@ export async function handleGetMember(
   const forbidden = authorize(auth, PERMISSIONS["members:read"]!);
   if (forbidden) return forbidden;
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   const member = await memberRepo.findById(memberId);
 
   if (!member) {
@@ -109,7 +109,7 @@ export async function handleGetMember(
         .first<{ name: string }>()
     : null;
 
-  const positionRepo = new PositionRepo(createDb(env));
+  const positionRepo = new PositionRepo(createDb(env, auth.conferenceId));
   const positions = await positionRepo.findByMember(memberId);
 
   return json({
@@ -171,7 +171,7 @@ export async function handleCreateMember(request: Request, env: Env): Promise<Re
     return json({ error: "Church not found" }, 404);
   }
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   const result = await memberRepo.create(body);
 
   await logAudit(env, {
@@ -230,7 +230,7 @@ export async function handleUpdateMember(
     if (err) return json({ error: err }, 400);
   }
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   const existing = await memberRepo.findById(memberId);
   if (!existing) {
     return json({ error: "Member not found" }, 404);
@@ -290,7 +290,7 @@ export async function handleRemoveMember(
   const newStatus = body.reason === "deceased" ? "deceased" : "removed";
   const statusDate = body.date || new Date().toISOString();
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   const prevMember = await memberRepo.findById(memberId);
   const prevState = prevMember ? JSON.stringify(prevMember) : null;
 
@@ -324,7 +324,7 @@ export async function handleGetHouseholds(request: Request, env: Env): Promise<R
     ? Number(url.searchParams.get("church_id"))
     : undefined;
 
-  const householdRepo = new HouseholdRepo(createDb(env));
+  const householdRepo = new HouseholdRepo(createDb(env, auth.conferenceId));
   const households = await householdRepo.findByChurch(churchId);
 
   // Enrich with head member name and count
@@ -368,7 +368,7 @@ export async function handleCreateHousehold(request: Request, env: Env): Promise
     return json({ error: "churchId and name are required" }, 400);
   }
 
-  const householdRepo = new HouseholdRepo(createDb(env));
+  const householdRepo = new HouseholdRepo(createDb(env, auth.conferenceId));
   const result = await householdRepo.create(body);
 
   await logAudit(env, {
@@ -403,7 +403,7 @@ export async function handleUpdateHousehold(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const householdRepo = new HouseholdRepo(createDb(env));
+  const householdRepo = new HouseholdRepo(createDb(env, auth.conferenceId));
   const existing = await householdRepo.findById(householdId);
   if (!existing) {
     return json({ error: "Household not found" }, 404);
@@ -442,7 +442,7 @@ export async function handleGetPositions(request: Request, env: Env): Promise<Re
   const forbidden = authorize(auth, PERMISSIONS["members:read"]!);
   if (forbidden) return forbidden;
 
-  const positionRepo = new PositionRepo(createDb(env));
+  const positionRepo = new PositionRepo(createDb(env, auth.conferenceId));
   const positions = await positionRepo.findAll();
 
   return json({ positions });
@@ -466,7 +466,7 @@ export async function handleCreatePosition(request: Request, env: Env): Promise<
     return json({ error: "name is required" }, 400);
   }
 
-  const positionRepo = new PositionRepo(createDb(env));
+  const positionRepo = new PositionRepo(createDb(env, auth.conferenceId));
   const existing = await positionRepo.findByName(body.name);
   if (existing) {
     return json({ error: "Position already exists" }, 409);
@@ -519,13 +519,13 @@ export async function handleAssignPosition(
     return json({ error: "positionId is required" }, 400);
   }
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   const member = await memberRepo.findById(memberId);
   if (!member) {
     return json({ error: "Member not found" }, 404);
   }
 
-  const positionRepo = new PositionRepo(createDb(env));
+  const positionRepo = new PositionRepo(createDb(env, auth.conferenceId));
   const position = await positionRepo.findById(body.positionId);
   if (!position) {
     return json({ error: "Position not found" }, 404);
@@ -564,7 +564,7 @@ export async function handleRemovePosition(
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
-  const positionRepo = new PositionRepo(createDb(env));
+  const positionRepo = new PositionRepo(createDb(env, auth.conferenceId));
   const hasPosition = await positionRepo.hasActivePosition(memberId, positionId);
   if (!hasPosition) {
     return json({ error: "Member does not hold this position" }, 404);
@@ -595,8 +595,8 @@ export async function handleGetTransfers(request: Request, env: Env): Promise<Re
   const forbidden = authorize(auth, PERMISSIONS["members:read"]!);
   if (forbidden) return forbidden;
 
-  const transferRepo = new TransferRepo(createDb(env));
-  const memberRepo = new MemberRepo(createDb(env));
+  const transferRepo = new TransferRepo(createDb(env, auth.conferenceId));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
 
   // Auto-expire stale transfers
   try {
@@ -668,7 +668,7 @@ export async function handleInitiateTransfer(request: Request, env: Env): Promis
     return json({ error: "memberId and toChurchId are required" }, 400);
   }
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   const member = await memberRepo.findById(body.memberId);
   if (!member) return json({ error: "Member not found" }, 404);
   if (member.status !== "active") {
@@ -683,7 +683,7 @@ export async function handleInitiateTransfer(request: Request, env: Env): Promis
     return json({ error: "Cannot transfer to the same church" }, 400);
   }
 
-  const transferRepo = new TransferRepo(createDb(env));
+  const transferRepo = new TransferRepo(createDb(env, auth.conferenceId));
   const hasPending = await transferRepo.hasPendingForMember(body.memberId);
   if (hasPending) {
     return json({ error: "A pending transfer already exists for this member" }, 409);
@@ -757,7 +757,7 @@ export async function handleApproveTransfer(
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
-  const transferRepo = new TransferRepo(createDb(env));
+  const transferRepo = new TransferRepo(createDb(env, auth.conferenceId));
   const transfer = await transferRepo.findById(transferId);
   if (!transfer) return json({ error: "Transfer not found" }, 404);
   if (transfer.status !== "pending_conference") {
@@ -830,7 +830,7 @@ export async function handleAcceptTransfer(
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
-  const transferRepo = new TransferRepo(createDb(env));
+  const transferRepo = new TransferRepo(createDb(env, auth.conferenceId));
   const transfer = await transferRepo.findById(transferId);
   if (!transfer) return json({ error: "Transfer not found" }, 404);
   if (transfer.status !== "pending_destination") {
@@ -839,7 +839,7 @@ export async function handleAcceptTransfer(
 
   await transferRepo.accept(transferId, Number(auth.userId));
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   await memberRepo.transferTo(transfer.memberId, transfer.toChurchId, transfer.fromChurchId);
 
   await logAudit(env, {
@@ -903,7 +903,7 @@ export async function handleRejectTransfer(
     // Body is optional
   }
 
-  const transferRepo = new TransferRepo(createDb(env));
+  const transferRepo = new TransferRepo(createDb(env, auth.conferenceId));
   const transfer = await transferRepo.findById(transferId);
   if (!transfer) return json({ error: "Transfer not found" }, 404);
   if (!["pending_conference", "pending_destination"].includes(transfer.status)) {
@@ -912,7 +912,7 @@ export async function handleRejectTransfer(
 
   await transferRepo.reject(transferId, body.note);
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   await memberRepo.reactivate(transfer.memberId);
 
   await logAudit(env, {
@@ -982,14 +982,14 @@ export async function handleOverrideTransfer(
     return json({ error: "action must be force_approve or force_reject" }, 400);
   }
 
-  const transferRepo = new TransferRepo(createDb(env));
+  const transferRepo = new TransferRepo(createDb(env, auth.conferenceId));
   const transfer = await transferRepo.findById(transferId);
   if (!transfer) return json({ error: "Transfer not found" }, 404);
   if (!["pending_conference", "pending_destination"].includes(transfer.status)) {
     return json({ error: "Transfer cannot be overridden in its current state" }, 400);
   }
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
 
   if (body.action === "force_approve") {
     if (transfer.status === "pending_conference") {
@@ -1045,7 +1045,7 @@ export async function handleGetSelfMember(
     return json({ error: "No member record linked to your account" }, 404);
   }
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   const member = await memberRepo.findByIdAndChurch(user.member_id, churchId);
   if (!member) {
     return json({ error: "Member not found in this church" }, 404);
@@ -1086,7 +1086,7 @@ export async function handleUpdateSelfMember(
     return json({ error: "version is required for optimistic locking" }, 400);
   }
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   const existing = await memberRepo.findByIdAndChurch(user.member_id, churchId);
   if (!existing) {
     return json({ error: "Member not found in this church" }, 404);
@@ -1149,7 +1149,7 @@ export async function handleMemberGiving(
     return json({ error: "amount must be positive" }, 400);
   }
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   const member = await memberRepo.findById(memberId);
   if (!member) return json({ error: "Member not found" }, 404);
   if (member.churchId !== churchId) {
@@ -1246,7 +1246,7 @@ export async function handleMemberTransfer(
     return json({ error: "toChurchId is required" }, 400);
   }
 
-  const memberRepo = new MemberRepo(createDb(env));
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   const member = await memberRepo.findById(memberId);
   if (!member) return json({ error: "Member not found" }, 404);
   if (member.churchId !== churchId) {
@@ -1264,7 +1264,7 @@ export async function handleMemberTransfer(
     return json({ error: "Cannot transfer to the same church" }, 400);
   }
 
-  const transferRepo = new TransferRepo(createDb(env));
+  const transferRepo = new TransferRepo(createDb(env, auth.conferenceId));
   const hasPending = await transferRepo.hasPendingForMember(memberId);
   if (hasPending) {
     return json({ error: "A pending transfer already exists for this member" }, 409);

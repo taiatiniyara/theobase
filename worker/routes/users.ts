@@ -55,7 +55,7 @@ export async function handleInviteUser(request: Request, env: Env): Promise<Resp
     return json({ error: `Invalid role. Must be one of: ${validRoles.join(", ")}` }, 400);
   }
 
-  const userRepo = new UserRepo(createDb(env));
+  const userRepo = new UserRepo(createDb(env, auth.conferenceId));
 
   const existing = await userRepo.findByEmail(body.email.toLowerCase().trim());
   if (existing) {
@@ -106,7 +106,7 @@ export async function handleGetUsers(request: Request, env: Env): Promise<Respon
   const url = new URL(request.url);
   const conferenceId = url.searchParams.get("conference_id");
 
-  const userRepo = new UserRepo(createDb(env));
+  const userRepo = new UserRepo(createDb(env, auth.conferenceId));
   const users = await userRepo.findAll(conferenceId ? Number(conferenceId) : undefined);
 
   return json({ users: users.map(toUserResponse) });
@@ -130,7 +130,7 @@ export async function handleUpdateUser(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const userRepo = new UserRepo(createDb(env));
+  const userRepo = new UserRepo(createDb(env, auth.conferenceId));
 
   const user = await userRepo.findById(userId);
   if (!user) {
@@ -214,7 +214,7 @@ export async function handleBulkInviteUsers(request: Request, env: Env): Promise
   const created: { email: string; role: string; tempPassword: string; id: number }[] = [];
   const errors: { row: number; message: string }[] = [];
 
-  const userRepo = new UserRepo(createDb(env));
+  const userRepo = new UserRepo(createDb(env, auth.conferenceId));
 
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i]!;
@@ -282,7 +282,7 @@ export async function handleGetMe(request: Request, env: Env): Promise<Response>
   const auth = await authenticate(request, env);
   if (auth instanceof Response) return auth;
 
-  const userRepo = new UserRepo(createDb(env));
+  const userRepo = new UserRepo(createDb(env, auth.conferenceId));
 
   const user = await userRepo.findUserWithChurch(Number(auth.userId));
   if (!user) {
@@ -293,7 +293,7 @@ export async function handleGetMe(request: Request, env: Env): Promise<Response>
   let church = null;
 
   if (user.conference_id) {
-    const conferenceRepo = new ConferenceRepo(createDb(env));
+    const conferenceRepo = new ConferenceRepo(createDb(env, auth.conferenceId));
     conference = await conferenceRepo.findById(user.conference_id);
     if (conference) {
       conference = { id: conference.id, name: conference.name, code: conference.code };
@@ -301,7 +301,7 @@ export async function handleGetMe(request: Request, env: Env): Promise<Response>
   }
 
   if (user.church_id) {
-    const churchRepo = new ChurchRepo(createDb(env));
+    const churchRepo = new ChurchRepo(createDb(env, auth.conferenceId));
     church = await churchRepo.findById(user.church_id);
     if (church) {
       church = { id: church.id, name: church.name, type: church.type };

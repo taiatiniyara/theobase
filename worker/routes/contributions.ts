@@ -20,7 +20,9 @@ export async function handleGetContributions(request: Request, env: Env): Promis
     return json({ error: "church_id and year are required" }, 400);
   }
 
-  const cid = await new ChurchRepo(createDb(env)).getTreasuryChurchId(Number(churchId));
+  const cid = await new ChurchRepo(createDb(env, auth.conferenceId)).getTreasuryChurchId(
+    Number(churchId)
+  );
 
   const params: (number | string)[] = [];
   params.push(cid);
@@ -117,7 +119,9 @@ export async function handleGetContributionStatement(
     return json({ error: "church_id and year are required" }, 400);
   }
 
-  const cid = await new ChurchRepo(createDb(env)).getTreasuryChurchId(Number(churchId));
+  const cid = await new ChurchRepo(createDb(env, auth.conferenceId)).getTreasuryChurchId(
+    Number(churchId)
+  );
 
   const params: (number | string)[] = [];
   params.push(cid);

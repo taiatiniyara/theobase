@@ -43,7 +43,7 @@ export async function handleGetConferenceTithe(request: Request, env: Env): Prom
   const month = url.searchParams.get("month");
   if (!year || !month) return json({ error: "year and month are required" }, 400);
 
-  const repo = new ReconciliationRepo(createDb(env));
+  const repo = new ReconciliationRepo(createDb(env, auth.conferenceId));
   const rows = await repo.getConferenceTithe(auth.conferenceId!, Number(year), Number(month));
 
   return json({ tithe: rows.map(toTitheEntry) });
@@ -73,7 +73,7 @@ export async function handleReceiveTithe(request: Request, env: Env): Promise<Re
     return json({ error: "churchId, year, and month are required" }, 400);
   }
 
-  const repo = new ReconciliationRepo(createDb(env));
+  const repo = new ReconciliationRepo(createDb(env, auth.conferenceId));
   const result = (await repo.receiveTithe({
     churchId: Number(body.churchId),
     year: Number(body.year),
@@ -101,7 +101,7 @@ export async function handleChurchBalance(request: Request, env: Env): Promise<R
   if (auth instanceof Response) return auth;
 
   const url = new URL(request.url);
-  const repo = new ReconciliationRepo(createDb(env));
+  const repo = new ReconciliationRepo(createDb(env, auth.conferenceId));
 
   if (request.method === "GET") {
     const churchId = url.searchParams.get("church_id");
@@ -111,7 +111,9 @@ export async function handleChurchBalance(request: Request, env: Env): Promise<R
       return json({ error: "church_id, year, and month are required" }, 400);
     }
 
-    const cid = await new ChurchRepo(createDb(env)).getTreasuryChurchId(Number(churchId));
+    const cid = await new ChurchRepo(createDb(env, auth.conferenceId)).getTreasuryChurchId(
+      Number(churchId)
+    );
     const rec = await repo.getChurchBalance(cid, Number(year), Number(month));
 
     if (!rec) return json({ reconciliation: null });
@@ -139,7 +141,9 @@ export async function handleChurchBalance(request: Request, env: Env): Promise<R
     return json({ error: "churchId, year, month, and bankBalance are required" }, 400);
   }
 
-  const cid = await new ChurchRepo(createDb(env)).getTreasuryChurchId(Number(body.churchId));
+  const cid = await new ChurchRepo(createDb(env, auth.conferenceId)).getTreasuryChurchId(
+    Number(body.churchId)
+  );
   const result = (await repo.setChurchBalance({
     churchId: cid,
     year: Number(body.year),
@@ -172,7 +176,7 @@ export async function handleTitheReport(request: Request, env: Env): Promise<Res
   const month = url.searchParams.get("month");
   if (!year || !month) return json({ error: "year and month are required" }, 400);
 
-  const repo = new ReconciliationRepo(createDb(env));
+  const repo = new ReconciliationRepo(createDb(env, auth.conferenceId));
   const rows = await repo.getTitheReport(auth.conferenceId!, Number(year), Number(month));
 
   return json({ report: rows.map(toTitheReportEntry) });

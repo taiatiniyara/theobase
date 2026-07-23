@@ -32,7 +32,9 @@ export async function handleGetQuarterlyReport(request: Request, env: Env): Prom
   const periodEnd = q === 4 ? `${y + 1}-01-01` : `${y}-${String(endMonth + 1).padStart(2, "0")}-01`;
 
   const chId = Number(churchId);
-  const treasuryId = await new ChurchRepo(createDb(env)).getTreasuryChurchId(chId);
+  const treasuryId = await new ChurchRepo(createDb(env, auth.conferenceId)).getTreasuryChurchId(
+    chId
+  );
 
   const baptismsRow = await env.DB.prepare(
     `SELECT COUNT(*) as count FROM members

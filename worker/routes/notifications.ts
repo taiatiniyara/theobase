@@ -23,7 +23,7 @@ export async function handleGetNotifications(request: Request, env: Env): Promis
   const url = new URL(request.url);
   const unreadOnly = url.searchParams.get("unread") === "1";
 
-  const repo = new NotificationRepo(createDb(env));
+  const repo = new NotificationRepo(createDb(env, auth.conferenceId));
   const notifications = await repo.findAll(Number(auth.userId), unreadOnly);
 
   return json({ notifications: notifications.map(toNotificationResponse) });
@@ -37,7 +37,7 @@ export async function handleMarkNotificationRead(
   const auth = await authenticate(request, env);
   if (auth instanceof Response) return auth;
 
-  const repo = new NotificationRepo(createDb(env));
+  const repo = new NotificationRepo(createDb(env, auth.conferenceId));
   const success = await repo.markRead(notificationId, Number(auth.userId));
 
   if (!success) {
@@ -51,7 +51,7 @@ export async function handleMarkAllRead(request: Request, env: Env): Promise<Res
   const auth = await authenticate(request, env);
   if (auth instanceof Response) return auth;
 
-  const repo = new NotificationRepo(createDb(env));
+  const repo = new NotificationRepo(createDb(env, auth.conferenceId));
   await repo.markAllRead(Number(auth.userId));
 
   return json({ success: true });
