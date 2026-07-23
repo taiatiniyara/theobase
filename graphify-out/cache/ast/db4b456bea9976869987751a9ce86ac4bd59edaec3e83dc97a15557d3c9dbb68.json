@@ -1,0 +1,710 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reconciliation_ts",
+      "label": "reconciliation.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_reconciliation_json",
+      "label": "json()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L4"
+    },
+    {
+      "id": "routes_reconciliation_handlegetconferencetithe",
+      "label": "handleGetConferenceTithe()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L14"
+    },
+    {
+      "id": "routes_reconciliation_handlereceivetithe",
+      "label": "handleReceiveTithe()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L81"
+    },
+    {
+      "id": "routes_reconciliation_handlechurchbalance",
+      "label": "handleChurchBalance()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L162"
+    },
+    {
+      "id": "routes_reconciliation_handletithereport",
+      "label": "handleTitheReport()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L259"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reconciliation_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_middleware_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reconciliation_ts",
+      "target": "lib_middleware_authenticate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reconciliation_ts",
+      "target": "lib_middleware_authorize",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reconciliation_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reconciliation_ts",
+      "target": "lib_roles_permissions",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reconciliation_ts",
+      "target": "routes_reconciliation_json",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reconciliation_ts",
+      "target": "routes_reconciliation_handlegetconferencetithe",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reconciliation_ts",
+      "target": "routes_reconciliation_handlereceivetithe",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reconciliation_ts",
+      "target": "routes_reconciliation_handlechurchbalance",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L162",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_reconciliation_ts",
+      "target": "routes_reconciliation_handletithereport",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L259",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_reconciliation_handlegetconferencetithe",
+      "target": "routes_reconciliation_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_reconciliation_handlereceivetithe",
+      "target": "routes_reconciliation_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_reconciliation_handlechurchbalance",
+      "target": "routes_reconciliation_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L173",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_reconciliation_handletithereport",
+      "target": "routes_reconciliation_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L269",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_reconciliation_json",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L5"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L15"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L19"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L23"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "await env.DB.prepare(\"SELECT conference_id FROM users WHERE id = ?\")\r\n    .bind(Number(auth.userId))\r\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L27"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L27"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L27"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L28"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L34"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "padStart",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "padStart",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L36"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L36"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlegetconferencetithe",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L60"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlereceivetithe",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L82"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlereceivetithe",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L85"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlereceivetithe",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L105"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlereceivetithe",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L106"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlereceivetithe",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L107"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlereceivetithe",
+      "callee": "await env.DB.prepare(\r\n    `SELECT COALESCE(SUM(t.amount), 0) as total\r\n     FROM transactions t\r\n     JOIN funds f ON t.fund_id = f.id\r\n     WHERE t.church_id = ? AND t.type = 'income'\r\n       AND f.type = 'tithe' AND t.confirmed_by IS NOT NULL`\r\n  )\r\n    .bind(chId)\r\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L109"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlereceivetithe",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L109"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlereceivetithe",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L109"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlereceivetithe",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L124"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlereceivetithe",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L124"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlereceivetithe",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L124"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlereceivetithe",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L145"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L163"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L169"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L170"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L171"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L175"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "first",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L177"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L177"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L177"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L180"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L180"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L188"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L208"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L209"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L210"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "await env.DB.prepare(\r\n    `SELECT COALESCE(SUM(CASE WHEN t.type = 'income' AND f.forwarding_rule = 'local' THEN t.amount ELSE 0 END), 0) -\r\n            COALESCE(SUM(CASE WHEN t.type = 'expense' THEN t.amount ELSE 0 END), 0) as balance\r\n     FROM transactions t\r\n     JOIN funds f ON t.fund_id = f.id\r\n     WHERE t.church_id = ? AND (t.confirmed_by IS NOT NULL OR t.type = 'expense')`\r\n  )\r\n    .bind(chId)\r\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L212"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L212"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L212"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "await env.DB.prepare(\r\n    \"SELECT id FROM reconciliations WHERE church_id = ? AND year = ? AND month = ?\"\r\n  )\r\n    .bind(chId, y, m)\r\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L226"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L226"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L226"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L233"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L233"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L233"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L239"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L239"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handlechurchbalance",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L239"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L260"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L263"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L267"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L268"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "await env.DB.prepare(\"SELECT conference_id FROM users WHERE id = ?\")\r\n    .bind(Number(auth.userId))\r\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L271"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L271"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L271"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L272"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L277"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L278"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "padStart",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L279"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L279"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "padStart",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L280"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L280"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L282"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L282"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L282"
+    },
+    {
+      "caller_nid": "routes_reconciliation_handletithereport",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts",
+      "source_location": "L304"
+    }
+  ]
+}

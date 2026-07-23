@@ -1,5 +1,7 @@
 import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
+import { createDb } from "../lib/db";
+import { AuditRepo, type AuditEntry } from "../repos/audit";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -9,6 +11,22 @@ function json(data: unknown, status = 200): Response {
       "Access-Control-Allow-Origin": "*",
     },
   });
+}
+
+function toAuditEntry(e: AuditEntry) {
+  return {
+    id: e.id,
+    timestamp: e.timestamp,
+    actor_id: e.actorId,
+    actor_email: e.actorEmail,
+    action: e.action,
+    entity_type: e.entityType,
+    entity_id: e.entityId,
+    prev_state: e.prevState,
+    new_state: e.newState,
+    module: e.module,
+    device_info: e.deviceInfo,
+  };
 }
 
 export async function handleGetAuditLog(request: Request, env: Env): Promise<Response> {
@@ -28,59 +46,24 @@ export async function handleGetAuditLog(request: Request, env: Env): Promise<Res
   const to = url.searchParams.get("to");
   const page = Math.max(1, Number(url.searchParams.get("page")) || 1);
   const limit = Math.min(100, Math.max(1, Number(url.searchParams.get("limit")) || 50));
-  const offset = (page - 1) * limit;
 
-  let where = "WHERE 1=1";
-  const params: (string | number)[] = [];
-
-  if (entityType) {
-    where += " AND al.entity_type = ?";
-    params.push(entityType);
-  }
-  if (entityId) {
-    where += " AND al.entity_id = ?";
-    params.push(Number(entityId));
-  }
-  if (actorId) {
-    where += " AND al.actor_id = ?";
-    params.push(Number(actorId));
-  }
-  if (action) {
-    where += " AND al.action = ?";
-    params.push(action);
-  }
-  if (module) {
-    where += " AND al.module = ?";
-    params.push(module);
-  }
-  if (from) {
-    where += " AND al.timestamp >= ?";
-    params.push(from);
-  }
-  if (to) {
-    where += " AND al.timestamp <= ?";
-    params.push(to);
-  }
-
-  const countResult = await env.DB.prepare(`SELECT COUNT(*) as total FROM audit_log al ${where}`)
-    .bind(...params)
-    .first<{ total: number }>();
-
-  const total = countResult?.total ?? 0;
-
-  const result = await env.DB.prepare(
-    `SELECT al.*, u.email as actor_email
-     FROM audit_log al
-     LEFT JOIN users u ON al.actor_id = u.id
-     ${where}
-     ORDER BY al.timestamp DESC
-     LIMIT ? OFFSET ?`
-  )
-    .bind(...params, limit, offset)
-    .all();
+  const repo = new AuditRepo(createDb(env));
+  const { entries, total } = await repo.findAll(
+    {
+      entityType: entityType ?? undefined,
+      entityId: entityId ? Number(entityId) : undefined,
+      actorId: actorId ? Number(actorId) : undefined,
+      action: action ?? undefined,
+      module: module ?? undefined,
+      from: from ?? undefined,
+      to: to ?? undefined,
+    },
+    page,
+    limit
+  );
 
   return json({
-    entries: result.results,
+    entries: entries.map(toAuditEntry),
     total,
     page,
     limit,
@@ -104,27 +87,11 @@ export async function handleGetAuditByEntity(
   const page = Math.max(1, Number(url.searchParams.get("page")) || 1);
   const limit = Math.min(100, Math.max(1, Number(url.searchParams.get("limit")) || 50));
 
-  const countResult = await env.DB.prepare(
-    `SELECT COUNT(*) as total FROM audit_log WHERE entity_type = ? AND entity_id = ?`
-  )
-    .bind(entityType, entityId)
-    .first<{ total: number }>();
-
-  const total = countResult?.total ?? 0;
-
-  const result = await env.DB.prepare(
-    `SELECT al.*, u.email as actor_email
-     FROM audit_log al
-     LEFT JOIN users u ON al.actor_id = u.id
-     WHERE al.entity_type = ? AND al.entity_id = ?
-     ORDER BY al.timestamp DESC
-     LIMIT ? OFFSET ?`
-  )
-    .bind(entityType, entityId, limit, (page - 1) * limit)
-    .all();
+  const repo = new AuditRepo(createDb(env));
+  const { entries, total } = await repo.findByEntity(entityType, entityId, page, limit);
 
   return json({
-    entries: result.results,
+    entries: entries.map(toAuditEntry),
     total,
     page,
     limit,

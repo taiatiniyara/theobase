@@ -1,6 +1,16 @@
 import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { logAudit, getDeviceInfo } from "../lib/audit";
+import { createDb } from "../lib/db";
+import {
+  FundRepo,
+  ExpenseCategoryRepo,
+  BatchRepo,
+  TransactionRepo,
+  BudgetRepo,
+  BudgetTemplateRepo,
+} from "../repos/finance";
+import type { FundRow, ExpenseCategoryRow } from "../repos/finance";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -19,6 +29,27 @@ function uuid(): string {
 const FUND_TYPES = ["tithe", "local_budget", "sabbath_school"];
 const FORWARDING_RULES = ["local", "conference"];
 
+function toFundResponse(f: FundRow) {
+  return {
+    id: f.id,
+    name: f.name,
+    type: f.type,
+    forwarding_rule: f.forwardingRule,
+    conference_id: f.conferenceId,
+    created_at: f.createdAt,
+  };
+}
+
+function toExpenseCategoryResponse(ec: ExpenseCategoryRow) {
+  return {
+    id: ec.id,
+    name: ec.name,
+    conference_id: ec.conferenceId,
+    active: ec.active,
+    created_at: ec.createdAt,
+  };
+}
+
 // ── Funds ──
 
 export async function handleGetFunds(request: Request, env: Env): Promise<Response> {
@@ -29,22 +60,14 @@ export async function handleGetFunds(request: Request, env: Env): Promise<Respon
   if (forbidden) return forbidden;
 
   const url = new URL(request.url);
-  const conferenceId = url.searchParams.get("conference_id");
+  const conferenceId = url.searchParams.get("conference_id")
+    ? Number(url.searchParams.get("conference_id"))
+    : undefined;
 
-  let query = "SELECT id, name, type, forwarding_rule, conference_id, created_at FROM funds";
-  const params: number[] = [];
+  const fundRepo = new FundRepo(createDb(env));
+  const funds = await fundRepo.findAll(conferenceId);
 
-  if (conferenceId) {
-    query += " WHERE conference_id = ?";
-    params.push(Number(conferenceId));
-  }
-  query += " ORDER BY type, name";
-
-  const result = await env.DB.prepare(query)
-    .bind(...params)
-    .all();
-
-  return json({ funds: result.results });
+  return json({ funds: funds.map(toFundResponse) });
 }
 
 export async function handleCreateFund(request: Request, env: Env): Promise<Response> {
@@ -78,15 +101,13 @@ export async function handleCreateFund(request: Request, env: Env): Promise<Resp
   }
 
   try {
-    const result = await env.DB.prepare(
-      `INSERT INTO funds (name, type, forwarding_rule, conference_id) VALUES (?, ?, ?, ?) RETURNING id`
-    )
-      .bind(body.name, body.type, body.forwardingRule, body.conferenceId)
-      .first<{ id: number }>();
-
-    if (!result) {
-      return json({ error: "Failed to create fund" }, 500);
-    }
+    const fundRepo = new FundRepo(createDb(env));
+    const result = await fundRepo.create({
+      name: body.name,
+      type: body.type,
+      forwardingRule: body.forwardingRule,
+      conferenceId: body.conferenceId,
+    });
 
     await logAudit(env, {
       actor_id: Number(auth.userId),
@@ -99,7 +120,16 @@ export async function handleCreateFund(request: Request, env: Env): Promise<Resp
       device_info: getDeviceInfo(request),
     });
 
-    return json({ id: result.id, ...body }, 201);
+    return json(
+      {
+        id: result.id,
+        name: result.name,
+        type: result.type,
+        forwarding_rule: result.forwardingRule,
+        conference_id: result.conferenceId,
+      },
+      201
+    );
   } catch (err: unknown) {
     const msg = String(err);
     if (msg.includes("UNIQUE")) {
@@ -119,30 +149,15 @@ export async function handleGetExpenseCategories(request: Request, env: Env): Pr
   if (forbidden) return forbidden;
 
   const url = new URL(request.url);
-  const conferenceId = url.searchParams.get("conference_id");
+  const conferenceId = url.searchParams.get("conference_id")
+    ? Number(url.searchParams.get("conference_id"))
+    : undefined;
   const includeInactive = url.searchParams.get("include_inactive") === "1";
 
-  let query = "SELECT id, name, conference_id, active, created_at FROM expense_categories";
-  const params: (number | string)[] = [];
-  const conditions: string[] = [];
+  const categoryRepo = new ExpenseCategoryRepo(createDb(env));
+  const categories = await categoryRepo.findAll(conferenceId, includeInactive ? undefined : true);
 
-  if (conferenceId) {
-    conditions.push("conference_id = ?");
-    params.push(Number(conferenceId));
-  }
-  if (!includeInactive) {
-    conditions.push("active = 1");
-  }
-  if (conditions.length > 0) {
-    query += " WHERE " + conditions.join(" AND ");
-  }
-  query += " ORDER BY name";
-
-  const result = await env.DB.prepare(query)
-    .bind(...params)
-    .all();
-
-  return json({ expenseCategories: result.results });
+  return json({ expenseCategories: categories.map(toExpenseCategoryResponse) });
 }
 
 export async function handleUpdateExpenseCategory(
@@ -163,33 +178,24 @@ export async function handleUpdateExpenseCategory(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const existing = await env.DB.prepare("SELECT * FROM expense_categories WHERE id = ?")
-    .bind(categoryId)
-    .first();
+  if (body.name === undefined && body.active === undefined) {
+    return json({ error: "No fields to update" }, 400);
+  }
+
+  const categoryRepo = new ExpenseCategoryRepo(createDb(env));
+  const existing = await categoryRepo.findById(categoryId);
   if (!existing) {
     return json({ error: "Expense category not found" }, 404);
   }
 
-  const updates: string[] = [];
-  const params: unknown[] = [];
+  const updated = await categoryRepo.update(categoryId, {
+    name: body.name,
+    active: body.active,
+  });
 
-  if (body.name !== undefined) {
-    updates.push("name = ?");
-    params.push(body.name);
+  if (!updated) {
+    return json({ error: "Expense category not found" }, 404);
   }
-  if (body.active !== undefined) {
-    updates.push("active = ?");
-    params.push(body.active ? 1 : 0);
-  }
-
-  if (updates.length === 0) {
-    return json({ error: "No fields to update" }, 400);
-  }
-
-  params.push(categoryId);
-  await env.DB.prepare(`UPDATE expense_categories SET ${updates.join(", ")} WHERE id = ?`)
-    .bind(...params)
-    .run();
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
@@ -224,15 +230,11 @@ export async function handleCreateExpenseCategory(request: Request, env: Env): P
   }
 
   try {
-    const result = await env.DB.prepare(
-      `INSERT INTO expense_categories (name, conference_id) VALUES (?, ?) RETURNING id`
-    )
-      .bind(body.name, body.conferenceId)
-      .first<{ id: number }>();
-
-    if (!result) {
-      return json({ error: "Failed to create expense category" }, 500);
-    }
+    const categoryRepo = new ExpenseCategoryRepo(createDb(env));
+    const result = await categoryRepo.create({
+      name: body.name,
+      conferenceId: body.conferenceId,
+    });
 
     await logAudit(env, {
       actor_id: Number(auth.userId),
@@ -245,7 +247,14 @@ export async function handleCreateExpenseCategory(request: Request, env: Env): P
       device_info: getDeviceInfo(request),
     });
 
-    return json({ id: result.id, ...body }, 201);
+    return json(
+      {
+        id: result.id,
+        name: result.name,
+        conference_id: result.conferenceId,
+      },
+      201
+    );
   } catch (err: unknown) {
     const msg = String(err);
     if (msg.includes("UNIQUE")) {
@@ -336,20 +345,33 @@ export async function handleGetBatch(
     return json({ error: "Batch not found" }, 404);
   }
 
-  const transactions = await env.DB.prepare(
-    `SELECT t.*, f.name as fund_name, f.type as fund_type,
-     u.email as created_by_email, uc.email as confirmed_by_email
-     FROM transactions t
-     JOIN funds f ON t.fund_id = f.id
-     JOIN users u ON t.created_by = u.id
-     LEFT JOIN users uc ON t.confirmed_by = uc.id
-     WHERE t.batch_id = ?
-     ORDER BY t.created_at`
-  )
-    .bind(batchId)
-    .all();
+  const batchRepo = new BatchRepo(createDb(env));
+  const txns = await batchRepo.getBatchTransactions(batchId);
+  const transactions = txns.map((t) => ({
+    id: t.id,
+    church_id: t.churchId,
+    fund_id: t.fundId,
+    type: t.type,
+    amount: t.amount,
+    description: t.description,
+    batch_id: t.batchId,
+    category_id: t.categoryId,
+    budget_ref: t.budgetRef,
+    created_by: t.createdBy,
+    uuid: t.uuid,
+    envelope_number: t.envelopeNumber,
+    member_id: t.memberId,
+    proxy_for_member_id: t.proxyForMemberId,
+    confirmed_by: t.confirmedBy,
+    confirmed_at: t.confirmedAt,
+    verified: t.verified,
+    verified_by: t.verifiedBy,
+    verified_at: t.verifiedAt,
+    created_at: t.createdAt,
+    fund_name: t.fundName,
+  }));
 
-  return json({ ...batch, transactions: transactions.results });
+  return json({ ...batch, transactions });
 }
 
 export async function handleCreateBatch(request: Request, env: Env): Promise<Response> {
@@ -377,16 +399,12 @@ export async function handleCreateBatch(request: Request, env: Env): Promise<Res
     return json({ error: "Church not found" }, 404);
   }
 
-  const result = await env.DB.prepare(
-    `INSERT INTO offering_batches (church_id, sabbath_date, submitted_by, submitted_at)
-     VALUES (?, ?, ?, datetime('now')) RETURNING id`
-  )
-    .bind(body.churchId, body.sabbathDate, Number(auth.userId))
-    .first<{ id: number }>();
-
-  if (!result) {
-    return json({ error: "Failed to create batch" }, 500);
-  }
+  const batchRepo = new BatchRepo(createDb(env));
+  const result = await batchRepo.create({
+    churchId: body.churchId,
+    sabbathDate: body.sabbathDate,
+    submittedBy: Number(auth.userId),
+  });
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
@@ -399,7 +417,15 @@ export async function handleCreateBatch(request: Request, env: Env): Promise<Res
     device_info: getDeviceInfo(request),
   });
 
-  return json({ id: result.id, ...body, status: "pending" }, 201);
+  return json(
+    {
+      id: result.id,
+      church_id: result.churchId,
+      sabbath_date: result.sabbathDate,
+      status: "pending",
+    },
+    201
+  );
 }
 
 export async function handleConfirmBatch(
@@ -413,16 +439,9 @@ export async function handleConfirmBatch(
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
-  const batch = await env.DB.prepare(
-    `SELECT id, status, confirmed_by_1, confirmed_by_2 FROM offering_batches WHERE id = ?`
-  )
-    .bind(batchId)
-    .first<{
-      id: number;
-      status: string;
-      confirmed_by_1: number | null;
-      confirmed_by_2: number | null;
-    }>();
+  const db = createDb(env);
+  const batchRepo = new BatchRepo(db);
+  const batch = await batchRepo.findById(batchId);
 
   if (!batch) {
     return json({ error: "Batch not found" }, 404);
@@ -433,18 +452,14 @@ export async function handleConfirmBatch(
 
   const userId = Number(auth.userId);
 
-  if (batch.confirmed_by_1 === null) {
-    if (userId === batch.confirmed_by_2) {
+  if (batch.confirmedBy1 === null) {
+    if (userId === batch.confirmedBy2) {
       return json({ error: "Dual-custody requires two different people" }, 400);
     }
-    await env.DB.prepare(
-      `UPDATE offering_batches SET confirmed_by_1 = ?, confirmed_at_1 = datetime('now') WHERE id = ?`
-    )
-      .bind(userId, batchId)
-      .run();
+    await batchRepo.confirmFirst(batchId, userId);
 
     await logAudit(env, {
-      actor_id: Number(auth.userId),
+      actor_id: userId,
       action: "confirm_1",
       entity_type: "offering_batch",
       entity_id: batchId,
@@ -457,24 +472,15 @@ export async function handleConfirmBatch(
     return json({ confirmedBy: 1, batchId });
   }
 
-  if (batch.confirmed_by_2 === null) {
-    if (userId === batch.confirmed_by_1) {
+  if (batch.confirmedBy2 === null) {
+    if (userId === batch.confirmedBy1) {
       return json({ error: "Dual-custody requires two different people" }, 400);
     }
-    await env.DB.prepare(
-      `UPDATE offering_batches SET confirmed_by_2 = ?, confirmed_at_2 = datetime('now'), status = 'confirmed' WHERE id = ?`
-    )
-      .bind(userId, batchId)
-      .run();
+    await batchRepo.confirmSecond(batchId, userId);
 
-    await env.DB.prepare(
-      `UPDATE transactions SET confirmed_by = ?, confirmed_at = datetime('now')
-       WHERE batch_id = ? AND type = 'income' AND confirmed_by IS NULL`
-    )
-      .bind(userId, batchId)
-      .run();
+    const txnRepo = new TransactionRepo(db);
+    await txnRepo.confirmTransactions(batchId, userId, new Date().toISOString());
 
-    // Auto-create forward transactions for tithe and sabbath_school funds
     const forwardingTxns = await env.DB.prepare(
       `SELECT t.id, t.fund_id, t.amount, t.church_id, f.forwarding_rule, f.type
        FROM transactions t
@@ -491,17 +497,20 @@ export async function handleConfirmBatch(
         type: string;
       }>();
 
+    let forwardCount = 0;
     for (const ft of forwardingTxns.results) {
-      await env.DB.prepare(
-        `INSERT INTO transactions (church_id, fund_id, type, amount, description, created_by, uuid)
-         VALUES (?, ?, 'forward', ?, 'Auto-forwarded on dual-custody confirmation', ?, ?)`
-      )
-        .bind(ft.church_id, ft.fund_id, ft.amount, userId, uuid())
-        .run();
+      await txnRepo.createForward({
+        churchId: ft.church_id,
+        fundId: ft.fund_id,
+        amount: ft.amount,
+        createdBy: userId,
+        uuid: uuid(),
+      });
+      forwardCount++;
     }
 
     await logAudit(env, {
-      actor_id: Number(auth.userId),
+      actor_id: userId,
       action: "confirm_2",
       entity_type: "offering_batch",
       entity_id: batchId,
@@ -509,7 +518,7 @@ export async function handleConfirmBatch(
       new_state: JSON.stringify({
         confirmedBy: 2,
         status: "confirmed",
-        forwardingCreated: forwardingTxns.results.length,
+        forwardingCreated: forwardCount,
       }),
       module: "finance",
       device_info: getDeviceInfo(request),
@@ -836,21 +845,14 @@ export async function handleCreateBudget(request: Request, env: Env): Promise<Re
   }
 
   try {
-    const ins = await env.DB.prepare(
-      `INSERT INTO budgets (church_id, fund_id, category_id, planned_amount, fiscal_year)
-       VALUES (?, ?, ?, ?, ?)`
-    )
-      .bind(body.churchId, body.fundId, body.categoryId, body.plannedAmount, body.fiscalYear)
-      .run();
-
-    if (!ins.success) {
-      return json({ error: `Failed to create budget: insert returned success=false` }, 500);
-    }
-
-    const result = await env.DB.prepare("SELECT last_insert_rowid() as id").first<{ id: number }>();
-    if (!result) {
-      return json({ error: `Failed to create budget: last_insert_rowid returned null` }, 500);
-    }
+    const budgetRepo = new BudgetRepo(createDb(env));
+    const result = await budgetRepo.create({
+      churchId: body.churchId,
+      fundId: body.fundId,
+      categoryId: body.categoryId,
+      plannedAmount: body.plannedAmount,
+      fiscalYear: body.fiscalYear,
+    });
 
     await logAudit(env, {
       actor_id: Number(auth.userId),
@@ -863,7 +865,17 @@ export async function handleCreateBudget(request: Request, env: Env): Promise<Re
       device_info: getDeviceInfo(request),
     });
 
-    return json({ id: result.id, ...body }, 201);
+    return json(
+      {
+        id: result.id,
+        church_id: result.churchId,
+        fund_id: result.fundId,
+        category_id: result.categoryId,
+        planned_amount: result.plannedAmount,
+        fiscal_year: result.fiscalYear,
+      },
+      201
+    );
   } catch (err: unknown) {
     const msg = String(err);
     if (msg.includes("UNIQUE")) {
@@ -871,6 +883,42 @@ export async function handleCreateBudget(request: Request, env: Env): Promise<Re
     }
     return json({ error: `Failed to create budget: ${msg}` }, 500);
   }
+}
+
+export async function handleApproveBudget(
+  request: Request,
+  env: Env,
+  budgetId: number
+): Promise<Response> {
+  const auth = await authenticate(request, env);
+  if (auth instanceof Response) return auth;
+
+  const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
+  if (forbidden) return forbidden;
+
+  const budgetRepo = new BudgetRepo(createDb(env));
+  const existing = await budgetRepo.findById(budgetId);
+  if (!existing) {
+    return json({ error: "Budget not found" }, 404);
+  }
+  if (existing.approved) {
+    return json({ error: "Budget is already approved" }, 400);
+  }
+
+  await budgetRepo.approve(budgetId, Number(auth.userId));
+
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "approve_budget",
+    entity_type: "budget",
+    entity_id: budgetId,
+    prev_state: JSON.stringify({ approved: 0 }),
+    new_state: JSON.stringify({ approved: 1 }),
+    module: "finance",
+    device_info: getDeviceInfo(request),
+  });
+
+  return json({ success: true });
 }
 
 // ── Budget Templates ──
@@ -944,17 +992,14 @@ export async function handleCreateBudgetTemplate(request: Request, env: Env): Pr
   }
 
   try {
-    await env.DB.prepare(
-      `INSERT INTO budget_templates (conference_id, category_id, fund_id, planned_amount, fiscal_year)
-       VALUES (?, ?, ?, ?, ?)`
-    )
-      .bind(body.conferenceId, body.categoryId, body.fundId, body.plannedAmount, body.fiscalYear)
-      .run();
-
-    const result = await env.DB.prepare("SELECT last_insert_rowid() as id").first<{ id: number }>();
-    if (!result) {
-      return json({ error: "Failed to create budget template" }, 500);
-    }
+    const templateRepo = new BudgetTemplateRepo(createDb(env));
+    const result = await templateRepo.create({
+      conferenceId: body.conferenceId,
+      categoryId: body.categoryId,
+      fundId: body.fundId,
+      plannedAmount: body.plannedAmount,
+      fiscalYear: body.fiscalYear,
+    });
 
     await logAudit(env, {
       actor_id: Number(auth.userId),
@@ -967,7 +1012,17 @@ export async function handleCreateBudgetTemplate(request: Request, env: Env): Pr
       device_info: getDeviceInfo(request),
     });
 
-    return json({ id: result.id, ...body }, 201);
+    return json(
+      {
+        id: result.id,
+        conference_id: result.conferenceId,
+        category_id: result.categoryId,
+        fund_id: result.fundId,
+        planned_amount: result.plannedAmount,
+        fiscal_year: result.fiscalYear,
+      },
+      201
+    );
   } catch (err: unknown) {
     const msg = String(err);
     if (msg.includes("UNIQUE")) {
@@ -975,47 +1030,6 @@ export async function handleCreateBudgetTemplate(request: Request, env: Env): Pr
     }
     return json({ error: "Failed to create budget template" }, 500);
   }
-}
-
-export async function handleApproveBudget(
-  request: Request,
-  env: Env,
-  budgetId: number
-): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
-  const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
-  if (forbidden) return forbidden;
-
-  const existing = await env.DB.prepare("SELECT id, approved FROM budgets WHERE id = ?")
-    .bind(budgetId)
-    .first<{ id: number; approved: number }>();
-  if (!existing) {
-    return json({ error: "Budget not found" }, 404);
-  }
-  if (existing.approved) {
-    return json({ error: "Budget is already approved" }, 400);
-  }
-
-  await env.DB.prepare(
-    `UPDATE budgets SET approved = 1, approved_by = ?, approved_at = datetime('now') WHERE id = ?`
-  )
-    .bind(Number(auth.userId), budgetId)
-    .run();
-
-  await logAudit(env, {
-    actor_id: Number(auth.userId),
-    action: "approve_budget",
-    entity_type: "budget",
-    entity_id: budgetId,
-    prev_state: JSON.stringify({ approved: 0 }),
-    new_state: JSON.stringify({ approved: 1 }),
-    module: "finance",
-    device_info: getDeviceInfo(request),
-  });
-
-  return json({ success: true });
 }
 
 // ── Monthly Treasurer Report ──

@@ -1,0 +1,72 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_schema_org_ts",
+      "label": "org.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\org.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "schema_org_conferences",
+      "label": "conferences",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\org.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "schema_org_districts",
+      "label": "districts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\org.ts",
+      "source_location": "L13"
+    },
+    {
+      "id": "schema_org_churches",
+      "label": "churches",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\org.ts",
+      "source_location": "L21"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_schema_org_ts",
+      "target": "sqlite_core",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\org.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_schema_org_ts",
+      "target": "schema_org_conferences",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\org.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_schema_org_ts",
+      "target": "schema_org_districts",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\org.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_schema_org_ts",
+      "target": "schema_org_churches",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\org.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": []
+}

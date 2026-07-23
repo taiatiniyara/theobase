@@ -2,6 +2,9 @@ import { authenticate, authorize, requireConference } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { parseCsv, validateCsvHeaders } from "../lib/csv";
 import { logAudit, getDeviceInfo } from "../lib/audit";
+import { createDb } from "../lib/db";
+import { ConferenceRepo, DistrictRepo, ChurchRepo } from "../repos/org";
+import type { ConferenceRow, DistrictRow, ChurchRow } from "../repos/org";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -13,6 +16,46 @@ function json(data: unknown, status = 200): Response {
   });
 }
 
+function toConferenceResponse(c: ConferenceRow) {
+  return {
+    id: c.id,
+    name: c.name,
+    code: c.code,
+    address: c.address,
+    bank_details: c.bankDetails,
+    created_at: c.createdAt,
+  };
+}
+
+function toDistrictResponse(d: DistrictRow & { pastorEmail?: string | null }) {
+  return {
+    id: d.id,
+    name: d.name,
+    conference_id: d.conferenceId,
+    pastor_user_id: d.pastorUserId,
+    pastor_email: d.pastorEmail ?? null,
+    created_at: d.createdAt,
+  };
+}
+
+function toChurchResponse(c: ChurchRow & { districtName?: string | null }) {
+  return {
+    id: c.id,
+    name: c.name,
+    code: c.code,
+    type: c.type,
+    parent_id: c.parentId,
+    parent_type: c.parentType,
+    district_id: c.districtId,
+    district_name: c.districtName ?? null,
+    address: c.address,
+    bank_details: c.bankDetails,
+    charter_status: c.charterStatus,
+    founded_date: c.foundedDate,
+    created_at: c.createdAt,
+  };
+}
+
 export async function handleGetConferences(request: Request, env: Env): Promise<Response> {
   const auth = await authenticate(request, env);
   if (auth instanceof Response) return auth;
@@ -20,11 +63,10 @@ export async function handleGetConferences(request: Request, env: Env): Promise<
   const forbidden = authorize(auth, PERMISSIONS["org:read"]!);
   if (forbidden) return forbidden;
 
-  const conferences = await env.DB.prepare(
-    "SELECT id, name, code, address, bank_details, created_at FROM conferences ORDER BY name"
-  ).all();
+  const confRepo = new ConferenceRepo(createDb(env));
+  const conferences = await confRepo.findAll();
 
-  return json({ conferences: conferences.results });
+  return json({ conferences: conferences.map(toConferenceResponse) });
 }
 
 export async function handleCreateConference(request: Request, env: Env): Promise<Response> {
@@ -45,22 +87,19 @@ export async function handleCreateConference(request: Request, env: Env): Promis
     return json({ error: "name and code are required" }, 400);
   }
 
-  const existing = await env.DB.prepare("SELECT id FROM conferences WHERE code = ?")
-    .bind(body.code)
-    .first();
+  const confRepo = new ConferenceRepo(createDb(env));
+
+  const existing = await confRepo.findByCode(body.code);
   if (existing) {
     return json({ error: "Conference code already exists" }, 409);
   }
 
-  const result = await env.DB.prepare(
-    `INSERT INTO conferences (name, code, address, bank_details) VALUES (?, ?, ?, ?) RETURNING id`
-  )
-    .bind(body.name, body.code, body.address ?? null, body.bankDetails ?? null)
-    .first<{ id: number }>();
-
-  if (!result) {
-    return json({ error: "Failed to create conference" }, 500);
-  }
+  const result = await confRepo.create({
+    name: body.name,
+    code: body.code,
+    address: body.address,
+    bankDetails: body.bankDetails,
+  });
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
@@ -97,41 +136,17 @@ export async function handleUpdateConference(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const existing = await env.DB.prepare("SELECT * FROM conferences WHERE id = ?")
-    .bind(conferenceId)
-    .first();
+  const confRepo = new ConferenceRepo(createDb(env));
+  const existing = await confRepo.findById(conferenceId);
   if (!existing) {
     return json({ error: "Conference not found" }, 404);
   }
 
   const prevState = JSON.stringify(existing);
 
-  const updates: string[] = [];
-  const params: unknown[] = [];
+  const updated = await confRepo.update(conferenceId, body);
 
-  if (body.name !== undefined) {
-    updates.push("name = ?");
-    params.push(body.name);
-  }
-  if (body.code !== undefined) {
-    updates.push("code = ?");
-    params.push(body.code);
-  }
-  if (body.address !== undefined) {
-    updates.push("address = ?");
-    params.push(body.address);
-  }
-  if (body.bankDetails !== undefined) {
-    updates.push("bank_details = ?");
-    params.push(body.bankDetails);
-  }
-
-  if (updates.length > 0) {
-    params.push(conferenceId);
-    await env.DB.prepare(`UPDATE conferences SET ${updates.join(", ")} WHERE id = ?`)
-      .bind(...params)
-      .run();
-
+  if (updated) {
     await logAudit(env, {
       actor_id: Number(auth.userId),
       action: "update",
@@ -152,18 +167,23 @@ export async function handleGetDistricts(
   env: Env,
   conferenceId: number
 ): Promise<Response> {
-  const districts = await env.DB.prepare(
-    `SELECT d.id, d.name, d.pastor_user_id, d.created_at,
-            u.email as pastor_email
-     FROM districts d
-     LEFT JOIN users u ON d.pastor_user_id = u.id
-     WHERE d.conference_id = ?
-     ORDER BY d.name`
-  )
-    .bind(conferenceId)
-    .all();
+  const districtRepo = new DistrictRepo(createDb(env));
+  const districts = await districtRepo.findAll(conferenceId);
 
-  return json({ districts: districts.results });
+  const enriched = await Promise.all(
+    districts.map(async (d) => {
+      let pastorEmail: string | null = null;
+      if (d.pastorUserId) {
+        const user = await env.DB.prepare("SELECT email FROM users WHERE id = ?")
+          .bind(d.pastorUserId)
+          .first<{ email: string }>();
+        pastorEmail = user?.email ?? null;
+      }
+      return toDistrictResponse({ ...d, pastorEmail });
+    })
+  );
+
+  return json({ districts: enriched });
 }
 
 export async function handleCreateDistrict(
@@ -191,15 +211,12 @@ export async function handleCreateDistrict(
     return json({ error: "name is required" }, 400);
   }
 
-  const result = await env.DB.prepare(
-    `INSERT INTO districts (name, conference_id, pastor_user_id) VALUES (?, ?, ?) RETURNING id`
-  )
-    .bind(body.name, conferenceId, body.pastorUserId ?? null)
-    .first<{ id: number }>();
-
-  if (!result) {
-    return json({ error: "Failed to create district" }, 500);
-  }
+  const districtRepo = new DistrictRepo(createDb(env));
+  const result = await districtRepo.create({
+    name: body.name,
+    conferenceId,
+    pastorUserId: body.pastorUserId,
+  });
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
@@ -233,33 +250,20 @@ export async function handleUpdateDistrict(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const existing = await env.DB.prepare("SELECT * FROM districts WHERE id = ?")
-    .bind(districtId)
-    .first();
+  const districtRepo = new DistrictRepo(createDb(env));
+  const existing = await districtRepo.findById(districtId);
   if (!existing) {
     return json({ error: "District not found" }, 404);
   }
 
   const prevState = JSON.stringify(existing);
 
-  const updates: string[] = [];
-  const params: unknown[] = [];
+  const updated = await districtRepo.update(districtId, {
+    name: body.name,
+    pastorUserId: body.pastorUserId,
+  });
 
-  if (body.name !== undefined) {
-    updates.push("name = ?");
-    params.push(body.name);
-  }
-  if (body.pastorUserId !== undefined) {
-    updates.push("pastor_user_id = ?");
-    params.push(body.pastorUserId);
-  }
-
-  if (updates.length > 0) {
-    params.push(districtId);
-    await env.DB.prepare(`UPDATE districts SET ${updates.join(", ")} WHERE id = ?`)
-      .bind(...params)
-      .run();
-
+  if (updated) {
     await logAudit(env, {
       actor_id: Number(auth.userId),
       action: "update",
@@ -280,21 +284,23 @@ export async function handleGetChurches(
   env: Env,
   conferenceId: number
 ): Promise<Response> {
-  const churches = await env.DB.prepare(
-    `SELECT c.id, c.name, c.code, c.type, c.parent_id, c.parent_type,
-            c.district_id, c.address, c.bank_details, c.charter_status, c.founded_date,
-            c.created_at, d.name as district_name
-     FROM churches c
-     LEFT JOIN districts d ON c.district_id = d.id
-     WHERE c.parent_type = 'conference' AND c.parent_id = ? OR c.id IN (
-       SELECT id FROM churches WHERE parent_type = 'conference' AND parent_id = ?
-     )
-     ORDER BY c.name`
-  )
-    .bind(conferenceId, conferenceId)
-    .all();
+  const churchRepo = new ChurchRepo(createDb(env));
+  const churches = await churchRepo.findAll(conferenceId);
 
-  return json({ churches: churches.results });
+  const enriched = await Promise.all(
+    churches.map(async (c) => {
+      let districtName: string | null = null;
+      if (c.districtId) {
+        const district = await env.DB.prepare("SELECT name FROM districts WHERE id = ?")
+          .bind(c.districtId)
+          .first<{ name: string }>();
+        districtName = district?.name ?? null;
+      }
+      return toChurchResponse({ ...c, districtName });
+    })
+  );
+
+  return json({ churches: enriched });
 }
 
 export async function handleCreateChurch(request: Request, env: Env): Promise<Response> {
@@ -330,25 +336,17 @@ export async function handleCreateChurch(request: Request, env: Env): Promise<Re
 
   const churchCode = body.code || body.name.toLowerCase().replace(/\s+/g, "_");
 
-  const result = await env.DB.prepare(
-    `INSERT INTO churches (name, code, type, parent_id, parent_type, district_id, address, bank_details)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`
-  )
-    .bind(
-      body.name,
-      churchCode,
-      body.type,
-      body.parentId,
-      body.parentType,
-      body.districtId ?? null,
-      body.address ?? null,
-      body.bankDetails ?? null
-    )
-    .first<{ id: number }>();
-
-  if (!result) {
-    return json({ error: "Failed to create church" }, 500);
-  }
+  const churchRepo = new ChurchRepo(createDb(env));
+  const result = await churchRepo.create({
+    name: body.name,
+    code: churchCode,
+    type: body.type,
+    parentId: body.parentId,
+    parentType: body.parentType,
+    districtId: body.districtId,
+    address: body.address,
+    bankDetails: body.bankDetails,
+  });
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
@@ -389,9 +387,8 @@ export async function handleUpdateChurch(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const existing = await env.DB.prepare("SELECT * FROM churches WHERE id = ?")
-    .bind(churchId)
-    .first();
+  const churchRepo = new ChurchRepo(createDb(env));
+  const existing = await churchRepo.findById(churchId);
   if (!existing) {
     return json({ error: "Church not found" }, 404);
   }
@@ -402,40 +399,16 @@ export async function handleUpdateChurch(
     return json({ error: "type must be organized, company, or branch" }, 400);
   }
 
-  const updates: string[] = [];
-  const params: unknown[] = [];
+  const updated = await churchRepo.update(churchId, {
+    name: body.name,
+    code: body.code,
+    type: body.type,
+    districtId: body.districtId,
+    address: body.address,
+    bankDetails: body.bankDetails,
+  });
 
-  if (body.name !== undefined) {
-    updates.push("name = ?");
-    params.push(body.name);
-  }
-  if (body.code !== undefined) {
-    updates.push("code = ?");
-    params.push(body.code);
-  }
-  if (body.type !== undefined) {
-    updates.push("type = ?");
-    params.push(body.type);
-  }
-  if (body.districtId !== undefined) {
-    updates.push("district_id = ?");
-    params.push(body.districtId);
-  }
-  if (body.address !== undefined) {
-    updates.push("address = ?");
-    params.push(body.address);
-  }
-  if (body.bankDetails !== undefined) {
-    updates.push("bank_details = ?");
-    params.push(body.bankDetails);
-  }
-
-  if (updates.length > 0) {
-    params.push(churchId);
-    await env.DB.prepare(`UPDATE churches SET ${updates.join(", ")} WHERE id = ?`)
-      .bind(...params)
-      .run();
-
+  if (updated) {
     await logAudit(env, {
       actor_id: Number(auth.userId),
       action: "update",
@@ -482,6 +455,8 @@ export async function handleBulkCreateChurches(request: Request, env: Env): Prom
   const created: { name: string; type: string; id: number }[] = [];
   const errors: { row: number; message: string }[] = [];
 
+  const churchRepo = new ChurchRepo(createDb(env));
+
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i]!;
     const name = row[0]?.trim();
@@ -511,18 +486,16 @@ export async function handleBulkCreateChurches(request: Request, env: Env): Prom
       districtId = district.id;
     }
 
-    const result = await env.DB.prepare(
-      `INSERT INTO churches (name, code, type, parent_id, parent_type, district_id)
-       VALUES (?, ?, ?, ?, 'conference', ?) RETURNING id`
-    )
-      .bind(name, name.toLowerCase().replace(/\s+/g, "_"), type, body.conferenceId, districtId)
-      .first<{ id: number }>();
+    const result = await churchRepo.create({
+      name,
+      code: name.toLowerCase().replace(/\s+/g, "_"),
+      type,
+      parentId: body.conferenceId,
+      parentType: "conference",
+      districtId: districtId ?? undefined,
+    });
 
-    if (result) {
-      created.push({ name, type, id: result.id });
-    } else {
-      errors.push({ row: i, message: "Failed to create church" });
-    }
+    created.push({ name, type, id: result.id });
   }
 
   return json({ created, errors });

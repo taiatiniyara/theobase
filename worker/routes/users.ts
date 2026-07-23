@@ -3,6 +3,9 @@ import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS, ROLES } from "../lib/roles";
 import { parseCsv, validateCsvHeaders } from "../lib/csv";
 import { logAudit, getDeviceInfo } from "../lib/audit";
+import { createDb } from "../lib/db";
+import { UserRepo } from "../repos/users";
+import { ConferenceRepo, ChurchRepo } from "../repos/org";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -12,6 +15,24 @@ function json(data: unknown, status = 200): Response {
       "Access-Control-Allow-Origin": "*",
     },
   });
+}
+
+function toUserResponse(u: {
+  id: number;
+  email: string;
+  role: string;
+  conferenceId: number | null;
+  memberId: number | null;
+  createdAt: string | null;
+}) {
+  return {
+    id: u.id,
+    email: u.email,
+    role: u.role,
+    conference_id: u.conferenceId,
+    member_id: u.memberId,
+    created_at: u.createdAt,
+  };
 }
 
 export async function handleInviteUser(request: Request, env: Env): Promise<Response> {
@@ -43,9 +64,9 @@ export async function handleInviteUser(request: Request, env: Env): Promise<Resp
     return json({ error: `Invalid role. Must be one of: ${validRoles.join(", ")}` }, 400);
   }
 
-  const existing = await env.DB.prepare("SELECT id FROM users WHERE email = ?")
-    .bind(body.email.toLowerCase().trim())
-    .first();
+  const userRepo = new UserRepo(createDb(env));
+
+  const existing = await userRepo.findByEmail(body.email.toLowerCase().trim());
   if (existing) {
     return json({ error: "User with this email already exists" }, 409);
   }
@@ -53,22 +74,13 @@ export async function handleInviteUser(request: Request, env: Env): Promise<Resp
   const tempPassword = generateResetToken().slice(0, 16);
   const passwordHash = await hashPassword(tempPassword);
 
-  const result = await env.DB.prepare(
-    `INSERT INTO users (email, password_hash, role, conference_id, member_id)
-     VALUES (?, ?, ?, ?, ?) RETURNING id`
-  )
-    .bind(
-      body.email.toLowerCase().trim(),
-      passwordHash,
-      body.role,
-      body.conferenceId ?? auth.conferenceId ?? null,
-      body.memberId ?? null
-    )
-    .first<{ id: number }>();
-
-  if (!result) {
-    return json({ error: "Failed to create user" }, 500);
-  }
+  const result = await userRepo.create({
+    email: body.email.toLowerCase().trim(),
+    passwordHash,
+    role: body.role,
+    conferenceId: body.conferenceId ?? auth.conferenceId ?? undefined,
+    memberId: body.memberId ?? undefined,
+  });
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
@@ -103,23 +115,10 @@ export async function handleGetUsers(request: Request, env: Env): Promise<Respon
   const url = new URL(request.url);
   const conferenceId = url.searchParams.get("conference_id");
 
-  let users;
-  if (conferenceId) {
-    users = await env.DB.prepare(
-      `SELECT id, email, role, conference_id, member_id, created_at
-       FROM users WHERE conference_id = ?
-       ORDER BY created_at DESC`
-    )
-      .bind(Number(conferenceId))
-      .all();
-  } else {
-    users = await env.DB.prepare(
-      `SELECT id, email, role, conference_id, member_id, created_at
-       FROM users ORDER BY created_at DESC`
-    ).all();
-  }
+  const userRepo = new UserRepo(createDb(env));
+  const users = await userRepo.findAll(conferenceId ? Number(conferenceId) : undefined);
 
-  return json({ users: users.results });
+  return json({ users: users.map(toUserResponse) });
 }
 
 export async function handleUpdateUser(
@@ -140,9 +139,9 @@ export async function handleUpdateUser(
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const user = await env.DB.prepare("SELECT id, role, conference_id FROM users WHERE id = ?")
-    .bind(userId)
-    .first<{ id: number; role: string; conference_id: number | null }>();
+  const userRepo = new UserRepo(createDb(env));
+
+  const user = await userRepo.findById(userId);
   if (!user) {
     return json({ error: "User not found" }, 404);
   }
@@ -152,7 +151,7 @@ export async function handleUpdateUser(
     if (!validRoles.includes(body.role as (typeof ROLES)[keyof typeof ROLES])) {
       return json({ error: `Invalid role. Must be one of: ${validRoles.join(", ")}` }, 400);
     }
-    await env.DB.prepare("UPDATE users SET role = ? WHERE id = ?").bind(body.role, userId).run();
+    await userRepo.update(userId, { role: body.role });
     await logAudit(env, {
       actor_id: Number(auth.userId),
       action: "update_role",
@@ -166,9 +165,7 @@ export async function handleUpdateUser(
   }
 
   if (body.active !== undefined) {
-    await env.DB.prepare("UPDATE users SET active = ? WHERE id = ?")
-      .bind(body.active ? 1 : 0, userId)
-      .run();
+    await userRepo.update(userId, { active: body.active ? 1 : 0 });
     await logAudit(env, {
       actor_id: Number(auth.userId),
       action: body.active ? "activate" : "deactivate",
@@ -182,12 +179,9 @@ export async function handleUpdateUser(
   }
 
   if (body.resetPassword) {
-    const { hashPassword: hp } = await import("../lib/auth");
     const tempPassword = generateResetToken().slice(0, 16);
-    const passwordHash = await hp(tempPassword);
-    await env.DB.prepare("UPDATE users SET password_hash = ? WHERE id = ?")
-      .bind(passwordHash, userId)
-      .run();
+    const passwordHash = await hashPassword(tempPassword);
+    await userRepo.update(userId, { passwordHash });
     return json({
       id: userId,
       message: "Password reset successfully",
@@ -229,6 +223,8 @@ export async function handleBulkInviteUsers(request: Request, env: Env): Promise
   const created: { email: string; role: string; tempPassword: string; id: number }[] = [];
   const errors: { row: number; message: string }[] = [];
 
+  const userRepo = new UserRepo(createDb(env));
+
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i]!;
     const email = row[0]?.trim().toLowerCase();
@@ -246,9 +242,7 @@ export async function handleBulkInviteUsers(request: Request, env: Env): Promise
       continue;
     }
 
-    const existing = await env.DB.prepare("SELECT id FROM users WHERE email = ?")
-      .bind(email)
-      .first();
+    const existing = await userRepo.findByEmail(email);
     if (existing) {
       errors.push({ row: i, message: `User ${email} already exists` });
       continue;
@@ -276,16 +270,16 @@ export async function handleBulkInviteUsers(request: Request, env: Env): Promise
     const tempPassword = generateResetToken().slice(0, 16);
     const passwordHash = await hashPassword(tempPassword);
 
-    const result = await env.DB.prepare(
-      `INSERT INTO users (email, password_hash, role, conference_id, member_id)
-       VALUES (?, ?, ?, ?, ?) RETURNING id`
-    )
-      .bind(email, passwordHash, role, body.conferenceId, memberId)
-      .first<{ id: number }>();
-
-    if (result) {
+    try {
+      const result = await userRepo.create({
+        email,
+        passwordHash,
+        role,
+        conferenceId: body.conferenceId,
+        memberId: memberId ?? undefined,
+      });
       created.push({ email, role, tempPassword, id: result.id });
-    } else {
+    } catch {
       errors.push({ row: i, message: "Failed to create user" });
     }
   }
@@ -297,18 +291,9 @@ export async function handleGetMe(request: Request, env: Env): Promise<Response>
   const auth = await authenticate(request, env);
   if (auth instanceof Response) return auth;
 
-  const user = await env.DB.prepare(
-    "SELECT id, email, role, conference_id, member_id FROM users WHERE id = ?"
-  )
-    .bind(Number(auth.userId))
-    .first<{
-      id: number;
-      email: string;
-      role: string;
-      conference_id: number | null;
-      member_id: number | null;
-    }>();
+  const userRepo = new UserRepo(createDb(env));
 
+  const user = await userRepo.findUserWithChurch(Number(auth.userId));
   if (!user) {
     return json({ error: "User not found" }, 404);
   }
@@ -317,19 +302,18 @@ export async function handleGetMe(request: Request, env: Env): Promise<Response>
   let church = null;
 
   if (user.conference_id) {
-    conference = await env.DB.prepare("SELECT id, name, code FROM conferences WHERE id = ?")
-      .bind(user.conference_id)
-      .first();
+    const conferenceRepo = new ConferenceRepo(createDb(env));
+    conference = await conferenceRepo.findById(user.conference_id);
+    if (conference) {
+      conference = { id: conference.id, name: conference.name, code: conference.code };
+    }
   }
 
-  if (user.member_id) {
-    const member = await env.DB.prepare("SELECT church_id FROM members WHERE id = ?")
-      .bind(user.member_id)
-      .first<{ church_id: number }>();
-    if (member) {
-      church = await env.DB.prepare("SELECT id, name, type FROM churches WHERE id = ?")
-        .bind(member.church_id)
-        .first();
+  if (user.church_id) {
+    const churchRepo = new ChurchRepo(createDb(env));
+    church = await churchRepo.findById(user.church_id);
+    if (church) {
+      church = { id: church.id, name: church.name, type: church.type };
     }
   }
 

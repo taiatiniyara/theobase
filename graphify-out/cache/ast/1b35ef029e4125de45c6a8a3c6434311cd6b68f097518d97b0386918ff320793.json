@@ -1,0 +1,1079 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "label": "org.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "repos_org_conferencerow",
+      "label": "ConferenceRow",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L5"
+    },
+    {
+      "id": "repos_org_districtrow",
+      "label": "DistrictRow",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L6"
+    },
+    {
+      "id": "repos_org_churchrow",
+      "label": "ChurchRow",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L7"
+    },
+    {
+      "id": "repos_org_conferencerepo",
+      "label": "ConferenceRepo",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L9"
+    },
+    {
+      "id": "repos_org_conferencerepo_constructor",
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L10"
+    },
+    {
+      "id": "repos_org_conferencerepo_findall",
+      "label": ".findAll()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L12"
+    },
+    {
+      "id": "repos_org_conferencerepo_create",
+      "label": ".create()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L16"
+    },
+    {
+      "id": "repos_org_conferencerepo_findbyid",
+      "label": ".findById()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L34"
+    },
+    {
+      "id": "repos_org_conferencerepo_findbycode",
+      "label": ".findByCode()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L38"
+    },
+    {
+      "id": "repos_org_conferencerepo_update",
+      "label": ".update()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L42"
+    },
+    {
+      "id": "repos_org_districtrepo",
+      "label": "DistrictRepo",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L72"
+    },
+    {
+      "id": "repos_org_districtrepo_constructor",
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L73"
+    },
+    {
+      "id": "repos_org_districtrepo_findall",
+      "label": ".findAll()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L75"
+    },
+    {
+      "id": "repos_org_districtrepo_create",
+      "label": ".create()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L83"
+    },
+    {
+      "id": "repos_org_districtrepo_findbyid",
+      "label": ".findById()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L99"
+    },
+    {
+      "id": "repos_org_districtrepo_update",
+      "label": ".update()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L103"
+    },
+    {
+      "id": "repos_org_churchrepo",
+      "label": "ChurchRepo",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L126"
+    },
+    {
+      "id": "repos_org_churchrepo_constructor",
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L127"
+    },
+    {
+      "id": "repos_org_churchrepo_findall",
+      "label": ".findAll()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L129"
+    },
+    {
+      "id": "repos_org_churchrepo_create",
+      "label": ".create()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L152"
+    },
+    {
+      "id": "repos_org_churchrepo_findbyid",
+      "label": ".findById()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L178"
+    },
+    {
+      "id": "repos_org_churchrepo_findbycode",
+      "label": ".findByCode()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L182"
+    },
+    {
+      "id": "repos_org_churchrepo_update",
+      "label": ".update()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L186"
+    },
+    {
+      "id": "repos_org_churchrepo_bulkcreate",
+      "label": ".bulkCreate()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L219"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "drizzle_orm",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_db_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "lib_db_db",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_schema_index_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "schema_index_conferences",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "schema_index_districts",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "schema_index_churches",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "repos_org_conferencerow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "repos_org_districtrow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "repos_org_churchrow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "repos_org_conferencerepo",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_conferencerepo",
+      "target": "repos_org_conferencerepo_constructor",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_conferencerepo",
+      "target": "repos_org_conferencerepo_findall",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_conferencerepo",
+      "target": "repos_org_conferencerepo_create",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_conferencerepo",
+      "target": "repos_org_conferencerepo_findbyid",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_conferencerepo",
+      "target": "repos_org_conferencerepo_findbycode",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_conferencerepo",
+      "target": "repos_org_conferencerepo_update",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "repos_org_districtrepo",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_districtrepo",
+      "target": "repos_org_districtrepo_constructor",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L73",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_districtrepo",
+      "target": "repos_org_districtrepo_findall",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L75",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_districtrepo",
+      "target": "repos_org_districtrepo_create",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L83",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_districtrepo",
+      "target": "repos_org_districtrepo_findbyid",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L99",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_districtrepo",
+      "target": "repos_org_districtrepo_update",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L103",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_repos_org_ts",
+      "target": "repos_org_churchrepo",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L126",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_churchrepo",
+      "target": "repos_org_churchrepo_constructor",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L127",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_churchrepo",
+      "target": "repos_org_churchrepo_findall",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L129",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_churchrepo",
+      "target": "repos_org_churchrepo_create",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L152",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_churchrepo",
+      "target": "repos_org_churchrepo_findbyid",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L178",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_churchrepo",
+      "target": "repos_org_churchrepo_findbycode",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L182",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_churchrepo",
+      "target": "repos_org_churchrepo_update",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L186",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_churchrepo",
+      "target": "repos_org_churchrepo_bulkcreate",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L219",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_conferencerepo_update",
+      "target": "repos_org_churchrepo_findbyid",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L59",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_conferencerepo_update",
+      "target": "repos_org_churchrepo_update",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L62",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_districtrepo_update",
+      "target": "repos_org_churchrepo_findbyid",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L113",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_districtrepo_update",
+      "target": "repos_org_churchrepo_update",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L116",
+      "weight": 1.0
+    },
+    {
+      "source": "repos_org_churchrepo_update",
+      "target": "repos_org_churchrepo_findbyid",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L207",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "repos_org_conferencerepo_findall",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L13"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_findall",
+      "callee": "from",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L13"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_findall",
+      "callee": "select",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L13"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_create",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_create",
+      "callee": "returning",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_create",
+      "callee": "values",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_create",
+      "callee": "insert",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_findbyid",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_findbyid",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_findbyid",
+      "callee": "from",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_findbyid",
+      "callee": "select",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_findbyid",
+      "callee": "eq",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_findbycode",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L39"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_findbycode",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L39"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_findbycode",
+      "callee": "from",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L39"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_findbycode",
+      "callee": "select",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L39"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_findbycode",
+      "callee": "eq",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L39"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_update",
+      "callee": "keys",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L57"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_update",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L62"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_update",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L62"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_update",
+      "callee": "set",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L62"
+    },
+    {
+      "caller_nid": "repos_org_conferencerepo_update",
+      "callee": "eq",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L65"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_findall",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L76"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_findall",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L76"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_findall",
+      "callee": "from",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L76"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_findall",
+      "callee": "select",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L76"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_findall",
+      "callee": "eq",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L79"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_create",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L88"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_create",
+      "callee": "returning",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L88"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_create",
+      "callee": "values",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L88"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_create",
+      "callee": "insert",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L88"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_findbyid",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L100"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_findbyid",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L100"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_findbyid",
+      "callee": "from",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L100"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_findbyid",
+      "callee": "select",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L100"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_findbyid",
+      "callee": "eq",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L100"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_update",
+      "callee": "keys",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L111"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_update",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_update",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_update",
+      "callee": "set",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "repos_org_districtrepo_update",
+      "callee": "eq",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L119"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "from",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L130"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "select",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L130"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L131"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L133"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L133"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "or",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L135"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "and",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L136"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "eq",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L137"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "eq",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L138"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "inArray",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L140"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L142"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "from",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L142"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "select",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L142"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findall",
+      "callee": "eq",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L145"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_create",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L162"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_create",
+      "callee": "returning",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L162"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_create",
+      "callee": "values",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L162"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_create",
+      "callee": "insert",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L162"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findbyid",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L179"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findbyid",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L179"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findbyid",
+      "callee": "from",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L179"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findbyid",
+      "callee": "select",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L179"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findbyid",
+      "callee": "eq",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L179"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findbycode",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L183"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findbycode",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L183"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findbycode",
+      "callee": "from",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L183"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findbycode",
+      "callee": "select",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L183"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_findbycode",
+      "callee": "eq",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L183"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_update",
+      "callee": "keys",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L205"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_update",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L210"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_update",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L210"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_update",
+      "callee": "set",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L210"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_update",
+      "callee": "eq",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L213"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_bulkcreate",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L230"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_bulkcreate",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L233"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_bulkcreate",
+      "callee": "append",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L234"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_bulkcreate",
+      "callee": "sql",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L234"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_bulkcreate",
+      "callee": "join",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L235"
+    },
+    {
+      "caller_nid": "repos_org_churchrepo_bulkcreate",
+      "callee": "sql",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\org.ts",
+      "source_location": "L235"
+    }
+  ]
+}

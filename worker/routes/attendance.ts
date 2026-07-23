@@ -1,6 +1,8 @@
 import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { logAudit, getDeviceInfo } from "../lib/audit";
+import { createDb } from "../lib/db";
+import { AttendanceRepo, type AttendanceRow } from "../repos/attendance";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -13,6 +15,19 @@ function json(data: unknown, status = 200): Response {
 }
 
 const CATEGORIES = ["sabbath-school", "church-service", "youth"] as const;
+
+function toAttendanceResponse(a: AttendanceRow) {
+  return {
+    id: a.id,
+    church_id: a.churchId,
+    date: a.date,
+    count: a.count,
+    category: a.category,
+    created_by: a.createdBy,
+    created_at: a.createdAt,
+    updated_at: a.updatedAt,
+  };
+}
 
 export async function handleRecordAttendance(request: Request, env: Env): Promise<Response> {
   const auth = await authenticate(request, env);
@@ -46,53 +61,46 @@ export async function handleRecordAttendance(request: Request, env: Env): Promis
     return json({ error: "count must be a non-negative number" }, 400);
   }
 
-  const prev = await env.DB.prepare(
-    `SELECT id, count FROM attendance
-     WHERE church_id = ? AND date = ? AND category = ?`
-  )
-    .bind(body.churchId, body.date, body.category)
-    .first<{ id: number; count: number }>();
+  const repo = new AttendanceRepo(createDb(env));
 
-  const result = await env.DB.prepare(
-    `INSERT INTO attendance (church_id, date, count, category, created_by)
-     VALUES (?, ?, ?, ?, ?)
-     ON CONFLICT(church_id, date, category)
-     DO UPDATE SET count = ?, updated_at = datetime('now')
-     RETURNING id`
-  )
-    .bind(body.churchId, body.date, body.count, body.category, Number(auth.userId), body.count)
-    .first<{ id: number }>();
+  const existing = await repo.findAll({
+    churchId: body.churchId,
+    from: body.date,
+    to: body.date,
+    category: body.category,
+  });
+  const prev = existing.length > 0 ? existing[0] : null;
 
-  const attendanceId = result!.id;
+  const attendance = await repo.upsert({
+    churchId: body.churchId,
+    date: body.date,
+    count: body.count,
+    category: body.category,
+    createdBy: Number(auth.userId),
+  });
+
   const updated = prev !== null;
-  const action = updated ? "attendance:update" : "attendance:create";
 
   if (body.memberIds && body.memberIds.length > 0) {
-    await env.DB.prepare(`DELETE FROM member_attendance WHERE attendance_id = ?`)
-      .bind(attendanceId)
-      .run();
-
-    const stmt = env.DB.prepare(
-      `INSERT OR IGNORE INTO member_attendance (attendance_id, member_id) VALUES (?, ?)`
-    );
-    const batch: D1PreparedStatement[] = body.memberIds.map((mid) => stmt.bind(attendanceId, mid));
-    if (batch.length > 0) {
-      await env.DB.batch(batch);
+    const existingMemberIds = await repo.getMemberIds(attendance.id);
+    if (existingMemberIds.length > 0) {
+      await repo.removeMembers(attendance.id, existingMemberIds);
     }
+    await repo.addMembers(attendance.id, body.memberIds);
   }
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
-    action,
+    action: updated ? "attendance:update" : "attendance:create",
     entity_type: "attendance",
-    entity_id: attendanceId,
+    entity_id: attendance.id,
     prev_state: prev ? JSON.stringify({ count: prev.count }) : null,
     new_state: JSON.stringify({ count: body.count, category: body.category, date: body.date }),
     module: "attendance",
     device_info: getDeviceInfo(request),
   });
 
-  return json({ id: attendanceId, updated }, updated ? 200 : 201);
+  return json({ id: attendance.id, updated }, updated ? 200 : 201);
 }
 
 export async function handleGetAttendance(request: Request, env: Env): Promise<Response> {
@@ -108,42 +116,15 @@ export async function handleGetAttendance(request: Request, env: Env): Promise<R
   const to = url.searchParams.get("to");
   const category = url.searchParams.get("category");
 
-  let query = `SELECT id, church_id, date, count, category, created_by, created_at, updated_at
-    FROM attendance WHERE 1=1`;
-  const params: (string | number)[] = [];
+  const repo = new AttendanceRepo(createDb(env));
+  const attendance = await repo.findAll({
+    churchId: churchId ? Number(churchId) : undefined,
+    from: from ?? undefined,
+    to: to ?? undefined,
+    category: category ?? undefined,
+  });
 
-  if (churchId) {
-    query += " AND church_id = ?";
-    params.push(Number(churchId));
-  }
-  if (from) {
-    query += " AND date >= ?";
-    params.push(from);
-  }
-  if (to) {
-    query += " AND date <= ?";
-    params.push(to);
-  }
-  if (category) {
-    query += " AND category = ?";
-    params.push(category);
-  }
-  query += " ORDER BY date DESC, category";
-
-  const result = await env.DB.prepare(query)
-    .bind(...params)
-    .all<{
-      id: number;
-      church_id: number;
-      date: string;
-      count: number;
-      category: string;
-      created_by: number;
-      created_at: string;
-      updated_at: string;
-    }>();
-
-  return json({ attendance: result.results });
+  return json({ attendance: attendance.map(toAttendanceResponse) });
 }
 
 export async function handleGetAttendanceStats(request: Request, env: Env): Promise<Response> {
@@ -157,61 +138,16 @@ export async function handleGetAttendanceStats(request: Request, env: Env): Prom
   const churchId = url.searchParams.get("church_id");
   const from = url.searchParams.get("from");
   const to = url.searchParams.get("to");
-  const category = url.searchParams.get("category");
 
   if (!churchId) {
     return json({ error: "church_id is required" }, 400);
   }
 
-  let query = `SELECT category, AVG(count) as average, COUNT(*) as weeks, MIN(count) as min, MAX(count) as max
-    FROM attendance WHERE church_id = ?`;
-  const params: (string | number)[] = [Number(churchId)];
+  const repo = new AttendanceRepo(createDb(env));
+  const cid = Number(churchId);
 
-  if (from) {
-    query += " AND date >= ?";
-    params.push(from);
-  }
-  if (to) {
-    query += " AND date <= ?";
-    params.push(to);
-  }
-  if (category) {
-    query += " AND category = ?";
-    params.push(category);
-  }
-  query += " GROUP BY category ORDER BY category";
+  const stats = await repo.getStats(cid, from ?? undefined, to ?? undefined);
+  const trend = await repo.getTrend(cid, from ?? undefined, to ?? undefined);
 
-  const stats = await env.DB.prepare(query)
-    .bind(...params)
-    .all<{
-      category: string;
-      average: number | null;
-      weeks: number;
-      min: number | null;
-      max: number | null;
-    }>();
-
-  let trendQuery = `SELECT date, count, category FROM attendance
-    WHERE church_id = ?`;
-  const trendParams: (string | number)[] = [Number(churchId)];
-
-  if (from) {
-    trendQuery += " AND date >= ?";
-    trendParams.push(from);
-  }
-  if (to) {
-    trendQuery += " AND date <= ?";
-    trendParams.push(to);
-  }
-  if (category) {
-    trendQuery += " AND category = ?";
-    trendParams.push(category);
-  }
-  trendQuery += " ORDER BY date";
-
-  const trend = await env.DB.prepare(trendQuery)
-    .bind(...trendParams)
-    .all<{ date: string; count: number; category: string }>();
-
-  return json({ stats: stats.results, trend: trend.results });
+  return json({ stats, trend });
 }

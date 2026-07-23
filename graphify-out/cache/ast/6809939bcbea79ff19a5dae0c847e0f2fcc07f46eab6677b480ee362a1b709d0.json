@@ -1,0 +1,40 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_schema_reconciliation_ts",
+      "label": "reconciliation.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\reconciliation.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "schema_reconciliation_reconciliations",
+      "label": "reconciliations",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\reconciliation.ts",
+      "source_location": "L3"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_schema_reconciliation_ts",
+      "target": "sqlite_core",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\reconciliation.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_schema_reconciliation_ts",
+      "target": "schema_reconciliation_reconciliations",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\reconciliation.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": []
+}

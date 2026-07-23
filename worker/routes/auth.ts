@@ -8,6 +8,10 @@ import {
 } from "../lib/auth";
 import { ROLES } from "../lib/roles";
 import { logAudit, getDeviceInfo } from "../lib/audit";
+import { createDb } from "../lib/db";
+import { UserRepo } from "../repos/users";
+import { ConferenceRepo } from "../repos/org";
+import { MemberRepo } from "../repos/members";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -34,9 +38,9 @@ export async function handleAuthSignup(request: Request, env: Env): Promise<Resp
     return json({ error: "Password must be at least 8 characters" }, 400);
   }
 
-  const existing = await env.DB.prepare("SELECT id FROM users WHERE email = ?")
-    .bind(body.email.toLowerCase().trim())
-    .first();
+  const userRepo = new UserRepo(createDb(env));
+
+  const existing = await userRepo.findByEmail(body.email.toLowerCase().trim());
   if (existing) {
     return json({ error: "Email already registered" }, 409);
   }
@@ -45,26 +49,20 @@ export async function handleAuthSignup(request: Request, env: Env): Promise<Resp
 
   let conferenceId: number | null = null;
   if (body.conferenceName) {
-    const result = await env.DB.prepare(
-      "INSERT INTO conferences (name, code) VALUES (?, ?) RETURNING id"
-    )
-      .bind(body.conferenceName, body.conferenceName.toLowerCase().replace(/\s+/g, "_"))
-      .first<{ id: number }>();
-    if (result) {
-      conferenceId = result.id;
-    }
+    const conferenceRepo = new ConferenceRepo(createDb(env));
+    const result = await conferenceRepo.create({
+      name: body.conferenceName,
+      code: body.conferenceName.toLowerCase().replace(/\s+/g, "_"),
+    });
+    conferenceId = result.id;
   }
 
-  const result = await env.DB.prepare(
-    `INSERT INTO users (email, password_hash, role, conference_id)
-     VALUES (?, ?, 'sysadmin', ?) RETURNING id`
-  )
-    .bind(body.email.toLowerCase().trim(), passwordHash, conferenceId)
-    .first<{ id: number }>();
-
-  if (!result) {
-    return json({ error: "Failed to create user" }, 500);
-  }
+  const result = await userRepo.create({
+    email: body.email.toLowerCase().trim(),
+    passwordHash,
+    role: "sysadmin",
+    conferenceId: conferenceId ?? undefined,
+  });
 
   await logAudit(env, {
     actor_id: result.id,
@@ -105,19 +103,9 @@ export async function handleAuthLogin(request: Request, env: Env): Promise<Respo
     return json({ error: "email and password are required" }, 400);
   }
 
-  const user = await env.DB.prepare(
-    "SELECT id, password_hash, role, conference_id, member_id, active FROM users WHERE email = ?"
-  )
-    .bind(body.email.toLowerCase().trim())
-    .first<{
-      id: number;
-      password_hash: string;
-      role: string;
-      conference_id: number | null;
-      member_id: number | null;
-      active: number | null;
-    }>();
+  const userRepo = new UserRepo(createDb(env));
 
+  const user = await userRepo.findByEmail(body.email.toLowerCase().trim());
   if (!user) {
     return json({ error: "Invalid email or password" }, 401);
   }
@@ -126,17 +114,16 @@ export async function handleAuthLogin(request: Request, env: Env): Promise<Respo
     return json({ error: "Account has been deactivated. Contact your system administrator." }, 403);
   }
 
-  const valid = await verifyPassword(body.password, user.password_hash);
+  const valid = await verifyPassword(body.password, user.passwordHash);
   if (!valid) {
     return json({ error: "Invalid email or password" }, 401);
   }
 
   let churchId: number | undefined;
-  if (user.member_id) {
-    const member = await env.DB.prepare("SELECT church_id FROM members WHERE id = ?")
-      .bind(user.member_id)
-      .first<{ church_id: number }>();
-    churchId = member?.church_id;
+  if (user.memberId) {
+    const memberRepo = new MemberRepo(createDb(env));
+    const member = await memberRepo.findById(user.memberId);
+    churchId = member?.churchId;
   }
 
   const userId = String(user.id);
@@ -144,7 +131,7 @@ export async function handleAuthLogin(request: Request, env: Env): Promise<Respo
     {
       sub: userId,
       role: user.role,
-      conferenceId: user.conference_id ?? undefined,
+      conferenceId: user.conferenceId ?? undefined,
       churchId,
     },
     env.JWT_SECRET
@@ -156,7 +143,7 @@ export async function handleAuthLogin(request: Request, env: Env): Promise<Respo
     refreshToken,
     userId,
     role: user.role,
-    conferenceId: user.conference_id,
+    conferenceId: user.conferenceId,
     churchId,
   });
 }
@@ -179,18 +166,9 @@ export async function handleAuthRefresh(request: Request, env: Env): Promise<Res
       return json({ error: "Invalid token type" }, 401);
     }
 
-    const user = await env.DB.prepare(
-      "SELECT id, role, conference_id, member_id, active FROM users WHERE id = ?"
-    )
-      .bind(Number(payload.sub))
-      .first<{
-        id: number;
-        role: string;
-        conference_id: number | null;
-        member_id: number | null;
-        active: number | null;
-      }>();
+    const userRepo = new UserRepo(createDb(env));
 
+    const user = await userRepo.findById(Number(payload.sub));
     if (!user) {
       return json({ error: "User not found" }, 401);
     }
@@ -200,18 +178,17 @@ export async function handleAuthRefresh(request: Request, env: Env): Promise<Res
     }
 
     let churchId: number | undefined;
-    if (user.member_id) {
-      const member = await env.DB.prepare("SELECT church_id FROM members WHERE id = ?")
-        .bind(user.member_id)
-        .first<{ church_id: number }>();
-      churchId = member?.church_id;
+    if (user.memberId) {
+      const memberRepo = new MemberRepo(createDb(env));
+      const member = await memberRepo.findById(user.memberId);
+      churchId = member?.churchId;
     }
 
     const accessToken = await signAccessToken(
       {
         sub: payload.sub,
         role: user.role,
-        conferenceId: user.conference_id ?? undefined,
+        conferenceId: user.conferenceId ?? undefined,
         churchId,
       },
       env.JWT_SECRET
@@ -236,10 +213,9 @@ export async function handleForgotPassword(request: Request, env: Env): Promise<
     return json({ error: "email is required" }, 400);
   }
 
-  const user = await env.DB.prepare("SELECT id FROM users WHERE email = ?")
-    .bind(body.email.toLowerCase().trim())
-    .first<{ id: number }>();
+  const userRepo = new UserRepo(createDb(env));
 
+  const user = await userRepo.findByEmail(body.email.toLowerCase().trim());
   if (!user) {
     return json({ message: "If the email exists, a reset link has been sent" });
   }
@@ -247,9 +223,7 @@ export async function handleForgotPassword(request: Request, env: Env): Promise<
   const resetToken = generateResetToken();
   const expiresAt = new Date(Date.now() + 3600000).toISOString();
 
-  await env.DB.prepare(`UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?`)
-    .bind(resetToken, expiresAt, user.id)
-    .run();
+  await userRepo.update(user.id, { resetToken, resetTokenExpires: expiresAt });
 
   return json({
     message: "If the email exists, a reset link has been sent",
@@ -272,22 +246,15 @@ export async function handleResetPassword(request: Request, env: Env): Promise<R
     return json({ error: "Password must be at least 8 characters" }, 400);
   }
 
-  const user = await env.DB.prepare(
-    "SELECT id FROM users WHERE reset_token = ? AND reset_token_expires > datetime('now')"
-  )
-    .bind(body.token)
-    .first<{ id: number }>();
+  const userRepo = new UserRepo(createDb(env));
 
+  const user = await userRepo.findByResetToken(body.token);
   if (!user) {
     return json({ error: "Invalid or expired reset token" }, 400);
   }
 
   const passwordHash = await hashPassword(body.newPassword);
-  await env.DB.prepare(
-    "UPDATE users SET password_hash = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?"
-  )
-    .bind(passwordHash, user.id)
-    .run();
+  await userRepo.update(user.id, { passwordHash, resetToken: null, resetTokenExpires: null });
 
   await logAudit(env, {
     actor_id: user.id,
