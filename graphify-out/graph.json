@@ -50,7 +50,7 @@
       "source_file": "eslint.config.js",
       "source_location": "L1",
       "id": "eslint_config_js",
-      "community": 39,
+      "community": 43,
       "norm_label": "eslint.config.js"
     },
     {
@@ -59,7 +59,7 @@
       "source_file": "vite.config.ts",
       "source_location": "L1",
       "id": "vite_config_ts",
-      "community": 40,
+      "community": 44,
       "norm_label": "vite.config.ts"
     },
     {
@@ -68,7 +68,7 @@
       "source_file": "vitest.config.ts",
       "source_location": "L1",
       "id": "vitest_config_ts",
-      "community": 41,
+      "community": 45,
       "norm_label": "vitest.config.ts"
     },
     {
@@ -77,7 +77,7 @@
       "source_file": "public/sw.js",
       "source_location": "L1",
       "id": "public_sw_js",
-      "community": 28,
+      "community": 30,
       "norm_label": "sw.js"
     },
     {
@@ -86,7 +86,7 @@
       "source_file": "public/sw.js",
       "source_location": "L2",
       "id": "public_sw_assets_to_cache",
-      "community": 28,
+      "community": 30,
       "norm_label": "assets_to_cache"
     },
     {
@@ -95,7 +95,7 @@
       "source_file": "public/sw.js",
       "source_location": "L32",
       "id": "public_sw_url",
-      "community": 28,
+      "community": 30,
       "norm_label": "url"
     },
     {
@@ -104,7 +104,7 @@
       "source_file": "public/sw.js",
       "source_location": "L38",
       "id": "public_sw_fetchpromise",
-      "community": 28,
+      "community": 30,
       "norm_label": "fetchpromise"
     },
     {
@@ -138,7 +138,7 @@
       "label": "rootRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L27",
+      "source_location": "L28",
       "id": "src_routes_rootroute",
       "community": 6,
       "norm_label": "rootroute"
@@ -147,7 +147,7 @@
       "label": "indexRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L35",
+      "source_location": "L36",
       "id": "src_routes_indexroute",
       "community": 6,
       "norm_label": "indexroute"
@@ -156,7 +156,7 @@
       "label": "loginRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L41",
+      "source_location": "L42",
       "id": "src_routes_loginroute",
       "community": 6,
       "norm_label": "loginroute"
@@ -165,7 +165,7 @@
       "label": "signupRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L47",
+      "source_location": "L48",
       "id": "src_routes_signuproute",
       "community": 6,
       "norm_label": "signuproute"
@@ -174,7 +174,7 @@
       "label": "forgotPasswordRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L53",
+      "source_location": "L54",
       "id": "src_routes_forgotpasswordroute",
       "community": 6,
       "norm_label": "forgotpasswordroute"
@@ -183,7 +183,7 @@
       "label": "dashboardLayout",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L59",
+      "source_location": "L60",
       "id": "src_routes_dashboardlayout",
       "community": 6,
       "norm_label": "dashboardlayout"
@@ -192,7 +192,7 @@
       "label": "dashboardIndex",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L70",
+      "source_location": "L71",
       "id": "src_routes_dashboardindex",
       "community": 6,
       "norm_label": "dashboardindex"
@@ -201,7 +201,7 @@
       "label": "organizationRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L76",
+      "source_location": "L77",
       "id": "src_routes_organizationroute",
       "community": 6,
       "norm_label": "organizationroute"
@@ -210,7 +210,7 @@
       "label": "usersRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L82",
+      "source_location": "L83",
       "id": "src_routes_usersroute",
       "community": 6,
       "norm_label": "usersroute"
@@ -219,7 +219,7 @@
       "label": "financeRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L88",
+      "source_location": "L89",
       "id": "src_routes_financeroute",
       "community": 6,
       "norm_label": "financeroute"
@@ -228,7 +228,7 @@
       "label": "membersRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L94",
+      "source_location": "L95",
       "id": "src_routes_membersroute",
       "community": 6,
       "norm_label": "membersroute"
@@ -237,7 +237,7 @@
       "label": "reportsRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L100",
+      "source_location": "L101",
       "id": "src_routes_reportsroute",
       "community": 6,
       "norm_label": "reportsroute"
@@ -246,7 +246,7 @@
       "label": "settingsRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L106",
+      "source_location": "L107",
       "id": "src_routes_settingsroute",
       "community": 6,
       "norm_label": "settingsroute"
@@ -255,7 +255,7 @@
       "label": "auditRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L112",
+      "source_location": "L113",
       "id": "src_routes_auditroute",
       "community": 6,
       "norm_label": "auditroute"
@@ -264,7 +264,7 @@
       "label": "reconciliationRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L118",
+      "source_location": "L119",
       "id": "src_routes_reconciliationroute",
       "community": 6,
       "norm_label": "reconciliationroute"
@@ -273,7 +273,7 @@
       "label": "conferenceDashboardRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L124",
+      "source_location": "L125",
       "id": "src_routes_conferencedashboardroute",
       "community": 6,
       "norm_label": "conferencedashboardroute"
@@ -282,7 +282,7 @@
       "label": "districtDashboardRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L130",
+      "source_location": "L131",
       "id": "src_routes_districtdashboardroute",
       "community": 6,
       "norm_label": "districtdashboardroute"
@@ -291,7 +291,7 @@
       "label": "globalDashboardRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L136",
+      "source_location": "L137",
       "id": "src_routes_globaldashboardroute",
       "community": 6,
       "norm_label": "globaldashboardroute"
@@ -300,16 +300,25 @@
       "label": "attendanceRoute",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L142",
+      "source_location": "L143",
       "id": "src_routes_attendanceroute",
       "community": 6,
       "norm_label": "attendanceroute"
     },
     {
+      "label": "contributionsRoute",
+      "file_type": "code",
+      "source_file": "src/routes.tsx",
+      "source_location": "L149",
+      "id": "src_routes_contributionsroute",
+      "community": 6,
+      "norm_label": "contributionsroute"
+    },
+    {
       "label": "routeTree",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L148",
+      "source_location": "L155",
       "id": "src_routes_routetree",
       "community": 6,
       "norm_label": "routetree"
@@ -318,7 +327,7 @@
       "label": "router",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L170",
+      "source_location": "L178",
       "id": "src_routes_router",
       "community": 6,
       "norm_label": "router"
@@ -327,7 +336,7 @@
       "label": "Register",
       "file_type": "code",
       "source_file": "src/routes.tsx",
-      "source_location": "L173",
+      "source_location": "L181",
       "id": "src_routes_register",
       "community": 6,
       "norm_label": "register"
@@ -338,7 +347,7 @@
       "source_file": "src/vite-env.d.ts",
       "source_location": "L1",
       "id": "src_vite_env_d_ts",
-      "community": 42,
+      "community": 46,
       "norm_label": "vite-env.d.ts"
     },
     {
@@ -446,7 +455,7 @@
       "source_file": "src/lib/api.ts",
       "source_location": "L128",
       "id": "lib_api_authapi",
-      "community": 5,
+      "community": 33,
       "norm_label": "authapi"
     },
     {
@@ -455,7 +464,7 @@
       "source_file": "src/lib/api.ts",
       "source_location": "L146",
       "id": "lib_api_orgapi",
-      "community": 3,
+      "community": 25,
       "norm_label": "orgapi"
     },
     {
@@ -464,7 +473,7 @@
       "source_file": "src/lib/api.ts",
       "source_location": "L183",
       "id": "lib_api_userapi",
-      "community": 3,
+      "community": 31,
       "norm_label": "userapi"
     },
     {
@@ -711,39 +720,66 @@
       "norm_label": "reconciliationapi"
     },
     {
-      "label": "AttendanceRecord",
+      "label": "ContributionSummary",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
       "source_location": "L742",
+      "id": "lib_api_contributionsummary",
+      "community": 15,
+      "norm_label": "contributionsummary"
+    },
+    {
+      "label": "ContributionStatement",
+      "file_type": "code",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L750",
+      "id": "lib_api_contributionstatement",
+      "community": 15,
+      "norm_label": "contributionstatement"
+    },
+    {
+      "label": "contributionApi",
+      "file_type": "code",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L770",
+      "id": "lib_api_contributionapi",
+      "community": 15,
+      "norm_label": "contributionapi"
+    },
+    {
+      "label": "AttendanceRecord",
+      "file_type": "code",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L788",
       "id": "lib_api_attendancerecord",
-      "community": 14,
+      "community": 16,
       "norm_label": "attendancerecord"
     },
     {
       "label": "AttendanceStats",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L753",
+      "source_location": "L799",
       "id": "lib_api_attendancestats",
-      "community": 14,
+      "community": 16,
       "norm_label": "attendancestats"
     },
     {
       "label": "AttendanceTrendPoint",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L761",
+      "source_location": "L807",
       "id": "lib_api_attendancetrendpoint",
-      "community": 14,
+      "community": 16,
       "norm_label": "attendancetrendpoint"
     },
     {
       "label": "attendanceApi",
       "file_type": "code",
       "source_file": "src/lib/api.ts",
-      "source_location": "L767",
+      "source_location": "L813",
       "id": "lib_api_attendanceapi",
-      "community": 14,
+      "community": 16,
       "norm_label": "attendanceapi"
     },
     {
@@ -840,7 +876,7 @@
       "label": "isModuleVisible()",
       "file_type": "code",
       "source_file": "src/lib/modules.ts",
-      "source_location": "L171",
+      "source_location": "L179",
       "id": "lib_modules_ismodulevisible",
       "community": 11,
       "norm_label": "ismodulevisible()"
@@ -849,7 +885,7 @@
       "label": "getVisibleGroups()",
       "file_type": "code",
       "source_file": "src/lib/modules.ts",
-      "source_location": "L175",
+      "source_location": "L183",
       "id": "lib_modules_getvisiblegroups",
       "community": 11,
       "norm_label": "getvisiblegroups()"
@@ -1283,34 +1319,34 @@
       "source_file": "src/routes/AttendancePage.tsx",
       "source_location": "L1",
       "id": "src_routes_attendancepage_tsx",
-      "community": 14,
+      "community": 16,
       "norm_label": "attendancepage.tsx"
     },
     {
       "label": "CATEGORIES",
       "file_type": "code",
       "source_file": "src/routes/AttendancePage.tsx",
-      "source_location": "L5",
+      "source_location": "L10",
       "id": "routes_attendancepage_categories",
-      "community": 14,
+      "community": 16,
       "norm_label": "categories"
     },
     {
       "label": "TrendLine()",
       "file_type": "code",
       "source_file": "src/routes/AttendancePage.tsx",
-      "source_location": "L11",
+      "source_location": "L16",
       "id": "routes_attendancepage_trendline",
-      "community": 14,
+      "community": 16,
       "norm_label": "trendline()"
     },
     {
       "label": "AttendancePage()",
       "file_type": "code",
       "source_file": "src/routes/AttendancePage.tsx",
-      "source_location": "L31",
+      "source_location": "L36",
       "id": "routes_attendancepage_attendancepage",
-      "community": 14,
+      "community": 16,
       "norm_label": "attendancepage()"
     },
     {
@@ -1355,7 +1391,7 @@
       "source_file": "src/routes/ConferenceDashboard.tsx",
       "source_location": "L1",
       "id": "src_routes_conferencedashboard_tsx",
-      "community": 17,
+      "community": 3,
       "norm_label": "conferencedashboard.tsx"
     },
     {
@@ -1364,7 +1400,7 @@
       "source_file": "src/routes/ConferenceDashboard.tsx",
       "source_location": "L5",
       "id": "routes_conferencedashboard_churchmetric",
-      "community": 17,
+      "community": 3,
       "norm_label": "churchmetric"
     },
     {
@@ -1373,7 +1409,7 @@
       "source_file": "src/routes/ConferenceDashboard.tsx",
       "source_location": "L15",
       "id": "routes_conferencedashboard_conferencesummary",
-      "community": 17,
+      "community": 3,
       "norm_label": "conferencesummary"
     },
     {
@@ -1382,7 +1418,7 @@
       "source_file": "src/routes/ConferenceDashboard.tsx",
       "source_location": "L22",
       "id": "routes_conferencedashboard_district",
-      "community": 17,
+      "community": 3,
       "norm_label": "district"
     },
     {
@@ -1391,7 +1427,7 @@
       "source_file": "src/routes/ConferenceDashboard.tsx",
       "source_location": "L27",
       "id": "routes_conferencedashboard_conferencedashboard",
-      "community": 17,
+      "community": 3,
       "norm_label": "conferencedashboard()"
     },
     {
@@ -1400,7 +1436,7 @@
       "source_file": "src/routes/ConferenceDashboard.tsx",
       "source_location": "L215",
       "id": "routes_conferencedashboard_summarycard",
-      "community": 17,
+      "community": 3,
       "norm_label": "summarycard()"
     },
     {
@@ -1409,7 +1445,7 @@
       "source_file": "src/routes/ConferenceDashboard.tsx",
       "source_location": "L224",
       "id": "routes_conferencedashboard_sortheader",
-      "community": 17,
+      "community": 3,
       "norm_label": "sortheader()"
     },
     {
@@ -1438,6 +1474,51 @@
       "id": "routes_conflictresolver_diffview",
       "community": 1,
       "norm_label": "diffview()"
+    },
+    {
+      "label": "ContributionsPage.tsx",
+      "file_type": "code",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L1",
+      "id": "src_routes_contributionspage_tsx",
+      "community": 15,
+      "norm_label": "contributionspage.tsx"
+    },
+    {
+      "label": "FUND_LABELS",
+      "file_type": "code",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L5",
+      "id": "routes_contributionspage_fund_labels",
+      "community": 15,
+      "norm_label": "fund_labels"
+    },
+    {
+      "label": "FUND_ORDER",
+      "file_type": "code",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L11",
+      "id": "routes_contributionspage_fund_order",
+      "community": 15,
+      "norm_label": "fund_order"
+    },
+    {
+      "label": "formatCurrency()",
+      "file_type": "code",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L13",
+      "id": "routes_contributionspage_formatcurrency",
+      "community": 15,
+      "norm_label": "formatcurrency()"
+    },
+    {
+      "label": "ContributionsPage()",
+      "file_type": "code",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L21",
+      "id": "routes_contributionspage_contributionspage",
+      "community": 15,
+      "norm_label": "contributionspage()"
     },
     {
       "label": "DashboardLayout.tsx",
@@ -1652,7 +1733,7 @@
       "source_file": "src/routes/ForgotPasswordPage.tsx",
       "source_location": "L1",
       "id": "src_routes_forgotpasswordpage_tsx",
-      "community": 5,
+      "community": 33,
       "norm_label": "forgotpasswordpage.tsx"
     },
     {
@@ -1661,7 +1742,7 @@
       "source_file": "src/routes/ForgotPasswordPage.tsx",
       "source_location": "L4",
       "id": "routes_forgotpasswordpage_forgotpasswordpage",
-      "community": 5,
+      "community": 33,
       "norm_label": "forgotpasswordpage()"
     },
     {
@@ -1769,7 +1850,7 @@
       "source_file": "src/routes/OrgManagementPage.tsx",
       "source_location": "L1",
       "id": "src_routes_orgmanagementpage_tsx",
-      "community": 3,
+      "community": 25,
       "norm_label": "orgmanagementpage.tsx"
     },
     {
@@ -1778,7 +1859,7 @@
       "source_file": "src/routes/OrgManagementPage.tsx",
       "source_location": "L5",
       "id": "routes_orgmanagementpage_conference",
-      "community": 3,
+      "community": 25,
       "norm_label": "conference"
     },
     {
@@ -1787,7 +1868,7 @@
       "source_file": "src/routes/OrgManagementPage.tsx",
       "source_location": "L13",
       "id": "routes_orgmanagementpage_district",
-      "community": 3,
+      "community": 25,
       "norm_label": "district"
     },
     {
@@ -1796,7 +1877,7 @@
       "source_file": "src/routes/OrgManagementPage.tsx",
       "source_location": "L19",
       "id": "routes_orgmanagementpage_church",
-      "community": 3,
+      "community": 25,
       "norm_label": "church"
     },
     {
@@ -1805,7 +1886,7 @@
       "source_file": "src/routes/OrgManagementPage.tsx",
       "source_location": "L27",
       "id": "routes_orgmanagementpage_orgmanagementpage",
-      "community": 3,
+      "community": 25,
       "norm_label": "orgmanagementpage()"
     },
     {
@@ -1904,7 +1985,7 @@
       "source_file": "src/routes/UsersPage.tsx",
       "source_location": "L1",
       "id": "src_routes_userspage_tsx",
-      "community": 3,
+      "community": 31,
       "norm_label": "userspage.tsx"
     },
     {
@@ -1913,7 +1994,7 @@
       "source_file": "src/routes/UsersPage.tsx",
       "source_location": "L5",
       "id": "routes_userspage_userrecord",
-      "community": 3,
+      "community": 31,
       "norm_label": "userrecord"
     },
     {
@@ -1922,7 +2003,7 @@
       "source_file": "src/routes/UsersPage.tsx",
       "source_location": "L12",
       "id": "routes_userspage_userspage",
-      "community": 3,
+      "community": 31,
       "norm_label": "userspage()"
     },
     {
@@ -2001,7 +2082,7 @@
       "label": "listBody",
       "file_type": "code",
       "source_file": "test/attendance.test.ts",
-      "source_location": "L123",
+      "source_location": "L122",
       "id": "test_attendance_test_listbody",
       "community": 9,
       "norm_label": "listbody"
@@ -2010,7 +2091,7 @@
       "label": "rangeBody",
       "file_type": "code",
       "source_file": "test/attendance.test.ts",
-      "source_location": "L131",
+      "source_location": "L130",
       "id": "test_attendance_test_rangebody",
       "community": 9,
       "norm_label": "rangebody"
@@ -2019,7 +2100,7 @@
       "label": "catBody",
       "file_type": "code",
       "source_file": "test/attendance.test.ts",
-      "source_location": "L139",
+      "source_location": "L138",
       "id": "test_attendance_test_catbody",
       "community": 9,
       "norm_label": "catbody"
@@ -2028,7 +2109,7 @@
       "label": "statsBody",
       "file_type": "code",
       "source_file": "test/attendance.test.ts",
-      "source_location": "L148",
+      "source_location": "L147",
       "id": "test_attendance_test_statsbody",
       "community": 9,
       "norm_label": "statsbody"
@@ -2037,7 +2118,7 @@
       "label": "ss",
       "file_type": "code",
       "source_file": "test/attendance.test.ts",
-      "source_location": "L153",
+      "source_location": "L158",
       "id": "test_attendance_test_ss",
       "community": 9,
       "norm_label": "ss"
@@ -2048,7 +2129,7 @@
       "source_file": "test/auth.test.ts",
       "source_location": "L1",
       "id": "test_auth_test_ts",
-      "community": 24,
+      "community": 26,
       "norm_label": "auth.test.ts"
     },
     {
@@ -2057,7 +2138,7 @@
       "source_file": "test/auth.test.ts",
       "source_location": "L32",
       "id": "test_auth_test_signupbody",
-      "community": 24,
+      "community": 26,
       "norm_label": "signupbody"
     },
     {
@@ -2066,7 +2147,7 @@
       "source_file": "test/auth.test.ts",
       "source_location": "L46",
       "id": "test_auth_test_mebody",
-      "community": 24,
+      "community": 26,
       "norm_label": "mebody"
     },
     {
@@ -2075,7 +2156,7 @@
       "source_file": "test/auth.test.ts",
       "source_location": "L57",
       "id": "test_auth_test_loginbody",
-      "community": 24,
+      "community": 26,
       "norm_label": "loginbody"
     },
     {
@@ -2084,7 +2165,7 @@
       "source_file": "test/auth.test.ts",
       "source_location": "L71",
       "id": "test_auth_test_refreshbody",
-      "community": 24,
+      "community": 26,
       "norm_label": "refreshbody"
     },
     {
@@ -2093,7 +2174,7 @@
       "source_file": "test/auth.test.ts",
       "source_location": "L81",
       "id": "test_auth_test_forgotbody",
-      "community": 24,
+      "community": 26,
       "norm_label": "forgotbody"
     },
     {
@@ -2102,7 +2183,7 @@
       "source_file": "test/conference.test.ts",
       "source_location": "L1",
       "id": "test_conference_test_ts",
-      "community": 15,
+      "community": 17,
       "norm_label": "conference.test.ts"
     },
     {
@@ -2111,7 +2192,7 @@
       "source_file": "test/conference.test.ts",
       "source_location": "L35",
       "id": "test_conference_test_sb",
-      "community": 15,
+      "community": 17,
       "norm_label": "sb"
     },
     {
@@ -2120,7 +2201,7 @@
       "source_file": "test/conference.test.ts",
       "source_location": "L41",
       "id": "test_conference_test_mb",
-      "community": 15,
+      "community": 17,
       "norm_label": "mb"
     },
     {
@@ -2129,7 +2210,7 @@
       "source_file": "test/conference.test.ts",
       "source_location": "L65",
       "id": "test_conference_test_hh",
-      "community": 15,
+      "community": 17,
       "norm_label": "hh"
     },
     {
@@ -2138,7 +2219,7 @@
       "source_file": "test/conference.test.ts",
       "source_location": "L79",
       "id": "test_conference_test_now",
-      "community": 15,
+      "community": 17,
       "norm_label": "now"
     },
     {
@@ -2147,7 +2228,7 @@
       "source_file": "test/conference.test.ts",
       "source_location": "L107",
       "id": "test_conference_test_pb",
-      "community": 15,
+      "community": 17,
       "norm_label": "pb"
     },
     {
@@ -2156,7 +2237,7 @@
       "source_file": "test/conference.test.ts",
       "source_location": "L113",
       "id": "test_conference_test_md",
-      "community": 15,
+      "community": 17,
       "norm_label": "md"
     },
     {
@@ -2165,8 +2246,98 @@
       "source_file": "test/conference.test.ts",
       "source_location": "L126",
       "id": "test_conference_test_b",
-      "community": 15,
+      "community": 17,
       "norm_label": "b"
+    },
+    {
+      "label": "contributions.test.ts",
+      "file_type": "code",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L1",
+      "id": "test_contributions_test_ts",
+      "community": 12,
+      "norm_label": "contributions.test.ts"
+    },
+    {
+      "label": "signupBody",
+      "file_type": "code",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L37",
+      "id": "test_contributions_test_signupbody",
+      "community": 12,
+      "norm_label": "signupbody"
+    },
+    {
+      "label": "me",
+      "file_type": "code",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L48",
+      "id": "test_contributions_test_me",
+      "community": 12,
+      "norm_label": "me"
+    },
+    {
+      "label": "c1Body",
+      "file_type": "code",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L64",
+      "id": "test_contributions_test_c1body",
+      "community": 12,
+      "norm_label": "c1body"
+    },
+    {
+      "label": "uuid()",
+      "file_type": "code",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L143",
+      "id": "test_contributions_test_uuid",
+      "community": 12,
+      "norm_label": "uuid()"
+    },
+    {
+      "label": "authHeaders()",
+      "file_type": "code",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L240",
+      "id": "test_contributions_test_authheaders",
+      "community": 12,
+      "norm_label": "authheaders()"
+    },
+    {
+      "label": "body",
+      "file_type": "code",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L250",
+      "id": "test_contributions_test_body",
+      "community": 12,
+      "norm_label": "body"
+    },
+    {
+      "label": "jane",
+      "file_type": "code",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L261",
+      "id": "test_contributions_test_jane",
+      "community": 12,
+      "norm_label": "jane"
+    },
+    {
+      "label": "john",
+      "file_type": "code",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L270",
+      "id": "test_contributions_test_john",
+      "community": 12,
+      "norm_label": "john"
+    },
+    {
+      "label": "listBody",
+      "file_type": "code",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L285",
+      "id": "test_contributions_test_listbody",
+      "community": 12,
+      "norm_label": "listbody"
     },
     {
       "label": "csv.test.ts",
@@ -2192,7 +2363,7 @@
       "source_file": "test/env.d.ts",
       "source_location": "L1",
       "id": "test_env_d_ts",
-      "community": 31,
+      "community": 35,
       "norm_label": "env.d.ts"
     },
     {
@@ -2201,7 +2372,7 @@
       "source_file": "test/env.d.ts",
       "source_location": "L2",
       "id": "test_env_d_providedenv",
-      "community": 31,
+      "community": 35,
       "norm_label": "providedenv"
     },
     {
@@ -2210,7 +2381,7 @@
       "source_file": "test/finance.test.ts",
       "source_location": "L1",
       "id": "test_finance_test_ts",
-      "community": 18,
+      "community": 19,
       "norm_label": "finance.test.ts"
     },
     {
@@ -2219,7 +2390,7 @@
       "source_file": "test/finance.test.ts",
       "source_location": "L40",
       "id": "test_finance_test_sb",
-      "community": 18,
+      "community": 19,
       "norm_label": "sb"
     },
     {
@@ -2228,7 +2399,7 @@
       "source_file": "test/finance.test.ts",
       "source_location": "L46",
       "id": "test_finance_test_mb",
-      "community": 18,
+      "community": 19,
       "norm_label": "mb"
     },
     {
@@ -2237,7 +2408,7 @@
       "source_file": "test/finance.test.ts",
       "source_location": "L95",
       "id": "test_finance_test_h",
-      "community": 18,
+      "community": 19,
       "norm_label": "h()"
     },
     {
@@ -2246,7 +2417,7 @@
       "source_file": "test/finance.test.ts",
       "source_location": "L98",
       "id": "test_finance_test_jh",
-      "community": 18,
+      "community": 19,
       "norm_label": "jh()"
     },
     {
@@ -2255,7 +2426,7 @@
       "source_file": "test/finance.test.ts",
       "source_location": "L107",
       "id": "test_finance_test_b",
-      "community": 18,
+      "community": 19,
       "norm_label": "b"
     },
     {
@@ -2264,7 +2435,7 @@
       "source_file": "test/finance.test.ts",
       "source_location": "L208",
       "id": "test_finance_test_lb",
-      "community": 18,
+      "community": 19,
       "norm_label": "lb"
     },
     {
@@ -2399,7 +2570,7 @@
       "source_file": "test/org.test.ts",
       "source_location": "L1",
       "id": "test_org_test_ts",
-      "community": 30,
+      "community": 34,
       "norm_label": "org.test.ts"
     },
     {
@@ -2408,7 +2579,7 @@
       "source_file": "test/org.test.ts",
       "source_location": "L31",
       "id": "test_org_test_body",
-      "community": 30,
+      "community": 34,
       "norm_label": "body"
     },
     {
@@ -2417,7 +2588,7 @@
       "source_file": "test/org.test.ts",
       "source_location": "L37",
       "id": "test_org_test_me",
-      "community": 30,
+      "community": 34,
       "norm_label": "me"
     },
     {
@@ -2426,7 +2597,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L1",
       "id": "test_reconciliation_test_ts",
-      "community": 12,
+      "community": 13,
       "norm_label": "reconciliation.test.ts"
     },
     {
@@ -2435,7 +2606,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L36",
       "id": "test_reconciliation_test_sb",
-      "community": 12,
+      "community": 13,
       "norm_label": "sb"
     },
     {
@@ -2444,7 +2615,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L42",
       "id": "test_reconciliation_test_mb",
-      "community": 12,
+      "community": 13,
       "norm_label": "mb"
     },
     {
@@ -2453,7 +2624,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L112",
       "id": "test_reconciliation_test_b",
-      "community": 12,
+      "community": 13,
       "norm_label": "b"
     },
     {
@@ -2462,7 +2633,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L116",
       "id": "test_reconciliation_test_churcha",
-      "community": 12,
+      "community": 13,
       "norm_label": "churcha"
     },
     {
@@ -2471,7 +2642,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L117",
       "id": "test_reconciliation_test_churchb",
-      "community": 12,
+      "community": 13,
       "norm_label": "churchb"
     },
     {
@@ -2480,7 +2651,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L124",
       "id": "test_reconciliation_test_hh",
-      "community": 12,
+      "community": 13,
       "norm_label": "hh"
     },
     {
@@ -2489,7 +2660,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L149",
       "id": "test_reconciliation_test_b2",
-      "community": 12,
+      "community": 13,
       "norm_label": "b2"
     },
     {
@@ -2498,7 +2669,7 @@
       "source_file": "test/reconciliation.test.ts",
       "source_location": "L210",
       "id": "test_reconciliation_test_eps",
-      "community": 12,
+      "community": 13,
       "norm_label": "eps"
     },
     {
@@ -2507,7 +2678,7 @@
       "source_file": "test/reports.test.ts",
       "source_location": "L1",
       "id": "test_reports_test_ts",
-      "community": 19,
+      "community": 20,
       "norm_label": "reports.test.ts"
     },
     {
@@ -2516,7 +2687,7 @@
       "source_file": "test/reports.test.ts",
       "source_location": "L43",
       "id": "test_reports_test_sb",
-      "community": 19,
+      "community": 20,
       "norm_label": "sb"
     },
     {
@@ -2525,7 +2696,7 @@
       "source_file": "test/reports.test.ts",
       "source_location": "L49",
       "id": "test_reports_test_mb",
-      "community": 19,
+      "community": 20,
       "norm_label": "mb"
     },
     {
@@ -2534,7 +2705,7 @@
       "source_file": "test/reports.test.ts",
       "source_location": "L64",
       "id": "test_reports_test_cb",
-      "community": 19,
+      "community": 20,
       "norm_label": "cb"
     },
     {
@@ -2543,7 +2714,7 @@
       "source_file": "test/reports.test.ts",
       "source_location": "L108",
       "id": "test_reports_test_ecb",
-      "community": 19,
+      "community": 20,
       "norm_label": "ecb"
     },
     {
@@ -2552,7 +2723,7 @@
       "source_file": "test/reports.test.ts",
       "source_location": "L110",
       "id": "test_reports_test_hh",
-      "community": 19,
+      "community": 20,
       "norm_label": "hh"
     },
     {
@@ -2561,7 +2732,7 @@
       "source_file": "test/reports.test.ts",
       "source_location": "L173",
       "id": "test_reports_test_b",
-      "community": 19,
+      "community": 20,
       "norm_label": "b"
     },
     {
@@ -2570,7 +2741,7 @@
       "source_file": "test/smoke.test.ts",
       "source_location": "L1",
       "id": "test_smoke_test_ts",
-      "community": 32,
+      "community": 36,
       "norm_label": "smoke.test.ts"
     },
     {
@@ -2579,7 +2750,7 @@
       "source_file": "test/smoke.test.ts",
       "source_location": "L6",
       "id": "test_smoke_test_request",
-      "community": 32,
+      "community": 36,
       "norm_label": "request"
     },
     {
@@ -2588,7 +2759,7 @@
       "source_file": "worker/env.d.ts",
       "source_location": "L1",
       "id": "worker_env_d_ts",
-      "community": 33,
+      "community": 37,
       "norm_label": "env.d.ts"
     },
     {
@@ -2597,7 +2768,7 @@
       "source_file": "worker/env.d.ts",
       "source_location": "L1",
       "id": "worker_env_d_env",
-      "community": 33,
+      "community": 37,
       "norm_label": "env"
     },
     {
@@ -2613,7 +2784,7 @@
       "label": "json()",
       "file_type": "code",
       "source_file": "worker/index.ts",
-      "source_location": "L93",
+      "source_location": "L97",
       "id": "worker_index_json",
       "community": 0,
       "norm_label": "json()"
@@ -2622,7 +2793,7 @@
       "label": "fetch()",
       "file_type": "code",
       "source_file": "worker/index.ts",
-      "source_location": "L104",
+      "source_location": "L108",
       "id": "worker_index_fetch",
       "community": 0,
       "norm_label": "fetch()"
@@ -2633,7 +2804,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L1",
       "id": "worker_durables_churchsyncdo_ts",
-      "community": 13,
+      "community": 14,
       "norm_label": "churchsyncdo.ts"
     },
     {
@@ -2642,7 +2813,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L3",
       "id": "durables_churchsyncdo_offlineoperation",
-      "community": 13,
+      "community": 14,
       "norm_label": "offlineoperation"
     },
     {
@@ -2651,7 +2822,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L9",
       "id": "durables_churchsyncdo_churchsyncdo",
-      "community": 13,
+      "community": 14,
       "norm_label": "churchsyncdo"
     },
     {
@@ -2660,7 +2831,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L12",
       "id": "durables_churchsyncdo_churchsyncdo_constructor",
-      "community": 13,
+      "community": 14,
       "norm_label": ".constructor()"
     },
     {
@@ -2669,7 +2840,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L37",
       "id": "durables_churchsyncdo_churchsyncdo_getactivesyncsessions",
-      "community": 13,
+      "community": 14,
       "norm_label": ".getactivesyncsessions()"
     },
     {
@@ -2678,7 +2849,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L47",
       "id": "durables_churchsyncdo_churchsyncdo_registersync",
-      "community": 13,
+      "community": 14,
       "norm_label": ".registersync()"
     },
     {
@@ -2687,7 +2858,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L57",
       "id": "durables_churchsyncdo_churchsyncdo_applyofflineoperation",
-      "community": 13,
+      "community": 14,
       "norm_label": ".applyofflineoperation()"
     },
     {
@@ -2696,7 +2867,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L83",
       "id": "durables_churchsyncdo_churchsyncdo_getunsyncedoperations",
-      "community": 13,
+      "community": 14,
       "norm_label": ".getunsyncedoperations()"
     },
     {
@@ -2705,7 +2876,7 @@
       "source_file": "worker/durables/ChurchSyncDO.ts",
       "source_location": "L97",
       "id": "durables_churchsyncdo_churchsyncdo_getsyncstate",
-      "community": 13,
+      "community": 14,
       "norm_label": ".getsyncstate()"
     },
     {
@@ -2714,7 +2885,7 @@
       "source_file": "worker/durables/ConferenceDO.ts",
       "source_location": "L1",
       "id": "worker_durables_conferencedo_ts",
-      "community": 25,
+      "community": 27,
       "norm_label": "conferencedo.ts"
     },
     {
@@ -2723,7 +2894,7 @@
       "source_file": "worker/durables/ConferenceDO.ts",
       "source_location": "L3",
       "id": "durables_conferencedo_conferencedo",
-      "community": 25,
+      "community": 27,
       "norm_label": "conferencedo"
     },
     {
@@ -2732,7 +2903,7 @@
       "source_file": "worker/durables/ConferenceDO.ts",
       "source_location": "L6",
       "id": "durables_conferencedo_conferencedo_constructor",
-      "community": 25,
+      "community": 27,
       "norm_label": ".constructor()"
     },
     {
@@ -2741,7 +2912,7 @@
       "source_file": "worker/durables/ConferenceDO.ts",
       "source_location": "L20",
       "id": "durables_conferencedo_conferencedo_getinfo",
-      "community": 25,
+      "community": 27,
       "norm_label": ".getinfo()"
     },
     {
@@ -2750,7 +2921,7 @@
       "source_file": "worker/durables/ConferenceDO.ts",
       "source_location": "L37",
       "id": "durables_conferencedo_conferencedo_recordaggregate",
-      "community": 25,
+      "community": 27,
       "norm_label": ".recordaggregate()"
     },
     {
@@ -2759,7 +2930,7 @@
       "source_file": "worker/durables/ConferenceDO.ts",
       "source_location": "L53",
       "id": "durables_conferencedo_conferencedo_getaggregate",
-      "community": 25,
+      "community": 27,
       "norm_label": ".getaggregate()"
     },
     {
@@ -3072,7 +3243,7 @@
       "label": "handleGetAttendance()",
       "file_type": "code",
       "source_file": "worker/routes/attendance.ts",
-      "source_location": "L107",
+      "source_location": "L98",
       "id": "routes_attendance_handlegetattendance",
       "community": 0,
       "norm_label": "handlegetattendance()"
@@ -3081,7 +3252,7 @@
       "label": "handleGetAttendanceStats()",
       "file_type": "code",
       "source_file": "worker/routes/attendance.ts",
-      "source_location": "L158",
+      "source_location": "L149",
       "id": "routes_attendance_handlegetattendancestats",
       "community": 0,
       "norm_label": "handlegetattendancestats()"
@@ -3229,6 +3400,42 @@
       "id": "routes_conference_handleglobaldashboard",
       "community": 0,
       "norm_label": "handleglobaldashboard()"
+    },
+    {
+      "label": "contributions.ts",
+      "file_type": "code",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L1",
+      "id": "worker_routes_contributions_ts",
+      "community": 0,
+      "norm_label": "contributions.ts"
+    },
+    {
+      "label": "json()",
+      "file_type": "code",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L4",
+      "id": "routes_contributions_json",
+      "community": 0,
+      "norm_label": "json()"
+    },
+    {
+      "label": "handleGetContributions()",
+      "file_type": "code",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L14",
+      "id": "routes_contributions_handlegetcontributions",
+      "community": 0,
+      "norm_label": "handlegetcontributions()"
+    },
+    {
+      "label": "handleGetContributionStatement()",
+      "file_type": "code",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L109",
+      "id": "routes_contributions_handlegetcontributionstatement",
+      "community": 0,
+      "norm_label": "handlegetcontributionstatement()"
     },
     {
       "label": "finance.ts",
@@ -3794,7 +4001,7 @@
       "source_file": "worker/routes/org.ts",
       "source_location": "L454",
       "id": "routes_org_handlebulkcreatechurches",
-      "community": 4,
+      "community": 0,
       "norm_label": "handlebulkcreatechurches()"
     },
     {
@@ -3938,7 +4145,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L1",
       "id": "agents_md",
-      "community": 26,
+      "community": 28,
       "norm_label": "agents.md"
     },
     {
@@ -3947,7 +4154,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L1",
       "id": "theobase_agents_agent_skills",
-      "community": 26,
+      "community": 28,
       "norm_label": "agent skills"
     },
     {
@@ -3956,7 +4163,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L3",
       "id": "theobase_agents_issue_tracker",
-      "community": 26,
+      "community": 28,
       "norm_label": "issue tracker"
     },
     {
@@ -3965,7 +4172,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L7",
       "id": "theobase_agents_triage_labels",
-      "community": 26,
+      "community": 28,
       "norm_label": "triage labels"
     },
     {
@@ -3974,7 +4181,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L11",
       "id": "theobase_agents_domain_docs",
-      "community": 26,
+      "community": 28,
       "norm_label": "domain docs"
     },
     {
@@ -3983,7 +4190,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L15",
       "id": "theobase_agents_graphify",
-      "community": 26,
+      "community": 28,
       "norm_label": "graphify"
     },
     {
@@ -3992,7 +4199,7 @@
       "source_file": "CONTEXT.md",
       "source_location": "L1",
       "id": "context_md",
-      "community": 27,
+      "community": 29,
       "norm_label": "context.md"
     },
     {
@@ -4001,7 +4208,7 @@
       "source_file": "CONTEXT.md",
       "source_location": "L1",
       "id": "theobase_context_theobase",
-      "community": 27,
+      "community": 29,
       "norm_label": "theobase"
     },
     {
@@ -4010,7 +4217,7 @@
       "source_file": "CONTEXT.md",
       "source_location": "L5",
       "id": "theobase_context_organization",
-      "community": 27,
+      "community": 29,
       "norm_label": "organization"
     },
     {
@@ -4019,7 +4226,7 @@
       "source_file": "CONTEXT.md",
       "source_location": "L35",
       "id": "theobase_context_finance",
-      "community": 27,
+      "community": 29,
       "norm_label": "finance"
     },
     {
@@ -4028,7 +4235,7 @@
       "source_file": "CONTEXT.md",
       "source_location": "L73",
       "id": "theobase_context_membership",
-      "community": 27,
+      "community": 29,
       "norm_label": "membership"
     },
     {
@@ -4037,7 +4244,7 @@
       "source_file": "CONTEXT.md",
       "source_location": "L91",
       "id": "theobase_context_reporting",
-      "community": 27,
+      "community": 29,
       "norm_label": "reporting"
     },
     {
@@ -4046,7 +4253,7 @@
       "source_file": "docs/adr/0001-append-only-immutable-finance.md",
       "source_location": "L1",
       "id": "docs_adr_0001_append_only_immutable_finance_md",
-      "community": 34,
+      "community": 38,
       "norm_label": "0001-append-only-immutable-finance.md"
     },
     {
@@ -4055,7 +4262,7 @@
       "source_file": "docs/adr/0001-append-only-immutable-finance.md",
       "source_location": "L1",
       "id": "adr_0001_append_only_immutable_finance_append_only_immutable_finance",
-      "community": 34,
+      "community": 38,
       "norm_label": "append-only immutable finance"
     },
     {
@@ -4064,7 +4271,7 @@
       "source_file": "docs/adr/0002-per-conference-d1-tenancy.md",
       "source_location": "L1",
       "id": "docs_adr_0002_per_conference_d1_tenancy_md",
-      "community": 35,
+      "community": 39,
       "norm_label": "0002-per-conference-d1-tenancy.md"
     },
     {
@@ -4073,7 +4280,7 @@
       "source_file": "docs/adr/0002-per-conference-d1-tenancy.md",
       "source_location": "L1",
       "id": "adr_0002_per_conference_d1_tenancy_per_conference_d1_tenancy",
-      "community": 35,
+      "community": 39,
       "norm_label": "per-conference d1 tenancy"
     },
     {
@@ -4082,7 +4289,7 @@
       "source_file": "docs/adr/0003-offline-first-pwa.md",
       "source_location": "L1",
       "id": "docs_adr_0003_offline_first_pwa_md",
-      "community": 36,
+      "community": 40,
       "norm_label": "0003-offline-first-pwa.md"
     },
     {
@@ -4091,7 +4298,7 @@
       "source_file": "docs/adr/0003-offline-first-pwa.md",
       "source_location": "L1",
       "id": "adr_0003_offline_first_pwa_offline_first_pwa_architecture",
-      "community": 36,
+      "community": 40,
       "norm_label": "offline-first pwa architecture"
     },
     {
@@ -4100,7 +4307,7 @@
       "source_file": "docs/adr/0004-modular-package-architecture.md",
       "source_location": "L1",
       "id": "docs_adr_0004_modular_package_architecture_md",
-      "community": 37,
+      "community": 41,
       "norm_label": "0004-modular-package-architecture.md"
     },
     {
@@ -4109,7 +4316,7 @@
       "source_file": "docs/adr/0004-modular-package-architecture.md",
       "source_location": "L1",
       "id": "adr_0004_modular_package_architecture_modular_architecture_with_package_based_registry",
-      "community": 37,
+      "community": 41,
       "norm_label": "modular architecture with package-based registry"
     },
     {
@@ -4118,7 +4325,7 @@
       "source_file": "docs/agents/domain.md",
       "source_location": "L1",
       "id": "docs_agents_domain_md",
-      "community": 16,
+      "community": 18,
       "norm_label": "domain.md"
     },
     {
@@ -4127,7 +4334,7 @@
       "source_file": "docs/agents/domain.md",
       "source_location": "L1",
       "id": "agents_domain_domain_docs",
-      "community": 16,
+      "community": 18,
       "norm_label": "domain docs"
     },
     {
@@ -4136,7 +4343,7 @@
       "source_file": "docs/agents/domain.md",
       "source_location": "L5",
       "id": "agents_domain_before_exploring_read_these",
-      "community": 16,
+      "community": 18,
       "norm_label": "before exploring, read these"
     },
     {
@@ -4145,7 +4352,7 @@
       "source_file": "docs/agents/domain.md",
       "source_location": "L13",
       "id": "agents_domain_file_structure",
-      "community": 16,
+      "community": 18,
       "norm_label": "file structure"
     },
     {
@@ -4154,7 +4361,7 @@
       "source_file": "docs/agents/domain.md",
       "source_location": "L17",
       "id": "agents_domain_codeblock_1",
-      "community": 16,
+      "community": 18,
       "norm_label": "code:block1 (/)"
     },
     {
@@ -4163,7 +4370,7 @@
       "source_file": "docs/agents/domain.md",
       "source_location": "L28",
       "id": "agents_domain_codeblock_2",
-      "community": 16,
+      "community": 18,
       "norm_label": "code:block2 (/)"
     },
     {
@@ -4172,7 +4379,7 @@
       "source_file": "docs/agents/domain.md",
       "source_location": "L41",
       "id": "agents_domain_use_the_glossary_s_vocabulary",
-      "community": 16,
+      "community": 18,
       "norm_label": "use the glossary's vocabulary"
     },
     {
@@ -4181,7 +4388,7 @@
       "source_file": "docs/agents/domain.md",
       "source_location": "L47",
       "id": "agents_domain_flag_adr_conflicts",
-      "community": 16,
+      "community": 18,
       "norm_label": "flag adr conflicts"
     },
     {
@@ -4190,7 +4397,7 @@
       "source_file": "docs/agents/issue-tracker.md",
       "source_location": "L1",
       "id": "docs_agents_issue_tracker_md",
-      "community": 20,
+      "community": 21,
       "norm_label": "issue-tracker.md"
     },
     {
@@ -4199,7 +4406,7 @@
       "source_file": "docs/agents/issue-tracker.md",
       "source_location": "L1",
       "id": "agents_issue_tracker_issue_tracker_github",
-      "community": 20,
+      "community": 21,
       "norm_label": "issue tracker: github"
     },
     {
@@ -4208,7 +4415,7 @@
       "source_file": "docs/agents/issue-tracker.md",
       "source_location": "L5",
       "id": "agents_issue_tracker_conventions",
-      "community": 20,
+      "community": 21,
       "norm_label": "conventions"
     },
     {
@@ -4217,7 +4424,7 @@
       "source_file": "docs/agents/issue-tracker.md",
       "source_location": "L16",
       "id": "agents_issue_tracker_pull_requests_as_a_triage_surface",
-      "community": 20,
+      "community": 21,
       "norm_label": "pull requests as a triage surface"
     },
     {
@@ -4226,7 +4433,7 @@
       "source_file": "docs/agents/issue-tracker.md",
       "source_location": "L20",
       "id": "agents_issue_tracker_when_a_skill_says_publish_to_the_issue_tracker",
-      "community": 20,
+      "community": 21,
       "norm_label": "when a skill says \"publish to the issue tracker\""
     },
     {
@@ -4235,7 +4442,7 @@
       "source_file": "docs/agents/issue-tracker.md",
       "source_location": "L24",
       "id": "agents_issue_tracker_when_a_skill_says_fetch_the_relevant_ticket",
-      "community": 20,
+      "community": 21,
       "norm_label": "when a skill says \"fetch the relevant ticket\""
     },
     {
@@ -4244,7 +4451,7 @@
       "source_file": "docs/agents/issue-tracker.md",
       "source_location": "L28",
       "id": "agents_issue_tracker_wayfinding_operations",
-      "community": 20,
+      "community": 21,
       "norm_label": "wayfinding operations"
     },
     {
@@ -4253,7 +4460,7 @@
       "source_file": "docs/agents/triage-labels.md",
       "source_location": "L1",
       "id": "docs_agents_triage_labels_md",
-      "community": 38,
+      "community": 42,
       "norm_label": "triage-labels.md"
     },
     {
@@ -4262,7 +4469,7 @@
       "source_file": "docs/agents/triage-labels.md",
       "source_location": "L1",
       "id": "agents_triage_labels_triage_labels",
-      "community": 38,
+      "community": 42,
       "norm_label": "triage labels"
     },
     {
@@ -4301,7 +4508,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 21,
+      "community": 22,
       "norm_label": "agent skills configuration",
       "id": "agentsmd_agent_skills"
     },
@@ -4314,7 +4521,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 21,
+      "community": 22,
       "norm_label": "github issues tracker",
       "id": "agentsmd_github_issues"
     },
@@ -4327,7 +4534,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 21,
+      "community": 22,
       "norm_label": "triage label system",
       "id": "agentsmd_triage_labels_system"
     },
@@ -4340,7 +4547,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 21,
+      "community": 22,
       "norm_label": "domain documentation layout",
       "id": "agentsmd_domain_docs_layout"
     },
@@ -4852,7 +5059,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 21,
+      "community": 22,
       "norm_label": "github issues agent workflows",
       "id": "issuetrackermd_github_issues_workflows"
     },
@@ -4865,7 +5072,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 21,
+      "community": 22,
       "norm_label": "wayfinding operations",
       "id": "issuetrackermd_wayfinding_operations"
     },
@@ -4878,7 +5085,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 21,
+      "community": 22,
       "norm_label": "triage label mapping",
       "id": "triagelabelsmd_triage_labels_mapping"
     },
@@ -4891,7 +5098,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 43,
+      "community": 47,
       "norm_label": "eslint configuration",
       "id": "eslint_config"
     },
@@ -4969,7 +5176,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 44,
+      "community": 48,
       "norm_label": "vite client type declarations",
       "id": "vite_env_types"
     },
@@ -5074,7 +5281,7 @@
       "author": null,
       "contributor": null,
       "rationale": "1640x720 PNG image in branding directory for Theobase, the Seventh-day Adventist church administration platform. Dimensions match standard Open Graph / social share cover image (2:1 aspect ratio). Companion files in the same directory: logo-light.svg (orange #F97316 + gray #6B7280 wordmark), icon.svg (flame/torch icon in orange), favicon.ico, profile-picture.png, and theobase.af (Affinity Designer source). Actual visual content of cover.png is AMBIGUOUS \u00e2\u20ac\u201d model cannot view images.",
-      "community": 22,
+      "community": 24,
       "norm_label": "theobase brand cover image (1640x720 opengraph/social share)",
       "id": "coverpng_brand_cover_image"
     },
@@ -5088,7 +5295,7 @@
       "author": null,
       "contributor": null,
       "rationale": "Brand colors extracted from companion SVG files in the same branding directory. Logo-light.svg uses fill:rgb(249,115,22) for the icon and fill:rgb(107,114,128) for the wordmark text. The icon.svg uses fill:rgb(249,115,22) exclusively.",
-      "community": 22,
+      "community": 24,
       "norm_label": "theobase brand color palette: orange #f97316 + gray #6b7280",
       "id": "branding_brand_palette"
     },
@@ -5102,7 +5309,7 @@
       "author": null,
       "contributor": null,
       "rationale": "Theobase is a platform for Seventh-day Adventist church administration from Conference down to Member level, with modular architecture (Finance, Membership, Organization Structure, Auth/Roles, Audit/Reports). Built with React, TanStack Router, Vite, D1 (SQLite), and Cloudflare Workers.",
-      "community": 22,
+      "community": 24,
       "norm_label": "theobase sda church administration platform",
       "id": "theobase_platform"
     },
@@ -5116,7 +5323,7 @@
       "author": null,
       "contributor": null,
       "rationale": "The file theobase.af in the branding directory is an Affinity Designer source file that likely contains the source art for the cover image and other branding assets.",
-      "community": 22,
+      "community": 24,
       "norm_label": "affinity designer source file",
       "id": "branding_affinity_source"
     },
@@ -5129,7 +5336,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 29,
+      "community": 32,
       "norm_label": "theobase icon (shield mark)",
       "id": "theobase_icon"
     },
@@ -5142,7 +5349,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 29,
+      "community": 32,
       "norm_label": "theobase logo light (icon + wordmark)",
       "id": "theobase_logo_light"
     },
@@ -5155,7 +5362,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 29,
+      "community": 32,
       "norm_label": "theobase project",
       "id": "theobase_project"
     },
@@ -5168,7 +5375,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 29,
+      "community": 32,
       "norm_label": "serif affinity designer",
       "id": "serif_affinity_designer"
     },
@@ -5273,7 +5480,7 @@
       "author": null,
       "contributor": null,
       "rationale": "PNG image in branding directory alongside logo-light.svg, icon.svg, favicon.ico, cover.png, and theobase.af (Affinity Designer source). Companion icon.svg depicts a flame/torch icon in orange (#F97316) \u00e2\u20ac\u201d the profile picture likely derives from the same icon asset. Serves as the application avatar/profile image for Theobase, a Seventh-day Adventist church administration platform spanning Conference \u00e2\u2020\u2019 District \u00e2\u2020\u2019 Church \u00e2\u2020\u2019 Member levels.",
-      "community": 22,
+      "community": 24,
       "norm_label": "theobase profile picture (flame/torch icon in orange #f97316)",
       "id": "profile_picture_brand_asset"
     },
@@ -5287,7 +5494,7 @@
       "author": null,
       "contributor": null,
       "rationale": "Brand colors extracted from companion SVG files. Logo-light.svg uses fill:rgb(249,115,22) for the flame/torch icon and fill:rgb(107,114,128) for the wordmark. The profile picture likely uses the same orange (#F97316) flame/torch icon.",
-      "community": 22,
+      "community": 24,
       "norm_label": "theobase brand palette: orange #f97316 + gray #6b7280",
       "id": "brand_palette_orange_gray"
     },
@@ -5301,7 +5508,7 @@
       "author": null,
       "contributor": null,
       "rationale": "The companion icon.svg file depicts a flame/torch icon rendered in orange (#F97316). This icon serves as the primary brand mark across favicon.ico, logos, and the profile picture. The name 'Theobase' (theo = God) pairs with the flame as a symbol of the Holy Spirit / divine presence \u00e2\u20ac\u201d thematically aligned with Seventh-day Adventist theology.",
-      "community": 22,
+      "community": 24,
       "norm_label": "flame/torch icon a\u20ac\u201d primary brand mark of theobase",
       "id": "flame_torch_icon"
     }
@@ -5585,8 +5792,19 @@
       "source_file": "src/routes.tsx",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_tsx",
-      "target": "src_routes_attendancepage_tsx",
+      "target": "src_routes_attendancepage_tsx"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "src_routes_tsx",
+      "target": "src_routes_contributionspage_tsx",
       "confidence_score": 1.0
     },
     {
@@ -5775,8 +5993,18 @@
       "source_file": "src/routes.tsx",
       "source_location": "L142",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_tsx",
-      "target": "src_routes_attendanceroute",
+      "target": "src_routes_attendanceroute"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes.tsx",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "src_routes_tsx",
+      "target": "src_routes_contributionsroute",
       "confidence_score": 1.0
     },
     {
@@ -6216,8 +6444,38 @@
       "source_location": "L742",
       "weight": 1.0,
       "source": "src_lib_api_ts",
-      "target": "lib_api_attendancerecord",
+      "target": "lib_api_contributionsummary",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L750",
+      "weight": 1.0,
+      "source": "src_lib_api_ts",
+      "target": "lib_api_contributionstatement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L770",
+      "weight": 1.0,
+      "source": "src_lib_api_ts",
+      "target": "lib_api_contributionapi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L742",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_lib_api_ts",
+      "target": "lib_api_attendancerecord"
     },
     {
       "relation": "contains",
@@ -6225,9 +6483,9 @@
       "source_file": "src/lib/api.ts",
       "source_location": "L753",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_api_ts",
-      "target": "lib_api_attendancestats",
-      "confidence_score": 1.0
+      "target": "lib_api_attendancestats"
     },
     {
       "relation": "contains",
@@ -6235,9 +6493,9 @@
       "source_file": "src/lib/api.ts",
       "source_location": "L761",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_api_ts",
-      "target": "lib_api_attendancetrendpoint",
-      "confidence_score": 1.0
+      "target": "lib_api_attendancetrendpoint"
     },
     {
       "relation": "contains",
@@ -6245,9 +6503,9 @@
       "source_file": "src/lib/api.ts",
       "source_location": "L767",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_api_ts",
-      "target": "lib_api_attendanceapi",
-      "confidence_score": 1.0
+      "target": "lib_api_attendanceapi"
     },
     {
       "relation": "imports_from",
@@ -6298,9 +6556,9 @@
       "source_file": "src/routes/AttendancePage.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_attendancepage_tsx",
-      "target": "src_lib_api_ts",
-      "confidence_score": 1.0
+      "target": "src_lib_api_ts"
     },
     {
       "relation": "imports_from",
@@ -6323,6 +6581,17 @@
       "confidence_score": 1.0,
       "source": "src_routes_conferencedashboard_tsx",
       "target": "src_lib_api_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_contributionspage_tsx",
+      "target": "src_lib_api_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -7085,11 +7354,33 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/routes/AttendancePage.tsx",
+      "source_file": "src/routes/ContributionsPage.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "source": "src_routes_attendancepage_tsx",
-      "target": "lib_api_attendancerecord",
+      "source": "src_routes_contributionspage_tsx",
+      "target": "lib_api_contributionsummary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_contributionspage_tsx",
+      "target": "lib_api_contributionstatement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_routes_contributionspage_tsx",
+      "target": "lib_api_contributionapi",
       "confidence_score": 1.0
     },
     {
@@ -7099,9 +7390,9 @@
       "source_file": "src/routes/AttendancePage.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_attendancepage_tsx",
-      "target": "lib_api_attendancestats",
-      "confidence_score": 1.0
+      "target": "lib_api_attendancerecord"
     },
     {
       "relation": "imports",
@@ -7110,9 +7401,9 @@
       "source_file": "src/routes/AttendancePage.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_attendancepage_tsx",
-      "target": "lib_api_attendancetrendpoint",
-      "confidence_score": 1.0
+      "target": "lib_api_attendancestats"
     },
     {
       "relation": "imports",
@@ -7121,9 +7412,20 @@
       "source_file": "src/routes/AttendancePage.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_attendancepage_tsx",
-      "target": "lib_api_attendanceapi",
-      "confidence_score": 1.0
+      "target": "lib_api_attendancetrendpoint"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/AttendancePage.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_routes_attendancepage_tsx",
+      "target": "lib_api_attendanceapi"
     },
     {
       "relation": "contains",
@@ -7182,9 +7484,9 @@
       "source_file": "src/routes/AttendancePage.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_attendancepage_tsx",
-      "target": "src_lib_auth_tsx",
-      "confidence_score": 1.0
+      "target": "src_lib_auth_tsx"
     },
     {
       "relation": "imports_from",
@@ -7196,6 +7498,17 @@
       "confidence_score": 1.0,
       "source": "src_routes_conferencedashboard_tsx",
       "target": "src_lib_auth_tsx"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_routes_contributionspage_tsx",
+      "target": "src_lib_auth_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -7336,9 +7649,9 @@
       "source_file": "src/routes/AttendancePage.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_attendancepage_tsx",
-      "target": "lib_auth_useauth",
-      "confidence_score": 1.0
+      "target": "lib_auth_useauth"
     },
     {
       "relation": "imports",
@@ -7350,6 +7663,17 @@
       "confidence_score": 1.0,
       "source": "src_routes_conferencedashboard_tsx",
       "target": "lib_auth_useauth"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_routes_contributionspage_tsx",
+      "target": "lib_auth_useauth",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7503,6 +7827,17 @@
       "source_location": "L28",
       "weight": 1.0,
       "source": "routes_conferencedashboard_conferencedashboard",
+      "target": "lib_auth_useauth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "routes_contributionspage_contributionspage",
       "target": "lib_auth_useauth"
     },
     {
@@ -8629,9 +8964,9 @@
       "source_file": "src/routes/AttendancePage.tsx",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_attendancepage_tsx",
-      "target": "routes_attendancepage_categories",
-      "confidence_score": 1.0
+      "target": "routes_attendancepage_categories"
     },
     {
       "relation": "contains",
@@ -8639,9 +8974,9 @@
       "source_file": "src/routes/AttendancePage.tsx",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_attendancepage_tsx",
-      "target": "routes_attendancepage_trendline",
-      "confidence_score": 1.0
+      "target": "routes_attendancepage_trendline"
     },
     {
       "relation": "contains",
@@ -8649,9 +8984,9 @@
       "source_file": "src/routes/AttendancePage.tsx",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routes_attendancepage_tsx",
-      "target": "routes_attendancepage_attendancepage",
-      "confidence_score": 1.0
+      "target": "routes_attendancepage_attendancepage"
     },
     {
       "relation": "contains",
@@ -8773,6 +9108,57 @@
       "confidence_score": 1.0,
       "source": "src_routes_dashboardlayout_tsx",
       "target": "src_routes_conflictresolver_tsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_routes_contributionspage_tsx",
+      "target": "routes_contributionspage_fund_labels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_routes_contributionspage_tsx",
+      "target": "routes_contributionspage_fund_order",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "src_routes_contributionspage_tsx",
+      "target": "routes_contributionspage_formatcurrency",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "src_routes_contributionspage_tsx",
+      "target": "routes_contributionspage_contributionspage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/ContributionsPage.tsx",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "routes_contributionspage_contributionspage",
+      "target": "routes_contributionspage_formatcurrency",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -9192,9 +9578,9 @@
       "source_file": "test/attendance.test.ts",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_attendance_test_ts",
-      "target": "test_attendance_test_signupbody",
-      "confidence_score": 1.0
+      "target": "test_attendance_test_signupbody"
     },
     {
       "relation": "contains",
@@ -9202,9 +9588,9 @@
       "source_file": "test/attendance.test.ts",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_attendance_test_ts",
-      "target": "test_attendance_test_me",
-      "confidence_score": 1.0
+      "target": "test_attendance_test_me"
     },
     {
       "relation": "contains",
@@ -9212,9 +9598,9 @@
       "source_file": "test/attendance.test.ts",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_attendance_test_ts",
-      "target": "test_attendance_test_c1body",
-      "confidence_score": 1.0
+      "target": "test_attendance_test_c1body"
     },
     {
       "relation": "contains",
@@ -9222,9 +9608,9 @@
       "source_file": "test/attendance.test.ts",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_attendance_test_ts",
-      "target": "test_attendance_test_authheaders",
-      "confidence_score": 1.0
+      "target": "test_attendance_test_authheaders"
     },
     {
       "relation": "contains",
@@ -9232,9 +9618,9 @@
       "source_file": "test/attendance.test.ts",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_attendance_test_ts",
-      "target": "test_attendance_test_jsonauthheaders",
-      "confidence_score": 1.0
+      "target": "test_attendance_test_jsonauthheaders"
     },
     {
       "relation": "contains",
@@ -9242,9 +9628,9 @@
       "source_file": "test/attendance.test.ts",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_attendance_test_ts",
-      "target": "test_attendance_test_b1",
-      "confidence_score": 1.0
+      "target": "test_attendance_test_b1"
     },
     {
       "relation": "contains",
@@ -9252,9 +9638,9 @@
       "source_file": "test/attendance.test.ts",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_attendance_test_ts",
-      "target": "test_attendance_test_b2",
-      "confidence_score": 1.0
+      "target": "test_attendance_test_b2"
     },
     {
       "relation": "contains",
@@ -9262,9 +9648,9 @@
       "source_file": "test/attendance.test.ts",
       "source_location": "L123",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_attendance_test_ts",
-      "target": "test_attendance_test_listbody",
-      "confidence_score": 1.0
+      "target": "test_attendance_test_listbody"
     },
     {
       "relation": "contains",
@@ -9272,9 +9658,9 @@
       "source_file": "test/attendance.test.ts",
       "source_location": "L131",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_attendance_test_ts",
-      "target": "test_attendance_test_rangebody",
-      "confidence_score": 1.0
+      "target": "test_attendance_test_rangebody"
     },
     {
       "relation": "contains",
@@ -9282,9 +9668,9 @@
       "source_file": "test/attendance.test.ts",
       "source_location": "L139",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_attendance_test_ts",
-      "target": "test_attendance_test_catbody",
-      "confidence_score": 1.0
+      "target": "test_attendance_test_catbody"
     },
     {
       "relation": "contains",
@@ -9292,9 +9678,9 @@
       "source_file": "test/attendance.test.ts",
       "source_location": "L148",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_attendance_test_ts",
-      "target": "test_attendance_test_statsbody",
-      "confidence_score": 1.0
+      "target": "test_attendance_test_statsbody"
     },
     {
       "relation": "contains",
@@ -9302,9 +9688,9 @@
       "source_file": "test/attendance.test.ts",
       "source_location": "L153",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_attendance_test_ts",
-      "target": "test_attendance_test_ss",
-      "confidence_score": 1.0
+      "target": "test_attendance_test_ss"
     },
     {
       "relation": "contains",
@@ -9425,6 +9811,96 @@
       "confidence_score": 1.0,
       "source": "test_conference_test_ts",
       "target": "test_conference_test_b"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "test_contributions_test_ts",
+      "target": "test_contributions_test_signupbody",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "test_contributions_test_ts",
+      "target": "test_contributions_test_me",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "test_contributions_test_ts",
+      "target": "test_contributions_test_c1body",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L143",
+      "weight": 1.0,
+      "source": "test_contributions_test_ts",
+      "target": "test_contributions_test_uuid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L240",
+      "weight": 1.0,
+      "source": "test_contributions_test_ts",
+      "target": "test_contributions_test_authheaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L319",
+      "weight": 1.0,
+      "source": "test_contributions_test_ts",
+      "target": "test_contributions_test_body",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L261",
+      "weight": 1.0,
+      "source": "test_contributions_test_ts",
+      "target": "test_contributions_test_jane",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L270",
+      "weight": 1.0,
+      "source": "test_contributions_test_ts",
+      "target": "test_contributions_test_john",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/contributions.test.ts",
+      "source_location": "L285",
+      "weight": 1.0,
+      "source": "test_contributions_test_ts",
+      "target": "test_contributions_test_listbody",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10789,9 +11265,9 @@
       "source_file": "worker/index.ts",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_index_ts",
-      "target": "worker_routes_attendance_ts",
-      "confidence_score": 1.0
+      "target": "worker_routes_attendance_ts"
     },
     {
       "relation": "imports",
@@ -10800,9 +11276,9 @@
       "source_file": "worker/index.ts",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_index_ts",
-      "target": "routes_attendance_handlerecordattendance",
-      "confidence_score": 1.0
+      "target": "routes_attendance_handlerecordattendance"
     },
     {
       "relation": "imports",
@@ -10811,9 +11287,9 @@
       "source_file": "worker/index.ts",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_index_ts",
-      "target": "routes_attendance_handlegetattendance",
-      "confidence_score": 1.0
+      "target": "routes_attendance_handlegetattendance"
     },
     {
       "relation": "imports",
@@ -10822,8 +11298,41 @@
       "source_file": "worker/index.ts",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_index_ts",
-      "target": "routes_attendance_handlegetattendancestats",
+      "target": "routes_attendance_handlegetattendancestats"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/index.ts",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "worker_index_ts",
+      "target": "worker_routes_contributions_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/index.ts",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "worker_index_ts",
+      "target": "routes_contributions_handlegetcontributions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/index.ts",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "worker_index_ts",
+      "target": "routes_contributions_handlegetcontributionstatement",
       "confidence_score": 1.0
     },
     {
@@ -11628,6 +12137,28 @@
       "target": "routes_conference_handleglobaldashboard"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/index.ts",
+      "source_location": "L411",
+      "weight": 1.0,
+      "source": "worker_index_fetch",
+      "target": "routes_contributions_handlegetcontributions"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/index.ts",
+      "source_location": "L415",
+      "weight": 1.0,
+      "source": "worker_index_fetch",
+      "target": "routes_contributions_handlegetcontributionstatement"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "worker/durables/ChurchSyncDO.ts",
@@ -11794,9 +12325,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "worker_lib_audit_ts",
-      "confidence_score": 1.0
+      "target": "worker_lib_audit_ts"
     },
     {
       "relation": "imports_from",
@@ -11860,9 +12391,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "lib_audit_logaudit",
-      "confidence_score": 1.0
+      "target": "lib_audit_logaudit"
     },
     {
       "relation": "imports",
@@ -12278,9 +12809,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "lib_audit_getdeviceinfo",
-      "confidence_score": 1.0
+      "target": "lib_audit_getdeviceinfo"
     },
     {
       "relation": "imports",
@@ -13307,9 +13838,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "worker_lib_middleware_ts",
-      "confidence_score": 1.0
+      "target": "worker_lib_middleware_ts"
     },
     {
       "relation": "imports_from",
@@ -13332,6 +13863,17 @@
       "confidence_score": 1.0,
       "source": "worker_routes_conference_ts",
       "target": "worker_lib_middleware_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "worker_routes_contributions_ts",
+      "target": "worker_lib_middleware_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -13439,9 +13981,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "lib_middleware_authenticate",
-      "confidence_score": 1.0
+      "target": "lib_middleware_authenticate"
     },
     {
       "relation": "imports",
@@ -13464,6 +14006,17 @@
       "confidence_score": 1.0,
       "source": "worker_routes_conference_ts",
       "target": "lib_middleware_authenticate"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "worker_routes_contributions_ts",
+      "target": "lib_middleware_authenticate",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -13628,6 +14181,28 @@
       "source_location": "L235",
       "weight": 1.0,
       "source": "routes_conference_handleglobaldashboard",
+      "target": "lib_middleware_authenticate"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "routes_contributions_handlegetcontributions",
+      "target": "lib_middleware_authenticate"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "routes_contributions_handlegetcontributionstatement",
       "target": "lib_middleware_authenticate"
     },
     {
@@ -14253,9 +14828,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "lib_middleware_authorize",
-      "confidence_score": 1.0
+      "target": "lib_middleware_authorize"
     },
     {
       "relation": "imports",
@@ -14278,6 +14853,17 @@
       "confidence_score": 1.0,
       "source": "worker_routes_conference_ts",
       "target": "lib_middleware_authorize"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "worker_routes_contributions_ts",
+      "target": "lib_middleware_authorize",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -14431,6 +15017,28 @@
       "source_location": "L238",
       "weight": 1.0,
       "source": "routes_conference_handleglobaldashboard",
+      "target": "lib_middleware_authorize"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "routes_contributions_handlegetcontributions",
+      "target": "lib_middleware_authorize"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L117",
+      "weight": 1.0,
+      "source": "routes_contributions_handlegetcontributionstatement",
       "target": "lib_middleware_authorize"
     },
     {
@@ -15105,9 +15713,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "worker_lib_roles_ts",
-      "confidence_score": 1.0
+      "target": "worker_lib_roles_ts"
     },
     {
       "relation": "imports_from",
@@ -15141,6 +15749,17 @@
       "confidence_score": 1.0,
       "source": "worker_routes_conference_ts",
       "target": "worker_lib_roles_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "worker_routes_contributions_ts",
+      "target": "worker_lib_roles_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -15237,9 +15856,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "lib_roles_permissions",
-      "confidence_score": 1.0
+      "target": "lib_roles_permissions"
     },
     {
       "relation": "imports",
@@ -15262,6 +15881,17 @@
       "confidence_score": 1.0,
       "source": "worker_routes_conference_ts",
       "target": "lib_roles_permissions"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "worker_routes_contributions_ts",
+      "target": "lib_roles_permissions",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15335,9 +15965,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "routes_attendance_json",
-      "confidence_score": 1.0
+      "target": "routes_attendance_json"
     },
     {
       "relation": "contains",
@@ -15345,9 +15975,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "routes_attendance_categories",
-      "confidence_score": 1.0
+      "target": "routes_attendance_categories"
     },
     {
       "relation": "contains",
@@ -15355,9 +15985,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "routes_attendance_handlerecordattendance",
-      "confidence_score": 1.0
+      "target": "routes_attendance_handlerecordattendance"
     },
     {
       "relation": "contains",
@@ -15365,9 +15995,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "routes_attendance_handlegetattendance",
-      "confidence_score": 1.0
+      "target": "routes_attendance_handlegetattendance"
     },
     {
       "relation": "contains",
@@ -15375,9 +16005,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L158",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "worker_routes_attendance_ts",
-      "target": "routes_attendance_handlegetattendancestats",
-      "confidence_score": 1.0
+      "target": "routes_attendance_handlegetattendancestats"
     },
     {
       "relation": "calls",
@@ -15386,9 +16016,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_attendance_handlerecordattendance",
-      "target": "routes_attendance_json",
-      "confidence_score": 1.0
+      "target": "routes_attendance_json"
     },
     {
       "relation": "calls",
@@ -15397,9 +16027,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L155",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_attendance_handlegetattendance",
-      "target": "routes_attendance_json",
-      "confidence_score": 1.0
+      "target": "routes_attendance_json"
     },
     {
       "relation": "calls",
@@ -15408,9 +16038,9 @@
       "source_file": "worker/routes/attendance.ts",
       "source_location": "L172",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_attendance_handlegetattendancestats",
-      "target": "routes_attendance_json",
-      "confidence_score": 1.0
+      "target": "routes_attendance_json"
     },
     {
       "relation": "contains",
@@ -15651,6 +16281,58 @@
       "confidence_score": 1.0,
       "source": "routes_conference_handleglobaldashboard",
       "target": "routes_conference_json"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "worker_routes_contributions_ts",
+      "target": "routes_contributions_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "worker_routes_contributions_ts",
+      "target": "routes_contributions_handlegetcontributions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "worker_routes_contributions_ts",
+      "target": "routes_contributions_handlegetcontributionstatement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "routes_contributions_handlegetcontributions",
+      "target": "routes_contributions_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/routes/contributions.ts",
+      "source_location": "L125",
+      "weight": 1.0,
+      "source": "routes_contributions_handlegetcontributionstatement",
+      "target": "routes_contributions_json",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18344,5 +19026,5 @@
       "source_file": ""
     }
   ],
-  "built_at_commit": "454ee5c32d25673a052ac22d95fb6ab80de3ed59"
+  "built_at_commit": "3a11c3e18abf4d751648af84006303938009382b"
 }

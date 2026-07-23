@@ -76,6 +76,14 @@ export const MODULE_GROUPS: ModuleGroup[] = [
         roles: ["sysadmin", "auditor", "president"],
         icon: "shield",
       },
+      {
+        id: "contributions",
+        label: "Contributions",
+        path: "/app/contributions",
+        permission: "finance:read",
+        roles: ["sysadmin", "president", "secretary", "treasurer", "auditor"],
+        icon: "currency",
+      },
     ],
   },
   {

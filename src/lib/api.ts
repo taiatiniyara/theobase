@@ -739,6 +739,52 @@ export const reconciliationApi = {
     }>(`/church/balance`, data),
 };
 
+export interface ContributionSummary {
+  donorId: number;
+  donorName: string;
+  totals: Record<string, number>;
+  grandTotal: number;
+  transactionCount: number;
+}
+
+export interface ContributionStatement {
+  donorId: number;
+  donorName: string;
+  year: number;
+  churchId: number;
+  churchName: string;
+  transactions: {
+    id: number;
+    date: string;
+    fund: string;
+    fundName: string;
+    amount: number;
+    type: string;
+    description: string | null;
+    envelopeNumber: number | null;
+  }[];
+  totals: Record<string, number>;
+  grandTotal: number;
+}
+
+export const contributionApi = {
+  getContributions: (churchId: number, year: number, donorId?: number) => {
+    const qs = new URLSearchParams();
+    qs.set("church_id", String(churchId));
+    qs.set("year", String(year));
+    if (donorId) qs.set("donor_id", String(donorId));
+    return api.get<{ year: number; churchId: number; contributions: ContributionSummary[] }>(
+      `/contributions?${qs.toString()}`
+    );
+  },
+  getStatement: (donorId: number, churchId: number, year: number) => {
+    const qs = new URLSearchParams();
+    qs.set("church_id", String(churchId));
+    qs.set("year", String(year));
+    return api.get<ContributionStatement>(`/contributions/${donorId}?${qs.toString()}`);
+  },
+};
+
 export interface AttendanceRecord {
   id: number;
   church_id: number;

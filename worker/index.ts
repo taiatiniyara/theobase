@@ -87,6 +87,7 @@ import {
   handleGetAttendance,
   handleGetAttendanceStats,
 } from "./routes/attendance";
+import { handleGetContributions, handleGetContributionStatement } from "./routes/contributions";
 
 export { ChurchSyncDO, ConferenceDO };
 
@@ -400,6 +401,15 @@ export default {
     }
     if (path === "/api/conference/global-dashboard" && request.method === "GET") {
       return handleGlobalDashboard(request, env);
+    }
+
+    // Contribution routes
+    if (path === "/api/contributions" && request.method === "GET") {
+      return handleGetContributions(request, env);
+    }
+    const contributionMatch = path.match(/^\/api\/contributions\/(\d+)$/);
+    if (contributionMatch && request.method === "GET") {
+      return handleGetContributionStatement(request, env, Number(contributionMatch[1]));
     }
 
     // DO routes (existing)
