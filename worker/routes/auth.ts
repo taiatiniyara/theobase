@@ -12,16 +12,7 @@ import { createDb } from "../lib/db";
 import { UserRepo } from "../repos/users";
 import { ConferenceRepo } from "../repos/org";
 import { MemberRepo } from "../repos/members";
-
-function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
-}
+import { json } from "../lib/response";
 
 export async function handleAuthSignup(request: Request, env: Env): Promise<Response> {
   let body: { email: string; password: string; fullName: string; conferenceName?: string };

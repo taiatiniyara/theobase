@@ -1,6 +1,9 @@
+import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { ChurchSyncDO } from "./durables/ChurchSyncDO";
 import { ConferenceDO } from "./durables/ConferenceDO";
 import { checkRateLimitAsync } from "./lib/rate-limit";
+import { json } from "./lib/response";
 import {
   handleAuthSignup,
   handleAuthLogin,
@@ -101,436 +104,269 @@ import { handleGetContributions, handleGetContributionStatement } from "./routes
 
 export { ChurchSyncDO, ConferenceDO };
 
-function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
+type HonoEnv = {
+  Bindings: Env;
+};
+
+const app = new Hono<HonoEnv>();
+
+app.use("*", cors());
+
+function rateLimit(key: string) {
+  return async (c: { req: { raw: Request }; env: Env }, next: () => Promise<void>) => {
+    const limit = await checkRateLimitAsync(c.req.raw, c.env, key);
+    if (limit) return limit;
+    await next();
+  };
 }
 
-export default {
-  async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
-    const url = new URL(request.url);
-    const path = url.pathname;
+app.get("/api/health", async (c) => {
+  try {
+    if (c.env.DB) {
+      await c.env.DB.prepare("SELECT 1").run();
+      return json({ status: "ok", database: "connected" });
+    }
+    return json({ status: "ok", database: "unavailable" });
+  } catch {
+    return json({ status: "error", database: "error" }, 503);
+  }
+});
 
-    if (request.method === "OPTIONS") {
-      return new Response(null, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        },
-      });
-    }
+app.post("/api/auth/signup", rateLimit("auth:signup"), (c) => handleAuthSignup(c.req.raw, c.env));
+app.post("/api/auth/login", rateLimit("auth:login"), (c) => handleAuthLogin(c.req.raw, c.env));
+app.post("/api/auth/refresh", (c) => handleAuthRefresh(c.req.raw, c.env));
+app.post("/api/auth/forgot-password", rateLimit("auth:forgot-password"), (c) =>
+  handleForgotPassword(c.req.raw, c.env)
+);
+app.post("/api/auth/reset-password", rateLimit("auth:reset-password"), (c) =>
+  handleResetPassword(c.req.raw, c.env)
+);
+app.get("/api/auth/me", (c) => handleGetMe(c.req.raw, c.env));
 
-    if (path === "/api/health") {
-      try {
-        if (env.DB) {
-          await env.DB.prepare("SELECT 1").run();
-          return json({ status: "ok", database: "connected" });
-        }
-        return json({ status: "ok", database: "unavailable" });
-      } catch {
-        return json({ status: "error", database: "error" }, 503);
-      }
-    }
+app.get("/api/conferences", (c) => handleGetConferences(c.req.raw, c.env));
+app.post("/api/conferences", (c) => handleCreateConference(c.req.raw, c.env));
+app.patch("/api/conferences/:id", (c) =>
+  handleUpdateConference(c.req.raw, c.env, Number(c.req.param("id")))
+);
 
-    // Auth routes (with rate limiting)
-    if (path === "/api/auth/signup" && request.method === "POST") {
-      const limit = await checkRateLimitAsync(request, env, "auth:signup");
-      if (limit) return limit;
-      return handleAuthSignup(request, env);
-    }
-    if (path === "/api/auth/login" && request.method === "POST") {
-      const limit = await checkRateLimitAsync(request, env, "auth:login");
-      if (limit) return limit;
-      return handleAuthLogin(request, env);
-    }
-    if (path === "/api/auth/refresh" && request.method === "POST") {
-      return handleAuthRefresh(request, env);
-    }
-    if (path === "/api/auth/forgot-password" && request.method === "POST") {
-      const limit = await checkRateLimitAsync(request, env, "auth:forgot-password");
-      if (limit) return limit;
-      return handleForgotPassword(request, env);
-    }
-    if (path === "/api/auth/reset-password" && request.method === "POST") {
-      const limit = await checkRateLimitAsync(request, env, "auth:reset-password");
-      if (limit) return limit;
-      return handleResetPassword(request, env);
-    }
-    if (path === "/api/auth/me" && request.method === "GET") {
-      return handleGetMe(request, env);
-    }
+app.get("/api/conferences/:confId/districts", (c) =>
+  handleGetDistricts(c.req.raw, c.env, Number(c.req.param("confId")))
+);
+app.post("/api/conferences/:confId/districts", (c) =>
+  handleCreateDistrict(c.req.raw, c.env, Number(c.req.param("confId")))
+);
+app.patch("/api/districts/:id", (c) =>
+  handleUpdateDistrict(c.req.raw, c.env, Number(c.req.param("id")))
+);
 
-    // Conference routes
-    if (path === "/api/conferences" && request.method === "GET") {
-      return handleGetConferences(request, env);
-    }
-    if (path === "/api/conferences" && request.method === "POST") {
-      return handleCreateConference(request, env);
-    }
-    const confUpdateMatch = path.match(/^\/api\/conferences\/(\d+)$/);
-    if (confUpdateMatch && request.method === "PATCH") {
-      return handleUpdateConference(request, env, Number(confUpdateMatch[1]));
-    }
+app.get("/api/conferences/:confId/churches", (c) =>
+  handleGetChurches(c.req.raw, c.env, Number(c.req.param("confId")))
+);
+app.post("/api/churches", (c) => handleCreateChurch(c.req.raw, c.env));
+app.post("/api/churches/bulk", (c) => handleBulkCreateChurches(c.req.raw, c.env));
+app.patch("/api/churches/:id", (c) =>
+  handleUpdateChurch(c.req.raw, c.env, Number(c.req.param("id")))
+);
 
-    // District routes
-    const distListMatch = path.match(/^\/api\/conferences\/(\d+)\/districts$/);
-    if (distListMatch && request.method === "GET") {
-      return handleGetDistricts(request, env, Number(distListMatch[1]));
-    }
-    if (distListMatch && request.method === "POST") {
-      return handleCreateDistrict(request, env, Number(distListMatch[1]));
-    }
-    const distUpdateMatch = path.match(/^\/api\/districts\/(\d+)$/);
-    if (distUpdateMatch && request.method === "PATCH") {
-      return handleUpdateDistrict(request, env, Number(distUpdateMatch[1]));
-    }
+app.get("/api/users", (c) => handleGetUsers(c.req.raw, c.env));
+app.post("/api/users/invite", (c) => handleInviteUser(c.req.raw, c.env));
+app.post("/api/users/bulk-invite", (c) => handleBulkInviteUsers(c.req.raw, c.env));
+app.patch("/api/users/:id", (c) => handleUpdateUser(c.req.raw, c.env, Number(c.req.param("id"))));
 
-    // Church routes
-    const churchListMatch = path.match(/^\/api\/conferences\/(\d+)\/churches$/);
-    if (churchListMatch && request.method === "GET") {
-      return handleGetChurches(request, env, Number(churchListMatch[1]));
-    }
-    if (path === "/api/churches" && request.method === "POST") {
-      return handleCreateChurch(request, env);
-    }
-    if (path === "/api/churches/bulk" && request.method === "POST") {
-      return handleBulkCreateChurches(request, env);
-    }
-    const churchUpdateMatch = path.match(/^\/api\/churches\/(\d+)$/);
-    if (churchUpdateMatch && request.method === "PATCH") {
-      return handleUpdateChurch(request, env, Number(churchUpdateMatch[1]));
-    }
+app.get("/api/members", (c) => handleGetMembers(c.req.raw, c.env));
+app.post("/api/members", (c) => handleCreateMember(c.req.raw, c.env));
+app.get("/api/members/:id", (c) => handleGetMember(c.req.raw, c.env, Number(c.req.param("id"))));
+app.patch("/api/members/:id", (c) =>
+  handleUpdateMember(c.req.raw, c.env, Number(c.req.param("id")))
+);
+app.post("/api/members/:id/remove", (c) =>
+  handleRemoveMember(c.req.raw, c.env, Number(c.req.param("id")))
+);
 
-    // User routes
-    if (path === "/api/users" && request.method === "GET") {
-      return handleGetUsers(request, env);
-    }
-    if (path === "/api/users/invite" && request.method === "POST") {
-      return handleInviteUser(request, env);
-    }
-    if (path === "/api/users/bulk-invite" && request.method === "POST") {
-      return handleBulkInviteUsers(request, env);
-    }
-    const userMatch = path.match(/^\/api\/users\/(\d+)$/);
-    if (userMatch && request.method === "PATCH") {
-      return handleUpdateUser(request, env, Number(userMatch[1]));
-    }
+app.get("/api/households", (c) => handleGetHouseholds(c.req.raw, c.env));
+app.post("/api/households", (c) => handleCreateHousehold(c.req.raw, c.env));
+app.patch("/api/households/:id", (c) =>
+  handleUpdateHousehold(c.req.raw, c.env, Number(c.req.param("id")))
+);
 
-    // Member routes
-    if (path === "/api/members" && request.method === "GET") {
-      return handleGetMembers(request, env);
-    }
-    if (path === "/api/members" && request.method === "POST") {
-      return handleCreateMember(request, env);
-    }
-    const memberMatch = path.match(/^\/api\/members\/(\d+)$/);
-    if (memberMatch && request.method === "GET") {
-      return handleGetMember(request, env, Number(memberMatch[1]));
-    }
-    if (memberMatch && request.method === "PATCH") {
-      return handleUpdateMember(request, env, Number(memberMatch[1]));
-    }
-    const removeMemberMatch = path.match(/^\/api\/members\/(\d+)\/remove$/);
-    if (removeMemberMatch && request.method === "POST") {
-      return handleRemoveMember(request, env, Number(removeMemberMatch[1]));
-    }
+app.get("/api/positions", (c) => handleGetPositions(c.req.raw, c.env));
+app.post("/api/positions", (c) => handleCreatePosition(c.req.raw, c.env));
+app.post("/api/members/:memberId/positions", (c) =>
+  handleAssignPosition(c.req.raw, c.env, Number(c.req.param("memberId")))
+);
+app.delete("/api/members/:memberId/positions/:posId", (c) =>
+  handleRemovePosition(
+    c.req.raw,
+    c.env,
+    Number(c.req.param("memberId")),
+    Number(c.req.param("posId"))
+  )
+);
 
-    // Household routes
-    if (path === "/api/households" && request.method === "GET") {
-      return handleGetHouseholds(request, env);
-    }
-    if (path === "/api/households" && request.method === "POST") {
-      return handleCreateHousehold(request, env);
-    }
-    const householdMatch = path.match(/^\/api\/households\/(\d+)$/);
-    if (householdMatch && request.method === "PATCH") {
-      return handleUpdateHousehold(request, env, Number(householdMatch[1]));
-    }
+app.get("/api/transfers", (c) => handleGetTransfers(c.req.raw, c.env));
+app.post("/api/transfers", (c) => handleInitiateTransfer(c.req.raw, c.env));
+app.post("/api/transfers/:id/approve", (c) =>
+  handleApproveTransfer(c.req.raw, c.env, Number(c.req.param("id")))
+);
+app.post("/api/transfers/:id/accept", (c) =>
+  handleAcceptTransfer(c.req.raw, c.env, Number(c.req.param("id")))
+);
+app.post("/api/transfers/:id/reject", (c) =>
+  handleRejectTransfer(c.req.raw, c.env, Number(c.req.param("id")))
+);
+app.post("/api/transfers/:id/override", (c) =>
+  handleOverrideTransfer(c.req.raw, c.env, Number(c.req.param("id")))
+);
 
-    // Position routes
-    if (path === "/api/positions" && request.method === "GET") {
-      return handleGetPositions(request, env);
-    }
-    if (path === "/api/positions" && request.method === "POST") {
-      return handleCreatePosition(request, env);
-    }
+app.get("/api/churches/:churchId/members/me", (c) =>
+  handleGetSelfMember(c.req.raw, c.env, Number(c.req.param("churchId")))
+);
+app.patch("/api/churches/:churchId/members/me", (c) =>
+  handleUpdateSelfMember(c.req.raw, c.env, Number(c.req.param("churchId")))
+);
 
-    // Member position routes
-    const memberPosMatch = path.match(/^\/api\/members\/(\d+)\/positions$/);
-    if (memberPosMatch && request.method === "POST") {
-      return handleAssignPosition(request, env, Number(memberPosMatch[1]));
-    }
-    const memberPosDelMatch = path.match(/^\/api\/members\/(\d+)\/positions\/(\d+)$/);
-    if (memberPosDelMatch && request.method === "DELETE") {
-      return handleRemovePosition(
-        request,
-        env,
-        Number(memberPosDelMatch[1]),
-        Number(memberPosDelMatch[2])
-      );
-    }
+app.post("/api/churches/:churchId/members/:memberId/giving", (c) =>
+  handleMemberGiving(
+    c.req.raw,
+    c.env,
+    Number(c.req.param("churchId")),
+    Number(c.req.param("memberId"))
+  )
+);
+app.post("/api/churches/:churchId/members/:memberId/transfer-request", (c) =>
+  handleMemberTransfer(
+    c.req.raw,
+    c.env,
+    Number(c.req.param("churchId")),
+    Number(c.req.param("memberId"))
+  )
+);
 
-    // Transfer routes
-    if (path === "/api/transfers" && request.method === "GET") {
-      return handleGetTransfers(request, env);
-    }
-    if (path === "/api/transfers" && request.method === "POST") {
-      return handleInitiateTransfer(request, env);
-    }
-    const transferApproveMatch = path.match(/^\/api\/transfers\/(\d+)\/approve$/);
-    if (transferApproveMatch && request.method === "POST") {
-      return handleApproveTransfer(request, env, Number(transferApproveMatch[1]));
-    }
-    const transferAcceptMatch = path.match(/^\/api\/transfers\/(\d+)\/accept$/);
-    if (transferAcceptMatch && request.method === "POST") {
-      return handleAcceptTransfer(request, env, Number(transferAcceptMatch[1]));
-    }
-    const transferRejectMatch = path.match(/^\/api\/transfers\/(\d+)\/reject$/);
-    if (transferRejectMatch && request.method === "POST") {
-      return handleRejectTransfer(request, env, Number(transferRejectMatch[1]));
-    }
-    const transferOverrideMatch = path.match(/^\/api\/transfers\/(\d+)\/override$/);
-    if (transferOverrideMatch && request.method === "POST") {
-      return handleOverrideTransfer(request, env, Number(transferOverrideMatch[1]));
-    }
+app.get("/api/churches/:churchId/declarations", (c) =>
+  handleListDeclarations(c.req.raw, c.env, Number(c.req.param("churchId")))
+);
+app.post("/api/churches/:churchId/declarations/:declId/verify", (c) =>
+  handleVerifyDeclaration(
+    c.req.raw,
+    c.env,
+    Number(c.req.param("churchId")),
+    Number(c.req.param("declId"))
+  )
+);
+app.post("/api/churches/:churchId/declarations/:declId/reject", (c) =>
+  handleRejectDeclaration(
+    c.req.raw,
+    c.env,
+    Number(c.req.param("churchId")),
+    Number(c.req.param("declId"))
+  )
+);
 
-    // Member self-service
-    const selfMemberMatch = path.match(/^\/api\/churches\/(\d+)\/members\/me$/);
-    if (selfMemberMatch && request.method === "GET") {
-      return handleGetSelfMember(request, env, Number(selfMemberMatch[1]));
-    }
-    if (selfMemberMatch && request.method === "PATCH") {
-      return handleUpdateSelfMember(request, env, Number(selfMemberMatch[1]));
-    }
+app.get("/api/funds", (c) => handleGetFunds(c.req.raw, c.env));
+app.post("/api/funds", (c) => handleCreateFund(c.req.raw, c.env));
 
-    // Member giving declaration
-    const memberGivingMatch = path.match(/^\/api\/churches\/(\d+)\/members\/(\d+)\/giving$/);
-    if (memberGivingMatch && request.method === "POST") {
-      return handleMemberGiving(
-        request,
-        env,
-        Number(memberGivingMatch[1]),
-        Number(memberGivingMatch[2])
-      );
-    }
+app.get("/api/expense-categories", (c) => handleGetExpenseCategories(c.req.raw, c.env));
+app.post("/api/expense-categories", (c) => handleCreateExpenseCategory(c.req.raw, c.env));
+app.patch("/api/expense-categories/:id", (c) =>
+  handleUpdateExpenseCategory(c.req.raw, c.env, Number(c.req.param("id")))
+);
 
-    // Member-initiated transfer
-    const memberTransferMatch = path.match(
-      /^\/api\/churches\/(\d+)\/members\/(\d+)\/transfer-request$/
-    );
-    if (memberTransferMatch && request.method === "POST") {
-      return handleMemberTransfer(
-        request,
-        env,
-        Number(memberTransferMatch[1]),
-        Number(memberTransferMatch[2])
-      );
-    }
+app.get("/api/finance/batches", (c) => handleGetBatches(c.req.raw, c.env));
+app.post("/api/finance/batches", (c) => handleCreateBatch(c.req.raw, c.env));
+app.get("/api/finance/batches/:id", (c) =>
+  handleGetBatch(c.req.raw, c.env, Number(c.req.param("id")))
+);
+app.post("/api/finance/batches/:id/confirm", (c) =>
+  handleConfirmBatch(c.req.raw, c.env, Number(c.req.param("id")))
+);
 
-    // Treasurer declaration verification
-    const churchDeclarationsMatch = path.match(/^\/api\/churches\/(\d+)\/declarations$/);
-    if (churchDeclarationsMatch && request.method === "GET") {
-      return handleListDeclarations(request, env, Number(churchDeclarationsMatch[1]));
-    }
-    const verifyDeclMatch = path.match(/^\/api\/churches\/(\d+)\/declarations\/(\d+)\/verify$/);
-    if (verifyDeclMatch && request.method === "POST") {
-      return handleVerifyDeclaration(
-        request,
-        env,
-        Number(verifyDeclMatch[1]),
-        Number(verifyDeclMatch[2])
-      );
-    }
-    const rejectDeclMatch = path.match(/^\/api\/churches\/(\d+)\/declarations\/(\d+)\/reject$/);
-    if (rejectDeclMatch && request.method === "POST") {
-      return handleRejectDeclaration(
-        request,
-        env,
-        Number(rejectDeclMatch[1]),
-        Number(rejectDeclMatch[2])
-      );
-    }
+app.get("/api/finance/transactions", (c) => handleGetTransactions(c.req.raw, c.env));
+app.post("/api/finance/transactions", (c) => handleCreateTransaction(c.req.raw, c.env));
+app.post("/api/finance/expenses", (c) => handleCreateExpense(c.req.raw, c.env));
 
-    // Finance — funds
-    if (path === "/api/funds" && request.method === "GET") {
-      return handleGetFunds(request, env);
-    }
-    if (path === "/api/funds" && request.method === "POST") {
-      return handleCreateFund(request, env);
-    }
+app.get("/api/finance/budgets", (c) => handleGetBudgets(c.req.raw, c.env));
+app.post("/api/finance/budgets", (c) => handleCreateBudget(c.req.raw, c.env));
+app.post("/api/finance/budgets/:id/approve", (c) =>
+  handleApproveBudget(c.req.raw, c.env, Number(c.req.param("id")))
+);
 
-    // Finance — expense categories
-    if (path === "/api/expense-categories" && request.method === "GET") {
-      return handleGetExpenseCategories(request, env);
-    }
-    if (path === "/api/expense-categories" && request.method === "POST") {
-      return handleCreateExpenseCategory(request, env);
-    }
-    const expenseCatMatch = path.match(/^\/api\/expense-categories\/(\d+)$/);
-    if (expenseCatMatch && request.method === "PATCH") {
-      return handleUpdateExpenseCategory(request, env, Number(expenseCatMatch[1]));
-    }
+app.get("/api/finance/budget-templates", (c) => handleGetBudgetTemplates(c.req.raw, c.env));
+app.post("/api/finance/budget-templates", (c) => handleCreateBudgetTemplate(c.req.raw, c.env));
 
-    // Finance — offering batches
-    if (path === "/api/finance/batches" && request.method === "GET") {
-      return handleGetBatches(request, env);
-    }
-    if (path === "/api/finance/batches" && request.method === "POST") {
-      return handleCreateBatch(request, env);
-    }
-    const batchMatch = path.match(/^\/api\/finance\/batches\/(\d+)$/);
-    if (batchMatch && request.method === "GET") {
-      return handleGetBatch(request, env, Number(batchMatch[1]));
-    }
-    const batchConfirmMatch = path.match(/^\/api\/finance\/batches\/(\d+)\/confirm$/);
-    if (batchConfirmMatch && request.method === "POST") {
-      return handleConfirmBatch(request, env, Number(batchConfirmMatch[1]));
-    }
+app.get("/api/finance/report/monthly", (c) => handleGetMonthlyReport(c.req.raw, c.env));
+app.get("/api/report/quarterly", (c) => handleGetQuarterlyReport(c.req.raw, c.env));
 
-    // Finance — transactions
-    if (path === "/api/finance/transactions" && request.method === "GET") {
-      return handleGetTransactions(request, env);
-    }
-    if (path === "/api/finance/transactions" && request.method === "POST") {
-      return handleCreateTransaction(request, env);
-    }
-    if (path === "/api/finance/expenses" && request.method === "POST") {
-      return handleCreateExpense(request, env);
-    }
+app.get("/api/conference/tithe", (c) => handleGetConferenceTithe(c.req.raw, c.env));
+app.post("/api/conference/tithe/receive", (c) => handleReceiveTithe(c.req.raw, c.env));
+app.get("/api/conference/tithe/report", (c) => handleTitheReport(c.req.raw, c.env));
+app.on(["GET", "POST"], "/api/church/balance", (c) => handleChurchBalance(c.req.raw, c.env));
 
-    // Finance — budgets
-    if (path === "/api/finance/budgets" && request.method === "GET") {
-      return handleGetBudgets(request, env);
-    }
-    if (path === "/api/finance/budgets" && request.method === "POST") {
-      return handleCreateBudget(request, env);
-    }
-    const budgetApproveMatch = path.match(/^\/api\/finance\/budgets\/(\d+)\/approve$/);
-    if (budgetApproveMatch && request.method === "POST") {
-      return handleApproveBudget(request, env, Number(budgetApproveMatch[1]));
-    }
+app.get("/api/notifications", (c) => handleGetNotifications(c.req.raw, c.env));
+app.post("/api/notifications/read-all", (c) => handleMarkAllRead(c.req.raw, c.env));
+app.post("/api/notifications/:id/read", (c) =>
+  handleMarkNotificationRead(c.req.raw, c.env, Number(c.req.param("id")))
+);
 
-    // Finance — budget templates
-    if (path === "/api/finance/budget-templates" && request.method === "GET") {
-      return handleGetBudgetTemplates(request, env);
-    }
-    if (path === "/api/finance/budget-templates" && request.method === "POST") {
-      return handleCreateBudgetTemplate(request, env);
-    }
+app.get("/api/audit", (c) => handleGetAuditLog(c.req.raw, c.env));
+app.get("/api/audit/:entityType/:entityId", (c) =>
+  handleGetAuditByEntity(
+    c.req.raw,
+    c.env,
+    c.req.param("entityType"),
+    Number(c.req.param("entityId"))
+  )
+);
 
-    // Finance — reports
-    if (path === "/api/finance/report/monthly" && request.method === "GET") {
-      return handleGetMonthlyReport(request, env);
-    }
-    if (path === "/api/report/quarterly" && request.method === "GET") {
-      return handleGetQuarterlyReport(request, env);
-    }
+app.post("/api/attendance", (c) => handleRecordAttendance(c.req.raw, c.env));
+app.get("/api/attendance", (c) => handleGetAttendance(c.req.raw, c.env));
+app.get("/api/attendance/stats", (c) => handleGetAttendanceStats(c.req.raw, c.env));
 
-    // Reconciliation routes
-    if (path === "/api/conference/tithe" && request.method === "GET") {
-      return handleGetConferenceTithe(request, env);
-    }
-    if (path === "/api/conference/tithe/receive" && request.method === "POST") {
-      return handleReceiveTithe(request, env);
-    }
-    if (path === "/api/conference/tithe/report" && request.method === "GET") {
-      return handleTitheReport(request, env);
-    }
-    if (path === "/api/church/balance" && (request.method === "GET" || request.method === "POST")) {
-      return handleChurchBalance(request, env);
-    }
+app.get("/api/conference/dashboard", (c) => handleConferenceDashboard(c.req.raw, c.env));
+app.get("/api/conference/district-dashboard", (c) => handleDistrictDashboard(c.req.raw, c.env));
+app.get("/api/conference/global-dashboard", (c) => handleGlobalDashboard(c.req.raw, c.env));
 
-    // Notification routes
-    if (path === "/api/notifications" && request.method === "GET") {
-      return handleGetNotifications(request, env);
-    }
-    if (path === "/api/notifications/read-all" && request.method === "POST") {
-      return handleMarkAllRead(request, env);
-    }
-    const notifMatch = path.match(/^\/api\/notifications\/(\d+)\/read$/);
-    if (notifMatch && request.method === "POST") {
-      return handleMarkNotificationRead(request, env, Number(notifMatch[1]));
-    }
+app.get("/api/contributions", (c) => handleGetContributions(c.req.raw, c.env));
+app.get("/api/contributions/:id", (c) =>
+  handleGetContributionStatement(c.req.raw, c.env, Number(c.req.param("id")))
+);
 
-    // Audit routes
-    if (path === "/api/audit" && request.method === "GET") {
-      return handleGetAuditLog(request, env);
-    }
-    const auditEntityMatch = path.match(/^\/api\/audit\/(.+)\/(\d+)$/);
-    if (auditEntityMatch && request.method === "GET") {
-      return handleGetAuditByEntity(
-        request,
-        env,
-        auditEntityMatch[1]!,
-        Number(auditEntityMatch[2])
-      );
-    }
+app.get("/api/sync/state", async (c) => {
+  if (!c.env.CHURCH_SYNC_DO) return c.notFound();
+  const churchParam = c.req.query("church_id") || "default";
+  const doId = c.env.CHURCH_SYNC_DO.idFromName(churchParam);
+  const stub = c.env.CHURCH_SYNC_DO.get(doId);
+  const state = await stub.getSyncState(churchParam);
+  return json(state);
+});
 
-    // Attendance routes
-    if (path === "/api/attendance" && request.method === "POST") {
-      return handleRecordAttendance(request, env);
-    }
-    if (path === "/api/attendance" && request.method === "GET") {
-      return handleGetAttendance(request, env);
-    }
-    if (path === "/api/attendance/stats" && request.method === "GET") {
-      return handleGetAttendanceStats(request, env);
-    }
+app.post("/api/sync/register", async (c) => {
+  if (!c.env.CHURCH_SYNC_DO) return c.notFound();
+  const churchParam = c.req.query("church_id") || "default";
+  const body = await c.req.json<{
+    userId: string;
+    operationType?: string;
+    clientUuid?: string;
+    payload?: string;
+  }>();
+  const doId = c.env.CHURCH_SYNC_DO.idFromName(churchParam);
+  const stub = c.env.CHURCH_SYNC_DO.get(doId);
+  await stub.registerSync(churchParam, body.userId);
+  if (body.operationType && body.clientUuid) {
+    await stub.applyOfflineOperation(churchParam, body.userId, {
+      type: body.operationType,
+      payload: body.payload ?? "{}",
+      clientUuid: body.clientUuid,
+    });
+  }
+  return json({ success: true });
+});
 
-    // Conference dashboard routes
-    if (path === "/api/conference/dashboard" && request.method === "GET") {
-      return handleConferenceDashboard(request, env);
-    }
-    if (path === "/api/conference/district-dashboard" && request.method === "GET") {
-      return handleDistrictDashboard(request, env);
-    }
-    if (path === "/api/conference/global-dashboard" && request.method === "GET") {
-      return handleGlobalDashboard(request, env);
-    }
+app.get("/api/conference/info", async (c) => {
+  if (!c.env.CONFERENCE_DO) return c.notFound();
+  const doId = c.env.CONFERENCE_DO.idFromName("main");
+  const stub = c.env.CONFERENCE_DO.get(doId);
+  const info = await stub.getInfo();
+  return json(info);
+});
 
-    // Contribution routes
-    if (path === "/api/contributions" && request.method === "GET") {
-      return handleGetContributions(request, env);
-    }
-    const contributionMatch = path.match(/^\/api\/contributions\/(\d+)$/);
-    if (contributionMatch && request.method === "GET") {
-      return handleGetContributionStatement(request, env, Number(contributionMatch[1]));
-    }
-
-    // DO routes (existing)
-    if (path.startsWith("/api/sync/") && env.CHURCH_SYNC_DO) {
-      const churchParam = url.searchParams.get("church_id") || "default";
-      const doId = env.CHURCH_SYNC_DO.idFromName(churchParam);
-      const stub = env.CHURCH_SYNC_DO.get(doId);
-
-      if (path === "/api/sync/state" && request.method === "GET") {
-        const state = await stub.getSyncState(churchParam);
-        return json(state);
-      }
-
-      if (path === "/api/sync/register" && request.method === "POST") {
-        const body: { userId: string } = await request.json();
-        await stub.registerSync(churchParam, body.userId);
-        return json({ success: true });
-      }
-    }
-
-    if (path.startsWith("/api/conference/") && env.CONFERENCE_DO) {
-      const doId = env.CONFERENCE_DO.idFromName("main");
-      const stub = env.CONFERENCE_DO.get(doId);
-
-      if (path === "/api/conference/info" && request.method === "GET") {
-        const info = await stub.getInfo();
-        return json(info);
-      }
-    }
-
-    return env.ASSETS ? env.ASSETS.fetch(request) : new Response("Not Found", { status: 404 });
-  },
-};
+export default app;

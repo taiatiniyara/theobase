@@ -11,16 +11,7 @@ import {
   BudgetTemplateRepo,
 } from "../repos/finance";
 import type { FundRow, ExpenseCategoryRow } from "../repos/finance";
-
-function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
-}
+import { json } from "../lib/response";
 
 function uuid(): string {
   return crypto.randomUUID();

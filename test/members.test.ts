@@ -1,17 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { SELF, env } from "cloudflare:test";
-
-const FULL_SCHEMA =
-  `CREATE TABLE IF NOT EXISTS conferences (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, code TEXT NOT NULL UNIQUE, parent_union_id INTEGER, address TEXT, bank_details TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS districts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, conference_id INTEGER NOT NULL REFERENCES conferences(id), pastor_user_id INTEGER, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS churches (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, code TEXT NOT NULL, type TEXT NOT NULL CHECK (type IN ('organized', 'company', 'branch')), parent_id INTEGER NOT NULL, parent_type TEXT NOT NULL CHECK (parent_type IN ('conference', 'church')), district_id INTEGER REFERENCES districts(id), address TEXT, bank_details TEXT, charter_status TEXT, founded_date TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS households (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), head_member_id INTEGER, name TEXT NOT NULL, address TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS members (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), household_id INTEGER REFERENCES households(id), full_name TEXT NOT NULL, preferred_name TEXT, dob TEXT, gender TEXT, baptism_date TEXT, baptism_type TEXT CHECK (baptism_type IN ('immersion', 'profession_of_faith')), join_date TEXT, prev_church_id INTEGER REFERENCES churches(id), phone TEXT, email TEXT, address TEXT, marital_status TEXT, status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'transferred', 'deceased', 'removed')), status_date TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')), version INTEGER NOT NULL DEFAULT 1);` +
-  `CREATE TABLE IF NOT EXISTS positions (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, module TEXT NOT NULL DEFAULT 'core');` +
-  `CREATE TABLE IF NOT EXISTS member_positions (member_id INTEGER NOT NULL REFERENCES members(id), position_id INTEGER NOT NULL REFERENCES positions(id), start_date TEXT NOT NULL DEFAULT (datetime('now')), end_date TEXT, PRIMARY KEY (member_id, position_id));` +
-  `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, member_id INTEGER REFERENCES members(id), conference_id INTEGER REFERENCES conferences(id), role TEXT NOT NULL CHECK (role IN ('president', 'secretary', 'treasurer', 'auditor', 'sysadmin', 'pastor', 'member')), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS transfer_requests (id INTEGER PRIMARY KEY AUTOINCREMENT, member_id INTEGER NOT NULL REFERENCES members(id), from_church_id INTEGER NOT NULL REFERENCES churches(id), to_church_id INTEGER NOT NULL REFERENCES churches(id), initiated_by INTEGER NOT NULL REFERENCES users(id), initiated_at TEXT NOT NULL DEFAULT (datetime('now')), conference_approved_by INTEGER REFERENCES users(id), conference_approved_at TEXT, accepted_by INTEGER REFERENCES users(id), accepted_at TEXT, rejection_note TEXT, expires_at TEXT, override_by INTEGER REFERENCES users(id), override_at TEXT, override_action TEXT, override_note TEXT, status TEXT NOT NULL DEFAULT 'pending_conference' CHECK (status IN ('pending_conference', 'pending_destination', 'completed', 'rejected', 'expired')));` +
-  `CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, recipient_user_id INTEGER NOT NULL REFERENCES users(id), type TEXT NOT NULL, entity_type TEXT NOT NULL, entity_id INTEGER NOT NULL, message TEXT NOT NULL, read INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL DEFAULT (datetime('now')));`;
+import { SELF } from "cloudflare:test";
+import { setupTestContext, createSecondChurch } from "./helpers/auth";
 
 describe("membership API", () => {
   let accessToken: string;
@@ -22,61 +11,11 @@ describe("membership API", () => {
   let memberId2: number;
 
   beforeAll(async () => {
-    await env.DB.exec(FULL_SCHEMA);
-    await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token TEXT;");
-    await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token_expires TEXT;");
-    await env.DB.exec("ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1;");
-
-    const signupRes = await SELF.fetch("http://localhost/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: "memadmin@test.com",
-        password: "password123",
-        fullName: "Mem Admin",
-        conferenceName: "Central Conference",
-      }),
-    });
-    const signupBody = (await signupRes.json()) as { accessToken: string };
-    accessToken = signupBody.accessToken;
-
-    const meRes = await SELF.fetch("http://localhost/api/auth/me", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    const me = (await meRes.json()) as { conference: { id: number } };
-    conferenceId = me.conference.id;
-
-    const c1 = await SELF.fetch("http://localhost/api/churches", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        name: "Central SDA Church",
-        type: "organized",
-        parentId: conferenceId,
-        parentType: "conference",
-      }),
-    });
-    const c1Body = (await c1.json()) as { id: number };
-    churchId = c1Body.id;
-
-    const c2 = await SELF.fetch("http://localhost/api/churches", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        name: "Riverside SDA Church",
-        type: "organized",
-        parentId: conferenceId,
-        parentType: "conference",
-      }),
-    });
-    const c2Body = (await c2.json()) as { id: number };
-    churchId2 = c2Body.id;
+    const ctx = await setupTestContext();
+    accessToken = ctx.accessToken;
+    conferenceId = ctx.conferenceId;
+    churchId = ctx.churchId;
+    churchId2 = (await createSecondChurch(accessToken, conferenceId)).churchId2;
   });
 
   function authHeaders() {
@@ -122,7 +61,7 @@ describe("membership API", () => {
     });
     const detailBody = (await detailRes.json()) as { full_name: string; church_name: string };
     expect(detailBody.full_name).toBe("John Doe");
-    expect(detailBody.church_name).toBe("Central SDA Church");
+    expect(detailBody.church_name).toBe("Test Church");
 
     const updateRes = await SELF.fetch(`http://localhost/api/members/${memberId}`, {
       method: "PATCH",

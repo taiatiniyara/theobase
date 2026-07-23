@@ -14,9 +14,10 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@theobase/types": ["./shared/types/index.ts"]
     }
   },
-  "include": ["src", "vite-env.d.ts"],
+  "include": ["src", "shared", "vite-env.d.ts"],
   "exclude": ["node_modules", "dist"]
 }

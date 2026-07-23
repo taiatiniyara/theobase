@@ -1,21 +1,8 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { SELF, env } from "cloudflare:test";
-
-const FULL_SCHEMA =
-  `CREATE TABLE IF NOT EXISTS conferences (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, code TEXT NOT NULL UNIQUE, parent_union_id INTEGER, address TEXT, bank_details TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS districts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, conference_id INTEGER NOT NULL REFERENCES conferences(id), pastor_user_id INTEGER, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS churches (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, code TEXT NOT NULL, type TEXT NOT NULL CHECK (type IN ('organized', 'company', 'branch')), parent_id INTEGER NOT NULL, parent_type TEXT NOT NULL CHECK (parent_type IN ('conference', 'church')), district_id INTEGER REFERENCES districts(id), address TEXT, bank_details TEXT, charter_status TEXT, founded_date TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS households (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), head_member_id INTEGER, name TEXT NOT NULL, address TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS members (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), household_id INTEGER REFERENCES households(id), full_name TEXT NOT NULL, preferred_name TEXT, dob TEXT, gender TEXT, baptism_date TEXT, baptism_type TEXT CHECK (baptism_type IN ('immersion', 'profession_of_faith')), join_date TEXT, prev_church_id INTEGER REFERENCES churches(id), phone TEXT, email TEXT, address TEXT, marital_status TEXT, status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'transferred', 'deceased', 'removed')), status_date TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')), version INTEGER NOT NULL DEFAULT 1);` +
-  `CREATE TABLE IF NOT EXISTS positions (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, module TEXT NOT NULL DEFAULT 'core');` +
-  `CREATE TABLE IF NOT EXISTS member_positions (member_id INTEGER NOT NULL REFERENCES members(id), position_id INTEGER NOT NULL REFERENCES positions(id), start_date TEXT NOT NULL DEFAULT (datetime('now')), end_date TEXT, PRIMARY KEY (member_id, position_id));` +
-  `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, member_id INTEGER REFERENCES members(id), conference_id INTEGER REFERENCES conferences(id), role TEXT NOT NULL CHECK (role IN ('president', 'secretary', 'treasurer', 'auditor', 'sysadmin', 'pastor', 'member')), reset_token TEXT, reset_token_expires TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS transfer_requests (id INTEGER PRIMARY KEY AUTOINCREMENT, member_id INTEGER NOT NULL REFERENCES members(id), from_church_id INTEGER NOT NULL REFERENCES churches(id), to_church_id INTEGER NOT NULL REFERENCES churches(id), initiated_by INTEGER NOT NULL REFERENCES users(id), initiated_at TEXT NOT NULL DEFAULT (datetime('now')), conference_approved_by INTEGER REFERENCES users(id), conference_approved_at TEXT, accepted_by INTEGER REFERENCES users(id), accepted_at TEXT, rejection_note TEXT, expires_at TEXT, override_by INTEGER REFERENCES users(id), override_at TEXT, override_action TEXT, override_note TEXT, status TEXT NOT NULL DEFAULT 'pending_conference' CHECK (status IN ('pending_conference', 'pending_destination', 'completed', 'rejected', 'expired')));` +
-  `CREATE TABLE IF NOT EXISTS funds (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, type TEXT NOT NULL CHECK (type IN ('tithe', 'local_budget', 'sabbath_school')), forwarding_rule TEXT NOT NULL, conference_id INTEGER NOT NULL REFERENCES conferences(id), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS expense_categories (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, conference_id INTEGER NOT NULL REFERENCES conferences(id), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS offering_batches (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), sabbath_date TEXT NOT NULL, confirmed_by_1 INTEGER REFERENCES users(id), confirmed_at_1 TEXT, confirmed_by_2 INTEGER REFERENCES users(id), confirmed_at_2 TEXT, status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'synced')), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
-  `CREATE TABLE IF NOT EXISTS transactions (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), fund_id INTEGER NOT NULL REFERENCES funds(id), type TEXT NOT NULL CHECK (type IN ('income', 'expense', 'forward')), amount REAL NOT NULL, description TEXT, category_id INTEGER REFERENCES expense_categories(id), budget_ref INTEGER, batch_id INTEGER REFERENCES offering_batches(id), created_by INTEGER NOT NULL REFERENCES users(id), created_at TEXT NOT NULL DEFAULT (datetime('now')), confirmed_by INTEGER REFERENCES users(id), confirmed_at TEXT, uuid TEXT NOT NULL UNIQUE);` +
-  `CREATE TABLE IF NOT EXISTS budgets (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), fund_id INTEGER NOT NULL REFERENCES funds(id), category_id INTEGER NOT NULL REFERENCES expense_categories(id), planned_amount REAL NOT NULL, fiscal_year INTEGER NOT NULL, created_at TEXT NOT NULL DEFAULT (datetime('now')));`;
+import { FULL_SCHEMA } from "./helpers/schema";
+import { setupTestContext } from "./helpers/auth";
+import { createFund, createMember } from "./helpers/factories";
 
 describe("quarterly business meeting report", () => {
   let accessToken: string;
@@ -30,75 +17,15 @@ describe("quarterly business meeting report", () => {
   beforeAll(async () => {
     await env.DB.exec(FULL_SCHEMA);
 
-    const sr = await SELF.fetch("http://localhost/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: "qr@t.com",
-        password: "password123",
-        fullName: "QR Admin",
-        conferenceName: "Central",
-      }),
-    });
-    const sb = (await sr.json()) as { accessToken: string };
-    accessToken = sb.accessToken;
+    const ctx = await setupTestContext();
+    accessToken = ctx.accessToken;
+    conferenceId = ctx.conferenceId;
+    churchId = ctx.churchId;
+    userId = ctx.userId;
 
-    const mr = await SELF.fetch("http://localhost/api/auth/me", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    const mb = (await mr.json()) as { id: number; conference: { id: number } };
-    userId = mb.id;
-    conferenceId = mb.conference.id;
-
-    const cr = await SELF.fetch("http://localhost/api/churches", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
-      body: JSON.stringify({
-        name: "Test Church",
-        code: "TC",
-        type: "organized",
-        parentId: conferenceId,
-        parentType: "conference",
-      }),
-    });
-    const cb = (await cr.json()) as { id: number };
-    churchId = cb.id;
-
-    const fr = await SELF.fetch("http://localhost/api/funds", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
-      body: JSON.stringify({
-        name: "Tithe",
-        type: "tithe",
-        forwardingRule: "conference",
-        conferenceId,
-      }),
-    });
-    titheFundId = ((await fr.json()) as { id: number }).id;
-
-    const bfr = await SELF.fetch("http://localhost/api/funds", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
-      body: JSON.stringify({
-        name: "Local Budget",
-        type: "local_budget",
-        forwardingRule: "local",
-        conferenceId,
-      }),
-    });
-    budgetFundId = ((await bfr.json()) as { id: number }).id;
-
-    const sfr = await SELF.fetch("http://localhost/api/funds", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
-      body: JSON.stringify({
-        name: "Sabbath School",
-        type: "sabbath_school",
-        forwardingRule: "conference",
-        conferenceId,
-      }),
-    });
-    ssFundId = ((await sfr.json()) as { id: number }).id;
+    titheFundId = (await createFund(accessToken, conferenceId, "Tithe", "tithe")).id;
+    budgetFundId = (await createFund(accessToken, conferenceId, "Local Budget", "local_budget")).id;
+    ssFundId = (await createFund(accessToken, conferenceId, "Sabbath School", "sabbath_school")).id;
 
     const ecr = await SELF.fetch("http://localhost/api/expense-categories", {
       method: "POST",
@@ -112,17 +39,14 @@ describe("quarterly business meeting report", () => {
       Authorization: `Bearer ${accessToken}`,
     };
 
-    const mr2 = await SELF.fetch("http://localhost/api/members", {
-      method: "POST",
-      headers: hh,
-      body: JSON.stringify({
+    memberId = (
+      await createMember(accessToken, {
         churchId,
         fullName: "Member One",
         baptismDate: "2026-07-10",
         baptismType: "immersion",
-      }),
-    });
-    memberId = ((await mr2.json()) as { id: number }).id;
+      })
+    ).id;
 
     await SELF.fetch("http://localhost/api/positions", {
       method: "POST",

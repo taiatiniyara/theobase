@@ -6,16 +6,7 @@ import { logAudit, getDeviceInfo } from "../lib/audit";
 import { createDb } from "../lib/db";
 import { UserRepo } from "../repos/users";
 import { ConferenceRepo, ChurchRepo } from "../repos/org";
-
-function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
-}
+import { json } from "../lib/response";
 
 function toUserResponse(u: {
   id: number;

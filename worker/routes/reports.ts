@@ -1,15 +1,6 @@
 import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
-
-function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
-}
+import { json } from "../lib/response";
 
 export async function handleGetQuarterlyReport(request: Request, env: Env): Promise<Response> {
   const auth = await authenticate(request, env);

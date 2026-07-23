@@ -1,3 +1,9 @@
+import { PERMISSIONS as SHARED_PERMISSIONS } from "../../shared/types/index";
+export type Role =
+  "sysadmin" | "president" | "secretary" | "treasurer" | "auditor" | "pastor" | "member";
+
+export const PERMISSIONS: Record<string, Role[]> = SHARED_PERMISSIONS as Record<string, Role[]>;
+
 export const ROLES = {
   sysadmin: "sysadmin",
   president: "president",
@@ -8,9 +14,7 @@ export const ROLES = {
   member: "member",
 } as const;
 
-export type Role = (typeof ROLES)[keyof typeof ROLES];
-
-export const ROLE_LABELS: Record<Role, string> = {
+export const ROLE_LABELS: Record<string, string> = {
   sysadmin: "System Admin",
   president: "Conference President",
   secretary: "Conference Secretary",
@@ -20,56 +24,12 @@ export const ROLE_LABELS: Record<Role, string> = {
   member: "Church Member",
 };
 
-export const CONFERENCE_ROLES: Role[] = [
-  ROLES.sysadmin,
-  ROLES.president,
-  ROLES.secretary,
-  ROLES.treasurer,
-  ROLES.auditor,
+export const CONFERENCE_ROLES: string[] = [
+  "sysadmin",
+  "president",
+  "secretary",
+  "treasurer",
+  "auditor",
 ];
 
-export const CHURCH_ROLES: Role[] = [ROLES.pastor, ROLES.member];
-
-export const PERMISSIONS: Record<string, Role[]> = {
-  "org:manage": [ROLES.sysadmin],
-  "org:read": [
-    ROLES.sysadmin,
-    ROLES.president,
-    ROLES.secretary,
-    ROLES.treasurer,
-    ROLES.auditor,
-    ROLES.pastor,
-    ROLES.member,
-  ],
-  "members:write": [ROLES.sysadmin, ROLES.secretary, ROLES.pastor],
-  "members:read": [
-    ROLES.sysadmin,
-    ROLES.president,
-    ROLES.secretary,
-    ROLES.treasurer,
-    ROLES.auditor,
-    ROLES.pastor,
-    ROLES.member,
-  ],
-  "finance:write": [ROLES.sysadmin, ROLES.treasurer],
-  "finance:read": [
-    ROLES.sysadmin,
-    ROLES.president,
-    ROLES.secretary,
-    ROLES.treasurer,
-    ROLES.auditor,
-    ROLES.pastor,
-  ],
-  "audit:read": [ROLES.sysadmin, ROLES.auditor, ROLES.president],
-  "users:invite": [ROLES.sysadmin, ROLES.secretary],
-  "attendance:write": [ROLES.sysadmin, ROLES.secretary, ROLES.pastor],
-  "attendance:read": [
-    ROLES.sysadmin,
-    ROLES.president,
-    ROLES.secretary,
-    ROLES.treasurer,
-    ROLES.auditor,
-    ROLES.pastor,
-    ROLES.member,
-  ],
-};
+export const CHURCH_ROLES: string[] = ["pastor", "member"];

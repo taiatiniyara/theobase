@@ -1,4 +1,5 @@
 import { verifyToken } from "./auth";
+import { json } from "./response";
 
 export interface AuthContext {
   userId: string;
@@ -51,14 +52,4 @@ export function requireConference(auth: AuthContext, conferenceId: number): Resp
     return json({ error: "Access denied — not your conference" }, 403);
   }
   return null;
-}
-
-function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
 }

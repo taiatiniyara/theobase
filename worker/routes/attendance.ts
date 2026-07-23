@@ -3,16 +3,7 @@ import { PERMISSIONS } from "../lib/roles";
 import { logAudit, getDeviceInfo } from "../lib/audit";
 import { createDb } from "../lib/db";
 import { AttendanceRepo, type AttendanceRow } from "../repos/attendance";
-
-function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
-}
+import { json } from "../lib/response";
 
 const CATEGORIES = ["sabbath-school", "church-service", "youth"] as const;
 

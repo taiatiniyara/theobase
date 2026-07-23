@@ -2,19 +2,10 @@ import { authenticate, authorize, requireConference } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { parseCsv, validateCsvHeaders } from "../lib/csv";
 import { logAudit, getDeviceInfo } from "../lib/audit";
+import { json } from "../lib/response";
 import { createDb } from "../lib/db";
 import { ConferenceRepo, DistrictRepo, ChurchRepo } from "../repos/org";
 import type { ConferenceRow, DistrictRow, ChurchRow } from "../repos/org";
-
-function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
-}
 
 function toConferenceResponse(c: ConferenceRow) {
   return {

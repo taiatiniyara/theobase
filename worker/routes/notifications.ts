@@ -1,16 +1,7 @@
 import { authenticate } from "../lib/middleware";
 import { createDb } from "../lib/db";
 import { NotificationRepo, type NotificationRow } from "../repos/notifications";
-
-function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
-}
+import { json } from "../lib/response";
 
 function toNotificationResponse(n: NotificationRow) {
   return {

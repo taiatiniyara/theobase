@@ -6,7 +6,7 @@ export interface ReceiveTitheData {
   churchId: number;
   year: number;
   month: number;
-  receivedAmount: number;
+  receivedAmount?: number;
   note?: string;
   reconciledBy: number;
 }
@@ -16,20 +16,17 @@ export interface SetBalanceData {
   year: number;
   month: number;
   bankBalance: number;
-  systemBalance: number;
-  bankNote?: string;
-  reconciledBy: number;
+  note?: string;
 }
 
 export interface ConferenceTitheRow {
   churchId: number;
   churchName: string;
-  year: number;
-  month: number;
   forwardedTithe: number;
   receivedTithe: number | null;
-  titheDiscrepancy: number | null;
   titheStatus: string;
+  note: string | null;
+  titheDiscrepancy: number | null;
 }
 
 export interface ChurchBalanceRow {
@@ -42,8 +39,6 @@ export interface ChurchBalanceRow {
 export interface TitheReportRow {
   churchId: number;
   churchName: string;
-  year: number;
-  month: number;
   forwardedTithe: number;
   receivedTithe: number | null;
   titheDiscrepancy: number | null;
@@ -57,59 +52,62 @@ export type ReconciliationRow = typeof reconciliations.$inferSelect;
 export class ReconciliationRepo {
   constructor(private db: Db) {}
 
-  async getConferenceTithe(conferenceId: number): Promise<ConferenceTitheRow[]> {
+  async getConferenceTithe(
+    conferenceId: number,
+    year: number,
+    month: number
+  ): Promise<ConferenceTitheRow[]> {
+    const periodStart = `${year}-${String(month).padStart(2, "0")}-01`;
+    const nextMonth =
+      month === 12 ? `${year + 1}-01-01` : `${year}-${String(month + 1).padStart(2, "0")}-01`;
+
     return this.db.all<ConferenceTitheRow>(
       sql`SELECT
             c.id as "churchId",
             c.name as "churchName",
-            CAST(strftime('%Y', 'now') AS INTEGER) as year,
-            CAST(strftime('%m', 'now') AS INTEGER) as month,
             COALESCE(SUM(t.amount), 0) as "forwardedTithe",
             r.received_tithe as "receivedTithe",
-            r.tithe_discrepancy as "titheDiscrepancy",
-            COALESCE(r.tithe_status, 'pending') as "titheStatus"
+            MAX(COALESCE(r.tithe_status, 'pending')) as "titheStatus",
+            MAX(r.tithe_note) as "note"
           FROM churches c
           JOIN transactions t ON t.church_id = c.id AND t.type = 'income'
-          JOIN funds f ON f.id = t.fund_id AND f.type = 'tithe'
-          JOIN offering_batches b ON b.id = t.batch_id AND b.status = 'confirmed'
+            AND t.confirmed_by IS NOT NULL
+            AND t.created_at >= ${periodStart} AND t.created_at < ${nextMonth}
+          JOIN funds f ON t.fund_id = f.id AND f.type = 'tithe'
           LEFT JOIN reconciliations r ON r.church_id = c.id
-          WHERE c.parent_type = 'conference' AND c.parent_id = ${conferenceId}
+            AND r.year = ${year} AND r.month = ${month}
+          WHERE c.parent_id = ${conferenceId} AND c.parent_type = 'conference'
           GROUP BY c.id
           ORDER BY c.name ASC`
     );
   }
 
   async receiveTithe(data: ReceiveTitheData): Promise<ReconciliationRow> {
-    const record = await this.db.get<ReconciliationRow>(
-      sql`SELECT * FROM reconciliations
-            WHERE church_id = ${data.churchId}
-              AND year = ${data.year}
-              AND month = ${data.month}`
+    const forwardedRow = await this.db.get<{ total: number }>(
+      sql`SELECT COALESCE(SUM(t.amount), 0) as total
+          FROM transactions t
+          JOIN funds f ON t.fund_id = f.id
+          WHERE t.church_id = ${data.churchId} AND t.type = 'income'
+            AND f.type = 'tithe' AND t.confirmed_by IS NOT NULL`
     );
 
-    if (!record) {
-      return this.db.get<ReconciliationRow>(
-        sql`INSERT INTO reconciliations
-                (church_id, year, month, received_tithe, tithe_note, reconciled_by, reconciled_at, tithe_status)
-              VALUES
-                (${data.churchId}, ${data.year}, ${data.month}, ${data.receivedAmount},
-                 ${data.note ?? null}, ${data.reconciledBy}, datetime('now'), 'received')
-              RETURNING *`
-      );
-    }
-
-    const discrepancy = (record.forwardedTithe ?? 0) - data.receivedAmount;
+    const forwarded = forwardedRow?.total ?? 0;
+    const received = data.receivedAmount ?? forwarded;
+    const discrepancy = forwarded - received;
+    const status = discrepancy === 0 ? "received" : "discrepancy";
 
     return this.db.get<ReconciliationRow>(
-      sql`UPDATE reconciliations
-            SET received_tithe = ${data.receivedAmount},
-                tithe_discrepancy = ${discrepancy},
-                tithe_note = ${data.note ?? record.titheNote},
-                tithe_status = ${discrepancy === 0 ? "matched" : "discrepancy"},
-                reconciled_by = ${data.reconciledBy},
-                reconciled_at = datetime('now')
-            WHERE id = ${record.id}
-            RETURNING *`
+      sql`INSERT INTO reconciliations (church_id, year, month, forwarded_tithe, received_tithe, tithe_discrepancy, tithe_status, tithe_note, reconciled_by, reconciled_at)
+          VALUES (${data.churchId}, ${data.year}, ${data.month}, ${forwarded}, ${received}, ${discrepancy}, ${status}, ${data.note ?? null}, ${data.reconciledBy}, datetime('now'))
+          ON CONFLICT(church_id, year, month) DO UPDATE SET
+            forwarded_tithe = excluded.forwarded_tithe,
+            received_tithe = excluded.received_tithe,
+            tithe_discrepancy = excluded.tithe_discrepancy,
+            tithe_status = excluded.tithe_status,
+            tithe_note = excluded.tithe_note,
+            reconciled_by = excluded.reconciled_by,
+            reconciled_at = datetime('now')
+          RETURNING *`
     );
   }
 
@@ -131,62 +129,71 @@ export class ReconciliationRepo {
     );
   }
 
-  async setChurchBalance(data: SetBalanceData): Promise<ReconciliationRow> {
-    const discrepancy = data.systemBalance - data.bankBalance;
+  async getSystemBalance(churchId: number): Promise<number> {
+    const row = await this.db.get<{ balance: number }>(
+      sql`SELECT COALESCE(SUM(CASE WHEN t.type = 'income' AND f.forwarding_rule = 'local' THEN t.amount ELSE 0 END), 0) -
+                 COALESCE(SUM(CASE WHEN t.type = 'expense' THEN t.amount ELSE 0 END), 0) as balance
+          FROM transactions t
+          JOIN funds f ON t.fund_id = f.id
+          WHERE t.church_id = ${churchId} AND (t.confirmed_by IS NOT NULL OR t.type = 'expense')`
+    );
+    return row?.balance ?? 0;
+  }
 
-    const record = await this.db.get<ReconciliationRow>(
-      sql`SELECT * FROM reconciliations
-            WHERE church_id = ${data.churchId}
-              AND year = ${data.year}
-              AND month = ${data.month}`
+  async setChurchBalance(data: SetBalanceData): Promise<ReconciliationRow> {
+    const systemBalance = await this.getSystemBalance(data.churchId);
+    const bankDiscrepancy = systemBalance - data.bankBalance;
+
+    const existing = await this.db.get<{ id: number }>(
+      sql`SELECT id FROM reconciliations WHERE church_id = ${data.churchId} AND year = ${data.year} AND month = ${data.month}`
     );
 
-    if (!record) {
+    if (existing) {
       return this.db.get<ReconciliationRow>(
-        sql`INSERT INTO reconciliations
-                (church_id, year, month, bank_balance, system_balance,
-                 bank_discrepancy, bank_note, reconciled_by, reconciled_at)
-              VALUES
-                (${data.churchId}, ${data.year}, ${data.month},
-                 ${data.bankBalance}, ${data.systemBalance},
-                 ${discrepancy}, ${data.bankNote ?? null},
-                 ${data.reconciledBy}, datetime('now'))
-              RETURNING *`
+        sql`UPDATE reconciliations
+            SET bank_balance = ${data.bankBalance},
+                system_balance = ${systemBalance},
+                bank_discrepancy = ${bankDiscrepancy},
+                bank_note = ${data.note ?? null}
+            WHERE id = ${existing.id}
+            RETURNING *`
       );
     }
 
     return this.db.get<ReconciliationRow>(
-      sql`UPDATE reconciliations
-            SET bank_balance = ${data.bankBalance},
-                system_balance = ${data.systemBalance},
-                bank_discrepancy = ${discrepancy},
-                bank_note = ${data.bankNote ?? record.bankNote},
-                reconciled_by = ${data.reconciledBy},
-                reconciled_at = datetime('now')
-            WHERE id = ${record.id}
-            RETURNING *`
+      sql`INSERT INTO reconciliations (church_id, year, month, bank_balance, system_balance, bank_discrepancy, bank_note)
+          VALUES (${data.churchId}, ${data.year}, ${data.month}, ${data.bankBalance}, ${systemBalance}, ${bankDiscrepancy}, ${data.note ?? null})
+          RETURNING *`
     );
   }
 
-  async getTitheReport(conferenceId: number): Promise<TitheReportRow[]> {
+  async getTitheReport(
+    conferenceId: number,
+    year: number,
+    month: number
+  ): Promise<TitheReportRow[]> {
+    const periodStart = `${year}-${String(month).padStart(2, "0")}-01`;
+    const nextMonth =
+      month === 12 ? `${year + 1}-01-01` : `${year}-${String(month + 1).padStart(2, "0")}-01`;
+
     return this.db.all<TitheReportRow>(
       sql`SELECT
             c.id as "churchId",
             c.name as "churchName",
-            CAST(strftime('%Y', 'now') AS INTEGER) as year,
-            CAST(strftime('%m', 'now') AS INTEGER) as month,
             COALESCE(SUM(t.amount), 0) as "forwardedTithe",
-            r.received_tithe as "receivedTithe",
-            r.tithe_discrepancy as "titheDiscrepancy",
-            COALESCE(r.tithe_status, 'pending') as "titheStatus",
+            MAX(COALESCE(r.received_tithe, 0)) as "receivedTithe",
+            COALESCE(SUM(t.amount), 0) - MAX(COALESCE(r.received_tithe, 0)) as "titheDiscrepancy",
+            MAX(COALESCE(r.tithe_status, 'pending')) as "titheStatus",
             r.bank_balance as "bankBalance",
             r.system_balance as "systemBalance"
           FROM churches c
           JOIN transactions t ON t.church_id = c.id AND t.type = 'income'
-          JOIN funds f ON f.id = t.fund_id AND f.type = 'tithe'
-          JOIN offering_batches b ON b.id = t.batch_id AND b.status = 'confirmed'
+            AND t.confirmed_by IS NOT NULL
+            AND t.created_at >= ${periodStart} AND t.created_at < ${nextMonth}
+          JOIN funds f ON t.fund_id = f.id AND f.type = 'tithe'
           LEFT JOIN reconciliations r ON r.church_id = c.id
-          WHERE c.parent_type = 'conference' AND c.parent_id = ${conferenceId}
+            AND r.year = ${year} AND r.month = ${month}
+          WHERE c.parent_id = ${conferenceId} AND c.parent_type = 'conference'
           GROUP BY c.id
           ORDER BY c.name ASC`
     );

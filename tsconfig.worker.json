@@ -5,5 +5,5 @@
     "lib": ["ES2022"],
     "noUncheckedIndexedAccess": false
   },
-  "include": ["worker", "test"]
+  "include": ["worker", "test", "shared"]
 }

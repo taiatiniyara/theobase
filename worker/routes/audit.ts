@@ -2,16 +2,7 @@ import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { createDb } from "../lib/db";
 import { AuditRepo, type AuditEntry } from "../repos/audit";
-
-function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
-}
+import { json } from "../lib/response";
 
 function toAuditEntry(e: AuditEntry) {
   return {

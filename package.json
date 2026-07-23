@@ -22,6 +22,7 @@
     "@tanstack/react-table": "^8.21.0",
     "dexie": "^4.4.4",
     "drizzle-orm": "^0.45.2",
+    "hono": "^4.12.31",
     "jose": "^6.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
@@ -47,6 +48,7 @@
     "typescript": "^5.8.0",
     "typescript-eslint": "^8.32.0",
     "vite": "^6.3.0",
+    "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^3.1.0",
     "wrangler": "^4.13.0"
   },

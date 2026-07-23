@@ -90,6 +90,7 @@ export async function startSync(): Promise<void> {
   emit({ status: "syncing", current: 0, total: ops.length, label: formatLabel(ops[0]!) });
 
   let errorCount = 0;
+  let syncedCount = 0;
 
   for (let i = 0; i < ops.length; i++) {
     const op = ops[i]!;
@@ -104,6 +105,17 @@ export async function startSync(): Promise<void> {
 
       if (res.ok) {
         await markOperationSynced(op.id!);
+        syncedCount++;
+
+        apiFetch("/sync/register", {
+          method: "POST",
+          body: JSON.stringify({
+            userId: getToken() ? "user" : "anonymous",
+            operationType: op.type,
+            clientUuid: op.clientUuid,
+            payload: op.payload,
+          }),
+        }).catch(() => {});
       } else {
         errorCount++;
         if (res.status === 409) {
@@ -125,6 +137,13 @@ export async function startSync(): Promise<void> {
     } catch {
       errorCount++;
     }
+  }
+
+  if (syncedCount > 0) {
+    apiFetch("/sync/register", {
+      method: "POST",
+      body: JSON.stringify({ userId: getToken() ? "user" : "anonymous" }),
+    }).catch(() => {});
   }
 
   if (errorCount > 0) {
