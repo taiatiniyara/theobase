@@ -1,0 +1,488 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "label": "offline-db.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "lib_offline_db_queuedoperation",
+      "label": "QueuedOperation",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "lib_offline_db_cachedmember",
+      "label": "CachedMember",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L15"
+    },
+    {
+      "id": "lib_offline_db_cachedresponse",
+      "label": "CachedResponse",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L23"
+    },
+    {
+      "id": "lib_offline_db_db",
+      "label": "db",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L29"
+    },
+    {
+      "id": "lib_offline_db_offlinedb",
+      "label": "OfflineDB",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L42"
+    },
+    {
+      "id": "lib_offline_db_generateclientuuid",
+      "label": "generateClientUuid()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L44"
+    },
+    {
+      "id": "lib_offline_db_priority_map",
+      "label": "PRIORITY_MAP",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L52"
+    },
+    {
+      "id": "lib_offline_db_getoperationpriority",
+      "label": "getOperationPriority()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L59"
+    },
+    {
+      "id": "lib_offline_db_queueoperation",
+      "label": "queueOperation()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L67"
+    },
+    {
+      "id": "lib_offline_db_getpendingoperations",
+      "label": "getPendingOperations()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L87"
+    },
+    {
+      "id": "lib_offline_db_markoperationsynced",
+      "label": "markOperationSynced()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L95"
+    },
+    {
+      "id": "lib_offline_db_cachemembers",
+      "label": "cacheMembers()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L99"
+    },
+    {
+      "id": "lib_offline_db_getcachedmembers",
+      "label": "getCachedMembers()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L114"
+    },
+    {
+      "id": "lib_offline_db_cacheresponse",
+      "label": "cacheResponse()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L119"
+    },
+    {
+      "id": "lib_offline_db_getcachedresponse",
+      "label": "getCachedResponse()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L127"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "dexie",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_queuedoperation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_cachedmember",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_cachedresponse",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_db",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_offlinedb",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_generateclientuuid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L44",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_priority_map",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L52",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_getoperationpriority",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L59",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_queueoperation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L67",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_getpendingoperations",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L87",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_markoperationsynced",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L95",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_cachemembers",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L99",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_getcachedmembers",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L114",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_cacheresponse",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L119",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "target": "lib_offline_db_getcachedresponse",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L127",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_offline_db_queueoperation",
+      "target": "lib_offline_db_generateclientuuid",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L74",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_offline_db_queueoperation",
+      "target": "lib_offline_db_getoperationpriority",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L75",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "lib_offline_db_generateclientuuid",
+      "callee": "getItem",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L45"
+    },
+    {
+      "caller_nid": "lib_offline_db_generateclientuuid",
+      "callee": "randomUUID",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L47"
+    },
+    {
+      "caller_nid": "lib_offline_db_generateclientuuid",
+      "callee": "setItem",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L48"
+    },
+    {
+      "caller_nid": "lib_offline_db_getoperationpriority",
+      "callee": "startsWith",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L60"
+    },
+    {
+      "caller_nid": "lib_offline_db_getoperationpriority",
+      "callee": "startsWith",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L60"
+    },
+    {
+      "caller_nid": "lib_offline_db_getoperationpriority",
+      "callee": "startsWith",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L62"
+    },
+    {
+      "caller_nid": "lib_offline_db_getoperationpriority",
+      "callee": "startsWith",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L63"
+    },
+    {
+      "caller_nid": "lib_offline_db_queueoperation",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L79"
+    },
+    {
+      "caller_nid": "lib_offline_db_queueoperation",
+      "callee": "toISOString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L80"
+    },
+    {
+      "caller_nid": "lib_offline_db_queueoperation",
+      "callee": "add",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L83"
+    },
+    {
+      "caller_nid": "lib_offline_db_getpendingoperations",
+      "callee": "toArray",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L88"
+    },
+    {
+      "caller_nid": "lib_offline_db_getpendingoperations",
+      "callee": "equals",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L88"
+    },
+    {
+      "caller_nid": "lib_offline_db_getpendingoperations",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L88"
+    },
+    {
+      "caller_nid": "lib_offline_db_getpendingoperations",
+      "callee": "sort",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L89"
+    },
+    {
+      "caller_nid": "lib_offline_db_markoperationsynced",
+      "callee": "delete",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L96"
+    },
+    {
+      "caller_nid": "lib_offline_db_cachemembers",
+      "callee": "delete",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L100"
+    },
+    {
+      "caller_nid": "lib_offline_db_cachemembers",
+      "callee": "equals",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L100"
+    },
+    {
+      "caller_nid": "lib_offline_db_cachemembers",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L100"
+    },
+    {
+      "caller_nid": "lib_offline_db_cachemembers",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L101"
+    },
+    {
+      "caller_nid": "lib_offline_db_cachemembers",
+      "callee": "bulkAdd",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L111"
+    },
+    {
+      "caller_nid": "lib_offline_db_getcachedmembers",
+      "callee": "toArray",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L115"
+    },
+    {
+      "caller_nid": "lib_offline_db_getcachedmembers",
+      "callee": "equals",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L115"
+    },
+    {
+      "caller_nid": "lib_offline_db_getcachedmembers",
+      "callee": "where",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L115"
+    },
+    {
+      "caller_nid": "lib_offline_db_getcachedmembers",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "lib_offline_db_cacheresponse",
+      "callee": "put",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L120"
+    },
+    {
+      "caller_nid": "lib_offline_db_cacheresponse",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L122"
+    },
+    {
+      "caller_nid": "lib_offline_db_cacheresponse",
+      "callee": "toISOString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L123"
+    },
+    {
+      "caller_nid": "lib_offline_db_getcachedresponse",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L128"
+    },
+    {
+      "caller_nid": "lib_offline_db_getcachedresponse",
+      "callee": "parse",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\offline-db.ts",
+      "source_location": "L129"
+    }
+  ]
+}

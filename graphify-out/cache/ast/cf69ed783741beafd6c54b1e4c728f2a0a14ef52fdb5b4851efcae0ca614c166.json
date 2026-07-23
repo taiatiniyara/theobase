@@ -1,0 +1,213 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_districtdashboard_tsx",
+      "label": "DistrictDashboard.tsx",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_districtdashboard_churchmetric",
+      "label": "ChurchMetric",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L5"
+    },
+    {
+      "id": "routes_districtdashboard_districtsummary",
+      "label": "DistrictSummary",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L14"
+    },
+    {
+      "id": "routes_districtdashboard_districtdashboard",
+      "label": "DistrictDashboard()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L21"
+    },
+    {
+      "id": "routes_districtdashboard_summarycard",
+      "label": "SummaryCard()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L119"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_districtdashboard_tsx",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_districtdashboard_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_auth_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_districtdashboard_tsx",
+      "target": "lib_auth_useauth",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_districtdashboard_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_api_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_districtdashboard_tsx",
+      "target": "lib_api_api",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_districtdashboard_tsx",
+      "target": "routes_districtdashboard_churchmetric",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_districtdashboard_tsx",
+      "target": "routes_districtdashboard_districtsummary",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_districtdashboard_tsx",
+      "target": "routes_districtdashboard_districtdashboard",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_districtdashboard_tsx",
+      "target": "routes_districtdashboard_summarycard",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L119",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_districtdashboard_districtdashboard",
+      "callee": "useAuth",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "routes_districtdashboard_districtdashboard",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L23"
+    },
+    {
+      "caller_nid": "routes_districtdashboard_districtdashboard",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "routes_districtdashboard_districtdashboard",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L25"
+    },
+    {
+      "caller_nid": "routes_districtdashboard_districtdashboard",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L26"
+    },
+    {
+      "caller_nid": "routes_districtdashboard_districtdashboard",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "routes_districtdashboard_districtdashboard",
+      "callee": "includes",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L50"
+    },
+    {
+      "caller_nid": "routes_districtdashboard_districtdashboard",
+      "callee": "toLocaleString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L78"
+    },
+    {
+      "caller_nid": "routes_districtdashboard_districtdashboard",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L79"
+    },
+    {
+      "caller_nid": "routes_districtdashboard_districtdashboard",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L80"
+    },
+    {
+      "caller_nid": "routes_districtdashboard_districtdashboard",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L81"
+    },
+    {
+      "caller_nid": "routes_districtdashboard_districtdashboard",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\DistrictDashboard.tsx",
+      "source_location": "L96"
+    }
+  ]
+}

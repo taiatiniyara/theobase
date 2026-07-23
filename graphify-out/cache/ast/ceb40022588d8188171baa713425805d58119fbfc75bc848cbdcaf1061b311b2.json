@@ -1,0 +1,747 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_conference_ts",
+      "label": "conference.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_conference_json",
+      "label": "json()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L4"
+    },
+    {
+      "id": "routes_conference_handleconferencedashboard",
+      "label": "handleConferenceDashboard()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L14"
+    },
+    {
+      "id": "routes_conference_handledistrictdashboard",
+      "label": "handleDistrictDashboard()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L129"
+    },
+    {
+      "id": "routes_conference_handleglobaldashboard",
+      "label": "handleGlobalDashboard()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L230"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_conference_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_middleware_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_conference_ts",
+      "target": "lib_middleware_authenticate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_conference_ts",
+      "target": "lib_middleware_authorize",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_conference_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_conference_ts",
+      "target": "lib_roles_permissions",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_conference_ts",
+      "target": "routes_conference_json",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_conference_ts",
+      "target": "routes_conference_handleconferencedashboard",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_conference_ts",
+      "target": "routes_conference_handledistrictdashboard",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L129",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_conference_ts",
+      "target": "routes_conference_handleglobaldashboard",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L230",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_conference_handleconferencedashboard",
+      "target": "routes_conference_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_conference_handledistrictdashboard",
+      "target": "routes_conference_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L139",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_conference_handleglobaldashboard",
+      "target": "routes_conference_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L288",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_conference_json",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L5"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L15"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "await env.DB.prepare(\"SELECT conference_id FROM users WHERE id = ?\")\n    .bind(Number(auth.userId))\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L25"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "getFullYear",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L32"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "getMonth",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "padStart",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L34"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L34"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT COALESCE(SUM(t.amount), 0) as total\n     FROM transactions t\n     JOIN churches c ON t.church_id = c.id\n     JOIN funds f ON t.fund_id = f.id\n     WHERE c.parent_id = ? AND c.parent_type = 'conference'\n       AND t.type = 'income' AND f.type = 'tithe'\n       AND t.confirmed_by IS NOT NULL\n       AND t.created_at >= ? ${churchWhere}`\n  )\n    .bind(confId, periodStart, ...(districtId ? [Number(districtId)] : []))\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L50"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as total\n     FROM members m\n     JOIN churches c ON m.church_id = c.id\n     WHERE c.parent_id = ? AND c.parent_type = 'conference'\n       AND m.status = 'active'`\n  )\n    .bind(confId)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L53"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L53"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L53"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as total\n     FROM members m\n     JOIN churches c ON m.church_id = c.id\n     WHERE c.parent_id = ? AND c.parent_type = 'conference'\n       AND m.baptism_type = 'immersion'\n       AND m.baptism_date >= ?`\n  )\n    .bind(confId, yearStart)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L63"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L63"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L63"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as total\n     FROM churches c\n     WHERE c.parent_id = ? AND c.parent_type = 'conference' ${churchJoin}`\n  )\n    .bind(confId)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L74"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L74"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L74"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L82"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L82"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L82"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L103"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L103"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L103"
+    },
+    {
+      "caller_nid": "routes_conference_handleconferencedashboard",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L130"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L133"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "await env.DB.prepare(\"SELECT id, conference_id FROM users WHERE id = ?\")\n    .bind(Number(auth.userId))\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L136"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L136"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L136"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L137"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT id, name FROM districts WHERE pastor_user_id = ? AND conference_id = ?`\n  )\n    .bind(user.id, user.conference_id)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L141"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L141"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L141"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "getFullYear",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L152"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "getMonth",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L153"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "padStart",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L154"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L154"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT COALESCE(SUM(t.amount), 0) as total\n     FROM transactions t\n     JOIN churches c ON t.church_id = c.id\n     JOIN funds f ON t.fund_id = f.id\n     WHERE c.district_id = ? AND t.type = 'income' AND f.type = 'tithe'\n       AND t.confirmed_by IS NOT NULL AND t.created_at >= ?`\n  )\n    .bind(districtId, periodStart)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L159"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L159"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L159"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as total\n     FROM members m\n     JOIN churches c ON m.church_id = c.id\n     WHERE c.district_id = ? AND m.status = 'active'`\n  )\n    .bind(districtId)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L170"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L170"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L170"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as total\n     FROM members m\n     JOIN churches c ON m.church_id = c.id\n     WHERE c.district_id = ? AND m.baptism_type = 'immersion' AND m.baptism_date >= ?`\n  )\n    .bind(districtId, yearStart)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L179"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L179"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L179"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as total FROM churches WHERE district_id = ?`\n  )\n    .bind(districtId)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L188"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L188"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L188"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L194"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L194"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L194"
+    },
+    {
+      "caller_nid": "routes_conference_handledistrictdashboard",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L219"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L231"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L234"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "getFullYear",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L238"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "getMonth",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L239"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "padStart",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L240"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L240"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT COALESCE(SUM(t.amount), 0) as total\n     FROM transactions t\n     JOIN funds f ON t.fund_id = f.id\n     WHERE t.type = 'income' AND f.type = 'tithe'\n       AND t.confirmed_by IS NOT NULL AND t.created_at >= ?`\n  )\n    .bind(periodStart)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L243"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L243"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L243"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as total FROM members WHERE status = 'active'`\n  ).first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L253"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L253"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as total\n     FROM members\n     WHERE baptism_type = 'immersion' AND baptism_date >= ?`\n  )\n    .bind(yearStart)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L257"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L257"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L257"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "await env.DB.prepare(`SELECT COUNT(*) as total FROM churches`).first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L265"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L265"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "await env.DB.prepare(\n    `SELECT COUNT(*) as total FROM conferences`\n  ).first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L269"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L269"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L273"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L273"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L273"
+    },
+    {
+      "caller_nid": "routes_conference_handleglobaldashboard",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts",
+      "source_location": "L296"
+    }
+  ]
+}

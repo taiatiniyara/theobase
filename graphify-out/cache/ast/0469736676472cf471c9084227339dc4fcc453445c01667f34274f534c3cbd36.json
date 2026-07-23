@@ -1,0 +1,604 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "label": "attendance.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_attendance_json",
+      "label": "json()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L5"
+    },
+    {
+      "id": "routes_attendance_categories",
+      "label": "CATEGORIES",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L15"
+    },
+    {
+      "id": "routes_attendance_handlerecordattendance",
+      "label": "handleRecordAttendance()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L17"
+    },
+    {
+      "id": "routes_attendance_handlegetattendance",
+      "label": "handleGetAttendance()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L98"
+    },
+    {
+      "id": "routes_attendance_handlegetattendancestats",
+      "label": "handleGetAttendanceStats()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L149"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_middleware_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "lib_middleware_authenticate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "lib_middleware_authorize",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "lib_roles_permissions",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_audit_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "lib_audit_logaudit",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "lib_audit_getdeviceinfo",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "routes_attendance_json",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "routes_attendance_categories",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "routes_attendance_handlerecordattendance",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "routes_attendance_handlegetattendance",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L98",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_attendance_ts",
+      "target": "routes_attendance_handlegetattendancestats",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L149",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_attendance_handlerecordattendance",
+      "target": "routes_attendance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_attendance_handlegetattendance",
+      "target": "routes_attendance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L146",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_attendance_handlegetattendancestats",
+      "target": "routes_attendance_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L163",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_attendance_json",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L6"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L21"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "includes",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "join",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L42"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "await env.DB.prepare(\n    `SELECT id, count FROM attendance\n     WHERE church_id = ? AND date = ? AND category = ?`\n  )\n    .bind(body.churchId, body.date, body.category)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L49"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L49"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L49"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "await env.DB.prepare(\n    `INSERT INTO attendance (church_id, date, count, category, created_by)\n     VALUES (?, ?, ?, ?, ?)\n     ON CONFLICT(church_id, date, category)\n     DO UPDATE SET count = ?, updated_at = datetime('now')\n     RETURNING id`\n  )\n    .bind(body.churchId, body.date, body.count, body.category, Number(auth.userId), body.count)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L56"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L56"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L56"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L63"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L75"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L78"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "batch",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L80"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "logAudit",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L84"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L85"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L89"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L90"
+    },
+    {
+      "caller_nid": "routes_attendance_handlerecordattendance",
+      "callee": "getDeviceInfo",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L92"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L99"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L102"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L106"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L107"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L109"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L117"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L117"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L121"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L125"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L129"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "await env.DB.prepare(query)\n    .bind(...params)\n    .all",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L133"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L133"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendance",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L133"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L150"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L153"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L157"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L158"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L159"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L160"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L168"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L172"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L176"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L180"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "await env.DB.prepare(query)\n    .bind(...params)\n    .all",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L184"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L184"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L184"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L196"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L200"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L204"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L208"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "await env.DB.prepare(trendQuery)\n    .bind(...trendParams)\n    .all",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L212"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L212"
+    },
+    {
+      "caller_nid": "routes_attendance_handlegetattendancestats",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts",
+      "source_location": "L212"
+    }
+  ]
+}

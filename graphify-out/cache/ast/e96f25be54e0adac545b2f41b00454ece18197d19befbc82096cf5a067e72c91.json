@@ -1,0 +1,62 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_public_sw_js",
+      "label": "sw.js",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\public\\sw.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "public_sw_assets_to_cache",
+      "label": "ASSETS_TO_CACHE",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\public\\sw.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "public_sw_url",
+      "label": "url",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\public\\sw.js",
+      "source_location": "L32"
+    },
+    {
+      "id": "public_sw_fetchpromise",
+      "label": "fetchPromise",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\public\\sw.js",
+      "source_location": "L38"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_public_sw_js",
+      "target": "public_sw_assets_to_cache",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\public\\sw.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_public_sw_js",
+      "target": "public_sw_url",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\public\\sw.js",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_public_sw_js",
+      "target": "public_sw_fetchpromise",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\public\\sw.js",
+      "source_location": "L38",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": []
+}

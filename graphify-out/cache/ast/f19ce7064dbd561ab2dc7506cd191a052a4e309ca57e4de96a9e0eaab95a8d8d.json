@@ -1,0 +1,227 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_globaldashboard_tsx",
+      "label": "GlobalDashboard.tsx",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_globaldashboard_globalsummary",
+      "label": "GlobalSummary",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L5"
+    },
+    {
+      "id": "routes_globaldashboard_monthlytrend",
+      "label": "MonthlyTrend",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L13"
+    },
+    {
+      "id": "routes_globaldashboard_globaldashboard",
+      "label": "GlobalDashboard()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L18"
+    },
+    {
+      "id": "routes_globaldashboard_summarycard",
+      "label": "SummaryCard()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L104"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_globaldashboard_tsx",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_globaldashboard_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_auth_tsx",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_globaldashboard_tsx",
+      "target": "lib_auth_useauth",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_globaldashboard_tsx",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_api_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_globaldashboard_tsx",
+      "target": "lib_api_api",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_globaldashboard_tsx",
+      "target": "routes_globaldashboard_globalsummary",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_globaldashboard_tsx",
+      "target": "routes_globaldashboard_monthlytrend",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_globaldashboard_tsx",
+      "target": "routes_globaldashboard_globaldashboard",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_routes_globaldashboard_tsx",
+      "target": "routes_globaldashboard_summarycard",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L104",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "useAuth",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L19"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L20"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L21"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "includes",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L44"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "max",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L52"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L52"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "toLocaleString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L72"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L73"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L74"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L75"
+    },
+    {
+      "caller_nid": "routes_globaldashboard_globaldashboard",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\GlobalDashboard.tsx",
+      "source_location": "L81"
+    }
+  ]
+}

@@ -1,0 +1,529 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "label": "sync-manager.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "lib_sync_manager_syncstatus",
+      "label": "SyncStatus",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L4"
+    },
+    {
+      "id": "lib_sync_manager_syncprogress",
+      "label": "SyncProgress",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L6"
+    },
+    {
+      "id": "lib_sync_manager_onsyncprogress",
+      "label": "onSyncProgress()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L15"
+    },
+    {
+      "id": "lib_sync_manager_emit",
+      "label": "emit()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L19"
+    },
+    {
+      "id": "lib_sync_manager_getonlinestatus",
+      "label": "getOnlineStatus()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L26"
+    },
+    {
+      "id": "lib_sync_manager_initsyncmanager",
+      "label": "initSyncManager()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L30"
+    },
+    {
+      "id": "lib_sync_manager_apifetch",
+      "label": "apiFetch()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L51"
+    },
+    {
+      "id": "lib_sync_manager_startsync",
+      "label": "startSync()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L81"
+    },
+    {
+      "id": "lib_sync_manager_formatlabel",
+      "label": "formatLabel()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L137"
+    },
+    {
+      "id": "lib_sync_manager_onconflict",
+      "label": "onConflict()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L153"
+    },
+    {
+      "id": "lib_sync_manager_emitconflict",
+      "label": "emitConflict()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L162"
+    },
+    {
+      "id": "lib_sync_manager_triggersync",
+      "label": "triggerSync()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L169"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_api_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_api_gettoken",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_api_settokens",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_api_cleartokens",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_api_getrefreshtoken",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_offline_db_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_offline_db_getpendingoperations",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_offline_db_markoperationsynced",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_offline_db_queuedoperation",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_syncstatus",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_syncprogress",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_onsyncprogress",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_emit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_getonlinestatus",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_initsyncmanager",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_apifetch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_startsync",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_formatlabel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L137",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_onconflict",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L153",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_emitconflict",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L162",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_src_lib_sync_manager_ts",
+      "target": "lib_sync_manager_triggersync",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L169",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_sync_manager_initsyncmanager",
+      "target": "lib_sync_manager_startsync",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_sync_manager_startsync",
+      "target": "lib_sync_manager_emit",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L86",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_sync_manager_startsync",
+      "target": "lib_sync_manager_formatlabel",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L90",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_sync_manager_startsync",
+      "target": "lib_sync_manager_apifetch",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L100",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_sync_manager_startsync",
+      "target": "lib_sync_manager_emitconflict",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L116",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "lib_sync_manager_emit",
+      "callee": "progressCb",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L20"
+    },
+    {
+      "caller_nid": "lib_sync_manager_initsyncmanager",
+      "callee": "addEventListener",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "lib_sync_manager_initsyncmanager",
+      "callee": "addEventListener",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "lib_sync_manager_initsyncmanager",
+      "callee": "setInterval",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "lib_sync_manager_apifetch",
+      "callee": "getToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L52"
+    },
+    {
+      "caller_nid": "lib_sync_manager_apifetch",
+      "callee": "fetch",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "lib_sync_manager_apifetch",
+      "callee": "getRefreshToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L61"
+    },
+    {
+      "caller_nid": "lib_sync_manager_apifetch",
+      "callee": "fetch",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L62"
+    },
+    {
+      "caller_nid": "lib_sync_manager_apifetch",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L65"
+    },
+    {
+      "caller_nid": "lib_sync_manager_apifetch",
+      "callee": "getRefreshToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L65"
+    },
+    {
+      "caller_nid": "lib_sync_manager_apifetch",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L68"
+    },
+    {
+      "caller_nid": "lib_sync_manager_apifetch",
+      "callee": "setTokens",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L69"
+    },
+    {
+      "caller_nid": "lib_sync_manager_apifetch",
+      "callee": "fetch",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "lib_sync_manager_apifetch",
+      "callee": "clearTokens",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L73"
+    },
+    {
+      "caller_nid": "lib_sync_manager_startsync",
+      "callee": "getPendingOperations",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L84"
+    },
+    {
+      "caller_nid": "lib_sync_manager_startsync",
+      "callee": "parse",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L99"
+    },
+    {
+      "caller_nid": "lib_sync_manager_startsync",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L102"
+    },
+    {
+      "caller_nid": "lib_sync_manager_startsync",
+      "callee": "markOperationSynced",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L106"
+    },
+    {
+      "caller_nid": "lib_sync_manager_startsync",
+      "callee": "catch",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "lib_sync_manager_startsync",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "lib_sync_manager_startsync",
+      "callee": "startsWith",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L115"
+    },
+    {
+      "caller_nid": "lib_sync_manager_formatlabel",
+      "callee": "startsWith",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L141"
+    },
+    {
+      "caller_nid": "lib_sync_manager_formatlabel",
+      "callee": "startsWith",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L142"
+    },
+    {
+      "caller_nid": "lib_sync_manager_emitconflict",
+      "callee": "conflictCb",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L166"
+    },
+    {
+      "caller_nid": "lib_sync_manager_triggersync",
+      "callee": "clearTimeout",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L170"
+    },
+    {
+      "caller_nid": "lib_sync_manager_triggersync",
+      "callee": "setTimeout",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\lib\\sync-manager.ts",
+      "source_location": "L171"
+    }
+  ]
+}

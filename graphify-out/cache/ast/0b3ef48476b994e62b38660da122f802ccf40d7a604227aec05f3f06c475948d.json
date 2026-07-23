@@ -1,0 +1,455 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_contributions_ts",
+      "label": "contributions.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_contributions_json",
+      "label": "json()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L4"
+    },
+    {
+      "id": "routes_contributions_handlegetcontributions",
+      "label": "handleGetContributions()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L14"
+    },
+    {
+      "id": "routes_contributions_handlegetcontributionstatement",
+      "label": "handleGetContributionStatement()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L106"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_contributions_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_middleware_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_contributions_ts",
+      "target": "lib_middleware_authenticate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_contributions_ts",
+      "target": "lib_middleware_authorize",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_contributions_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_contributions_ts",
+      "target": "lib_roles_permissions",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_contributions_ts",
+      "target": "routes_contributions_json",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_contributions_ts",
+      "target": "routes_contributions_handlegetcontributions",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_contributions_ts",
+      "target": "routes_contributions_handlegetcontributionstatement",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L106",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_contributions_handlegetcontributions",
+      "target": "routes_contributions_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_contributions_handlegetcontributionstatement",
+      "target": "routes_contributions_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L122",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_contributions_json",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L5"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L15"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L23"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L79"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L80"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L81"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "has",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L83"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "set",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L84"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L86"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L93"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L96"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L100"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L101"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "from",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L102"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributions",
+      "callee": "values",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L102"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L111"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "authorize",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L114"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L118"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L119"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L126"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L126"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "push",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L130"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "await env.DB.prepare(\"SELECT name FROM churches WHERE id = ?\")\n    .bind(Number(churchId))\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L132"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L132"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L132"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L133"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L136"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L136"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L136"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L166"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L167"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L172"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L177"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L178"
+    },
+    {
+      "caller_nid": "routes_contributions_handlegetcontributionstatement",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts",
+      "source_location": "L180"
+    }
+  ]
+}

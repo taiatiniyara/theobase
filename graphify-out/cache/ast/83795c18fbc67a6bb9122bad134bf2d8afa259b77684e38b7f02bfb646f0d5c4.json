@@ -1,0 +1,757 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "label": "auth.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_auth_json",
+      "label": "json()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L12"
+    },
+    {
+      "id": "routes_auth_handleauthsignup",
+      "label": "handleAuthSignup()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L22"
+    },
+    {
+      "id": "routes_auth_handleauthlogin",
+      "label": "handleAuthLogin()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L96"
+    },
+    {
+      "id": "routes_auth_handleauthrefresh",
+      "label": "handleAuthRefresh()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L164"
+    },
+    {
+      "id": "routes_auth_handleforgotpassword",
+      "label": "handleForgotPassword()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L227"
+    },
+    {
+      "id": "routes_auth_handleresetpassword",
+      "label": "handleResetPassword()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L260"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_auth_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "lib_auth_hashpassword",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "lib_auth_verifypassword",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "lib_auth_signaccesstoken",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "lib_auth_signrefreshtoken",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "lib_auth_verifytoken",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "lib_auth_generateresettoken",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_roles_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "lib_roles_roles",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_audit_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "lib_audit_logaudit",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "lib_audit_getdeviceinfo",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "routes_auth_json",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "routes_auth_handleauthsignup",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "routes_auth_handleauthlogin",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "routes_auth_handleauthrefresh",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L164",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "routes_auth_handleforgotpassword",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L227",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_auth_ts",
+      "target": "routes_auth_handleresetpassword",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L260",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_auth_handleauthsignup",
+      "target": "routes_auth_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_auth_handleauthlogin",
+      "target": "routes_auth_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L99",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_auth_handleauthrefresh",
+      "target": "routes_auth_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L167",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_auth_handleforgotpassword",
+      "target": "routes_auth_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L230",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_auth_handleresetpassword",
+      "target": "routes_auth_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L263",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_auth_json",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L13"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "first",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L37"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L37"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L37"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "toLowerCase",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "hashPassword",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L44"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "await env.DB.prepare(\n      \"INSERT INTO conferences (name, code) VALUES (?, ?) RETURNING id\"\n    )\n      .bind(body.conferenceName, body.conferenceName.toLowerCase().replace(/\\s+/g, \"_\"))\n      .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L48"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L48"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L48"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "replace",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L51"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "toLowerCase",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L51"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "await env.DB.prepare(\n    `INSERT INTO users (email, password_hash, role, conference_id)\n     VALUES (?, ?, 'sysadmin', ?) RETURNING id`\n  )\n    .bind(body.email.toLowerCase().trim(), passwordHash, conferenceId)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L58"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L58"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L58"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L62"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "toLowerCase",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L62"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "logAudit",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L69"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L75"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L75"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "toLowerCase",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L75"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "getDeviceInfo",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L77"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L80"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "signAccessToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L81"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthsignup",
+      "callee": "signRefreshToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L85"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthlogin",
+      "callee": "await env.DB.prepare(\n    \"SELECT id, password_hash, role, conference_id, member_id, active FROM users WHERE email = ?\"\n  )\n    .bind(body.email.toLowerCase().trim())\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthlogin",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthlogin",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthlogin",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L111"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthlogin",
+      "callee": "toLowerCase",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L111"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthlogin",
+      "callee": "verifyPassword",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L129"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthlogin",
+      "callee": "await env.DB.prepare(\"SELECT church_id FROM members WHERE id = ?\")\n      .bind(user.member_id)\n      .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L136"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthlogin",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L136"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthlogin",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L136"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthlogin",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L142"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthlogin",
+      "callee": "signAccessToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L143"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthlogin",
+      "callee": "signRefreshToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L152"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthrefresh",
+      "callee": "verifyToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L177"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthrefresh",
+      "callee": "await env.DB.prepare(\n      \"SELECT id, role, conference_id, member_id, active FROM users WHERE id = ?\"\n    )\n      .bind(Number(payload.sub))\n      .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L182"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthrefresh",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L182"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthrefresh",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L182"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthrefresh",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L185"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthrefresh",
+      "callee": "await env.DB.prepare(\"SELECT church_id FROM members WHERE id = ?\")\n        .bind(user.member_id)\n        .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L204"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthrefresh",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L204"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthrefresh",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L204"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthrefresh",
+      "callee": "signAccessToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L210"
+    },
+    {
+      "caller_nid": "routes_auth_handleauthrefresh",
+      "callee": "signRefreshToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L219"
+    },
+    {
+      "caller_nid": "routes_auth_handleforgotpassword",
+      "callee": "await env.DB.prepare(\"SELECT id FROM users WHERE email = ?\")\n    .bind(body.email.toLowerCase().trim())\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L239"
+    },
+    {
+      "caller_nid": "routes_auth_handleforgotpassword",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L239"
+    },
+    {
+      "caller_nid": "routes_auth_handleforgotpassword",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L239"
+    },
+    {
+      "caller_nid": "routes_auth_handleforgotpassword",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L240"
+    },
+    {
+      "caller_nid": "routes_auth_handleforgotpassword",
+      "callee": "toLowerCase",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L240"
+    },
+    {
+      "caller_nid": "routes_auth_handleforgotpassword",
+      "callee": "generateResetToken",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L247"
+    },
+    {
+      "caller_nid": "routes_auth_handleforgotpassword",
+      "callee": "toISOString",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L248"
+    },
+    {
+      "caller_nid": "routes_auth_handleforgotpassword",
+      "callee": "now",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L248"
+    },
+    {
+      "caller_nid": "routes_auth_handleforgotpassword",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L250"
+    },
+    {
+      "caller_nid": "routes_auth_handleforgotpassword",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L250"
+    },
+    {
+      "caller_nid": "routes_auth_handleforgotpassword",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L250"
+    },
+    {
+      "caller_nid": "routes_auth_handleresetpassword",
+      "callee": "await env.DB.prepare(\n    \"SELECT id FROM users WHERE reset_token = ? AND reset_token_expires > datetime('now')\"\n  )\n    .bind(body.token)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L275"
+    },
+    {
+      "caller_nid": "routes_auth_handleresetpassword",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L275"
+    },
+    {
+      "caller_nid": "routes_auth_handleresetpassword",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L275"
+    },
+    {
+      "caller_nid": "routes_auth_handleresetpassword",
+      "callee": "hashPassword",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L285"
+    },
+    {
+      "caller_nid": "routes_auth_handleresetpassword",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L286"
+    },
+    {
+      "caller_nid": "routes_auth_handleresetpassword",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L286"
+    },
+    {
+      "caller_nid": "routes_auth_handleresetpassword",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L286"
+    },
+    {
+      "caller_nid": "routes_auth_handleresetpassword",
+      "callee": "logAudit",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L292"
+    },
+    {
+      "caller_nid": "routes_auth_handleresetpassword",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L298"
+    },
+    {
+      "caller_nid": "routes_auth_handleresetpassword",
+      "callee": "getDeviceInfo",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts",
+      "source_location": "L300"
+    }
+  ]
+}

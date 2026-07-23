@@ -1,0 +1,306 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_notifications_ts",
+      "label": "notifications.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "routes_notifications_json",
+      "label": "json()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "routes_notifications_handlegetnotifications",
+      "label": "handleGetNotifications()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L13"
+    },
+    {
+      "id": "routes_notifications_handlemarknotificationread",
+      "label": "handleMarkNotificationRead()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L38"
+    },
+    {
+      "id": "routes_notifications_handlemarkallread",
+      "label": "handleMarkAllRead()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L64"
+    },
+    {
+      "id": "routes_notifications_createnotification",
+      "label": "createNotification()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L75"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_notifications_ts",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_middleware_ts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_notifications_ts",
+      "target": "lib_middleware_authenticate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_notifications_ts",
+      "target": "routes_notifications_json",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_notifications_ts",
+      "target": "routes_notifications_handlegetnotifications",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_notifications_ts",
+      "target": "routes_notifications_handlemarknotificationread",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_notifications_ts",
+      "target": "routes_notifications_handlemarkallread",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L64",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_routes_notifications_ts",
+      "target": "routes_notifications_createnotification",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L75",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_notifications_handlegetnotifications",
+      "target": "routes_notifications_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_notifications_handlemarknotificationread",
+      "target": "routes_notifications_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_notifications_handlemarkallread",
+      "target": "routes_notifications_json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L72",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "routes_notifications_json",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L4"
+    },
+    {
+      "caller_nid": "routes_notifications_handlegetnotifications",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L14"
+    },
+    {
+      "caller_nid": "routes_notifications_handlegetnotifications",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "routes_notifications_handlegetnotifications",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "routes_notifications_handlegetnotifications",
+      "callee": "all",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "routes_notifications_handlegetnotifications",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "routes_notifications_handlegetnotifications",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarknotificationread",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarknotificationread",
+      "callee": "await env.DB.prepare(\n    \"SELECT id, recipient_user_id FROM notifications WHERE id = ?\"\n  )\n    .bind(notificationId)\n    .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarknotificationread",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarknotificationread",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarknotificationread",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L55"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarknotificationread",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarknotificationread",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarknotificationread",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarkallread",
+      "callee": "authenticate",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L65"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarkallread",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L68"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarkallread",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L68"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarkallread",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L68"
+    },
+    {
+      "caller_nid": "routes_notifications_handlemarkallread",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L69"
+    },
+    {
+      "caller_nid": "routes_notifications_createnotification",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L84"
+    },
+    {
+      "caller_nid": "routes_notifications_createnotification",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L84"
+    },
+    {
+      "caller_nid": "routes_notifications_createnotification",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts",
+      "source_location": "L84"
+    }
+  ]
+}
