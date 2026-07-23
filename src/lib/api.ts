@@ -838,3 +838,77 @@ export const attendanceApi = {
     );
   },
 };
+
+export interface GivingDeclaration {
+  id: number;
+  church_id: number;
+  fund_id: number;
+  amount: number;
+  description: string | null;
+  member_id: number;
+  proxy_for_member_id: number | null;
+  verified: number;
+  verified_by: number | null;
+  verified_at: string | null;
+  created_at: string;
+  uuid: string;
+  member_name: string;
+  proxy_for_name: string | null;
+  fund_name: string;
+  fund_type: string;
+}
+
+export const selfMemberApi = {
+  getMe: (churchId: number) =>
+    api.get<{
+      id: number;
+      church_id: number;
+      full_name: string;
+      phone: string | null;
+      email: string | null;
+      address: string | null;
+      version: number;
+    }>(`/churches/${churchId}/members/me`),
+  updateMe: (
+    churchId: number,
+    data: { fullName?: string; phone?: string; email?: string; address?: string; version: number }
+  ) => api.patch<{ success: boolean }>(`/churches/${churchId}/members/me`, data),
+};
+
+export const givingApi = {
+  declare: (
+    churchId: number,
+    memberId: number,
+    data: { fundId: number; amount: number; description?: string; proxyForMemberId?: number }
+  ) =>
+    api.post<{
+      id: number;
+      memberId: number;
+      amount: number;
+      fundType: string;
+      verified: boolean;
+      proxyFor: number | null;
+    }>(`/churches/${churchId}/members/${memberId}/giving`, data),
+  requestTransfer: (churchId: number, memberId: number, toChurchId: number) =>
+    api.post<{ id: number; memberId: number; status: string }>(
+      `/churches/${churchId}/members/${memberId}/transfer-request`,
+      { toChurchId }
+    ),
+};
+
+export const declarationApi = {
+  list: (churchId: number, verified?: boolean) => {
+    const qs = verified !== undefined ? `?verified=${verified}` : "";
+    return api.get<{ declarations: GivingDeclaration[] }>(
+      `/churches/${churchId}/declarations${qs}`
+    );
+  },
+  verify: (churchId: number, declarationId: number) =>
+    api.post<{ success: true; id: number; verified: true }>(
+      `/churches/${churchId}/declarations/${declarationId}/verify`
+    ),
+  reject: (churchId: number, declarationId: number) =>
+    api.post<{ success: true; id: number; rejected: true }>(
+      `/churches/${churchId}/declarations/${declarationId}/reject`
+    ),
+};

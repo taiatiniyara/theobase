@@ -3,6 +3,7 @@ import { useAuth } from "../lib/auth";
 import {
   financeApi,
   memberApi,
+  declarationApi,
   type Fund,
   type ExpenseCategory,
   type Batch,
@@ -10,9 +11,11 @@ import {
   type Transaction,
   type Budget,
   type MonthlyReport,
+  type GivingDeclaration,
 } from "../lib/api";
 
-type Tab = "overview" | "batches" | "transactions" | "budgets" | "reports" | "setup";
+type Tab =
+  "overview" | "batches" | "transactions" | "budgets" | "reports" | "setup" | "declarations";
 
 export default function FinancePage() {
   const { user } = useAuth();
@@ -28,6 +31,7 @@ export default function FinancePage() {
     { key: "transactions", label: "Transactions" },
     { key: "budgets", label: "Budgets" },
     { key: "reports", label: "Reports" },
+    { key: "declarations", label: "Declarations" },
     { key: "setup", label: "Setup" },
   ];
 
@@ -78,6 +82,7 @@ export default function FinancePage() {
           <ReportsTab _conferenceId={conferenceId} churchId={churchId} setError={setError} />
         )}
         {tab === "setup" && <SetupTab conferenceId={conferenceId} setError={setError} />}
+        {tab === "declarations" && <DeclarationsTab churchId={churchId} setError={setError} />}
       </div>
     </div>
   );
@@ -1523,6 +1528,140 @@ function SetupTab({
               </li>
             ))}
           </ul>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function DeclarationsTab({
+  churchId,
+  setError,
+}: {
+  churchId: number | undefined;
+  setError: (e: string) => void;
+}) {
+  const [declarations, setDeclarations] = useState<GivingDeclaration[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const loadDeclarations = useCallback(async () => {
+    if (!churchId) return;
+    setLoading(true);
+    try {
+      const data = await declarationApi.list(churchId, false);
+      setDeclarations(data.declarations);
+    } catch {
+      setError("Failed to load declarations");
+    } finally {
+      setLoading(false);
+    }
+  }, [churchId, setError]);
+
+  useEffect(() => {
+    loadDeclarations();
+  }, [loadDeclarations]);
+
+  async function handleVerify(id: number) {
+    if (!churchId) return;
+    try {
+      await declarationApi.verify(churchId, id);
+      setMessage("Declaration verified");
+      loadDeclarations();
+    } catch (err: unknown) {
+      setMessage(
+        err && typeof err === "object" && "error" in err
+          ? String((err as { error: string }).error)
+          : "Verification failed"
+      );
+    }
+  }
+
+  async function handleReject(id: number) {
+    if (!churchId) return;
+    try {
+      await declarationApi.reject(churchId, id);
+      setMessage("Declaration rejected and removed");
+      loadDeclarations();
+    } catch (err: unknown) {
+      setMessage(
+        err && typeof err === "object" && "error" in err
+          ? String((err as { error: string }).error)
+          : "Rejection failed"
+      );
+    }
+  }
+
+  if (!churchId) {
+    return <p className="text-sm text-gray-500">No church assigned.</p>;
+  }
+
+  return (
+    <div>
+      <h3 className="text-lg font-medium text-gray-900">Giving Declarations Inbox</h3>
+      <p className="mt-1 text-sm text-gray-500">
+        Member-submitted giving declarations awaiting verification against physical envelopes.
+      </p>
+
+      {message && (
+        <div className="mt-3 rounded bg-blue-50 p-2 text-sm text-blue-600">{message}</div>
+      )}
+
+      <div className="mt-4">
+        {loading ? (
+          <p className="text-sm text-gray-500">Loading...</p>
+        ) : declarations.length === 0 ? (
+          <p className="text-sm text-gray-500">No pending declarations.</p>
+        ) : (
+          <div className="rounded-lg bg-white shadow">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b bg-gray-50">
+                <tr>
+                  <th className="px-4 py-2 font-medium text-gray-700">Member</th>
+                  <th className="px-4 py-2 font-medium text-gray-700">Fund</th>
+                  <th className="px-4 py-2 font-medium text-gray-700">Amount</th>
+                  <th className="px-4 py-2 font-medium text-gray-700">Proxy</th>
+                  <th className="px-4 py-2 font-medium text-gray-700">Date</th>
+                  <th className="px-4 py-2 font-medium text-gray-700">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {declarations.map((d) => (
+                  <tr key={d.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-2">{d.member_name}</td>
+                    <td className="px-4 py-2">{d.fund_name}</td>
+                    <td className="px-4 py-2 font-medium">${d.amount.toFixed(2)}</td>
+                    <td className="px-4 py-2">
+                      {d.proxy_for_name ? (
+                        <span className="text-xs text-orange-500">via {d.proxy_for_name}</span>
+                      ) : (
+                        <span className="text-xs text-gray-400">self</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-2 text-gray-500">
+                      {new Date(d.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleVerify(d.id)}
+                          className="rounded bg-green-100 px-2 py-0.5 text-xs text-green-700 hover:bg-green-200"
+                        >
+                          Verify
+                        </button>
+                        <button
+                          onClick={() => handleReject(d.id)}
+                          className="rounded bg-red-100 px-2 py-0.5 text-xs text-red-700 hover:bg-red-200"
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

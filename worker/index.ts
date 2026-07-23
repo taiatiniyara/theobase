@@ -45,6 +45,13 @@ import {
   handleApproveTransfer,
   handleAcceptTransfer,
   handleRejectTransfer,
+  handleGetSelfMember,
+  handleUpdateSelfMember,
+  handleMemberGiving,
+  handleMemberTransfer,
+  handleListDeclarations,
+  handleVerifyDeclaration,
+  handleRejectDeclaration,
 } from "./routes/members";
 import {
   handleGetFunds,
@@ -286,6 +293,63 @@ export default {
     const transferRejectMatch = path.match(/^\/api\/transfers\/(\d+)\/reject$/);
     if (transferRejectMatch && request.method === "POST") {
       return handleRejectTransfer(request, env, Number(transferRejectMatch[1]));
+    }
+
+    // Member self-service
+    const selfMemberMatch = path.match(/^\/api\/churches\/(\d+)\/members\/me$/);
+    if (selfMemberMatch && request.method === "GET") {
+      return handleGetSelfMember(request, env, Number(selfMemberMatch[1]));
+    }
+    if (selfMemberMatch && request.method === "PATCH") {
+      return handleUpdateSelfMember(request, env, Number(selfMemberMatch[1]));
+    }
+
+    // Member giving declaration
+    const memberGivingMatch = path.match(/^\/api\/churches\/(\d+)\/members\/(\d+)\/giving$/);
+    if (memberGivingMatch && request.method === "POST") {
+      return handleMemberGiving(
+        request,
+        env,
+        Number(memberGivingMatch[1]),
+        Number(memberGivingMatch[2])
+      );
+    }
+
+    // Member-initiated transfer
+    const memberTransferMatch = path.match(
+      /^\/api\/churches\/(\d+)\/members\/(\d+)\/transfer-request$/
+    );
+    if (memberTransferMatch && request.method === "POST") {
+      return handleMemberTransfer(
+        request,
+        env,
+        Number(memberTransferMatch[1]),
+        Number(memberTransferMatch[2])
+      );
+    }
+
+    // Treasurer declaration verification
+    const churchDeclarationsMatch = path.match(/^\/api\/churches\/(\d+)\/declarations$/);
+    if (churchDeclarationsMatch && request.method === "GET") {
+      return handleListDeclarations(request, env, Number(churchDeclarationsMatch[1]));
+    }
+    const verifyDeclMatch = path.match(/^\/api\/churches\/(\d+)\/declarations\/(\d+)\/verify$/);
+    if (verifyDeclMatch && request.method === "POST") {
+      return handleVerifyDeclaration(
+        request,
+        env,
+        Number(verifyDeclMatch[1]),
+        Number(verifyDeclMatch[2])
+      );
+    }
+    const rejectDeclMatch = path.match(/^\/api\/churches\/(\d+)\/declarations\/(\d+)\/reject$/);
+    if (rejectDeclMatch && request.method === "POST") {
+      return handleRejectDeclaration(
+        request,
+        env,
+        Number(rejectDeclMatch[1]),
+        Number(rejectDeclMatch[2])
+      );
     }
 
     // Finance — funds

@@ -1,0 +1,161 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_rate_limit_ts",
+      "label": "rate-limit.ts",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "lib_rate_limit_ratelimitconfig",
+      "label": "RateLimitConfig",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "lib_rate_limit_auth_limit",
+      "label": "AUTH_LIMIT",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L6"
+    },
+    {
+      "id": "lib_rate_limit_checkratelimitasync",
+      "label": "checkRateLimitAsync()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L8"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_rate_limit_ts",
+      "target": "lib_rate_limit_ratelimitconfig",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_rate_limit_ts",
+      "target": "lib_rate_limit_auth_limit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_worker_lib_rate_limit_ts",
+      "target": "lib_rate_limit_checkratelimitasync",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "trim",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "split",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "now",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L21"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "run",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L25"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L25"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L25"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "await env.DB.prepare(\n      \"INSERT OR REPLACE INTO rate_limits (key, window_start, count) VALUES (?, ?, COALESCE((SELECT count FROM rate_limits WHERE key = ? AND window_start > ?), 0) + 1) RETURNING count\"\n    )\n      .bind(rateKey, now, rateKey, windowStart)\n      .first",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L29"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "bind",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L29"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "prepare",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L29"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L37"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L47"
+    },
+    {
+      "caller_nid": "lib_rate_limit_checkratelimitasync",
+      "callee": "ceil",
+      "is_member_call": true,
+      "source_file": "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts",
+      "source_location": "L47"
+    }
+  ]
+}

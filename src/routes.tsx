@@ -24,6 +24,7 @@ import DistrictDashboard from "./routes/DistrictDashboard";
 import GlobalDashboard from "./routes/GlobalDashboard";
 import AttendancePage from "./routes/AttendancePage";
 import ContributionsPage from "./routes/ContributionsPage";
+import MemberDashboardPage from "./routes/MemberDashboardPage";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -152,6 +153,12 @@ const contributionsRoute = createRoute({
   component: ContributionsPage,
 });
 
+const memberDashboardRoute = createRoute({
+  getParentRoute: () => dashboardLayout,
+  path: "/member-dashboard",
+  component: MemberDashboardPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
@@ -172,6 +179,7 @@ const routeTree = rootRoute.addChildren([
     globalDashboardRoute,
     attendanceRoute,
     contributionsRoute,
+    memberDashboardRoute,
   ]),
 ]);
 
