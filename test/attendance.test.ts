@@ -17,6 +17,7 @@ describe("attendance API", () => {
     await env.DB.exec(FULL_SCHEMA);
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token TEXT;");
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token_expires TEXT;");
+    await env.DB.exec("ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1;");
 
     const signupRes = await SELF.fetch("http://localhost/api/auth/signup", {
       method: "POST",

@@ -122,6 +122,82 @@ export async function handleGetUsers(request: Request, env: Env): Promise<Respon
   return json({ users: users.results });
 }
 
+export async function handleUpdateUser(
+  request: Request,
+  env: Env,
+  userId: number
+): Promise<Response> {
+  const auth = await authenticate(request, env);
+  if (auth instanceof Response) return auth;
+
+  const forbidden = authorize(auth, PERMISSIONS["users:invite"]!);
+  if (forbidden) return forbidden;
+
+  let body: { role?: string; active?: boolean; resetPassword?: boolean };
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: "Invalid JSON" }, 400);
+  }
+
+  const user = await env.DB.prepare("SELECT id, role, conference_id FROM users WHERE id = ?")
+    .bind(userId)
+    .first<{ id: number; role: string; conference_id: number | null }>();
+  if (!user) {
+    return json({ error: "User not found" }, 404);
+  }
+
+  if (body.role) {
+    const validRoles = Object.values(ROLES);
+    if (!validRoles.includes(body.role as (typeof ROLES)[keyof typeof ROLES])) {
+      return json({ error: `Invalid role. Must be one of: ${validRoles.join(", ")}` }, 400);
+    }
+    await env.DB.prepare("UPDATE users SET role = ? WHERE id = ?").bind(body.role, userId).run();
+    await logAudit(env, {
+      actor_id: Number(auth.userId),
+      action: "update_role",
+      entity_type: "user",
+      entity_id: userId,
+      prev_state: JSON.stringify({ role: user.role }),
+      new_state: JSON.stringify({ role: body.role }),
+      module: "users",
+      device_info: getDeviceInfo(request),
+    });
+  }
+
+  if (body.active !== undefined) {
+    await env.DB.prepare("UPDATE users SET active = ? WHERE id = ?")
+      .bind(body.active ? 1 : 0, userId)
+      .run();
+    await logAudit(env, {
+      actor_id: Number(auth.userId),
+      action: body.active ? "activate" : "deactivate",
+      entity_type: "user",
+      entity_id: userId,
+      prev_state: JSON.stringify({ active: true }),
+      new_state: JSON.stringify({ active: body.active }),
+      module: "users",
+      device_info: getDeviceInfo(request),
+    });
+  }
+
+  if (body.resetPassword) {
+    const { hashPassword: hp } = await import("../lib/auth");
+    const tempPassword = generateResetToken().slice(0, 16);
+    const passwordHash = await hp(tempPassword);
+    await env.DB.prepare("UPDATE users SET password_hash = ? WHERE id = ?")
+      .bind(passwordHash, userId)
+      .run();
+    return json({
+      id: userId,
+      message: "Password reset successfully",
+      tempPassword,
+    });
+  }
+
+  return json({ id: userId, message: "User updated successfully" });
+}
+
 export async function handleBulkInviteUsers(request: Request, env: Env): Promise<Response> {
   const auth = await authenticate(request, env);
   if (auth instanceof Response) return auth;

@@ -2,18 +2,18 @@
 
 ## Corpus Check
 
-- 82 files · ~117,849 words
+- 85 files · ~118,777 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 
-- 572 nodes · 1268 edges · 49 communities (35 shown, 14 thin omitted)
+- 580 nodes · 1287 edges · 48 communities (35 shown, 13 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 29 edges (avg confidence: 0.76)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
 
-- Built from commit: `3a11c3e1`
+- Built from commit: `b8743a01`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -61,17 +61,16 @@
 - [[_COMMUNITY_Community 39|Community 39]]
 - [[_COMMUNITY_Community 40|Community 40]]
 - [[_COMMUNITY_Community 41|Community 41]]
-- [[_COMMUNITY_Community 42|Community 42]]
+- [[_COMMUNITY_Community 46|Community 46]]
 - [[_COMMUNITY_Community 47|Community 47]]
-- [[_COMMUNITY_Community 48|Community 48]]
 
 ## God Nodes (most connected - your core abstractions)
 
-1. `authenticate()` - 80 edges
-2. `fetch()` - 76 edges
-3. `authorize()` - 73 edges
-4. `logAudit()` - 39 edges
-5. `getDeviceInfo()` - 39 edges
+1. `authenticate()` - 81 edges
+2. `fetch()` - 78 edges
+3. `authorize()` - 74 edges
+4. `logAudit()` - 40 edges
+5. `getDeviceInfo()` - 40 edges
 6. `useAuth()` - 31 edges
 7. `json()` - 19 edges
 8. `json()` - 18 edges
@@ -98,12 +97,12 @@
 - **Cloudflare Workers Durable Object Architecture** — worker_entry, ChurchSyncDO, ConferenceDO, worker_env_types [INFERRED 0.75]
 - **Dev Proxy and Test Pipeline** — vite_config, vitest_config, worker_entry, smoke_test [INFERRED 0.75]
 
-## Communities (49 total, 14 thin omitted)
+## Communities (48 total, 13 thin omitted)
 
 ### Community 0 - "Community 0"
 
 Cohesion: 0.1
-Nodes (93): AuditEntry, getDeviceInfo(), logAudit(), AuthContext, authenticate(), authorize(), extractToken(), json() (+85 more)
+Nodes (95): AuditEntry, getDeviceInfo(), logAudit(), AuthContext, authenticate(), authorize(), extractToken(), json() (+87 more)
 
 ### Community 1 - "Community 1"
 
@@ -117,18 +116,18 @@ Nodes (38): ADR-0001: Append-Only Immutable Finance, SDA Church Manual, Cloudfla
 
 ### Community 3 - "Community 3"
 
-Cohesion: 0.09
-Nodes (21): api, AuthContext, AuthContextType, useAuth(), User, ChurchMetric, ConferenceDashboard(), ConferenceSummary (+13 more)
+Cohesion: 0.08
+Nodes (24): api, userApi, AuthContext, AuthContextType, useAuth(), User, ChurchMetric, ConferenceDashboard() (+16 more)
 
 ### Community 4 - "Community 4"
 
-Cohesion: 0.14
-Nodes (27): generateResetToken(), getKey(), hashPassword(), signAccessToken(), signRefreshToken(), verifyPassword(), verifyToken(), CsvParseResult (+19 more)
+Cohesion: 0.09
+Nodes (24): attendanceApi, AttendanceRecord, AttendanceStats, AttendanceTrendPoint, authApi, AuthResponse, BudgetTemplate, ChurchBalance (+16 more)
 
 ### Community 5 - "Community 5"
 
-Cohesion: 0.1
-Nodes (22): auditApi, AuditLogEntry, AuditLogResponse, AuthResponse, BudgetTemplate, ChurchBalance, CreateMemberData, financeApi (+14 more)
+Cohesion: 0.15
+Nodes (26): generateResetToken(), getKey(), hashPassword(), signAccessToken(), signRefreshToken(), verifyPassword(), verifyToken(), CsvParseResult (+18 more)
 
 ### Community 6 - "Community 6"
 
@@ -178,7 +177,7 @@ Nodes (7): contributionApi, ContributionStatement, ContributionSummary, Contribu
 ### Community 16 - "Community 16"
 
 Cohesion: 0.25
-Nodes (6): attendanceApi, AttendanceRecord, AttendanceStats, AttendanceTrendPoint, AttendancePage(), CATEGORIES
+Nodes (7): body, forgotBody, loginBody, meBody, refreshBody, signupBody, userId
 
 ### Community 17 - "Community 17"
 
@@ -193,27 +192,27 @@ Nodes (7): Before exploring, read these, code:block1 (/), code:block2 (/), Domai
 ### Community 19 - "Community 19"
 
 Cohesion: 0.29
-Nodes (4): b, lb, mb, sb
+Nodes (5): auditApi, AuditLogEntry, AuditLogResponse, ACTIONS, ENTITY_TYPES
 
 ### Community 20 - "Community 20"
 
 Cohesion: 0.29
-Nodes (6): b, cb, ecb, hh, mb, sb
+Nodes (4): b, lb, mb, sb
 
 ### Community 21 - "Community 21"
 
 Cohesion: 0.29
-Nodes (6): Conventions, Issue tracker: GitHub, Pull requests as a triage surface, Wayfinding operations, When a skill says "fetch the relevant ticket", When a skill says "publish to the issue tracker"
+Nodes (6): b, cb, ecb, hh, mb, sb
 
 ### Community 22 - "Community 22"
 
 Cohesion: 0.29
-Nodes (7): Agent Skills Configuration, Domain Documentation Layout, GitHub Issues Tracker, Triage Label System, GitHub Issues Agent Workflows, Wayfinding Operations, Triage Label Mapping
+Nodes (6): Conventions, Issue tracker: GitHub, Pull requests as a triage surface, Wayfinding operations, When a skill says "fetch the relevant ticket", When a skill says "publish to the issue tracker"
 
 ### Community 23 - "Community 23"
 
-Cohesion: 0.33
-Nodes (7): Brand Orange (rgb 249,115,22), Branding Directory, Logo Light SVG, 512x512 Bounding Rect (fill:none), T Icon Glyph, Theobase Brand, Wordmark Text Paths
+Cohesion: 0.29
+Nodes (7): Agent Skills Configuration, Domain Documentation Layout, GitHub Issues Tracker, Triage Label System, GitHub Issues Agent Workflows, Wayfinding Operations, Triage Label Mapping
 
 ### Community 24 - "Community 24"
 
@@ -223,12 +222,12 @@ Nodes (7): Theobase Brand Palette: Orange #F97316 + Gray #6B7280, Affinity Desig
 ### Community 25 - "Community 25"
 
 Cohesion: 0.33
-Nodes (5): orgApi, Church, Conference, District, OrgManagementPage()
+Nodes (7): Brand Orange (rgb 249,115,22), Branding Directory, Logo Light SVG, 512x512 Bounding Rect (fill:none), T Icon Glyph, Theobase Brand, Wordmark Text Paths
 
 ### Community 26 - "Community 26"
 
 Cohesion: 0.33
-Nodes (5): forgotBody, loginBody, meBody, refreshBody, signupBody
+Nodes (5): orgApi, Church, Conference, District, OrgManagementPage()
 
 ### Community 28 - "Community 28"
 
@@ -242,13 +241,13 @@ Nodes (5): Finance, Membership, Organization, Reporting, Theobase
 
 ### Community 30 - "Community 30"
 
-Cohesion: 0.5
-Nodes (3): ASSETS_TO_CACHE, fetchPromise, url
+Cohesion: 0.4
+Nodes (3): AUTH_LIMIT, checkRateLimitAsync(), RateLimitConfig
 
 ### Community 31 - "Community 31"
 
 Cohesion: 0.5
-Nodes (3): userApi, UserRecord, UsersPage()
+Nodes (3): ASSETS_TO_CACHE, fetchPromise, url
 
 ### Community 32 - "Community 32"
 
@@ -262,9 +261,9 @@ Nodes (4): Serif Affinity Designer, Theobase Icon (Shield Mark), Theobase Logo L
 
 ## Knowledge Gaps
 
-- **201 isolated node(s):** `ASSETS_TO_CACHE`, `url`, `fetchPromise`, `queryClient`, `rootRoute` (+196 more)
+- **205 isolated node(s):** `ASSETS_TO_CACHE`, `url`, `fetchPromise`, `queryClient`, `rootRoute` (+200 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 
@@ -272,15 +271,15 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **What is the exact relationship between `TanStack Router Configuration` and `Home Page Component`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `fetch()` connect `Community 0` to `Community 1`, `Community 4`?**
-  _High betweenness centrality (0.205) - this node is a cross-community bridge._
-- **Why does `request()` connect `Community 1` to `Community 0`, `Community 5`?**
-  _High betweenness centrality (0.154) - this node is a cross-community bridge._
+- **Why does `fetch()` connect `Community 0` to `Community 1`, `Community 5`, `Community 30`?**
+  _High betweenness centrality (0.208) - this node is a cross-community bridge._
+- **Why does `request()` connect `Community 1` to `Community 0`, `Community 4`?**
+  _High betweenness centrality (0.156) - this node is a cross-community bridge._
 - **Why does `apiFetch()` connect `Community 1` to `Community 0`?**
   _High betweenness centrality (0.044) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `fetch()` (e.g. with `request()` and `apiFetch()`) actually correct?**
   _`fetch()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `ASSETS_TO_CACHE`, `url`, `fetchPromise` to the rest of the system?**
-  _201 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _205 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._

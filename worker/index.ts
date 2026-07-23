@@ -1,5 +1,6 @@
 import { ChurchSyncDO } from "./durables/ChurchSyncDO";
 import { ConferenceDO } from "./durables/ConferenceDO";
+import { checkRateLimitAsync } from "./lib/rate-limit";
 import {
   handleAuthSignup,
   handleAuthLogin,
@@ -24,6 +25,7 @@ import {
   handleGetUsers,
   handleBulkInviteUsers,
   handleGetMe,
+  handleUpdateUser,
 } from "./routes/users";
 import {
   handleGetMembers,
@@ -117,23 +119,39 @@ export default {
     }
 
     if (path === "/api/health") {
-      return json({ status: "ok" });
+      try {
+        if (env.DB) {
+          await env.DB.prepare("SELECT 1").run();
+          return json({ status: "ok", database: "connected" });
+        }
+        return json({ status: "ok", database: "unavailable" });
+      } catch {
+        return json({ status: "error", database: "error" }, 503);
+      }
     }
 
-    // Auth routes
+    // Auth routes (with rate limiting)
     if (path === "/api/auth/signup" && request.method === "POST") {
+      const limit = await checkRateLimitAsync(request, env, "auth:signup");
+      if (limit) return limit;
       return handleAuthSignup(request, env);
     }
     if (path === "/api/auth/login" && request.method === "POST") {
+      const limit = await checkRateLimitAsync(request, env, "auth:login");
+      if (limit) return limit;
       return handleAuthLogin(request, env);
     }
     if (path === "/api/auth/refresh" && request.method === "POST") {
       return handleAuthRefresh(request, env);
     }
     if (path === "/api/auth/forgot-password" && request.method === "POST") {
+      const limit = await checkRateLimitAsync(request, env, "auth:forgot-password");
+      if (limit) return limit;
       return handleForgotPassword(request, env);
     }
     if (path === "/api/auth/reset-password" && request.method === "POST") {
+      const limit = await checkRateLimitAsync(request, env, "auth:reset-password");
+      if (limit) return limit;
       return handleResetPassword(request, env);
     }
     if (path === "/api/auth/me" && request.method === "GET") {
@@ -190,6 +208,10 @@ export default {
     }
     if (path === "/api/users/bulk-invite" && request.method === "POST") {
       return handleBulkInviteUsers(request, env);
+    }
+    const userMatch = path.match(/^\/api\/users\/(\d+)$/);
+    if (userMatch && request.method === "PATCH") {
+      return handleUpdateUser(request, env, Number(userMatch[1]));
     }
 
     // Member routes

@@ -106,7 +106,7 @@ export async function handleAuthLogin(request: Request, env: Env): Promise<Respo
   }
 
   const user = await env.DB.prepare(
-    "SELECT id, password_hash, role, conference_id, member_id FROM users WHERE email = ?"
+    "SELECT id, password_hash, role, conference_id, member_id, active FROM users WHERE email = ?"
   )
     .bind(body.email.toLowerCase().trim())
     .first<{
@@ -115,10 +115,15 @@ export async function handleAuthLogin(request: Request, env: Env): Promise<Respo
       role: string;
       conference_id: number | null;
       member_id: number | null;
+      active: number | null;
     }>();
 
   if (!user) {
     return json({ error: "Invalid email or password" }, 401);
+  }
+
+  if (user.active === 0) {
+    return json({ error: "Account has been deactivated. Contact your system administrator." }, 403);
   }
 
   const valid = await verifyPassword(body.password, user.password_hash);
@@ -175,7 +180,7 @@ export async function handleAuthRefresh(request: Request, env: Env): Promise<Res
     }
 
     const user = await env.DB.prepare(
-      "SELECT id, role, conference_id, member_id FROM users WHERE id = ?"
+      "SELECT id, role, conference_id, member_id, active FROM users WHERE id = ?"
     )
       .bind(Number(payload.sub))
       .first<{
@@ -183,10 +188,15 @@ export async function handleAuthRefresh(request: Request, env: Env): Promise<Res
         role: string;
         conference_id: number | null;
         member_id: number | null;
+        active: number | null;
       }>();
 
     if (!user) {
       return json({ error: "User not found" }, 401);
+    }
+
+    if (user.active === 0) {
+      return json({ error: "Account deactivated" }, 403);
     }
 
     let churchId: number | undefined;

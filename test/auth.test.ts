@@ -14,6 +14,7 @@ describe("auth API", () => {
     await env.DB.exec(FULL_SCHEMA);
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token TEXT;");
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token_expires TEXT;");
+    await env.DB.exec("ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1;");
   });
 
   it("full auth flow: signup, me, login, refresh, forgot-password", async () => {
@@ -111,5 +112,71 @@ describe("auth API", () => {
   it("rejects unauthenticated /me", async () => {
     const res = await SELF.fetch("http://localhost/api/auth/me");
     expect(res.status).toBe(401);
+  });
+
+  it("health endpoint returns database status", async () => {
+    const res = await SELF.fetch("http://localhost/api/health");
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { status: string; database: string };
+    expect(body.status).toBe("ok");
+    expect(body.database).toBe("connected");
+  });
+
+  it("user deactivation prevents login", async () => {
+    // Create a separate user for this test
+    const signupRes = await SELF.fetch("http://localhost/api/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: "deacttest@test.com",
+        password: "testpass12",
+        fullName: "Deact Test",
+      }),
+    });
+    expect(signupRes.status).toBe(200);
+    const signupBody = (await signupRes.json()) as {
+      accessToken: string;
+      userId: string;
+    };
+    const adminToken = signupBody.accessToken;
+    const userId = Number(signupBody.userId);
+
+    // Deactivate the user
+    const deactRes = await SELF.fetch(`http://localhost/api/users/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${adminToken}`,
+      },
+      body: JSON.stringify({ active: false }),
+    });
+    expect(deactRes.status).toBe(200);
+
+    // Login should be rejected
+    const loginRes = await SELF.fetch("http://localhost/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "deacttest@test.com", password: "testpass12" }),
+    });
+    expect(loginRes.status).toBe(403);
+
+    // Reactivate (token still valid from signup)
+    const reactRes = await SELF.fetch(`http://localhost/api/users/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${adminToken}`,
+      },
+      body: JSON.stringify({ active: true }),
+    });
+    expect(reactRes.status).toBe(200);
+
+    // Login works again
+    const loginRes2 = await SELF.fetch("http://localhost/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "deacttest@test.com", password: "testpass12" }),
+    });
+    expect(loginRes2.status).toBe(200);
   });
 });
