@@ -1,5 +1,7 @@
 import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
+import { ChurchRepo } from "../repos/org";
+import { createDb } from "../lib/db";
 import { json } from "../lib/response";
 
 export async function handleGetQuarterlyReport(request: Request, env: Env): Promise<Response> {
@@ -30,6 +32,7 @@ export async function handleGetQuarterlyReport(request: Request, env: Env): Prom
   const periodEnd = q === 4 ? `${y + 1}-01-01` : `${y}-${String(endMonth + 1).padStart(2, "0")}-01`;
 
   const chId = Number(churchId);
+  const treasuryId = await new ChurchRepo(createDb(env)).getTreasuryChurchId(chId);
 
   const baptismsRow = await env.DB.prepare(
     `SELECT COUNT(*) as count FROM members
@@ -108,7 +111,7 @@ export async function handleGetQuarterlyReport(request: Request, env: Env): Prom
        AND t.created_at >= ? AND t.created_at < ?
        AND t.confirmed_by IS NOT NULL`
   )
-    .bind(chId, periodStart, periodEnd)
+    .bind(treasuryId, periodStart, periodEnd)
     .first<{ total: number }>();
 
   const budgetIncomeRow = await env.DB.prepare(
@@ -120,7 +123,7 @@ export async function handleGetQuarterlyReport(request: Request, env: Env): Prom
        AND t.created_at >= ? AND t.created_at < ?
        AND t.confirmed_by IS NOT NULL`
   )
-    .bind(chId, periodStart, periodEnd)
+    .bind(treasuryId, periodStart, periodEnd)
     .first<{ total: number }>();
 
   const budgetExpensesRow = await env.DB.prepare(
@@ -131,7 +134,7 @@ export async function handleGetQuarterlyReport(request: Request, env: Env): Prom
        AND f.type = 'local_budget'
        AND t.created_at >= ? AND t.created_at < ?`
   )
-    .bind(chId, periodStart, periodEnd)
+    .bind(treasuryId, periodStart, periodEnd)
     .first<{ total: number }>();
 
   const ssRow = await env.DB.prepare(
@@ -143,7 +146,7 @@ export async function handleGetQuarterlyReport(request: Request, env: Env): Prom
        AND t.created_at >= ? AND t.created_at < ?
        AND t.confirmed_by IS NOT NULL`
   )
-    .bind(chId, periodStart, periodEnd)
+    .bind(treasuryId, periodStart, periodEnd)
     .first<{ total: number }>();
 
   const titheForwarded = titheRow?.total ?? 0;

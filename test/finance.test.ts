@@ -283,6 +283,48 @@ describe("finance API", () => {
     expect(r.status).toBe(200);
   });
 
+  it("branch treasury routes to parent organized church", async () => {
+    const parentRes = await SELF.fetch("http://localhost/api/churches", {
+      method: "POST",
+      headers: jh(),
+      body: JSON.stringify({
+        name: "Parent Org",
+        type: "organized",
+        parentId: conferenceId,
+        parentType: "conference",
+      }),
+    });
+    expect(parentRes.status).toBe(201);
+    const parentBody = (await parentRes.json()) as { id: number };
+    const parentId = parentBody.id;
+
+    const branchRes = await SELF.fetch("http://localhost/api/churches", {
+      method: "POST",
+      headers: jh(),
+      body: JSON.stringify({
+        name: "Branch Church",
+        type: "branch",
+        parentId,
+        parentType: "church",
+      }),
+    });
+    expect(branchRes.status).toBe(201);
+    const branchBody = (await branchRes.json()) as { id: number };
+    const branchId = branchBody.id;
+
+    const batchRes = await SELF.fetch("http://localhost/api/finance/batches", {
+      method: "POST",
+      headers: jh(),
+      body: JSON.stringify({
+        churchId: branchId,
+        sabbathDate: "2026-07-04",
+      }),
+    });
+    expect(batchRes.status).toBe(201);
+    const batch = (await batchRes.json()) as { id: number };
+    expect(batch.id).toBeTypeOf("number");
+  });
+
   it("rejects unauthenticated access", async () => {
     for (const ep of [
       "/api/funds",

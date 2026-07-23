@@ -1,5 +1,7 @@
 import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
+import { ChurchRepo } from "../repos/org";
+import { createDb } from "../lib/db";
 import { json } from "../lib/response";
 
 export async function handleGetContributions(request: Request, env: Env): Promise<Response> {
@@ -18,8 +20,10 @@ export async function handleGetContributions(request: Request, env: Env): Promis
     return json({ error: "church_id and year are required" }, 400);
   }
 
+  const cid = await new ChurchRepo(createDb(env)).getTreasuryChurchId(Number(churchId));
+
   const params: (number | string)[] = [];
-  params.push(Number(churchId));
+  params.push(cid);
 
   const startDate = `${year}-01-01`;
   const endDate = `${year}-12-31`;
@@ -113,8 +117,10 @@ export async function handleGetContributionStatement(
     return json({ error: "church_id and year are required" }, 400);
   }
 
+  const cid = await new ChurchRepo(createDb(env)).getTreasuryChurchId(Number(churchId));
+
   const params: (number | string)[] = [];
-  params.push(Number(churchId));
+  params.push(cid);
 
   const startDate = `${year}-01-01`;
   const endDate = `${year}-12-31`;

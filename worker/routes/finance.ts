@@ -11,7 +11,13 @@ import {
   BudgetTemplateRepo,
 } from "../repos/finance";
 import type { FundRow, ExpenseCategoryRow } from "../repos/finance";
+import { ChurchRepo } from "../repos/org";
 import { json } from "../lib/response";
+
+async function resolveTreasuryChurchId(env: Env, churchId: number): Promise<number> {
+  const churchRepo = new ChurchRepo(createDb(env));
+  return churchRepo.getTreasuryChurchId(churchId);
+}
 
 function uuid(): string {
   return crypto.randomUUID();
@@ -390,9 +396,11 @@ export async function handleCreateBatch(request: Request, env: Env): Promise<Res
     return json({ error: "Church not found" }, 404);
   }
 
+  const treasuryChurchId = await resolveTreasuryChurchId(env, body.churchId);
+
   const batchRepo = new BatchRepo(createDb(env));
   const result = await batchRepo.create({
-    churchId: body.churchId,
+    churchId: treasuryChurchId,
     sabbathDate: body.sabbathDate,
     submittedBy: Number(auth.userId),
   });
@@ -627,7 +635,10 @@ export async function handleCreateTransaction(request: Request, env: Env): Promi
   if (batch.status !== "pending") {
     return json({ error: "Cannot add to a confirmed batch" }, 400);
   }
-  if (batch.church_id !== body.churchId) {
+
+  const treasuryChurchId = await resolveTreasuryChurchId(env, body.churchId);
+
+  if (batch.church_id !== treasuryChurchId) {
     return json({ error: "Church mismatch between transaction and batch" }, 400);
   }
 
@@ -662,7 +673,7 @@ export async function handleCreateTransaction(request: Request, env: Env): Promi
      VALUES (?, ?, 'income', ?, ?, ?, ?, ?, ?, ?) RETURNING id`
   )
     .bind(
-      body.churchId,
+      treasuryChurchId,
       body.fundId,
       body.amount,
       body.description ?? null,
@@ -725,13 +736,15 @@ export async function handleCreateExpense(request: Request, env: Env): Promise<R
     return json({ error: "Fund not found" }, 404);
   }
 
+  const treasuryChurchId = await resolveTreasuryChurchId(env, body.churchId);
+
   const txnUuid = uuid();
   const result = await env.DB.prepare(
     `INSERT INTO transactions (church_id, fund_id, type, amount, description, category_id, budget_ref, created_by, uuid)
      VALUES (?, ?, 'expense', ?, ?, ?, ?, ?, ?) RETURNING id`
   )
     .bind(
-      body.churchId,
+      treasuryChurchId,
       body.fundId,
       body.amount,
       body.description ?? null,
@@ -836,9 +849,10 @@ export async function handleCreateBudget(request: Request, env: Env): Promise<Re
   }
 
   try {
+    const treasuryChurchId = await resolveTreasuryChurchId(env, body.churchId);
     const budgetRepo = new BudgetRepo(createDb(env));
     const result = await budgetRepo.create({
-      churchId: body.churchId,
+      churchId: treasuryChurchId,
       fundId: body.fundId,
       categoryId: body.categoryId,
       plannedAmount: body.plannedAmount,
@@ -1041,6 +1055,8 @@ export async function handleGetMonthlyReport(request: Request, env: Env): Promis
     return json({ error: "church_id, year, and month are required" }, 400);
   }
 
+  const cid = await resolveTreasuryChurchId(env, Number(churchId));
+
   const y = Number(year);
   const m = Number(month);
   const periodStart = `${y}-${String(m).padStart(2, "0")}-01`;
@@ -1051,7 +1067,7 @@ export async function handleGetMonthlyReport(request: Request, env: Env): Promis
      FROM transactions
      WHERE church_id = ? AND created_at < ? AND (confirmed_by IS NOT NULL OR type = 'expense')`
   )
-    .bind(Number(churchId), periodStart)
+    .bind(cid, periodStart)
     .first<{ balance: number }>();
 
   const incomeByFund = await env.DB.prepare(
@@ -1062,9 +1078,9 @@ export async function handleGetMonthlyReport(request: Request, env: Env): Promis
        AND t.confirmed_by IS NOT NULL
      WHERE f.conference_id = (SELECT parent_id FROM churches WHERE id = ? AND parent_type = 'conference')
      GROUP BY f.id
-     ORDER BY f.type, f.name`
+      ORDER BY f.type, f.name`
   )
-    .bind(Number(churchId), periodStart, nextMonth, Number(churchId))
+    .bind(cid, periodStart, nextMonth, cid)
     .all();
 
   const expensesByCategory = await env.DB.prepare(
@@ -1079,7 +1095,7 @@ export async function handleGetMonthlyReport(request: Request, env: Env): Promis
      GROUP BY ec.id
      ORDER BY ec.name`
   )
-    .bind(Number(churchId), periodStart, nextMonth, Number(churchId), y, Number(churchId))
+    .bind(cid, periodStart, nextMonth, cid, y, cid)
     .all();
 
   const forwarded = await env.DB.prepare(
@@ -1093,7 +1109,7 @@ export async function handleGetMonthlyReport(request: Request, env: Env): Promis
      GROUP BY f.id
      ORDER BY f.type, f.name`
   )
-    .bind(Number(churchId), periodStart, nextMonth, Number(churchId))
+    .bind(cid, periodStart, nextMonth, cid)
     .all();
 
   const closingBalance = await env.DB.prepare(
@@ -1101,7 +1117,7 @@ export async function handleGetMonthlyReport(request: Request, env: Env): Promis
      FROM transactions
      WHERE church_id = ? AND created_at < ? AND (confirmed_by IS NOT NULL OR type = 'expense')`
   )
-    .bind(Number(churchId), nextMonth)
+    .bind(cid, nextMonth)
     .first<{ balance: number }>();
 
   const incomeRows = incomeByFund.results as {

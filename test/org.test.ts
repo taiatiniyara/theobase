@@ -75,6 +75,117 @@ describe("organization API", () => {
       }),
     });
     expect(res.status).toBe(201);
+    const body = (await res.json()) as { id: number };
+    churchId = body.id;
+    return body;
+  });
+
+  let churchId: number;
+
+  it("rejects Company with church parent", async () => {
+    const res = await SELF.fetch("http://localhost/api/churches", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        name: "Invalid Company",
+        type: "company",
+        parentId: churchId ?? 1,
+        parentType: "church",
+      }),
+    });
+    expect(res.status).toBe(400);
+    const body = (await res.json()) as { error: string };
+    expect(body.error).toContain("Companies must be directly under a Conference");
+  });
+
+  it("rejects Branch under non-organized parent", async () => {
+    const res = await SELF.fetch("http://localhost/api/churches", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        name: "Invalid Branch",
+        type: "branch",
+        parentId: conferenceId,
+        parentType: "conference",
+      }),
+    });
+    expect(res.status).toBe(400);
+    const body = (await res.json()) as { error: string };
+    expect(body.error).toContain("Branches must be under a parent church");
+  });
+
+  it("creates an organized church then a Branch under it", async () => {
+    const parentRes = await SELF.fetch("http://localhost/api/churches", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        name: "Parent Organized",
+        type: "organized",
+        parentId: conferenceId,
+        parentType: "conference",
+      }),
+    });
+    expect(parentRes.status).toBe(201);
+    const parentBody = (await parentRes.json()) as { id: number };
+
+    const branchRes = await SELF.fetch("http://localhost/api/churches", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        name: "Valid Branch",
+        type: "branch",
+        parentId: parentBody.id,
+        parentType: "church",
+      }),
+    });
+    expect(branchRes.status).toBe(201);
+  });
+
+  it("rejects Branch under Company parent", async () => {
+    const companyRes = await SELF.fetch("http://localhost/api/churches", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        name: "A Company",
+        type: "company",
+        parentId: conferenceId,
+        parentType: "conference",
+      }),
+    });
+    expect(companyRes.status).toBe(201);
+    const companyBody = (await companyRes.json()) as { id: number };
+
+    const branchRes = await SELF.fetch("http://localhost/api/churches", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        name: "Branch Under Company",
+        type: "branch",
+        parentId: companyBody.id,
+        parentType: "church",
+      }),
+    });
+    expect(branchRes.status).toBe(400);
+    const body = (await branchRes.json()) as { error: string };
+    expect(body.error).toContain("Branch parent must be an Organized Church");
   });
 
   it("invites a user", async () => {

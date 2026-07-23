@@ -209,6 +209,15 @@ export class ChurchRepo {
     return true;
   }
 
+  async getTreasuryChurchId(churchId: number): Promise<number> {
+    const church = await this.findById(churchId);
+    if (!church) return churchId;
+    if (church.type === "branch") {
+      return church.parentId;
+    }
+    return churchId;
+  }
+
   async bulkCreate(
     rows: Array<{
       name: string;

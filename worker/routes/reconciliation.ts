@@ -2,6 +2,7 @@ import { authenticate, authorize } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { json } from "../lib/response";
 import { createDb } from "../lib/db";
+import { ChurchRepo } from "../repos/org";
 import {
   ReconciliationRepo,
   type ConferenceTitheRow,
@@ -110,7 +111,8 @@ export async function handleChurchBalance(request: Request, env: Env): Promise<R
       return json({ error: "church_id, year, and month are required" }, 400);
     }
 
-    const rec = await repo.getChurchBalance(Number(churchId), Number(year), Number(month));
+    const cid = await new ChurchRepo(createDb(env)).getTreasuryChurchId(Number(churchId));
+    const rec = await repo.getChurchBalance(cid, Number(year), Number(month));
 
     if (!rec) return json({ reconciliation: null });
 
@@ -137,8 +139,9 @@ export async function handleChurchBalance(request: Request, env: Env): Promise<R
     return json({ error: "churchId, year, month, and bankBalance are required" }, 400);
   }
 
+  const cid = await new ChurchRepo(createDb(env)).getTreasuryChurchId(Number(body.churchId));
   const result = (await repo.setChurchBalance({
-    churchId: Number(body.churchId),
+    churchId: cid,
     year: Number(body.year),
     month: Number(body.month),
     bankBalance: body.bankBalance,

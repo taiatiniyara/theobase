@@ -325,6 +325,21 @@ export async function handleCreateChurch(request: Request, env: Env): Promise<Re
     return json({ error: "type must be organized, company, or branch" }, 400);
   }
 
+  if (body.type === "company" && body.parentType !== "conference") {
+    return json({ error: "Companies must be directly under a Conference" }, 400);
+  }
+
+  if (body.type === "branch") {
+    if (body.parentType !== "church") {
+      return json({ error: "Branches must be under a parent church" }, 400);
+    }
+    const parentRepo = new ChurchRepo(createDb(env));
+    const parent = await parentRepo.findById(body.parentId);
+    if (!parent || parent.type !== "organized") {
+      return json({ error: "Branch parent must be an Organized Church" }, 400);
+    }
+  }
+
   const churchCode = body.code || body.name.toLowerCase().replace(/\s+/g, "_");
 
   const churchRepo = new ChurchRepo(createDb(env));
@@ -388,6 +403,22 @@ export async function handleUpdateChurch(
 
   if (body.type && !["organized", "company", "branch"].includes(body.type)) {
     return json({ error: "type must be organized, company, or branch" }, 400);
+  }
+
+  const newType = body.type ?? existing.type;
+
+  if (newType === "company" && existing.parentType !== "conference") {
+    return json({ error: "Companies must be directly under a Conference" }, 400);
+  }
+
+  if (newType === "branch") {
+    if (existing.parentType !== "church") {
+      return json({ error: "Branches must be under a parent church" }, 400);
+    }
+    const parent = await churchRepo.findById(existing.parentId);
+    if (!parent || parent.type !== "organized") {
+      return json({ error: "Branch parent must be an Organized Church" }, 400);
+    }
   }
 
   const updated = await churchRepo.update(churchId, {
