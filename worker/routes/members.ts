@@ -749,6 +749,46 @@ export async function handleGetTransfers(request: Request, env: Env): Promise<Re
   const forbidden = authorize(auth, PERMISSIONS["members:read"]!);
   if (forbidden) return forbidden;
 
+  // Auto-expire stale transfers (on-read check)
+  try {
+    const expiredMembers = await env.DB.prepare(
+      `SELECT member_id FROM transfer_requests
+       WHERE status IN ('pending_conference', 'pending_destination')
+       AND expires_at IS NOT NULL AND expires_at < datetime('now')`
+    ).all<{ member_id: number }>();
+
+    if (expiredMembers.results.length > 0) {
+      await env.DB.prepare(
+        `UPDATE transfer_requests SET status = 'expired'
+         WHERE status IN ('pending_conference', 'pending_destination')
+         AND expires_at IS NOT NULL AND expires_at < datetime('now')`
+      ).run();
+
+      for (const row of expiredMembers.results) {
+        await env.DB.prepare(
+          `UPDATE members SET status = 'active', status_date = NULL,
+           updated_at = datetime('now'), version = version + 1
+           WHERE id = ? AND status = 'transferred'`
+        )
+          .bind(row.member_id)
+          .run();
+
+        await logAudit(env, {
+          actor_id: 0,
+          action: "auto_expire",
+          entity_type: "transfer",
+          entity_id: row.member_id,
+          prev_state: JSON.stringify({ memberStatus: "transferred" }),
+          new_state: JSON.stringify({ memberStatus: "active", reason: "transfer_expired" }),
+          module: "members",
+          device_info: "system",
+        });
+      }
+    }
+  } catch {
+    // Table may not have expires_at column yet — safe to ignore
+  }
+
   const url = new URL(request.url);
   const churchId = url.searchParams.get("church_id");
   const status = url.searchParams.get("status");
@@ -830,8 +870,8 @@ export async function handleInitiateTransfer(request: Request, env: Env): Promis
   }
 
   const result = await env.DB.prepare(
-    `INSERT INTO transfer_requests (member_id, from_church_id, to_church_id, initiated_by)
-     VALUES (?, ?, ?, ?) RETURNING id`
+    `INSERT INTO transfer_requests (member_id, from_church_id, to_church_id, initiated_by, expires_at)
+     VALUES (?, ?, ?, ?, datetime('now', '+6 months')) RETURNING id`
   )
     .bind(body.memberId, member.church_id, body.toChurchId, Number(auth.userId))
     .first<{ id: number }>();
@@ -1150,6 +1190,118 @@ export async function handleRejectTransfer(
   return json({ success: true, status: "rejected" });
 }
 
+export async function handleOverrideTransfer(
+  request: Request,
+  env: Env,
+  transferId: number
+): Promise<Response> {
+  const auth = await authenticate(request, env);
+  if (auth instanceof Response) return auth;
+
+  const user = await env.DB.prepare("SELECT role, conference_id FROM users WHERE id = ?")
+    .bind(Number(auth.userId))
+    .first<{ role: string; conference_id: number | null }>();
+  if (!user || !["secretary", "president"].includes(user.role)) {
+    return json({ error: "Only Conference Secretary or President can override transfers" }, 403);
+  }
+
+  let body: { action: string; note?: string };
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: "Invalid JSON" }, 400);
+  }
+
+  if (!["force_approve", "force_reject"].includes(body.action)) {
+    return json({ error: "action must be force_approve or force_reject" }, 400);
+  }
+
+  const transfer = await env.DB.prepare(
+    "SELECT id, member_id, from_church_id, to_church_id, status FROM transfer_requests WHERE id = ?"
+  )
+    .bind(transferId)
+    .first<{
+      id: number;
+      member_id: number;
+      from_church_id: number;
+      to_church_id: number;
+      status: string;
+    }>();
+  if (!transfer) {
+    return json({ error: "Transfer not found" }, 404);
+  }
+  if (!["pending_conference", "pending_destination"].includes(transfer.status)) {
+    return json({ error: "Transfer cannot be overridden in its current state" }, 400);
+  }
+
+  if (body.action === "force_approve") {
+    if (transfer.status === "pending_conference") {
+      await env.DB.prepare(
+        `UPDATE transfer_requests SET status = 'pending_destination', override_by = ?, override_at = datetime('now'),
+         override_action = 'force_approve', override_note = ?,
+         conference_approved_by = ?, conference_approved_at = datetime('now')
+         WHERE id = ?`
+      )
+        .bind(Number(auth.userId), body.note ?? null, Number(auth.userId), transferId)
+        .run();
+    } else {
+      await env.DB.prepare(
+        `UPDATE transfer_requests SET status = 'completed', override_by = ?, override_at = datetime('now'),
+         override_action = 'force_approve', override_note = ?,
+         accepted_by = ?, accepted_at = datetime('now')
+         WHERE id = ?`
+      )
+        .bind(Number(auth.userId), body.note ?? null, Number(auth.userId), transferId)
+        .run();
+
+      await env.DB.prepare(
+        `UPDATE members SET church_id = ?, status = 'active', status_date = NULL,
+         updated_at = datetime('now'), version = version + 1 WHERE id = ?`
+      )
+        .bind(transfer.to_church_id, transfer.member_id)
+        .run();
+    }
+  } else {
+    await env.DB.prepare(
+      `UPDATE transfer_requests SET status = 'rejected', override_by = ?, override_at = datetime('now'),
+       override_action = 'force_reject', override_note = ? WHERE id = ?`
+    )
+      .bind(Number(auth.userId), body.note ?? null, transferId)
+      .run();
+
+    await env.DB.prepare(
+      `UPDATE members SET status = 'active', status_date = NULL,
+       updated_at = datetime('now'), version = version + 1 WHERE id = ?`
+    )
+      .bind(transfer.member_id)
+      .run();
+  }
+
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: `override_${body.action}`,
+    entity_type: "transfer",
+    entity_id: transferId,
+    prev_state: JSON.stringify({ status: transfer.status }),
+    new_state: JSON.stringify({
+      status: body.action === "force_approve" ? "approved" : "rejected",
+      override: true,
+      note: body.note,
+    }),
+    module: "members",
+    device_info: getDeviceInfo(request),
+  });
+
+  const targetStatus =
+    body.action === "force_approve"
+      ? transfer.status === "pending_conference"
+        ? "pending_destination"
+        : "completed"
+      : "rejected";
+
+  return json({ success: true, status: targetStatus, overridden: true });
+}
+
 // ── Member Self-Service ──
 
 export async function handleGetSelfMember(
@@ -1455,8 +1607,8 @@ export async function handleMemberTransfer(
   }
 
   const result = await env.DB.prepare(
-    `INSERT INTO transfer_requests (member_id, from_church_id, to_church_id, initiated_by)
-     VALUES (?, ?, ?, ?) RETURNING id`
+    `INSERT INTO transfer_requests (member_id, from_church_id, to_church_id, initiated_by, expires_at)
+     VALUES (?, ?, ?, ?, datetime('now', '+6 months')) RETURNING id`
   )
     .bind(memberId, member.church_id, body.toChurchId, Number(auth.userId))
     .first<{ id: number }>();

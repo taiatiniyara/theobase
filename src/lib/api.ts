@@ -238,6 +238,8 @@ export const memberApi = {
   approveTransfer: (id: number) => api.post(`/transfers/${id}/approve`),
   acceptTransfer: (id: number) => api.post(`/transfers/${id}/accept`),
   rejectTransfer: (id: number, note?: string) => api.post(`/transfers/${id}/reject`, { note }),
+  overrideTransfer: (id: number, action: "force_approve" | "force_reject", note?: string) =>
+    api.post(`/transfers/${id}/override`, { action, note }),
 };
 
 export interface Member {
@@ -305,6 +307,11 @@ export interface Transfer {
   accepted_at: string | null;
   status: string;
   rejection_note: string | null;
+  expires_at: string | null;
+  override_by: number | null;
+  override_at: string | null;
+  override_action: string | null;
+  override_note: string | null;
   member_name: string;
   from_church_name: string;
   to_church_name: string;

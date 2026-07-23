@@ -45,6 +45,7 @@ import {
   handleApproveTransfer,
   handleAcceptTransfer,
   handleRejectTransfer,
+  handleOverrideTransfer,
   handleGetSelfMember,
   handleUpdateSelfMember,
   handleMemberGiving,
@@ -293,6 +294,10 @@ export default {
     const transferRejectMatch = path.match(/^\/api\/transfers\/(\d+)\/reject$/);
     if (transferRejectMatch && request.method === "POST") {
       return handleRejectTransfer(request, env, Number(transferRejectMatch[1]));
+    }
+    const transferOverrideMatch = path.match(/^\/api\/transfers\/(\d+)\/override$/);
+    if (transferOverrideMatch && request.method === "POST") {
+      return handleOverrideTransfer(request, env, Number(transferOverrideMatch[1]));
     }
 
     // Member self-service

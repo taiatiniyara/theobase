@@ -26,6 +26,11 @@ export default function MembersPage() {
   const [statusFilter, setStatusFilter] = useState("");
   const [rejectTransferId, setRejectTransferId] = useState<number | null>(null);
   const [rejectionNote, setRejectionNote] = useState("");
+  const [overrideTransferId, setOverrideTransferId] = useState<number | null>(null);
+  const [overrideAction, setOverrideAction] = useState<"force_approve" | "force_reject">(
+    "force_approve"
+  );
+  const [overrideNote, setOverrideNote] = useState("");
 
   const conferenceId = user?.conference?.id;
 
@@ -218,6 +223,25 @@ export default function MembersPage() {
         setRejectionNote("");
       }
       setMessage(`Transfer ${action}ed`);
+      loadTransfers();
+      loadMembers();
+    } catch (err: unknown) {
+      const msg =
+        err && typeof err === "object" && "error" in err
+          ? String((err as { error: string }).error)
+          : "Failed";
+      setMessage(msg);
+    }
+  }
+
+  async function handleOverrideTransfer(id: number) {
+    try {
+      await memberApi.overrideTransfer(id, overrideAction, overrideNote || undefined);
+      setOverrideTransferId(null);
+      setOverrideNote("");
+      setMessage(
+        `Transfer ${overrideAction === "force_approve" ? "force-approved" : "force-rejected"}`
+      );
       loadTransfers();
       loadMembers();
     } catch (err: unknown) {
@@ -756,18 +780,217 @@ export default function MembersPage() {
                               ? "bg-green-100 text-green-700"
                               : t.status === "rejected"
                                 ? "bg-red-100 text-red-700"
-                                : "bg-yellow-100 text-yellow-700"
+                                : t.status === "expired"
+                                  ? "bg-gray-100 text-gray-700"
+                                  : "bg-yellow-100 text-yellow-700"
                           }`}
                         >
                           {t.status.replace(/_/g, " ")}
                         </span>
                       </div>
+
+                      {/* Status Timeline */}
+                      <div className="mt-2 flex items-center gap-1 text-xs">
+                        {(["pending_conference", "pending_destination", "completed"] as const).map(
+                          (step, i) => {
+                            const steps = [
+                              {
+                                label: "Initiated",
+                                date: t.initiated_at,
+                                done: true,
+                              },
+                              {
+                                label: "Approved",
+                                date: t.conference_approved_at,
+                                done:
+                                  t.status === "pending_destination" || t.status === "completed",
+                              },
+                              {
+                                label: "Completed",
+                                date: t.accepted_at,
+                                done: t.status === "completed",
+                              },
+                            ];
+
+                            if (t.status === "rejected" || t.status === "expired") return null;
+
+                            return (
+                              <div key={step} className="flex items-center gap-1">
+                                {i > 0 && t.status !== "rejected" && t.status !== "expired" && (
+                                  <span
+                                    className={`h-px w-6 ${
+                                      steps[i]!.done ? "bg-green-400" : "bg-gray-300"
+                                    }`}
+                                  />
+                                )}
+                                <div className="flex items-center gap-1">
+                                  <span
+                                    className={`inline-block h-2 w-2 rounded-full ${
+                                      steps[i]!.done ? "bg-green-500" : "bg-gray-300"
+                                    }`}
+                                  />
+                                  <span
+                                    className={steps[i]!.done ? "text-green-700" : "text-gray-400"}
+                                  >
+                                    {steps[i]!.label}
+                                  </span>
+                                </div>
+                              </div>
+                            );
+                          }
+                        )}
+
+                        {(t.status === "rejected" || t.status === "expired") && (
+                          <>
+                            <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
+                            <span className="text-green-700">Initiated</span>
+                            <span className="h-px w-6 bg-gray-300" />
+                            <span className="inline-block h-2 w-2 rounded-full bg-red-500" />
+                            <span className="text-red-600">
+                              {t.status === "rejected" ? "Rejected" : "Expired"}
+                            </span>
+                          </>
+                        )}
+                      </div>
+
                       <div className="text-xs text-gray-500">
                         Initiated: {new Date(t.initiated_at).toLocaleDateString()}
+                        {t.expires_at && (
+                          <span className="ml-2">
+                            Expires: {new Date(t.expires_at).toLocaleDateString()}
+                          </span>
+                        )}
+                        {t.override_action && (
+                          <span className="ml-2 text-purple-600">
+                            Overridden ({t.override_action}) by Secretary
+                          </span>
+                        )}
                         {t.rejection_note && (
                           <span className="ml-2 text-red-500">Note: {t.rejection_note}</span>
                         )}
+                        {t.override_note && (
+                          <span className="ml-2 text-purple-500">
+                            Override note: {t.override_note}
+                          </span>
+                        )}
                       </div>
+
+                      {/* Action Buttons */}
+                      {t.status === "pending_conference" && (
+                        <div className="space-x-2">
+                          <button
+                            onClick={async () => {
+                              try {
+                                const detail = await memberApi.getMember(t.member_id);
+                                setSelectedMember(detail as unknown as Member);
+                              } catch {
+                                /* ignore */
+                              }
+                            }}
+                            className="rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-700 hover:bg-blue-200"
+                          >
+                            Review Member
+                          </button>
+                          <button
+                            onClick={() => handleTransferAction(t.id, "approve")}
+                            className="rounded bg-green-100 px-2 py-0.5 text-xs text-green-700 hover:bg-green-200"
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={() => {
+                              setRejectTransferId(t.id);
+                              setRejectionNote("");
+                            }}
+                            className="rounded bg-red-100 px-2 py-0.5 text-xs text-red-700 hover:bg-red-200"
+                          >
+                            Reject
+                          </button>
+                          {(user?.role === "secretary" || user?.role === "president") && (
+                            <>
+                              <button
+                                onClick={() => {
+                                  setOverrideTransferId(t.id);
+                                  setOverrideAction("force_approve");
+                                  setOverrideNote("");
+                                }}
+                                className="rounded bg-purple-100 px-2 py-0.5 text-xs text-purple-700 hover:bg-purple-200"
+                              >
+                                Force Approve
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setOverrideTransferId(t.id);
+                                  setOverrideAction("force_reject");
+                                  setOverrideNote("");
+                                }}
+                                className="rounded bg-orange-100 px-2 py-0.5 text-xs text-orange-700 hover:bg-orange-200"
+                              >
+                                Force Reject
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      )}
+
+                      {t.status === "pending_destination" && (
+                        <div className="space-x-2">
+                          <button
+                            onClick={async () => {
+                              try {
+                                const detail = await memberApi.getMember(t.member_id);
+                                setSelectedMember(detail as unknown as Member);
+                              } catch {
+                                /* ignore */
+                              }
+                            }}
+                            className="rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-700 hover:bg-blue-200"
+                          >
+                            Review Member
+                          </button>
+                          <button
+                            onClick={() => handleTransferAction(t.id, "accept")}
+                            className="rounded bg-green-100 px-2 py-0.5 text-xs text-green-700 hover:bg-green-200"
+                          >
+                            Accept
+                          </button>
+                          <button
+                            onClick={() => {
+                              setRejectTransferId(t.id);
+                              setRejectionNote("");
+                            }}
+                            className="rounded bg-red-100 px-2 py-0.5 text-xs text-red-700 hover:bg-red-200"
+                          >
+                            Reject
+                          </button>
+                          {(user?.role === "secretary" || user?.role === "president") && (
+                            <>
+                              <button
+                                onClick={() => {
+                                  setOverrideTransferId(t.id);
+                                  setOverrideAction("force_approve");
+                                  setOverrideNote("");
+                                }}
+                                className="rounded bg-purple-100 px-2 py-0.5 text-xs text-purple-700 hover:bg-purple-200"
+                              >
+                                Force Approve
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setOverrideTransferId(t.id);
+                                  setOverrideAction("force_reject");
+                                  setOverrideNote("");
+                                }}
+                                className="rounded bg-orange-100 px-2 py-0.5 text-xs text-orange-700 hover:bg-orange-200"
+                              >
+                                Force Reject
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Rejection note input */}
                       {rejectTransferId === t.id && (
                         <div className="mt-2">
                           <input
@@ -794,74 +1017,39 @@ export default function MembersPage() {
                           </button>
                         </div>
                       )}
-                      {rejectTransferId !== t.id && (
-                        <div className="space-x-2">
-                          {t.status === "pending_conference" && (
-                            <>
-                              <button
-                                onClick={async () => {
-                                  try {
-                                    const detail = await memberApi.getMember(t.member_id);
-                                    setSelectedMember(detail as unknown as Member);
-                                  } catch {
-                                    /* ignore */
-                                  }
-                                }}
-                                className="rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-700 hover:bg-blue-200"
-                              >
-                                Review Member
-                              </button>
-                              <button
-                                onClick={() => handleTransferAction(t.id, "approve")}
-                                className="rounded bg-green-100 px-2 py-0.5 text-xs text-green-700 hover:bg-green-200"
-                              >
-                                Approve
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setRejectTransferId(t.id);
-                                  setRejectionNote("");
-                                }}
-                                className="rounded bg-red-100 px-2 py-0.5 text-xs text-red-700 hover:bg-red-200"
-                              >
-                                Reject
-                              </button>
-                            </>
-                          )}
-                          {t.status === "pending_destination" && (
-                            <>
-                              <button
-                                onClick={async () => {
-                                  try {
-                                    const detail = await memberApi.getMember(t.member_id);
-                                    setSelectedMember(detail as unknown as Member);
-                                  } catch {
-                                    /* ignore */
-                                  }
-                                }}
-                                className="rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-700 hover:bg-blue-200"
-                              >
-                                Review Member
-                              </button>
-                              <button
-                                onClick={() => handleTransferAction(t.id, "accept")}
-                                className="rounded bg-green-100 px-2 py-0.5 text-xs text-green-700 hover:bg-green-200"
-                              >
-                                Accept
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setRejectTransferId(t.id);
-                                  setRejectionNote("");
-                                }}
-                                className="rounded bg-red-100 px-2 py-0.5 text-xs text-red-700 hover:bg-red-200"
-                              >
-                                Reject
-                              </button>
-                            </>
-                          )}
+
+                      {/* Override note input */}
+                      {overrideTransferId === t.id && (
+                        <div className="mt-2">
+                          <input
+                            type="text"
+                            value={overrideNote}
+                            onChange={(e) => setOverrideNote(e.target.value)}
+                            placeholder="Reason for override (optional)"
+                            className="mr-2 rounded-md border border-gray-300 px-2 py-1 text-sm"
+                          />
+                          <button
+                            onClick={() => handleOverrideTransfer(t.id)}
+                            className={`rounded px-2 py-1 text-xs text-white hover:opacity-90 ${
+                              overrideAction === "force_approve" ? "bg-purple-500" : "bg-orange-600"
+                            }`}
+                          >
+                            {overrideAction === "force_approve"
+                              ? "Confirm Force Approve"
+                              : "Confirm Force Reject"}
+                          </button>
+                          <button
+                            onClick={() => {
+                              setOverrideTransferId(null);
+                              setOverrideNote("");
+                            }}
+                            className="ml-1 rounded border px-2 py-1 text-xs text-gray-600 hover:bg-gray-100"
+                          >
+                            Cancel
+                          </button>
                         </div>
                       )}
+
                       {selectedMember && selectedMember.id === t.member_id && (
                         <div className="mt-2 rounded border border-gray-200 bg-gray-50 p-3 text-xs">
                           <p>
