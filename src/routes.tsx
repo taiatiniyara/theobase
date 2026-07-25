@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import {
   Outlet,
   createRootRoute,
@@ -5,32 +6,43 @@ import {
   createRouter,
   redirect,
 } from "@tanstack/react-router";
-import HomePage from "./routes/HomePage";
-import LoginPage from "./routes/LoginPage";
-import SignupPage from "./routes/SignupPage";
-import ForgotPasswordPage from "./routes/ForgotPasswordPage";
-import DashboardLayout from "./routes/DashboardLayout";
-import DashboardPage from "./routes/DashboardPage";
-import OrgManagementPage from "./routes/OrgManagementPage";
-import UsersPage from "./routes/UsersPage";
-import FinancePage from "./routes/FinancePage";
-import MembersPage from "./routes/MembersPage";
-import ReportsPage from "./routes/ReportsPage";
-import SettingsPage from "./routes/SettingsPage";
-import AuditPage from "./routes/AuditPage";
-import ReconciliationPage from "./routes/ReconciliationPage";
-import ConferenceDashboard from "./routes/ConferenceDashboard";
-import DistrictDashboard from "./routes/DistrictDashboard";
-import GlobalDashboard from "./routes/GlobalDashboard";
-import AttendancePage from "./routes/AttendancePage";
-import ContributionsPage from "./routes/ContributionsPage";
-import MemberDashboardPage from "./routes/MemberDashboardPage";
+
+const HomePage = lazy(() => import("./routes/HomePage"));
+const LoginPage = lazy(() => import("./routes/LoginPage"));
+const SignupPage = lazy(() => import("./routes/SignupPage"));
+const ForgotPasswordPage = lazy(() => import("./routes/ForgotPasswordPage"));
+const DashboardLayout = lazy(() => import("./routes/DashboardLayout"));
+const DashboardPage = lazy(() => import("./routes/DashboardPage"));
+const OrgManagementPage = lazy(() => import("./routes/OrgManagementPage"));
+const UsersPage = lazy(() => import("./routes/UsersPage"));
+const FinancePage = lazy(() => import("./routes/FinancePage"));
+const MembersPage = lazy(() => import("./routes/MembersPage"));
+const ReportsPage = lazy(() => import("./routes/ReportsPage"));
+const SettingsPage = lazy(() => import("./routes/SettingsPage"));
+const AuditPage = lazy(() => import("./routes/AuditPage"));
+const ReconciliationPage = lazy(() => import("./routes/ReconciliationPage"));
+const ConferenceDashboard = lazy(() => import("./routes/ConferenceDashboard"));
+const DistrictDashboard = lazy(() => import("./routes/DistrictDashboard"));
+const GlobalDashboard = lazy(() => import("./routes/GlobalDashboard"));
+const AttendancePage = lazy(() => import("./routes/AttendancePage"));
+const ContributionsPage = lazy(() => import("./routes/ContributionsPage"));
+const MemberDashboardPage = lazy(() => import("./routes/MemberDashboardPage"));
+
+function Spinner() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-spin h-8 w-8 border-4 border-orange-500 border-t-transparent rounded-full" />
+    </div>
+  );
+}
 
 const rootRoute = createRootRoute({
   component: () => (
-    <div className="min-h-screen bg-gray-50">
-      <Outlet />
-    </div>
+    <Suspense fallback={<Spinner />}>
+      <div className="min-h-screen bg-gray-50">
+        <Outlet />
+      </div>
+    </Suspense>
   ),
 });
 
