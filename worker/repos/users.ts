@@ -14,6 +14,7 @@ export interface UserWithChurch {
   reset_token: string | null;
   reset_token_expires: string | null;
   active: number;
+  email_verified: number;
   created_at: string;
   church_id: number | null;
 }
@@ -33,11 +34,13 @@ export class UserRepo {
     role: string;
     conferenceId?: number | null;
     memberId?: number | null;
+    emailVerified?: number;
   }): Promise<UserRow> {
+    const verified = data.emailVerified ?? 0;
     const result = await this.db.get<UserRow>(
-      sql`INSERT INTO users (email, password_hash, role, conference_id, member_id)
+      sql`INSERT INTO users (email, password_hash, role, conference_id, member_id, email_verified)
         VALUES (${data.email}, ${data.passwordHash}, ${data.role},
-          ${data.conferenceId ?? null}, ${data.memberId ?? null})
+          ${data.conferenceId ?? null}, ${data.memberId ?? null}, ${verified})
         RETURNING *`
     );
     return result!;
@@ -65,6 +68,7 @@ export class UserRepo {
       role?: string;
       passwordHash?: string;
       active?: number;
+      emailVerified?: number;
       resetToken?: string | null;
       resetTokenExpires?: string | null;
     }
@@ -73,6 +77,7 @@ export class UserRepo {
     if (data.role !== undefined) setData.role = data.role;
     if (data.passwordHash !== undefined) setData.passwordHash = data.passwordHash;
     if (data.active !== undefined) setData.active = data.active;
+    if (data.emailVerified !== undefined) setData.emailVerified = data.emailVerified;
     if (data.resetToken !== undefined) setData.resetToken = data.resetToken ?? null;
     if (data.resetTokenExpires !== undefined)
       setData.resetTokenExpires = data.resetTokenExpires ?? null;
@@ -113,8 +118,18 @@ export class UserRepo {
       reset_token: user.resetToken,
       reset_token_expires: user.resetTokenExpires,
       active: user.active ?? 1,
+      email_verified: user.emailVerified ?? 1,
       created_at: user.createdAt ?? "",
       church_id: churchId,
     };
+  }
+
+  async verifyEmail(userId: number): Promise<boolean> {
+    await this.db
+      .update(users)
+      .set({ emailVerified: 1 } as never)
+      .where(eq(users.id, userId))
+      .run();
+    return true;
   }
 }

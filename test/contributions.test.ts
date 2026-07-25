@@ -6,7 +6,7 @@ const FULL_SCHEMA =
   `CREATE TABLE IF NOT EXISTS churches (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, code TEXT NOT NULL, type TEXT NOT NULL CHECK (type IN ('organized', 'company', 'branch')), parent_id INTEGER NOT NULL, parent_type TEXT NOT NULL CHECK (parent_type IN ('conference', 'church')), district_id INTEGER, address TEXT, bank_details TEXT, charter_status TEXT, founded_date TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
   `CREATE TABLE IF NOT EXISTS households (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), head_member_id INTEGER, name TEXT NOT NULL, address TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
   `CREATE TABLE IF NOT EXISTS members (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), household_id INTEGER REFERENCES households(id), full_name TEXT NOT NULL, preferred_name TEXT, dob TEXT, gender TEXT, baptism_date TEXT, baptism_type TEXT, join_date TEXT, prev_church_id INTEGER, phone TEXT, email TEXT, address TEXT, marital_status TEXT, status TEXT NOT NULL DEFAULT 'active', status_date TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')), version INTEGER NOT NULL DEFAULT 1);` +
-  `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, member_id INTEGER, conference_id INTEGER REFERENCES conferences(id), role TEXT NOT NULL CHECK (role IN ('president', 'secretary', 'treasurer', 'auditor', 'sysadmin', 'pastor', 'member')), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
+  `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, member_id INTEGER, conference_id INTEGER REFERENCES conferences(id), role TEXT NOT NULL CHECK (role IN ('president', 'secretary', 'treasurer', 'auditor', 'sysadmin', 'pastor', 'member')), email_verified INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
   `CREATE TABLE IF NOT EXISTS funds (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, type TEXT NOT NULL CHECK (type IN ('tithe', 'local_budget', 'sabbath_school')), forwarding_rule TEXT NOT NULL, conference_id INTEGER NOT NULL REFERENCES conferences(id), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
   `CREATE TABLE IF NOT EXISTS transactions (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), fund_id INTEGER NOT NULL REFERENCES funds(id), type TEXT NOT NULL CHECK (type IN ('income', 'expense', 'forward')), amount REAL NOT NULL, description TEXT, category_id INTEGER, budget_ref INTEGER, batch_id INTEGER, created_by INTEGER NOT NULL REFERENCES users(id), created_at TEXT NOT NULL DEFAULT (datetime('now')), confirmed_by INTEGER REFERENCES users(id), confirmed_at TEXT, uuid TEXT NOT NULL UNIQUE, envelope_number INTEGER, member_id INTEGER REFERENCES members(id));`;
 
@@ -21,11 +21,23 @@ describe("contribution statements API", () => {
 
   beforeAll(async () => {
     await env.DB.exec(FULL_SCHEMA);
-    await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token TEXT;");
-    await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token_expires TEXT;");
-    await env.DB.exec("ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1;");
+    try {
+      await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token TEXT;");
+    } catch {
+      /* ok */
+    }
+    try {
+      await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token_expires TEXT;");
+    } catch {
+      /* ok */
+    }
+    try {
+      await env.DB.exec("ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1;");
+    } catch {
+      /* ok */
+    }
 
-    const signupRes = await SELF.fetch("http://localhost/api/auth/signup", {
+    await SELF.fetch("http://localhost/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -35,13 +47,21 @@ describe("contribution statements API", () => {
         conferenceName: "Cont Conf",
       }),
     });
-    const signupBody = (await signupRes.json()) as {
+    await env.DB.prepare("UPDATE users SET email_verified = 1 WHERE email = ?")
+      .bind("contreas@test.com")
+      .run();
+    const loginRes = await SELF.fetch("http://localhost/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "contreas@test.com", password: "password123" }),
+    });
+    const loginBody = (await loginRes.json()) as {
       accessToken: string;
       userId: string;
       role: string;
     };
-    accessToken = signupBody.accessToken;
-    userId = Number(signupBody.userId);
+    accessToken = loginBody.accessToken;
+    userId = Number(loginBody.userId);
 
     const meRes = await SELF.fetch("http://localhost/api/auth/me", {
       headers: { Authorization: `Bearer ${accessToken}` },

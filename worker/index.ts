@@ -11,6 +11,7 @@ import {
   handleAuthRefresh,
   handleForgotPassword,
   handleResetPassword,
+  handleVerifyEmail,
 } from "./routes/auth";
 import {
   handleGetConferences,
@@ -169,6 +170,9 @@ app.post("/api/auth/forgot-password", rateLimit("auth:forgot-password"), (c) =>
 );
 app.post("/api/auth/reset-password", rateLimit("auth:reset-password"), (c) =>
   handleResetPassword(c.req.raw, c.env, undefined as unknown as AuthContext)
+);
+app.post("/api/auth/verify-email", rateLimit("auth:verify-email"), (c) =>
+  handleVerifyEmail(c.req.raw, c.env, undefined as unknown as AuthContext)
 );
 
 // ========================

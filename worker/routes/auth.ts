@@ -5,6 +5,8 @@ import {
   signRefreshToken,
   verifyToken,
   generateResetToken,
+  generateVerifyToken,
+  verifyEmailToken,
 } from "../lib/auth";
 import { ROLES } from "../lib/roles";
 import { logAudit, getDeviceInfo } from "../lib/audit";
@@ -12,7 +14,7 @@ import { createDb } from "../lib/db";
 import { UserRepo } from "../repos/users";
 import { ConferenceRepo } from "../repos/org";
 import { MemberRepo } from "../repos/members";
-import { sendResetEmail } from "../lib/email";
+import { sendResetEmail, sendVerifyEmail } from "../lib/email";
 import { json } from "../lib/response";
 import type { AuthContext } from "../lib/middleware";
 
@@ -59,6 +61,7 @@ export async function handleAuthSignup(
     passwordHash,
     role: "sysadmin",
     conferenceId: conferenceId ?? undefined,
+    emailVerified: 0,
   });
 
   await logAudit(env, {
@@ -72,19 +75,11 @@ export async function handleAuthSignup(
     device_info: getDeviceInfo(request),
   });
 
-  const userId = String(result.id);
-  const accessToken = await signAccessToken(
-    { sub: userId, role: ROLES.sysadmin, conferenceId: conferenceId ?? undefined },
-    env.JWT_SECRET
-  );
-  const refreshToken = await signRefreshToken({ sub: userId }, env.JWT_SECRET);
+  const verifyToken = await generateVerifyToken(result.id, env.JWT_SECRET);
+  await sendVerifyEmail(env, body.email.toLowerCase().trim(), verifyToken);
 
   return json({
-    accessToken,
-    refreshToken,
-    userId,
-    role: ROLES.sysadmin,
-    conferenceName: body.conferenceName,
+    message: "Account created. Check your email to verify your address.",
   });
 }
 
@@ -113,6 +108,10 @@ export async function handleAuthLogin(
 
   if (user.active === 0) {
     return json({ error: "Account has been deactivated. Contact your system administrator." }, 403);
+  }
+
+  if ((user.emailVerified ?? 1) === 0) {
+    return json({ error: "Please verify your email address before logging in." }, 403);
   }
 
   const valid = await verifyPassword(body.password, user.passwordHash);
@@ -203,6 +202,33 @@ export async function handleAuthRefresh(
     return json({ accessToken, refreshToken });
   } catch {
     return json({ error: "Invalid or expired refresh token" }, 401);
+  }
+}
+
+export async function handleVerifyEmail(
+  request: Request,
+  env: Env,
+  _auth: AuthContext
+): Promise<Response> {
+  let body: { token: string };
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: "Invalid JSON" }, 400);
+  }
+
+  if (!body.token) {
+    return json({ error: "token is required" }, 400);
+  }
+
+  try {
+    const payload = await verifyEmailToken(body.token, env.JWT_SECRET);
+    const userId = Number(payload.sub);
+    const userRepo = new UserRepo(createDb(env));
+    await userRepo.verifyEmail(userId);
+    return json({ message: "Email verified successfully." });
+  } catch {
+    return json({ error: "Invalid or expired verification token" }, 400);
   }
 }
 

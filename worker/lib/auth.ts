@@ -104,3 +104,24 @@ export function generateResetToken(): string {
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 }
+
+const VERIFY_EXPIRY = "24h";
+
+export async function generateVerifyToken(userId: number, secret: string): Promise<string> {
+  return new SignJWT({ sub: String(userId), type: "email-verify" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime(VERIFY_EXPIRY)
+    .sign(getKey(secret));
+}
+
+export async function verifyEmailToken(
+  token: string,
+  secret: string
+): Promise<{ sub: string; type: string }> {
+  const { payload } = await jwtVerify(token, getKey(secret));
+  if (payload.type !== "email-verify") {
+    throw new Error("Invalid token type");
+  }
+  return payload as unknown as { sub: string; type: string };
+}

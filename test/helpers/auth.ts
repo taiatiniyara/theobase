@@ -19,10 +19,14 @@ export function jsonAuthHeaders(token: string): Record<string, string> {
 export async function setupTestContext(role = "sysadmin" as string): Promise<TestContext> {
   await env.DB.exec(FULL_SCHEMA);
   for (const alter of SCHEMA_ALTERS) {
-    await env.DB.exec(alter);
+    try {
+      await env.DB.exec(alter);
+    } catch {
+      // Column may already exist from previous test file
+    }
   }
 
-  const signupRes = await SELF.fetch("http://localhost/api/auth/signup", {
+  await SELF.fetch("http://localhost/api/auth/signup", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -32,8 +36,17 @@ export async function setupTestContext(role = "sysadmin" as string): Promise<Tes
       conferenceName: "Test Conference",
     }),
   });
-  const signupBody = (await signupRes.json()) as { accessToken: string };
-  const accessToken = signupBody.accessToken;
+  await env.DB.prepare("UPDATE users SET email_verified = 1 WHERE email = ?")
+    .bind(`${role}@test.com`)
+    .run();
+
+  const loginRes = await SELF.fetch("http://localhost/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: `${role}@test.com`, password: "password123" }),
+  });
+  const loginBody = (await loginRes.json()) as { accessToken: string };
+  const accessToken = loginBody.accessToken;
 
   const meRes = await SELF.fetch("http://localhost/api/auth/me", {
     headers: { Authorization: `Bearer ${accessToken}` },

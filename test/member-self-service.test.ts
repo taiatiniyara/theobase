@@ -7,7 +7,7 @@ const FULL_SCHEMA =
   `CREATE TABLE IF NOT EXISTS churches (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, code TEXT NOT NULL, type TEXT NOT NULL CHECK (type IN ('organized', 'company', 'branch')), parent_id INTEGER NOT NULL, parent_type TEXT NOT NULL CHECK (parent_type IN ('conference', 'church')), district_id INTEGER REFERENCES districts(id), address TEXT, bank_details TEXT, charter_status TEXT, founded_date TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
   `CREATE TABLE IF NOT EXISTS households (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), head_member_id INTEGER, name TEXT NOT NULL, address TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
   `CREATE TABLE IF NOT EXISTS members (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), household_id INTEGER REFERENCES households(id), full_name TEXT NOT NULL, preferred_name TEXT, dob TEXT, gender TEXT, baptism_date TEXT, baptism_type TEXT CHECK (baptism_type IN ('immersion', 'profession_of_faith')), join_date TEXT, prev_church_id INTEGER REFERENCES churches(id), phone TEXT, email TEXT, address TEXT, marital_status TEXT, status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'transferred', 'deceased', 'removed')), status_date TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')), version INTEGER NOT NULL DEFAULT 1);` +
-  `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, member_id INTEGER REFERENCES members(id), conference_id INTEGER REFERENCES conferences(id), role TEXT NOT NULL CHECK (role IN ('president', 'secretary', 'treasurer', 'auditor', 'sysadmin', 'pastor', 'member')), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
+  `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, member_id INTEGER REFERENCES members(id), conference_id INTEGER REFERENCES conferences(id), role TEXT NOT NULL CHECK (role IN ('president', 'secretary', 'treasurer', 'auditor', 'sysadmin', 'pastor', 'member')), email_verified INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
   `CREATE TABLE IF NOT EXISTS funds (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, type TEXT NOT NULL CHECK (type IN ('tithe', 'local_budget', 'sabbath_school')), forwarding_rule TEXT NOT NULL, conference_id INTEGER NOT NULL REFERENCES conferences(id), created_at TEXT NOT NULL DEFAULT (datetime('now')));` +
   `CREATE TABLE IF NOT EXISTS transactions (id INTEGER PRIMARY KEY AUTOINCREMENT, church_id INTEGER NOT NULL REFERENCES churches(id), fund_id INTEGER NOT NULL REFERENCES funds(id), type TEXT NOT NULL CHECK (type IN ('income', 'expense', 'forward')), amount REAL NOT NULL, description TEXT, batch_id INTEGER, envelope_number INTEGER, member_id INTEGER REFERENCES members(id), proxy_for_member_id INTEGER REFERENCES members(id), verified INTEGER NOT NULL DEFAULT 0, verified_by INTEGER REFERENCES users(id), verified_at TEXT, created_by INTEGER NOT NULL REFERENCES users(id), created_at TEXT NOT NULL DEFAULT (datetime('now')), uuid TEXT NOT NULL UNIQUE);` +
   `CREATE TABLE IF NOT EXISTS transfer_requests (id INTEGER PRIMARY KEY AUTOINCREMENT, member_id INTEGER NOT NULL REFERENCES members(id), from_church_id INTEGER NOT NULL REFERENCES churches(id), to_church_id INTEGER NOT NULL REFERENCES churches(id), initiated_by INTEGER NOT NULL REFERENCES users(id), initiated_at TEXT NOT NULL DEFAULT (datetime('now')), conference_approved_by INTEGER REFERENCES users(id), conference_approved_at TEXT, accepted_by INTEGER REFERENCES users(id), accepted_at TEXT, rejection_note TEXT, expires_at TEXT, override_by INTEGER REFERENCES users(id), override_at TEXT, override_action TEXT, override_note TEXT, status TEXT NOT NULL DEFAULT 'pending_conference' CHECK (status IN ('pending_conference', 'pending_destination', 'completed', 'rejected', 'expired')));` +
@@ -35,7 +35,7 @@ describe("member self-service API", () => {
     await env.DB.exec("ALTER TABLE transactions ADD COLUMN confirmed_at TEXT;");
 
     // Sign up as sysadmin to create org structure
-    const adminSignup = await SELF.fetch("http://localhost/api/auth/signup", {
+    await SELF.fetch("http://localhost/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -45,7 +45,15 @@ describe("member self-service API", () => {
         conferenceName: "Central Conference",
       }),
     });
-    const adminBody = (await adminSignup.json()) as { accessToken: string };
+    await env.DB.prepare("UPDATE users SET email_verified = 1 WHERE email = ?")
+      .bind("admin@test.com")
+      .run();
+    const adminLoginRes = await SELF.fetch("http://localhost/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "admin@test.com", password: "password123" }),
+    });
+    const adminBody = (await adminLoginRes.json()) as { accessToken: string };
     const adminToken = adminBody.accessToken;
 
     const meRes = await SELF.fetch("http://localhost/api/auth/me", {
@@ -128,7 +136,7 @@ describe("member self-service API", () => {
     void ((await f2.json()) as { id: number }).id;
 
     // Sign up member user (linked to Jane Doe) — skip conferenceName to avoid duplicate
-    const memberSignup = await SELF.fetch("http://localhost/api/auth/signup", {
+    await SELF.fetch("http://localhost/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -137,7 +145,15 @@ describe("member self-service API", () => {
         fullName: "Jane Doe",
       }),
     });
-    const memberBody = (await memberSignup.json()) as { accessToken: string; userId: string };
+    await env.DB.prepare("UPDATE users SET email_verified = 1 WHERE email = ?")
+      .bind("jane@member.com")
+      .run();
+    const memberLogin1 = await SELF.fetch("http://localhost/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "jane@member.com", password: "password123" }),
+    });
+    const memberBody = (await memberLogin1.json()) as { accessToken: string; userId: string };
     memberToken = memberBody.accessToken;
     memberUserId = Number(memberBody.userId);
 
@@ -155,7 +171,7 @@ describe("member self-service API", () => {
     memberToken = ((await loginRes.json()) as { accessToken: string }).accessToken;
 
     // Sign up treasurer user — skip conferenceName to avoid duplicate
-    const treasSignup = await SELF.fetch("http://localhost/api/auth/signup", {
+    await SELF.fetch("http://localhost/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -164,7 +180,15 @@ describe("member self-service API", () => {
         fullName: "Treasurer",
       }),
     });
-    const treasBody = (await treasSignup.json()) as { accessToken: string; userId: string };
+    await env.DB.prepare("UPDATE users SET email_verified = 1 WHERE email = ?")
+      .bind("treasurer@test.com")
+      .run();
+    const treasLogin1 = await SELF.fetch("http://localhost/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "treasurer@test.com", password: "password123" }),
+    });
+    const treasBody = (await treasLogin1.json()) as { accessToken: string; userId: string };
     const treasUserId = Number(treasBody.userId);
 
     await env.DB.prepare("UPDATE users SET role = ?, conference_id = ? WHERE id = ?")
