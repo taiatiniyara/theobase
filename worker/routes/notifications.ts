@@ -1,4 +1,4 @@
-import { authenticate } from "../lib/middleware";
+import { type AuthContext } from "../lib/middleware";
 import { createDb } from "../lib/db";
 import { NotificationRepo, type NotificationRow } from "../repos/notifications";
 import { json } from "../lib/response";
@@ -16,10 +16,11 @@ function toNotificationResponse(n: NotificationRow) {
   };
 }
 
-export async function handleGetNotifications(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetNotifications(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const url = new URL(request.url);
   const unreadOnly = url.searchParams.get("unread") === "1";
 
@@ -32,11 +33,9 @@ export async function handleGetNotifications(request: Request, env: Env): Promis
 export async function handleMarkNotificationRead(
   request: Request,
   env: Env,
+  auth: AuthContext,
   notificationId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const repo = new NotificationRepo(createDb(env, auth.conferenceId));
   const success = await repo.markRead(notificationId, Number(auth.userId));
 
@@ -47,10 +46,11 @@ export async function handleMarkNotificationRead(
   return json({ success: true });
 }
 
-export async function handleMarkAllRead(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleMarkAllRead(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const repo = new NotificationRepo(createDb(env, auth.conferenceId));
   await repo.markAllRead(Number(auth.userId));
 

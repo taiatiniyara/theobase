@@ -17,6 +17,117 @@ describe("auth API", () => {
     await env.DB.exec("ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1;");
   });
 
+  describe("auth middleware", () => {
+    beforeAll(async () => {
+      await env.DB.exec(FULL_SCHEMA);
+    });
+
+    async function createUser(): Promise<{ accessToken: string; userId: string }> {
+      const res = await SELF.fetch("http://localhost/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: "middleware-test@test.com",
+          password: "password123",
+          fullName: "Middleware Test",
+          conferenceName: "MW Conference",
+        }),
+      });
+      const body = (await res.json()) as { accessToken: string; userId: string };
+      return body;
+    }
+
+    it("returns 401 for unauthenticated request to a protected route", async () => {
+      const res = await SELF.fetch("http://localhost/api/members");
+      expect(res.status).toBe(401);
+      const body = (await res.json()) as { error: string };
+      expect(body.error).toBe("Authentication required");
+    });
+
+    it("returns 200 for authenticated request to a protected route", async () => {
+      await createUser();
+      // Need a church to query members
+      const confRes = await SELF.fetch("http://localhost/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: "mw-admin@test.com",
+          password: "password123",
+          fullName: "MW Admin",
+          conferenceName: "MW2 Conference",
+        }),
+      });
+      const { accessToken: adminToken } = (await confRes.json()) as { accessToken: string };
+
+      await SELF.fetch("http://localhost/api/churches", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${adminToken}`,
+        },
+        body: JSON.stringify({
+          name: "MW Church",
+          code: "mw_church",
+          type: "organized",
+          parentId: 1,
+          parentType: "conference",
+          districtId: 2,
+        }),
+      });
+
+      const res = await SELF.fetch("http://localhost/api/members", {
+        headers: { Authorization: `Bearer ${adminToken}` },
+      });
+      expect(res.status).toBe(200);
+    });
+
+    it("does not protect the health route", async () => {
+      const res = await SELF.fetch("http://localhost/api/health");
+      expect(res.status).toBe(200);
+    });
+
+    it("does not protect auth signup", async () => {
+      const res = await SELF.fetch("http://localhost/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: "no-auth-test@test.com",
+          password: "password123",
+          fullName: "No Auth Test",
+        }),
+      });
+      expect(res.status).toBe(200);
+    });
+
+    it("does not protect auth login", async () => {
+      await createUser();
+      const res = await SELF.fetch("http://localhost/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "middleware-test@test.com", password: "password123" }),
+      });
+      expect(res.status).toBe(200);
+    });
+
+    it("returns 401 for expired or invalid token", async () => {
+      const res = await SELF.fetch("http://localhost/api/members", {
+        headers: { Authorization: "Bearer invalid.token.here" },
+      });
+      expect(res.status).toBe(401);
+      const body = (await res.json()) as { error: string };
+      expect(body.error).toBe("Invalid or expired token");
+    });
+
+    it("does not protect auth forgot-password", async () => {
+      const res = await SELF.fetch("http://localhost/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "middleware-test@test.com" }),
+      });
+      expect(res.status).toBe(200);
+    });
+  });
+
   it("full auth flow: signup, me, login, refresh, forgot-password", async () => {
     // Signup
     const signupRes = await SELF.fetch("http://localhost/api/auth/signup", {

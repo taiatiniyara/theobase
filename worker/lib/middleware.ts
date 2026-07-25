@@ -40,6 +40,18 @@ export async function authenticate(request: Request, env: Env): Promise<AuthCont
   }
 }
 
+export function auth() {
+  return async (
+    c: { req: { raw: Request }; env: Env; set: (key: string, value: unknown) => void },
+    next: () => Promise<void>
+  ) => {
+    const result = await authenticate(c.req.raw, c.env);
+    if (result instanceof Response) return result;
+    c.set("auth", result);
+    await next();
+  };
+}
+
 export function authorize(auth: AuthContext, allowedRoles: string[]): Response | null {
   if (!allowedRoles.includes(auth.role)) {
     return json({ error: "Insufficient permissions" }, 403);

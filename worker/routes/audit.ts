@@ -1,4 +1,4 @@
-import { authenticate, authorize } from "../lib/middleware";
+import { authorize, type AuthContext } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { createDb } from "../lib/db";
 import { AuditRepo, type AuditEntry } from "../repos/audit";
@@ -20,10 +20,11 @@ function toAuditEntry(e: AuditEntry) {
   };
 }
 
-export async function handleGetAuditLog(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetAuditLog(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["audit:read"]!);
   if (forbidden) return forbidden;
 
@@ -65,12 +66,10 @@ export async function handleGetAuditLog(request: Request, env: Env): Promise<Res
 export async function handleGetAuditByEntity(
   request: Request,
   env: Env,
+  auth: AuthContext,
   entityType: string,
   entityId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["audit:read"]!);
   if (forbidden) return forbidden;
 

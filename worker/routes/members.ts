@@ -1,4 +1,4 @@
-import { authenticate, authorize } from "../lib/middleware";
+import { authorize, type AuthContext } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { logAudit, getDeviceInfo } from "../lib/audit";
 import { createNotification } from "./notifications";
@@ -60,10 +60,11 @@ function toHouseholdResponse(h: HouseholdRow) {
 
 // ── Members ──
 
-export async function handleGetMembers(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetMembers(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["members:read"]!);
   if (forbidden) return forbidden;
 
@@ -84,11 +85,9 @@ export async function handleGetMembers(request: Request, env: Env): Promise<Resp
 export async function handleGetMember(
   request: Request,
   env: Env,
+  auth: AuthContext,
   memberId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["members:read"]!);
   if (forbidden) return forbidden;
 
@@ -126,10 +125,11 @@ export async function handleGetMember(
   });
 }
 
-export async function handleCreateMember(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleCreateMember(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
@@ -191,11 +191,9 @@ export async function handleCreateMember(request: Request, env: Env): Promise<Re
 export async function handleUpdateMember(
   request: Request,
   env: Env,
+  auth: AuthContext,
   memberId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
@@ -265,11 +263,9 @@ export async function handleUpdateMember(
 export async function handleRemoveMember(
   request: Request,
   env: Env,
+  auth: AuthContext,
   memberId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
@@ -312,10 +308,11 @@ export async function handleRemoveMember(
 
 // ── Households ──
 
-export async function handleGetHouseholds(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetHouseholds(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["members:read"]!);
   if (forbidden) return forbidden;
 
@@ -350,10 +347,11 @@ export async function handleGetHouseholds(request: Request, env: Env): Promise<R
   return json({ households: enriched });
 }
 
-export async function handleCreateHousehold(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleCreateHousehold(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
@@ -388,11 +386,9 @@ export async function handleCreateHousehold(request: Request, env: Env): Promise
 export async function handleUpdateHousehold(
   request: Request,
   env: Env,
+  auth: AuthContext,
   householdId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
@@ -435,10 +431,11 @@ export async function handleUpdateHousehold(
 
 // ── Positions ──
 
-export async function handleGetPositions(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetPositions(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["members:read"]!);
   if (forbidden) return forbidden;
 
@@ -448,10 +445,11 @@ export async function handleGetPositions(request: Request, env: Env): Promise<Re
   return json({ positions });
 }
 
-export async function handleCreatePosition(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleCreatePosition(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
@@ -500,11 +498,9 @@ export async function handleCreatePosition(request: Request, env: Env): Promise<
 export async function handleAssignPosition(
   request: Request,
   env: Env,
+  auth: AuthContext,
   memberId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
@@ -555,12 +551,10 @@ export async function handleAssignPosition(
 export async function handleRemovePosition(
   request: Request,
   env: Env,
+  auth: AuthContext,
   memberId: number,
   positionId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
@@ -588,10 +582,11 @@ export async function handleRemovePosition(
 
 // ── Transfers ──
 
-export async function handleGetTransfers(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetTransfers(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["members:read"]!);
   if (forbidden) return forbidden;
 
@@ -650,10 +645,11 @@ export async function handleGetTransfers(request: Request, env: Env): Promise<Re
   return json({ transfers: enriched });
 }
 
-export async function handleInitiateTransfer(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleInitiateTransfer(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
@@ -749,11 +745,9 @@ export async function handleInitiateTransfer(request: Request, env: Env): Promis
 export async function handleApproveTransfer(
   request: Request,
   env: Env,
+  auth: AuthContext,
   transferId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
@@ -822,11 +816,9 @@ export async function handleApproveTransfer(
 export async function handleAcceptTransfer(
   request: Request,
   env: Env,
+  auth: AuthContext,
   transferId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
@@ -888,11 +880,9 @@ export async function handleAcceptTransfer(
 export async function handleRejectTransfer(
   request: Request,
   env: Env,
+  auth: AuthContext,
   transferId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["members:write"]!);
   if (forbidden) return forbidden;
 
@@ -959,11 +949,9 @@ export async function handleRejectTransfer(
 export async function handleOverrideTransfer(
   request: Request,
   env: Env,
+  auth: AuthContext,
   transferId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const user = await env.DB.prepare("SELECT role, conference_id FROM users WHERE id = ?")
     .bind(Number(auth.userId))
     .first<{ role: string; conference_id: number | null }>();
@@ -1033,11 +1021,9 @@ export async function handleOverrideTransfer(
 export async function handleGetSelfMember(
   request: Request,
   env: Env,
+  auth: AuthContext,
   churchId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const user = await env.DB.prepare("SELECT id, member_id FROM users WHERE id = ?")
     .bind(Number(auth.userId))
     .first<{ id: number; member_id: number | null }>();
@@ -1057,11 +1043,9 @@ export async function handleGetSelfMember(
 export async function handleUpdateSelfMember(
   request: Request,
   env: Env,
+  auth: AuthContext,
   churchId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const user = await env.DB.prepare("SELECT id, member_id FROM users WHERE id = ?")
     .bind(Number(auth.userId))
     .first<{ id: number; member_id: number | null }>();
@@ -1124,12 +1108,10 @@ export async function handleUpdateSelfMember(
 export async function handleMemberGiving(
   request: Request,
   env: Env,
+  auth: AuthContext,
   churchId: number,
   memberId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   let body: {
     fundId: number;
     amount: number;
@@ -1222,12 +1204,10 @@ export async function handleMemberGiving(
 export async function handleMemberTransfer(
   request: Request,
   env: Env,
+  auth: AuthContext,
   churchId: number,
   memberId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const user = await env.DB.prepare("SELECT id, member_id FROM users WHERE id = ?")
     .bind(Number(auth.userId))
     .first<{ id: number; member_id: number | null }>();
@@ -1330,11 +1310,9 @@ export async function handleMemberTransfer(
 export async function handleListDeclarations(
   request: Request,
   env: Env,
+  auth: AuthContext,
   churchId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
   if (forbidden) return forbidden;
 
@@ -1368,12 +1346,10 @@ export async function handleListDeclarations(
 export async function handleVerifyDeclaration(
   request: Request,
   env: Env,
+  auth: AuthContext,
   churchId: number,
   declarationId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
@@ -1413,12 +1389,10 @@ export async function handleVerifyDeclaration(
 export async function handleRejectDeclaration(
   request: Request,
   env: Env,
+  auth: AuthContext,
   churchId: number,
   declarationId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 

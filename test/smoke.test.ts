@@ -12,7 +12,7 @@ describe("theobase worker", () => {
   });
 
   it("returns 404 for unknown routes", async () => {
-    const request = new Request("http://localhost/api/nonexistent");
+    const request = new Request("http://localhost/nonexistent");
     const response = await SELF.fetch(request);
 
     expect(response.status).toBe(404);

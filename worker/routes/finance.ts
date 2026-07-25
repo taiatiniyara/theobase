@@ -1,4 +1,4 @@
-import { authenticate, authorize } from "../lib/middleware";
+import { authorize, type AuthContext } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { logAudit, getDeviceInfo } from "../lib/audit";
 import { createDb } from "../lib/db";
@@ -49,10 +49,11 @@ function toExpenseCategoryResponse(ec: ExpenseCategoryRow) {
 
 // ── Funds ──
 
-export async function handleGetFunds(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetFunds(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
   if (forbidden) return forbidden;
 
@@ -67,10 +68,11 @@ export async function handleGetFunds(request: Request, env: Env): Promise<Respon
   return json({ funds: funds.map(toFundResponse) });
 }
 
-export async function handleCreateFund(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleCreateFund(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
@@ -138,10 +140,11 @@ export async function handleCreateFund(request: Request, env: Env): Promise<Resp
 
 // ── Expense Categories ──
 
-export async function handleGetExpenseCategories(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetExpenseCategories(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
   if (forbidden) return forbidden;
 
@@ -160,11 +163,9 @@ export async function handleGetExpenseCategories(request: Request, env: Env): Pr
 export async function handleUpdateExpenseCategory(
   request: Request,
   env: Env,
+  auth: AuthContext,
   categoryId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
@@ -208,10 +209,11 @@ export async function handleUpdateExpenseCategory(
   return json({ success: true });
 }
 
-export async function handleCreateExpenseCategory(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleCreateExpenseCategory(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
@@ -263,10 +265,11 @@ export async function handleCreateExpenseCategory(request: Request, env: Env): P
 
 // ── Offering Batches ──
 
-export async function handleGetBatches(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetBatches(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
   if (forbidden) return forbidden;
 
@@ -316,11 +319,9 @@ export async function handleGetBatches(request: Request, env: Env): Promise<Resp
 export async function handleGetBatch(
   request: Request,
   env: Env,
+  auth: AuthContext,
   batchId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
   if (forbidden) return forbidden;
 
@@ -371,10 +372,11 @@ export async function handleGetBatch(
   return json({ ...batch, transactions });
 }
 
-export async function handleCreateBatch(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleCreateBatch(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
@@ -430,11 +432,9 @@ export async function handleCreateBatch(request: Request, env: Env): Promise<Res
 export async function handleConfirmBatch(
   request: Request,
   env: Env,
+  auth: AuthContext,
   batchId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
@@ -531,10 +531,11 @@ export async function handleConfirmBatch(
 
 // ── Transactions ──
 
-export async function handleGetTransactions(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetTransactions(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
   if (forbidden) return forbidden;
 
@@ -595,10 +596,11 @@ export async function handleGetTransactions(request: Request, env: Env): Promise
   return json({ transactions: result.results });
 }
 
-export async function handleCreateTransaction(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleCreateTransaction(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
@@ -703,10 +705,11 @@ export async function handleCreateTransaction(request: Request, env: Env): Promi
   return json({ id: result.id, ...body, type: "income", uuid: txnUuid }, 201);
 }
 
-export async function handleCreateExpense(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleCreateExpense(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
@@ -775,10 +778,11 @@ export async function handleCreateExpense(request: Request, env: Env): Promise<R
 
 // ── Budgets ──
 
-export async function handleGetBudgets(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetBudgets(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
   if (forbidden) return forbidden;
 
@@ -815,10 +819,11 @@ export async function handleGetBudgets(request: Request, env: Env): Promise<Resp
   return json({ budgets: result.results });
 }
 
-export async function handleCreateBudget(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleCreateBudget(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
@@ -893,11 +898,9 @@ export async function handleCreateBudget(request: Request, env: Env): Promise<Re
 export async function handleApproveBudget(
   request: Request,
   env: Env,
+  auth: AuthContext,
   budgetId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
@@ -928,10 +931,11 @@ export async function handleApproveBudget(
 
 // ── Budget Templates ──
 
-export async function handleGetBudgetTemplates(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetBudgetTemplates(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
   if (forbidden) return forbidden;
 
@@ -963,10 +967,11 @@ export async function handleGetBudgetTemplates(request: Request, env: Env): Prom
   return json({ budgetTemplates: result.results });
 }
 
-export async function handleCreateBudgetTemplate(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleCreateBudgetTemplate(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
@@ -1039,10 +1044,11 @@ export async function handleCreateBudgetTemplate(request: Request, env: Env): Pr
 
 // ── Monthly Treasurer Report ──
 
-export async function handleGetMonthlyReport(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetMonthlyReport(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
   if (forbidden) return forbidden;
 

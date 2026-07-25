@@ -1,13 +1,14 @@
-import { authenticate, authorize } from "../lib/middleware";
+import { authorize, type AuthContext } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { ChurchRepo } from "../repos/org";
 import { createDb } from "../lib/db";
 import { json } from "../lib/response";
 
-export async function handleGetQuarterlyReport(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetQuarterlyReport(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
   if (forbidden) return forbidden;
 

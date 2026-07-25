@@ -1,4 +1,4 @@
-import { authenticate, authorize, requireConference } from "../lib/middleware";
+import { authorize, requireConference, type AuthContext } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { parseCsv, validateCsvHeaders } from "../lib/csv";
 import { logAudit, getDeviceInfo } from "../lib/audit";
@@ -47,10 +47,11 @@ function toChurchResponse(c: ChurchRow & { districtName?: string | null }) {
   };
 }
 
-export async function handleGetConferences(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetConferences(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["org:read"]!);
   if (forbidden) return forbidden;
 
@@ -60,10 +61,11 @@ export async function handleGetConferences(request: Request, env: Env): Promise<
   return json({ conferences: conferences.map(toConferenceResponse) });
 }
 
-export async function handleCreateConference(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleCreateConference(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["org:manage"]!);
   if (forbidden) return forbidden;
 
@@ -109,11 +111,9 @@ export async function handleCreateConference(request: Request, env: Env): Promis
 export async function handleUpdateConference(
   request: Request,
   env: Env,
+  auth: AuthContext,
   conferenceId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["org:manage"]!);
   if (forbidden) return forbidden;
 
@@ -156,6 +156,7 @@ export async function handleUpdateConference(
 export async function handleGetDistricts(
   _request: Request,
   env: Env,
+  auth: AuthContext,
   conferenceId: number
 ): Promise<Response> {
   const districtRepo = new DistrictRepo(createDb(env));
@@ -180,11 +181,9 @@ export async function handleGetDistricts(
 export async function handleCreateDistrict(
   request: Request,
   env: Env,
+  auth: AuthContext,
   conferenceId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["org:manage"]!);
   if (forbidden) return forbidden;
 
@@ -226,11 +225,9 @@ export async function handleCreateDistrict(
 export async function handleUpdateDistrict(
   request: Request,
   env: Env,
+  auth: AuthContext,
   districtId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["org:manage"]!);
   if (forbidden) return forbidden;
 
@@ -273,6 +270,7 @@ export async function handleUpdateDistrict(
 export async function handleGetChurches(
   _request: Request,
   env: Env,
+  auth: AuthContext,
   conferenceId: number
 ): Promise<Response> {
   const churchRepo = new ChurchRepo(createDb(env));
@@ -294,10 +292,11 @@ export async function handleGetChurches(
   return json({ churches: enriched });
 }
 
-export async function handleCreateChurch(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleCreateChurch(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["org:manage"]!);
   if (forbidden) return forbidden;
 
@@ -371,11 +370,9 @@ export async function handleCreateChurch(request: Request, env: Env): Promise<Re
 export async function handleUpdateChurch(
   request: Request,
   env: Env,
+  auth: AuthContext,
   churchId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["org:manage"]!);
   if (forbidden) return forbidden;
 
@@ -446,10 +443,11 @@ export async function handleUpdateChurch(
   return json({ success: true });
 }
 
-export async function handleBulkCreateChurches(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleBulkCreateChurches(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["org:manage"]!);
   if (forbidden) return forbidden;
 

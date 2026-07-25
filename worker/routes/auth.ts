@@ -14,8 +14,13 @@ import { ConferenceRepo } from "../repos/org";
 import { MemberRepo } from "../repos/members";
 import { sendResetEmail } from "../lib/email";
 import { json } from "../lib/response";
+import type { AuthContext } from "../lib/middleware";
 
-export async function handleAuthSignup(request: Request, env: Env): Promise<Response> {
+export async function handleAuthSignup(
+  request: Request,
+  env: Env,
+  _auth: AuthContext
+): Promise<Response> {
   let body: { email: string; password: string; fullName: string; conferenceName?: string };
   try {
     body = await request.json();
@@ -83,7 +88,11 @@ export async function handleAuthSignup(request: Request, env: Env): Promise<Resp
   });
 }
 
-export async function handleAuthLogin(request: Request, env: Env): Promise<Response> {
+export async function handleAuthLogin(
+  request: Request,
+  env: Env,
+  _auth: AuthContext
+): Promise<Response> {
   let body: { email: string; password: string };
   try {
     body = await request.json();
@@ -140,7 +149,11 @@ export async function handleAuthLogin(request: Request, env: Env): Promise<Respo
   });
 }
 
-export async function handleAuthRefresh(request: Request, env: Env): Promise<Response> {
+export async function handleAuthRefresh(
+  request: Request,
+  env: Env,
+  _auth: AuthContext
+): Promise<Response> {
   let body: { refreshToken: string };
   try {
     body = await request.json();
@@ -193,7 +206,11 @@ export async function handleAuthRefresh(request: Request, env: Env): Promise<Res
   }
 }
 
-export async function handleForgotPassword(request: Request, env: Env): Promise<Response> {
+export async function handleForgotPassword(
+  request: Request,
+  env: Env,
+  _auth: AuthContext
+): Promise<Response> {
   let body: { email: string };
   try {
     body = await request.json();
@@ -224,7 +241,11 @@ export async function handleForgotPassword(request: Request, env: Env): Promise<
   });
 }
 
-export async function handleResetPassword(request: Request, env: Env): Promise<Response> {
+export async function handleResetPassword(
+  request: Request,
+  env: Env,
+  _auth: AuthContext
+): Promise<Response> {
   let body: { token: string; newPassword: string };
   try {
     body = await request.json();

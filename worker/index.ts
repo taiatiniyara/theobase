@@ -4,6 +4,7 @@ import { ChurchSyncDO } from "./durables/ChurchSyncDO";
 import { ConferenceDO } from "./durables/ConferenceDO";
 import { checkRateLimitAsync } from "./lib/rate-limit";
 import { json } from "./lib/response";
+import { auth, type AuthContext } from "./lib/middleware";
 import {
   handleAuthSignup,
   handleAuthLogin,
@@ -106,6 +107,9 @@ export { ChurchSyncDO, ConferenceDO };
 
 type HonoEnv = {
   Bindings: Env;
+  Variables: {
+    auth?: AuthContext;
+  };
 };
 
 const app = new Hono<HonoEnv>();
@@ -120,6 +124,12 @@ function rateLimit(key: string) {
   };
 }
 
+const authMiddleware = auth();
+
+// ========================
+// PUBLIC routes — no auth required
+// ========================
+
 app.get("/api/health", async (c) => {
   try {
     if (c.env.DB) {
@@ -132,103 +142,129 @@ app.get("/api/health", async (c) => {
   }
 });
 
-app.post("/api/auth/signup", rateLimit("auth:signup"), (c) => handleAuthSignup(c.req.raw, c.env));
-app.post("/api/auth/login", rateLimit("auth:login"), (c) => handleAuthLogin(c.req.raw, c.env));
-app.post("/api/auth/refresh", (c) => handleAuthRefresh(c.req.raw, c.env));
+app.post("/api/auth/signup", rateLimit("auth:signup"), (c) =>
+  handleAuthSignup(c.req.raw, c.env, undefined as unknown as AuthContext)
+);
+app.post("/api/auth/login", rateLimit("auth:login"), (c) =>
+  handleAuthLogin(c.req.raw, c.env, undefined as unknown as AuthContext)
+);
+app.post("/api/auth/refresh", (c) =>
+  handleAuthRefresh(c.req.raw, c.env, undefined as unknown as AuthContext)
+);
 app.post("/api/auth/forgot-password", rateLimit("auth:forgot-password"), (c) =>
-  handleForgotPassword(c.req.raw, c.env)
+  handleForgotPassword(c.req.raw, c.env, undefined as unknown as AuthContext)
 );
 app.post("/api/auth/reset-password", rateLimit("auth:reset-password"), (c) =>
-  handleResetPassword(c.req.raw, c.env)
+  handleResetPassword(c.req.raw, c.env, undefined as unknown as AuthContext)
 );
-app.get("/api/auth/me", (c) => handleGetMe(c.req.raw, c.env));
 
-app.get("/api/conferences", (c) => handleGetConferences(c.req.raw, c.env));
-app.post("/api/conferences", (c) => handleCreateConference(c.req.raw, c.env));
+// ========================
+// AUTH middleware — all routes below require valid JWT
+// ========================
+
+app.use("/api/*", authMiddleware);
+
+// ========================
+// PROTECTED routes
+// ========================
+
+const getAuth = (c: { get: (key: "auth") => AuthContext | undefined }): AuthContext =>
+  c.get("auth")!;
+
+app.get("/api/auth/me", (c) => handleGetMe(c.req.raw, c.env, getAuth(c)));
+
+app.get("/api/conferences", (c) => handleGetConferences(c.req.raw, c.env, getAuth(c)));
+app.post("/api/conferences", (c) => handleCreateConference(c.req.raw, c.env, getAuth(c)));
 app.patch("/api/conferences/:id", (c) =>
-  handleUpdateConference(c.req.raw, c.env, Number(c.req.param("id")))
+  handleUpdateConference(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
 app.get("/api/conferences/:confId/districts", (c) =>
-  handleGetDistricts(c.req.raw, c.env, Number(c.req.param("confId")))
+  handleGetDistricts(c.req.raw, c.env, getAuth(c), Number(c.req.param("confId")))
 );
 app.post("/api/conferences/:confId/districts", (c) =>
-  handleCreateDistrict(c.req.raw, c.env, Number(c.req.param("confId")))
+  handleCreateDistrict(c.req.raw, c.env, getAuth(c), Number(c.req.param("confId")))
 );
 app.patch("/api/districts/:id", (c) =>
-  handleUpdateDistrict(c.req.raw, c.env, Number(c.req.param("id")))
+  handleUpdateDistrict(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
 app.get("/api/conferences/:confId/churches", (c) =>
-  handleGetChurches(c.req.raw, c.env, Number(c.req.param("confId")))
+  handleGetChurches(c.req.raw, c.env, getAuth(c), Number(c.req.param("confId")))
 );
-app.post("/api/churches", (c) => handleCreateChurch(c.req.raw, c.env));
-app.post("/api/churches/bulk", (c) => handleBulkCreateChurches(c.req.raw, c.env));
+app.post("/api/churches", (c) => handleCreateChurch(c.req.raw, c.env, getAuth(c)));
+app.post("/api/churches/bulk", (c) => handleBulkCreateChurches(c.req.raw, c.env, getAuth(c)));
 app.patch("/api/churches/:id", (c) =>
-  handleUpdateChurch(c.req.raw, c.env, Number(c.req.param("id")))
+  handleUpdateChurch(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
-app.get("/api/users", (c) => handleGetUsers(c.req.raw, c.env));
-app.post("/api/users/invite", (c) => handleInviteUser(c.req.raw, c.env));
-app.post("/api/users/bulk-invite", (c) => handleBulkInviteUsers(c.req.raw, c.env));
-app.patch("/api/users/:id", (c) => handleUpdateUser(c.req.raw, c.env, Number(c.req.param("id"))));
+app.get("/api/users", (c) => handleGetUsers(c.req.raw, c.env, getAuth(c)));
+app.post("/api/users/invite", (c) => handleInviteUser(c.req.raw, c.env, getAuth(c)));
+app.post("/api/users/bulk-invite", (c) => handleBulkInviteUsers(c.req.raw, c.env, getAuth(c)));
+app.patch("/api/users/:id", (c) =>
+  handleUpdateUser(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
+);
 
-app.get("/api/members", (c) => handleGetMembers(c.req.raw, c.env));
-app.post("/api/members", (c) => handleCreateMember(c.req.raw, c.env));
-app.get("/api/members/:id", (c) => handleGetMember(c.req.raw, c.env, Number(c.req.param("id"))));
+app.get("/api/members", (c) => handleGetMembers(c.req.raw, c.env, getAuth(c)));
+app.post("/api/members", (c) => handleCreateMember(c.req.raw, c.env, getAuth(c)));
+app.get("/api/members/:id", (c) =>
+  handleGetMember(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
+);
 app.patch("/api/members/:id", (c) =>
-  handleUpdateMember(c.req.raw, c.env, Number(c.req.param("id")))
+  handleUpdateMember(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 app.post("/api/members/:id/remove", (c) =>
-  handleRemoveMember(c.req.raw, c.env, Number(c.req.param("id")))
+  handleRemoveMember(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
-app.get("/api/households", (c) => handleGetHouseholds(c.req.raw, c.env));
-app.post("/api/households", (c) => handleCreateHousehold(c.req.raw, c.env));
+app.get("/api/households", (c) => handleGetHouseholds(c.req.raw, c.env, getAuth(c)));
+app.post("/api/households", (c) => handleCreateHousehold(c.req.raw, c.env, getAuth(c)));
 app.patch("/api/households/:id", (c) =>
-  handleUpdateHousehold(c.req.raw, c.env, Number(c.req.param("id")))
+  handleUpdateHousehold(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
-app.get("/api/positions", (c) => handleGetPositions(c.req.raw, c.env));
-app.post("/api/positions", (c) => handleCreatePosition(c.req.raw, c.env));
+app.get("/api/positions", (c) => handleGetPositions(c.req.raw, c.env, getAuth(c)));
+app.post("/api/positions", (c) => handleCreatePosition(c.req.raw, c.env, getAuth(c)));
 app.post("/api/members/:memberId/positions", (c) =>
-  handleAssignPosition(c.req.raw, c.env, Number(c.req.param("memberId")))
+  handleAssignPosition(c.req.raw, c.env, getAuth(c), Number(c.req.param("memberId")))
 );
 app.delete("/api/members/:memberId/positions/:posId", (c) =>
   handleRemovePosition(
     c.req.raw,
     c.env,
+    getAuth(c),
     Number(c.req.param("memberId")),
     Number(c.req.param("posId"))
   )
 );
 
-app.get("/api/transfers", (c) => handleGetTransfers(c.req.raw, c.env));
-app.post("/api/transfers", (c) => handleInitiateTransfer(c.req.raw, c.env));
+app.get("/api/transfers", (c) => handleGetTransfers(c.req.raw, c.env, getAuth(c)));
+app.post("/api/transfers", (c) => handleInitiateTransfer(c.req.raw, c.env, getAuth(c)));
 app.post("/api/transfers/:id/approve", (c) =>
-  handleApproveTransfer(c.req.raw, c.env, Number(c.req.param("id")))
+  handleApproveTransfer(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 app.post("/api/transfers/:id/accept", (c) =>
-  handleAcceptTransfer(c.req.raw, c.env, Number(c.req.param("id")))
+  handleAcceptTransfer(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 app.post("/api/transfers/:id/reject", (c) =>
-  handleRejectTransfer(c.req.raw, c.env, Number(c.req.param("id")))
+  handleRejectTransfer(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 app.post("/api/transfers/:id/override", (c) =>
-  handleOverrideTransfer(c.req.raw, c.env, Number(c.req.param("id")))
+  handleOverrideTransfer(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
 app.get("/api/churches/:churchId/members/me", (c) =>
-  handleGetSelfMember(c.req.raw, c.env, Number(c.req.param("churchId")))
+  handleGetSelfMember(c.req.raw, c.env, getAuth(c), Number(c.req.param("churchId")))
 );
 app.patch("/api/churches/:churchId/members/me", (c) =>
-  handleUpdateSelfMember(c.req.raw, c.env, Number(c.req.param("churchId")))
+  handleUpdateSelfMember(c.req.raw, c.env, getAuth(c), Number(c.req.param("churchId")))
 );
 
 app.post("/api/churches/:churchId/members/:memberId/giving", (c) =>
   handleMemberGiving(
     c.req.raw,
     c.env,
+    getAuth(c),
     Number(c.req.param("churchId")),
     Number(c.req.param("memberId"))
   )
@@ -237,18 +273,20 @@ app.post("/api/churches/:churchId/members/:memberId/transfer-request", (c) =>
   handleMemberTransfer(
     c.req.raw,
     c.env,
+    getAuth(c),
     Number(c.req.param("churchId")),
     Number(c.req.param("memberId"))
   )
 );
 
 app.get("/api/churches/:churchId/declarations", (c) =>
-  handleListDeclarations(c.req.raw, c.env, Number(c.req.param("churchId")))
+  handleListDeclarations(c.req.raw, c.env, getAuth(c), Number(c.req.param("churchId")))
 );
 app.post("/api/churches/:churchId/declarations/:declId/verify", (c) =>
   handleVerifyDeclaration(
     c.req.raw,
     c.env,
+    getAuth(c),
     Number(c.req.param("churchId")),
     Number(c.req.param("declId"))
   )
@@ -257,77 +295,93 @@ app.post("/api/churches/:churchId/declarations/:declId/reject", (c) =>
   handleRejectDeclaration(
     c.req.raw,
     c.env,
+    getAuth(c),
     Number(c.req.param("churchId")),
     Number(c.req.param("declId"))
   )
 );
 
-app.get("/api/funds", (c) => handleGetFunds(c.req.raw, c.env));
-app.post("/api/funds", (c) => handleCreateFund(c.req.raw, c.env));
+app.get("/api/funds", (c) => handleGetFunds(c.req.raw, c.env, getAuth(c)));
+app.post("/api/funds", (c) => handleCreateFund(c.req.raw, c.env, getAuth(c)));
 
-app.get("/api/expense-categories", (c) => handleGetExpenseCategories(c.req.raw, c.env));
-app.post("/api/expense-categories", (c) => handleCreateExpenseCategory(c.req.raw, c.env));
+app.get("/api/expense-categories", (c) => handleGetExpenseCategories(c.req.raw, c.env, getAuth(c)));
+app.post("/api/expense-categories", (c) =>
+  handleCreateExpenseCategory(c.req.raw, c.env, getAuth(c))
+);
 app.patch("/api/expense-categories/:id", (c) =>
-  handleUpdateExpenseCategory(c.req.raw, c.env, Number(c.req.param("id")))
+  handleUpdateExpenseCategory(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
-app.get("/api/finance/batches", (c) => handleGetBatches(c.req.raw, c.env));
-app.post("/api/finance/batches", (c) => handleCreateBatch(c.req.raw, c.env));
+app.get("/api/finance/batches", (c) => handleGetBatches(c.req.raw, c.env, getAuth(c)));
+app.post("/api/finance/batches", (c) => handleCreateBatch(c.req.raw, c.env, getAuth(c)));
 app.get("/api/finance/batches/:id", (c) =>
-  handleGetBatch(c.req.raw, c.env, Number(c.req.param("id")))
+  handleGetBatch(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 app.post("/api/finance/batches/:id/confirm", (c) =>
-  handleConfirmBatch(c.req.raw, c.env, Number(c.req.param("id")))
+  handleConfirmBatch(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
-app.get("/api/finance/transactions", (c) => handleGetTransactions(c.req.raw, c.env));
-app.post("/api/finance/transactions", (c) => handleCreateTransaction(c.req.raw, c.env));
-app.post("/api/finance/expenses", (c) => handleCreateExpense(c.req.raw, c.env));
+app.get("/api/finance/transactions", (c) => handleGetTransactions(c.req.raw, c.env, getAuth(c)));
+app.post("/api/finance/transactions", (c) => handleCreateTransaction(c.req.raw, c.env, getAuth(c)));
+app.post("/api/finance/expenses", (c) => handleCreateExpense(c.req.raw, c.env, getAuth(c)));
 
-app.get("/api/finance/budgets", (c) => handleGetBudgets(c.req.raw, c.env));
-app.post("/api/finance/budgets", (c) => handleCreateBudget(c.req.raw, c.env));
+app.get("/api/finance/budgets", (c) => handleGetBudgets(c.req.raw, c.env, getAuth(c)));
+app.post("/api/finance/budgets", (c) => handleCreateBudget(c.req.raw, c.env, getAuth(c)));
 app.post("/api/finance/budgets/:id/approve", (c) =>
-  handleApproveBudget(c.req.raw, c.env, Number(c.req.param("id")))
+  handleApproveBudget(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
-app.get("/api/finance/budget-templates", (c) => handleGetBudgetTemplates(c.req.raw, c.env));
-app.post("/api/finance/budget-templates", (c) => handleCreateBudgetTemplate(c.req.raw, c.env));
+app.get("/api/finance/budget-templates", (c) =>
+  handleGetBudgetTemplates(c.req.raw, c.env, getAuth(c))
+);
+app.post("/api/finance/budget-templates", (c) =>
+  handleCreateBudgetTemplate(c.req.raw, c.env, getAuth(c))
+);
 
-app.get("/api/finance/report/monthly", (c) => handleGetMonthlyReport(c.req.raw, c.env));
-app.get("/api/report/quarterly", (c) => handleGetQuarterlyReport(c.req.raw, c.env));
+app.get("/api/finance/report/monthly", (c) => handleGetMonthlyReport(c.req.raw, c.env, getAuth(c)));
+app.get("/api/report/quarterly", (c) => handleGetQuarterlyReport(c.req.raw, c.env, getAuth(c)));
 
-app.get("/api/conference/tithe", (c) => handleGetConferenceTithe(c.req.raw, c.env));
-app.post("/api/conference/tithe/receive", (c) => handleReceiveTithe(c.req.raw, c.env));
-app.get("/api/conference/tithe/report", (c) => handleTitheReport(c.req.raw, c.env));
-app.on(["GET", "POST"], "/api/church/balance", (c) => handleChurchBalance(c.req.raw, c.env));
+app.get("/api/conference/tithe", (c) => handleGetConferenceTithe(c.req.raw, c.env, getAuth(c)));
+app.post("/api/conference/tithe/receive", (c) => handleReceiveTithe(c.req.raw, c.env, getAuth(c)));
+app.get("/api/conference/tithe/report", (c) => handleTitheReport(c.req.raw, c.env, getAuth(c)));
+app.on(["GET", "POST"], "/api/church/balance", (c) =>
+  handleChurchBalance(c.req.raw, c.env, getAuth(c))
+);
 
-app.get("/api/notifications", (c) => handleGetNotifications(c.req.raw, c.env));
-app.post("/api/notifications/read-all", (c) => handleMarkAllRead(c.req.raw, c.env));
+app.get("/api/notifications", (c) => handleGetNotifications(c.req.raw, c.env, getAuth(c)));
+app.post("/api/notifications/read-all", (c) => handleMarkAllRead(c.req.raw, c.env, getAuth(c)));
 app.post("/api/notifications/:id/read", (c) =>
-  handleMarkNotificationRead(c.req.raw, c.env, Number(c.req.param("id")))
+  handleMarkNotificationRead(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
-app.get("/api/audit", (c) => handleGetAuditLog(c.req.raw, c.env));
+app.get("/api/audit", (c) => handleGetAuditLog(c.req.raw, c.env, getAuth(c)));
 app.get("/api/audit/:entityType/:entityId", (c) =>
   handleGetAuditByEntity(
     c.req.raw,
     c.env,
+    getAuth(c),
     c.req.param("entityType"),
     Number(c.req.param("entityId"))
   )
 );
 
-app.post("/api/attendance", (c) => handleRecordAttendance(c.req.raw, c.env));
-app.get("/api/attendance", (c) => handleGetAttendance(c.req.raw, c.env));
-app.get("/api/attendance/stats", (c) => handleGetAttendanceStats(c.req.raw, c.env));
+app.post("/api/attendance", (c) => handleRecordAttendance(c.req.raw, c.env, getAuth(c)));
+app.get("/api/attendance", (c) => handleGetAttendance(c.req.raw, c.env, getAuth(c)));
+app.get("/api/attendance/stats", (c) => handleGetAttendanceStats(c.req.raw, c.env, getAuth(c)));
 
-app.get("/api/conference/dashboard", (c) => handleConferenceDashboard(c.req.raw, c.env));
-app.get("/api/conference/district-dashboard", (c) => handleDistrictDashboard(c.req.raw, c.env));
-app.get("/api/conference/global-dashboard", (c) => handleGlobalDashboard(c.req.raw, c.env));
+app.get("/api/conference/dashboard", (c) =>
+  handleConferenceDashboard(c.req.raw, c.env, getAuth(c))
+);
+app.get("/api/conference/district-dashboard", (c) =>
+  handleDistrictDashboard(c.req.raw, c.env, getAuth(c))
+);
+app.get("/api/conference/global-dashboard", (c) =>
+  handleGlobalDashboard(c.req.raw, c.env, getAuth(c))
+);
 
-app.get("/api/contributions", (c) => handleGetContributions(c.req.raw, c.env));
+app.get("/api/contributions", (c) => handleGetContributions(c.req.raw, c.env, getAuth(c)));
 app.get("/api/contributions/:id", (c) =>
-  handleGetContributionStatement(c.req.raw, c.env, Number(c.req.param("id")))
+  handleGetContributionStatement(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
 app.get("/api/sync/state", async (c) => {

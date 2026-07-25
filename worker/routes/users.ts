@@ -1,5 +1,5 @@
 import { hashPassword, generateResetToken } from "../lib/auth";
-import { authenticate, authorize } from "../lib/middleware";
+import { authorize, type AuthContext } from "../lib/middleware";
 import { PERMISSIONS, ROLES } from "../lib/roles";
 import { parseCsv, validateCsvHeaders } from "../lib/csv";
 import { logAudit, getDeviceInfo } from "../lib/audit";
@@ -26,10 +26,11 @@ function toUserResponse(u: {
   };
 }
 
-export async function handleInviteUser(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleInviteUser(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["users:invite"]!);
   if (forbidden) return forbidden;
 
@@ -96,10 +97,11 @@ export async function handleInviteUser(request: Request, env: Env): Promise<Resp
   );
 }
 
-export async function handleGetUsers(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetUsers(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["users:invite"]!);
   if (forbidden) return forbidden;
 
@@ -115,11 +117,9 @@ export async function handleGetUsers(request: Request, env: Env): Promise<Respon
 export async function handleUpdateUser(
   request: Request,
   env: Env,
+  auth: AuthContext,
   userId: number
 ): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
   const forbidden = authorize(auth, PERMISSIONS["users:invite"]!);
   if (forbidden) return forbidden;
 
@@ -183,10 +183,11 @@ export async function handleUpdateUser(
   return json({ id: userId, message: "User updated successfully" });
 }
 
-export async function handleBulkInviteUsers(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleBulkInviteUsers(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["users:invite"]!);
   if (forbidden) return forbidden;
 
@@ -278,10 +279,11 @@ export async function handleBulkInviteUsers(request: Request, env: Env): Promise
   return json({ created, errors });
 }
 
-export async function handleGetMe(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetMe(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const userRepo = new UserRepo(createDb(env, auth.conferenceId));
 
   const user = await userRepo.findUserWithChurch(Number(auth.userId));

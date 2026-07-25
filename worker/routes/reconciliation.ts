@@ -1,4 +1,4 @@
-import { authenticate, authorize } from "../lib/middleware";
+import { authorize, type AuthContext } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { json } from "../lib/response";
 import { createDb } from "../lib/db";
@@ -31,10 +31,11 @@ function toTitheReportEntry(r: TitheReportRow) {
   };
 }
 
-export async function handleGetConferenceTithe(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetConferenceTithe(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
   if (forbidden) return forbidden;
 
@@ -49,10 +50,11 @@ export async function handleGetConferenceTithe(request: Request, env: Env): Prom
   return json({ tithe: rows.map(toTitheEntry) });
 }
 
-export async function handleReceiveTithe(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleReceiveTithe(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
@@ -96,10 +98,11 @@ export async function handleReceiveTithe(request: Request, env: Env): Promise<Re
   });
 }
 
-export async function handleChurchBalance(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleChurchBalance(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const url = new URL(request.url);
   const repo = new ReconciliationRepo(createDb(env, auth.conferenceId));
 
@@ -164,10 +167,11 @@ export async function handleChurchBalance(request: Request, env: Env): Promise<R
   });
 }
 
-export async function handleTitheReport(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleTitheReport(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["finance:read"]!);
   if (forbidden) return forbidden;
 

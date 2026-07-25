@@ -1,4 +1,4 @@
-import { authenticate, authorize } from "../lib/middleware";
+import { authorize, type AuthContext } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { logAudit, getDeviceInfo } from "../lib/audit";
 import { createDb } from "../lib/db";
@@ -20,10 +20,11 @@ function toAttendanceResponse(a: AttendanceRow) {
   };
 }
 
-export async function handleRecordAttendance(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleRecordAttendance(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["attendance:write"]!);
   if (forbidden) return forbidden;
 
@@ -94,10 +95,11 @@ export async function handleRecordAttendance(request: Request, env: Env): Promis
   return json({ id: attendance.id, updated }, updated ? 200 : 201);
 }
 
-export async function handleGetAttendance(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetAttendance(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["attendance:read"]!);
   if (forbidden) return forbidden;
 
@@ -118,10 +120,11 @@ export async function handleGetAttendance(request: Request, env: Env): Promise<R
   return json({ attendance: attendance.map(toAttendanceResponse) });
 }
 
-export async function handleGetAttendanceStats(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGetAttendanceStats(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["attendance:read"]!);
   if (forbidden) return forbidden;
 

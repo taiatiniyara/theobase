@@ -1,11 +1,12 @@
-import { authenticate, authorize } from "../lib/middleware";
+import { authorize, type AuthContext } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { json } from "../lib/response";
 
-export async function handleConferenceDashboard(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleConferenceDashboard(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["org:read"]!);
   if (forbidden) return forbidden;
 
@@ -117,10 +118,11 @@ export async function handleConferenceDashboard(request: Request, env: Env): Pro
   });
 }
 
-export async function handleDistrictDashboard(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleDistrictDashboard(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["org:read"]!);
   if (forbidden) return forbidden;
 
@@ -218,10 +220,11 @@ export async function handleDistrictDashboard(request: Request, env: Env): Promi
   });
 }
 
-export async function handleGlobalDashboard(request: Request, env: Env): Promise<Response> {
-  const auth = await authenticate(request, env);
-  if (auth instanceof Response) return auth;
-
+export async function handleGlobalDashboard(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
   const forbidden = authorize(auth, PERMISSIONS["org:read"]!);
   if (forbidden) return forbidden;
 
