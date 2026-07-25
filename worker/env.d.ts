@@ -5,6 +5,8 @@ interface Env {
   JWT_SECRET: string;
   ALLOWED_ORIGINS?: string;
   CSP_REPORT_ONLY?: string;
+  CF_API_TOKEN?: string;
+  CF_ACCOUNT_ID?: string;
   EMAIL?: SendEmail;
   ASSETS?: { fetch: (request: Request) => Promise<Response> };
 }

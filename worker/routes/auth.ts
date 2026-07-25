@@ -54,6 +54,12 @@ export async function handleAuthSignup(
       code: body.conferenceName.toLowerCase().replace(/\s+/g, "_"),
     });
     conferenceId = result.id;
+
+    if (env.CONFERENCE_DO) {
+      const doId = env.CONFERENCE_DO.idFromName(`provision-${result.id}`);
+      const stub = env.CONFERENCE_DO.get(doId);
+      await stub.provision(result.id, result.code);
+    }
   }
 
   const isTestBypass = request.headers.get("X-Theobase-Test-Bypass") === "email-verification";

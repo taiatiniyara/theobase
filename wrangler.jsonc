@@ -28,7 +28,7 @@
   "migrations": [
     {
       "tag": "v1",
-      "new_classes": ["ChurchSyncDO", "ConferenceDO"],
+      "new_sqlite_classes": ["ChurchSyncDO", "ConferenceDO"],
     },
   ],
   "observability": {

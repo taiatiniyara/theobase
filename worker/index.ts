@@ -443,4 +443,14 @@ app.get("/api/conference/info", async (c) => {
   return json(info);
 });
 
+app.get("/api/conferences/:id/provisioning-status", authMiddleware, async (c) => {
+  if (!c.env.CONFERENCE_DO) return c.notFound();
+  const confId = c.req.param("id");
+  const doId = c.env.CONFERENCE_DO.idFromName(`provision-${confId}`);
+  const stub = c.env.CONFERENCE_DO.get(doId);
+  const status = await stub.getProvisioningStatus();
+  if (!status) return json({ error: "No provisioning status" }, 404);
+  return json(status);
+});
+
 export default app;
