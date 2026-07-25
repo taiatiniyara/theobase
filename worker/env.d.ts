@@ -5,6 +5,7 @@ interface Env {
   JWT_SECRET: string;
   ALLOWED_ORIGINS?: string;
   CSP_REPORT_ONLY?: string;
+  DISABLE_API_RATE_LIMIT?: string;
   CF_API_TOKEN?: string;
   CF_ACCOUNT_ID?: string;
   EMAIL?: SendEmail;

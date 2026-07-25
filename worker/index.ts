@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { ChurchSyncDO } from "./durables/ChurchSyncDO";
 import { ConferenceDO } from "./durables/ConferenceDO";
-import { checkRateLimitAsync } from "./lib/rate-limit";
+import { checkRateLimitAsync, AUTH_LIMIT, READ_LIMIT, WRITE_LIMIT } from "./lib/rate-limit";
 import { json } from "./lib/response";
 import { auth, type AuthContext } from "./lib/middleware";
 import { csp } from "./lib/csp";
@@ -133,9 +133,9 @@ app.use("*", async (c, next) => {
 
 app.use("*", csp());
 
-function rateLimit(key: string) {
+function rateLimit(key: string, config = AUTH_LIMIT) {
   return async (c: { req: { raw: Request }; env: Env }, next: () => Promise<void>) => {
-    const limit = await checkRateLimitAsync(c.req.raw, c.env, key);
+    const limit = await checkRateLimitAsync(c.req.raw, c.env, key, config);
     if (limit) return limit;
     await next();
   };
@@ -176,6 +176,23 @@ app.post("/api/auth/reset-password", rateLimit("auth:reset-password"), (c) =>
 );
 app.post("/api/auth/verify-email", rateLimit("auth:verify-email"), (c) =>
   handleVerifyEmail(c.req.raw, c.env, undefined as unknown as AuthContext)
+);
+
+// ========================
+// API rate limiting — tiered: read 100/min, write 30/min
+// ========================
+
+const readLimitM = rateLimit("api:read", READ_LIMIT);
+const writeLimitM = rateLimit("api:write", WRITE_LIMIT);
+
+app.use(
+  "/api/*",
+  async (c: { req: { raw: Request; method: string }; env: Env }, next: () => Promise<void>) => {
+    if (c.env.DISABLE_API_RATE_LIMIT === "true") return next();
+    if (c.req.method === "GET") return readLimitM(c, next);
+    if (["POST", "PATCH", "DELETE"].includes(c.req.method)) return writeLimitM(c, next);
+    await next();
+  }
 );
 
 // ========================
