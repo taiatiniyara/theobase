@@ -4,6 +4,7 @@ interface Env {
   CONFERENCE_DO: DurableObjectNamespace<import("./durables/ConferenceDO").ConferenceDO>;
   JWT_SECRET: string;
   ALLOWED_ORIGINS?: string;
+  CSP_REPORT_ONLY?: string;
   EMAIL?: SendEmail;
   ASSETS?: { fetch: (request: Request) => Promise<Response> };
 }

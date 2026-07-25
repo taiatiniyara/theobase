@@ -5,6 +5,7 @@ import { ConferenceDO } from "./durables/ConferenceDO";
 import { checkRateLimitAsync } from "./lib/rate-limit";
 import { json } from "./lib/response";
 import { auth, type AuthContext } from "./lib/middleware";
+import { csp } from "./lib/csp";
 import {
   handleAuthSignup,
   handleAuthLogin,
@@ -129,6 +130,8 @@ app.use("*", async (c, next) => {
     credentials: true,
   })(c, next);
 });
+
+app.use("*", csp());
 
 function rateLimit(key: string) {
   return async (c: { req: { raw: Request }; env: Env }, next: () => Promise<void>) => {
