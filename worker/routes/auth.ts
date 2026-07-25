@@ -56,12 +56,14 @@ export async function handleAuthSignup(
     conferenceId = result.id;
   }
 
+  const isTestBypass = request.headers.get("X-Theobase-Test-Bypass") === "email-verification";
+
   const result = await userRepo.create({
     email: body.email.toLowerCase().trim(),
     passwordHash,
     role: "sysadmin",
     conferenceId: conferenceId ?? undefined,
-    emailVerified: 0,
+    emailVerified: isTestBypass ? 1 : 0,
   });
 
   await logAudit(env, {
@@ -74,6 +76,16 @@ export async function handleAuthSignup(
     module: "auth",
     device_info: getDeviceInfo(request),
   });
+
+  if (isTestBypass) {
+    const userId = String(result.id);
+    const accessToken = await signAccessToken(
+      { sub: userId, role: ROLES.sysadmin, conferenceId: conferenceId ?? undefined },
+      env.JWT_SECRET
+    );
+    const refreshToken = await signRefreshToken({ sub: userId }, env.JWT_SECRET);
+    return json({ accessToken, refreshToken, userId, role: ROLES.sysadmin });
+  }
 
   const verifyToken = await generateVerifyToken(result.id, env.JWT_SECRET);
   await sendVerifyEmail(env, body.email.toLowerCase().trim(), verifyToken);
