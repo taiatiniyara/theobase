@@ -16,5 +16,13 @@ export default defineWorkersConfig({
       },
     },
     include: ["test/**/*.test.ts"],
+    coverage: {
+      provider: "istanbul",
+      thresholds: {
+        lines: 35,
+        branches: 20,
+        functions: 25,
+      },
+    },
   },
 });
