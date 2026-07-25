@@ -298,3 +298,52 @@ describe("auth API", () => {
     expect(loginRes2.status).toBe(200);
   });
 });
+
+describe("cors", () => {
+  it("returns ACAO header for allowed origin", async () => {
+    const res = await SELF.fetch("http://localhost/api/health", {
+      headers: { Origin: "http://localhost:5173" },
+    });
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBe("http://localhost:5173");
+  });
+
+  it("does not return ACAO header for disallowed origin", async () => {
+    const res = await SELF.fetch("http://localhost/api/health", {
+      headers: { Origin: "https://evil.com" },
+    });
+    expect(res.status).toBe(200);
+    const acao = res.headers.get("Access-Control-Allow-Origin");
+    expect(acao).not.toBe("https://evil.com");
+  });
+
+  it("handles OPTIONS preflight for allowed origin", async () => {
+    const res = await SELF.fetch("http://localhost/api/auth/login", {
+      method: "OPTIONS",
+      headers: { Origin: "http://localhost:5173", "Access-Control-Request-Method": "POST" },
+    });
+    expect(res.status).toBe(204);
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBe("http://localhost:5173");
+  });
+
+  it("returns a default origin for requests without Origin header", async () => {
+    const res = await SELF.fetch("http://localhost/api/health");
+    expect(res.status).toBe(200);
+    const acao = res.headers.get("Access-Control-Allow-Origin");
+    expect(acao).toBe("http://localhost:5173");
+  });
+
+  it("enforces restricted methods in preflight", async () => {
+    const res = await SELF.fetch("http://localhost/api/health", {
+      method: "OPTIONS",
+      headers: {
+        Origin: "http://localhost:5173",
+        "Access-Control-Request-Method": "PUT",
+      },
+    });
+    expect(res.status).toBe(204);
+    const allowed = res.headers.get("Access-Control-Allow-Methods");
+    expect(allowed).not.toContain("PUT");
+    expect(allowed).toContain("GET");
+  });
+});

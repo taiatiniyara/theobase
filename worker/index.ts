@@ -114,7 +114,20 @@ type HonoEnv = {
 
 const app = new Hono<HonoEnv>();
 
-app.use("*", cors());
+app.use("*", async (c, next) => {
+  const origins = (c.env.ALLOWED_ORIGINS?.split(",") ?? ["http://localhost:5173"]).map(
+    (o: string) => o.trim()
+  );
+  return cors({
+    origin: (origin) => {
+      if (!origin) return origins[0]!;
+      return origins.includes(origin) ? origin : origins[0]!;
+    },
+    allowMethods: ["GET", "POST", "PATCH", "DELETE"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })(c, next);
+});
 
 function rateLimit(key: string) {
   return async (c: { req: { raw: Request }; env: Env }, next: () => Promise<void>) => {
