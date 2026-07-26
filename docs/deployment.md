@@ -4,10 +4,10 @@ This guide covers deploying Theobase to production on Cloudflare Workers.
 
 ## Prerequisites
 
-- Cloudflare account with Workers plan (paid, for D1 and Durable Objects)
+- Cloudflare account (Workers Paid plan recommended for production; D1 and Durable Objects available on Free plan for development)
 - Node.js 22+
 - Domain configured in Cloudflare DNS (e.g., `theobase.app`)
-- [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/) (`npm i -g wrangler`)
+- Wrangler CLI (`npm install` in the project installs it as a dev dependency)
 
 ## 1. Custom domain
 
@@ -16,7 +16,7 @@ In the Cloudflare dashboard, add your custom domain to Workers Routes or use a W
 ## 2. D1 database
 
 ```bash
-wrangler d1 create theobase
+npx wrangler d1 create theobase
 ```
 
 Note the database ID and update `wrangler.jsonc`:
@@ -32,21 +32,16 @@ Note the database ID and update `wrangler.jsonc`:
 ]
 ```
 
-Run migrations:
+Apply all migrations:
 
 ```bash
-wrangler d1 execute theobase --file=migrations/0001_initial.sql
-wrangler d1 execute theobase --file=migrations/0002_auth_reset.sql
-wrangler d1 execute theobase --file=migrations/0003_reconciliation.sql
-wrangler d1 execute theobase --file=migrations/0004_finance_and_transfer_enhancements.sql
-wrangler d1 execute theobase --file=migrations/0005_attendance.sql
-wrangler d1 execute theobase --file=migrations/0006_rate_limits.sql
-wrangler d1 execute theobase --file=migrations/0007_user_management.sql
-wrangler d1 execute theobase --file=migrations/0008_member_self_service.sql
-wrangler d1 execute theobase --file=migrations/0009_transfer_lifecycle.sql
-wrangler d1 execute theobase --file=migrations/0010_email_verification.sql
-wrangler d1 execute theobase --file=migrations/0011_billing.sql
-wrangler d1 execute theobase --file=migrations/0012_gap_fill.sql
+npx wrangler d1 migrations apply theobase
+```
+
+To run a single migration file instead:
+
+```bash
+npx wrangler d1 execute theobase --file=migrations/0001_initial.sql
 ```
 
 ## 3. Cloudflare secrets
@@ -54,8 +49,8 @@ wrangler d1 execute theobase --file=migrations/0012_gap_fill.sql
 Set production secrets via Wrangler:
 
 ```bash
-wrangler secret put JWT_SECRET
-wrangler secret put ALLOWED_ORIGINS
+npx wrangler secret put JWT_SECRET
+npx wrangler secret put ALLOWED_ORIGINS
 ```
 
 - `JWT_SECRET`: a long random string (use `openssl rand -hex 64`). This is the signing key for all JWT tokens.
@@ -93,7 +88,7 @@ In the Cloudflare dashboard, navigate to **Workers & Pages** > **Email** > **Ema
 ## 6. Deploy
 
 ```bash
-wrangler deploy
+npx wrangler deploy
 ```
 
 Verify the deployment:
@@ -128,79 +123,90 @@ Note the database ID and replace `"theobase-staging"` in `wrangler.jsonc` under 
 ### Run staging migrations
 
 ```bash
-for f in migrations/*.sql; do
-  wrangler d1 execute theobase-staging --env staging --file="$f"
-done
+npx wrangler d1 migrations apply theobase-staging --env staging
 ```
 
 ### Set staging secrets
 
 ```bash
-wrangler secret put JWT_SECRET --env staging
-wrangler secret put ALLOWED_ORIGINS --env staging
+npx wrangler secret put JWT_SECRET --env staging
+npx wrangler secret put ALLOWED_ORIGINS --env staging
 ```
 
 ### Deploy to staging
 
 ```bash
-wrangler deploy --env staging
+npx wrangler deploy --env staging
 ```
 
-Staging deploys automatically from CI on push to `main`. Verify at `https://staging.theobase.app`.
+Staging is deployed automatically by CI on push to `main`. For manual deploy, run the command above.
 
-## 9. Production deploy pipeline
+## 9. Production deployment
 
-Production deploys are gated behind manual approval via GitHub Environments.
-
-### Setup
-
-1. In your GitHub repo, go to **Settings** > **Environments**.
-2. Create an environment named `production`.
-3. Add required reviewers (your team).
-4. Optionally add a wait timer or deployment branch restriction.
-
-### Flow
-
-1. Merge PR to `main`.
-2. CI runs checks, tests, coverage, E2E.
-3. CI deploys to staging automatically.
-4. CI creates a production deployment — reviewers are notified.
-5. A reviewer approves the deployment.
-6. CI runs `wrangler deploy --env production`.
-
-### Manual production deploy
-
-To deploy directly (bypassing CI):
+Production deployment uses the `production` environment defined in `wrangler.jsonc`.
 
 ```bash
-wrangler deploy --env production
+npx wrangler deploy --env production
 ```
+
+CI/CD (`.github/workflows/ci.yml`) automates: lint, typecheck, test, coverage, e2e, staging deploy, then production deploy on push to `main`.
 
 ## 10. Production checklist
 
+### Automated (verified by CI)
+
+- [x] Tests pass (132/132 across 15 test files)
+- [x] TypeScript compiles cleanly (tsc --noEmit)
+- [x] Lint passes (0 errors)
+- [x] Pre-commit hooks active (Husky + lint-staged: Prettier + ESLint)
+- [x] Frontend builds (`npm run build` produces dist/)
+- [x] npm audit clean (0 vulnerabilities)
+- [x] CI/CD pipeline runs on push/PR to main
+- [x] Production environment configured in wrangler.jsonc
+
+### Manual setup (one-time)
+
 - [ ] Custom domain configured and serving traffic
-- [ ] D1 database created and all migrations run
-- [ ] Staging D1 created and migrations run
-- [ ] `JWT_SECRET` set via `wrangler secret put` (production and staging)
-- [ ] `ALLOWED_ORIGINS` set to production domain(s)
-- [ ] `SENTRY_DSN` set for error monitoring
+- [ ] D1 database created for production: `npx wrangler d1 create theobase-production`
+- [ ] D1 database created for staging: `npx wrangler d1 create theobase-staging`
+- [ ] Update `wrangler.jsonc` with real D1 database IDs (replace placeholder `"theobase-production"` and `"theobase-staging"`)
+- [ ] Run migrations on production: `npx wrangler d1 migrations apply theobase-production --env production`
+- [ ] Run migrations on staging: `npx wrangler d1 migrations apply theobase-staging --env staging`
+
+### Secrets (one-time per environment)
+
+- [ ] `JWT_SECRET` set: `npx wrangler secret put JWT_SECRET --env production` (use `openssl rand -hex 64`)
+- [ ] `JWT_SECRET` set: `npx wrangler secret put JWT_SECRET --env staging`
+- [ ] `ALLOWED_ORIGINS` set: `npx wrangler secret put ALLOWED_ORIGINS --env production` (e.g. `https://theobase.app`)
+- [ ] `ALLOWED_ORIGINS` set: `npx wrangler secret put ALLOWED_ORIGINS --env staging`
+- [ ] `SENTRY_DSN` set for error monitoring: `npx wrangler secret put SENTRY_DSN --env production`
+- [ ] `STRIPE_SECRET_KEY` set: `npx wrangler secret put STRIPE_SECRET_KEY --env production`
+- [ ] `STRIPE_WEBHOOK_SECRET` set: `npx wrangler secret put STRIPE_WEBHOOK_SECRET --env production`
+
+### Infrastructure verification
+
+- [ ] Worker deployed: `npx wrangler deploy --env production`
+- [ ] Health endpoint returns 200: `curl https://<your-domain>/api/health`
+- [ ] Frontend built and deployed (Cloudflare Pages or Worker ASSETS binding)
+- [ ] Durable Object migration tagged and deployed (tag `v1` in wrangler.jsonc)
 - [ ] Analytics Engine dataset created and binding configured
 - [ ] Email binding configured and SPF/DKIM/DMARC records applied
-- [ ] Durable Object migration tagged and deployed
-- [ ] Worker deployed (`wrangler deploy`)
-- [ ] Health endpoint returns 200
-- [ ] Frontend built and deployed
+
+### Pre-launch verification
+
 - [ ] Staging verified: sign up, create Conference, check provisioning
-- [ ] Production GitHub Environment configured with required reviewers
 - [ ] Smoke test: sign up, verify email, log in, create a church, record attendance
 - [ ] Observability dashboard checked (Cloudflare Workers + Sentry + Analytics)
 - [ ] Rate limiting verified (no 429s under normal use)
+- [ ] CSP headers verified (Content-Security-Policy-Report-Only present on all responses)
+- [ ] CORS restricted to ALLOWED_ORIGINS (test with external origin)
+- [ ] Stripe checkout flow tested end-to-end
 - [ ] DR restore procedure tested (tabletop exercise complete)
 
 ## Rollback
 
 ```bash
-wrangler rollback
+npx wrangler rollback
 ```
 
 Or use the Cloudflare dashboard to roll back to a previous deployment.

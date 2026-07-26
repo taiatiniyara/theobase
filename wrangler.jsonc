@@ -55,5 +55,16 @@
         },
       ],
     },
+    "production": {
+      "name": "theobase-production",
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "theobase-production",
+          "database_id": "theobase-production",
+          "migrations_dir": "migrations",
+        },
+      ],
+    },
   },
 }
