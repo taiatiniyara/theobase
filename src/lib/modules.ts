@@ -180,6 +180,14 @@ export const MODULE_GROUPS: ModuleGroup[] = [
         roles: ["sysadmin", "secretary", "treasurer", "pastor"],
         icon: "cog",
       },
+      {
+        id: "billing",
+        label: "Billing",
+        path: "/app/admin/billing",
+        permission: "org:read",
+        roles: ["sysadmin", "president", "secretary", "treasurer"],
+        icon: "currency",
+      },
     ],
   },
 ];

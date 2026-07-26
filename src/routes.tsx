@@ -27,6 +27,7 @@ const GlobalDashboard = lazy(() => import("./routes/GlobalDashboard"));
 const AttendancePage = lazy(() => import("./routes/AttendancePage"));
 const ContributionsPage = lazy(() => import("./routes/ContributionsPage"));
 const MemberDashboardPage = lazy(() => import("./routes/MemberDashboardPage"));
+const BillingPage = lazy(() => import("./routes/BillingPage"));
 
 function Spinner() {
   return (
@@ -171,6 +172,12 @@ const memberDashboardRoute = createRoute({
   component: MemberDashboardPage,
 });
 
+const billingRoute = createRoute({
+  getParentRoute: () => dashboardLayout,
+  path: "/admin/billing",
+  component: BillingPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
@@ -192,6 +199,7 @@ const routeTree = rootRoute.addChildren([
     attendanceRoute,
     contributionsRoute,
     memberDashboardRoute,
+    billingRoute,
   ]),
 ]);
 

@@ -926,3 +926,25 @@ export const declarationApi = {
       `/churches/${churchId}/declarations/${declarationId}/reject`
     ),
 };
+
+export interface BillingStatus {
+  subscription: {
+    id: number;
+    status: string;
+    churchCount: number;
+    trialEndsAt: string;
+  };
+  invoices: {
+    id: number;
+    periodStart: string;
+    periodEnd: string;
+    churchCount: number;
+    amount: number;
+    status: string;
+  }[];
+}
+
+export const billingApi = {
+  getStatus: () => api.get<BillingStatus>("/billing/status"),
+  createCheckout: () => api.post<{ url: string }>("/billing/checkout"),
+};
