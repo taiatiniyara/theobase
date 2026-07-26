@@ -1,4 +1,4 @@
-import { eq, and, gte, lte, sql } from "drizzle-orm";
+import { eq, and, gte, lte, sql, desc, asc } from "drizzle-orm";
 import type { Db } from "../lib/db";
 import { attendance, memberAttendance } from "../schema/attendance";
 
@@ -67,11 +67,11 @@ export class AttendanceRepo {
     if (conditions.length > 0) {
       return query
         .where(and(...conditions))
-        .orderBy(sql`date DESC`)
+        .orderBy(desc(attendance.date))
         .all();
     }
 
-    return query.orderBy(sql`date DESC`).all();
+    return query.orderBy(desc(attendance.date)).all();
   }
 
   async findById(id: number): Promise<AttendanceRow | undefined> {
@@ -111,7 +111,7 @@ export class AttendanceRepo {
       })
       .from(attendance)
       .where(and(...conditions))
-      .orderBy(sql`date ASC`)
+      .orderBy(asc(attendance.date))
       .all();
   }
 

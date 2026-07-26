@@ -1,4 +1,4 @@
-import { eq, and, sql } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import type { Db } from "../lib/db";
 import { notifications } from "../schema/notifications";
 
@@ -16,7 +16,7 @@ export class NotificationRepo {
       .select()
       .from(notifications)
       .where(and(...conditions))
-      .orderBy(sql`created_at DESC`)
+      .orderBy(desc(notifications.createdAt))
       .all();
   }
 
@@ -32,9 +32,11 @@ export class NotificationRepo {
   }
 
   async markAllRead(recipientId: number): Promise<void> {
-    await this.db.run(
-      sql`UPDATE notifications SET read = 1 WHERE recipient_user_id = ${recipientId} AND read = 0`
-    );
+    await this.db
+      .update(notifications)
+      .set({ read: 1 })
+      .where(and(eq(notifications.recipientUserId, recipientId), eq(notifications.read, 0)))
+      .run();
   }
 
   async create(data: {
