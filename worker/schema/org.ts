@@ -30,5 +30,6 @@ export const churches = sqliteTable("churches", {
   bankDetails: text("bank_details"),
   charterStatus: text("charter_status"),
   foundedDate: text("founded_date"),
+  status: text("status").default("active"),
   createdAt: text("created_at").default("(datetime('now'))"),
 });

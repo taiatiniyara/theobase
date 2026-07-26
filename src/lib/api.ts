@@ -169,10 +169,18 @@ export const orgApi = {
     api.post(`/conferences/${conferenceId}/districts`, data),
   updateDistrict: (id: number, data: Record<string, unknown>) =>
     api.patch(`/districts/${id}`, data),
-  getChurches: (conferenceId: number) =>
-    api.get<{ churches: { id: number; name: string; type: string; district_name?: string }[] }>(
-      `/conferences/${conferenceId}/churches`
-    ),
+  getChurches: (conferenceId: number, includeInactive?: boolean) => {
+    const qs = includeInactive ? "?include_inactive=1" : "";
+    return api.get<{
+      churches: {
+        id: number;
+        name: string;
+        type: string;
+        status?: string;
+        district_name?: string;
+      }[];
+    }>(`/conferences/${conferenceId}/churches${qs}`);
+  },
   createChurch: (data: {
     name: string;
     code?: string;
@@ -183,6 +191,8 @@ export const orgApi = {
     address?: string;
   }) => api.post("/churches", data),
   updateChurch: (id: number, data: Record<string, unknown>) => api.patch(`/churches/${id}`, data),
+  deactivateChurch: (id: number) => api.patch(`/churches/${id}`, { status: "inactive" }),
+  reactivateChurch: (id: number) => api.patch(`/churches/${id}`, { status: "active" }),
   bulkCreateChurches: (conferenceId: number, csv: string) =>
     api.post("/churches/bulk", { conferenceId, csv }),
 };

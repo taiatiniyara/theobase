@@ -122,21 +122,35 @@ export class DistrictRepo {
 export class ChurchRepo {
   constructor(private db: Db) {}
 
-  async findAll(conferenceId?: number): Promise<ChurchRow[]> {
-    const query = this.db.select().from(churches);
-    if (!conferenceId) return query.all();
+  async findAll(conferenceId?: number, statusFilter?: string): Promise<ChurchRow[]> {
+    const base = this.db.select().from(churches);
 
-    return query
+    if (!conferenceId && !statusFilter) return base.all();
+
+    const andConditions: ReturnType<typeof eq>[] = [];
+
+    if (statusFilter) {
+      andConditions.push(eq(churches.status, statusFilter));
+    }
+
+    if (!conferenceId) {
+      return base.where(and(...andConditions)).all();
+    }
+
+    return base
       .where(
-        or(
-          and(eq(churches.parentType, "conference"), eq(churches.parentId, conferenceId)),
-          inArray(
-            churches.districtId,
-            this.db
-              .select({ id: districts.id })
-              .from(districts)
-              .where(eq(districts.conferenceId, conferenceId))
-          )
+        and(
+          or(
+            and(eq(churches.parentType, "conference"), eq(churches.parentId, conferenceId)),
+            inArray(
+              churches.districtId,
+              this.db
+                .select({ id: districts.id })
+                .from(districts)
+                .where(eq(districts.conferenceId, conferenceId))
+            )
+          ),
+          ...andConditions
         )
       )
       .all();
@@ -185,6 +199,7 @@ export class ChurchRepo {
       districtId?: number | null;
       address?: string;
       bankDetails?: string;
+      status?: string;
     }
   ): Promise<boolean> {
     const setData: Record<string, unknown> = {};
@@ -194,6 +209,7 @@ export class ChurchRepo {
     if (data.districtId !== undefined) setData.districtId = data.districtId ?? null;
     if (data.address !== undefined) setData.address = data.address;
     if (data.bankDetails !== undefined) setData.bankDetails = data.bankDetails;
+    if (data.status !== undefined) setData.status = data.status;
 
     if (Object.keys(setData).length === 0) return false;
 

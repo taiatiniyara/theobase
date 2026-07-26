@@ -268,13 +268,15 @@ export async function handleUpdateDistrict(
 }
 
 export async function handleGetChurches(
-  _request: Request,
+  request: Request,
   env: Env,
   auth: AuthContext,
   conferenceId: number
 ): Promise<Response> {
+  const url = new URL(request.url);
+  const includeInactive = url.searchParams.get("include_inactive") === "1";
   const churchRepo = new ChurchRepo(createDb(env));
-  const churches = await churchRepo.findAll(conferenceId);
+  const churches = await churchRepo.findAll(conferenceId, includeInactive ? undefined : "active");
 
   const enriched = await Promise.all(
     churches.map(async (c) => {
@@ -383,6 +385,7 @@ export async function handleUpdateChurch(
     districtId?: number | null;
     address?: string;
     bankDetails?: string;
+    status?: string;
   };
   try {
     body = await request.json();
@@ -425,6 +428,7 @@ export async function handleUpdateChurch(
     districtId: body.districtId,
     address: body.address,
     bankDetails: body.bankDetails,
+    status: body.status,
   });
 
   if (updated) {
