@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "theobase",
+  "account_id": "2e2276433c73f18451f3f2fd50adddb7",
   "main": "worker/index.ts",
   "compatibility_date": "2025-07-22",
   "compatibility_flags": ["nodejs_compat"],
@@ -51,9 +52,13 @@
   "env": {
     "staging": {
       "name": "theobase-staging",
+      "routes": [
+        { "pattern": "staging.theobase.app", "custom_domain": true },
+      ],
       "assets": {
         "directory": "./dist",
         "not_found_handling": "single-page-application",
+        "binding": "ASSETS",
       },
       "durable_objects": {
         "bindings": [
@@ -74,9 +79,14 @@
     },
     "production": {
       "name": "theobase-production",
+      "routes": [
+        { "pattern": "theobase.app", "custom_domain": true },
+        { "pattern": "www.theobase.app", "custom_domain": true },
+      ],
       "assets": {
         "directory": "./dist",
         "not_found_handling": "single-page-application",
+        "binding": "ASSETS",
       },
       "durable_objects": {
         "bindings": [
