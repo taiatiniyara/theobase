@@ -1,0 +1,127 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_md",
+      "label": "positions-roles.md",
+      "file_type": "document",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_positions_and_roles",
+      "label": "Positions and Roles",
+      "file_type": "document",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_overview",
+      "label": "Overview",
+      "file_type": "document",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_standard_church_positions",
+      "label": "Standard Church Positions",
+      "file_type": "document",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L9"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_assigning_a_position_to_a_member",
+      "label": "Assigning a Position to a Member",
+      "file_type": "document",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L31"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_removing_a_position",
+      "label": "Removing a Position",
+      "file_type": "document",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L42"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_viewing_all_position_holders",
+      "label": "Viewing All Position Holders",
+      "file_type": "document",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L51"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_benefits",
+      "label": "Benefits",
+      "file_type": "document",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L59"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_positions_and_roles",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_positions_and_roles",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_overview",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_positions_and_roles",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_standard_church_positions",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_positions_and_roles",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_assigning_a_position_to_a_member",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_positions_and_roles",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_removing_a_position",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_positions_and_roles",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_viewing_all_position_holders",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_positions_and_roles",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_positions_roles_benefits",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/positions-roles.md",
+      "source_location": "L59",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

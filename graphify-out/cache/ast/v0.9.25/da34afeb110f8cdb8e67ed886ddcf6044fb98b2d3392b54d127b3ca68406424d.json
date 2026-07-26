@@ -1,0 +1,175 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_md",
+      "label": "quarterly-report.md",
+      "file_type": "document",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_quarterly_business_meeting_report",
+      "label": "Quarterly Business Meeting Report",
+      "file_type": "document",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_overview",
+      "label": "Overview",
+      "file_type": "document",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_generating_the_report",
+      "label": "Generating the Report",
+      "file_type": "document",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L7"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_report_sections",
+      "label": "Report Sections",
+      "file_type": "document",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L13"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_section_1_membership_presented_by_the_clerk",
+      "label": "Section 1: Membership (Presented by the Clerk)",
+      "file_type": "document",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L15"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_section_2_finance_presented_by_the_treasurer",
+      "label": "Section 2: Finance (Presented by the Treasurer)",
+      "file_type": "document",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L28"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_section_3_officers_presented_by_the_clerk",
+      "label": "Section 3: Officers (Presented by the Clerk)",
+      "file_type": "document",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L38"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_printing_and_presenting",
+      "label": "Printing and Presenting",
+      "file_type": "document",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L46"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_auditor_role_notes",
+      "label": "Auditor Role Notes",
+      "file_type": "document",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L52"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_tips",
+      "label": "Tips",
+      "file_type": "document",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L60"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_quarterly_business_meeting_report",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_quarterly_business_meeting_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_overview",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_quarterly_business_meeting_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_generating_the_report",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_quarterly_business_meeting_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_report_sections",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_report_sections",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_section_1_membership_presented_by_the_clerk",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_report_sections",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_section_2_finance_presented_by_the_treasurer",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_report_sections",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_section_3_officers_presented_by_the_clerk",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_quarterly_business_meeting_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_printing_and_presenting",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_quarterly_business_meeting_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_auditor_role_notes",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L52",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_quarterly_business_meeting_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_quarterly_report_tips",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/quarterly-report.md",
+      "source_location": "L60",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

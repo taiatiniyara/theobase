@@ -1,8 +1,8 @@
 {
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.github\\workflows\\ci.yml": {
-    "size": 405,
-    "mtime_ns": 1784745531804266000,
-    "word_count": 48
+    "size": 1401,
+    "mtime_ns": 1785024360941659300,
+    "word_count": 152
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.opencode\\opencode.json": {
     "size": 98,
@@ -175,10 +175,10 @@
     }
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\package.json": {
-    "size": 1781,
-    "mtime_ns": 1784782776366506700,
-    "word_count": 146,
-    "hashes": { "package.json": "bf536fb3a498cf22d044b8d41e757bdafd2544d15025367a1e6c38ca9c5b7829" }
+    "size": 2166,
+    "mtime_ns": 1785027541024185800,
+    "word_count": 172,
+    "hashes": { "package.json": "c144716313d0be123981eaa1298ff228480417943da0a062c9051c113d9c48e5" }
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\public\\cover-theobase.jpg": {
     "size": 311645,
@@ -254,14 +254,14 @@
     "word_count": 422
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\main.tsx": {
-    "size": 753,
-    "mtime_ns": 1784763854423231200,
-    "word_count": 70
+    "size": 770,
+    "mtime_ns": 1785027701527534200,
+    "word_count": 72
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes.tsx": {
-    "size": 4753,
-    "mtime_ns": 1784770905753413000,
-    "word_count": 427
+    "size": 5401,
+    "mtime_ns": 1785016145312349400,
+    "word_count": 500
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\routes\\AttendancePage.tsx": {
     "size": 12943,
@@ -379,24 +379,24 @@
     "word_count": 4
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\attendance.test.ts": {
-    "size": 8122,
-    "mtime_ns": 1784768068512159400,
-    "word_count": 803
+    "size": 8574,
+    "mtime_ns": 1785014453541264000,
+    "word_count": 844
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\auth.test.ts": {
-    "size": 12823,
-    "mtime_ns": 1785010275193668600,
-    "word_count": 1255
+    "size": 19837,
+    "mtime_ns": 1785016020503064300,
+    "word_count": 1862
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\conference.test.ts": {
-    "size": 9472,
-    "mtime_ns": 1784764795944603000,
-    "word_count": 1018
+    "size": 10305,
+    "mtime_ns": 1785014453617812700,
+    "word_count": 1094
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\contributions.test.ts": {
-    "size": 12950,
-    "mtime_ns": 1784768068573652300,
-    "word_count": 1265
+    "size": 13484,
+    "mtime_ns": 1785014453640815700,
+    "word_count": 1329
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\csv.test.ts": {
     "size": 1126,
@@ -409,14 +409,14 @@
     "word_count": 18
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\finance.test.ts": {
-    "size": 14875,
-    "mtime_ns": 1784832953980722800,
-    "word_count": 1485
+    "size": 15309,
+    "mtime_ns": 1785014453665825800,
+    "word_count": 1526
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\helpers\\auth.ts": {
-    "size": 2357,
-    "mtime_ns": 1784782778111507300,
-    "word_count": 253
+    "size": 2781,
+    "mtime_ns": 1785014453677817200,
+    "word_count": 299
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\helpers\\factories.ts": {
     "size": 1731,
@@ -424,14 +424,14 @@
     "word_count": 187
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\helpers\\schema.ts": {
-    "size": 8538,
-    "mtime_ns": 1784782778126505600,
-    "word_count": 1033
+    "size": 8657,
+    "mtime_ns": 1785014453682814700,
+    "word_count": 1050
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\member-self-service.test.ts": {
-    "size": 20213,
-    "mtime_ns": 1784772618024815300,
-    "word_count": 1998
+    "size": 21317,
+    "mtime_ns": 1785014453715389300,
+    "word_count": 2097
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\members.test.ts": {
     "size": 9606,
@@ -439,14 +439,14 @@
     "word_count": 852
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\org.test.ts": {
-    "size": 8834,
-    "mtime_ns": 1784832913665914100,
-    "word_count": 901
+    "size": 9298,
+    "mtime_ns": 1785014453731387600,
+    "word_count": 942
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\reconciliation.test.ts": {
-    "size": 11699,
-    "mtime_ns": 1784761253110881700,
-    "word_count": 1203
+    "size": 12135,
+    "mtime_ns": 1785014453747382800,
+    "word_count": 1244
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\reports.test.ts": {
     "size": 6415,
@@ -460,13 +460,13 @@
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\smoke.test.ts": {
     "size": 638,
-    "mtime_ns": 1785011476834323400,
+    "mtime_ns": 1785011988996273500,
     "word_count": 70
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\test\\transfer.test.ts": {
-    "size": 19529,
-    "mtime_ns": 1784772752803694300,
-    "word_count": 1978
+    "size": 19921,
+    "mtime_ns": 1785014453774391400,
+    "word_count": 2015
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\tmp\\architecture-review.html": {
     "size": 28003,
@@ -490,14 +490,14 @@
     }
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\vite.config.ts": {
-    "size": 338,
-    "mtime_ns": 1784782778186505900,
-    "word_count": 34
+    "size": 693,
+    "mtime_ns": 1785016160007385200,
+    "word_count": 57
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\vitest.config.ts": {
-    "size": 441,
-    "mtime_ns": 1784751889490723200,
-    "word_count": 36
+    "size": 613,
+    "mtime_ns": 1785023433165631400,
+    "word_count": 50
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ChurchSyncDO.ts": {
     "size": 3374,
@@ -505,19 +505,19 @@
     "word_count": 359
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\ConferenceDO.ts": {
-    "size": 1798,
-    "mtime_ns": 1784745840543472900,
-    "word_count": 191
+    "size": 5338,
+    "mtime_ns": 1785019127745885500,
+    "word_count": 524
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\env.d.ts": {
-    "size": 321,
-    "mtime_ns": 1784833889378231600,
-    "word_count": 22
+    "size": 647,
+    "mtime_ns": 1785027006654615500,
+    "word_count": 44
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\index.ts": {
-    "size": 15030,
-    "mtime_ns": 1785011775597383500,
-    "word_count": 1112
+    "size": 18627,
+    "mtime_ns": 1785027006746196400,
+    "word_count": 1446
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\audit.ts": {
     "size": 1093,
@@ -525,9 +525,9 @@
     "word_count": 121
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\auth.ts": {
-    "size": 2941,
-    "mtime_ns": 1784749564655322100,
-    "word_count": 299
+    "size": 3594,
+    "mtime_ns": 1785014453833963400,
+    "word_count": 375
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\csv.ts": {
     "size": 1290,
@@ -540,24 +540,24 @@
     "word_count": 31
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\email.ts": {
-    "size": 858,
-    "mtime_ns": 1784834058258138700,
-    "word_count": 105
+    "size": 1726,
+    "mtime_ns": 1785014453839960700,
+    "word_count": 209
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\middleware.ts": {
     "size": 1968,
-    "mtime_ns": 1785011399935298700,
+    "mtime_ns": 1785011989065441200,
     "word_count": 241
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\rate-limit.ts": {
-    "size": 1613,
-    "mtime_ns": 1784768068685265000,
-    "word_count": 173
+    "size": 1787,
+    "mtime_ns": 1785023459734948300,
+    "word_count": 196
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\response.ts": {
-    "size": 234,
-    "mtime_ns": 1784782778234505400,
-    "word_count": 23
+    "size": 192,
+    "mtime_ns": 1785012723402769500,
+    "word_count": 21
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\roles.ts": {
     "size": 951,
@@ -620,69 +620,69 @@
     "word_count": 458
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\users.ts": {
-    "size": 3528,
-    "mtime_ns": 1784779170311403000,
-    "word_count": 356
+    "size": 4028,
+    "mtime_ns": 1785014453857966800,
+    "word_count": 401
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\attendance.ts": {
-    "size": 4425,
-    "mtime_ns": 1785011259628701800,
-    "word_count": 480
+    "size": 4449,
+    "mtime_ns": 1785011989081441100,
+    "word_count": 486
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\audit.ts": {
-    "size": 2674,
-    "mtime_ns": 1785011327916354700,
-    "word_count": 272
+    "size": 2682,
+    "mtime_ns": 1785011989090441700,
+    "word_count": 274
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\auth.ts": {
-    "size": 7686,
-    "mtime_ns": 1785011267619046800,
-    "word_count": 882
+    "size": 9202,
+    "mtime_ns": 1785018774830698500,
+    "word_count": 1057
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\conference.ts": {
-    "size": 9955,
-    "mtime_ns": 1785011263253973600,
-    "word_count": 1179
+    "size": 9979,
+    "mtime_ns": 1785011989127448300,
+    "word_count": 1185
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\contributions.ts": {
-    "size": 5218,
-    "mtime_ns": 1785011261806507900,
-    "word_count": 555
+    "size": 5226,
+    "mtime_ns": 1785011989143917200,
+    "word_count": 557
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\finance.ts": {
-    "size": 33629,
-    "mtime_ns": 1785011260348090800,
-    "word_count": 3681
+    "size": 33741,
+    "mtime_ns": 1785011989196913800,
+    "word_count": 3709
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\members.ts": {
-    "size": 43190,
-    "mtime_ns": 1785011328684926700,
-    "word_count": 4655
+    "size": 43252,
+    "mtime_ns": 1785011989261432800,
+    "word_count": 4671
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\notifications.ts": {
-    "size": 2033,
-    "mtime_ns": 1785011329481258600,
-    "word_count": 210
+    "size": 2046,
+    "mtime_ns": 1785011989273433500,
+    "word_count": 214
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\org.ts": {
-    "size": 14401,
-    "mtime_ns": 1785011327154518400,
-    "word_count": 1593
+    "size": 14433,
+    "mtime_ns": 1785011989311267000,
+    "word_count": 1601
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reconciliation.ts": {
-    "size": 5377,
-    "mtime_ns": 1785011263988118700,
-    "word_count": 530
+    "size": 5409,
+    "mtime_ns": 1785011989323622700,
+    "word_count": 538
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\reports.ts": {
-    "size": 6552,
-    "mtime_ns": 1785011262530155000,
-    "word_count": 808
+    "size": 6560,
+    "mtime_ns": 1785011989334927100,
+    "word_count": 810
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\users.ts": {
-    "size": 9128,
-    "mtime_ns": 1785011261080504300,
-    "word_count": 1018
+    "size": 9160,
+    "mtime_ns": 1785011989350926300,
+    "word_count": 1026
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\attendance.ts": {
     "size": 1096,
@@ -725,8 +725,406 @@
     "word_count": 64
   },
   "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\schema\\users.ts": {
-    "size": 563,
-    "mtime_ns": 1784779170505989300,
-    "word_count": 38
+    "size": 618,
+    "mtime_ns": 1785014453880970200,
+    "word_count": 40
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\spec-mvp-gap-fill.md": {
+    "size": 12129,
+    "mtime_ns": 1785031980137981300,
+    "word_count": 1750,
+    "hashes": {
+      ".tmp/spec-mvp-gap-fill.md": "b5a1de2920c198d80eca1fd7e2c285b24c8c5fcdcb66ddfb7ff30da4f448e038"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\tickets\\01.txt": {
+    "size": 2102,
+    "mtime_ns": 1785032200544683000,
+    "word_count": 281
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\tickets\\02.txt": {
+    "size": 1194,
+    "mtime_ns": 1785032300934470100,
+    "word_count": 169
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\tickets\\03.txt": {
+    "size": 2124,
+    "mtime_ns": 1785032302075984300,
+    "word_count": 286
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\tickets\\04.txt": {
+    "size": 2102,
+    "mtime_ns": 1785032303180217200,
+    "word_count": 269
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\tickets\\05.txt": {
+    "size": 1477,
+    "mtime_ns": 1785032304172783200,
+    "word_count": 200
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\tickets\\06.txt": {
+    "size": 1792,
+    "mtime_ns": 1785032305191408600,
+    "word_count": 240
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\tickets\\07.txt": {
+    "size": 916,
+    "mtime_ns": 1785032235145178200,
+    "word_count": 140
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\tickets\\08.txt": {
+    "size": 1266,
+    "mtime_ns": 1785032240026669200,
+    "word_count": 193
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\tickets\\09.txt": {
+    "size": 1757,
+    "mtime_ns": 1785032246326002000,
+    "word_count": 260
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\tickets\\10.txt": {
+    "size": 1087,
+    "mtime_ns": 1785032250874385500,
+    "word_count": 171
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\tickets\\11.txt": {
+    "size": 1323,
+    "mtime_ns": 1785032255493558000,
+    "word_count": 200
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\.tmp\\tickets\\12.txt": {
+    "size": 1306,
+    "mtime_ns": 1785032260580121000,
+    "word_count": 198
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\README.md": {
+    "size": 1688,
+    "mtime_ns": 1785014857690638100,
+    "word_count": 211,
+    "hashes": { "readme.md": "1a141038fd4dcb8f18cde506b5bae7d10844abd506e4a566bea32bad3a08b798" }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\deployment.md": {
+    "size": 6925,
+    "mtime_ns": 1785032522483529600,
+    "word_count": 911,
+    "hashes": {
+      "docs/deployment.md": "018aab1003b3046f25a937d4cedd7857cd9157b2497213c45925c139a13d5c54"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\disaster-recovery.md": {
+    "size": 3669,
+    "mtime_ns": 1785022646154100500,
+    "word_count": 534,
+    "hashes": {
+      "docs/disaster-recovery.md": "ec0f387d031494e559968f167414bb01b4af00a84be4d15e7939517cea43d496"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\legal\\data-processing-agreement.md": {
+    "size": 8283,
+    "mtime_ns": 1785027497316909600,
+    "word_count": 1100,
+    "hashes": {
+      "docs/legal/data-processing-agreement.md": "7193f710cc6e52d346d807b04f87ba845feec359bfc33aef11e1fafeda82cbac"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\legal\\privacy-policy.md": {
+    "size": 7284,
+    "mtime_ns": 1785027497340981400,
+    "word_count": 1035,
+    "hashes": {
+      "docs/legal/privacy-policy.md": "d34ecf40b04ff96a00a1bd43055b02cff2b575e20a931057751d41d1039c94c0"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\legal\\terms-of-service.md": {
+    "size": 7461,
+    "mtime_ns": 1785027210291639100,
+    "word_count": 1116,
+    "hashes": {
+      "docs/legal/terms-of-service.md": "c2704fe509e5efb87fd8402a909d78e013849c6a583aba38d400764abdaea6cd"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\security-audit.md": {
+    "size": 8714,
+    "mtime_ns": 1785027497388596300,
+    "word_count": 1031,
+    "hashes": {
+      "docs/security-audit.md": "fed46ca83875d35770d5b249df593d3eeaa5c69d4c465083f386dade7e183c33"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\billing.md": {
+    "size": 3492,
+    "mtime_ns": 1785027497401676800,
+    "word_count": 539,
+    "hashes": {
+      "docs/support/billing.md": "fd3c03ed113d3f47fab05569b9d565ceb7002dcc981e0362a1dd82c5f7e11da0"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\conference-dashboard.md": {
+    "size": 2475,
+    "mtime_ns": 1785027497411194300,
+    "word_count": 372,
+    "hashes": {
+      "docs/support/conference-dashboard.md": "fd251c6f882bcc303c6bef6b7f9d6d57e790ce7f7f05727e48d252c0183f7de8"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\contacting-support.md": {
+    "size": 3548,
+    "mtime_ns": 1785027497421706700,
+    "word_count": 554,
+    "hashes": {
+      "docs/support/contacting-support.md": "7c70f08ccc00ec5e4150b0c3444664e4e9150e68611566e9c4aad2f087c1dfe5"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\first-church.md": {
+    "size": 2290,
+    "mtime_ns": 1785027310309323500,
+    "word_count": 350,
+    "hashes": {
+      "docs/support/first-church.md": "74790660ee0771838ba24377f8080bf0575d26cb8cfdca64205628ae2eb72c30"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\forgot-password.md": {
+    "size": 2152,
+    "mtime_ns": 1785027410017707100,
+    "word_count": 360,
+    "hashes": {
+      "docs/support/forgot-password.md": "82eaea53b0d633b134e1f70a724115c1535efc5b38f145e80dfb8486c3d79917"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\getting-started.md": {
+    "size": 2083,
+    "mtime_ns": 1785027302006866500,
+    "word_count": 317,
+    "hashes": {
+      "docs/support/getting-started.md": "d5407816e28c5ec2d432a27a5e3ff428682c974fb55b46f20346bc20f01545c4"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\managing-members.md": {
+    "size": 2358,
+    "mtime_ns": 1785027335789806800,
+    "word_count": 363,
+    "hashes": {
+      "docs/support/managing-members.md": "70101afb59e7f63604937d2ce4e1b875d2375d06820089793e94f1168c2a6034"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\member-transfer.md": {
+    "size": 2657,
+    "mtime_ns": 1785027344560474300,
+    "word_count": 403,
+    "hashes": {
+      "docs/support/member-transfer.md": "8fd76d7f3a02e0f85904d4fb626431df919b8a6dfec61a22022f354c8fe90e5b"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\monthly-report.md": {
+    "size": 2710,
+    "mtime_ns": 1785027497471498400,
+    "word_count": 392,
+    "hashes": {
+      "docs/support/monthly-report.md": "ca59f1b7d963d6a629d6750cb47ee838d128c56b8ddf814d1dc2a7e59777226f"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\offering-batches.md": {
+    "size": 2472,
+    "mtime_ns": 1785027497480113000,
+    "word_count": 390,
+    "hashes": {
+      "docs/support/offering-batches.md": "2315709dfec858f9ae46250717c5a51955c19d13d6642e7b6aacb90e23806a70"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\positions-roles.md": {
+    "size": 3184,
+    "mtime_ns": 1785027497487640100,
+    "word_count": 411,
+    "hashes": {
+      "docs/support/positions-roles.md": "0b6feaff22ba87502f77d97aaa86f9ed5fd072124d124576ddec8634265032c4"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\quarterly-report.md": {
+    "size": 3311,
+    "mtime_ns": 1785027497494695100,
+    "word_count": 472,
+    "hashes": {
+      "docs/support/quarterly-report.md": "da34afeb110f8cdb8e67ed886ddcf6044fb98b2d3392b54d127b3ca68406424d"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\reconciliation.md": {
+    "size": 2977,
+    "mtime_ns": 1785027497501694500,
+    "word_count": 429,
+    "hashes": {
+      "docs/support/reconciliation.md": "b7c93ade5693178a58abb13b6912cfee177aed7237cad5f639dc7d7f4ecb807f"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\recording-attendance.md": {
+    "size": 2034,
+    "mtime_ns": 1785027318527314700,
+    "word_count": 316,
+    "hashes": {
+      "docs/support/recording-attendance.md": "68b4b83c3d202a74f603b2bfbf5782c1df74838403b7a818bd5dde885cc70309"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\docs\\support\\user-management.md": {
+    "size": 3647,
+    "mtime_ns": 1785027497517737300,
+    "word_count": 523,
+    "hashes": {
+      "docs/support/user-management.md": "a88fbef12c95fdae523c632e5e8ef3b5bfd3481a0338a35513fcb3c0a1f7bea0"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\e2e\\app.spec.ts": {
+    "size": 3144,
+    "mtime_ns": 1785016501263956600,
+    "word_count": 310
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\e2e\\auth.spec.ts": {
+    "size": 1396,
+    "mtime_ns": 1785016449690775300,
+    "word_count": 120
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\e2e\\helpers.ts": {
+    "size": 759,
+    "mtime_ns": 1785016434544723800,
+    "word_count": 86
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\e2e\\playwright.config.ts": {
+    "size": 338,
+    "mtime_ns": 1785016286140864500,
+    "word_count": 36
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\load\\globalload.js": {
+    "size": 3991,
+    "mtime_ns": 1785024804185393900,
+    "word_count": 430
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\migrations\\0010_email_verification.sql": {
+    "size": 151,
+    "mtime_ns": 1785014408415611200,
+    "word_count": 21,
+    "hashes": {
+      "migrations/0010_email_verification.sql": "874cd6652a8e85ae9e47488af671fa64d549d157eab2f909288b0f4759087064"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\migrations\\0011_billing.sql": {
+    "size": 1076,
+    "mtime_ns": 1785026954416995300,
+    "word_count": 124,
+    "hashes": {
+      "migrations/0011_billing.sql": "5f52f8a176503509ee7f59d0e9cfe9927c83ced280f24dba44ed271ac7bb9086"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\migrations\\0012_gap_fill.sql": {
+    "size": 2189,
+    "mtime_ns": 1785032498744570200,
+    "word_count": 269,
+    "hashes": {
+      "migrations/0012_gap_fill.sql": "db0889b907dfbe1ab7ffefcf9f948ab6c452c407ee1bcee617e7e7ec89d03bd1"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\i18n.ts": {
+    "size": 1110,
+    "mtime_ns": 1785027574412223200,
+    "word_count": 105
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\locales\\en\\auth.json": {
+    "size": 998,
+    "mtime_ns": 1785027622531769200,
+    "word_count": 105,
+    "hashes": {
+      "src/locales/en/auth.json": "d4dedbcfbd2677d87fb76adac73b5699e74ba191113cb27644ddeb42c2c06a53"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\locales\\en\\common.json": {
+    "size": 930,
+    "mtime_ns": 1785027619923204900,
+    "word_count": 82,
+    "hashes": {
+      "src/locales/en/common.json": "231e42e82a49049ba245187267e38c19115347f807a7e9dd02dae672af6d8e9b"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\locales\\en\\dashboard.json": {
+    "size": 644,
+    "mtime_ns": 1785027624438701900,
+    "word_count": 55,
+    "hashes": {
+      "src/locales/en/dashboard.json": "2a88a3383bb9f8ca07b8473120e86fd6a421d74ff70e89f8b2a93a94289df350"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\locales\\es\\auth.json": {
+    "size": 1212,
+    "mtime_ns": 1785027631454837800,
+    "word_count": 119,
+    "hashes": {
+      "src/locales/es/auth.json": "7deb1c5f1adde042031dc37f4ad0312ff0ed7615748f8f9d78bd6440d04a6d92"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\locales\\es\\common.json": {
+    "size": 1032,
+    "mtime_ns": 1785027627922343900,
+    "word_count": 87,
+    "hashes": {
+      "src/locales/es/common.json": "d069b97433fd970bf47aad34fe8f7d79c5331904f168eb68ce3f012dee4ca9c3"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\locales\\es\\dashboard.json": {
+    "size": 679,
+    "mtime_ns": 1785027633819880400,
+    "word_count": 65,
+    "hashes": {
+      "src/locales/es/dashboard.json": "b739147e45c877a0bd2a8e75d5b0c7c629a4b7e2e880f59f544fb88902313a37"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\locales\\pt\\auth.json": {
+    "size": 1033,
+    "mtime_ns": 1785027640443227200,
+    "word_count": 109,
+    "hashes": {
+      "src/locales/pt/auth.json": "acbb16440bcf64718928d4b7d392d89dfe8a8c986a7cd7f06dff2a0164cf0ed4"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\locales\\pt\\common.json": {
+    "size": 997,
+    "mtime_ns": 1785027637140493800,
+    "word_count": 83,
+    "hashes": {
+      "src/locales/pt/common.json": "626a00f635ac4f2885823d5870d672b545788ad3eedc3698511fd7609e5de6b4"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\src\\locales\\pt\\dashboard.json": {
+    "size": 686,
+    "mtime_ns": 1785027642800884800,
+    "word_count": 64,
+    "hashes": {
+      "src/locales/pt/dashboard.json": "b02bb713d3dc1a133bb60dd9a8b5c5ddeca34703a3e8ae350bd059e8d07a1acc"
+    }
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\durables\\migration-sql.ts": {
+    "size": 14644,
+    "mtime_ns": 1785018682616878500,
+    "word_count": 1645
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\billing-guard.ts": {
+    "size": 1242,
+    "mtime_ns": 1785027006759860600,
+    "word_count": 151
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\csp.ts": {
+    "size": 531,
+    "mtime_ns": 1785016072351229800,
+    "word_count": 59
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\lib\\monitoring.ts": {
+    "size": 1073,
+    "mtime_ns": 1785024210707906400,
+    "word_count": 134
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\repos\\billing.ts": {
+    "size": 3903,
+    "mtime_ns": 1785027006775942300,
+    "word_count": 377
+  },
+  "C:\\Users\\codec\\OneDrive\\Documents\\Tiniyara\\theobase\\worker\\routes\\billing.ts": {
+    "size": 4786,
+    "mtime_ns": 1785027006794466600,
+    "word_count": 487
   }
 }

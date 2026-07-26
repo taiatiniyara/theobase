@@ -1,0 +1,131 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_md",
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_theobase",
+      "label": "Theobase",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_quick_start",
+      "label": "Quick start",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L7"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_documentation",
+      "label": "Documentation",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L18"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_commands",
+      "label": "Commands",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L25"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_stack",
+      "label": "Stack",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L35"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_theobase",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_theobase",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_quick_start",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_theobase",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_documentation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_context_md",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_adr_md",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_deployment_md",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_agents_md",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_theobase",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_commands",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_theobase",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_readme_stack",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L35",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

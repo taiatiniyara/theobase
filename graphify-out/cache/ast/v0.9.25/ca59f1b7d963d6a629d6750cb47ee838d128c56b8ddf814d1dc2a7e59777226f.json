@@ -1,0 +1,191 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_md",
+      "label": "monthly-report.md",
+      "file_type": "document",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_monthly_treasurer_report",
+      "label": "Monthly Treasurer Report",
+      "file_type": "document",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_overview",
+      "label": "Overview",
+      "file_type": "document",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_generating_the_report",
+      "label": "Generating the Report",
+      "file_type": "document",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L7"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_what_s_in_the_report",
+      "label": "What's in the Report",
+      "file_type": "document",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L13"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_income_section",
+      "label": "Income Section",
+      "file_type": "document",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L15"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_expense_section",
+      "label": "Expense Section",
+      "file_type": "document",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L25"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_balance_summary",
+      "label": "Balance Summary",
+      "file_type": "document",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L37"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_notes_and_attachments",
+      "label": "Notes and Attachments",
+      "file_type": "document",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L44"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_exporting",
+      "label": "Exporting",
+      "file_type": "document",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L48"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_re_running_reports",
+      "label": "Re-running Reports",
+      "file_type": "document",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L52"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_validation",
+      "label": "Validation",
+      "file_type": "document",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L56"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_monthly_treasurer_report",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_monthly_treasurer_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_overview",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_monthly_treasurer_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_generating_the_report",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_monthly_treasurer_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_what_s_in_the_report",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_what_s_in_the_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_income_section",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_what_s_in_the_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_expense_section",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_what_s_in_the_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_balance_summary",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_what_s_in_the_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_notes_and_attachments",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L44",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_monthly_treasurer_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_exporting",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L48",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_monthly_treasurer_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_re_running_reports",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L52",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_monthly_treasurer_report",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_monthly_report_validation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/monthly-report.md",
+      "source_location": "L56",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

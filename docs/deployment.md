@@ -45,6 +45,8 @@ wrangler d1 execute theobase --file=migrations/0007_user_management.sql
 wrangler d1 execute theobase --file=migrations/0008_member_self_service.sql
 wrangler d1 execute theobase --file=migrations/0009_transfer_lifecycle.sql
 wrangler d1 execute theobase --file=migrations/0010_email_verification.sql
+wrangler d1 execute theobase --file=migrations/0011_billing.sql
+wrangler d1 execute theobase --file=migrations/0012_gap_fill.sql
 ```
 
 ## 3. Cloudflare secrets

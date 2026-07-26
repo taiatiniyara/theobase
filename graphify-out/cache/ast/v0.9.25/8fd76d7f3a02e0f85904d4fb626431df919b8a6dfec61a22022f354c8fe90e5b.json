@@ -1,0 +1,159 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_md",
+      "label": "member-transfer.md",
+      "file_type": "document",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_member_transfer",
+      "label": "Member Transfer",
+      "file_type": "document",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_overview",
+      "label": "Overview",
+      "file_type": "document",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_the_transfer_workflow",
+      "label": "The Transfer Workflow",
+      "file_type": "document",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L7"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_step_1_initiate_transfer_sending_church_clerk",
+      "label": "Step 1: Initiate Transfer (Sending Church Clerk)",
+      "file_type": "document",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L9"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_step_2_approve_transfer_conference_secretary",
+      "label": "Step 2: Approve Transfer (Conference Secretary)",
+      "file_type": "document",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L19"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_step_3_accept_transfer_receiving_church_clerk",
+      "label": "Step 3: Accept Transfer (Receiving Church Clerk)",
+      "file_type": "document",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L28"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_override_conference_level",
+      "label": "Override (Conference-Level)",
+      "file_type": "document",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L36"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_transfer_history",
+      "label": "Transfer History",
+      "file_type": "document",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L47"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_tips",
+      "label": "Tips",
+      "file_type": "document",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L51"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_member_transfer",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_member_transfer",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_overview",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_member_transfer",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_the_transfer_workflow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_the_transfer_workflow",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_step_1_initiate_transfer_sending_church_clerk",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_the_transfer_workflow",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_step_2_approve_transfer_conference_secretary",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_the_transfer_workflow",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_step_3_accept_transfer_receiving_church_clerk",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_member_transfer",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_override_conference_level",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_member_transfer",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_transfer_history",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_member_transfer",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_member_transfer_tips",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/member-transfer.md",
+      "source_location": "L51",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

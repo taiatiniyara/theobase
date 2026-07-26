@@ -1,0 +1,143 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_md",
+      "label": "offering-batches.md",
+      "file_type": "document",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_offering_batches_and_dual_custody",
+      "label": "Offering Batches and Dual Custody",
+      "file_type": "document",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_overview",
+      "label": "Overview",
+      "file_type": "document",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_the_dual_custody_workflow",
+      "label": "The Dual-Custody Workflow",
+      "file_type": "document",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L7"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_step_1_treasurer_creates_the_batch",
+      "label": "Step 1: Treasurer Creates the Batch",
+      "file_type": "document",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L9"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_step_2_assistant_treasurer_confirms",
+      "label": "Step 2: Assistant Treasurer Confirms",
+      "file_type": "document",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L24"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_what_if_there_s_a_mistake",
+      "label": "What If There's a Mistake?",
+      "file_type": "document",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L38"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_viewing_confirmed_batches",
+      "label": "Viewing Confirmed Batches",
+      "file_type": "document",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L49"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_batch_reports",
+      "label": "Batch Reports",
+      "file_type": "document",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L53"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_offering_batches_and_dual_custody",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_offering_batches_and_dual_custody",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_overview",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_offering_batches_and_dual_custody",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_the_dual_custody_workflow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_the_dual_custody_workflow",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_step_1_treasurer_creates_the_batch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_the_dual_custody_workflow",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_step_2_assistant_treasurer_confirms",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_offering_batches_and_dual_custody",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_what_if_there_s_a_mistake",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_offering_batches_and_dual_custody",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_viewing_confirmed_batches",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_offering_batches_and_dual_custody",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_offering_batches_batch_reports",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/offering-batches.md",
+      "source_location": "L53",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

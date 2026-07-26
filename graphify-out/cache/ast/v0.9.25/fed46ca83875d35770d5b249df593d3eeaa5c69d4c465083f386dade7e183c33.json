@@ -1,0 +1,175 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_md",
+      "label": "security-audit.md",
+      "file_type": "document",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_security_audit",
+      "label": "Security Audit",
+      "file_type": "document",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_automated_scans",
+      "label": "Automated Scans",
+      "file_type": "document",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L5"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_npm_audit",
+      "label": "npm audit",
+      "file_type": "document",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L7"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_snyk",
+      "label": "Snyk",
+      "file_type": "document",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L22"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_owasp_zap",
+      "label": "OWASP ZAP",
+      "file_type": "document",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L37"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_manual_checks",
+      "label": "Manual Checks",
+      "file_type": "document",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L57"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_findings_and_remediation",
+      "label": "Findings and Remediation",
+      "file_type": "document",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L76"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_remediation_workflow",
+      "label": "Remediation workflow",
+      "file_type": "document",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L82"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_scheduled_audits",
+      "label": "Scheduled Audits",
+      "file_type": "document",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L90"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_responsible_disclosure",
+      "label": "Responsible Disclosure",
+      "file_type": "document",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L101"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_security_audit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_security_audit",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_automated_scans",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_automated_scans",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_npm_audit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_automated_scans",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_snyk",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_automated_scans",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_owasp_zap",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_security_audit",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_manual_checks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_security_audit",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_findings_and_remediation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_findings_and_remediation",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_remediation_workflow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L82",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_security_audit",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_scheduled_audits",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L90",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_security_audit",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_security_audit_responsible_disclosure",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/security-audit.md",
+      "source_location": "L101",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}
