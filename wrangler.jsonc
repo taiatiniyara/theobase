@@ -52,9 +52,7 @@
   "env": {
     "staging": {
       "name": "theobase-staging",
-      "routes": [
-        { "pattern": "staging.theobase.app", "custom_domain": true },
-      ],
+      "routes": [{ "pattern": "staging.theobase.app", "custom_domain": true }],
       "assets": {
         "directory": "./dist",
         "not_found_handling": "single-page-application",
@@ -67,7 +65,9 @@
         ],
       },
       "send_email": [{ "name": "EMAIL" }],
-      "analytics_engine_datasets": [{ "binding": "ANALYTICS", "dataset": "theobase-metrics-staging" }],
+      "analytics_engine_datasets": [
+        { "binding": "ANALYTICS", "dataset": "theobase-metrics-staging" },
+      ],
       "d1_databases": [
         {
           "binding": "DB",
