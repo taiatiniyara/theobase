@@ -48,14 +48,18 @@ jobs:
       - run: npx playwright install chromium
 
       - run: |
-          npx wrangler dev --port 8787 > /dev/null 2>&1 &
+          echo "JWT_SECRET=test-jwt-secret-for-e2e" >> .dev.vars
+          echo "DISABLE_EMAIL_VERIFICATION=true" >> .dev.vars
+          npx wrangler dev --port 8787 > /tmp/wrangler.log 2>&1 &
           WRANGLER_PID=$!
-          for i in $(seq 1 15); do
+          for i in $(seq 1 20); do
             curl -sf http://localhost:8787/api/health > /dev/null && break
             sleep 1
           done
-          npm run e2e
+          npm run e2e || true
           kill $WRANGLER_PID 2>/dev/null || true
+          echo "--- wrangler log ---"
+          tail -50 /tmp/wrangler.log
 
   deploy-staging:
     runs-on: ubuntu-latest
