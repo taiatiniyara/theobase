@@ -6,6 +6,7 @@ import { checkRateLimitAsync, AUTH_LIMIT, READ_LIMIT, WRITE_LIMIT } from "./lib/
 import { json } from "./lib/response";
 import { auth, type AuthContext } from "./lib/middleware";
 import { csp } from "./lib/csp";
+import { sentryMiddleware, analyticsMiddleware } from "./lib/monitoring";
 import {
   handleAuthSignup,
   handleAuthLogin,
@@ -142,6 +143,9 @@ function rateLimit(key: string, config = AUTH_LIMIT) {
 }
 
 const authMiddleware = auth();
+
+app.use("*", sentryMiddleware());
+app.use("*", analyticsMiddleware());
 
 // ========================
 // PUBLIC routes — no auth required

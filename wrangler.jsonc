@@ -28,10 +28,16 @@
   "migrations": [
     {
       "tag": "v1",
-      "new_sqlite_classes": ["ChurchSyncDO", "ConferenceDO"],
+      "new_classes": ["ChurchSyncDO", "ConferenceDO"],
     },
   ],
   "observability": {
     "enabled": true,
   },
+  "analytics_engine_datasets": [
+    {
+      "binding": "ANALYTICS",
+      "dataset": "theobase-metrics",
+    },
+  ],
 }
