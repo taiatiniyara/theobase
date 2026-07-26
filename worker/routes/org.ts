@@ -6,6 +6,7 @@ import { json } from "../lib/response";
 import { createDb } from "../lib/db";
 import { ConferenceRepo, DistrictRepo, ChurchRepo } from "../repos/org";
 import type { ConferenceRow, DistrictRow, ChurchRow } from "../repos/org";
+import { UserRepo } from "../repos/users";
 
 function toConferenceResponse(c: ConferenceRow) {
   return {
@@ -159,16 +160,16 @@ export async function handleGetDistricts(
   auth: AuthContext,
   conferenceId: number
 ): Promise<Response> {
-  const districtRepo = new DistrictRepo(createDb(env));
+  const db = createDb(env);
+  const districtRepo = new DistrictRepo(db);
+  const userRepo = new UserRepo(db);
   const districts = await districtRepo.findAll(conferenceId);
 
   const enriched = await Promise.all(
     districts.map(async (d) => {
       let pastorEmail: string | null = null;
       if (d.pastorUserId) {
-        const user = await env.DB.prepare("SELECT email FROM users WHERE id = ?")
-          .bind(d.pastorUserId)
-          .first<{ email: string }>();
+        const user = await userRepo.findById(d.pastorUserId);
         pastorEmail = user?.email ?? null;
       }
       return toDistrictResponse({ ...d, pastorEmail });
@@ -275,16 +276,16 @@ export async function handleGetChurches(
 ): Promise<Response> {
   const url = new URL(request.url);
   const includeInactive = url.searchParams.get("include_inactive") === "1";
-  const churchRepo = new ChurchRepo(createDb(env));
+  const db = createDb(env);
+  const churchRepo = new ChurchRepo(db);
+  const districtRepo = new DistrictRepo(db);
   const churches = await churchRepo.findAll(conferenceId, includeInactive ? undefined : "active");
 
   const enriched = await Promise.all(
     churches.map(async (c) => {
       let districtName: string | null = null;
       if (c.districtId) {
-        const district = await env.DB.prepare("SELECT name FROM districts WHERE id = ?")
-          .bind(c.districtId)
-          .first<{ name: string }>();
+        const district = await districtRepo.findById(c.districtId);
         districtName = district?.name ?? null;
       }
       return toChurchResponse({ ...c, districtName });
@@ -479,7 +480,10 @@ export async function handleBulkCreateChurches(
   const created: { name: string; type: string; id: number }[] = [];
   const errors: { row: number; message: string }[] = [];
 
-  const churchRepo = new ChurchRepo(createDb(env, auth.conferenceId));
+  const db = createDb(env, auth.conferenceId);
+  const churchRepo = new ChurchRepo(db);
+  const districtRepo = new DistrictRepo(db);
+  const allDistricts = await districtRepo.findAll(body.conferenceId);
 
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i]!;
@@ -498,11 +502,7 @@ export async function handleBulkCreateChurches(
 
     let districtId: number | null = null;
     if (districtName) {
-      const district = await env.DB.prepare(
-        "SELECT id FROM districts WHERE name = ? AND conference_id = ?"
-      )
-        .bind(districtName, body.conferenceId)
-        .first<{ id: number }>();
+      const district = allDistricts.find((d) => d.name === districtName);
       if (!district) {
         errors.push({ row: i, message: `District not found: ${districtName}` });
         continue;
