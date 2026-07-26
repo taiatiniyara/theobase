@@ -11,6 +11,7 @@ export default defineWorkersConfig({
         miniflare: {
           vars: {
             JWT_SECRET: "test-jwt-secret-for-vitest",
+            DISABLE_EMAIL_VERIFICATION: "true",
           },
         },
       },

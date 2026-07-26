@@ -64,7 +64,9 @@ export async function handleAuthSignup(
     }
   }
 
-  const isTestBypass = request.headers.get("X-Theobase-Test-Bypass") === "email-verification";
+  const isTestBypass =
+    env.DISABLE_EMAIL_VERIFICATION === "true" &&
+    request.headers.get("X-Theobase-Test-Bypass") === "email-verification";
 
   const result = await userRepo.create({
     email: body.email.toLowerCase().trim(),
