@@ -46,22 +46,38 @@
   "env": {
     "staging": {
       "name": "theobase-staging",
+      "durable_objects": {
+        "bindings": [
+          { "name": "CHURCH_SYNC_DO", "class_name": "ChurchSyncDO" },
+          { "name": "CONFERENCE_DO", "class_name": "ConferenceDO" },
+        ],
+      },
+      "send_email": [{ "name": "EMAIL" }],
+      "analytics_engine_datasets": [{ "binding": "ANALYTICS", "dataset": "theobase-metrics-staging" }],
       "d1_databases": [
         {
           "binding": "DB",
           "database_name": "theobase-staging",
-          "database_id": "theobase-staging",
+          "database_id": "d6d62909-ab22-41b2-9fce-44b850ab55e2",
           "migrations_dir": "migrations",
         },
       ],
     },
     "production": {
       "name": "theobase-production",
+      "durable_objects": {
+        "bindings": [
+          { "name": "CHURCH_SYNC_DO", "class_name": "ChurchSyncDO" },
+          { "name": "CONFERENCE_DO", "class_name": "ConferenceDO" },
+        ],
+      },
+      "send_email": [{ "name": "EMAIL" }],
+      "analytics_engine_datasets": [{ "binding": "ANALYTICS", "dataset": "theobase-metrics" }],
       "d1_databases": [
         {
           "binding": "DB",
           "database_name": "theobase-production",
-          "database_id": "theobase-production",
+          "database_id": "71a5cc99-e10a-4eca-8016-953cf117fa0f",
           "migrations_dir": "migrations",
         },
       ],
