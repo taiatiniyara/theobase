@@ -1,0 +1,18 @@
+{
+  "welcome": "Bienvenido a Theobase",
+  "overview": "Resumen de administración de iglesia",
+  "totalMembers": "Total de miembros",
+  "totalChurches": "Total de iglesias",
+  "titheThisMonth": "Diezmos de este mes",
+  "attendanceThisWeek": "Asistencia de esta semana",
+  "recentActivity": "Actividad reciente",
+  "quickActions": "Acciones rápidas",
+  "recordAttendance": "Registrar asistencia",
+  "createBatch": "Crear lote de ofrendas",
+  "addMember": "Agregar miembro",
+  "viewReports": "Ver informes",
+  "memberDashboard": "Panel de miembro",
+  "conferenceDashboard": "Panel de conferencia",
+  "districtDashboard": "Panel de distrito",
+  "globalDashboard": "Panel global"
+}

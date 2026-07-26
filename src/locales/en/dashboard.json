@@ -1,0 +1,18 @@
+{
+  "welcome": "Welcome to Theobase",
+  "overview": "Church Administration Overview",
+  "totalMembers": "Total Members",
+  "totalChurches": "Total Churches",
+  "titheThisMonth": "Tithe This Month",
+  "attendanceThisWeek": "Attendance This Week",
+  "recentActivity": "Recent Activity",
+  "quickActions": "Quick Actions",
+  "recordAttendance": "Record Attendance",
+  "createBatch": "Create Offering Batch",
+  "addMember": "Add Member",
+  "viewReports": "View Reports",
+  "memberDashboard": "Member Dashboard",
+  "conferenceDashboard": "Conference Dashboard",
+  "districtDashboard": "District Dashboard",
+  "globalDashboard": "Global Dashboard"
+}
