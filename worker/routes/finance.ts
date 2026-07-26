@@ -12,6 +12,7 @@ import {
 } from "../repos/finance";
 import type { FundRow, ExpenseCategoryRow } from "../repos/finance";
 import { ChurchRepo } from "../repos/org";
+import { MemberRepo } from "../repos/members";
 import { json } from "../lib/response";
 
 async function resolveTreasuryChurchId(env: Env, churchId: number): Promise<number> {
@@ -391,9 +392,8 @@ export async function handleCreateBatch(
     return json({ error: "churchId and sabbathDate are required" }, 400);
   }
 
-  const church = await env.DB.prepare("SELECT id FROM churches WHERE id = ?")
-    .bind(body.churchId)
-    .first();
+  const churchRepo = new ChurchRepo(createDb(env, auth.conferenceId));
+  const church = await churchRepo.findById(body.churchId);
   if (!church) {
     return json({ error: "Church not found" }, 404);
   }
@@ -626,11 +626,9 @@ export async function handleCreateTransaction(
     return json({ error: "amount must be positive" }, 400);
   }
 
-  const batch = await env.DB.prepare(
-    "SELECT id, church_id, status FROM offering_batches WHERE id = ?"
-  )
-    .bind(body.batchId)
-    .first<{ id: number; church_id: number; status: string }>();
+  const db = createDb(env, auth.conferenceId);
+  const batchRepo = new BatchRepo(db);
+  const batch = await batchRepo.findById(body.batchId);
   if (!batch) {
     return json({ error: "Batch not found" }, 404);
   }
@@ -640,69 +638,58 @@ export async function handleCreateTransaction(
 
   const treasuryChurchId = await resolveTreasuryChurchId(env, body.churchId);
 
-  if (batch.church_id !== treasuryChurchId) {
+  if (batch.churchId !== treasuryChurchId) {
     return json({ error: "Church mismatch between transaction and batch" }, 400);
   }
 
   if (body.envelopeNumber !== undefined) {
-    const dupEnv = await env.DB.prepare(
-      "SELECT id FROM transactions WHERE batch_id = ? AND envelope_number = ?"
-    )
-      .bind(body.batchId, body.envelopeNumber)
-      .first();
+    const txnRepo = new TransactionRepo(db);
+    const dupEnv = await txnRepo.findByBatchAndEnvelope(body.batchId, body.envelopeNumber);
     if (dupEnv) {
       return json({ error: `Envelope #${body.envelopeNumber} already used in this batch` }, 409);
     }
   }
 
   if (body.memberId !== undefined) {
-    const member = await env.DB.prepare("SELECT id, church_id FROM members WHERE id = ?")
-      .bind(body.memberId)
-      .first<{ id: number; church_id: number }>();
+    const memberRepo = new MemberRepo(db);
+    const member = await memberRepo.findById(body.memberId);
     if (!member) {
       return json({ error: "Member not found" }, 404);
     }
   }
 
-  const fund = await env.DB.prepare("SELECT id FROM funds WHERE id = ?").bind(body.fundId).first();
+  const fundRepo = new FundRepo(db);
+  const fund = await fundRepo.findById(body.fundId);
   if (!fund) {
     return json({ error: "Fund not found" }, 404);
   }
 
   const txnUuid = uuid();
-  const result = await env.DB.prepare(
-    `INSERT INTO transactions (church_id, fund_id, type, amount, description, batch_id, created_by, uuid, envelope_number, member_id)
-     VALUES (?, ?, 'income', ?, ?, ?, ?, ?, ?, ?) RETURNING id`
-  )
-    .bind(
-      treasuryChurchId,
-      body.fundId,
-      body.amount,
-      body.description ?? null,
-      body.batchId,
-      Number(auth.userId),
-      txnUuid,
-      body.envelopeNumber ?? null,
-      body.memberId ?? null
-    )
-    .first<{ id: number }>();
-
-  if (!result) {
-    return json({ error: "Failed to create transaction" }, 500);
-  }
+  const txnRepo = new TransactionRepo(db);
+  const txn = await txnRepo.createIncome({
+    churchId: treasuryChurchId,
+    fundId: body.fundId,
+    amount: body.amount,
+    description: body.description,
+    batchId: body.batchId,
+    createdBy: Number(auth.userId),
+    uuid: txnUuid,
+    envelopeNumber: body.envelopeNumber,
+    memberId: body.memberId,
+  });
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
     action: "create",
     entity_type: "transaction",
-    entity_id: result.id,
+    entity_id: txn.id,
     prev_state: null,
-    new_state: JSON.stringify({ ...body, id: result.id, type: "income", uuid: txnUuid }),
+    new_state: JSON.stringify({ ...body, id: txn.id, type: "income", uuid: txnUuid }),
     module: "finance",
     device_info: getDeviceInfo(request),
   });
 
-  return json({ id: result.id, ...body, type: "income", uuid: txnUuid }, 201);
+  return json({ id: txn.id, ...body, type: "income", uuid: txnUuid }, 201);
 }
 
 export async function handleVoidTransaction(
@@ -714,36 +701,23 @@ export async function handleVoidTransaction(
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
-  const txn = await env.DB.prepare(
-    "SELECT id, confirmed_by, type, amount, church_id, batch_id FROM transactions WHERE id = ?"
-  )
-    .bind(transactionId)
-    .first<{
-      id: number;
-      confirmed_by: number | null;
-      type: string;
-      amount: number;
-      church_id: number;
-      batch_id: number | null;
-    }>();
+  const db = createDb(env, auth.conferenceId);
+  const txnRepo = new TransactionRepo(db);
+  const txn = await txnRepo.findById(transactionId);
   if (!txn) return json({ error: "Transaction not found" }, 404);
 
-  if (txn.confirmed_by !== null) {
+  if (txn.confirmedBy !== null) {
     return json({ error: "Cannot void a confirmed transaction — use reversal instead" }, 400);
   }
 
-  await env.DB.prepare(
-    "UPDATE transactions SET confirmed_by = NULL, confirmed_at = NULL, batch_id = NULL WHERE id = ?"
-  )
-    .bind(transactionId)
-    .run();
+  await txnRepo.voidTransaction(transactionId);
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
     action: "void",
     entity_type: "transaction",
     entity_id: transactionId,
-    prev_state: JSON.stringify({ confirmed_by: txn.confirmed_by, batch_id: txn.batch_id }),
+    prev_state: JSON.stringify({ confirmed_by: txn.confirmedBy, batch_id: txn.batchId }),
     new_state: JSON.stringify({ voided: true, batch_id: null }),
     module: "finance",
     device_info: getDeviceInfo(_request),
@@ -761,21 +735,12 @@ export async function handleReverseTransaction(
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
-  const original = await env.DB.prepare(
-    "SELECT id, church_id, fund_id, type, amount, confirmed_by FROM transactions WHERE id = ?"
-  )
-    .bind(transactionId)
-    .first<{
-      id: number;
-      church_id: number;
-      fund_id: number;
-      type: string;
-      amount: number;
-      confirmed_by: number | null;
-    }>();
+  const db = createDb(env, auth.conferenceId);
+  const txnRepo = new TransactionRepo(db);
+  const original = await txnRepo.findById(transactionId);
   if (!original) return json({ error: "Transaction not found" }, 404);
 
-  if (original.confirmed_by === null) {
+  if (original.confirmedBy === null) {
     return json({ error: "Cannot reverse an unconfirmed transaction — use void instead" }, 400);
   }
 
@@ -786,20 +751,20 @@ export async function handleReverseTransaction(
     body = {};
   }
   const reversalAmount = -Math.abs(original.amount);
-  const uuid = crypto.randomUUID();
+  const reversalUuid = crypto.randomUUID();
 
   const result = await env.DB.prepare(
     `INSERT INTO transactions (church_id, fund_id, type, amount, description, created_by, uuid, confirmed_by, confirmed_at, corrects_transaction_id)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), ?) RETURNING id`
   )
     .bind(
-      original.church_id,
-      original.fund_id,
+      original.churchId,
+      original.fundId,
       original.type,
       reversalAmount,
       body.description ?? `Reversal of transaction #${transactionId}`,
       Number(auth.userId),
-      uuid,
+      reversalUuid,
       Number(auth.userId),
       transactionId
     )
@@ -857,7 +822,9 @@ export async function handleCreateExpense(
     return json({ error: "amount must be positive" }, 400);
   }
 
-  const fund = await env.DB.prepare("SELECT id FROM funds WHERE id = ?").bind(body.fundId).first();
+  const db = createDb(env, auth.conferenceId);
+  const fundRepo = new FundRepo(db);
+  const fund = await fundRepo.findById(body.fundId);
   if (!fund) {
     return json({ error: "Fund not found" }, 404);
   }
@@ -865,38 +832,30 @@ export async function handleCreateExpense(
   const treasuryChurchId = await resolveTreasuryChurchId(env, body.churchId);
 
   const txnUuid = uuid();
-  const result = await env.DB.prepare(
-    `INSERT INTO transactions (church_id, fund_id, type, amount, description, category_id, budget_ref, created_by, uuid)
-     VALUES (?, ?, 'expense', ?, ?, ?, ?, ?, ?) RETURNING id`
-  )
-    .bind(
-      treasuryChurchId,
-      body.fundId,
-      body.amount,
-      body.description ?? null,
-      body.categoryId ?? null,
-      body.budgetRef ?? null,
-      Number(auth.userId),
-      txnUuid
-    )
-    .first<{ id: number }>();
-
-  if (!result) {
-    return json({ error: "Failed to create expense" }, 500);
-  }
+  const txnRepo = new TransactionRepo(db);
+  const txn = await txnRepo.createExpense({
+    churchId: treasuryChurchId,
+    fundId: body.fundId,
+    amount: body.amount,
+    description: body.description,
+    categoryId: body.categoryId,
+    budgetRef: body.budgetRef,
+    createdBy: Number(auth.userId),
+    uuid: txnUuid,
+  });
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
     action: "create",
     entity_type: "transaction",
-    entity_id: result.id,
+    entity_id: txn.id,
     prev_state: null,
-    new_state: JSON.stringify({ ...body, id: result.id, type: "expense", uuid: txnUuid }),
+    new_state: JSON.stringify({ ...body, id: txn.id, type: "expense", uuid: txnUuid }),
     module: "finance",
     device_info: getDeviceInfo(request),
   });
 
-  return json({ id: result.id, ...body, type: "expense", uuid: txnUuid }, 201);
+  return json({ id: txn.id, ...body, type: "expense", uuid: txnUuid }, 201);
 }
 
 // ── Budgets ──

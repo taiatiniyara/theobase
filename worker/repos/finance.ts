@@ -191,6 +191,7 @@ export class TransactionRepo {
     fundId: number;
     amount: number;
     description?: string;
+    batchId?: number;
     createdBy: number;
     uuid: string;
     memberId?: number;
@@ -205,6 +206,7 @@ export class TransactionRepo {
         type: "income",
         amount: data.amount,
         description: data.description ?? null,
+        batchId: data.batchId ?? null,
         createdBy: data.createdBy,
         uuid: data.uuid,
         memberId: data.memberId ?? null,
@@ -221,6 +223,7 @@ export class TransactionRepo {
     amount: number;
     description?: string;
     categoryId?: number;
+    budgetRef?: number;
     createdBy: number;
     uuid: string;
   }): Promise<TransactionRow> {
@@ -233,6 +236,7 @@ export class TransactionRepo {
         amount: data.amount,
         description: data.description ?? null,
         categoryId: data.categoryId ?? null,
+        budgetRef: data.budgetRef ?? null,
         createdBy: data.createdBy,
         uuid: data.uuid,
       })
@@ -301,8 +305,33 @@ export class TransactionRepo {
     return query.orderBy(desc(transactions.createdAt)).all();
   }
 
+  async findById(id: number): Promise<TransactionRow | undefined> {
+    return this.db.select().from(transactions).where(eq(transactions.id, id)).get();
+  }
+
   async findByBatch(batchId: number): Promise<TransactionRow[]> {
     return this.db.select().from(transactions).where(eq(transactions.batchId, batchId)).all();
+  }
+
+  async findByBatchAndEnvelope(
+    batchId: number,
+    envelopeNumber: number
+  ): Promise<TransactionRow | undefined> {
+    return this.db
+      .select()
+      .from(transactions)
+      .where(
+        and(eq(transactions.batchId, batchId), eq(transactions.envelopeNumber, envelopeNumber))
+      )
+      .get();
+  }
+
+  async voidTransaction(id: number): Promise<void> {
+    await this.db
+      .update(transactions)
+      .set({ confirmedBy: null, confirmedAt: null, batchId: null })
+      .where(eq(transactions.id, id))
+      .run();
   }
 
   async confirmTransactions(batchId: number, userId: number, confirmedAt: string): Promise<void> {
