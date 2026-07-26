@@ -47,7 +47,10 @@ jobs:
 
       - run: npx playwright install chromium
 
+      - run: npx wrangler dev --port 8787 &
+      - run: for i in 1 2 3 4 5 6 7 8 9 10; do curl -s http://localhost:8787/api/health && break; sleep 1; done
       - run: npm run e2e
+      - run: kill $(lsof -t -i:8787) || true
 
   deploy-staging:
     runs-on: ubuntu-latest
