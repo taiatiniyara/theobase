@@ -281,6 +281,23 @@ describe("auth API", () => {
   });
 
   it("user deactivation prevents login", async () => {
+    // Create an admin user
+    const admRes = await SELF.fetch("http://localhost/api/auth/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Theobase-Test-Bypass": "email-verification",
+      },
+      body: JSON.stringify({
+        email: "deact-admin@test.com",
+        password: "adminpass12",
+        fullName: "Deact Admin",
+      }),
+    });
+    expect(admRes.status).toBe(200);
+    const admBody = (await admRes.json()) as { accessToken: string; userId: string };
+    const adminToken = admBody.accessToken;
+
     // Create a separate user for this test
     const signupRes = await SELF.fetch("http://localhost/api/auth/signup", {
       method: "POST",
@@ -298,18 +315,14 @@ describe("auth API", () => {
       .bind("deacttest@test.com")
       .run();
 
-    // Login to get token
+    // Login as deacttest
     const loginRes0 = await SELF.fetch("http://localhost/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: "deacttest@test.com", password: "testpass12" }),
     });
     expect(loginRes0.status).toBe(200);
-    const loginBody0 = (await loginRes0.json()) as {
-      accessToken: string;
-      userId: string;
-    };
-    const adminToken = loginBody0.accessToken;
+    const loginBody0 = (await loginRes0.json()) as { userId: string };
     const userId = Number(loginBody0.userId);
 
     // Deactivate the user

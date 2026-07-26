@@ -32,6 +32,14 @@ describe("finance API", () => {
     await env.DB.exec(
       "ALTER TABLE transactions ADD COLUMN corrects_transaction_id INTEGER REFERENCES transactions(id)"
     );
+    await env.DB.exec(
+      "ALTER TABLE transactions ADD COLUMN proxy_for_member_id INTEGER REFERENCES members(id)"
+    );
+    await env.DB.exec("ALTER TABLE transactions ADD COLUMN verified INTEGER NOT NULL DEFAULT 0");
+    await env.DB.exec(
+      "ALTER TABLE transactions ADD COLUMN verified_by INTEGER REFERENCES users(id)"
+    );
+    await env.DB.exec("ALTER TABLE transactions ADD COLUMN verified_at TEXT");
 
     const sr = await SELF.fetch("http://localhost/api/auth/signup", {
       method: "POST",

@@ -710,6 +710,10 @@ export async function handleVoidTransaction(
     return json({ error: "Cannot void a confirmed transaction — use reversal instead" }, 400);
   }
 
+  if (txn.batchId === null) {
+    return json({ error: "Transaction is already voided" }, 400);
+  }
+
   await txnRepo.voidTransaction(transactionId);
 
   await logAudit(env, {

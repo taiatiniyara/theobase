@@ -19,7 +19,13 @@ export function billingGuard() {
 
     const db = createDb(c.env);
     const repo = new BillingRepo(db);
-    const sub = await repo.getSubscription(auth.conferenceId);
+    let sub;
+    try {
+      sub = await repo.getSubscription(auth.conferenceId);
+    } catch {
+      await next();
+      return;
+    }
 
     if (!sub) {
       await next();
