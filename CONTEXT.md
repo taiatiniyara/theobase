@@ -58,6 +58,10 @@ _Avoid_: Deposit slip, collection record
 The Church Manual requirement that all church funds must be counted by at least two people. In the platform: the Treasurer submits an offering batch; the Assistant Treasurer (or another authorized second person) reviews and confirms it before it posts.
 _Avoid_: Two-person rule, double-entry (accounting concept, not custody)
 
+**Giving Declaration**:
+A member self-reporting their offering amount and fund (e.g., "I put $50 in the tithe envelope today") before the Treasurer verifies against the physical envelope. The lifecycle: member declares → Treasurer or Assistant Treasurer verifies or rejects → verified declarations feed into the dual-custody Offering Batch. Distinct from a Transaction — a declaration is a claim by the member; a Transaction is the official financial record created by the Treasurer after verification and batch confirmation.
+_Avoid_: Self-report, giving statement (a contribution statement is a year-end tax document, not a declaration)
+
 **Expense Category**:
 A classification for church spending configured by the Conference — e.g., Utilities, Maintenance, Supplies, Evangelism. Used for budget tracking and reporting.
 _Avoid_: Account code, cost centre
