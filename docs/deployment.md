@@ -228,3 +228,5 @@ Or use the Cloudflare dashboard to roll back to a previous deployment.
 **CORS errors in browser** — verify `ALLOWED_ORIGINS` includes the frontend's origin, including protocol and port.
 
 **Email not sending** — check the Email binding in `wrangler.jsonc` and DNS records (SPF/DKIM/DMARC).
+
+**Tests fail on Windows with "Isolated storage failed"** — known `@cloudflare/vitest-pool-workers` issue with DO SQLite file locking on Windows. Tests pass on Linux CI. Workaround: kill any leftover `workerd.exe` processes and delete `%TEMP%\miniflare-*` before running.
