@@ -11,5 +11,6 @@ export const users = sqliteTable("users", {
   resetTokenExpires: text("reset_token_expires"),
   active: integer("active").default(1),
   emailVerified: integer("email_verified").default(1),
+  status: text("status").default("active"),
   createdAt: text("created_at").default("(datetime('now'))"),
 });

@@ -189,13 +189,17 @@ export const orgApi = {
 
 export const userApi = {
   getUsers: (conferenceId?: number) =>
-    api.get<{ users: { id: number; email: string; role: string }[] }>(
-      `/users${conferenceId ? `?conference_id=${conferenceId}` : ""}`
-    ),
+    api.get<{
+      users: { id: number; email: string; role: string; active: number; status?: string }[];
+    }>(`/users${conferenceId ? `?conference_id=${conferenceId}` : ""}`),
   inviteUser: (data: { email: string; role: string; conferenceId?: number; churchId?: number }) =>
     api.post("/users/invite", data),
   bulkInvite: (conferenceId: number, csv: string) =>
     api.post("/users/bulk-invite", { conferenceId, csv }),
+  updateUser: (id: number, data: { role?: string; active?: boolean }) =>
+    api.patch(`/users/${id}`, data),
+  deactivateUser: (id: number) => api.patch(`/users/${id}`, { active: false }),
+  reactivateUser: (id: number) => api.patch(`/users/${id}`, { active: true }),
 };
 
 export const memberApi = {

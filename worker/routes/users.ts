@@ -156,7 +156,12 @@ export async function handleUpdateUser(
   }
 
   if (body.active !== undefined) {
-    await userRepo.update(userId, { active: body.active ? 1 : 0 });
+    if (userId === Number(auth.userId) && body.active === false) {
+      return json({ error: "Cannot deactivate your own account" }, 400);
+    }
+    const newActive = body.active ? 1 : 0;
+    const newStatus = body.active ? "active" : "inactive";
+    await userRepo.update(userId, { active: newActive, status: newStatus });
     await logAudit(env, {
       actor_id: Number(auth.userId),
       action: body.active ? "activate" : "deactivate",

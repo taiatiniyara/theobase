@@ -14,6 +14,7 @@ export interface UserWithChurch {
   reset_token: string | null;
   reset_token_expires: string | null;
   active: number;
+  status: string;
   email_verified: number;
   created_at: string;
   church_id: number | null;
@@ -68,6 +69,7 @@ export class UserRepo {
       role?: string;
       passwordHash?: string;
       active?: number;
+      status?: string;
       emailVerified?: number;
       resetToken?: string | null;
       resetTokenExpires?: string | null;
@@ -77,6 +79,7 @@ export class UserRepo {
     if (data.role !== undefined) setData.role = data.role;
     if (data.passwordHash !== undefined) setData.passwordHash = data.passwordHash;
     if (data.active !== undefined) setData.active = data.active;
+    if (data.status !== undefined) setData.status = data.status;
     if (data.emailVerified !== undefined) setData.emailVerified = data.emailVerified;
     if (data.resetToken !== undefined) setData.resetToken = data.resetToken ?? null;
     if (data.resetTokenExpires !== undefined)
@@ -119,6 +122,7 @@ export class UserRepo {
       reset_token_expires: user.resetTokenExpires,
       active: user.active ?? 1,
       email_verified: user.emailVerified ?? 1,
+      status: user.status ?? "active",
       created_at: user.createdAt ?? "",
       church_id: churchId,
     };
