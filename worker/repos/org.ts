@@ -190,6 +190,24 @@ export class ChurchRepo {
     return this.db.select().from(churches).where(eq(churches.code, code)).get();
   }
 
+  async findByNameAndParent(
+    name: string,
+    parentType: string,
+    parentId: number
+  ): Promise<ChurchRow | undefined> {
+    return this.db
+      .select()
+      .from(churches)
+      .where(
+        and(
+          eq(churches.name, name),
+          eq(churches.parentType, parentType),
+          eq(churches.parentId, parentId)
+        )
+      )
+      .get();
+  }
+
   async update(
     id: number,
     data: {

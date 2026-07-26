@@ -6,6 +6,7 @@ import { logAudit, getDeviceInfo } from "../lib/audit";
 import { createDb } from "../lib/db";
 import { UserRepo } from "../repos/users";
 import { ConferenceRepo, ChurchRepo } from "../repos/org";
+import { MemberRepo } from "../repos/members";
 import { json } from "../lib/response";
 
 function toUserResponse(u: {
@@ -220,7 +221,10 @@ export async function handleBulkInviteUsers(
   const created: { email: string; role: string; tempPassword: string; id: number }[] = [];
   const errors: { row: number; message: string }[] = [];
 
-  const userRepo = new UserRepo(createDb(env, auth.conferenceId));
+  const db = createDb(env, auth.conferenceId);
+  const userRepo = new UserRepo(db);
+  const churchRepo = new ChurchRepo(db);
+  const memberRepo = new MemberRepo(db);
 
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i]!;
@@ -247,17 +251,13 @@ export async function handleBulkInviteUsers(
 
     let memberId: number | null = null;
     if (churchName) {
-      const church = await env.DB.prepare(
-        "SELECT id FROM churches WHERE name = ? AND parent_type = 'conference' AND parent_id = ?"
-      )
-        .bind(churchName, body.conferenceId)
-        .first<{ id: number }>();
+      const church = await churchRepo.findByNameAndParent(
+        churchName,
+        "conference",
+        body.conferenceId
+      );
       if (church) {
-        const member = await env.DB.prepare(
-          "SELECT id FROM members WHERE church_id = ? AND email = ? LIMIT 1"
-        )
-          .bind(church.id, email)
-          .first<{ id: number }>();
+        const member = await memberRepo.findByEmailAndChurch(email, church.id);
         if (member) {
           memberId = member.id;
         }

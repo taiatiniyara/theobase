@@ -60,6 +60,14 @@ export class MemberRepo {
       .get();
   }
 
+  async findByEmailAndChurch(email: string, churchId: number): Promise<MemberRow | undefined> {
+    return this.db
+      .select()
+      .from(members)
+      .where(and(eq(members.email, email), eq(members.churchId, churchId)))
+      .get();
+  }
+
   async findByUserId(userId: number): Promise<MemberRow | undefined> {
     const user = await this.db.get<{ member_id: number | null }>(
       sql`SELECT member_id FROM users WHERE id = ${userId}`
