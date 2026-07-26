@@ -190,6 +190,22 @@ export const MODULE_GROUPS: ModuleGroup[] = [
       },
     ],
   },
+  {
+    id: "system",
+    label: "System",
+    permission: "org:read",
+    roles: ["sysadmin"],
+    items: [
+      {
+        id: "admin",
+        label: "Admin",
+        path: "/app/admin",
+        permission: "org:read",
+        roles: ["sysadmin"],
+        icon: "shield",
+      },
+    ],
+  },
 ];
 
 export function isModuleVisible(module: Module | ModuleGroup, userRole: string): boolean {

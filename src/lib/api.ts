@@ -948,3 +948,24 @@ export const billingApi = {
   getStatus: () => api.get<BillingStatus>("/billing/status"),
   createCheckout: () => api.post<{ url: string }>("/billing/checkout"),
 };
+
+export interface AdminSubscription {
+  id: number;
+  conferenceId: number;
+  status: string;
+  churchCount: number;
+  trialEndsAt: string;
+}
+
+export interface AdminProvisioningStatus {
+  state?: string;
+  step?: string;
+  conferenceId?: number;
+}
+
+export const adminApi = {
+  getBilling: () => api.get<{ subscriptions: AdminSubscription[] }>("/billing/admin"),
+  getHealth: () => api.get<{ status: string; database: string }>("/health"),
+  getProvisioningStatus: (conferenceId: number) =>
+    api.get<AdminProvisioningStatus>(`/conferences/${conferenceId}/provisioning-status`),
+};
