@@ -15,6 +15,9 @@ describe("auth API", () => {
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token TEXT;");
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token_expires TEXT;");
     await env.DB.exec("ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1;");
+    await env.DB.exec(
+      "CREATE TABLE IF NOT EXISTS token_blacklist (token_jti TEXT NOT NULL, expires_at TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (datetime('now')))"
+    );
     try {
       await env.DB.exec("ALTER TABLE users ADD COLUMN email_verified INTEGER NOT NULL DEFAULT 1;");
     } catch {
@@ -344,6 +347,62 @@ describe("auth API", () => {
       body: JSON.stringify({ email: "deacttest@test.com", password: "testpass12" }),
     });
     expect(loginRes2.status).toBe(200);
+  });
+
+  it("logout revokes refresh token so it cannot be used again", async () => {
+    const signupRes = await SELF.fetch("http://localhost/api/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: "logout-test@test.com",
+        password: "testpass12",
+        fullName: "Logout Test",
+      }),
+    });
+    expect(signupRes.status).toBe(200);
+
+    await env.DB.prepare("UPDATE users SET email_verified = 1 WHERE email = ?")
+      .bind("logout-test@test.com")
+      .run();
+
+    const loginRes = await SELF.fetch("http://localhost/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "logout-test@test.com", password: "testpass12" }),
+    });
+    expect(loginRes.status).toBe(200);
+    const loginBody = (await loginRes.json()) as {
+      accessToken: string;
+      refreshToken: string;
+    };
+    expect(loginBody.refreshToken).toBeTruthy();
+
+    // Logout
+    const logoutRes = await SELF.fetch("http://localhost/api/auth/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken: loginBody.refreshToken }),
+    });
+    expect(logoutRes.status).toBe(200);
+
+    // Try to refresh with the revoked token — should fail
+    const refreshRes = await SELF.fetch("http://localhost/api/auth/refresh", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken: loginBody.refreshToken }),
+    });
+    expect(refreshRes.status).toBe(401);
+    const refreshBody = (await refreshRes.json()) as { error: string };
+    expect(refreshBody.error).toBe("Token has been revoked");
+  });
+
+  it("logout succeeds with invalid token", async () => {
+    const res = await SELF.fetch("http://localhost/api/auth/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken: "not-a-valid-token" }),
+    });
+    expect(res.status).toBe(200);
   });
 
   it("email verification: signup, unverified login blocked, verify via API, login succeeds", async () => {

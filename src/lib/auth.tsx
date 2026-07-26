@@ -19,7 +19,7 @@ interface AuthContextType {
     fullName: string,
     conferenceName?: string
   ) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -69,7 +69,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     []
   );
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    await authApi.logout().catch(() => {});
     clearTokens();
     setUser(null);
   }, []);

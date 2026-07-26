@@ -7,6 +7,8 @@ import {
   generateResetToken,
   generateVerifyToken,
   verifyEmailToken,
+  isTokenBlacklisted,
+  blacklistToken,
 } from "../lib/auth";
 import { ROLES } from "../lib/roles";
 import { logAudit, getDeviceInfo } from "../lib/audit";
@@ -188,6 +190,13 @@ export async function handleAuthRefresh(
       return json({ error: "Invalid token type" }, 401);
     }
 
+    if (payload.jti) {
+      const blacklisted = await isTokenBlacklisted(env.DB, payload.jti);
+      if (blacklisted) {
+        return json({ error: "Token has been revoked" }, 401);
+      }
+    }
+
     const userRepo = new UserRepo(createDb(env));
 
     const user = await userRepo.findById(Number(payload.sub));
@@ -221,6 +230,35 @@ export async function handleAuthRefresh(
   } catch {
     return json({ error: "Invalid or expired refresh token" }, 401);
   }
+}
+
+export async function handleAuthLogout(
+  request: Request,
+  env: Env,
+  _auth: AuthContext
+): Promise<Response> {
+  let body: { refreshToken: string };
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: "Invalid JSON" }, 400);
+  }
+
+  if (!body.refreshToken) {
+    return json({ error: "refreshToken is required" }, 400);
+  }
+
+  try {
+    const payload = await verifyToken(body.refreshToken, env.JWT_SECRET);
+    if (payload.jti && payload.exp) {
+      const expiresAt = new Date(payload.exp * 1000).toISOString();
+      await blacklistToken(env.DB, payload.jti, expiresAt);
+    }
+  } catch {
+    // Token is already invalid — still safe to ignore
+  }
+
+  return json({ message: "Logged out successfully" });
 }
 
 export async function handleVerifyEmail(

@@ -19,7 +19,8 @@ export async function signAccessToken(
 }
 
 export async function signRefreshToken(payload: { sub: string }, secret: string): Promise<string> {
-  return new SignJWT({ ...payload, type: "refresh" })
+  const jti = crypto.randomUUID();
+  return new SignJWT({ ...payload, type: "refresh", jti })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(REFRESH_EXPIRY)
@@ -29,7 +30,15 @@ export async function signRefreshToken(payload: { sub: string }, secret: string)
 export async function verifyToken(
   token: string,
   secret: string
-): Promise<{ sub: string; role: string; conferenceId?: number; churchId?: number; type: string }> {
+): Promise<{
+  sub: string;
+  role: string;
+  conferenceId?: number;
+  churchId?: number;
+  type: string;
+  jti?: string;
+  exp?: number;
+}> {
   const { payload } = await jwtVerify(token, getKey(secret));
   return payload as unknown as {
     sub: string;
@@ -37,7 +46,32 @@ export async function verifyToken(
     conferenceId?: number;
     churchId?: number;
     type: string;
+    jti?: string;
+    exp?: number;
   };
+}
+
+export async function isTokenBlacklisted(db: D1Database, jti: string): Promise<boolean> {
+  const row = await db
+    .prepare("SELECT 1 FROM token_blacklist WHERE token_jti = ? LIMIT 1")
+    .bind(jti)
+    .first();
+  return !!row;
+}
+
+export async function blacklistToken(
+  db: D1Database,
+  jti: string,
+  expiresAt: string
+): Promise<void> {
+  await db
+    .prepare("INSERT INTO token_blacklist (token_jti, expires_at) VALUES (?, ?)")
+    .bind(jti, expiresAt)
+    .run();
+}
+
+export async function cleanExpiredBlacklist(db: D1Database): Promise<void> {
+  await db.prepare("DELETE FROM token_blacklist WHERE expires_at < datetime('now')").run();
 }
 
 export async function hashPassword(password: string): Promise<string> {

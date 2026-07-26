@@ -130,6 +130,13 @@ export const authApi = {
     api.post<AuthResponse>("/auth/signup", data),
   login: (data: { email: string; password: string }) => api.post<AuthResponse>("/auth/login", data),
   refresh: () => api.post<AuthResponse>("/auth/refresh", { refreshToken: getRefreshToken() }),
+  logout: () => {
+    const refreshToken = getRefreshToken();
+    if (refreshToken) {
+      return api.post("/auth/logout", { refreshToken });
+    }
+    return Promise.resolve();
+  },
   forgotPassword: (email: string) => api.post("/auth/forgot-password", { email }),
   resetPassword: (token: string, newPassword: string) =>
     api.post("/auth/reset-password", { token, newPassword }),

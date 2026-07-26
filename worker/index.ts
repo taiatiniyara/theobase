@@ -17,6 +17,7 @@ import { sentryMiddleware, analyticsMiddleware } from "./lib/monitoring";
 import { billingGuard } from "./lib/billing-guard";
 import { BillingRepo } from "./repos/billing";
 import { createDb } from "./lib/db";
+import { cleanExpiredBlacklist } from "./lib/auth";
 import {
   handleCreateCheckout,
   handleStripeWebhook,
@@ -30,6 +31,7 @@ import {
   handleForgotPassword,
   handleResetPassword,
   handleVerifyEmail,
+  handleAuthLogout,
 } from "./routes/auth";
 import {
   handleGetConferences,
@@ -196,6 +198,9 @@ app.post("/api/auth/reset-password", rateLimit("auth:reset-password"), (c) =>
 );
 app.post("/api/auth/verify-email", rateLimit("auth:verify-email"), (c) =>
   handleVerifyEmail(c.req.raw, c.env, undefined as unknown as AuthContext)
+);
+app.post("/api/auth/logout", rateLimit("auth:logout"), (c) =>
+  handleAuthLogout(c.req.raw, c.env, undefined as unknown as AuthContext)
 );
 
 app.post("/api/billing/webhook", (c) => handleStripeWebhook(c.req.raw, c.env));
@@ -543,5 +548,6 @@ export default {
         }
       }
     }
+    await cleanExpiredBlacklist(env.DB);
   },
 };
