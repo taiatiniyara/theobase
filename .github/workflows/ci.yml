@@ -47,10 +47,15 @@ jobs:
 
       - run: npx playwright install chromium
 
-      - run: npx wrangler dev --port 8787 &
-      - run: for i in 1 2 3 4 5 6 7 8 9 10; do curl -s http://localhost:8787/api/health && break; sleep 1; done
-      - run: npm run e2e
-      - run: kill $(lsof -t -i:8787) || true
+      - run: |
+          npx wrangler dev --port 8787 > /dev/null 2>&1 &
+          WRANGLER_PID=$!
+          for i in $(seq 1 15); do
+            curl -sf http://localhost:8787/api/health > /dev/null && break
+            sleep 1
+          done
+          npm run e2e
+          kill $WRANGLER_PID 2>/dev/null || true
 
   deploy-staging:
     runs-on: ubuntu-latest
