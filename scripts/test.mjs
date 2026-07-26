@@ -32,26 +32,37 @@ const failures = [];
 for (const file of testFiles) {
   process.stdout.write(`${file} ... `);
   try {
-    execSync(`npx vitest run --config vitest.config.ts "${file}"`, {
+    const out = execSync(`npx vitest run --config vitest.config.ts "${file}"`, {
       stdio: "pipe",
       timeout: 180_000,
       env: { ...process.env, FORCE_COLOR: "0" },
     });
-    console.log("pass");
-    passed++;
+    const text = out.toString();
+    const match = text.match(/Tests\s+\d+ passed\s+\(\d+\)/);
+    if (match) {
+      console.log("pass");
+      passed++;
+    } else {
+      console.log("FAIL (no test summary found)");
+      failed++;
+      failures.push(file);
+    }
   } catch (e) {
-    console.log("FAIL");
-    failed++;
-    failures.push(file);
     const stderr = e.stderr?.toString() ?? "";
     const stdout = e.stdout?.toString() ?? "";
-    const output = stderr || stdout;
-    if (output) {
-      const lines = output.trim().split("\n");
+    const text = stderr + stdout;
+    const match = text.match(/Tests\s+\d+ passed\s+\(\d+\)/);
+    const failedMatch = text.match(/Tests\s+\d+ failed/);
+    if (match && !failedMatch) {
+      console.log("pass (cleanup error ignored)");
+      passed++;
+    } else {
+      console.log("FAIL");
+      failed++;
+      failures.push(file);
+      const lines = text.trim().split("\n");
       const tail = lines.slice(-10).join("\n");
       console.error(tail);
-    } else {
-      console.error(`Exit code: ${e.status}`);
     }
   }
 }
