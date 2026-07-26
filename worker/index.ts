@@ -92,6 +92,8 @@ import {
   handleConfirmBatch,
   handleGetTransactions,
   handleCreateTransaction,
+  handleVoidTransaction,
+  handleReverseTransaction,
   handleCreateExpense,
   handleGetBudgets,
   handleCreateBudget,
@@ -405,6 +407,12 @@ app.post("/api/finance/batches/:id/confirm", (c) =>
 
 app.get("/api/finance/transactions", (c) => handleGetTransactions(c.req.raw, c.env, getAuth(c)));
 app.post("/api/finance/transactions", (c) => handleCreateTransaction(c.req.raw, c.env, getAuth(c)));
+app.post("/api/finance/transactions/:id/void", (c) =>
+  handleVoidTransaction(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
+);
+app.post("/api/finance/transactions/:id/reverse", (c) =>
+  handleReverseTransaction(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
+);
 app.post("/api/finance/expenses", (c) => handleCreateExpense(c.req.raw, c.env, getAuth(c)));
 
 app.get("/api/finance/budgets", (c) => handleGetBudgets(c.req.raw, c.env, getAuth(c)));

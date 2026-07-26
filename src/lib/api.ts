@@ -601,6 +601,13 @@ export const financeApi = {
     categoryId?: number;
     budgetRef?: number;
   }) => api.post<{ id: number }>("/finance/expenses", data),
+  voidTransaction: (id: number) =>
+    api.post<{ id: number; voided: boolean }>(`/finance/transactions/${id}/void`),
+  reverseTransaction: (id: number, description?: string) =>
+    api.post<{ id: number; originalId: number; amount: number; reversed: boolean }>(
+      `/finance/transactions/${id}/reverse`,
+      { description }
+    ),
 
   getBudgets: (params?: { church_id?: number; fiscal_year?: number }) => {
     const qs = new URLSearchParams();

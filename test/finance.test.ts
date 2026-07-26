@@ -27,6 +27,9 @@ describe("finance API", () => {
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token TEXT;");
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token_expires TEXT;");
     await env.DB.exec("ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1;");
+    await env.DB.exec(
+      "ALTER TABLE transactions ADD COLUMN corrects_transaction_id INTEGER REFERENCES transactions(id)"
+    );
 
     const sr = await SELF.fetch("http://localhost/api/auth/signup", {
       method: "POST",
@@ -355,5 +358,84 @@ describe("finance API", () => {
 
     const r2 = await SELF.fetch("http://localhost/api/finance/batches/99999", { headers: h() });
     expect(r2.status).toBe(404);
+  });
+
+  it("void unconfirmed transaction", async () => {
+    const bh = jh();
+    const bRes = await SELF.fetch("http://localhost/api/finance/batches", {
+      method: "POST",
+      headers: bh,
+      body: JSON.stringify({ churchId, sabbathDate: "2025-01-04" }),
+    });
+    const batch = (await bRes.json()) as { id: number };
+
+    const tRes = await SELF.fetch("http://localhost/api/finance/transactions", {
+      method: "POST",
+      headers: bh,
+      body: JSON.stringify({ churchId, fundId: titheFundId, amount: 50, batchId: batch.id }),
+    });
+    const txn = (await tRes.json()) as { id: number };
+
+    const voidRes = await SELF.fetch(`http://localhost/api/finance/transactions/${txn.id}/void`, {
+      method: "POST",
+      headers: bh,
+    });
+    expect(voidRes.status).toBe(200);
+    const voidBody = (await voidRes.json()) as { voided: boolean };
+    expect(voidBody.voided).toBe(true);
+
+    const voidAgain = await SELF.fetch(`http://localhost/api/finance/transactions/${txn.id}/void`, {
+      method: "POST",
+      headers: bh,
+    });
+    expect(voidAgain.status).toBe(400);
+  });
+
+  it("reverse confirmed transaction", async () => {
+    const bh = jh();
+    const bRes = await SELF.fetch("http://localhost/api/finance/batches", {
+      method: "POST",
+      headers: bh,
+      body: JSON.stringify({ churchId, sabbathDate: "2025-01-11" }),
+    });
+    const batch = (await bRes.json()) as { id: number };
+
+    const tRes = await SELF.fetch("http://localhost/api/finance/transactions", {
+      method: "POST",
+      headers: bh,
+      body: JSON.stringify({ churchId, fundId: titheFundId, amount: 100, batchId: batch.id }),
+    });
+    const txn = (await tRes.json()) as { id: number };
+
+    const reverseRes = await SELF.fetch(
+      `http://localhost/api/finance/transactions/${txn.id}/reverse`,
+      { method: "POST", headers: bh }
+    );
+    expect(reverseRes.status).toBe(400);
+
+    // Confirm batch, then confirm transaction
+    await SELF.fetch(`http://localhost/api/finance/batches/${batch.id}/confirm`, {
+      method: "POST",
+      headers: bh,
+    });
+    await env.DB.prepare(
+      "UPDATE transactions SET confirmed_by = 1, confirmed_at = datetime('now') WHERE id = ?"
+    )
+      .bind(txn.id)
+      .run();
+
+    const reverseRes2 = await SELF.fetch(
+      `http://localhost/api/finance/transactions/${txn.id}/reverse`,
+      { method: "POST", headers: bh, body: JSON.stringify({ description: "Test reversal" }) }
+    );
+    expect(reverseRes2.status).toBe(201);
+    const reversal = (await reverseRes2.json()) as {
+      reversed: boolean;
+      amount: number;
+      originalId: number;
+    };
+    expect(reversal.reversed).toBe(true);
+    expect(reversal.amount).toBe(-100);
+    expect(reversal.originalId).toBe(txn.id);
   });
 });

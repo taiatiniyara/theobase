@@ -705,6 +705,129 @@ export async function handleCreateTransaction(
   return json({ id: result.id, ...body, type: "income", uuid: txnUuid }, 201);
 }
 
+export async function handleVoidTransaction(
+  _request: Request,
+  env: Env,
+  auth: AuthContext,
+  transactionId: number
+): Promise<Response> {
+  const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
+  if (forbidden) return forbidden;
+
+  const txn = await env.DB.prepare(
+    "SELECT id, confirmed_by, type, amount, church_id, batch_id FROM transactions WHERE id = ?"
+  )
+    .bind(transactionId)
+    .first<{
+      id: number;
+      confirmed_by: number | null;
+      type: string;
+      amount: number;
+      church_id: number;
+      batch_id: number | null;
+    }>();
+  if (!txn) return json({ error: "Transaction not found" }, 404);
+
+  if (txn.confirmed_by !== null) {
+    return json({ error: "Cannot void a confirmed transaction — use reversal instead" }, 400);
+  }
+
+  await env.DB.prepare(
+    "UPDATE transactions SET confirmed_by = NULL, confirmed_at = NULL, batch_id = NULL WHERE id = ?"
+  )
+    .bind(transactionId)
+    .run();
+
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "void",
+    entity_type: "transaction",
+    entity_id: transactionId,
+    prev_state: JSON.stringify({ confirmed_by: txn.confirmed_by, batch_id: txn.batch_id }),
+    new_state: JSON.stringify({ voided: true, batch_id: null }),
+    module: "finance",
+    device_info: getDeviceInfo(_request),
+  });
+
+  return json({ id: transactionId, voided: true });
+}
+
+export async function handleReverseTransaction(
+  request: Request,
+  env: Env,
+  auth: AuthContext,
+  transactionId: number
+): Promise<Response> {
+  const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
+  if (forbidden) return forbidden;
+
+  const original = await env.DB.prepare(
+    "SELECT id, church_id, fund_id, type, amount, confirmed_by FROM transactions WHERE id = ?"
+  )
+    .bind(transactionId)
+    .first<{
+      id: number;
+      church_id: number;
+      fund_id: number;
+      type: string;
+      amount: number;
+      confirmed_by: number | null;
+    }>();
+  if (!original) return json({ error: "Transaction not found" }, 404);
+
+  if (original.confirmed_by === null) {
+    return json({ error: "Cannot reverse an unconfirmed transaction — use void instead" }, 400);
+  }
+
+  let body: { description?: string };
+  try {
+    body = await request.json();
+  } catch {
+    body = {};
+  }
+  const reversalAmount = -Math.abs(original.amount);
+  const uuid = crypto.randomUUID();
+
+  const result = await env.DB.prepare(
+    `INSERT INTO transactions (church_id, fund_id, type, amount, description, created_by, uuid, confirmed_by, confirmed_at, corrects_transaction_id)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), ?) RETURNING id`
+  )
+    .bind(
+      original.church_id,
+      original.fund_id,
+      original.type,
+      reversalAmount,
+      body.description ?? `Reversal of transaction #${transactionId}`,
+      Number(auth.userId),
+      uuid,
+      Number(auth.userId),
+      transactionId
+    )
+    .first<{ id: number }>();
+
+  if (!result) return json({ error: "Failed to create reversal" }, 500);
+
+  await logAudit(env, {
+    actor_id: Number(auth.userId),
+    action: "reverse",
+    entity_type: "transaction",
+    entity_id: result.id,
+    prev_state: null,
+    new_state: JSON.stringify({
+      originalId: transactionId,
+      reversalId: result.id,
+      amount: reversalAmount,
+    }),
+    module: "finance",
+    device_info: getDeviceInfo(request),
+  });
+
+  return json(
+    { id: result.id, originalId: transactionId, amount: reversalAmount, reversed: true },
+    201
+  );
+}
+
 export async function handleCreateExpense(
   request: Request,
   env: Env,
