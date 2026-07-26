@@ -541,7 +541,7 @@ app.get("/api/conferences/:id/provisioning-status", authMiddleware, async (c) =>
   return json(status);
 });
 
-app.all("/*", async (c) => {
+app.get("/*", async (c) => {
   if (c.req.path.startsWith("/api/")) return c.notFound();
   if (!c.env.ASSETS) return c.notFound();
   const res = await c.env.ASSETS.fetch(c.req.raw);
