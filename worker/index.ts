@@ -2,7 +2,14 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { ChurchSyncDO } from "./durables/ChurchSyncDO";
 import { ConferenceDO } from "./durables/ConferenceDO";
-import { checkRateLimitAsync, AUTH_LIMIT, READ_LIMIT, WRITE_LIMIT } from "./lib/rate-limit";
+import {
+  checkRateLimitAsync,
+  AUTH_LIMIT,
+  READ_LIMIT,
+  WRITE_LIMIT,
+  SYNC_READ_LIMIT,
+  SYNC_WRITE_LIMIT,
+} from "./lib/rate-limit";
 import { json } from "./lib/response";
 import { auth, type AuthContext } from "./lib/middleware";
 import { csp } from "./lib/csp";
@@ -202,8 +209,12 @@ const writeLimitM = rateLimit("api:write", WRITE_LIMIT);
 
 app.use(
   "/api/*",
-  async (c: { req: { raw: Request; method: string }; env: Env }, next: () => Promise<void>) => {
+  async (
+    c: { req: { raw: Request; method: string; path: string }; env: Env },
+    next: () => Promise<void>
+  ) => {
     if (c.env.DISABLE_API_RATE_LIMIT === "true") return next();
+    if (c.req.path.startsWith("/api/sync")) return next();
     if (c.req.method === "GET") return readLimitM(c, next);
     if (["POST", "PATCH", "DELETE"].includes(c.req.method)) return writeLimitM(c, next);
     await next();
@@ -437,7 +448,10 @@ app.get("/api/contributions/:id", (c) =>
   handleGetContributionStatement(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
-app.get("/api/sync/state", async (c) => {
+const syncReadM = rateLimit("sync:read", SYNC_READ_LIMIT);
+const syncWriteM = rateLimit("sync:write", SYNC_WRITE_LIMIT);
+
+app.get("/api/sync/state", syncReadM, async (c) => {
   if (!c.env.CHURCH_SYNC_DO) return c.notFound();
   const churchParam = c.req.query("church_id") || "default";
   const doId = c.env.CHURCH_SYNC_DO.idFromName(churchParam);
@@ -446,7 +460,7 @@ app.get("/api/sync/state", async (c) => {
   return json(state);
 });
 
-app.post("/api/sync/register", async (c) => {
+app.post("/api/sync/register", syncWriteM, async (c) => {
   if (!c.env.CHURCH_SYNC_DO) return c.notFound();
   const churchParam = c.req.query("church_id") || "default";
   const body = await c.req.json<{

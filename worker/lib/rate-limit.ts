@@ -6,6 +6,8 @@ interface RateLimitConfig {
 export const AUTH_LIMIT: RateLimitConfig = { maxRequests: 5, windowMs: 60_000 };
 export const READ_LIMIT: RateLimitConfig = { maxRequests: 300, windowMs: 60_000 };
 export const WRITE_LIMIT: RateLimitConfig = { maxRequests: 100, windowMs: 60_000 };
+export const SYNC_READ_LIMIT: RateLimitConfig = { maxRequests: 300, windowMs: 60_000 };
+export const SYNC_WRITE_LIMIT: RateLimitConfig = { maxRequests: 60, windowMs: 60_000 };
 
 export async function checkRateLimitAsync(
   request: Request,
