@@ -39,6 +39,13 @@ export class ConferenceRepo {
     return this.db.select().from(conferences).where(eq(conferences.code, code)).get();
   }
 
+  async count(): Promise<number> {
+    const result = await this.db.get<{ count: number }>(
+      sql`SELECT COUNT(*) as count FROM conferences`
+    );
+    return result?.count ?? 0;
+  }
+
   async update(
     id: number,
     data: {
@@ -206,6 +213,20 @@ export class ChurchRepo {
         )
       )
       .get();
+  }
+
+  async count(): Promise<number> {
+    const result = await this.db.get<{ count: number }>(
+      sql`SELECT COUNT(*) as count FROM churches`
+    );
+    return result?.count ?? 0;
+  }
+
+  async countByDistrict(districtId: number): Promise<number> {
+    const result = await this.db.get<{ count: number }>(
+      sql`SELECT COUNT(*) as count FROM churches WHERE district_id = ${districtId}`
+    );
+    return result?.count ?? 0;
   }
 
   async update(

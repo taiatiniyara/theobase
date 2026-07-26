@@ -1,6 +1,9 @@
 import { authorize, type AuthContext } from "../lib/middleware";
 import { PERMISSIONS } from "../lib/roles";
 import { json } from "../lib/response";
+import { createDb } from "../lib/db";
+import { UserRepo } from "../repos/users";
+import { ConferenceRepo, DistrictRepo, ChurchRepo } from "../repos/org";
 
 export async function handleConferenceDashboard(
   request: Request,
@@ -13,12 +16,10 @@ export async function handleConferenceDashboard(
   const url = new URL(request.url);
   const districtId = url.searchParams.get("district_id");
 
-  const user = await env.DB.prepare("SELECT conference_id FROM users WHERE id = ?")
-    .bind(Number(auth.userId))
-    .first<{ conference_id: number }>();
-  if (!user?.conference_id) return json({ error: "No conference" }, 400);
-
-  const confId = user.conference_id;
+  const userRepo = new UserRepo(createDb(env));
+  const user = await userRepo.findById(Number(auth.userId));
+  if (!user?.conferenceId) return json({ error: "No conference" }, 400);
+  const confId = user.conferenceId;
 
   const now = new Date();
   const y = now.getFullYear();
@@ -92,11 +93,11 @@ export async function handleConferenceDashboard(
     .bind(periodStart, yearStart, confId)
     .all();
 
-  const districtsResult = await env.DB.prepare(
-    `SELECT id, name FROM districts WHERE conference_id = ? ORDER BY name`
-  )
-    .bind(confId)
-    .all();
+  const districtRepo = new DistrictRepo(createDb(env));
+  const districts = await districtRepo.findAll(confId);
+  const districtsResult = {
+    results: districts.map((d) => ({ id: d.id, name: d.name })),
+  };
 
   return json({
     summary: {
@@ -126,15 +127,14 @@ export async function handleDistrictDashboard(
   const forbidden = authorize(auth, PERMISSIONS["org:read"]!);
   if (forbidden) return forbidden;
 
-  const user = await env.DB.prepare("SELECT id, conference_id FROM users WHERE id = ?")
-    .bind(Number(auth.userId))
-    .first<{ id: number; conference_id: number }>();
-  if (!user?.conference_id) return json({ error: "No conference" }, 400);
+  const userRepo = new UserRepo(createDb(env));
+  const user = await userRepo.findById(Number(auth.userId));
+  if (!user?.conferenceId) return json({ error: "No conference" }, 400);
 
   const districtRow = await env.DB.prepare(
     `SELECT id, name FROM districts WHERE pastor_user_id = ? AND conference_id = ?`
   )
-    .bind(user.id, user.conference_id)
+    .bind(user.id, user.conferenceId)
     .first<{ id: number; name: string }>();
 
   if (!districtRow) {
@@ -178,11 +178,8 @@ export async function handleDistrictDashboard(
     .bind(districtId, yearStart)
     .first<{ total: number }>();
 
-  const churchCountResult = await env.DB.prepare(
-    `SELECT COUNT(*) as total FROM churches WHERE district_id = ?`
-  )
-    .bind(districtId)
-    .first<{ total: number }>();
+  const churchRepo = new ChurchRepo(createDb(env));
+  const districtChurchCount = await churchRepo.countByDistrict(districtId);
 
   const churchesResult = await env.DB.prepare(
     `SELECT
@@ -207,7 +204,7 @@ export async function handleDistrictDashboard(
       titheForwardedThisMonth: titheResult?.total ?? 0,
       totalMembership: membershipResult?.total ?? 0,
       baptismsThisYear: baptismsResult?.total ?? 0,
-      churchCount: churchCountResult?.total ?? 0,
+      churchCount: districtChurchCount,
     },
     churches: (churchesResult.results as Record<string, unknown>[]).map((r) => ({
       id: r.id as number,
@@ -256,13 +253,10 @@ export async function handleGlobalDashboard(
     .bind(yearStart)
     .first<{ total: number }>();
 
-  const churchCountResult = await env.DB.prepare(`SELECT COUNT(*) as total FROM churches`).first<{
-    total: number;
-  }>();
-
-  const conferenceCountResult = await env.DB.prepare(
-    `SELECT COUNT(*) as total FROM conferences`
-  ).first<{ total: number }>();
+  const globalChurchRepo = new ChurchRepo(createDb(env));
+  const globalChurchCount = await globalChurchRepo.count();
+  const globalConfRepo = new ConferenceRepo(createDb(env));
+  const globalConferenceCount = await globalConfRepo.count();
 
   const monthlyTrendResult = await env.DB.prepare(
     `SELECT
@@ -284,8 +278,8 @@ export async function handleGlobalDashboard(
       titheForwardedThisMonth: titheResult?.total ?? 0,
       totalMembership: membershipResult?.total ?? 0,
       baptismsThisYear: baptismsResult?.total ?? 0,
-      churchCount: churchCountResult?.total ?? 0,
-      conferenceCount: conferenceCountResult?.total ?? 0,
+      churchCount: globalChurchCount,
+      conferenceCount: globalConferenceCount,
     },
     monthlyTrend: (monthlyTrendResult.results as { month: string; total: number }[]).map((r) => ({
       month: r.month,
