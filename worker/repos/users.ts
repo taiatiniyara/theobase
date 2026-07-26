@@ -1,6 +1,6 @@
 import { eq, and, sql } from "drizzle-orm";
 import type { Db } from "../lib/db";
-import { users } from "../schema";
+import { users, members } from "../schema";
 
 export type UserRow = typeof users.$inferSelect;
 
@@ -37,14 +37,18 @@ export class UserRepo {
     memberId?: number | null;
     emailVerified?: number;
   }): Promise<UserRow> {
-    const verified = data.emailVerified ?? 0;
-    const result = await this.db.get<UserRow>(
-      sql`INSERT INTO users (email, password_hash, role, conference_id, member_id, email_verified)
-        VALUES (${data.email}, ${data.passwordHash}, ${data.role},
-          ${data.conferenceId ?? null}, ${data.memberId ?? null}, ${verified})
-        RETURNING *`
-    );
-    return result!;
+    return this.db
+      .insert(users)
+      .values({
+        email: data.email,
+        passwordHash: data.passwordHash,
+        role: data.role,
+        conferenceId: data.conferenceId ?? null,
+        memberId: data.memberId ?? null,
+        emailVerified: data.emailVerified ?? 0,
+      })
+      .returning()
+      .get();
   }
 
   async findById(id: number): Promise<UserRow | undefined> {
@@ -105,10 +109,12 @@ export class UserRepo {
 
     let churchId: number | null = null;
     if (user.memberId) {
-      const member = await this.db.get<{ church_id: number | null }>(
-        sql`SELECT church_id FROM members WHERE id = ${user.memberId}`
-      );
-      churchId = member?.church_id ?? null;
+      const member = await this.db
+        .select({ churchId: members.churchId })
+        .from(members)
+        .where(eq(members.id, user.memberId))
+        .get();
+      churchId = member?.churchId ?? null;
     }
 
     return {

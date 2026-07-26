@@ -1,6 +1,6 @@
 import { eq, and, like, sql } from "drizzle-orm";
 import type { Db } from "../lib/db";
-import { members } from "../schema";
+import { members, users } from "../schema";
 
 export interface MemberFilters {
   churchId?: number;
@@ -69,11 +69,13 @@ export class MemberRepo {
   }
 
   async findByUserId(userId: number): Promise<MemberRow | undefined> {
-    const user = await this.db.get<{ member_id: number | null }>(
-      sql`SELECT member_id FROM users WHERE id = ${userId}`
-    );
-    if (!user || !user.member_id) return undefined;
-    return this.findById(user.member_id);
+    const user = await this.db
+      .select({ memberId: users.memberId })
+      .from(users)
+      .where(eq(users.id, userId))
+      .get();
+    if (!user || !user.memberId) return undefined;
+    return this.findById(user.memberId);
   }
 
   async findAll(filters: MemberFilters = {}): Promise<MemberRow[]> {
@@ -154,25 +156,43 @@ export class MemberRepo {
   }
 
   async setStatus(id: number, status: string, statusDate?: string): Promise<void> {
-    await this.db.run(
-      sql`UPDATE members SET status = ${status}, status_date = ${statusDate ?? null},
-        updated_at = datetime('now'), version = version + 1 WHERE id = ${id}`
-    );
+    await this.db
+      .update(members)
+      .set({
+        status,
+        statusDate: statusDate ?? null,
+        version: sql`${members.version} + 1`,
+        updatedAt: sql`datetime('now')`,
+      } as never)
+      .where(eq(members.id, id))
+      .run();
   }
 
   async transferTo(id: number, toChurchId: number, fromChurchId: number): Promise<void> {
-    await this.db.run(
-      sql`UPDATE members SET church_id = ${toChurchId},
-        prev_church_id = ${fromChurchId}, status = 'active',
-        status_date = NULL, updated_at = datetime('now'),
-        version = version + 1 WHERE id = ${id}`
-    );
+    await this.db
+      .update(members)
+      .set({
+        churchId: toChurchId,
+        prevChurchId: fromChurchId,
+        status: "active",
+        statusDate: null,
+        version: sql`${members.version} + 1`,
+        updatedAt: sql`datetime('now')`,
+      } as never)
+      .where(eq(members.id, id))
+      .run();
   }
 
   async reactivate(id: number): Promise<void> {
-    await this.db.run(
-      sql`UPDATE members SET status = 'active', status_date = NULL,
-        updated_at = datetime('now'), version = version + 1 WHERE id = ${id}`
-    );
+    await this.db
+      .update(members)
+      .set({
+        status: "active",
+        statusDate: null,
+        version: sql`${members.version} + 1`,
+        updatedAt: sql`datetime('now')`,
+      } as never)
+      .where(eq(members.id, id))
+      .run();
   }
 }
