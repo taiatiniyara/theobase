@@ -9,7 +9,7 @@
     {
       "binding": "DB",
       "database_name": "theobase",
-      "database_id": "theobase-dev",
+      "database_id": "207a2c28-c081-4c33-8541-4fd29a8dcac4",
       "migrations_dir": "migrations",
     },
   ],
