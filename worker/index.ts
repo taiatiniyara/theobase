@@ -7,6 +7,15 @@ import { json } from "./lib/response";
 import { auth, type AuthContext } from "./lib/middleware";
 import { csp } from "./lib/csp";
 import { sentryMiddleware, analyticsMiddleware } from "./lib/monitoring";
+import { billingGuard } from "./lib/billing-guard";
+import { BillingRepo } from "./repos/billing";
+import { createDb } from "./lib/db";
+import {
+  handleCreateCheckout,
+  handleStripeWebhook,
+  handleBillingStatus,
+  handleBillingAdmin,
+} from "./routes/billing";
 import {
   handleAuthSignup,
   handleAuthLogin,
@@ -182,6 +191,8 @@ app.post("/api/auth/verify-email", rateLimit("auth:verify-email"), (c) =>
   handleVerifyEmail(c.req.raw, c.env, undefined as unknown as AuthContext)
 );
 
+app.post("/api/billing/webhook", (c) => handleStripeWebhook(c.req.raw, c.env));
+
 // ========================
 // API rate limiting — tiered: read 100/min, write 30/min
 // ========================
@@ -204,6 +215,7 @@ app.use(
 // ========================
 
 app.use("/api/*", authMiddleware);
+app.use("/api/*", billingGuard());
 
 // ========================
 // PROTECTED routes
@@ -464,6 +476,10 @@ app.get("/api/conference/info", async (c) => {
   return json(info);
 });
 
+app.post("/api/billing/checkout", (c) => handleCreateCheckout(c.req.raw, c.env, getAuth(c)));
+app.get("/api/billing/status", (c) => handleBillingStatus(c.req.raw, c.env, getAuth(c)));
+app.get("/api/billing/admin", (c) => handleBillingAdmin(c.req.raw, c.env, getAuth(c)));
+
 app.get("/api/conferences/:id/provisioning-status", authMiddleware, async (c) => {
   if (!c.env.CONFERENCE_DO) return c.notFound();
   const confId = c.req.param("id");
@@ -474,4 +490,44 @@ app.get("/api/conferences/:id/provisioning-status", authMiddleware, async (c) =>
   return json(status);
 });
 
-export default app;
+export default {
+  fetch: app.fetch,
+  async scheduled(_event: ScheduledEvent, env: Env) {
+    const db = createDb(env);
+    const repo = new BillingRepo(db);
+    const subs = await repo.getAllActiveSubscriptions();
+
+    const now = new Date();
+    const periodStart = `${now.getFullYear()}-${String(now.getMonth()).padStart(2, "0")}-01`;
+    const periodEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+      .toISOString()
+      .split("T")[0]!;
+
+    for (const sub of subs) {
+      const count = await repo.countChurches(sub.conference_id);
+      await repo.updateSubscription(sub.conference_id, { churchCount: count });
+      await repo.createInvoice(sub.conference_id, count, periodStart, periodEnd);
+
+      if (sub.status === "active" && env.STRIPE_SECRET_KEY) {
+        try {
+          const Stripe = (await import("stripe")).default;
+          const stripe = new Stripe(env.STRIPE_SECRET_KEY);
+          if (sub.stripe_subscription_id) {
+            await stripe.subscriptionItems.list({
+              subscription: sub.stripe_subscription_id,
+            });
+          }
+        } catch {
+          // Stripe call failure is non-fatal for cron
+        }
+      }
+
+      if (sub.status === "trialing") {
+        const trialEnds = new Date(sub.trial_ends_at);
+        if (now > trialEnds) {
+          await repo.updateSubscription(sub.conference_id, { status: "past_due" });
+        }
+      }
+    }
+  },
+};

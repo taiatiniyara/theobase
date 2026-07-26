@@ -11,6 +11,9 @@ interface Env {
   CF_API_TOKEN?: string;
   CF_ACCOUNT_ID?: string;
   ANALYTICS?: AnalyticsEngineDataset;
+  STRIPE_SECRET_KEY?: string;
+  STRIPE_WEBHOOK_SECRET?: string;
+  STRIPE_PRICE_ID?: string;
   EMAIL?: SendEmail;
   ASSETS?: { fetch: (request: Request) => Promise<Response> };
 }
