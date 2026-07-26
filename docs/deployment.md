@@ -111,20 +111,89 @@ npm run build
 
 Deploy the `dist/` directory to Cloudflare Pages, or configure the Worker's `ASSETS` binding to serve it.
 
-## 8. Production checklist
+## 8. Staging environment
+
+Theobase supports a staging environment for pre-production verification.
+
+### Create staging D1
+
+```bash
+wrangler d1 create theobase-staging
+```
+
+Note the database ID and replace `"theobase-staging"` in `wrangler.jsonc` under `env.staging.d1_databases[0].database_id`.
+
+### Run staging migrations
+
+```bash
+for f in migrations/*.sql; do
+  wrangler d1 execute theobase-staging --env staging --file="$f"
+done
+```
+
+### Set staging secrets
+
+```bash
+wrangler secret put JWT_SECRET --env staging
+wrangler secret put ALLOWED_ORIGINS --env staging
+```
+
+### Deploy to staging
+
+```bash
+wrangler deploy --env staging
+```
+
+Staging deploys automatically from CI on push to `main`. Verify at `https://staging.theobase.app`.
+
+## 9. Production deploy pipeline
+
+Production deploys are gated behind manual approval via GitHub Environments.
+
+### Setup
+
+1. In your GitHub repo, go to **Settings** > **Environments**.
+2. Create an environment named `production`.
+3. Add required reviewers (your team).
+4. Optionally add a wait timer or deployment branch restriction.
+
+### Flow
+
+1. Merge PR to `main`.
+2. CI runs checks, tests, coverage, E2E.
+3. CI deploys to staging automatically.
+4. CI creates a production deployment — reviewers are notified.
+5. A reviewer approves the deployment.
+6. CI runs `wrangler deploy --env production`.
+
+### Manual production deploy
+
+To deploy directly (bypassing CI):
+
+```bash
+wrangler deploy --env production
+```
+
+## 10. Production checklist
 
 - [ ] Custom domain configured and serving traffic
 - [ ] D1 database created and all migrations run
-- [ ] `JWT_SECRET` set via `wrangler secret put`
+- [ ] Staging D1 created and migrations run
+- [ ] `JWT_SECRET` set via `wrangler secret put` (production and staging)
 - [ ] `ALLOWED_ORIGINS` set to production domain(s)
+- [ ] `SENTRY_DSN` set for error monitoring
+- [ ] Analytics Engine dataset created and binding configured
 - [ ] Email binding configured and SPF/DKIM/DMARC records applied
 - [ ] Durable Object migration tagged and deployed
 - [ ] Worker deployed (`wrangler deploy`)
 - [ ] Health endpoint returns 200
 - [ ] Frontend built and deployed
+- [ ] Staging verified: sign up, create Conference, check provisioning
+- [ ] Production GitHub Environment configured with required reviewers
 - [ ] Smoke test: sign up, verify email, log in, create a church, record attendance
-- [ ] Observability dashboard checked in Cloudflare Workers dashboard
+- [ ] Observability dashboard checked (Cloudflare Workers + Sentry + Analytics)
 - [ ] Rate limiting verified (no 429s under normal use)
+- [ ] DR restore procedure tested (tabletop exercise complete)
 
 ## Rollback
 

@@ -40,4 +40,17 @@
       "dataset": "theobase-metrics",
     },
   ],
+  "env": {
+    "staging": {
+      "name": "theobase-staging",
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "theobase-staging",
+          "database_id": "theobase-staging",
+          "migrations_dir": "migrations",
+        },
+      ],
+    },
+  },
 }
