@@ -35,7 +35,7 @@ export default function ReportsPage() {
         Combined membership + finance report for church business meetings.
       </p>
 
-      <div className="mt-4 flex flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4">
+      <div className="mt-4 flex flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4 no-print">
         <div>
           <label className="block text-xs font-medium text-gray-600">Church ID</label>
           <input
@@ -75,12 +75,20 @@ export default function ReportsPage() {
         >
           {loading ? "Generating..." : "Generate Report"}
         </button>
+        {report && (
+          <button
+            onClick={() => window.print()}
+            className="rounded-md border border-gray-300 px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            Print
+          </button>
+        )}
       </div>
 
       {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
 
       {report && (
-        <div className="mt-6 space-y-6">
+        <div className="mt-6 space-y-6 print-area">
           <div className="rounded-lg border border-gray-200 bg-white p-6">
             <div className="border-b border-gray-200 pb-4 text-center">
               <h3 className="text-lg font-bold text-gray-900">Quarterly Business Meeting Report</h3>

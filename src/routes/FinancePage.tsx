@@ -1232,7 +1232,7 @@ function ReportsTab({
 
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-end gap-3">
+      <div className="mb-4 flex flex-wrap items-end gap-3 no-print">
         <div>
           <label className="block text-sm font-medium text-gray-700">Church ID</label>
           <input
@@ -1272,10 +1272,18 @@ function ReportsTab({
         >
           {loading ? "Loading..." : "Generate Report"}
         </button>
+        {report && (
+          <button
+            onClick={() => window.print()}
+            className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+          >
+            Print
+          </button>
+        )}
       </div>
 
       {report && (
-        <div className="rounded-lg bg-white p-6 shadow">
+        <div className="rounded-lg bg-white p-6 shadow print-area">
           <h3 className="text-lg font-semibold text-gray-900">
             Monthly Treasurer Report —{" "}
             {new Date(report.period.year, report.period.month - 1).toLocaleString("default", {
