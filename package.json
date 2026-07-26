@@ -16,6 +16,7 @@
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "e2e": "playwright test --config e2e/playwright.config.ts",
+    "loadtest": "node load/globalload.js",
     "prepare": "husky"
   },
   "dependencies": {
