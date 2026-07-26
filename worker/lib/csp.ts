@@ -7,7 +7,7 @@ export function csp() {
     next: () => Promise<void>
   ): Promise<void> => {
     const headerName =
-      c.env.CSP_REPORT_ONLY !== "false"
+      c.env.CSP_REPORT_ONLY === "true"
         ? "Content-Security-Policy-Report-Only"
         : "Content-Security-Policy";
     c.header(headerName, POLICY);

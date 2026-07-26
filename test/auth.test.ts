@@ -521,9 +521,9 @@ describe("cors", () => {
 });
 
 describe("csp", () => {
-  it("returns CSP report-only header by default", async () => {
+  it("returns CSP enforce header by default", async () => {
     const res = await SELF.fetch("http://localhost/api/health");
-    const header = res.headers.get("Content-Security-Policy-Report-Only");
+    const header = res.headers.get("Content-Security-Policy");
     expect(header).toBeTruthy();
     expect(header).toContain("default-src 'self'");
     expect(header).toContain("script-src 'self'");
@@ -531,8 +531,8 @@ describe("csp", () => {
     expect(header).toContain("connect-src 'self' https://theobase.app");
   });
 
-  it("does not return enforce header by default", async () => {
+  it("does not return report-only header by default", async () => {
     const res = await SELF.fetch("http://localhost/api/health");
-    expect(res.headers.get("Content-Security-Policy")).toBeNull();
+    expect(res.headers.get("Content-Security-Policy-Report-Only")).toBeNull();
   });
 });
