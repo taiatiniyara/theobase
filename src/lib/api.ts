@@ -969,6 +969,15 @@ export const memberDashboardApi = {
   get: (memberId: number) => api.get<MemberDashboard>(`/members/${memberId}/dashboard`),
 };
 
+export const settingsApi = {
+  getChurch: () => api.get<Record<string, unknown>>("/settings/church"),
+  updateChurch: (data: Record<string, unknown>) => api.patch("/settings/church", data),
+  getUser: () => api.get<Record<string, unknown>>("/settings/user"),
+  updateUser: (data: Record<string, unknown>) => api.patch("/settings/user", data),
+  getConference: () => api.get<Record<string, unknown>>("/settings/conference"),
+  updateConference: (data: Record<string, unknown>) => api.patch("/settings/conference", data),
+};
+
 export const declarationApi = {
   list: (churchId: number, verified?: boolean) => {
     const qs = verified !== undefined ? `?verified=${verified}` : "";

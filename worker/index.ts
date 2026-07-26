@@ -124,6 +124,14 @@ import {
   handleGetAttendanceStats,
 } from "./routes/attendance";
 import { handleGetContributions, handleGetContributionStatement } from "./routes/contributions";
+import {
+  handleGetChurchSettings,
+  handleUpdateChurchSettings,
+  handleGetUserSettings,
+  handleUpdateUserSettings,
+  handleGetConferenceSettings,
+  handleUpdateConferenceSettings,
+} from "./routes/settings";
 
 export { ChurchSyncDO, ConferenceDO };
 
@@ -456,6 +464,17 @@ app.get("/api/conference/global-dashboard", (c) =>
 app.get("/api/contributions", (c) => handleGetContributions(c.req.raw, c.env, getAuth(c)));
 app.get("/api/contributions/:id", (c) =>
   handleGetContributionStatement(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
+);
+
+app.get("/api/settings/church", (c) => handleGetChurchSettings(c.req.raw, c.env, getAuth(c)));
+app.patch("/api/settings/church", (c) => handleUpdateChurchSettings(c.req.raw, c.env, getAuth(c)));
+app.get("/api/settings/user", (c) => handleGetUserSettings(c.req.raw, c.env, getAuth(c)));
+app.patch("/api/settings/user", (c) => handleUpdateUserSettings(c.req.raw, c.env, getAuth(c)));
+app.get("/api/settings/conference", (c) =>
+  handleGetConferenceSettings(c.req.raw, c.env, getAuth(c))
+);
+app.patch("/api/settings/conference", (c) =>
+  handleUpdateConferenceSettings(c.req.raw, c.env, getAuth(c))
 );
 
 const syncReadM = rateLimit("sync:read", SYNC_READ_LIMIT);
