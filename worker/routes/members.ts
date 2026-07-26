@@ -7,6 +7,9 @@ import { MemberRepo } from "../repos/members";
 import { HouseholdRepo } from "../repos/households";
 import { PositionRepo } from "../repos/positions";
 import { TransferRepo } from "../repos/transfers";
+import { ChurchRepo } from "../repos/org";
+import { UserRepo } from "../repos/users";
+import { FundRepo, TransactionRepo } from "../repos/finance";
 import { json } from "../lib/response";
 
 function validateEnum(value: string, allowed: string[], name: string): string | null {
@@ -98,15 +101,10 @@ export async function handleGetMember(
     return json({ error: "Member not found" }, 404);
   }
 
-  // Fetch church and household names via raw queries (these are cross-entity joins)
-  const church = await env.DB.prepare("SELECT name FROM churches WHERE id = ?")
-    .bind(member.churchId)
-    .first<{ name: string }>();
-  const household = member.householdId
-    ? await env.DB.prepare("SELECT name FROM households WHERE id = ?")
-        .bind(member.householdId)
-        .first<{ name: string }>()
-    : null;
+  const churchRepo = new ChurchRepo(createDb(env, auth.conferenceId));
+  const church = await churchRepo.findById(member.churchId);
+  const householdRepo = new HouseholdRepo(createDb(env, auth.conferenceId));
+  const household = member.householdId ? await householdRepo.findById(member.householdId) : null;
 
   const positionRepo = new PositionRepo(createDb(env, auth.conferenceId));
   const positions = await positionRepo.findByMember(memberId);
@@ -164,9 +162,8 @@ export async function handleCreateMember(
     if (err) return json({ error: err }, 400);
   }
 
-  const church = await env.DB.prepare("SELECT id FROM churches WHERE id = ?")
-    .bind(body.churchId)
-    .first();
+  const churchRepo = new ChurchRepo(createDb(env, auth.conferenceId));
+  const church = await churchRepo.findById(body.churchId);
   if (!church) {
     return json({ error: "Church not found" }, 404);
   }
@@ -325,16 +322,15 @@ export async function handleGetHouseholds(
   const households = await householdRepo.findByChurch(churchId);
 
   // Enrich with head member name and count
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
   const enriched = await Promise.all(
     households.map(async (h) => {
       const base = toHouseholdResponse(h);
       let headName: string | null = null;
       let memberCount = 0;
       if (h.headMemberId) {
-        const m = await env.DB.prepare("SELECT full_name FROM members WHERE id = ?")
-          .bind(h.headMemberId)
-          .first<{ full_name: string }>();
-        headName = m?.full_name ?? null;
+        const m = await memberRepo.findById(h.headMemberId);
+        headName = m?.fullName ?? null;
       }
       const count = await env.DB.prepare("SELECT COUNT(*) as c FROM members WHERE household_id = ?")
         .bind(h.id)
@@ -622,20 +618,15 @@ export async function handleGetTransfers(
   });
 
   // Enrich with names (cross-entity data)
+  const churchRepo = new ChurchRepo(createDb(env, auth.conferenceId));
   const enriched = await Promise.all(
     transfers.map(async (tr) => {
-      const member = await env.DB.prepare("SELECT full_name FROM members WHERE id = ?")
-        .bind(tr.memberId)
-        .first<{ full_name: string }>();
-      const fc = await env.DB.prepare("SELECT name FROM churches WHERE id = ?")
-        .bind(tr.fromChurchId)
-        .first<{ name: string }>();
-      const tc = await env.DB.prepare("SELECT name FROM churches WHERE id = ?")
-        .bind(tr.toChurchId)
-        .first<{ name: string }>();
+      const member = await memberRepo.findById(tr.memberId);
+      const fc = await churchRepo.findById(tr.fromChurchId);
+      const tc = await churchRepo.findById(tr.toChurchId);
       return {
         ...tr,
-        member_name: member?.full_name ?? null,
+        member_name: member?.fullName ?? null,
         from_church_name: fc?.name ?? null,
         to_church_name: tc?.name ?? null,
       };
@@ -671,9 +662,8 @@ export async function handleInitiateTransfer(
     return json({ error: "Only active members can be transferred" }, 400);
   }
 
-  const toChurch = await env.DB.prepare("SELECT id FROM churches WHERE id = ?")
-    .bind(body.toChurchId)
-    .first();
+  const churchRepo = new ChurchRepo(createDb(env, auth.conferenceId));
+  const toChurch = await churchRepo.findById(body.toChurchId);
   if (!toChurch) return json({ error: "Destination church not found" }, 404);
   if (member.churchId === body.toChurchId) {
     return json({ error: "Cannot transfer to the same church" }, 400);
@@ -710,15 +700,9 @@ export async function handleInitiateTransfer(
   });
 
   // Notify conference officers
-  const fromChurch = await env.DB.prepare("SELECT name FROM churches WHERE id = ?")
-    .bind(member.churchId)
-    .first<{ name: string }>();
-  const toChurchName = await env.DB.prepare("SELECT name FROM churches WHERE id = ?")
-    .bind(body.toChurchId)
-    .first<{ name: string }>();
-  const memberName = await env.DB.prepare("SELECT full_name FROM members WHERE id = ?")
-    .bind(body.memberId)
-    .first<{ full_name: string }>();
+  const fromChurch = await churchRepo.findById(member.churchId);
+  const toChurchName = await churchRepo.findById(body.toChurchId);
+  const memberName = await memberRepo.findById(body.memberId);
 
   const confUsers = await env.DB.prepare(
     `SELECT u.id FROM users u
@@ -735,7 +719,7 @@ export async function handleInitiateTransfer(
       "transfer_initiated",
       "transfer",
       result.id,
-      `Transfer requested: ${memberName?.full_name ?? "Member"} from ${fromChurch?.name ?? "source"} to ${toChurchName?.name ?? "destination"}`
+      `Transfer requested: ${memberName?.fullName ?? "Member"} from ${fromChurch?.name ?? "source"} to ${toChurchName?.name ?? "destination"}`
     );
   }
 
@@ -952,9 +936,8 @@ export async function handleOverrideTransfer(
   auth: AuthContext,
   transferId: number
 ): Promise<Response> {
-  const user = await env.DB.prepare("SELECT role, conference_id FROM users WHERE id = ?")
-    .bind(Number(auth.userId))
-    .first<{ role: string; conference_id: number | null }>();
+  const userRepo = new UserRepo(createDb(env, auth.conferenceId));
+  const user = await userRepo.findById(Number(auth.userId));
   if (!user || !["secretary", "president"].includes(user.role)) {
     return json({ error: "Only Conference Secretary or President can override transfers" }, 403);
   }
@@ -1024,15 +1007,14 @@ export async function handleGetSelfMember(
   auth: AuthContext,
   churchId: number
 ): Promise<Response> {
-  const user = await env.DB.prepare("SELECT id, member_id FROM users WHERE id = ?")
-    .bind(Number(auth.userId))
-    .first<{ id: number; member_id: number | null }>();
-  if (!user || !user.member_id) {
+  const userRepo = new UserRepo(createDb(env, auth.conferenceId));
+  const user = await userRepo.findById(Number(auth.userId));
+  if (!user || !user.memberId) {
     return json({ error: "No member record linked to your account" }, 404);
   }
 
   const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
-  const member = await memberRepo.findByIdAndChurch(user.member_id, churchId);
+  const member = await memberRepo.findByIdAndChurch(user.memberId, churchId);
   if (!member) {
     return json({ error: "Member not found in this church" }, 404);
   }
@@ -1046,10 +1028,9 @@ export async function handleUpdateSelfMember(
   auth: AuthContext,
   churchId: number
 ): Promise<Response> {
-  const user = await env.DB.prepare("SELECT id, member_id FROM users WHERE id = ?")
-    .bind(Number(auth.userId))
-    .first<{ id: number; member_id: number | null }>();
-  if (!user || !user.member_id) {
+  const userRepo = new UserRepo(createDb(env, auth.conferenceId));
+  const user = await userRepo.findById(Number(auth.userId));
+  if (!user || !user.memberId) {
     return json({ error: "No member record linked to your account" }, 404);
   }
 
@@ -1071,7 +1052,7 @@ export async function handleUpdateSelfMember(
   }
 
   const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
-  const existing = await memberRepo.findByIdAndChurch(user.member_id, churchId);
+  const existing = await memberRepo.findByIdAndChurch(user.memberId, churchId);
   if (!existing) {
     return json({ error: "Member not found in this church" }, 404);
   }
@@ -1079,7 +1060,7 @@ export async function handleUpdateSelfMember(
     return json({ error: "Conflict: member has been modified. Refresh and try again." }, 409);
   }
 
-  const updated = await memberRepo.update(user.member_id, {
+  const updated = await memberRepo.update(user.memberId, {
     fullName: body.fullName,
     phone: body.phone,
     email: body.email,
@@ -1093,7 +1074,7 @@ export async function handleUpdateSelfMember(
     actor_id: Number(auth.userId),
     action: "update",
     entity_type: "member",
-    entity_id: user.member_id,
+    entity_id: user.memberId,
     prev_state: JSON.stringify(existing),
     new_state: JSON.stringify(body),
     module: "members",
@@ -1149,31 +1130,23 @@ export async function handleMemberGiving(
     }
   }
 
-  const fund = await env.DB.prepare(
-    "SELECT id, name, type, forwarding_rule FROM funds WHERE id = ?"
-  )
-    .bind(body.fundId)
-    .first<{ id: number; name: string; type: string; forwarding_rule: string }>();
+  const fundRepo = new FundRepo(createDb(env, auth.conferenceId));
+  const fund = await fundRepo.findById(body.fundId);
   if (!fund) return json({ error: "Fund not found" }, 404);
 
   const uuid = crypto.randomUUID();
   const effectiveMemberId = body.proxyForMemberId ?? memberId;
-  const result = await env.DB.prepare(
-    `INSERT INTO transactions (church_id, fund_id, type, amount, description, created_by, uuid, member_id, proxy_for_member_id, verified)
-     VALUES (?, ?, 'income', ?, ?, ?, ?, ?, ?, 0) RETURNING id`
-  )
-    .bind(
-      churchId,
-      body.fundId,
-      body.amount,
-      body.description ?? null,
-      Number(auth.userId),
-      uuid,
-      effectiveMemberId,
-      body.proxyForMemberId ? memberId : null
-    )
-    .first<{ id: number }>();
-  if (!result) return json({ error: "Failed to record giving declaration" }, 500);
+  const transactionRepo = new TransactionRepo(createDb(env, auth.conferenceId));
+  const result = await transactionRepo.createIncome({
+    churchId,
+    fundId: body.fundId,
+    amount: body.amount,
+    description: body.description,
+    createdBy: Number(auth.userId),
+    uuid,
+    memberId: effectiveMemberId,
+    proxyForMemberId: body.proxyForMemberId ? memberId : undefined,
+  });
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
@@ -1208,10 +1181,9 @@ export async function handleMemberTransfer(
   churchId: number,
   memberId: number
 ): Promise<Response> {
-  const user = await env.DB.prepare("SELECT id, member_id FROM users WHERE id = ?")
-    .bind(Number(auth.userId))
-    .first<{ id: number; member_id: number | null }>();
-  if (!user || !user.member_id) {
+  const userRepo = new UserRepo(createDb(env, auth.conferenceId));
+  const user = await userRepo.findById(Number(auth.userId));
+  if (!user || !user.memberId) {
     return json({ error: "No member record linked to your account" }, 404);
   }
 
@@ -1236,9 +1208,8 @@ export async function handleMemberTransfer(
     return json({ error: "Only active members can be transferred" }, 400);
   }
 
-  const toChurch = await env.DB.prepare("SELECT id FROM churches WHERE id = ?")
-    .bind(body.toChurchId)
-    .first();
+  const churchRepo = new ChurchRepo(createDb(env, auth.conferenceId));
+  const toChurch = await churchRepo.findById(body.toChurchId);
   if (!toChurch) return json({ error: "Destination church not found" }, 404);
   if (member.churchId === body.toChurchId) {
     return json({ error: "Cannot transfer to the same church" }, 400);
@@ -1276,12 +1247,8 @@ export async function handleMemberTransfer(
   });
 
   // Notifications
-  const fromChurch = await env.DB.prepare("SELECT name FROM churches WHERE id = ?")
-    .bind(member.churchId)
-    .first<{ name: string }>();
-  const toChurchName = await env.DB.prepare("SELECT name FROM churches WHERE id = ?")
-    .bind(body.toChurchId)
-    .first<{ name: string }>();
+  const fromChurch = await churchRepo.findById(member.churchId);
+  const toChurchName = await churchRepo.findById(body.toChurchId);
 
   const confUsers = await env.DB.prepare(
     `SELECT u.id FROM users u
@@ -1353,24 +1320,17 @@ export async function handleVerifyDeclaration(
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
-  const declaration = await env.DB.prepare(
-    `SELECT id, church_id, verified FROM transactions WHERE id = ? AND batch_id IS NULL`
-  )
-    .bind(declarationId)
-    .first<{ id: number; church_id: number; verified: number }>();
+  const transactionRepo = new TransactionRepo(createDb(env, auth.conferenceId));
+  const declaration = await transactionRepo.findDeclarationById(declarationId);
   if (!declaration) return json({ error: "Declaration not found" }, 404);
-  if (declaration.church_id !== churchId) {
+  if (declaration.churchId !== churchId) {
     return json({ error: "Declaration does not belong to this church" }, 403);
   }
   if (declaration.verified === 1) {
     return json({ error: "Declaration is already verified" }, 400);
   }
 
-  await env.DB.prepare(
-    `UPDATE transactions SET verified = 1, verified_by = ?, verified_at = datetime('now') WHERE id = ?`
-  )
-    .bind(Number(auth.userId), declarationId)
-    .run();
+  await transactionRepo.verifyOne(declarationId, Number(auth.userId));
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
@@ -1396,20 +1356,17 @@ export async function handleRejectDeclaration(
   const forbidden = authorize(auth, PERMISSIONS["finance:write"]!);
   if (forbidden) return forbidden;
 
-  const declaration = await env.DB.prepare(
-    `SELECT id, church_id, verified FROM transactions WHERE id = ? AND batch_id IS NULL`
-  )
-    .bind(declarationId)
-    .first<{ id: number; church_id: number; verified: number }>();
+  const transactionRepo = new TransactionRepo(createDb(env, auth.conferenceId));
+  const declaration = await transactionRepo.findDeclarationById(declarationId);
   if (!declaration) return json({ error: "Declaration not found" }, 404);
-  if (declaration.church_id !== churchId) {
+  if (declaration.churchId !== churchId) {
     return json({ error: "Declaration does not belong to this church" }, 403);
   }
   if (declaration.verified === 1) {
     return json({ error: "Declaration is already verified — cannot reject" }, 400);
   }
 
-  await env.DB.prepare("DELETE FROM transactions WHERE id = ?").bind(declarationId).run();
+  await transactionRepo.deleteOne(declarationId);
 
   await logAudit(env, {
     actor_id: Number(auth.userId),
@@ -1431,16 +1388,14 @@ export async function handleMemberDashboard(
   auth: AuthContext,
   memberId: number
 ): Promise<Response> {
-  const member = await env.DB.prepare(`SELECT id, church_id, full_name FROM members WHERE id = ?`)
-    .bind(memberId)
-    .first<{ id: number; church_id: number; full_name: string }>();
+  const memberRepo = new MemberRepo(createDb(env, auth.conferenceId));
+  const member = await memberRepo.findById(memberId);
   if (!member) return json({ error: "Member not found" }, 404);
 
   if (auth.role === "member") {
-    const userRecord = await env.DB.prepare(`SELECT member_id FROM users WHERE id = ?`)
-      .bind(Number(auth.userId))
-      .first<{ member_id: number | null }>();
-    if (!userRecord?.member_id || userRecord.member_id !== memberId) {
+    const userRepo = new UserRepo(createDb(env, auth.conferenceId));
+    const userRecord = await userRepo.findById(Number(auth.userId));
+    if (!userRecord?.memberId || userRecord.memberId !== memberId) {
       return json({ error: "Forbidden" }, 403);
     }
   }
@@ -1500,7 +1455,7 @@ export async function handleMemberDashboard(
 
   return json({
     memberId,
-    memberName: member.full_name,
+    memberName: member.fullName,
     giving: {
       pending: pendingDeclarations.results,
       verified: verifiedDeclarations.results,
