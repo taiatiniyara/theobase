@@ -29,40 +29,47 @@ let passed = 0;
 let failed = 0;
 const failures = [];
 
+function stripAnsi(str) {
+  return str.replace(/\x1b\[[0-9;]*m/g, "");
+}
+
+function passedTest(text) {
+  const clean = stripAnsi(text);
+  return /Tests\s+\d+ passed/i.test(clean) || /All tests passed/i.test(clean);
+}
+function hasFailedTest(text) {
+  return /\d+ failed/i.test(stripAnsi(text));
+}
+
 for (const file of testFiles) {
   process.stdout.write(`${file} ... `);
   try {
     const out = execSync(`npx vitest run --config vitest.config.ts "${file}"`, {
       stdio: "pipe",
       timeout: 180_000,
-      env: { ...process.env, FORCE_COLOR: "0" },
     });
     const text = out.toString();
-    const match = text.match(/Tests\s+\d+ passed\s+\(\d+\)/);
-    if (match) {
+    if (passedTest(text) && !hasFailedTest(text)) {
       console.log("pass");
       passed++;
     } else {
       console.log("FAIL (no test summary found)");
       failed++;
       failures.push(file);
+      console.error(text.slice(-500));
     }
   } catch (e) {
-    const stderr = e.stderr?.toString() ?? "";
-    const stdout = e.stdout?.toString() ?? "";
-    const text = stderr + stdout;
-    const match = text.match(/Tests\s+\d+ passed\s+\(\d+\)/);
-    const failedMatch = text.match(/Tests\s+\d+ failed/);
-    if (match && !failedMatch) {
+    const stderr = (e.stderr || "").toString();
+    const stdout = (e.stdout || "").toString();
+    const text = stdout + stderr;
+    if (passedTest(text) && !hasFailedTest(text)) {
       console.log("pass (cleanup error ignored)");
       passed++;
     } else {
       console.log("FAIL");
       failed++;
       failures.push(file);
-      const lines = text.trim().split("\n");
-      const tail = lines.slice(-10).join("\n");
-      console.error(tail);
+      console.error(stripAnsi(text).split("\n").slice(-15).join("\n"));
     }
   }
 }
