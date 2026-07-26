@@ -129,9 +129,9 @@ export async function handleGetContributionStatement(
   const endDate = `${year}-12-31`;
   params.push(startDate, endDate, donorId);
 
-  const churchResult = await env.DB.prepare("SELECT name FROM churches WHERE id = ?")
-    .bind(Number(churchId))
-    .first<{ name: string }>();
+  const churchRepo = new ChurchRepo(createDb(env));
+  const church = await churchRepo.findById(Number(churchId));
+  const churchName = church?.name ?? "Unknown";
 
   const txResult = await env.DB.prepare(
     `SELECT
@@ -176,7 +176,7 @@ export async function handleGetContributionStatement(
     donorName,
     year: Number(year),
     churchId: Number(churchId),
-    churchName: churchResult?.name || "",
+    churchName,
     transactions: transactions.map((t) => ({
       id: Number(t.id),
       date: String(t.created_at),
