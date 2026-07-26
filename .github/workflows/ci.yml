@@ -26,6 +26,9 @@ jobs:
       - run: npm run typecheck
 
       - run: mkdir -p dist
+      - run: |
+          echo "JWT_SECRET=test-jwt-secret-for-vitest" >> .dev.vars
+          echo "DISABLE_EMAIL_VERIFICATION=true" >> .dev.vars
 
       - run: npm test
 
