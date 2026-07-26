@@ -146,7 +146,7 @@ type HonoEnv = {
 
 const app = new Hono<HonoEnv>();
 
-app.use("*", async (c, next) => {
+app.use("/api/*", async (c, next) => {
   const origins = (c.env.ALLOWED_ORIGINS?.split(",") ?? ["http://localhost:5173"]).map(
     (o: string) => o.trim()
   );
@@ -539,6 +539,15 @@ app.get("/api/conferences/:id/provisioning-status", authMiddleware, async (c) =>
   const status = await stub.getProvisioningStatus();
   if (!status) return json({ error: "No provisioning status" }, 404);
   return json(status);
+});
+
+app.get("/*", async (c) => {
+  if (!c.env.ASSETS) return c.notFound();
+  const res = await c.env.ASSETS.fetch(c.req.raw);
+  if (res.status === 404) {
+    return c.env.ASSETS.fetch(new Request(new URL("/index.html", c.req.url), c.req.raw));
+  }
+  return res;
 });
 
 export default {
