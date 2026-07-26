@@ -1,4 +1,4 @@
-import { eq, and, or, isNotNull, sql } from "drizzle-orm";
+import { eq, and, or, isNotNull, sql, inArray } from "drizzle-orm";
 import type { Db } from "../lib/db";
 import { transferRequests } from "../schema";
 
@@ -47,7 +47,7 @@ export class TransferRepo {
       .where(
         and(
           eq(transferRequests.memberId, memberId),
-          sql`${transferRequests.status} IN ('pending_conference', 'pending_destination')`
+          inArray(transferRequests.status, ["pending_conference", "pending_destination"])
         )
       )
       .get();
@@ -75,26 +75,35 @@ export class TransferRepo {
   }
 
   async approve(transferId: number, approvedBy: number): Promise<void> {
-    await this.db.run(
-      sql`UPDATE transfer_requests SET status = 'pending_destination',
-        conference_approved_by = ${approvedBy},
-        conference_approved_at = datetime('now') WHERE id = ${transferId}`
-    );
+    await this.db
+      .update(transferRequests)
+      .set({
+        status: "pending_destination",
+        conferenceApprovedBy: approvedBy,
+        conferenceApprovedAt: sql`datetime('now')`,
+      } as never)
+      .where(eq(transferRequests.id, transferId))
+      .run();
   }
 
   async accept(transferId: number, acceptedBy: number): Promise<void> {
-    await this.db.run(
-      sql`UPDATE transfer_requests SET status = 'completed',
-        accepted_by = ${acceptedBy},
-        accepted_at = datetime('now') WHERE id = ${transferId}`
-    );
+    await this.db
+      .update(transferRequests)
+      .set({
+        status: "completed",
+        acceptedBy,
+        acceptedAt: sql`datetime('now')`,
+      } as never)
+      .where(eq(transferRequests.id, transferId))
+      .run();
   }
 
   async reject(transferId: number, note?: string): Promise<void> {
-    await this.db.run(
-      sql`UPDATE transfer_requests SET status = 'rejected',
-        rejection_note = ${note ?? null} WHERE id = ${transferId}`
-    );
+    await this.db
+      .update(transferRequests)
+      .set({ status: "rejected", rejectionNote: note ?? null } as never)
+      .where(eq(transferRequests.id, transferId))
+      .run();
   }
 
   async override(
@@ -104,31 +113,48 @@ export class TransferRepo {
     note?: string
   ): Promise<void> {
     if (action === "force_approve") {
-      await this.db.run(
-        sql`UPDATE transfer_requests SET status = 'completed',
-          override_by = ${userId}, override_at = datetime('now'),
-          override_action = 'force_approve', override_note = ${note ?? null},
-          accepted_by = ${userId}, accepted_at = datetime('now')
-          WHERE id = ${transferId}`
-      );
+      await this.db
+        .update(transferRequests)
+        .set({
+          status: "completed",
+          overrideBy: userId,
+          overrideAt: sql`datetime('now')`,
+          overrideAction: "force_approve",
+          overrideNote: note ?? null,
+          acceptedBy: userId,
+          acceptedAt: sql`datetime('now')`,
+        } as never)
+        .where(eq(transferRequests.id, transferId))
+        .run();
     } else {
-      await this.db.run(
-        sql`UPDATE transfer_requests SET status = 'rejected',
-          override_by = ${userId}, override_at = datetime('now'),
-          override_action = 'force_reject', override_note = ${note ?? null}
-          WHERE id = ${transferId}`
-      );
+      await this.db
+        .update(transferRequests)
+        .set({
+          status: "rejected",
+          overrideBy: userId,
+          overrideAt: sql`datetime('now')`,
+          overrideAction: "force_reject",
+          overrideNote: note ?? null,
+        } as never)
+        .where(eq(transferRequests.id, transferId))
+        .run();
     }
   }
 
   async overrideToDestination(transferId: number, userId: number, note?: string): Promise<void> {
-    await this.db.run(
-      sql`UPDATE transfer_requests SET status = 'pending_destination',
-        override_by = ${userId}, override_at = datetime('now'),
-        override_action = 'force_approve', override_note = ${note ?? null},
-        conference_approved_by = ${userId},
-        conference_approved_at = datetime('now') WHERE id = ${transferId}`
-    );
+    await this.db
+      .update(transferRequests)
+      .set({
+        status: "pending_destination",
+        overrideBy: userId,
+        overrideAt: sql`datetime('now')`,
+        overrideAction: "force_approve",
+        overrideNote: note ?? null,
+        conferenceApprovedBy: userId,
+        conferenceApprovedAt: sql`datetime('now')`,
+      } as never)
+      .where(eq(transferRequests.id, transferId))
+      .run();
   }
 
   async expireStale(): Promise<number[]> {
@@ -137,7 +163,7 @@ export class TransferRepo {
       .from(transferRequests)
       .where(
         and(
-          sql`${transferRequests.status} IN ('pending_conference', 'pending_destination')`,
+          inArray(transferRequests.status, ["pending_conference", "pending_destination"]),
           isNotNull(transferRequests.expiresAt)
         )
       )
