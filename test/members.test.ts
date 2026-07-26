@@ -245,4 +245,26 @@ describe("membership API", () => {
     expect((await SELF.fetch("http://localhost/api/households")).status).toBe(401);
     expect((await SELF.fetch("http://localhost/api/positions")).status).toBe(401);
   });
+
+  it("member dashboard returns aggregated data", async () => {
+    memberId = await createMember("Dash User");
+    const res = await SELF.fetch(`http://localhost/api/members/${memberId}/dashboard`, {
+      headers: authHeaders(),
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as {
+      memberId: number;
+      memberName: string;
+      giving: { pending: unknown[]; verified: unknown[] };
+      activeTransfer: unknown;
+      recentAttendance: unknown[];
+      contributionYears: unknown[];
+    };
+    expect(body.memberId).toBe(memberId);
+    expect(body.memberName).toBe("Dash User");
+    expect(body.giving.pending).toBeInstanceOf(Array);
+    expect(body.giving.verified).toBeInstanceOf(Array);
+    expect(body.recentAttendance).toBeInstanceOf(Array);
+    expect(body.contributionYears).toBeInstanceOf(Array);
+  });
 });

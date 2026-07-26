@@ -1424,3 +1424,89 @@ export async function handleRejectDeclaration(
 
   return json({ success: true, id: declarationId, rejected: true });
 }
+
+export async function handleMemberDashboard(
+  _request: Request,
+  env: Env,
+  auth: AuthContext,
+  memberId: number
+): Promise<Response> {
+  const member = await env.DB.prepare(`SELECT id, church_id, full_name FROM members WHERE id = ?`)
+    .bind(memberId)
+    .first<{ id: number; church_id: number; full_name: string }>();
+  if (!member) return json({ error: "Member not found" }, 404);
+
+  if (auth.role === "member") {
+    const userRecord = await env.DB.prepare(`SELECT member_id FROM users WHERE id = ?`)
+      .bind(Number(auth.userId))
+      .first<{ member_id: number | null }>();
+    if (!userRecord?.member_id || userRecord.member_id !== memberId) {
+      return json({ error: "Forbidden" }, 403);
+    }
+  }
+
+  const pendingDeclarations = await env.DB.prepare(
+    `SELECT t.id, t.amount, t.description, t.verified, t.created_at,
+     f.name as fund_name, f.type as fund_type
+     FROM transactions t
+     JOIN funds f ON t.fund_id = f.id
+     WHERE t.member_id = ? AND t.batch_id IS NULL AND t.verified = 0
+     ORDER BY t.created_at DESC`
+  )
+    .bind(memberId)
+    .all();
+
+  const verifiedDeclarations = await env.DB.prepare(
+    `SELECT t.id, t.amount, t.description, t.verified, t.created_at,
+     f.name as fund_name, f.type as fund_type
+     FROM transactions t
+     JOIN funds f ON t.fund_id = f.id
+     WHERE t.member_id = ? AND t.batch_id IS NULL AND t.verified = 1
+     ORDER BY t.created_at DESC LIMIT 10`
+  )
+    .bind(memberId)
+    .all();
+
+  const activeTransfer = await env.DB.prepare(
+    `SELECT tr.id, tr.status, tr.initiated_at,
+     fc.name as from_church_name, tc.name as to_church_name
+     FROM transfer_requests tr
+     JOIN churches fc ON tr.from_church_id = fc.id
+     JOIN churches tc ON tr.to_church_id = tc.id
+     WHERE tr.member_id = ? AND tr.status NOT IN ('completed', 'rejected')
+     ORDER BY tr.initiated_at DESC LIMIT 1`
+  )
+    .bind(memberId)
+    .first();
+
+  const recentAttendance = await env.DB.prepare(
+    `SELECT a.date, a.category, a.count
+     FROM member_attendance ma
+     JOIN attendance a ON ma.attendance_id = a.id
+     WHERE ma.member_id = ?
+     ORDER BY a.date DESC LIMIT 10`
+  )
+    .bind(memberId)
+    .all();
+
+  const contributionYears = await env.DB.prepare(
+    `SELECT DISTINCT CAST(strftime('%Y', t.created_at) AS INTEGER) as year, t.church_id
+     FROM transactions t
+     WHERE t.member_id = ? AND t.confirmed_by IS NOT NULL
+     ORDER BY year DESC`
+  )
+    .bind(memberId)
+    .all();
+
+  return json({
+    memberId,
+    memberName: member.full_name,
+    giving: {
+      pending: pendingDeclarations.results,
+      verified: verifiedDeclarations.results,
+    },
+    activeTransfer: activeTransfer || null,
+    recentAttendance: recentAttendance.results,
+    contributionYears: contributionYears.results,
+  });
+}

@@ -78,6 +78,7 @@ import {
   handleListDeclarations,
   handleVerifyDeclaration,
   handleRejectDeclaration,
+  handleMemberDashboard,
 } from "./routes/members";
 import {
   handleGetFunds,
@@ -368,6 +369,10 @@ app.post("/api/churches/:churchId/declarations/:declId/reject", (c) =>
     Number(c.req.param("churchId")),
     Number(c.req.param("declId"))
   )
+);
+
+app.get("/api/members/:id/dashboard", (c) =>
+  handleMemberDashboard(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );
 
 app.get("/api/funds", (c) => handleGetFunds(c.req.raw, c.env, getAuth(c)));

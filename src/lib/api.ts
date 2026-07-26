@@ -910,6 +910,51 @@ export const givingApi = {
     ),
 };
 
+export interface MemberDashboard {
+  memberId: number;
+  memberName: string;
+  giving: {
+    pending: {
+      id: number;
+      amount: number;
+      description: string | null;
+      verified: number;
+      created_at: string;
+      fund_name: string;
+      fund_type: string;
+    }[];
+    verified: {
+      id: number;
+      amount: number;
+      description: string | null;
+      verified: number;
+      created_at: string;
+      fund_name: string;
+      fund_type: string;
+    }[];
+  };
+  activeTransfer: {
+    id: number;
+    status: string;
+    initiated_at: string;
+    from_church_name: string;
+    to_church_name: string;
+  } | null;
+  recentAttendance: {
+    date: string;
+    category: string;
+    count: number;
+  }[];
+  contributionYears: {
+    year: number;
+    church_id: number;
+  }[];
+}
+
+export const memberDashboardApi = {
+  get: (memberId: number) => api.get<MemberDashboard>(`/members/${memberId}/dashboard`),
+};
+
 export const declarationApi = {
   list: (churchId: number, verified?: boolean) => {
     const qs = verified !== undefined ? `?verified=${verified}` : "";
