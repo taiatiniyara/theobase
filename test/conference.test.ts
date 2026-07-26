@@ -21,6 +21,9 @@ describe("conference dashboard", () => {
 
   beforeAll(async () => {
     await env.DB.exec(FULL_SCHEMA);
+    await env.DB.exec("ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1;");
+    await env.DB.exec("ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'active';");
+    await env.DB.exec("ALTER TABLE churches ADD COLUMN status TEXT NOT NULL DEFAULT 'active';");
 
     const sr = await SELF.fetch("http://localhost/api/auth/signup", {
       method: "POST",

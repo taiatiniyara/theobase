@@ -42,6 +42,16 @@ describe("transfer workflow API", () => {
     } catch {
       /* already exists */
     }
+    try {
+      await env.DB.exec("ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'active';");
+    } catch {
+      /* already exists */
+    }
+    try {
+      await env.DB.exec("ALTER TABLE churches ADD COLUMN status TEXT NOT NULL DEFAULT 'active';");
+    } catch {
+      /* already exists */
+    }
 
     await SELF.fetch("http://localhost/api/auth/signup", {
       method: "POST",

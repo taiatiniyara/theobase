@@ -27,6 +27,8 @@ describe("finance API", () => {
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token TEXT;");
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token_expires TEXT;");
     await env.DB.exec("ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1;");
+    await env.DB.exec("ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'active';");
+    await env.DB.exec("ALTER TABLE churches ADD COLUMN status TEXT NOT NULL DEFAULT 'active';");
     await env.DB.exec(
       "ALTER TABLE transactions ADD COLUMN corrects_transaction_id INTEGER REFERENCES transactions(id)"
     );

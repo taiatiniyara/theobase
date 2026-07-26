@@ -15,6 +15,8 @@ describe("auth API", () => {
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token TEXT;");
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token_expires TEXT;");
     await env.DB.exec("ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1;");
+    await env.DB.exec("ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'active';");
+    await env.DB.exec("ALTER TABLE churches ADD COLUMN status TEXT NOT NULL DEFAULT 'active';");
     await env.DB.exec(
       "CREATE TABLE IF NOT EXISTS token_blacklist (token_jti TEXT NOT NULL, expires_at TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (datetime('now')))"
     );

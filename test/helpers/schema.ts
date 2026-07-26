@@ -27,4 +27,6 @@ export const SCHEMA_ALTERS = [
   "ALTER TABLE users ADD COLUMN reset_token_expires TEXT",
   "ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1",
   "ALTER TABLE users ADD COLUMN email_verified INTEGER NOT NULL DEFAULT 1",
+  "ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'active'",
+  "ALTER TABLE churches ADD COLUMN status TEXT NOT NULL DEFAULT 'active'",
 ];

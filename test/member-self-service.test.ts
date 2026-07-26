@@ -29,6 +29,8 @@ describe("member self-service API", () => {
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token TEXT;");
     await env.DB.exec("ALTER TABLE users ADD COLUMN reset_token_expires TEXT;");
     await env.DB.exec("ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1;");
+    await env.DB.exec("ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'active';");
+    await env.DB.exec("ALTER TABLE churches ADD COLUMN status TEXT NOT NULL DEFAULT 'active';");
     await env.DB.exec("ALTER TABLE transactions ADD COLUMN category_id INTEGER;");
     await env.DB.exec("ALTER TABLE transactions ADD COLUMN budget_ref INTEGER;");
     await env.DB.exec("ALTER TABLE transactions ADD COLUMN confirmed_by INTEGER;");

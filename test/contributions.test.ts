@@ -36,6 +36,16 @@ describe("contribution statements API", () => {
     } catch {
       /* ok */
     }
+    try {
+      await env.DB.exec("ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'active';");
+    } catch {
+      /* ok */
+    }
+    try {
+      await env.DB.exec("ALTER TABLE churches ADD COLUMN status TEXT NOT NULL DEFAULT 'active';");
+    } catch {
+      /* ok */
+    }
 
     await SELF.fetch("http://localhost/api/auth/signup", {
       method: "POST",
