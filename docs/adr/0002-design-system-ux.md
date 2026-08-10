@@ -12,7 +12,11 @@ Theobase serves non-technical church officers across 215+ countries, many on low
 
 ### Brand Identity
 
-The Theobase logo (`branding/logo-icon.svg`, `branding/logo-full.svg`) is a geometric three-tier mountain peak in layered blue — symbolising foundation, elevation, and stability. The full mark pairs the mountain icon with the "Theobase" wordmark.
+The Theobase logo (`branding/logo-icon.svg`, `branding/logo-full.svg`, `branding/logo-full-light.svg`) is a geometric three-tier mountain peak in layered blue — symbolising foundation, elevation, and stability. The full mark pairs the mountain icon with the "Theobase" wordmark. Three variants:
+
+- `logo-icon.svg` — mountain icon only. Used for favicons, app icons, and PWA manifests.
+- `logo-full.svg` — icon + wordmark in dark text. Used on light backgrounds (login screen, light-mode header).
+- `logo-full-light.svg` — icon + wordmark in light text. Used on dark backgrounds (dark-mode header, onboarding, email templates).
 
 The brand palette, extracted directly from the logo:
 

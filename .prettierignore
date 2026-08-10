@@ -1,7 +1,5 @@
 node_modules
 dist
 .cache
-*.tsbuildinfo
-.env
-.dev.vars
 graphify-out
+pnpm-lock.yaml

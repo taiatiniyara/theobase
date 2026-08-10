@@ -1,0 +1,18 @@
+{
+  "name": "Theobase",
+  "short_name": "Theobase",
+  "description": "Church membership and giving platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#2563EB",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

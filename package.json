@@ -1,0 +1,31 @@
+{
+  "name": "theobase",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @theobase/web dev",
+    "dev:worker": "pnpm --filter @theobase/worker dev",
+    "build": "pnpm --filter @theobase/shared build && pnpm --filter @theobase/web build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "prettier": "^3.7.4",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.48.1",
+    "vitest": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@11.17.0"
+}
