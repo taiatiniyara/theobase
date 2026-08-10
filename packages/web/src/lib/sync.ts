@@ -13,12 +13,40 @@ function getWorkerUrl(): string {
   return `${origin}/church`;
 }
 
+function base64UrlDecode(str: string): string {
+  return str.replace(/-/g, '+').replace(/_/g, '/');
+}
+
+export function getAuthToken(): string | null {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const payload = JSON.parse(atob(base64UrlDecode(parts[1]!))) as { exp?: number };
+    if (payload.exp && payload.exp < Date.now() / 1000) {
+      return null;
+    }
+  } catch {
+    return null;
+  }
+
+  return token;
+}
+
 async function flushIntent(intent: WalIntent, churchId: string): Promise<SyncResult> {
   const baseUrl = getWorkerUrl();
+  const token = getAuthToken();
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   try {
     const response = await fetch(`${baseUrl}/${churchId}/mutate`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
         operation: intent.operation,
         payload: intent.payload,

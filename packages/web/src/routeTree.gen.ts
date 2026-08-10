@@ -10,12 +10,36 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as MembersIndexRouteImport } from './routes/members/index'
+import { Route as MembersAddRouteImport } from './routes/members/add'
+import { Route as MembersMemberIdEditRouteImport } from './routes/members/$memberId.edit'
 import { Route as ChurchImportRouteImport } from './routes/church/import'
 import { Route as ChurchRegisterRouteImport } from './routes/church/register'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MembersIndexRoute = MembersIndexRouteImport.update({
+  id: '/members',
+  path: '/members',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MembersAddRoute = MembersAddRouteImport.update({
+  id: '/members/add',
+  path: '/members/add',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MembersMemberIdEditRoute = MembersMemberIdEditRouteImport.update({
+  id: '/members/$memberId/edit',
+  path: '/members/$memberId/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChurchImportRoute = ChurchImportRouteImport.update({
@@ -31,30 +55,46 @@ const ChurchRegisterRoute = ChurchRegisterRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/members': typeof MembersIndexRoute
+  '/members/add': typeof MembersAddRoute
+  '/members/$memberId/edit': typeof MembersMemberIdEditRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/members': typeof MembersIndexRoute
+  '/members/add': typeof MembersAddRoute
+  '/members/$memberId/edit': typeof MembersMemberIdEditRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/members': typeof MembersIndexRoute
+  '/members/add': typeof MembersAddRoute
+  '/members/$memberId/edit': typeof MembersMemberIdEditRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/church/import' | '/church/register'
+  fullPaths: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId/edit' | '/church/import' | '/church/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/church/import' | '/church/register'
-  id: '__root__' | '/' | '/church/import' | '/church/register'
+  to: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId/edit' | '/church/import' | '/church/register'
+  id: '__root__' | '/' | '/login' | '/members' | '/members/add' | '/members/$memberId/edit' | '/church/import' | '/church/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRoute
+  MembersIndexRoute: typeof MembersIndexRoute
+  MembersAddRoute: typeof MembersAddRoute
+  MembersMemberIdEditRoute: typeof MembersMemberIdEditRoute
   ChurchImportRoute: typeof ChurchImportRoute
   ChurchRegisterRoute: typeof ChurchRegisterRoute
 }
@@ -66,6 +106,34 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/members': {
+      id: '/members'
+      path: '/members'
+      fullPath: '/members'
+      preLoaderRoute: typeof MembersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/members/add': {
+      id: '/members/add'
+      path: '/members/add'
+      fullPath: '/members/add'
+      preLoaderRoute: typeof MembersAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/members/$memberId/edit': {
+      id: '/members/$memberId/edit'
+      path: '/members/$memberId/edit'
+      fullPath: '/members/$memberId/edit'
+      preLoaderRoute: typeof MembersMemberIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/church/import': {
@@ -87,6 +155,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginRoute: LoginRoute,
+  MembersIndexRoute: MembersIndexRoute,
+  MembersAddRoute: MembersAddRoute,
+  MembersMemberIdEditRoute: MembersMemberIdEditRoute,
   ChurchImportRoute: ChurchImportRoute,
   ChurchRegisterRoute: ChurchRegisterRoute,
 }
