@@ -25,3 +25,22 @@ Canonical five: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-huma
 ### Domain docs
 
 Single-context: root `CONTEXT.md` + `docs/adr/`. See `docs/agents/domain.md`.
+
+## Pre-commit self-review
+
+Before every commit, run a sub-agent to verify the diff against the ticket's acceptance criteria:
+
+1. At the start of a ticket, save the spec to `.scratch/spec.md`:
+   ```
+   gh issue view <number> --json body,title > .scratch/spec.md
+   ```
+
+2. After implementation, before committing, spawn a sub-agent with:
+   - `git diff HEAD` (the unstaged changes)
+   - `.scratch/spec.md` contents
+   - Relevant ADR sections from `docs/adr/`
+   - Prompt: "Check every AC against the diff. Report missing, partial, or wrong items. Under 200 words."
+
+3. Fix any gaps found, then commit.
+
+4. After committing, run `graphify update .`.
