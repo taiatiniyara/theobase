@@ -11,52 +11,81 @@ import {
   givingRecord,
 } from './schema';
 
-export const insertConferenceSchema = createInsertSchema(conference);
-export const selectConferenceSchema = createSelectSchema(conference);
-export const updateConferenceSchema = createUpdateSchema(conference);
+function schemasFor<T extends Parameters<typeof createInsertSchema>[0]>(table: T) {
+  return {
+    insert: createInsertSchema(table),
+    select: createSelectSchema(table),
+    update: createUpdateSchema(table),
+  };
+}
 
-export const insertChurchSchema = createInsertSchema(church);
-export const selectChurchSchema = createSelectSchema(church);
-export const updateChurchSchema = createUpdateSchema(church);
+const conferenceSchemas = schemasFor(conference);
+const churchSchemas = schemasFor(church);
+const userSchemas = schemasFor(user);
+const roleAssignmentSchemas = schemasFor(roleAssignment);
+const memberSchemas = schemasFor(member);
+const householdSchemas = schemasFor(household);
+const givingBatchSchemas = schemasFor(givingBatch);
+const givingRecordSchemas = schemasFor(givingRecord);
 
-export const insertUserSchema = createInsertSchema(user);
-export const selectUserSchema = createSelectSchema(user);
-export const updateUserSchema = createUpdateSchema(user);
+export const {
+  insert: insertConferenceSchema,
+  select: selectConferenceSchema,
+  update: updateConferenceSchema,
+} = conferenceSchemas;
+export const {
+  insert: insertChurchSchema,
+  select: selectChurchSchema,
+  update: updateChurchSchema,
+} = churchSchemas;
+export const {
+  insert: insertUserSchema,
+  select: selectUserSchema,
+  update: updateUserSchema,
+} = userSchemas;
+export const {
+  insert: insertRoleAssignmentSchema,
+  select: selectRoleAssignmentSchema,
+  update: updateRoleAssignmentSchema,
+} = roleAssignmentSchemas;
+export const {
+  insert: insertMemberSchema,
+  select: selectMemberSchema,
+  update: updateMemberSchema,
+} = memberSchemas;
+export const {
+  insert: insertHouseholdSchema,
+  select: selectHouseholdSchema,
+  update: updateHouseholdSchema,
+} = householdSchemas;
+export const {
+  insert: insertGivingBatchSchema,
+  select: selectGivingBatchSchema,
+  update: updateGivingBatchSchema,
+} = givingBatchSchemas;
+export const {
+  insert: insertGivingRecordSchema,
+  select: selectGivingRecordSchema,
+  update: updateGivingRecordSchema,
+} = givingRecordSchemas;
 
-export const insertRoleAssignmentSchema = createInsertSchema(roleAssignment);
-export const selectRoleAssignmentSchema = createSelectSchema(roleAssignment);
-export const updateRoleAssignmentSchema = createUpdateSchema(roleAssignment);
+type SelectOf<S extends { select: z.ZodTypeAny }> = z.infer<S['select']>;
+type InsertOf<S extends { insert: z.ZodTypeAny }> = z.infer<S['insert']>;
 
-export const insertMemberSchema = createInsertSchema(member);
-export const selectMemberSchema = createSelectSchema(member);
-export const updateMemberSchema = createUpdateSchema(member);
+export type Conference = SelectOf<typeof conferenceSchemas>;
+export type Church = SelectOf<typeof churchSchemas>;
+export type User = SelectOf<typeof userSchemas>;
+export type RoleAssignment = SelectOf<typeof roleAssignmentSchemas>;
+export type Member = SelectOf<typeof memberSchemas>;
+export type Household = SelectOf<typeof householdSchemas>;
+export type GivingBatch = SelectOf<typeof givingBatchSchemas>;
+export type GivingRecord = SelectOf<typeof givingRecordSchemas>;
 
-export const insertHouseholdSchema = createInsertSchema(household);
-export const selectHouseholdSchema = createSelectSchema(household);
-export const updateHouseholdSchema = createUpdateSchema(household);
-
-export const insertGivingBatchSchema = createInsertSchema(givingBatch);
-export const selectGivingBatchSchema = createSelectSchema(givingBatch);
-export const updateGivingBatchSchema = createUpdateSchema(givingBatch);
-
-export const insertGivingRecordSchema = createInsertSchema(givingRecord);
-export const selectGivingRecordSchema = createSelectSchema(givingRecord);
-export const updateGivingRecordSchema = createUpdateSchema(givingRecord);
-
-export type Conference = z.infer<typeof selectConferenceSchema>;
-export type Church = z.infer<typeof selectChurchSchema>;
-export type User = z.infer<typeof selectUserSchema>;
-export type RoleAssignment = z.infer<typeof selectRoleAssignmentSchema>;
-export type Member = z.infer<typeof selectMemberSchema>;
-export type Household = z.infer<typeof selectHouseholdSchema>;
-export type GivingBatch = z.infer<typeof selectGivingBatchSchema>;
-export type GivingRecord = z.infer<typeof selectGivingRecordSchema>;
-
-export type InsertConference = z.infer<typeof insertConferenceSchema>;
-export type InsertChurch = z.infer<typeof insertChurchSchema>;
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type InsertRoleAssignment = z.infer<typeof insertRoleAssignmentSchema>;
-export type InsertMember = z.infer<typeof insertMemberSchema>;
-export type InsertHousehold = z.infer<typeof insertHouseholdSchema>;
-export type InsertGivingBatch = z.infer<typeof insertGivingBatchSchema>;
-export type InsertGivingRecord = z.infer<typeof insertGivingRecordSchema>;
+export type InsertConference = InsertOf<typeof conferenceSchemas>;
+export type InsertChurch = InsertOf<typeof churchSchemas>;
+export type InsertUser = InsertOf<typeof userSchemas>;
+export type InsertRoleAssignment = InsertOf<typeof roleAssignmentSchemas>;
+export type InsertMember = InsertOf<typeof memberSchemas>;
+export type InsertHousehold = InsertOf<typeof householdSchemas>;
+export type InsertGivingBatch = InsertOf<typeof givingBatchSchemas>;
+export type InsertGivingRecord = InsertOf<typeof givingRecordSchemas>;

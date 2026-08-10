@@ -1,7 +1,6 @@
 import { DurableObject } from 'cloudflare:workers';
-import type { ChurchEvent } from '@theobase/shared';
+import type { ChurchEvent, ChurchOperation } from '@theobase/shared';
 
-const STATE_KEY = 'state';
 const LAST_HASH_KEY = 'lastHash';
 
 async function sha256(data: string): Promise<string> {
@@ -14,6 +13,47 @@ async function sha256(data: string): Promise<string> {
 function now(): number {
   return Date.now();
 }
+
+type EntityMap = Record<string, unknown>;
+
+function upsertEntity(
+  state: Record<string, unknown>,
+  key: string,
+  id: string,
+  value: unknown,
+): void {
+  const map = (state[key] as EntityMap) ?? {};
+  map[id] = value;
+  state[key] = map;
+}
+
+function deleteEntity(state: Record<string, unknown>, key: string, id: string): void {
+  const map = state[key] as EntityMap | undefined;
+  if (map) {
+    delete map[id];
+    state[key] = map;
+  }
+}
+
+const STATE_HANDLERS: Record<
+  string,
+  (payload: Record<string, unknown>, state: Record<string, unknown>) => void
+> = {
+  'member:create': (p, s) => upsertEntity(s, 'members', p.id as string, p),
+  'member:update': (p, s) => upsertEntity(s, 'members', p.id as string, p),
+  'member:delete': (p, s) => deleteEntity(s, 'members', p.id as string),
+  'household:create': (p, s) => upsertEntity(s, 'households', p.id as string, p),
+  'household:update': (p, s) => upsertEntity(s, 'households', p.id as string, p),
+  'household:delete': (p, s) => deleteEntity(s, 'households', p.id as string),
+  'giving_batch:create': (p, s) => upsertEntity(s, 'givingBatches', p.id as string, p),
+  'giving_batch:update': (p, s) => upsertEntity(s, 'givingBatches', p.id as string, p),
+  'giving_batch:commit': (p, s) => upsertEntity(s, 'givingBatches', p.id as string, p),
+  'giving_record:create': (p, s) => upsertEntity(s, 'givingRecords', p.id as string, p),
+  'giving_record:delete': (p, s) => deleteEntity(s, 'givingRecords', p.id as string),
+  'church:update': (p, s) => {
+    s.church = p;
+  },
+};
 
 export class ChurchDO extends DurableObject {
   private events: ChurchEvent[] = [];
@@ -33,7 +73,7 @@ export class ChurchDO extends DurableObject {
   }
 
   async appendEvent(
-    operation: string,
+    operation: ChurchOperation,
     payload: unknown,
     actor: string,
   ): Promise<ChurchEvent> {
@@ -103,69 +143,10 @@ export class ChurchDO extends DurableObject {
 
     const state: Record<string, unknown> = {};
     for (const event of this.events) {
-      this.applyEventToState(event, state);
+      applyEventToState(event, state);
     }
 
-    await this.ctx.storage.put(STATE_KEY, state);
     return state;
-  }
-
-  private applyEventToState(event: ChurchEvent, state: Record<string, unknown>): void {
-    const payload = event.payload as Record<string, unknown>;
-    switch (event.operation) {
-      case 'member:create':
-      case 'member:update': {
-        const members = (state.members as Record<string, unknown>) ?? {};
-        members[payload.id as string] = payload;
-        state.members = members;
-        break;
-      }
-      case 'member:delete': {
-        const members = (state.members as Record<string, unknown>) ?? {};
-        delete members[payload.id as string];
-        state.members = members;
-        break;
-      }
-      case 'household:create':
-      case 'household:update': {
-        const households = (state.households as Record<string, unknown>) ?? {};
-        households[payload.id as string] = payload;
-        state.households = households;
-        break;
-      }
-      case 'household:delete': {
-        const households = (state.households as Record<string, unknown>) ?? {};
-        delete households[payload.id as string];
-        state.households = households;
-        break;
-      }
-      case 'giving_batch:create':
-      case 'giving_batch:update':
-      case 'giving_batch:commit': {
-        const batches = (state.givingBatches as Record<string, unknown>) ?? {};
-        batches[payload.id as string] = payload;
-        state.givingBatches = batches;
-        break;
-      }
-      case 'giving_record:create': {
-        const records = (state.givingRecords as Record<string, unknown>) ?? {};
-        records[payload.id as string] = payload;
-        state.givingRecords = records;
-        break;
-      }
-      case 'giving_record:delete': {
-        const records = (state.givingRecords as Record<string, unknown>) ?? {};
-        delete records[payload.id as string];
-        state.givingRecords = records;
-        break;
-      }
-      case 'church:update': {
-        state.church = payload;
-        break;
-      }
-      default:
-        break;
-    }
   }
 
   async fetch(request: Request): Promise<Response> {
@@ -196,7 +177,7 @@ export class ChurchDO extends DurableObject {
 
       if (request.method === 'POST' && path === '/mutate') {
         const body = (await request.json()) as {
-          operation: string;
+          operation: ChurchOperation;
           payload: unknown;
           actor: string;
         };
@@ -214,5 +195,12 @@ export class ChurchDO extends DurableObject {
         { status: 500, headers: { 'Content-Type': 'application/json' } },
       );
     }
+  }
+}
+
+function applyEventToState(event: ChurchEvent, state: Record<string, unknown>): void {
+  const handler = STATE_HANDLERS[event.operation];
+  if (handler) {
+    handler(event.payload as Record<string, unknown>, state);
   }
 }

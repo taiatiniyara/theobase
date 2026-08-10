@@ -58,12 +58,8 @@
           "name": "church_conference_id_conference_id_fk",
           "tableFrom": "church",
           "tableTo": "conference",
-          "columnsFrom": [
-            "conference_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["conference_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -186,12 +182,8 @@
           "name": "giving_batch_church_id_church_id_fk",
           "tableFrom": "giving_batch",
           "tableTo": "church",
-          "columnsFrom": [
-            "church_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["church_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -199,12 +191,8 @@
           "name": "giving_batch_counter1_id_user_id_fk",
           "tableFrom": "giving_batch",
           "tableTo": "user",
-          "columnsFrom": [
-            "counter1_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["counter1_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -212,12 +200,8 @@
           "name": "giving_batch_counter2_id_user_id_fk",
           "tableFrom": "giving_batch",
           "tableTo": "user",
-          "columnsFrom": [
-            "counter2_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["counter2_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -294,12 +278,8 @@
           "name": "giving_record_batch_id_giving_batch_id_fk",
           "tableFrom": "giving_record",
           "tableTo": "giving_batch",
-          "columnsFrom": [
-            "batch_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["batch_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -307,12 +287,8 @@
           "name": "giving_record_member_id_member_id_fk",
           "tableFrom": "giving_record",
           "tableTo": "member",
-          "columnsFrom": [
-            "member_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["member_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -374,12 +350,8 @@
           "name": "household_church_id_church_id_fk",
           "tableFrom": "household",
           "tableTo": "church",
-          "columnsFrom": [
-            "church_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["church_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -499,12 +471,8 @@
           "name": "member_church_id_church_id_fk",
           "tableFrom": "member",
           "tableTo": "church",
-          "columnsFrom": [
-            "church_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["church_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -512,12 +480,8 @@
           "name": "member_household_id_household_id_fk",
           "tableFrom": "member",
           "tableTo": "household",
-          "columnsFrom": [
-            "household_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["household_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -572,12 +536,8 @@
           "name": "role_assignment_user_id_user_id_fk",
           "tableFrom": "role_assignment",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -585,12 +545,8 @@
           "name": "role_assignment_church_id_church_id_fk",
           "tableFrom": "role_assignment",
           "tableTo": "church",
-          "columnsFrom": [
-            "church_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["church_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -658,9 +614,7 @@
       "indexes": {
         "user_email_unique": {
           "name": "user_email_unique",
-          "columns": [
-            "email"
-          ],
+          "columns": ["email"],
           "isUnique": true
         }
       },

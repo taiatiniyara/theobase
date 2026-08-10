@@ -1,6 +1,6 @@
-export interface ChurchEvent {
+export interface ChurchEvent<Op extends string = string> {
   id: string;
-  operation: string;
+  operation: Op;
   payload: unknown;
   actor: string;
   timestamp: number;
@@ -23,3 +23,5 @@ export type ChurchOperation =
   | 'church:update'
   | 'role:assign'
   | 'role:revoke';
+
+export type ChurchEventTyped = ChurchEvent<ChurchOperation>;

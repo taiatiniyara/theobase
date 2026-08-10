@@ -81,7 +81,15 @@ export const member = sqliteTable('member', {
   gender: text('gender', { enum: ['male', 'female', 'other'] }),
   baptismDate: text('baptism_date'),
   membershipStatus: text('membership_status', {
-    enum: ['baptised', 'profession', 'transfer-in', 'transfer-out', 'deceased', 'removed', 'reinstated'],
+    enum: [
+      'baptised',
+      'profession',
+      'transfer-in',
+      'transfer-out',
+      'deceased',
+      'removed',
+      'reinstated',
+    ],
   })
     .notNull()
     .default('baptised'),
