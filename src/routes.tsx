@@ -12,6 +12,8 @@ const HomePage = lazy(() => import("./routes/HomePage"));
 const LoginPage = lazy(() => import("./routes/LoginPage"));
 const SignupPage = lazy(() => import("./routes/SignupPage"));
 const ForgotPasswordPage = lazy(() => import("./routes/ForgotPasswordPage"));
+const VerifyEmailPage = lazy(() => import("./routes/VerifyEmailPage"));
+const ResetPasswordPage = lazy(() => import("./routes/ResetPasswordPage"));
 const DashboardLayout = lazy(() => import("./routes/DashboardLayout"));
 const DashboardPage = lazy(() => import("./routes/DashboardPage"));
 const OrgManagementPage = lazy(() => import("./routes/OrgManagementPage"));
@@ -79,6 +81,24 @@ const forgotPasswordRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/forgot-password",
   component: ForgotPasswordPage,
+});
+
+const verifyEmailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/verify-email",
+  component: VerifyEmailPage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    token: typeof search.token === "string" ? search.token : "",
+  }),
+});
+
+const resetPasswordRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/reset-password",
+  component: ResetPasswordPage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    token: typeof search.token === "string" ? search.token : "",
+  }),
 });
 
 const dashboardLayout = createRoute({
@@ -205,6 +225,8 @@ const routeTree = rootRoute.addChildren([
   loginRoute,
   signupRoute,
   forgotPasswordRoute,
+  verifyEmailRoute,
+  resetPasswordRoute,
   dashboardLayout.addChildren([
     dashboardIndex,
     organizationRoute,
