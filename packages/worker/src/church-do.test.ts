@@ -166,4 +166,82 @@ describe('ChurchDO', () => {
     const members = state.members as Record<string, unknown>;
     expect(members['del-m1']).toBeUndefined();
   });
+
+  it('rejects invalid state transition', async () => {
+    await mutate('member:create', {
+      id: 'transition-m1',
+      firstName: 'State',
+      lastName: 'Transition',
+      status: 'baptised',
+    });
+
+    const response = await stub.fetch(
+      new Request('http://localhost/mutate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          operation: 'member:state-change',
+          payload: {
+            memberId: 'transition-m1',
+            prevState: 'baptised',
+            newState: 'transfer-out',
+            reason: 'Invalid jump',
+          },
+        }),
+      }),
+    );
+    expect(response.status).toBe(400);
+  });
+
+  it('accepts valid state transition', async () => {
+    await mutate('member:create', {
+      id: 'transition-m2',
+      firstName: 'Valid',
+      lastName: 'Transition',
+      status: 'baptised',
+    });
+
+    const event = await mutate('member:state-change', {
+      memberId: 'transition-m2',
+      prevState: 'baptised',
+      newState: 'profession',
+      reason: 'Public profession of faith',
+    });
+    expect(event.operation).toBe('member:state-change');
+
+    const state = await getState();
+    const members = state.members as Record<string, unknown>;
+    const member = members['transition-m2'] as Record<string, unknown>;
+    expect(member.status).toBe('profession');
+  });
+
+  it('transfer initiate creates audit entry', async () => {
+    await mutate('member:create', {
+      id: 'transfer-m1',
+      firstName: 'Transfer',
+      lastName: 'Member',
+      status: 'profession',
+    });
+
+    await mutate('transfer:initiate', {
+      memberId: 'transfer-m1',
+      fromChurchId: 'church-a',
+      toChurchId: 'church-b',
+      reason: 'Moving to new town',
+    });
+
+    const state = await getState();
+    const transferLog = state.transferLog as Array<Record<string, unknown>>;
+    expect(transferLog).toBeDefined();
+    expect(transferLog.length).toBeGreaterThanOrEqual(1);
+
+    const entry = transferLog.find((e) => e.memberId === 'transfer-m1');
+    expect(entry).toBeDefined();
+    expect(entry!.status).toBe('pending-accept');
+    expect(entry!.fromChurchId).toBe('church-a');
+    expect(entry!.toChurchId).toBe('church-b');
+  });
 });

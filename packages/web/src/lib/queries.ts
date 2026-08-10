@@ -97,3 +97,86 @@ export function useDeleteMember(churchId: string) {
     },
   });
 }
+
+export function useStateChangeMutation(churchId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (params: { memberId: string; prevState: string; newState: string; updatedMember: Member }) =>
+      postChurchMutation(churchId, 'member:state-change', {
+        memberId: params.memberId,
+        prevState: params.prevState,
+        newState: params.newState,
+        updatedMember: params.updatedMember,
+      }),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: memberKeys.list(churchId) });
+    },
+  });
+}
+
+export function useTransferInitiate(churchId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (params: { memberId: string; toChurchId: string; updatedMember: Member; reason?: string }) =>
+      postChurchMutation(churchId, 'transfer:initiate', {
+        memberId: params.memberId,
+        fromChurchId: churchId,
+        toChurchId: params.toChurchId,
+        updatedMember: params.updatedMember,
+        reason: params.reason ?? null,
+        prevState: params.updatedMember.membershipStatus,
+        newState: 'transfer-out',
+      }),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: memberKeys.list(churchId) });
+    },
+  });
+}
+
+export function useTransferAccept(churchId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (params: { memberId: string; fromChurchId: string; updatedMember: Member; reason?: string }) =>
+      postChurchMutation(churchId, 'transfer:accept', {
+        memberId: params.memberId,
+        fromChurchId: params.fromChurchId,
+        toChurchId: churchId,
+        updatedMember: params.updatedMember,
+        reason: params.reason ?? null,
+        prevState: 'transfer-out',
+        newState: params.updatedMember.membershipStatus,
+      }),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: memberKeys.list(churchId) });
+    },
+  });
+}
+
+export function useTransferReject(churchId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (params: { memberId: string; fromChurchId: string; reason?: string }) =>
+      postChurchMutation(churchId, 'transfer:reject', {
+        memberId: params.memberId,
+        fromChurchId: params.fromChurchId,
+        toChurchId: churchId,
+        reason: params.reason ?? null,
+        prevState: 'transfer-out',
+        newState: 'transfer-out',
+      }),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: memberKeys.list(churchId) });
+    },
+  });
+}
+
+export function useAuditLog(churchId: string, memberId: string) {
+  return useQuery({
+    queryKey: [...memberKeys.detail(churchId, memberId), 'audit'],
+    queryFn: async () => {
+      const state = await fetchChurchState(churchId);
+      const allAudit = (state.auditLog as Array<Record<string, unknown>>) ?? [];
+      return allAudit.filter((e) => e.memberId === memberId);
+    },
+  });
+}

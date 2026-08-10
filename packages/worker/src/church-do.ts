@@ -1,5 +1,6 @@
 import { DurableObject } from 'cloudflare:workers';
 import type { ChurchEvent, ChurchOperation, Role } from '@theobase/shared';
+import { isValidTransition, type MembershipState } from '@theobase/shared';
 import { verify } from './auth/jwt';
 
 const LAST_HASH_KEY = 'lastHash';
@@ -9,6 +10,7 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'member:create',
     'member:update',
     'member:delete',
+    'member:state-change',
     'household:create',
     'household:update',
     'household:delete',
@@ -16,6 +18,9 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'church:update',
     'role:assign',
     'role:revoke',
+    'transfer:initiate',
+    'transfer:accept',
+    'transfer:reject',
   ],
   treasurer: [
     'giving_record:create',
@@ -32,9 +37,9 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
   interest: [],
   visitor: [],
   'conference-treasurer': [],
-  'conference-secretary': [],
+  'conference-secretary': ['transfer:accept'],
   'conference-president': [],
-  auditor: [],
+  auditor: ['transfer:accept'],
   operator: [],
 };
 
@@ -84,6 +89,100 @@ const STATE_HANDLERS: Record<
   'member:create': (p, s) => upsertEntity(s, 'members', p.id as string, p),
   'member:update': (p, s) => upsertEntity(s, 'members', p.id as string, p),
   'member:delete': (p, s) => deleteEntity(s, 'members', p.id as string),
+  'member:state-change': (p, s) => {
+    upsertEntity(s, 'members', p.memberId as string, {
+      ...(p.updatedMember as Record<string, unknown> ?? {}),
+    });
+    const auditLog = (s.auditLog as Array<Record<string, unknown>>) ?? [];
+    auditLog.push({
+      memberId: p.memberId,
+      prevState: p.prevState,
+      newState: p.newState,
+      actor: p.actor,
+      timestamp: p.timestamp,
+      reason: p.reason ?? null,
+      operation: 'member:state-change',
+    });
+    s.auditLog = auditLog;
+  },
+  'transfer:initiate': (p, s) => {
+    upsertEntity(s, 'members', p.memberId as string, {
+      ...(p.updatedMember as Record<string, unknown> ?? {}),
+    });
+    const transferLog = (s.transferLog as Array<Record<string, unknown>>) ?? [];
+    transferLog.push({
+      memberId: p.memberId,
+      fromChurchId: p.fromChurchId,
+      toChurchId: p.toChurchId,
+      status: 'pending-accept',
+      initiatedAt: p.timestamp,
+      actor: p.actor,
+      reason: p.reason ?? null,
+    });
+    s.transferLog = transferLog;
+    const auditLog = (s.auditLog as Array<Record<string, unknown>>) ?? [];
+    auditLog.push({
+      memberId: p.memberId,
+      prevState: p.prevState,
+      newState: p.newState,
+      actor: p.actor,
+      timestamp: p.timestamp,
+      reason: p.reason ?? null,
+      operation: 'transfer:initiate',
+    });
+    s.auditLog = auditLog;
+  },
+  'transfer:accept': (p, s) => {
+    upsertEntity(s, 'members', p.memberId as string, {
+      ...(p.updatedMember as Record<string, unknown> ?? {}),
+    });
+    const transferLog = (s.transferLog as Array<Record<string, unknown>>) ?? [];
+    transferLog.push({
+      memberId: p.memberId,
+      fromChurchId: p.fromChurchId,
+      toChurchId: p.toChurchId,
+      status: 'accepted',
+      acceptedAt: p.timestamp,
+      actor: p.actor,
+      reason: p.reason ?? null,
+    });
+    s.transferLog = transferLog;
+    const auditLog = (s.auditLog as Array<Record<string, unknown>>) ?? [];
+    auditLog.push({
+      memberId: p.memberId,
+      prevState: p.prevState,
+      newState: p.newState,
+      actor: p.actor,
+      timestamp: p.timestamp,
+      reason: p.reason ?? null,
+      operation: 'transfer:accept',
+    });
+    s.auditLog = auditLog;
+  },
+  'transfer:reject': (p, s) => {
+    const transferLog = (s.transferLog as Array<Record<string, unknown>>) ?? [];
+    transferLog.push({
+      memberId: p.memberId,
+      fromChurchId: p.fromChurchId,
+      toChurchId: p.toChurchId,
+      status: 'rejected',
+      rejectedAt: p.timestamp,
+      actor: p.actor,
+      reason: p.reason ?? null,
+    });
+    s.transferLog = transferLog;
+    const auditLog = (s.auditLog as Array<Record<string, unknown>>) ?? [];
+    auditLog.push({
+      memberId: p.memberId,
+      prevState: p.prevState,
+      newState: p.newState,
+      actor: p.actor,
+      timestamp: p.timestamp,
+      reason: p.reason ?? null,
+      operation: 'transfer:reject',
+    });
+    s.auditLog = auditLog;
+  },
   'household:create': (p, s) => upsertEntity(s, 'households', p.id as string, p),
   'household:update': (p, s) => upsertEntity(s, 'households', p.id as string, p),
   'household:delete': (p, s) => deleteEntity(s, 'households', p.id as string),
@@ -220,6 +319,18 @@ export class ChurchDO extends DurableObject {
         });
       }
 
+      if (request.method === 'GET' && path.startsWith('/audit/')) {
+        const memberId = path.slice('/audit/'.length);
+        const events = await this.getEvents();
+        const filtered = events.filter((event) => {
+          const p = event.payload as Record<string, unknown>;
+          return p?.memberId === memberId;
+        });
+        return new Response(JSON.stringify(filtered), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
       if (request.method === 'POST' && path === '/mutate') {
         const authHeader = request.headers.get('Authorization');
         if (!authHeader?.startsWith('Bearer ')) {
@@ -239,6 +350,26 @@ export class ChurchDO extends DurableObject {
             status: 403,
             headers: { 'Content-Type': 'application/json' },
           });
+        }
+
+        if (body.operation === 'member:state-change') {
+          const p = body.payload as { memberId: string; prevState: string; newState: string };
+          if (!isValidTransition(p.prevState as MembershipState, p.newState as MembershipState)) {
+            return new Response(
+              JSON.stringify({ error: `Invalid transition: ${p.prevState} -> ${p.newState}` }),
+              { status: 400, headers: { 'Content-Type': 'application/json' } },
+            );
+          }
+          const state = await this.reconstructState();
+          const members = (state.members as Record<string, Record<string, unknown>>) ?? {};
+          const existing = members[p.memberId] ?? {};
+          const updatedMember = { ...existing, status: p.newState };
+          body.payload = {
+            ...(body.payload as Record<string, unknown>),
+            actor: user.sub,
+            timestamp: now(),
+            updatedMember,
+          };
         }
 
         const event = await this.appendEvent(body.operation, body.payload, user.sub);

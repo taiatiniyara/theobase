@@ -1,9 +1,18 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useAuth } from '../../lib/auth-store';
-import { useMembers, useUpdateMember, useDeleteMember } from '../../lib/queries';
+import { useMembers, useUpdateMember, useDeleteMember, useStateChangeMutation } from '../../lib/queries';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Input } from '../../components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../components/ui/select';
 import {
   Dialog,
   DialogTrigger,
@@ -13,7 +22,8 @@ import {
   DialogDescription,
 } from '../../components/ui/dialog';
 import { MemberForm } from '../../components/features/member-form';
-import type { InsertMember } from '@theobase/shared';
+import { VALID_TRANSITIONS, type MembershipState } from '@theobase/shared';
+import type { InsertMember, Member } from '@theobase/shared';
 
 export const Route = createFileRoute('/members/$memberId/edit')({
   component: EditMemberPage,
@@ -27,6 +37,9 @@ function EditMemberPage() {
   const deleteMember = useDeleteMember(churchId!);
   const navigate = useNavigate();
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [newState, setNewState] = useState('');
+  const [reason, setReason] = useState('');
+  const stateChangeMutation = useStateChangeMutation(churchId!);
 
   const member = members?.find((m) => m.id === memberId);
 
@@ -57,6 +70,32 @@ function EditMemberPage() {
         </div>
       </div>
     );
+  }
+
+  function statusBadgeVariant(status: string): 'success' | 'warning' | 'error' | 'default' {
+    switch (status) {
+      case 'baptised': return 'success';
+      case 'profession': return 'default';
+      case 'transfer-in': case 'transfer-out': return 'warning';
+      case 'deceased': case 'removed': return 'error';
+      default: return 'default';
+    }
+  }
+
+  async function handleStateChange() {
+    if (!newState || !member) return;
+    const updatedMember = {
+      ...member,
+      membershipStatus: newState,
+    };
+    await stateChangeMutation.mutateAsync({
+      memberId: memberId,
+      prevState: member.membershipStatus,
+      newState,
+      updatedMember: updatedMember as Member,
+    });
+    setNewState('');
+    setReason('');
   }
 
   async function handleSubmit(data: InsertMember) {
@@ -111,6 +150,41 @@ function EditMemberPage() {
               onCancel={() => navigate({ to: '/members' })}
               isLoading={updateMember.isPending}
             />
+
+            <div className="mt-8 border-t pt-6">
+              <h3 className="text-lg font-semibold mb-4">Membership Status</h3>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-sm text-neutral-500">Current:</span>
+                <Badge variant={statusBadgeVariant(member.membershipStatus)}>
+                  {member.membershipStatus}
+                </Badge>
+              </div>
+              <Select value={newState} onValueChange={setNewState}>
+                <SelectTrigger className="max-w-xs">
+                  <SelectValue placeholder="Select new status" />
+                </SelectTrigger>
+                <SelectContent>
+                  {(VALID_TRANSITIONS[member.membershipStatus as MembershipState] ?? []).map((s) => (
+                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {newState && (
+                <>
+                  <label className="block mt-3">
+                    <span className="text-sm font-medium text-neutral-700">Reason (optional)</span>
+                    <Input value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Reason for change" />
+                  </label>
+                  <Button
+                    className="mt-3"
+                    onClick={handleStateChange}
+                    disabled={stateChangeMutation.isPending}
+                  >
+                    {stateChangeMutation.isPending ? 'Updating...' : `Change to ${newState}`}
+                  </Button>
+                </>
+              )}
+            </div>
           </CardContent>
         </Card>
       </div>

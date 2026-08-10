@@ -5,3 +5,4 @@ export * from './schema';
 export * from './validators';
 export * from './events';
 export * from './auth';
+export * from './stateMachine';

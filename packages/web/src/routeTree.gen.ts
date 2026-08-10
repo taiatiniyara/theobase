@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MembersIndexRouteImport } from './routes/members/index'
 import { Route as MembersAddRouteImport } from './routes/members/add'
+import { Route as MembersMemberIdRouteImport } from './routes/members/$memberId'
 import { Route as MembersMemberIdEditRouteImport } from './routes/members/$memberId.edit'
 import { Route as ChurchImportRouteImport } from './routes/church/import'
 import { Route as ChurchRegisterRouteImport } from './routes/church/register'
@@ -37,6 +38,11 @@ const MembersAddRoute = MembersAddRouteImport.update({
   path: '/members/add',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MembersMemberIdRoute = MembersMemberIdRouteImport.update({
+  id: '/members/$memberId',
+  path: '/members/$memberId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MembersMemberIdEditRoute = MembersMemberIdEditRouteImport.update({
   id: '/members/$memberId/edit',
   path: '/members/$memberId/edit',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/members': typeof MembersIndexRoute
   '/members/add': typeof MembersAddRoute
+  '/members/$memberId': typeof MembersMemberIdRoute
   '/members/$memberId/edit': typeof MembersMemberIdEditRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/members': typeof MembersIndexRoute
   '/members/add': typeof MembersAddRoute
+  '/members/$memberId': typeof MembersMemberIdRoute
   '/members/$memberId/edit': typeof MembersMemberIdEditRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
@@ -77,16 +85,17 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/members': typeof MembersIndexRoute
   '/members/add': typeof MembersAddRoute
+  '/members/$memberId': typeof MembersMemberIdRoute
   '/members/$memberId/edit': typeof MembersMemberIdEditRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId/edit' | '/church/import' | '/church/register'
+  fullPaths: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/church/import' | '/church/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId/edit' | '/church/import' | '/church/register'
-  id: '__root__' | '/' | '/login' | '/members' | '/members/add' | '/members/$memberId/edit' | '/church/import' | '/church/register'
+  to: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/church/import' | '/church/register'
+  id: '__root__' | '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/church/import' | '/church/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,6 +103,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MembersIndexRoute: typeof MembersIndexRoute
   MembersAddRoute: typeof MembersAddRoute
+  MembersMemberIdRoute: typeof MembersMemberIdRoute
   MembersMemberIdEditRoute: typeof MembersMemberIdEditRoute
   ChurchImportRoute: typeof ChurchImportRoute
   ChurchRegisterRoute: typeof ChurchRegisterRoute
@@ -129,6 +139,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MembersAddRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/members/$memberId': {
+      id: '/members/$memberId'
+      path: '/members/$memberId'
+      fullPath: '/members/$memberId'
+      preLoaderRoute: typeof MembersMemberIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/members/$memberId/edit': {
       id: '/members/$memberId/edit'
       path: '/members/$memberId/edit'
@@ -158,6 +175,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MembersIndexRoute: MembersIndexRoute,
   MembersAddRoute: MembersAddRoute,
+  MembersMemberIdRoute: MembersMemberIdRoute,
   MembersMemberIdEditRoute: MembersMemberIdEditRoute,
   ChurchImportRoute: ChurchImportRoute,
   ChurchRegisterRoute: ChurchRegisterRoute,

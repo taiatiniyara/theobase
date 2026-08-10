@@ -12,6 +12,7 @@ export type ChurchOperation =
   | 'member:create'
   | 'member:update'
   | 'member:delete'
+  | 'member:state-change'
   | 'household:create'
   | 'household:update'
   | 'household:delete'
@@ -23,6 +24,23 @@ export type ChurchOperation =
   | 'church:create'
   | 'church:update'
   | 'role:assign'
-  | 'role:revoke';
+  | 'role:revoke'
+  | 'transfer:initiate'
+  | 'transfer:accept'
+  | 'transfer:reject';
 
 export type ChurchEventTyped = ChurchEvent<ChurchOperation>;
+
+export interface MemberStateChangePayload {
+  memberId: string;
+  prevState: string;
+  newState: string;
+  reason?: string;
+}
+
+export interface TransferPayload {
+  memberId: string;
+  fromChurchId: string;
+  toChurchId: string;
+  reason?: string;
+}
