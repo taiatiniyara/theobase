@@ -8,14 +8,17 @@
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
-    "@theobase/shared": "workspace:*"
+    "@theobase/shared": "workspace:*",
+    "drizzle-orm": "^0.45.2"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.20.3",
     "@cloudflare/workers-types": "^4.20250808.0",
+    "drizzle-kit": "^0.31.10",
     "typescript": "catalog:",
     "vitest": "catalog:",
     "wrangler": "^4.52.1"

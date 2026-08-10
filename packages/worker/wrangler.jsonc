@@ -3,4 +3,18 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-08-10",
   "compatibility_flags": ["nodejs_compat"],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CHURCH_DO",
+        "class_name": "ChurchDO",
+      },
+    ],
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["ChurchDO"],
+    },
+  ],
 }
