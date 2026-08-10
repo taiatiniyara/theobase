@@ -7,7 +7,6 @@ interface Env {
   CSP_REPORT_ONLY?: string;
   DISABLE_API_RATE_LIMIT?: string;
   DISABLE_EMAIL_VERIFICATION?: string;
-  INVITE_CODE?: string;
   CF_API_TOKEN?: string;
   CF_ACCOUNT_ID?: string;
   ANALYTICS?: AnalyticsEngineDataset;

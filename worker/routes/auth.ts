@@ -7,6 +7,7 @@ import {
   generateResetToken,
   generateVerifyToken,
   verifyEmailToken,
+  verifyInviteToken,
   isTokenBlacklisted,
   blacklistToken,
 } from "../lib/auth";
@@ -30,7 +31,7 @@ export async function handleAuthSignup(
     password: string;
     fullName: string;
     conferenceName?: string;
-    inviteCode?: string;
+    inviteToken?: string;
   };
   try {
     body = await request.json();
@@ -45,10 +46,6 @@ export async function handleAuthSignup(
     return json({ error: "Password must be at least 8 characters" }, 400);
   }
 
-  if (env.INVITE_CODE && body.inviteCode !== env.INVITE_CODE) {
-    return json({ error: "Invalid invite code" }, 403);
-  }
-
   const userRepo = new UserRepo(createDb(env));
 
   const existing = await userRepo.findByEmail(body.email.toLowerCase().trim());
@@ -56,10 +53,33 @@ export async function handleAuthSignup(
     return json({ error: "Email already registered" }, 409);
   }
 
+  const userCount = await userRepo.count();
+  const isBootstrap = userCount === 0;
+
+  let assignedConferenceId: number | null = null;
+  let assignedRole: string | null = null;
+
+  if (body.inviteToken) {
+    try {
+      const invite = await verifyInviteToken(body.inviteToken, env.JWT_SECRET);
+      if (invite.email.toLowerCase().trim() !== body.email.toLowerCase().trim()) {
+        return json({ error: "This invite is for a different email address" }, 403);
+      }
+      assignedConferenceId = invite.conferenceId;
+      assignedRole = invite.role;
+    } catch {
+      return json({ error: "Invalid or expired invite link" }, 403);
+    }
+  } else if (isBootstrap) {
+    assignedRole = "sysadmin";
+  } else {
+    return json({ error: "An invite link is required to sign up" }, 403);
+  }
+
   const passwordHash = await hashPassword(body.password);
 
-  let conferenceId: number | null = null;
-  if (body.conferenceName) {
+  let conferenceId: number | null = assignedConferenceId;
+  if (!conferenceId && body.conferenceName) {
     const conferenceRepo = new ConferenceRepo(createDb(env));
     const result = await conferenceRepo.create({
       name: body.conferenceName,
@@ -81,7 +101,7 @@ export async function handleAuthSignup(
   const result = await userRepo.create({
     email: body.email.toLowerCase().trim(),
     passwordHash,
-    role: "sysadmin",
+    role: assignedRole ?? "sysadmin",
     conferenceId: conferenceId ?? undefined,
     emailVerified: isTestBypass ? 1 : 0,
   });

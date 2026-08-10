@@ -51,6 +51,7 @@ import {
   handleBulkInviteUsers,
   handleGetMe,
   handleUpdateUser,
+  handleGenerateInviteLink,
 } from "./routes/users";
 import {
   handleGetMembers,
@@ -281,6 +282,9 @@ app.patch("/api/churches/:id", (c) =>
 app.get("/api/users", (c) => handleGetUsers(c.req.raw, c.env, getAuth(c)));
 app.post("/api/users/invite", (c) => handleInviteUser(c.req.raw, c.env, getAuth(c)));
 app.post("/api/users/bulk-invite", (c) => handleBulkInviteUsers(c.req.raw, c.env, getAuth(c)));
+app.post("/api/users/generate-invite-link", (c) =>
+  handleGenerateInviteLink(c.req.raw, c.env, getAuth(c))
+);
 app.patch("/api/users/:id", (c) =>
   handleUpdateUser(c.req.raw, c.env, getAuth(c), Number(c.req.param("id")))
 );

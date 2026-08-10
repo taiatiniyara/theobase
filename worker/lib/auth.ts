@@ -149,13 +149,38 @@ export async function generateVerifyToken(userId: number, secret: string): Promi
     .sign(getKey(secret));
 }
 
-export async function verifyEmailToken(
+export async function verifyEmailToken(token: string, secret: string): Promise<{ sub: string }> {
+  const { payload } = await jwtVerify(token, getKey(secret));
+  if (payload.type !== "email-verify") throw new Error("Invalid token type");
+  if (!payload.sub) throw new Error("Invalid token payload");
+  return { sub: payload.sub };
+}
+
+const INVITE_EXPIRY = "7d";
+
+export async function signInviteToken(
+  payload: { email: string; conferenceId: number; role: string },
+  secret: string
+): Promise<string> {
+  return new SignJWT({ ...payload, type: "invite" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime(INVITE_EXPIRY)
+    .sign(getKey(secret));
+}
+
+export async function verifyInviteToken(
   token: string,
   secret: string
-): Promise<{ sub: string; type: string }> {
+): Promise<{ email: string; conferenceId: number; role: string }> {
   const { payload } = await jwtVerify(token, getKey(secret));
-  if (payload.type !== "email-verify") {
-    throw new Error("Invalid token type");
+  if (payload.type !== "invite") throw new Error("Invalid token type");
+  if (!payload.email || !payload.conferenceId || !payload.role) {
+    throw new Error("Invalid invite payload");
   }
-  return payload as unknown as { sub: string; type: string };
+  return {
+    email: String(payload.email),
+    conferenceId: Number(payload.conferenceId),
+    role: String(payload.role),
+  };
 }

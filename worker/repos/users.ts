@@ -29,6 +29,11 @@ export class UserRepo {
     return query.where(eq(users.conferenceId, conferenceId)).all();
   }
 
+  async count(): Promise<number> {
+    const rows = await (this.db.select().from(users).all() as unknown as Promise<UserRow[]>);
+    return rows.length;
+  }
+
   async create(data: {
     email: string;
     passwordHash: string;

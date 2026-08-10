@@ -14,6 +14,7 @@ const SignupPage = lazy(() => import("./routes/SignupPage"));
 const ForgotPasswordPage = lazy(() => import("./routes/ForgotPasswordPage"));
 const VerifyEmailPage = lazy(() => import("./routes/VerifyEmailPage"));
 const ResetPasswordPage = lazy(() => import("./routes/ResetPasswordPage"));
+const AcceptInvitePage = lazy(() => import("./routes/AcceptInvitePage"));
 const DashboardLayout = lazy(() => import("./routes/DashboardLayout"));
 const DashboardPage = lazy(() => import("./routes/DashboardPage"));
 const OrgManagementPage = lazy(() => import("./routes/OrgManagementPage"));
@@ -96,6 +97,15 @@ const resetPasswordRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/reset-password",
   component: ResetPasswordPage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    token: typeof search.token === "string" ? search.token : "",
+  }),
+});
+
+const acceptInviteRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/accept-invite",
+  component: AcceptInvitePage,
   validateSearch: (search: Record<string, unknown>) => ({
     token: typeof search.token === "string" ? search.token : "",
   }),
@@ -227,6 +237,7 @@ const routeTree = rootRoute.addChildren([
   forgotPasswordRoute,
   verifyEmailRoute,
   resetPasswordRoute,
+  acceptInviteRoute,
   dashboardLayout.addChildren([
     dashboardIndex,
     organizationRoute,

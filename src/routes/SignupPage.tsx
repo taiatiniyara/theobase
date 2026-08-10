@@ -9,7 +9,6 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [conferenceName, setConferenceName] = useState("");
-  const [inviteCode, setInviteCode] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -18,7 +17,7 @@ export default function SignupPage() {
     setError("");
     setSubmitting(true);
     try {
-      await signup(email, password, fullName, conferenceName || undefined, inviteCode || undefined);
+      await signup(email, password, fullName, conferenceName || undefined);
       navigate({ to: "/app" });
     } catch (err: unknown) {
       const msg =
@@ -96,20 +95,6 @@ export default function SignupPage() {
             <p className="mt-1 text-xs text-gray-500">
               The administrative unit that owns your churches
             </p>
-          </div>
-          <div>
-            <label htmlFor="inviteCode" className="block text-sm font-medium text-gray-700">
-              Invite Code
-            </label>
-            <input
-              id="inviteCode"
-              type="text"
-              required
-              value={inviteCode}
-              onChange={(e) => setInviteCode(e.target.value)}
-              placeholder="Enter your invite code"
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-            />
           </div>
           <button
             type="submit"

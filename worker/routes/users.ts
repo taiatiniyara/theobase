@@ -1,4 +1,4 @@
-import { hashPassword, generateResetToken } from "../lib/auth";
+import { hashPassword, generateResetToken, signInviteToken } from "../lib/auth";
 import { authorize, type AuthContext } from "../lib/middleware";
 import { PERMISSIONS, ROLES } from "../lib/roles";
 import { parseCsv, validateCsvHeaders } from "../lib/csv";
@@ -322,4 +322,47 @@ export async function handleGetMe(
     conference,
     church,
   });
+}
+
+export async function handleGenerateInviteLink(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
+  const forbidden = authorize(auth, PERMISSIONS["users:invite"]!);
+  if (forbidden) return forbidden;
+
+  let body: { email: string; role: string };
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: "Invalid JSON" }, 400);
+  }
+
+  if (!body.email || !body.role) {
+    return json({ error: "email and role are required" }, 400);
+  }
+
+  const validRoles = Object.values(ROLES);
+  if (!validRoles.includes(body.role as (typeof ROLES)[keyof typeof ROLES])) {
+    return json({ error: `Invalid role. Must be one of: ${validRoles.join(", ")}` }, 400);
+  }
+
+  if (!auth.conferenceId) {
+    return json({ error: "No conference assigned to your account" }, 400);
+  }
+
+  const token = await signInviteToken(
+    {
+      email: body.email.toLowerCase().trim(),
+      conferenceId: auth.conferenceId,
+      role: body.role,
+    },
+    env.JWT_SECRET
+  );
+
+  const origin = env.ALLOWED_ORIGINS?.split(",")[0]?.trim() ?? "https://theobase.app";
+  const inviteUrl = `${origin}/accept-invite?token=${token}`;
+
+  return json({ inviteUrl, email: body.email, role: body.role });
 }
