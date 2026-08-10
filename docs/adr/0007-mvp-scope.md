@@ -13,6 +13,7 @@ Theobase was triggered by the Fiji Mission's financial tracking problems. The fi
 ### v1.0 — ships to Fiji Mission
 
 **Platform foundations:**
+
 - Cloudflare multi-tenant architecture (one DO per church, D1 for cross-church analytics)
 - Magic link auth + JWT role enforcement (clerk, treasurer, counter, pastor)
 - Church registration + DO auto-provisioning
@@ -22,6 +23,7 @@ Theobase was triggered by the Fiji Mission's financial tracking problems. The fi
 - English + Fijian Hindi
 
 **Membership:**
+
 - Member CRUD with Zod-validated fields
 - Full membership lifecycle: baptism, profession of faith, transfer in/out, death, removal, reinstatement
 - Membership audit trail (every state change logged with timestamp and actor)
@@ -34,6 +36,7 @@ Theobase was triggered by the Fiji Mission's financial tracking problems. The fi
 - 14 role types with full permission matrix: clerk, treasurer, counter, pastor, department-head, board-member, member, interest, visitor, conference-treasurer, conference-secretary, conference-president, auditor, operator
 
 **Giving & Finance:**
+
 - Counting room: dual-signoff giving batch workflow
 - Custom numeric keypad for amount entry
 - Giving records per member: tithe + offerings by category
@@ -42,15 +45,18 @@ Theobase was triggered by the Fiji Mission's financial tracking problems. The fi
 - Smart defaults (pre-populated members and categories from previous weeks)
 
 **Reporting:**
+
 - Annual statistical report (auto-derived from membership data, one-tap approve and submit)
 - Tithe remittance statement (auto-computed from committed giving records)
 - Monthly financial statement (auto-generated income/expense summary)
 
 **Conference view:**
+
 - Fiji Mission admin dashboard with aggregate analytics across all activated churches
 - Per-church reporting drill-down
 
 **Intelligence:**
+
 - Proactive surface: giving decline alerts, missing members, reports ready for review
 - Every surfaced insight includes a clear next action
 

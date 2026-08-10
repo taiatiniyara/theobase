@@ -24,8 +24,8 @@ Theobase serves non-technical church officers. Passwords mean forgotten credenti
 
 ```typescript
 {
-  sub: string;        // userId
-  churchId: string;   // the user's home church
+  sub: string; // userId
+  churchId: string; // the user's home church
   role: string; // 13 roles — see CONTEXT.md permission matrix
   tokenVersion: number; // incremented on role change or forced logout
   iat: number;

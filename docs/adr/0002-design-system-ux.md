@@ -20,11 +20,11 @@ The Theobase logo (`branding/logo-icon.svg`, `branding/logo-full.svg`, `branding
 
 The brand palette, extracted directly from the logo:
 
-| Token | Hex | Tailwind | Role |
-|-------|-----|----------|------|
-| `--color-brand-300` | `#93C5FD` | `blue-300` | Top peak — lightest, subtle accents |
-| `--color-brand-400` | `#60A5FA` | `blue-400` | Upper mid peak — hover states, secondary accents |
-| `--color-brand-500` | `#3B82F6` | `blue-500` | Lower mid peak — interactive elements |
+| Token               | Hex       | Tailwind   | Role                                                   |
+| ------------------- | --------- | ---------- | ------------------------------------------------------ |
+| `--color-brand-300` | `#93C5FD` | `blue-300` | Top peak — lightest, subtle accents                    |
+| `--color-brand-400` | `#60A5FA` | `blue-400` | Upper mid peak — hover states, secondary accents       |
+| `--color-brand-500` | `#3B82F6` | `blue-500` | Lower mid peak — interactive elements                  |
 | `--color-brand-600` | `#2563EB` | `blue-600` | Bottom peak — primary action color, links, focus rings |
 
 Neutral palette: Tailwind Slate (`slate-50` through `slate-950`) for text, backgrounds, and borders.

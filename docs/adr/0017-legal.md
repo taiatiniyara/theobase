@@ -21,26 +21,26 @@ Theobase collects PII and financial data. Legal documents must exist before prod
 
 What the policy will cover (all already enforced by architecture):
 
-| Section | Content |
-|---------|---------|
+| Section        | Content                                                                                                |
+| -------------- | ------------------------------------------------------------------------------------------------------ |
 | Data collected | Member PII (name, address, phone, email, DOB, photo), financial records, device info for observability |
-| Data usage | Church operations, reporting, aggregate analytics for Conferences |
-| Data sharing | No third parties. Data stays on Cloudflare. Conference sees aggregates only. |
-| Retention | Giving records 7 years, membership + 3 years after removal, access logs 1 year, login logs 90 days |
-| User rights | Export (full data), correction (clerk can edit PII), deletion (right-to-erasure with anonymization) |
-| Security | TLS 1.3, AES-256 at rest, MFA for financial roles, append-only event log |
-| Contact | Privacy requests: privacy@theobase.app |
+| Data usage     | Church operations, reporting, aggregate analytics for Conferences                                      |
+| Data sharing   | No third parties. Data stays on Cloudflare. Conference sees aggregates only.                           |
+| Retention      | Giving records 7 years, membership + 3 years after removal, access logs 1 year, login logs 90 days     |
+| User rights    | Export (full data), correction (clerk can edit PII), deletion (right-to-erasure with anonymization)    |
+| Security       | TLS 1.3, AES-256 at rest, MFA for financial roles, append-only event log                               |
+| Contact        | Privacy requests: privacy@theobase.app                                                                 |
 
 ### Terms of Service — Content Outline
 
-| Section | Content |
-|---------|---------|
-| Service description | Church management platform for SDA churches |
-| Customer | Conference/Mission (not individual churches) |
-| Pricing | $3/church/month or $30/church/year |
-| Cancellation | 90-day read-only access, full data export |
-| Liability | Standard limitation |
-| Governing law | Determined by Theobase's jurisdiction of incorporation |
+| Section             | Content                                                |
+| ------------------- | ------------------------------------------------------ |
+| Service description | Church management platform for SDA churches            |
+| Customer            | Conference/Mission (not individual churches)           |
+| Pricing             | $3/church/month or $30/church/year                     |
+| Cancellation        | 90-day read-only access, full data export              |
+| Liability           | Standard limitation                                    |
+| Governing law       | Determined by Theobase's jurisdiction of incorporation |
 
 ## Consequences
 

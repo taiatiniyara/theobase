@@ -13,6 +13,7 @@ Theobase handles sensitive data: member PII (names, addresses, birth dates), fin
 ### Data Integrity — Append-Only Event Log
 
 Every DO mutation emits an event to an append-only log. Each event carries:
+
 - The operation (e.g. `member.created`, `giving.batch.committed`)
 - The payload (the Zod-validated data)
 - The actor (`userId`)
@@ -22,12 +23,12 @@ The DO's current state is the cumulative result of replaying the event log. The 
 
 ### Member PII — Data Isolation
 
-| Level | Access |
-|-------|--------|
-| Local church officers (clerk, treasurer) | Full member details for their church only |
-| Pastor | Full member details for churches in their district |
-| Conference admin | Aggregate statistics only (counts, trends, totals). No individual member details. |
-| Union/Division admin | Aggregate statistics only |
+| Level                                    | Access                                                                            |
+| ---------------------------------------- | --------------------------------------------------------------------------------- |
+| Local church officers (clerk, treasurer) | Full member details for their church only                                         |
+| Pastor                                   | Full member details for churches in their district                                |
+| Conference admin                         | Aggregate statistics only (counts, trends, totals). No individual member details. |
+| Union/Division admin                     | Aggregate statistics only                                                         |
 
 PII at rest is encrypted (Cloudflare D1, R2, and Durable Object Storage all use AES-256). In transit: HTTPS (TLS 1.3) enforced on all connections.
 

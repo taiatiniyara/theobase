@@ -15,6 +15,7 @@ A seed script (`pnpm seed:demo`) that provisions a complete demo church:
 **Church**: "Suva Central SDA Church" under Fiji Mission.
 
 **Members** (120 synthetic):
+
 - Realistic Fijian names and surnames
 - Organised into 40 households (spouses, children, single adults)
 - Membership statuses distributed realistically: 85% baptised, 10% profession of faith, 3% transferred in, 2% deceased
@@ -22,16 +23,19 @@ A seed script (`pnpm seed:demo`) that provisions a complete demo church:
 - Assigned officers: 1 clerk, 1 treasurer, 2 counters, 1 Sabbath School superintendent, 1 Pathfinder director
 
 **Giving records** (6 months, ~2,500 records):
+
 - Weekly tithe per household (log-normal distribution: most give consistently, a few large givers, some irregular)
 - Offerings distributed across categories (Sabbath School 40%, Local Church Budget 30%, World Budget 15%, Building Fund 10%, ADRA 5%)
 - Seasonal pattern: 15% increase in Q4 (harvest/bonus giving)
 - 24 weekly batches, all committed
 
 **2 active batches** (for demo):
+
 - Batch A: open, counter1 confirmed, waiting on counter2 — shows the dual-signoff progress indicator
 - Batch B: disputed — counter1 and counter2 totals don't match — shows the side-by-side reconciliation UI
 
 **Demo accounts**:
+
 - `clerk@suva.theobase.app` — church clerk
 - `treasurer@suva.theobase.app` — church treasurer
 - `counter1@suva.theobase.app` — counter

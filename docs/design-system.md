@@ -8,20 +8,20 @@ The single source of truth for every visual decision in Theobase. Every componen
 
 The Theobase logo is a geometric three-tier mountain peak — foundation, elevation, stability. Three SVG variants live in `branding/`:
 
-| File | Usage |
-|------|-------|
-| `logo-icon.svg` | Favicon, app icon, PWA manifest. Mountain icon only. |
-| `logo-full.svg` | Light backgrounds: login screen, light-mode header. Icon + wordmark in dark text. |
+| File                  | Usage                                                                                           |
+| --------------------- | ----------------------------------------------------------------------------------------------- |
+| `logo-icon.svg`       | Favicon, app icon, PWA manifest. Mountain icon only.                                            |
+| `logo-full.svg`       | Light backgrounds: login screen, light-mode header. Icon + wordmark in dark text.               |
 | `logo-full-light.svg` | Dark backgrounds: dark-mode header, onboarding, email templates. Icon + wordmark in light text. |
 
 The brand palette is drawn directly from the layered peaks of the logo:
 
-| Token | Hex | Tailwind Equivalent | Peak Position | Role |
-|-------|-----|---------------------|---------------|------|
-| `brand-300` | `#93C5FD` | `blue-300` | Top peak (lightest) | Subtle accents, badges, selected backgrounds |
-| `brand-400` | `#60A5FA` | `blue-400` | Upper mid peak | Hover states, secondary accents, focus rings |
-| `brand-500` | `#3B82F6` | `blue-500` | Lower mid peak | Interactive elements, links, active borders |
-| `brand-600` | `#2563EB` | `blue-600` | Bottom peak (darkest) | Primary actions, active nav, pressed states |
+| Token       | Hex       | Tailwind Equivalent | Peak Position         | Role                                         |
+| ----------- | --------- | ------------------- | --------------------- | -------------------------------------------- |
+| `brand-300` | `#93C5FD` | `blue-300`          | Top peak (lightest)   | Subtle accents, badges, selected backgrounds |
+| `brand-400` | `#60A5FA` | `blue-400`          | Upper mid peak        | Hover states, secondary accents, focus rings |
+| `brand-500` | `#3B82F6` | `blue-500`          | Lower mid peak        | Interactive elements, links, active borders  |
+| `brand-600` | `#2563EB` | `blue-600`          | Bottom peak (darkest) | Primary actions, active nav, pressed states  |
 
 ---
 
@@ -34,17 +34,18 @@ Every visual property maps to a token. Components reference tokens, never raw va
 #### Brand
 
 ```css
---color-brand-100: #DBEAFE;  /* light backgrounds, selected rows */
---color-brand-200: #BFDBFE;  /* hover backgrounds on light surfaces */
---color-brand-300: #93C5FD;  /* subtle accents, badges */
---color-brand-400: #60A5FA;  /* hover states, secondary accents */
---color-brand-500: #3B82F6;  /* interactive elements, links */
---color-brand-600: #2563EB;  /* primary action, active nav, pressed */
---color-brand-700: #1D4ED8;  /* hover on primary buttons */
---color-brand-800: #1E40AF;  /* pressed on primary buttons, dark bg accents */
+--color-brand-100: #dbeafe; /* light backgrounds, selected rows */
+--color-brand-200: #bfdbfe; /* hover backgrounds on light surfaces */
+--color-brand-300: #93c5fd; /* subtle accents, badges */
+--color-brand-400: #60a5fa; /* hover states, secondary accents */
+--color-brand-500: #3b82f6; /* interactive elements, links */
+--color-brand-600: #2563eb; /* primary action, active nav, pressed */
+--color-brand-700: #1d4ed8; /* hover on primary buttons */
+--color-brand-800: #1e40af; /* pressed on primary buttons, dark bg accents */
 ```
 
 Usage:
+
 - **brand-600** is the primary action color. Buttons, links, active navigation indicators, focus rings.
 - **brand-100** backgrounds for selected or active items in lists and side nav.
 - **brand-500** for tappable/interactive elements that are not the primary action.
@@ -53,33 +54,35 @@ Usage:
 #### Neutral (Tailwind Slate)
 
 ```css
---color-neutral-50:  #F8FAFC;  /* page background (light mode) */
---color-neutral-100: #F1F5F9;  /* card background, hover rows */
---color-neutral-200: #E2E8F0;  /* skeleton loading, dividers, disabled bg */
---color-neutral-300: #CBD5E1;  /* border on inputs, subtle separators */
---color-neutral-400: #94A3B8;  /* placeholder text, disabled text */
---color-neutral-500: #64748B;  /* secondary text, helper text, icons */
---color-neutral-600: #475569;  /* body text (light mode subdued) */
---color-neutral-700: #334155;  /* body text (light mode default) */
---color-neutral-800: #1E293B;  /* heading text, emphasis */
---color-neutral-900: #0F172A;  /* high-emphasis headings */
---color-neutral-950: #020617;  /* dark mode page background */
+--color-neutral-50: #f8fafc; /* page background (light mode) */
+--color-neutral-100: #f1f5f9; /* card background, hover rows */
+--color-neutral-200: #e2e8f0; /* skeleton loading, dividers, disabled bg */
+--color-neutral-300: #cbd5e1; /* border on inputs, subtle separators */
+--color-neutral-400: #94a3b8; /* placeholder text, disabled text */
+--color-neutral-500: #64748b; /* secondary text, helper text, icons */
+--color-neutral-600: #475569; /* body text (light mode subdued) */
+--color-neutral-700: #334155; /* body text (light mode default) */
+--color-neutral-800: #1e293b; /* heading text, emphasis */
+--color-neutral-900: #0f172a; /* high-emphasis headings */
+--color-neutral-950: #020617; /* dark mode page background */
 ```
 
 Usage:
+
 - **Light mode:** `neutral-50` page bg, `neutral-100` card bg, `neutral-700` body text, `neutral-900` headings.
 - **Dark mode (flipped):** `neutral-950` page bg, `neutral-800` card bg, `neutral-300` body text, `neutral-100` headings.
 - **Borders:** `neutral-200` on light bg, `neutral-700` on dark bg.
 
 #### Semantic
 
-| Token | Hex | Light Variant | Hex | Usage |
-|-------|-----|---------------|-----|-------|
+| Token     | Hex       | Light Variant   | Hex       | Usage                                                |
+| --------- | --------- | --------------- | --------- | ---------------------------------------------------- |
 | `success` | `#16A34A` | `success-light` | `#DCFCE7` | Success snackbar, confirmed status, synced indicator |
-| `warning` | `#D97706` | `warning-light` | `#FEF3C7` | Pending status, attention badge, unsaved changes |
-| `error` | `#DC2626` | `error-light` | `#FEE2E2` | Error snackbar, validation error, offline indicator |
+| `warning` | `#D97706` | `warning-light` | `#FEF3C7` | Pending status, attention badge, unsaved changes     |
+| `error`   | `#DC2626` | `error-light`   | `#FEE2E2` | Error snackbar, validation error, offline indicator  |
 
 Usage:
+
 - **Light variants** for badge backgrounds and alert banners (text in the 700-weight variant of the same hue).
 - **Solid variants** for foreground elements: success dot, warning icon, error border.
 - Semantic colors do **not** change between light and dark mode.
@@ -87,6 +90,7 @@ Usage:
 #### High-Contrast Mode
 
 When `prefers-contrast: more` is active, all text must achieve WCAG AAA **7:1** ratio:
+
 - Neutral text upgrades one level darker/lighter versus its background.
 - Brand-600 on white drops to **brand-700** to hit 7:1.
 - Focus rings widen to 3px and use `brand-700`.
@@ -97,33 +101,33 @@ When `prefers-contrast: more` is active, all text must achieve WCAG AAA **7:1** 
 #### Font Stack
 
 ```css
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-  "Helvetica Neue", Arial, "Noto Sans", "Noto Sans Arabic",
-  "Noto Sans Devanagari", "Noto Sans SC", sans-serif;
+font-family:
+  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+  'Noto Sans Arabic', 'Noto Sans Devanagari', 'Noto Sans SC', sans-serif;
 ```
 
 Zero custom font downloads. System fonts load instantly and are familiar to every platform. The `Noto Sans` family covers Arabic, Devanagari, Chinese, and Pacific Island scripts as fallbacks when the system font lacks glyphs.
 
 #### Scale
 
-| Token | Size | Line Height | Usage |
-|-------|------|-------------|-------|
-| `text-xs` | 12px | 1rem | Badges, captions, helper text, sync indicator label |
-| `text-sm` | 14px | 1.25rem | Secondary text, list meta, form labels, input text |
-| `text-base` | 16px | 1.5rem | Body text, list items, card content |
-| `text-lg` | 18px | 1.75rem | Card headings, dialog titles, section headers |
-| `text-xl` | 20px | 1.75rem | Screen titles, modal headings |
-| `text-2xl` | 24px | 2rem | Dashboard KPIs, amount previews (non-keypad) |
-| `text-3xl` | 30px | 2.25rem | Keypad amount display, hero numbers, signoff confirmations |
+| Token       | Size | Line Height | Usage                                                      |
+| ----------- | ---- | ----------- | ---------------------------------------------------------- |
+| `text-xs`   | 12px | 1rem        | Badges, captions, helper text, sync indicator label        |
+| `text-sm`   | 14px | 1.25rem     | Secondary text, list meta, form labels, input text         |
+| `text-base` | 16px | 1.5rem      | Body text, list items, card content                        |
+| `text-lg`   | 18px | 1.75rem     | Card headings, dialog titles, section headers              |
+| `text-xl`   | 20px | 1.75rem     | Screen titles, modal headings                              |
+| `text-2xl`  | 24px | 2rem        | Dashboard KPIs, amount previews (non-keypad)               |
+| `text-3xl`  | 30px | 2.25rem     | Keypad amount display, hero numbers, signoff confirmations |
 
 #### Weights
 
-| Weight | Token | Usage |
-|--------|-------|-------|
-| 400 | `font-normal` | Body text, form helpers, list meta |
-| 500 | `font-medium` | Labels, badges, secondary buttons |
-| 600 | `font-semibold` | Headings, card titles, primary buttons, amount display |
-| 700 | `font-bold` | KPI numbers, batch summary totals |
+| Weight | Token           | Usage                                                  |
+| ------ | --------------- | ------------------------------------------------------ |
+| 400    | `font-normal`   | Body text, form helpers, list meta                     |
+| 500    | `font-medium`   | Labels, badges, secondary buttons                      |
+| 600    | `font-semibold` | Headings, card titles, primary buttons, amount display |
+| 700    | `font-bold`     | KPI numbers, batch summary totals                      |
 
 #### Rules
 
@@ -136,21 +140,22 @@ Zero custom font downloads. System fonts load instantly and are familiar to ever
 
 Tailwind default scale. Key patterns:
 
-| Pattern | Token | Pixels | Context |
-|---------|-------|--------|---------|
-| Screen horizontal padding | `px-4` | 16px | Mobile screens, form containers |
-| Screen horizontal padding | `px-6` | 24px | Tablet/desktop screens |
-| Card internal padding | `p-4` | 16px | All cards |
-| Section vertical gap | `space-y-6` | 24px | Between form sections, content blocks |
-| Form field gap | `space-y-4` | 16px | Between stacked inputs |
-| List item padding | `px-4 py-3` | 16px × 12px | Member list rows, record rows |
-| Bottom nav padding | `px-2 py-2` | 8px × 8px | Tab bar internal |
-| Top bar height | `h-14` | 56px | Header bar |
-| Bottom nav height | `h-16` | 64px | Mobile tab bar |
+| Pattern                   | Token       | Pixels      | Context                               |
+| ------------------------- | ----------- | ----------- | ------------------------------------- |
+| Screen horizontal padding | `px-4`      | 16px        | Mobile screens, form containers       |
+| Screen horizontal padding | `px-6`      | 24px        | Tablet/desktop screens                |
+| Card internal padding     | `p-4`       | 16px        | All cards                             |
+| Section vertical gap      | `space-y-6` | 24px        | Between form sections, content blocks |
+| Form field gap            | `space-y-4` | 16px        | Between stacked inputs                |
+| List item padding         | `px-4 py-3` | 16px × 12px | Member list rows, record rows         |
+| Bottom nav padding        | `px-2 py-2` | 8px × 8px   | Tab bar internal                      |
+| Top bar height            | `h-14`      | 56px        | Header bar                            |
+| Bottom nav height         | `h-16`      | 64px        | Mobile tab bar                        |
 
 #### Minimum Touch Target
 
 Every interactive element must have a **minimum 48×48px** touch area. If the visual element is smaller, enlarge its hit area with transparent padding. This applies to:
+
 - Buttons, links, tab items
 - Swipe targets on list items
 - Keypad buttons (these should be 56×56px)
@@ -158,11 +163,11 @@ Every interactive element must have a **minimum 48×48px** touch area. If the vi
 
 ### Border Radius
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `rounded-md` | 6px | Inputs, buttons, selects, date pickers |
-| `rounded-lg` | 8px | Cards, modals, sheets, form sections |
-| `rounded-full` | 9999px | Badges, avatars, sync indicator pill |
+| Token          | Value  | Usage                                  |
+| -------------- | ------ | -------------------------------------- |
+| `rounded-md`   | 6px    | Inputs, buttons, selects, date pickers |
+| `rounded-lg`   | 8px    | Cards, modals, sheets, form sections   |
+| `rounded-full` | 9999px | Badges, avatars, sync indicator pill   |
 
 **NEVER** use `rounded-none` (0px) or `rounded-sm` (2px) — they feel unfinished. **NEVER** use `rounded-xl` or larger for UI containers — they look inflated.
 
@@ -170,32 +175,36 @@ Every interactive element must have a **minimum 48×48px** touch area. If the vi
 
 Theobase is a flat design. Shadows are minimal and purposeful.
 
-| Token | Usage | Light Mode | Dark Mode |
-|-------|-------|------------|-----------|
-| `shadow-none` | Default state for all surfaces | — | — |
-| `shadow-sm` | Cards (resting) | `0 1px 2px rgba(0,0,0,0.05)` | `0 1px 2px rgba(0,0,0,0.3)` |
-| `shadow-md` | Modals, dialogs, bottom sheets | `0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)` | Same, with 0.4 alpha |
+| Token         | Usage                          | Light Mode                                                       | Dark Mode                   |
+| ------------- | ------------------------------ | ---------------------------------------------------------------- | --------------------------- |
+| `shadow-none` | Default state for all surfaces | —                                                                | —                           |
+| `shadow-sm`   | Cards (resting)                | `0 1px 2px rgba(0,0,0,0.05)`                                     | `0 1px 2px rgba(0,0,0,0.3)` |
+| `shadow-md`   | Modals, dialogs, bottom sheets | `0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)` | Same, with 0.4 alpha        |
 
 **NEVER** use `shadow-lg` or `shadow-xl` — flat design principle. Elevation is communicated through layout and borders, not heavy drop shadows.
 
 ### Motion
 
-| Type | Duration | Easing | Usage |
-|------|----------|--------|-------|
-| Micro | 150ms | `ease-out` | Button press, toggle, badge appear, focus ring transition |
-| Transition | 300ms | `ease-in-out` | Panel expand/collapse, snackbar enter/exit, modal open/close |
-| Page | 500ms | `ease-in-out` | Route transitions, sheets sliding in |
+| Type       | Duration | Easing        | Usage                                                        |
+| ---------- | -------- | ------------- | ------------------------------------------------------------ |
+| Micro      | 150ms    | `ease-out`    | Button press, toggle, badge appear, focus ring transition    |
+| Transition | 300ms    | `ease-in-out` | Panel expand/collapse, snackbar enter/exit, modal open/close |
+| Page       | 500ms    | `ease-in-out` | Route transitions, sheets sliding in                         |
 
 Spring physics for gestures:
+
 ```css
---spring-gentle: spring(0.5, 100, 15);   /* swipe-to-dismiss, pull-to-refresh */
---spring-snappy: spring(0.3, 200, 20);    /* keypad press feedback */
+--spring-gentle: spring(0.5, 100, 15); /* swipe-to-dismiss, pull-to-refresh */
+--spring-snappy: spring(0.3, 200, 20); /* keypad press feedback */
 ```
 
 All motion must be gated:
+
 ```css
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
@@ -239,9 +248,12 @@ Every screen in Theobase is exactly one of these three patterns. AI agents must 
 ```
 
 Structure:
+
 ```html
 <div class="flex flex-col min-h-screen bg-neutral-50 dark:bg-neutral-950">
-  <header class="h-14 flex items-center justify-between px-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950">
+  <header
+    class="h-14 flex items-center justify-between px-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950"
+  >
     <!-- Logo + SyncIndicator -->
   </header>
   <main class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
@@ -254,6 +266,7 @@ Structure:
 ```
 
 Rules:
+
 - Mobile: bottom nav. Desktop: side nav.
 - Insight Bar cards are tappable — tapping opens the relevant detail view.
 - Quick Actions are primary call-to-action buttons.
@@ -288,9 +301,12 @@ Rules:
 ```
 
 Structure:
+
 ```html
 <div class="flex flex-col min-h-screen bg-neutral-50 dark:bg-neutral-950">
-  <header class="h-14 flex items-center gap-3 px-4 border-b border-neutral-200 dark:border-neutral-800">
+  <header
+    class="h-14 flex items-center gap-3 px-4 border-b border-neutral-200 dark:border-neutral-800"
+  >
     <button><!-- Back arrow (brand-600) --></button>
     <h1 class="text-lg font-semibold flex-1"><!-- Title --></h1>
     <button><!-- Primary action (Edit/Save) --></button>
@@ -303,6 +319,7 @@ Structure:
 ```
 
 Rules:
+
 - Back button always `brand-600`, always leftmost. Title is centered when no right action, left-aligned when there is one.
 - The right action button is the primary action for this entity (Edit, Save, Share).
 - Detail cards group related information. One card per logical group.
@@ -339,9 +356,12 @@ Rules:
 ```
 
 Structure:
+
 ```html
 <div class="flex flex-col min-h-screen bg-neutral-50 dark:bg-neutral-950">
-  <header class="h-14 flex items-center gap-3 px-4 border-b border-neutral-200 dark:border-neutral-800">
+  <header
+    class="h-14 flex items-center gap-3 px-4 border-b border-neutral-200 dark:border-neutral-800"
+  >
     <button class="text-brand-600 font-medium"><!-- Cancel --></button>
     <h1 class="text-lg font-semibold flex-1 text-center"><!-- Title --></h1>
     <button class="text-brand-600 font-semibold"><!-- Save --></button>
@@ -358,6 +378,7 @@ Structure:
 ```
 
 Rules:
+
 - Cancel is always left, styled as `text-brand-600 font-medium` (link-style, not button).
 - Save/Submit is always right, styled as `text-brand-600 font-semibold`.
 - Form sections are grouped by topic, separated by `space-y-6`, with section titles in `text-lg font-semibold`.
@@ -376,32 +397,34 @@ Every component is a shadcn/ui primitive, styled with Theobase tokens. Features 
 
 ```css
 /* Base */
-btn: h-12 px-6 rounded-md font-semibold text-base inline-flex items-center justify-center gap-2 transition-colors duration-150
+btn: h-12 px-6 rounded-md font-semibold text-base inline-flex items-center justify-center gap-2
+  transition-colors duration-150;
 ```
 
-| Variant | Classes | Usage |
-|---------|---------|-------|
-| `primary` | `bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800` | Main action on screen |
-| `secondary` | `bg-neutral-100 text-neutral-700 hover:bg-neutral-200 active:bg-neutral-300 border border-neutral-200` | Secondary action |
-| `ghost` | `text-neutral-600 hover:bg-neutral-100 active:bg-neutral-200` | Tertiary action, nav items |
-| `destructive` | `bg-error text-white hover:bg-red-700 active:bg-red-800` | Delete, remove, irreversible |
+| Variant       | Classes                                                                                                | Usage                        |
+| ------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| `primary`     | `bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800`                                       | Main action on screen        |
+| `secondary`   | `bg-neutral-100 text-neutral-700 hover:bg-neutral-200 active:bg-neutral-300 border border-neutral-200` | Secondary action             |
+| `ghost`       | `text-neutral-600 hover:bg-neutral-100 active:bg-neutral-200`                                          | Tertiary action, nav items   |
+| `destructive` | `bg-error text-white hover:bg-red-700 active:bg-red-800`                                               | Delete, remove, irreversible |
 
-| Size | Classes | Usage |
-|------|---------|-------|
-| `sm` | `h-8 px-3 text-sm` | Table actions, inline buttons |
-| `default` | `h-12 px-6 text-base` | Standard buttons |
-| `lg` | `h-14 px-8 text-lg` | Primary CTA on empty states, signoff confirm |
+| Size      | Classes               | Usage                                        |
+| --------- | --------------------- | -------------------------------------------- |
+| `sm`      | `h-8 px-3 text-sm`    | Table actions, inline buttons                |
+| `default` | `h-12 px-6 text-base` | Standard buttons                             |
+| `lg`      | `h-14 px-8 text-lg`   | Primary CTA on empty states, signoff confirm |
 
-| State | Behavior |
-|-------|----------|
-| Default | Standard variant colors |
-| Hover | Darken by one step (e.g. brand-600 → brand-700) |
-| Active/Pressed | Darken by two steps, slight scale(0.98) |
-| Focus-visible | 2px offset ring in `brand-400`, radius matches button |
-| Disabled | `opacity-50 cursor-not-allowed`, no hover/press effects |
-| Loading | Replace content with a small spinner (not a skeleton), button stays same size |
+| State          | Behavior                                                                      |
+| -------------- | ----------------------------------------------------------------------------- |
+| Default        | Standard variant colors                                                       |
+| Hover          | Darken by one step (e.g. brand-600 → brand-700)                               |
+| Active/Pressed | Darken by two steps, slight scale(0.98)                                       |
+| Focus-visible  | 2px offset ring in `brand-400`, radius matches button                         |
+| Disabled       | `opacity-50 cursor-not-allowed`, no hover/press effects                       |
+| Loading        | Replace content with a small spinner (not a skeleton), button stays same size |
 
 **NEVER:**
+
 - Never use more than one primary button per screen.
 - Never make a button look like a link or vice versa.
 - Never use an icon-only button without an accessible label (`aria-label`).
@@ -417,19 +440,21 @@ input: h-12 w-full px-4 rounded-md border border-neutral-300 bg-white text-neutr
        dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100 dark:placeholder:text-neutral-500
 ```
 
-| State | Visual |
-|-------|--------|
-| Default | `border-neutral-300` |
-| Focus | `border-brand-500` + `ring-2 ring-brand-400` |
-| Error | `border-error` + `ring-2 ring-red-300` — error message in `text-error text-sm mt-1` |
-| Disabled | `bg-neutral-100 text-neutral-400` |
+| State    | Visual                                                                              |
+| -------- | ----------------------------------------------------------------------------------- |
+| Default  | `border-neutral-300`                                                                |
+| Focus    | `border-brand-500` + `ring-2 ring-brand-400`                                        |
+| Error    | `border-error` + `ring-2 ring-red-300` — error message in `text-error text-sm mt-1` |
+| Disabled | `bg-neutral-100 text-neutral-400`                                                   |
 
 Every input must have:
+
 1. A visible `<label>` above it (`text-sm font-medium text-neutral-700`).
 2. Optional `<p>` helper text below (`text-xs text-neutral-500`).
 3. Error message below when invalid (`text-sm text-error`).
 
 **NEVER:**
+
 - Never use `placeholder` as the only label. Placeholders disappear on focus.
 - Never use a bare input without a label.
 - Never set input height below 48px.
@@ -450,11 +475,11 @@ card: bg-white rounded-lg p-4 shadow-sm border border-neutral-200
       dark:bg-neutral-800 dark:border-neutral-700
 ```
 
-| Variant | Usage |
-|---------|-------|
-| Default | Standard content card |
+| Variant     | Usage                                                                                                      |
+| ----------- | ---------------------------------------------------------------------------------------------------------- |
+| Default     | Standard content card                                                                                      |
 | Interactive | Add `hover:shadow-md hover:border-brand-300 cursor-pointer transition-all duration-150` for tappable cards |
-| Insight | `bg-brand-100 dark:bg-brand-900 border-brand-200 dark:border-brand-800` for dashboard stat cards |
+| Insight     | `bg-brand-100 dark:bg-brand-900 border-brand-200 dark:border-brand-800` for dashboard stat cards           |
 
 Optional header: `px-4 pt-4 pb-0` with `text-lg font-semibold` title and optional action button on the right.
 
@@ -463,30 +488,30 @@ Optional header: `px-4 pt-4 pb-0` with `text-lg font-semibold` title and optiona
 #### Badge
 
 ```css
-badge: inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+badge: inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
 ```
 
-| Variant | Classes | Usage |
-|---------|---------|-------|
-| `default` | `bg-brand-100 text-brand-700` | Generic tags, roles, categories |
-| `success` | `bg-success-light text-green-700` | Confirmed, synced, active |
-| `warning` | `bg-warning-light text-amber-700` | Pending, draft, attention |
-| `error` | `bg-error-light text-red-700` | Failed, overdue, disputed |
+| Variant   | Classes                           | Usage                           |
+| --------- | --------------------------------- | ------------------------------- |
+| `default` | `bg-brand-100 text-brand-700`     | Generic tags, roles, categories |
+| `success` | `bg-success-light text-green-700` | Confirmed, synced, active       |
+| `warning` | `bg-warning-light text-amber-700` | Pending, draft, attention       |
+| `error`   | `bg-error-light text-red-700`     | Failed, overdue, disputed       |
 
 Every badge must contain text. **NEVER** use a color-only dot as a badge — always pair color with a label.
 
 #### Avatar
 
 ```css
-avatar: rounded-full overflow-hidden bg-brand-100 text-brand-700 font-medium
-        flex items-center justify-center
+avatar: rounded-full overflow-hidden bg-brand-100 text-brand-700 font-medium flex items-center
+  justify-center;
 ```
 
-| Size | Classes | Usage |
-|------|---------|-------|
-| `sm` | `w-8 h-8 text-xs` | List items, table rows |
+| Size      | Classes             | Usage                         |
+| --------- | ------------------- | ----------------------------- |
+| `sm`      | `w-8 h-8 text-xs`   | List items, table rows        |
 | `default` | `w-10 h-10 text-sm` | Detail cards, profile headers |
-| `lg` | `w-16 h-16 text-xl` | Profile screen |
+| `lg`      | `w-16 h-16 text-xl` | Profile screen                |
 
 When no image is available, show the member's initials (up to 2 characters) on `bg-brand-100 text-brand-700`. The background cycles through brand-100/200/300 by first-letter hash to vary color across a list.
 
@@ -516,6 +541,7 @@ side-nav: w-[240px] h-screen bg-white border-r border-neutral-200 flex flex-col
 ```
 
 Structure:
+
 - **Top:** Logo (logo-full.svg or logo-full-light.svg), 40px padding, linked to Dashboard.
 - **Middle:** Navigation items, vertical list, each item 48px height with `px-4`.
   - Active item: `bg-brand-100 dark:bg-brand-800` background, `text-brand-700 dark:text-brand-300` text, 3px `brand-600` left border.
@@ -532,6 +558,7 @@ top-bar: h-14 w-full bg-neutral-50 dark:bg-neutral-950 border-b border-neutral-2
 ```
 
 Structure:
+
 - Left: Back button (`text-brand-600 font-medium`, ← icon + "Back" text).
 - Center: Screen title (`text-lg font-semibold text-neutral-900 dark:text-neutral-100`, `flex-1 text-center`).
 - Right: Primary action (Save, Edit) or empty.
@@ -548,6 +575,7 @@ member-item: h-16 flex items-center gap-3 px-4 bg-white dark:bg-neutral-800 hove
 ```
 
 Structure:
+
 1. **Avatar** (40px, rounded-full, initials fallback)
 2. **Info column** (`flex-1 min-w-0`): Name (`text-base font-medium`), subtitle with role badge (`text-sm text-neutral-500` + badge)
 3. **Status badge** (right-aligned)
@@ -566,6 +594,7 @@ record-row: h-12 flex items-center gap-3 px-4 bg-white dark:bg-neutral-800
 ```
 
 Structure:
+
 1. Date (`text-sm text-neutral-500 tabular-nums`, fixed width)
 2. Member name (`text-sm font-medium`, `flex-1`)
 3. Amount (`text-sm font-semibold tabular-nums text-neutral-900 dark:text-neutral-100`, right-aligned)
@@ -578,16 +607,18 @@ Structure:
 #### Empty State
 
 ```css
-empty-state: flex flex-col items-center justify-center text-center px-4 py-12 min-h-[300px]
+empty-state: flex flex-col items-center justify-center text-center px-4 py-12 min-h-[300px];
 ```
 
 Structure:
+
 1. Icon (64×64px, `text-neutral-300`, brand-themed for the context — e.g., a giving icon for "No giving records")
 2. Heading (`text-lg font-semibold text-neutral-700 mt-6`)
 3. Description (`text-sm text-neutral-500 mt-2 max-w-xs`)
 4. Primary action button (`mt-6`)
 
 Examples:
+
 - "No members yet" → "Add your first member to get started" → [Add Member]
 - "No giving records" → "Start a new batch to record this week's giving" → [New Batch]
 - "No results found" → "Try adjusting your search or filters" → [Clear Filters]
@@ -601,6 +632,7 @@ skeleton: bg-neutral-200 dark:bg-neutral-700 rounded-md animate-pulse
 ```
 
 Match the shape of the component being loaded:
+
 - List item skeleton: avatar circle (40px) + two text bars (one 60% width, one 40% width)
 - Card skeleton: full card shape in neutral-200
 - Table skeleton: 3-5 rows of matching column widths
@@ -617,11 +649,11 @@ snackbar: fixed bottom-20 left-4 right-4 bg-neutral-900 dark:bg-neutral-100 text
           animate-in slide-in-from-bottom-4 duration-300
 ```
 
-| Variant | Left Icon | Usage |
-|---------|-----------|-------|
-| `success` | Check circle, `text-success` | Batch confirmed, member saved, sync complete |
-| `error` | Alert circle, `text-error` | Save failed, sync error, validation failure |
-| `warning` | Warning triangle, `text-warning` | Offline changes queued, stale data |
+| Variant   | Left Icon                        | Usage                                        |
+| --------- | -------------------------------- | -------------------------------------------- |
+| `success` | Check circle, `text-success`     | Batch confirmed, member saved, sync complete |
+| `error`   | Alert circle, `text-error`       | Save failed, sync error, validation failure  |
+| `warning` | Warning triangle, `text-warning` | Offline changes queued, stale data           |
 
 - Auto-dismisses after **5 seconds**.
 - Optional action button (e.g., "Undo") right-aligned.
@@ -641,6 +673,7 @@ dialog-content: fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-whit
 ```
 
 Structure:
+
 1. Title (`text-lg font-semibold`)
 2. Description (`text-sm text-neutral-500 mt-2`)
 3. Action buttons (`mt-6 flex gap-3 justify-end`): primary action rightmost, secondary (cancel) left.
@@ -654,14 +687,14 @@ Structure:
 #### Sync Indicator
 
 ```css
-sync-indicator: inline-flex items-center gap-1.5 px-2 py-1 rounded-full
+sync-indicator: inline-flex items-center gap-1.5 px-2 py-1 rounded-full;
 ```
 
-| State | Dot | Label | Action |
-|-------|-----|-------|--------|
-| Synced | `bg-success w-2 h-2 rounded-full` | "Synced" | None |
+| State   | Dot                               | Label       | Action                   |
+| ------- | --------------------------------- | ----------- | ------------------------ |
+| Synced  | `bg-success w-2 h-2 rounded-full` | "Synced"    | None                     |
 | Pending | `bg-warning w-2 h-2 rounded-full` | "3 pending" | Tap → queue detail sheet |
-| Offline | `bg-error w-2 h-2 rounded-full` | "Offline" | Tap → network status |
+| Offline | `bg-error w-2 h-2 rounded-full`   | "Offline"   | Tap → network status     |
 
 Positioned in the top bar (Dashboard header), right of the logo. The dot is a 3px × 16px pill (horizontal orientation) that animates between states with a 150ms color transition.
 
@@ -677,6 +710,7 @@ key: h-14 rounded-md bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neu
 ```
 
 Layout (calculator style):
+
 ```
 ┌───────┬───────┬───────┐
 │   1   │   2   │   3   │
@@ -718,6 +752,7 @@ batch-card: flex items-center gap-3 px-4 py-3 bg-white dark:bg-neutral-800 round
 ```
 
 Structure:
+
 1. Member name (`text-sm font-medium`, `flex-1`)
 2. Amount (`text-sm font-semibold tabular-nums`)
 3. Category badge
@@ -733,10 +768,12 @@ batch-summary: flex items-center justify-between px-4 py-4 bg-neutral-100 dark:b
 ```
 
 Structure:
+
 1. Left: "X records" + total amount in `text-lg font-semibold tabular-nums`
 2. Right: Dual-signoff progress indicator
 
 Dual-signoff indicator:
+
 ```css
 signoff: flex items-center gap-2
 signoff-counter: w-10 h-10 rounded-full border-2 border-neutral-300 dark:border-neutral-600
@@ -760,6 +797,7 @@ form-section-divider: border-t border-neutral-200 dark:border-neutral-800 my-6
 ```
 
 Structure:
+
 - Section title at top.
 - Inputs stacked with `space-y-4`.
 - Optional description below title (`text-sm text-neutral-500`).
@@ -774,8 +812,9 @@ Uses native `<input type="date">` styled with the Input component tokens. The na
 #### Currency Input
 
 Triggers the custom numeric keypad (replaces the system keyboard). Amount preview displayed below the input:
+
 ```css
-currency-preview: text-sm text-neutral-500 tabular-nums text-right
+currency-preview: text-sm text-neutral-500 tabular-nums text-right;
 ```
 
 Shows the parsed monetary value (e.g., "Amount: $50.00") as the user types on the keypad.

@@ -2,11 +2,11 @@
 
 ## Severity Levels
 
-| Level | Definition | Response |
-|-------|-----------|----------|
-| P1 | Platform down — no user can access any church DO | All hands. Cloudflare dashboard check, Worker logs, DO error rates. Target resolution: < 1 hour. |
-| P2 | Single church DO down or degraded | Investigate that DO's event log and error rate. Target resolution: < 4 hours. |
-| P3 | Feature degradation — a specific flow broken (e.g. counting room entry not syncing) | Bug report → triage → fix in next deployment. |
+| Level | Definition                                                                          | Response                                                                                         |
+| ----- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| P1    | Platform down — no user can access any church DO                                    | All hands. Cloudflare dashboard check, Worker logs, DO error rates. Target resolution: < 1 hour. |
+| P2    | Single church DO down or degraded                                                   | Investigate that DO's event log and error rate. Target resolution: < 4 hours.                    |
+| P3    | Feature degradation — a specific flow broken (e.g. counting room entry not syncing) | Bug report → triage → fix in next deployment.                                                    |
 
 ## Response Procedure
 

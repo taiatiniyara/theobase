@@ -14,12 +14,12 @@ We're not using Sentry. Theobase needs its own error tracking, sync health monit
 
 Infrastructure that records every error from day one, with no user-facing UI:
 
-| Component | Implementation |
-|-----------|----------------|
-| PWA client | `@theobase/observability` — wraps errors, breadcrumbs, sync metrics. Pushes to `metrics` Queue. Never blocks the user. |
-| DO error catches | Every DO catches unhandled errors, pushes to `metrics` Queue with DO ID, event log position, and stack trace. |
-| Worker middleware | Request timing and error rate per endpoint. Error responses pushed to Queue. |
-| Storage | D1 `errors` table: `id, churchId, userId, severity, type, message, stackTrace, breadcrumbTrail, deviceInfo, timestamp, resolved`. D1 `sync_health` table: `churchId, queueDepth, lastSyncAt, syncSuccessRate, doLatencyMs, updatedAt`. R2: full error payloads and raw stack traces. |
+| Component         | Implementation                                                                                                                                                                                                                                                                       |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| PWA client        | `@theobase/observability` — wraps errors, breadcrumbs, sync metrics. Pushes to `metrics` Queue. Never blocks the user.                                                                                                                                                               |
+| DO error catches  | Every DO catches unhandled errors, pushes to `metrics` Queue with DO ID, event log position, and stack trace.                                                                                                                                                                        |
+| Worker middleware | Request timing and error rate per endpoint. Error responses pushed to Queue.                                                                                                                                                                                                         |
+| Storage           | D1 `errors` table: `id, churchId, userId, severity, type, message, stackTrace, breadcrumbTrail, deviceInfo, timestamp, resolved`. D1 `sync_health` table: `churchId, queueDepth, lastSyncAt, syncSuccessRate, doLatencyMs, updatedAt`. R2: full error payloads and raw stack traces. |
 
 ### v1.5 — Observability UI (post-MVP)
 

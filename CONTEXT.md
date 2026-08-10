@@ -10,7 +10,7 @@ This means every feature is designed in the **approve-don't-build** posture: the
 
 ## Design Principle: Self-Teaching
 
-No one reads the manual. Every operation teaches the user how to do the next one. The interface uses progressive disclosure — show only what's relevant now, reveal more as the user's task grows — and inline guidance that explains *why* a step exists, not just *what* to do ("Two people must count the offering before it can be deposited — this protects you and the church").
+No one reads the manual. Every operation teaches the user how to do the next one. The interface uses progressive disclosure — show only what's relevant now, reveal more as the user's task grows — and inline guidance that explains _why_ a step exists, not just _what_ to do ("Two people must count the offering before it can be deposited — this protects you and the church").
 
 Every screen makes the next action obvious. Empty states tell the user what to do first, not just that something is empty ("No members yet — upload your membership roll or add the first person"). Error states explain what happened and what to do next, in plain language, never a stack trace.
 
@@ -75,23 +75,23 @@ The dashboard is proactive intelligence, not a passive rear-view mirror. Every s
 
 #### Permission Matrix
 
-| | Clerk | Treasurer | Counter | Pastor | Board | Dept Head | Member | Interest | Visitor | Conf Tres. | Conf Sec. | Conf Pres. | Auditor | Operator |
-|-|-------|-----------|---------|--------|-------|-----------|--------|----------|---------|------------|-----------|------------|---------|----------|
-| **Scope** | Church | Church | Church | District | Church | Church | Self | Self | Self | Conference | Conference | Conference | Assigned | Platform |
-| **Member: view detail** | All | All | ✗ | All | All | All | Self | Self | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| **Member: CRUD** | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | Contact* | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| **Member: lifecycle** | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| **Household: manage** | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| **Giving: view history** | All | All | ✗ | ✗ | ✗ | ✗ | Self | ✗ | ✗ | ✗ | ✗ | ✗ | All | ✗ |
-| **Giving: enter records** | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| **Giving: count batch** | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| **Reports: view** | All | All | ✗ | All | All | ✗ | Self | ✗ | ✗ | Remittance | Annual | All | All | All |
-| **Reports: submit** | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | Approve/Return | ✗ | ✗ | ✗ |
-| **Role invites** | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| **Church: activate** | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ✓ |
-| **Billing: manage** | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ |
-| **Observability** | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ |
-| **Support: impersonate** | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ |
+|                           | Clerk  | Treasurer | Counter | Pastor   | Board  | Dept Head | Member   | Interest | Visitor | Conf Tres. | Conf Sec.      | Conf Pres. | Auditor  | Operator |
+| ------------------------- | ------ | --------- | ------- | -------- | ------ | --------- | -------- | -------- | ------- | ---------- | -------------- | ---------- | -------- | -------- |
+| **Scope**                 | Church | Church    | Church  | District | Church | Church    | Self     | Self     | Self    | Conference | Conference     | Conference | Assigned | Platform |
+| **Member: view detail**   | All    | All       | ✗       | All      | All    | All       | Self     | Self     | ✗       | ✗          | ✗              | ✗          | ✗        | ✗        |
+| **Member: CRUD**          | ✓      | ✗         | ✗       | ✗        | ✗      | ✗         | Contact* | ✗        | ✗       | ✗          | ✗              | ✗          | ✗        | ✗        |
+| **Member: lifecycle**     | ✓      | ✗         | ✗       | ✗        | ✗      | ✗         | ✗        | ✗        | ✗       | ✗          | ✗              | ✗          | ✗        | ✗        |
+| **Household: manage**     | ✓      | ✗         | ✗       | ✗        | ✗      | ✗         | ✗        | ✗        | ✗       | ✗          | ✗              | ✗          | ✗        | ✗        |
+| **Giving: view history**  | All    | All       | ✗       | ✗        | ✗      | ✗         | Self     | ✗        | ✗       | ✗          | ✗              | ✗          | All      | ✗        |
+| **Giving: enter records** | ✗      | ✓         | ✗       | ✗        | ✗      | ✗         | ✗        | ✗        | ✗       | ✗          | ✗              | ✗          | ✗        | ✗        |
+| **Giving: count batch**   | ✗      | ✗         | ✓       | ✗        | ✗      | ✗         | ✗        | ✗        | ✗       | ✗          | ✗              | ✗          | ✗        | ✗        |
+| **Reports: view**         | All    | All       | ✗       | All      | All    | ✗         | Self     | ✗        | ✗       | Remittance | Annual         | All        | All      | All      |
+| **Reports: submit**       | ✓      | ✓         | ✗       | ✗        | ✗      | ✗         | ✗        | ✗        | ✗       | ✓          | Approve/Return | ✗          | ✗        | ✗        |
+| **Role invites**          | ✓      | ✗         | ✗       | ✗        | ✗      | ✗         | ✗        | ✗        | ✗       | ✗          | ✗              | ✗          | ✗        | ✗        |
+| **Church: activate**      | ✗      | ✗         | ✗       | ✗        | ✗      | ✗         | ✗        | ✗        | ✗       | ✓          | ✓              | ✗          | ✗        | ✓        |
+| **Billing: manage**       | ✗      | ✗         | ✗       | ✗        | ✗      | ✗         | ✗        | ✗        | ✗       | ✓          | ✗              | ✗          | ✗        | ✗        |
+| **Observability**         | ✗      | ✗         | ✗       | ✗        | ✗      | ✗         | ✗        | ✗        | ✗       | ✗          | ✗              | ✗          | ✗        | ✓        |
+| **Support: impersonate**  | ✗      | ✗         | ✗       | ✗        | ✗      | ✗         | ✗        | ✗        | ✗       | ✗          | ✗              | ✗          | ✗        | ✓        |
 
 \* Contact updates submitted by the member go to the clerk for approval before applying.
 
@@ -152,7 +152,7 @@ The dashboard is proactive intelligence, not a passive rear-view mirror. Every s
   - `logo-icon.svg` — mountain icon only, for favicons and app icons
   - `logo-full.svg` — icon + "Theobase" wordmark (dark text), for light backgrounds
   - `logo-full-light.svg` — icon + "Theobase" wordmark (light text), for dark backgrounds and dark mode headers
-  The mountain motif represents foundation, elevation, and stability. The palette defines the entire design system.
+    The mountain motif represents foundation, elevation, and stability. The palette defines the entire design system.
 - **Brand Palette** — defined in `docs/design-system.md`. Derived from the logo's layered blues: `brand-300` `#93C5FD`, `brand-400` `#60A5FA`, `brand-500` `#3B82F6`, `brand-600` `#2563EB`.
 - **Design System** — single source of truth for all UI decisions at `docs/design-system.md`. Defines brand tokens (from logo palette), typography, spacing, motion, three canonical layouts (Dashboard, Detail, Form), and a component catalog of shadcn/ui primitives styled with Theobase tokens. AI agents must read this file before building any UI. See `docs/adr/0005-design-system.md`.
 - **Clear Sync Status** — a small header indicator: green dot (synced), amber dot (pending), red dot (offline), with a badge count of queued changes. Tap for details. No intrusive modals.

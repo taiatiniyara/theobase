@@ -2,5 +2,5 @@
   "name": "theobase-worker",
   "main": "src/index.ts",
   "compatibility_date": "2025-08-10",
-  "compatibility_flags": ["nodejs_compat"]
+  "compatibility_flags": ["nodejs_compat"],
 }

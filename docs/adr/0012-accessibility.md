@@ -14,11 +14,11 @@ Two-tier enforcement: automated CI gates for every PR, manual release-gate check
 
 ### Tier 1: Automated (PR Gate)
 
-| Tool | What it catches |
-|------|-----------------|
+| Tool                     | What it catches                                                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
 | `eslint-plugin-jsx-a11y` | Missing alt text, invalid ARIA roles, missing form labels, no-positive-tabindex, anchor-has-content. Runs at lint stage. |
-| `@axe-core/react` | Runtime accessibility violations in component tests. Integrated with Vitest + React Testing Library. Runs at test stage. |
-| Playwright E2E | `@axe-core/playwright` on critical flows (login → counting room → batch commit → approve report). |
+| `@axe-core/react`        | Runtime accessibility violations in component tests. Integrated with Vitest + React Testing Library. Runs at test stage. |
+| Playwright E2E           | `@axe-core/playwright` on critical flows (login → counting room → batch commit → approve report).                        |
 
 **PR is blocked if any automated check fails.**
 

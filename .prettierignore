@@ -3,3 +3,8 @@ dist
 .cache
 graphify-out
 pnpm-lock.yaml
+**/routeTree.gen.ts
+.agents/
+.claude/
+.opencode/
+skills-lock.json

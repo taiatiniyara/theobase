@@ -9,6 +9,7 @@ Complete before every major release. All items must pass.
 ## 1. Screen Reader
 
 ### VoiceOver + Safari (macOS)
+
 - [ ] Login with magic link
 - [ ] Navigate member directory — all names and roles announced
 - [ ] Open form to add member — all fields labeled, required fields announced
@@ -18,9 +19,11 @@ Complete before every major release. All items must pass.
 - [ ] Approve report — success announced
 
 ### NVDA + Firefox (Windows)
+
 - [ ] Repeat the core flow from VoiceOver
 
 ### TalkBack + Chrome (Android)
+
 - [ ] Repeat the core flow
 
 ## 2. Keyboard Only
