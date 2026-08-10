@@ -153,12 +153,7 @@ export default function OrgManagementPage() {
   }
 
   if (!user?.conference) {
-    return (
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900">Organization</h2>
-        <p className="mt-4 text-gray-600">No Conference associated with your account.</p>
-      </div>
-    );
+    return <CreateFirstConference onCreated={() => window.location.reload()} />;
   }
 
   return (
@@ -379,6 +374,85 @@ export default function OrgManagementPage() {
             </form>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+function CreateFirstConference({ onCreated }: { onCreated: () => void }) {
+  const [name, setName] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    if (!name.trim()) {
+      setError("Conference name is required");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const apiBase = window.location.origin;
+      const res = await fetch(`${apiBase}/api/org/conferences`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          code: name.trim().toLowerCase().replace(/\s+/g, "_"),
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        onCreated();
+      } else {
+        setError(data.error ?? "Failed to create conference");
+      }
+    } catch {
+      setError("Unable to connect. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-gray-900">Welcome to Theobase</h2>
+      <p className="mt-2 text-gray-600">
+        Create your conference to get started. This is the administrative unit that owns your
+        churches.
+      </p>
+      <div className="mt-6 max-w-lg rounded-lg bg-white p-6 shadow">
+        <h3 className="text-lg font-medium text-gray-900">Create Your Conference</h3>
+        {error && (
+          <div className="mt-4 rounded bg-danger-bg p-3 text-sm text-danger-text">{error}</div>
+        )}
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+          <div>
+            <label htmlFor="confName" className="block text-sm font-medium text-gray-700">
+              Conference Name
+            </label>
+            <input
+              id="confName"
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g. Central Kenya Conference"
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={submitting}
+            className="rounded-md bg-brand px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 disabled:opacity-50"
+          >
+            {submitting ? "Creating..." : "Create Conference"}
+          </button>
+        </form>
       </div>
     </div>
   );

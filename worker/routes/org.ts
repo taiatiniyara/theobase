@@ -106,6 +106,11 @@ export async function handleCreateConference(
     device_info: getDeviceInfo(request),
   });
 
+  if (!auth.conferenceId) {
+    const userRepo = new UserRepo(createDb(env));
+    await userRepo.update(Number(auth.userId), { conferenceId: result.id });
+  }
+
   return json({ id: result.id, ...body }, 201);
 }
 

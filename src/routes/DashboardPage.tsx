@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "../lib/auth";
 
 const ROLE_DEFAULTS: Record<string, string> = {
+  sysadmin: "/app/organization",
   treasurer: "/app/finance",
   secretary: "/app/members",
   pastor: "/app/members",

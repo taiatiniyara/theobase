@@ -77,6 +77,7 @@ export class UserRepo {
       emailVerified?: number;
       resetToken?: string | null;
       resetTokenExpires?: string | null;
+      conferenceId?: number | null;
     }
   ): Promise<boolean> {
     const setData: Record<string, unknown> = {};
@@ -85,6 +86,7 @@ export class UserRepo {
     if (data.active !== undefined) setData.active = data.active;
     if (data.status !== undefined) setData.status = data.status;
     if (data.emailVerified !== undefined) setData.emailVerified = data.emailVerified;
+    if (data.conferenceId !== undefined) setData.conferenceId = data.conferenceId;
     if (data.resetToken !== undefined) setData.resetToken = data.resetToken ?? null;
     if (data.resetTokenExpires !== undefined)
       setData.resetTokenExpires = data.resetTokenExpires ?? null;

@@ -81,17 +81,20 @@ export default function SignupPage() {
           </div>
           <div>
             <label htmlFor="conferenceName" className="block text-sm font-medium text-gray-700">
-              Conference Name (optional)
+              Conference Name
             </label>
             <input
               id="conferenceName"
               type="text"
+              required
               value={conferenceName}
               onChange={(e) => setConferenceName(e.target.value)}
               placeholder="e.g. Central Kenya Conference"
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
             />
-            <p className="mt-1 text-xs text-gray-500">You can create this later</p>
+            <p className="mt-1 text-xs text-gray-500">
+              The administrative unit that owns your churches
+            </p>
           </div>
           <button
             type="submit"
