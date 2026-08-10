@@ -153,7 +153,7 @@ export default function OrgManagementPage() {
   }
 
   if (!user?.conference) {
-    return <CreateFirstConference onCreated={() => window.location.reload()} />;
+    return <CreateFirstConference />;
   }
 
   return (
@@ -379,7 +379,7 @@ export default function OrgManagementPage() {
   );
 }
 
-function CreateFirstConference({ onCreated }: { onCreated: () => void }) {
+function CreateFirstConference() {
   const [name, setName] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -407,7 +407,9 @@ function CreateFirstConference({ onCreated }: { onCreated: () => void }) {
       });
       const data = await res.json();
       if (res.ok) {
-        onCreated();
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        window.location.href = "/login";
       } else {
         setError(data.error ?? "Failed to create conference");
       }
