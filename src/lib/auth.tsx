@@ -17,7 +17,8 @@ interface AuthContextType {
     email: string,
     password: string,
     fullName: string,
-    conferenceName?: string
+    conferenceName?: string,
+    inviteCode?: string
   ) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -60,8 +61,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signup = useCallback(
-    async (email: string, password: string, fullName: string, conferenceName?: string) => {
-      const data = await authApi.signup({ email, password, fullName, conferenceName });
+    async (
+      email: string,
+      password: string,
+      fullName: string,
+      conferenceName?: string,
+      inviteCode?: string
+    ) => {
+      const data = await authApi.signup({ email, password, fullName, conferenceName, inviteCode });
       setTokens(data.accessToken, data.refreshToken);
       const me = await authApi.me();
       setUser(me);

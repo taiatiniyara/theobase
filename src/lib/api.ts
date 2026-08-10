@@ -126,8 +126,13 @@ interface AuthResponse {
 }
 
 export const authApi = {
-  signup: (data: { email: string; password: string; fullName: string; conferenceName?: string }) =>
-    api.post<AuthResponse>("/auth/signup", data),
+  signup: (data: {
+    email: string;
+    password: string;
+    fullName: string;
+    conferenceName?: string;
+    inviteCode?: string;
+  }) => api.post<AuthResponse>("/auth/signup", data),
   login: (data: { email: string; password: string }) => api.post<AuthResponse>("/auth/login", data),
   refresh: () => api.post<AuthResponse>("/auth/refresh", { refreshToken: getRefreshToken() }),
   logout: () => {

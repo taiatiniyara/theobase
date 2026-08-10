@@ -25,7 +25,13 @@ export async function handleAuthSignup(
   env: Env,
   _auth: AuthContext
 ): Promise<Response> {
-  let body: { email: string; password: string; fullName: string; conferenceName?: string };
+  let body: {
+    email: string;
+    password: string;
+    fullName: string;
+    conferenceName?: string;
+    inviteCode?: string;
+  };
   try {
     body = await request.json();
   } catch {
@@ -37,6 +43,10 @@ export async function handleAuthSignup(
   }
   if (body.password.length < 8) {
     return json({ error: "Password must be at least 8 characters" }, 400);
+  }
+
+  if (env.INVITE_CODE && body.inviteCode !== env.INVITE_CODE) {
+    return json({ error: "Invalid invite code" }, 403);
   }
 
   const userRepo = new UserRepo(createDb(env));
