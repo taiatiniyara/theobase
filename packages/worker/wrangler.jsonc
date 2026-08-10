@@ -3,6 +3,20 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-08-10",
   "compatibility_flags": ["nodejs_compat"],
+  "kv_namespaces": [
+    {
+      "binding": "AUTH_KV",
+      "id": "theobase-auth",
+    },
+  ],
+  "send_email": [
+    {
+      "name": "AUTH_EMAIL",
+    },
+  ],
+  "vars": {
+    "APP_URL": "http://localhost:8787",
+  },
   "durable_objects": {
     "bindings": [
       {

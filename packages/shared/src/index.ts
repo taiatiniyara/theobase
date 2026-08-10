@@ -4,3 +4,4 @@ export const APP_VERSION = '0.0.1' as const;
 export * from './schema';
 export * from './validators';
 export * from './events';
+export * from './auth';

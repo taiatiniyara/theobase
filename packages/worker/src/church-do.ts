@@ -1,7 +1,48 @@
 import { DurableObject } from 'cloudflare:workers';
-import type { ChurchEvent, ChurchOperation } from '@theobase/shared';
+import type { ChurchEvent, ChurchOperation, Role } from '@theobase/shared';
+import { verify } from './auth/jwt';
 
 const LAST_HASH_KEY = 'lastHash';
+
+const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
+  clerk: [
+    'member:create',
+    'member:update',
+    'member:delete',
+    'household:create',
+    'household:update',
+    'household:delete',
+    'church:update',
+    'role:assign',
+    'role:revoke',
+  ],
+  treasurer: [
+    'giving_record:create',
+    'giving_record:delete',
+    'giving_batch:create',
+    'giving_batch:update',
+    'giving_batch:commit',
+  ],
+  counter: ['giving_record:create'],
+  pastor: [],
+  'department-head': [],
+  'board-member': [],
+  member: [],
+  interest: [],
+  visitor: [],
+  'conference-treasurer': [],
+  'conference-secretary': [],
+  'conference-president': [],
+  auditor: [],
+  operator: [],
+};
+
+function canOperate(role: Role, operation: string): boolean {
+  if (role === 'operator') return true;
+  const allowed = ROLE_PERMISSIONS[role];
+  if (!allowed) return false;
+  return allowed.includes(operation as ChurchOperation);
+}
 
 async function sha256(data: string): Promise<string> {
   const encoder = new TextEncoder();
@@ -176,12 +217,27 @@ export class ChurchDO extends DurableObject {
       }
 
       if (request.method === 'POST' && path === '/mutate') {
+        const authHeader = request.headers.get('Authorization');
+        if (!authHeader?.startsWith('Bearer ')) {
+          return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+        const { payload: user } = await verify(authHeader.slice(7));
+
         const body = (await request.json()) as {
           operation: ChurchOperation;
           payload: unknown;
-          actor: string;
         };
-        const event = await this.appendEvent(body.operation, body.payload, body.actor);
+        if (!canOperate(user.role, body.operation)) {
+          return new Response(JSON.stringify({ error: 'Forbidden' }), {
+            status: 403,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+
+        const event = await this.appendEvent(body.operation, body.payload, user.sub);
         return new Response(JSON.stringify(event), {
           status: 201,
           headers: { 'Content-Type': 'application/json' },
