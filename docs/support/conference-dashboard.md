@@ -11,39 +11,36 @@ The Conference Dashboard provides a high-level view of all churches, members, an
 A statistics row showing:
 
 - **Total Churches**: Count of all organized churches, companies, and branches.
-- **Total Districts**: Number of pastoral districts.
-- **Membership**: Aggregate membership across all churches.
-- **Users**: Number of active platform users (clerks, treasurers, pastors).
+- **Total Membership**: Aggregate active membership across all churches.
+- **Tithe This Month**: Total tithe forwarded by all churches for the current month.
+- **Baptisms This Year**: Count of new members joined by baptism (immersion) this calendar year.
 
 ### Church List
 
 A searchable, sortable table of every church in your Conference:
 
-| Column      | Description                  |
-| ----------- | ---------------------------- |
-| Name        | Church name                  |
-| Type        | Organized / Company / Branch |
-| District    | Assigned district (if any)   |
-| Members     | Current membership count     |
-| Tithe (MTD) | Tithe forwarded this month   |
-| Status      | Active / inactive            |
+| Column       | Description                     |
+| ------------ | ------------------------------- |
+| Name         | Church name                     |
+| Type         | Organized / Company / Branch    |
+| District     | Assigned district (if any)      |
+| Members      | Active membership count         |
+| Tithe (MTD)  | Tithe forwarded this month      |
+| Baptisms YTD | Baptisms by immersion this year |
 
 Click any church to drill down into its detail view.
 
 ### Tithe Totals
 
-A bar chart showing monthly tithe totals across all churches for the past 12 months. Each bar shows:
-
-- **Tithe Forwarded**: Amount churches have recorded and forwarded.
-- **Tithe Received**: Amount the Conference has acknowledged as received (see Reconciliation guide).
+A summary of tithe forwarded by churches in the current month. For detailed per-church reconciliation of forwarded vs. received amounts, see the Reconciliation guide.
 
 ### Membership Trends
 
-A line chart showing membership growth over time:
+Current membership stats are displayed on the dashboard:
 
-- New baptisms and professions of faith.
-- Transfers in and out.
-- Net change per quarter.
+- Total active membership across all churches.
+- Baptisms by immersion this calendar year.
+- For detailed membership reports, use the Quarterly Business Meeting Report.
 
 ### Quick Actions
 

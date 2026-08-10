@@ -17,9 +17,9 @@ The SDA Church Manual requires that all church funds be counted by at least two 
    - Optionally associate the offering with a member.
    - Add a note if the envelope had a designation.
 5. Review the batch totals at the bottom of the form.
-6. Click **Submit for Review**.
+6. Click **Create Batch**.
 
-At this point, the batch status is "Submitted" — it is visible but not yet posted to financial reports.
+At this point, the batch status is "pending" — it is visible but not yet confirmed or posted to financial reports.
 
 ### Step 2: Assistant Treasurer Confirms
 
@@ -37,14 +37,13 @@ The batch status changes to "Confirmed". At this point:
 
 ## What If There's a Mistake?
 
-If the Assistant Treasurer finds an error:
+If the Assistant Treasurer finds an error during confirmation, they should not confirm the batch. Instead:
 
-1. Click **Reject Batch** with a note explaining the discrepancy.
-2. The batch returns to the Treasurer with status "Rejected".
-3. The Treasurer corrects the batch and resubmits.
-4. The Assistant Treasurer reviews and confirms the corrected batch.
+1. Contact the Treasurer to correct the batch details.
+2. The Treasurer can create a new batch with the corrected amounts.
+3. The original batch remains in "pending" status; it can be ignored or the transactions within it can be voided.
 
-Rejection and resubmission are recorded in the audit trail.
+All batch activity is recorded in the audit trail.
 
 ## Viewing Confirmed Batches
 

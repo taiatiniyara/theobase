@@ -2,18 +2,18 @@
 
 ## Corpus Check
 
-- 173 files · ~159,970 words
+- 177 files · ~159,010 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 
-- 1478 nodes · 2863 edges · 125 communities (79 shown, 46 thin omitted)
+- 1500 nodes · 3045 edges · 133 communities (84 shown, 49 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 40 edges (avg confidence: 0.69)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
 
-- Built from commit: `a4cc6d09`
+- Built from commit: `940236a4`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -139,18 +139,25 @@
 - @vitest/coverage-istanbul
 - wrangler
 - React Application Entry Point
+- rate-limit.ts
+- routes/users.ts
+- AttendancePage.tsx
+- repos/attendance.ts
+- ExpenseCategoryRepo
+- BudgetTemplateRepo
+- FundRepo
 
 ## God Nodes (most connected - your core abstractions)
 
-1. `json()` - 107 edges
-2. `createDb()` - 92 edges
+1. `json()` - 118 edges
+2. `createDb()` - 110 edges
 3. `authenticate()` - 91 edges
 4. `fetch()` - 86 edges
-5. `authorize()` - 78 edges
-6. `logAudit()` - 47 edges
-7. `getDeviceInfo()` - 46 edges
-8. `useAuth()` - 33 edges
-9. `Db` - 32 edges
+5. `authorize()` - 85 edges
+6. `logAudit()` - 49 edges
+7. `getDeviceInfo()` - 48 edges
+8. `Db` - 34 edges
+9. `useAuth()` - 33 edges
 10. `json()` - 26 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -177,12 +184,12 @@
 - **Cloudflare Workers Durable Object Architecture** — worker_entry, worker_durables_churchsyncdo, worker_durables_conferencedo, worker_env_types [INFERRED 0.75]
 - **Dev Proxy and Test Pipeline** — vite_config, vitest_config, worker_entry, test_smoke_test [INFERRED 0.75]
 
-## Communities (125 total, 46 thin omitted)
+## Communities (133 total, 49 thin omitted)
 
 ### Community 0 - "worker/index.ts"
 
 Cohesion: 0.06
-Nodes (131): app, authMiddleware, body, doId, fetch(), HonoEnv, json(), rateLimit() (+123 more)
+Nodes (129): app, authMiddleware, body, doId, fetch(), HonoEnv, json(), readLimitM (+121 more)
 
 ### Community 1 - "routes/reconciliation.ts"
 
@@ -192,17 +199,17 @@ Nodes (10): ChurchBalanceRow, ConferenceTitheRow, ReceiveTitheData, Reconciliati
 ### Community 2 - "api.ts"
 
 Cohesion: 0.06
-Nodes (38): attendanceApi, AttendanceRecord, AttendanceStats, AttendanceTrendPoint, auditApi, AuditLogEntry, AuditLogResponse, authApi (+30 more)
+Nodes (36): adminApi, AdminProvisioningStatus, AdminSubscription, auditApi, AuditLogEntry, AuditLogResponse, AuthResponse, billingApi (+28 more)
 
 ### Community 3 - "routes/auth.ts"
 
-Cohesion: 0.06
-Nodes (53): result, setupSecretary(), AuditEntry, generateResetToken(), generateVerifyToken(), getKey(), hashPassword(), signAccessToken() (+45 more)
+Cohesion: 0.16
+Nodes (22): setupSecretary(), blacklistToken(), generateResetToken(), generateVerifyToken(), getKey(), hashPassword(), isTokenBlacklisted(), signAccessToken() (+14 more)
 
 ### Community 4 - "useAuth"
 
 Cohesion: 0.07
-Nodes (29): api, orgApi, userApi, AuthContext, AuthContextType, useAuth(), User, ChurchMetric (+21 more)
+Nodes (26): api, orgApi, userApi, useAuth(), ChurchMetric, ConferenceDashboard(), ConferenceSummary, District (+18 more)
 
 ### Community 5 - "Member"
 
@@ -217,17 +224,17 @@ Nodes (28): createSecondChurch(), jsonAuthHeaders(), setupTestContext(), TestCon
 ### Community 7 - "routes.tsx"
 
 Cohesion: 0.04
-Nodes (43): attendanceRoute, auditRoute, conferenceDashboardRoute, contributionsRoute, dashboardIndex, districtDashboardRoute, financeRoute, forgotPasswordRoute (+35 more)
+Nodes (47): adminRoute, attendanceRoute, auditRoute, billingRoute, conferenceDashboardRoute, contributionsRoute, dashboardIndex, districtDashboardRoute (+39 more)
 
 ### Community 8 - "sync-manager.ts"
 
-Cohesion: 0.16
-Nodes (26): clearTokens(), getRefreshToken(), getToken(), request(), setTokens(), AuthProvider(), inferOperationType(), offlineSafeRequest() (+18 more)
+Cohesion: 0.30
+Nodes (10): inferOperationType(), offlineSafeRequest(), pullFreshData(), stripApiBase(), getOnlineStatus(), triggerSync(), useOfflineInit(), useSyncState() (+2 more)
 
 ### Community 9 - "offline-db.ts"
 
-Cohesion: 0.18
-Nodes (8): CachedMember, CachedResponse, db, generateClientUuid(), getOperationPriority(), OfflineDB, PRIORITY_MAP, queueOperation()
+Cohesion: 0.16
+Nodes (10): inferQueueType(), queueOffline(), CachedMember, CachedResponse, db, generateClientUuid(), getOperationPriority(), OfflineDB (+2 more)
 
 ### Community 10 - "types/index.ts"
 
@@ -236,8 +243,8 @@ Nodes (26): AttendanceRecordDto, AttendanceStatsDto, AttendanceTrendPointDto, Au
 
 ### Community 11 - "routes/attendance.ts"
 
-Cohesion: 0.13
-Nodes (11): AttendanceFilters, AttendanceRepo, AttendanceRow, CategoryStats, TrendPoint, UpsertAttendanceData, handleGetAttendanceStats(), handleRecordAttendance() (+3 more)
+Cohesion: 0.26
+Nodes (4): AttendanceRepo, handleGetAttendanceStats(), handleRecordAttendance(), json()
 
 ### Community 12 - "FinancePage.tsx"
 
@@ -251,8 +258,8 @@ Nodes (15): acceptBody, body, c1Body, c2Body, createMember(), dbTransfer, errBod
 
 ### Community 14 - "schema/index.ts"
 
-Cohesion: 0.17
-Nodes (10): CreateMemberData, MemberFilters, MemberRow, UpdateMemberData, MemberPositionRow, PositionRow, households, memberPositions (+2 more)
+Cohesion: 0.09
+Nodes (20): db, MEMBER_SCHEMA, repo, CreateMemberData, MemberFilters, MemberRow, UpdateMemberData, MemberPositionRow (+12 more)
 
 ### Community 15 - "DashboardLayout.tsx"
 
@@ -311,8 +318,8 @@ Nodes (7): b, batch, branchBody, lb, mb, parentBody, sb
 
 ### Community 28 - "Db"
 
-Cohesion: 0.22
-Nodes (3): NotificationRepo, NotificationRow, notifications
+Cohesion: 0.14
+Nodes (16): AuthContext, extractToken(), json(), requireConference(), CHURCH_ROLES, CONFERENCE_ROLES, PERMISSIONS, Role (+8 more)
 
 ### Community 29 - "auth.test.ts"
 
@@ -341,8 +348,8 @@ Nodes (7): Before exploring, read these, code:block1 (/), code:block2 (/), Domai
 
 ### Community 36 - "ExpenseCategoryRepo"
 
-Cohesion: 0.06
-Nodes (30): Billing, Billing page, Church deactivation, Deactivation, Further Notes, Glossary update, Implementation Decisions, Logout & security (+22 more)
+Cohesion: 0.11
+Nodes (12): ChurchRow, ConferenceRepo, ConferenceRow, DistrictRepo, DistrictRow, UserRepo, toChurchResponse(), toConferenceResponse() (+4 more)
 
 ### Community 37 - "Issue tracker: GitHub"
 
@@ -396,8 +403,8 @@ Nodes (27): 10. Production checklist, 1. Custom domain, 2. D1 database, 3. Cloud
 
 ### Community 48 - "FundRepo"
 
-Cohesion: 0.11
-Nodes (7): Db, AuditEntry, AuditFilters, AuditPage, AuditRepo, BudgetTemplateRepo, FundRepo
+Cohesion: 0.09
+Nodes (12): Db, AuditEntry, AuditFilters, AuditPage, AuditRepo, CreateHouseholdData, HouseholdRepo, HouseholdRow (+4 more)
 
 ### Community 50 - "sw.js"
 
@@ -421,8 +428,8 @@ Nodes (4): Serif Affinity Designer, Theobase Icon (Shield Mark), Theobase Logo L
 
 ### Community 55 - "request"
 
-Cohesion: 0.15
-Nodes (14): QueuedOperation, onConflict(), onSyncProgress(), ci, ConflictInfo, conflictListeners, gState, listeners (+6 more)
+Cohesion: 0.12
+Nodes (25): getToken(), getPendingOperations(), markOperationSynced(), QueuedOperation, apiFetch(), emit(), emitConflict(), formatLabel() (+17 more)
 
 ### Community 57 - "opencode.json"
 
@@ -441,8 +448,8 @@ Nodes (13): 1. Identify the database, 2. Initiate restore, 3. Update the Worker 
 
 ### Community 68 - "repos/members.test.ts"
 
-Cohesion: 0.15
-Nodes (7): db, MEMBER_SCHEMA, repo, CreateHouseholdData, HouseholdRepo, HouseholdRow, UpdateHouseholdData
+Cohesion: 0.22
+Nodes (10): authApi, clearTokens(), getRefreshToken(), isOnline(), request(), setTokens(), AuthContext, AuthContextType (+2 more)
 
 ### Community 69 - "Billing and Subscription"
 
@@ -456,13 +463,13 @@ Nodes (12): Contacting Support, Feature Requests, Good Example, Helpful Extras, 
 
 ### Community 73 - "BillingRepo"
 
-Cohesion: 0.19
-Nodes (4): scheduled(), BillingRepo, InvoiceRow, SubscriptionRow
+Cohesion: 0.18
+Nodes (7): scheduled(), cleanExpiredBlacklist(), BillingRepo, getStripe(), handleBillingStatus(), handleCreateCheckout(), handleStripeWebhook()
 
 ### Community 74 - "TransferRepo"
 
-Cohesion: 0.15
-Nodes (4): TransferFilters, TransferRepo, TransferRow, transferRequests
+Cohesion: 0.27
+Nodes (6): SettingsRepo, handleGetChurchSettings(), handleUpdateChurchSettings(), handleUpdateConferenceSettings(), handleUpdateUserSettings(), stripMeta()
 
 ### Community 75 - "Conference Dashboard"
 
@@ -549,27 +556,47 @@ Nodes (4): name, private, type, version
 Cohesion: 0.50
 Nodes (5): lint-staged, *.{json,css,md}, *.{ts,tsx,js,jsx}, eslint --fix, prettier --write
 
+### Community 125 - "rate-limit.ts"
+
+Cohesion: 0.22
+Nodes (8): rateLimit(), AUTH_LIMIT, checkRateLimitAsync(), RateLimitConfig, READ_LIMIT, SYNC_READ_LIMIT, SYNC_WRITE_LIMIT, WRITE_LIMIT
+
+### Community 126 - "routes/users.ts"
+
+Cohesion: 0.29
+Nodes (6): result, AuditEntry, CsvParseResult, parseCsv(), validateCsvHeaders(), toUserResponse()
+
+### Community 127 - "AttendancePage.tsx"
+
+Cohesion: 0.25
+Nodes (6): attendanceApi, AttendanceRecord, AttendanceStats, AttendanceTrendPoint, AttendancePage(), CATEGORIES
+
+### Community 128 - "repos/attendance.ts"
+
+Cohesion: 0.32
+Nodes (6): AttendanceFilters, CategoryStats, TrendPoint, UpsertAttendanceData, attendance, memberAttendance
+
 ## Knowledge Gaps
 
-- **651 isolated node(s):** `$schema`, `.opencode/plugins/graphify.js`, `PER_CONF`, `CONFERENCES`, `DURATION` (+646 more)
+- **634 isolated node(s):** `$schema`, `.opencode/plugins/graphify.js`, `PER_CONF`, `CONFERENCES`, `DURATION` (+629 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **46 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **49 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `fetch()` connect `worker/index.ts` to `sync-manager.ts`, `routes/auth.ts`, `routes/attendance.ts`?**
-  _High betweenness centrality (0.120) - this node is a cross-community bridge._
-- **Why does `request()` connect `sync-manager.ts` to `worker/index.ts`, `api.ts`?**
+- **Why does `fetch()` connect `worker/index.ts` to `routes/auth.ts`, `repos/members.test.ts`, `routes/attendance.ts`, `request`, `rate-limit.ts`?**
+  _High betweenness centrality (0.124) - this node is a cross-community bridge._
+- **Why does `request()` connect `repos/members.test.ts` to `worker/index.ts`, `offline-db.ts`, `api.ts`, `request`?**
   _High betweenness centrality (0.090) - this node is a cross-community bridge._
-- **Why does `apiFetch()` connect `sync-manager.ts` to `worker/index.ts`?**
-  _High betweenness centrality (0.026) - this node is a cross-community bridge._
+- **Why does `apiFetch()` connect `request` to `worker/index.ts`, `repos/members.test.ts`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `fetch()` (e.g. with `request()` and `apiFetch()`) actually correct?**
   _`fetch()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `.opencode/plugins/graphify.js`, `PER_CONF` to the rest of the system?**
-  _651 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _634 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `worker/index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.06226708074534162 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0557909604519774 - nodes in this community are weakly interconnected._
 - **Should `api.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.0603921568627451 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06207482993197279 - nodes in this community are weakly interconnected._

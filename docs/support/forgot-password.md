@@ -41,5 +41,5 @@ If you no longer have access to the email address on your account, contact suppo
 
 - Password reset tokens are **single-use**. Once you reset your password, the link cannot be reused.
 - The reset email includes only the link — no passwords are ever sent in email.
-- After resetting your password, all existing sessions are invalidated. You'll need to log in on all devices.
+- After resetting your password, you can log in immediately with your new password. Existing sessions on other devices remain active until their access tokens expire (15 minutes).
 - If you receive a password reset email you didn't request, contact support — someone may be attempting to access your account.

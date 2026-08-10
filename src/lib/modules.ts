@@ -116,6 +116,14 @@ export const MODULE_GROUPS: ModuleGroup[] = [
         roles: ["sysadmin", "president", "secretary", "treasurer", "auditor", "pastor", "member"],
         icon: "chart",
       },
+      {
+        id: "sabbath-school",
+        label: "Sabbath School",
+        path: "/app/sabbath-school",
+        permission: "attendance:read",
+        roles: ["sysadmin", "president", "secretary", "treasurer", "auditor", "pastor", "member"],
+        icon: "users",
+      },
     ],
   },
   {

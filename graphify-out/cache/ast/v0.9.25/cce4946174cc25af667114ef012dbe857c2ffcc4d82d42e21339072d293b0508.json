@@ -1,0 +1,351 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_md",
+      "label": "data-processing-agreement.md",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "label": "Data Processing Agreement (DPA)",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_1_parties",
+      "label": "1. Parties",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L5"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_2_purpose_and_scope",
+      "label": "2. Purpose and Scope",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L10"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_3_duration",
+      "label": "3. Duration",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L14"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_4_nature_and_purpose_of_processing",
+      "label": "4. Nature and Purpose of Processing",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L18"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_5_types_of_personal_data",
+      "label": "5. Types of Personal Data",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L28"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_6_categories_of_data_subjects",
+      "label": "6. Categories of Data Subjects",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L42"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_7_sub_processors",
+      "label": "7. Sub-processors",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L49"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_technical_and_organizational_measures_toms",
+      "label": "8. Technical and Organizational Measures (TOMs)",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L62"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_1_encryption",
+      "label": "8.1 Encryption",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L66"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_2_access_controls",
+      "label": "8.2 Access Controls",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L71"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_3_audit_logging",
+      "label": "8.3 Audit Logging",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L78"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_4_rate_limiting",
+      "label": "8.4 Rate Limiting",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L84"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_5_monitoring",
+      "label": "8.5 Monitoring",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L90"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_6_availability_and_resilience",
+      "label": "8.6 Availability and Resilience",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L96"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_9_data_subject_rights",
+      "label": "9. Data Subject Rights",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L103"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_10_breach_notification",
+      "label": "10. Breach Notification",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L111"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_11_data_deletion",
+      "label": "11. Data Deletion",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L119"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_12_audit_rights",
+      "label": "12. Audit Rights",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L127"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_13_international_data_transfers",
+      "label": "13. International Data Transfers",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L136"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_14_limitation_of_liability",
+      "label": "14. Limitation of Liability",
+      "file_type": "document",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L140"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_1_parties",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_2_purpose_and_scope",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_3_duration",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_4_nature_and_purpose_of_processing",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_5_types_of_personal_data",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_6_categories_of_data_subjects",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_7_sub_processors",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_technical_and_organizational_measures_toms",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L62",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_technical_and_organizational_measures_toms",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_1_encryption",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L66",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_technical_and_organizational_measures_toms",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_2_access_controls",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_technical_and_organizational_measures_toms",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_3_audit_logging",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_technical_and_organizational_measures_toms",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_4_rate_limiting",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L84",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_technical_and_organizational_measures_toms",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_5_monitoring",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L90",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_technical_and_organizational_measures_toms",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_8_6_availability_and_resilience",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_9_data_subject_rights",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L103",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_10_breach_notification",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L111",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_11_data_deletion",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L119",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_12_audit_rights",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L127",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_13_international_data_transfers",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L136",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_data_processing_agreement_dpa",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_legal_data_processing_agreement_14_limitation_of_liability",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/legal/data-processing-agreement.md",
+      "source_location": "L140",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

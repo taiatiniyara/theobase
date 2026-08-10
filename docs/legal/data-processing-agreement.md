@@ -72,7 +72,7 @@ The Processor implements and maintains the following measures:
 
 - **Authentication**: JWT-based authentication with HS256 signing. Access tokens expire after 15 minutes; refresh tokens expire after 7 days.
 - **Password security**: User passwords are hashed using PBKDF2 with 100,000 iterations and SHA-256. Passwords are never stored in plaintext.
-- **Authorization**: Role-based access control (sysadmin, conference_admin, treasurer, clerk, pastor, member). Users can only access data within their authorized scope.
+- **Authorization**: Role-based access control (sysadmin, president, secretary, treasurer, auditor, pastor, member). Users can only access data within their authorized scope.
 - **Tenant isolation**: Each Conference's data resides in its own Cloudflare D1 database. Cross-tenant access is prevented at the database level.
 
 ### 8.3 Audit Logging
@@ -89,7 +89,7 @@ The Processor implements and maintains the following measures:
 
 ### 8.5 Monitoring
 
-- Error tracking via Sentry (using Toucan-js for Workers compatibility).
+- Error logging via internal D1-based error logs table.
 - Analytics via Cloudflare Analytics Engine.
 - Cron-based subscription status checks run monthly.
 

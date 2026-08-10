@@ -179,7 +179,6 @@ CI/CD (`.github/workflows/ci.yml`) automates: lint, typecheck, test, coverage, e
 - [ ] `JWT_SECRET` set: `npx wrangler secret put JWT_SECRET --env staging`
 - [ ] `ALLOWED_ORIGINS` set: `npx wrangler secret put ALLOWED_ORIGINS --env production` (e.g. `https://theobase.app`)
 - [ ] `ALLOWED_ORIGINS` set: `npx wrangler secret put ALLOWED_ORIGINS --env staging`
-- [ ] `SENTRY_DSN` set for error monitoring: `npx wrangler secret put SENTRY_DSN --env production`
 - [ ] `STRIPE_SECRET_KEY` set: `npx wrangler secret put STRIPE_SECRET_KEY --env production`
 - [ ] `STRIPE_WEBHOOK_SECRET` set: `npx wrangler secret put STRIPE_WEBHOOK_SECRET --env production`
 
@@ -196,7 +195,7 @@ CI/CD (`.github/workflows/ci.yml`) automates: lint, typecheck, test, coverage, e
 
 - [ ] Staging verified: sign up, create Conference, check provisioning
 - [ ] Smoke test: sign up, verify email, log in, create a church, record attendance
-- [ ] Observability dashboard checked (Cloudflare Workers + Sentry + Analytics)
+- [ ] Observability dashboard checked (Cloudflare Analytics Engine)
 - [ ] Rate limiting verified (no 429s under normal use)
 - [ ] CSP headers verified (Content-Security-Policy-Report-Only present on all responses)
 - [ ] CORS restricted to ALLOWED_ORIGINS (test with external origin)

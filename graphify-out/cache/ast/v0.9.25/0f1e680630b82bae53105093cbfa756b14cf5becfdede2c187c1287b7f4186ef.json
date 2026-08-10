@@ -1,0 +1,143 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_md",
+      "label": "forgot-password.md",
+      "file_type": "document",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_forgot_password",
+      "label": "Forgot Password",
+      "file_type": "document",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_overview",
+      "label": "Overview",
+      "file_type": "document",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_resetting_your_password",
+      "label": "Resetting Your Password",
+      "file_type": "document",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L7"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_check_your_email",
+      "label": "Check Your Email",
+      "file_type": "document",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L14"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_setting_a_new_password",
+      "label": "Setting a New Password",
+      "file_type": "document",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L21"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_if_the_reset_link_doesn_t_work",
+      "label": "If the Reset Link Doesn't Work",
+      "file_type": "document",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L30"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_if_you_can_t_access_your_email",
+      "label": "If You Can't Access Your Email",
+      "file_type": "document",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L36"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_security_notes",
+      "label": "Security Notes",
+      "file_type": "document",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L40"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_forgot_password",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_forgot_password",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_overview",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_forgot_password",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_resetting_your_password",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_forgot_password",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_check_your_email",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_forgot_password",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_setting_a_new_password",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_forgot_password",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_if_the_reset_link_doesn_t_work",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_forgot_password",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_if_you_can_t_access_your_email",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_forgot_password",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_forgot_password_security_notes",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/forgot-password.md",
+      "source_location": "L40",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

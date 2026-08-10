@@ -8,14 +8,15 @@ User management lets you invite church officers and Conference staff to Theobase
 
 Theobase uses these system roles:
 
-| Role                 | Access Level                                                                                                |
-| -------------------- | ----------------------------------------------------------------------------------------------------------- |
-| **sysadmin**         | Full platform access across all Conferences. For platform administrators only.                              |
-| **conference_admin** | Full access within a single Conference. Can create churches, invite users, view all data.                   |
-| **treasurer**        | Can create and submit offering batches, enter expenses, and view financial reports for assigned churches.   |
-| **clerk**            | Can manage members, record attendance, initiate transfers, and update member records for assigned churches. |
-| **pastor**           | Read-only access to churches in their assigned district(s). Can view dashboards and reports.                |
-| **member**           | Limited self-service access — can view their own giving history and submit transfer requests.               |
+| Role          | Access Level                                                                                                                                                     |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **sysadmin**  | Full platform access across all Conferences. Can manage organization structure, users, and all modules. For platform administrators only.                        |
+| **president** | Read-only access to membership, finance, and audit across the Conference. Can view dashboards and reports but cannot modify data.                                |
+| **secretary** | Can manage members, record attendance, initiate transfers, and update member records for assigned churches. Can also invite users to the platform.               |
+| **treasurer** | Can create and confirm offering batches, enter transactions and expenses, and view financial reports for assigned churches. Full write access to finance module. |
+| **auditor**   | Read-only access to membership, finance, and audit logs across the Conference. Can view all audit trail entries and reports.                                     |
+| **pastor**    | Can view members, attendance, and dashboards for churches in their assigned district(s). Can also record attendance and manage member records.                   |
+| **member**    | Limited self-service access — can view their own giving history, attendance, and submit transfer requests. Can also submit giving declarations for verification. |
 
 ## Inviting a User
 
@@ -70,7 +71,7 @@ Member accounts are created through the self-service signup flow, not through us
 
 ## Tips
 
-- Assign the clerkiest, not the sysadmin, role to church clerks.
+- Assign the secretary role to church clerks for membership and attendance management.
 - A user can be assigned to multiple churches (useful for a treasurer serving two small churches).
 - Pastors should be assigned to districts, not individual churches — the district assignment automatically includes all churches in that district.
 - User deactivation does not delete the person from the membership roll — it only removes their platform access.

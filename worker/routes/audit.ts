@@ -4,6 +4,49 @@ import { createDb } from "../lib/db";
 import { AuditRepo, type AuditEntry } from "../repos/audit";
 import { json } from "../lib/response";
 
+interface ErrorLogRow {
+  id: number;
+  path: string;
+  method: string;
+  message: string;
+  stack: string | null;
+  user_agent: string | null;
+  created_at: string;
+}
+
+export async function handleGetErrorLogs(
+  request: Request,
+  env: Env,
+  auth: AuthContext
+): Promise<Response> {
+  const forbidden = authorize(auth, PERMISSIONS["audit:read"]!);
+  if (forbidden) return forbidden;
+
+  const url = new URL(request.url);
+  const page = Math.max(1, Number(url.searchParams.get("page")) || 1);
+  const limit = Math.min(100, Math.max(1, Number(url.searchParams.get("limit")) || 50));
+  const offset = (page - 1) * limit;
+
+  const countResult = await env.DB.prepare("SELECT COUNT(*) as count FROM error_logs").first<{
+    count: number;
+  }>();
+  const total = countResult?.count ?? 0;
+
+  const entries = await env.DB.prepare(
+    "SELECT * FROM error_logs ORDER BY created_at DESC LIMIT ?1 OFFSET ?2"
+  )
+    .bind(limit, offset)
+    .all<ErrorLogRow>();
+
+  return json({
+    entries: entries.results,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  });
+}
+
 function toAuditEntry(e: AuditEntry) {
   return {
     id: e.id,

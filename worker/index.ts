@@ -13,7 +13,7 @@ import {
 import { json } from "./lib/response";
 import { auth, type AuthContext } from "./lib/middleware";
 import { csp } from "./lib/csp";
-import { sentryMiddleware, analyticsMiddleware } from "./lib/monitoring";
+import { errorLoggingMiddleware, analyticsMiddleware } from "./lib/monitoring";
 import { billingGuard } from "./lib/billing-guard";
 import { BillingRepo } from "./repos/billing";
 import { createDb } from "./lib/db";
@@ -107,7 +107,7 @@ import {
   handleMarkNotificationRead,
   handleMarkAllRead,
 } from "./routes/notifications";
-import { handleGetAuditLog, handleGetAuditByEntity } from "./routes/audit";
+import { handleGetAuditLog, handleGetAuditByEntity, handleGetErrorLogs } from "./routes/audit";
 import { handleGetQuarterlyReport } from "./routes/reports";
 import {
   handleGetConferenceTithe,
@@ -173,7 +173,7 @@ function rateLimit(key: string, config = AUTH_LIMIT) {
 
 const authMiddleware = auth();
 
-app.use("*", sentryMiddleware());
+app.use("*", errorLoggingMiddleware());
 app.use("*", analyticsMiddleware());
 
 // ========================
@@ -445,6 +445,7 @@ app.post("/api/notifications/:id/read", (c) =>
 );
 
 app.get("/api/audit", (c) => handleGetAuditLog(c.req.raw, c.env, getAuth(c)));
+app.get("/api/errors", (c) => handleGetErrorLogs(c.req.raw, c.env, getAuth(c)));
 app.get("/api/audit/:entityType/:entityId", (c) =>
   handleGetAuditByEntity(
     c.req.raw,

@@ -6,6 +6,7 @@ import {
   createRouter,
   redirect,
 } from "@tanstack/react-router";
+import { ToastContainer } from "./components/ui/Toast";
 
 const HomePage = lazy(() => import("./routes/HomePage"));
 const LoginPage = lazy(() => import("./routes/LoginPage"));
@@ -29,6 +30,7 @@ const ContributionsPage = lazy(() => import("./routes/ContributionsPage"));
 const MemberDashboardPage = lazy(() => import("./routes/MemberDashboardPage"));
 const BillingPage = lazy(() => import("./routes/BillingPage"));
 const AdminPage = lazy(() => import("./routes/AdminPage"));
+const SabbathSchoolPage = lazy(() => import("./routes/SabbathSchoolPage"));
 
 function Spinner() {
   return (
@@ -41,8 +43,15 @@ function Spinner() {
 const rootRoute = createRootRoute({
   component: () => (
     <Suspense fallback={<Spinner />}>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[300] focus:rounded focus:bg-brand focus:px-4 focus:py-2 focus:text-white"
+      >
+        Skip to main content
+      </a>
       <div className="min-h-screen bg-gray-50">
         <Outlet />
+        <ToastContainer />
       </div>
     </Suspense>
   ),
@@ -185,6 +194,12 @@ const adminRoute = createRoute({
   component: AdminPage,
 });
 
+const sabbathSchoolRoute = createRoute({
+  getParentRoute: () => dashboardLayout,
+  path: "/sabbath-school",
+  component: SabbathSchoolPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
@@ -208,6 +223,7 @@ const routeTree = rootRoute.addChildren([
     memberDashboardRoute,
     billingRoute,
     adminRoute,
+    sabbathSchoolRoute,
   ]),
 ]);
 

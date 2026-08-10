@@ -20,7 +20,7 @@ Theobase supports three church types:
    - **Name**: The church's full name (e.g., "Bethlehem Seventh-day Adventist Church").
    - **Type**: Organized Church, Company, or Branch.
    - **District**: Assign to an existing district, or leave unassigned if districts aren't yet configured.
-   - **Location**: City, region, and country.
+   - **Address**: The church's physical address.
    - **Founded**: The date the church was established.
 4. If creating a Branch, select the parent Organized Church.
 5. Click **Save**.

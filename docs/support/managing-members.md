@@ -14,7 +14,6 @@ The membership module tracks every baptized member across your Conference, inclu
    - **Date of Birth**.
    - **Joining Method**: Baptism by immersion or Profession of Faith.
    - **Baptism/Joining Date**.
-   - **Officiating Minister**: Name of the pastor who performed the baptism or received the profession of faith.
    - **Previous Denomination**: Required if joining by Profession of Faith.
 4. Assign to a **Household** (optional). You can select an existing household or create a new one.
 5. Click **Save**.

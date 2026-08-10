@@ -14,7 +14,7 @@ When a Conference administrator creates an account, we collect:
 
 - Full name and email address of the administrator
 - Conference name, code, and contact information
-- User email addresses for each invited officer (clerk, treasurer, pastor, etc.)
+- User email addresses for each invited officer (secretaries, treasurers, pastors, etc.)
 
 ### 2.2 Church Member Data
 

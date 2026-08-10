@@ -1,115 +1,60 @@
-import { useState, useEffect, useCallback, type ReactNode } from "react";
-import { Outlet, Link, useNavigate } from "@tanstack/react-router";
+import { useState, useEffect, useCallback } from "react";
+import { Outlet, Link, useNavigate, useLocation } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../lib/auth";
 import { notificationApi, type Notification } from "../lib/api";
 import { getVisibleGroups } from "../lib/modules";
+import { getBreadcrumbs } from "../lib/useBreadcrumbs";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbSeparator } from "../components/ui/Breadcrumb";
 import SyncIndicator from "./SyncIndicator";
 import ConflictResolver from "./ConflictResolver";
+import { CommandPalette } from "../components/ui/CommandPalette";
+import {
+  Home,
+  Building2,
+  Users,
+  DollarSign,
+  User,
+  BarChart3,
+  Settings,
+  Shield,
+  Bell,
+  Menu,
+  X,
+  ChevronDown,
+  LogOut,
+  PanelLeftClose,
+  PanelLeft,
+  Moon,
+  Sun,
+} from "lucide-react";
+import { useDarkMode } from "../lib/useDarkMode";
 
-const ICONS: Record<string, ReactNode> = {
-  home: (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-      />
-    </svg>
-  ),
-  building: (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-      />
-    </svg>
-  ),
-  users: (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-      />
-    </svg>
-  ),
-  currency: (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
-  ),
-  person: (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-      />
-    </svg>
-  ),
-  chart: (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-      />
-    </svg>
-  ),
-  cog: (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-      />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
-  ),
-  shield: (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-      />
-    </svg>
-  ),
-  bell: (
-    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-      />
-    </svg>
-  ),
-  menu: (
-    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  ),
-  close: (
-    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-  ),
-  chevron: (
-    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-    </svg>
-  ),
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  home: Home,
+  building: Building2,
+  users: Users,
+  currency: DollarSign,
+  person: User,
+  chart: BarChart3,
+  cog: Settings,
+  shield: Shield,
 };
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { i18n } = useTranslation("common");
+  const { dark, toggle: toggleDark } = useDarkMode();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    try {
+      return localStorage.getItem("theobase-sidebar-collapsed") === "true";
+    } catch {
+      return false;
+    }
+  });
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -174,21 +119,37 @@ export default function DashboardLayout() {
   const visibleGroups = getVisibleGroups(role);
 
   function renderSidebar() {
+    const sidebarWidth = collapsed ? "w-16" : "w-64";
     return (
-      <aside className="flex h-full w-64 flex-col bg-gray-900 text-white">
-        <div className="flex items-center justify-between border-b border-gray-700 p-4">
-          <Link to="/app" className="flex items-center gap-2" onClick={() => setSidebarOpen(false)}>
-            <img src="/logo-light.svg" alt="Theobase" className="h-8 w-auto" />
-          </Link>
+      <aside
+        className={`flex h-full ${sidebarWidth} flex-col bg-gray-900 text-white transition-all duration-200`}
+      >
+        <div
+          className={`flex items-center border-b border-gray-700 p-4 ${collapsed ? "justify-center" : "justify-between"}`}
+        >
+          {!collapsed && (
+            <Link
+              to="/app"
+              className="flex items-center gap-2"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <img src="/logo-light.svg" alt="Theobase" className="h-8 w-auto" />
+            </Link>
+          )}
+          {collapsed && (
+            <Link to="/app" onClick={() => setSidebarOpen(false)}>
+              <img src="/icon.svg" alt="Theobase" className="h-8 w-8" />
+            </Link>
+          )}
           <button
             className="rounded p-1 hover:bg-gray-800 md:hidden"
             onClick={() => setSidebarOpen(false)}
             aria-label="Close sidebar"
           >
-            {ICONS.close}
+            <X className="h-5 w-5" />
           </button>
         </div>
-        {user?.conference && (
+        {!collapsed && user?.conference && (
           <div className="border-b border-gray-700 px-4 py-2">
             <p className="text-xs font-medium text-gray-400 uppercase tracking-wide">
               {user.conference.name}
@@ -199,7 +160,7 @@ export default function DashboardLayout() {
         <nav className="flex-1 space-y-4 overflow-y-auto p-2">
           {visibleGroups.map((group) => (
             <div key={group.id}>
-              {group.label && (
+              {!collapsed && group.label && (
                 <div className="px-3 pt-3 pb-1 text-xs font-semibold text-gray-500 uppercase">
                   {group.label}
                 </div>
@@ -207,26 +168,57 @@ export default function DashboardLayout() {
               <div className="space-y-1">
                 {group.items
                   .filter((item) => item.roles.includes(role))
-                  .map((item) => (
-                    <Link
-                      key={item.id}
-                      to={item.path}
-                      className="flex items-center gap-3 rounded px-3 py-2 text-sm transition-colors hover:bg-gray-800 [&.active]:bg-gray-800 [&.active]:text-brand"
-                      onClick={() => setSidebarOpen(false)}
-                    >
-                      {ICONS[item.icon]}
-                      {item.label}
-                    </Link>
-                  ))}
+                  .map((item) => {
+                    const Icon = ICON_MAP[item.icon];
+                    return (
+                      <Link
+                        key={item.id}
+                        to={item.path}
+                        className={`flex items-center gap-3 rounded px-3 py-2 text-sm transition-colors hover:bg-gray-800 [&.active]:bg-gray-800 [&.active]:text-brand ${collapsed ? "justify-center" : ""}`}
+                        onClick={() => setSidebarOpen(false)}
+                        title={collapsed ? item.label : undefined}
+                      >
+                        {Icon && <Icon className="h-5 w-5 shrink-0" />}
+                        {!collapsed && item.label}
+                      </Link>
+                    );
+                  })}
               </div>
             </div>
           ))}
         </nav>
+        {/* Language switcher */}
+        {!collapsed && (
+          <div className="border-t border-gray-700 px-4 py-2">
+            <select
+              value={i18n.language}
+              onChange={(e) => i18n.changeLanguage(e.target.value)}
+              className="w-full rounded border border-gray-600 bg-gray-800 px-2 py-1 text-xs text-gray-300"
+            >
+              <option value="en">English</option>
+              <option value="es">Español</option>
+              <option value="pt">Português</option>
+            </select>
+          </div>
+        )}
+        {/* Collapse toggle */}
+        <button
+          onClick={() => {
+            const next = !collapsed;
+            setCollapsed(next);
+            localStorage.setItem("theobase-sidebar-collapsed", String(next));
+          }}
+          className="hidden md:flex items-center justify-center border-t border-gray-700 p-3 text-gray-400 hover:bg-gray-800 hover:text-white"
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+        </button>
         <div className="border-t border-gray-700 p-2 md:hidden">
           <button
             onClick={handleLogout}
             className="block w-full rounded px-3 py-2 text-left text-sm text-gray-400 hover:bg-gray-800 hover:text-white"
           >
+            <LogOut className="mr-2 inline h-4 w-4" />
             Sign Out
           </button>
         </div>
@@ -246,9 +238,9 @@ export default function DashboardLayout() {
 
       {/* Sidebar - desktop: static, mobile: overlay */}
       <div
-        className={`fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        } ${collapsed ? "w-16" : "w-64"}`}
       >
         {renderSidebar()}
       </div>
@@ -263,13 +255,35 @@ export default function DashboardLayout() {
               onClick={() => setSidebarOpen(true)}
               aria-label="Open sidebar"
             >
-              {ICONS.menu}
+              <Menu className="h-6 w-6" />
             </button>
             <h1 className="text-lg font-semibold text-gray-900 hidden sm:block">Theobase</h1>
+            <div className="hidden sm:flex items-center text-gray-400 mx-1">|</div>
+            <Breadcrumb>
+              {getBreadcrumbs(location.pathname).map((crumb, i, arr) => (
+                <span key={i} className="hidden sm:contents">
+                  {crumb.to ? (
+                    <BreadcrumbItem to={crumb.to}>{crumb.label}</BreadcrumbItem>
+                  ) : (
+                    <BreadcrumbItem isLast>{crumb.label}</BreadcrumbItem>
+                  )}
+                  {i < arr.length - 1 && <BreadcrumbSeparator />}
+                </span>
+              ))}
+            </Breadcrumb>
           </div>
 
           <div className="flex items-center gap-2">
             <SyncIndicator />
+
+            {/* Dark mode toggle */}
+            <button
+              onClick={toggleDark}
+              className="rounded p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+              aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
 
             {/* Notification bell */}
             <div className="relative" data-notif-menu>
@@ -286,7 +300,7 @@ export default function DashboardLayout() {
                   }
                 }}
               >
-                {ICONS.bell}
+                <Bell className="h-5 w-5" />
                 {unreadCount > 0 && (
                   <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
                     {unreadCount}
@@ -369,7 +383,9 @@ export default function DashboardLayout() {
                 <span
                   className={`hidden sm:block transition-transform ${userMenuOpen ? "rotate-180" : ""}`}
                 >
-                  {ICONS.chevron}
+                  <ChevronDown
+                    className={`${userMenuOpen ? "rotate-180" : ""} transition-transform`}
+                  />
                 </span>
               </button>
 
@@ -386,7 +402,7 @@ export default function DashboardLayout() {
                     }}
                     className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                   >
-                    {ICONS.cog}
+                    <Settings className="h-4 w-4" />
                     Settings
                   </button>
                   <hr className="my-1 border-gray-100" />
@@ -397,19 +413,7 @@ export default function DashboardLayout() {
                     }}
                     className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                   >
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                      />
-                    </svg>
+                    <LogOut className="h-4 w-4" />
                     Sign Out
                   </button>
                 </div>
@@ -419,10 +423,11 @@ export default function DashboardLayout() {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-auto p-4 sm:p-6">
+        <main className="flex-1 overflow-auto p-4 sm:p-6" id="main-content">
           <Outlet />
         </main>
       </div>
+      <CommandPalette />
       <ConflictResolver />
     </div>
   );

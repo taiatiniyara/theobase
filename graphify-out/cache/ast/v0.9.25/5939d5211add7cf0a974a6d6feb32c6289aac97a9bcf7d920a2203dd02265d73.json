@@ -1,0 +1,159 @@
+{
+  "nodes": [
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_md",
+      "label": "user-management.md",
+      "file_type": "document",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_user_management",
+      "label": "User Management",
+      "file_type": "document",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_overview",
+      "label": "Overview",
+      "file_type": "document",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_roles",
+      "label": "Roles",
+      "file_type": "document",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L7"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_inviting_a_user",
+      "label": "Inviting a User",
+      "file_type": "document",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L21"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_bulk_inviting_users",
+      "label": "Bulk Inviting Users",
+      "file_type": "document",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L34"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_managing_existing_users",
+      "label": "Managing Existing Users",
+      "file_type": "document",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L46"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_resending_an_invitation",
+      "label": "Resending an Invitation",
+      "file_type": "document",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L55"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_self_service_member_access",
+      "label": "Self-Service: Member Access",
+      "file_type": "document",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L63"
+    },
+    {
+      "id": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_tips",
+      "label": "Tips",
+      "file_type": "document",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L72"
+    }
+  ],
+  "edges": [
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_md",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_user_management",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_user_management",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_overview",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_user_management",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_roles",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_user_management",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_inviting_a_user",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_user_management",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_bulk_inviting_users",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_user_management",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_managing_existing_users",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_user_management",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_resending_an_invitation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L55",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_user_management",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_self_service_member_access",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_user_management",
+      "target": "c_users_codec_onedrive_documents_tiniyara_theobase_docs_support_user_management_tips",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/support/user-management.md",
+      "source_location": "L72",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../lib/auth";
 import { api } from "../lib/api";
+import { KPICard } from "../components/ui/KPICard";
+import { PageHeader } from "../components/ui/PageHeader";
+import { Button } from "../components/ui/Button";
+import { PageSkeleton } from "../components/ui/Skeleton";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 interface GlobalSummary {
   titheForwardedThisMonth: number;
@@ -52,76 +57,60 @@ export default function GlobalDashboard() {
     );
   }
 
-  const maxTithe = Math.max(...trend.map((t) => t.tithe), 1);
+  if (loading) return <PageSkeleton />;
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">Global Dashboard</h2>
-        <button
-          onClick={fetchData}
-          className="rounded bg-brand px-4 py-2 text-sm font-medium text-white hover:bg-orange-600"
-        >
-          Refresh
-        </button>
+      <PageHeader
+        title="Global Dashboard"
+        actions={
+          <Button variant="primary" size="sm" onClick={fetchData}>
+            Refresh
+          </Button>
+        }
+      />
+
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <KPICard
+          title="Tithe This Month (All)"
+          value={`$${(summary?.titheForwardedThisMonth ?? 0).toLocaleString()}`}
+        />
+        <KPICard title="Total Membership (All)" value={String(summary?.totalMembership ?? 0)} />
+        <KPICard title="Baptisms This Year (All)" value={String(summary?.baptismsThisYear ?? 0)} />
+        <KPICard title="Total Churches" value={String(summary?.churchCount ?? 0)} />
+        <KPICard title="Conferences" value={String(summary?.conferenceCount ?? 0)} />
       </div>
 
-      {loading ? (
-        <p className="mt-4 text-gray-500">Loading...</p>
-      ) : (
-        <>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            <SummaryCard
-              label="Tithe This Month (All)"
-              value={`$${(summary?.titheForwardedThisMonth ?? 0).toLocaleString()}`}
-            />
-            <SummaryCard
-              label="Total Membership (All)"
-              value={String(summary?.totalMembership ?? 0)}
-            />
-            <SummaryCard
-              label="Baptisms This Year (All)"
-              value={String(summary?.baptismsThisYear ?? 0)}
-            />
-            <SummaryCard label="Total Churches" value={String(summary?.churchCount ?? 0)} />
-            <SummaryCard label="Conferences" value={String(summary?.conferenceCount ?? 0)} />
+      <div className="mt-6 rounded-lg bg-white p-6 shadow">
+        <h3 className="text-lg font-medium text-gray-900">Monthly Tithe Trend (Current Year)</h3>
+        {trend.length === 0 ? (
+          <p className="mt-4 text-center text-sm text-gray-500">No data available</p>
+        ) : (
+          <div className="mt-4" style={{ height: 300 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={trend}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis
+                  dataKey="month"
+                  tickFormatter={(v: string) => v.slice(5)}
+                  tick={{ fontSize: 12, fill: "#6b7280" }}
+                />
+                <YAxis
+                  tickFormatter={(v: number) => `$${Math.round(v / 1000)}k`}
+                  tick={{ fontSize: 12, fill: "#6b7280" }}
+                />
+                <Tooltip
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  formatter={(value: any) => [`$${Number(value).toLocaleString()}`, "Tithe"]}
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  labelFormatter={(label: any) => `Month: ${label}`}
+                />
+                <Bar dataKey="tithe" fill="#f97316" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
-
-          <div className="mt-6 rounded-lg bg-white p-6 shadow">
-            <h3 className="text-lg font-medium text-gray-900">
-              Monthly Tithe Trend (Current Year)
-            </h3>
-            <div className="mt-4 flex items-end gap-2" style={{ height: "200px" }}>
-              {trend.map((t) => {
-                const height = maxTithe > 0 ? (t.tithe / maxTithe) * 160 : 0;
-                const monthLabel = t.month.slice(5);
-                return (
-                  <div key={t.month} className="flex flex-1 flex-col items-center gap-1">
-                    <span className="text-xs text-gray-600">${Math.round(t.tithe / 1000)}k</span>
-                    <div
-                      className="w-full rounded-t bg-brand"
-                      style={{ height: `${Math.max(height, 2)}px`, minWidth: "20px" }}
-                    />
-                    <span className="text-xs text-gray-500">{monthLabel}</span>
-                  </div>
-                );
-              })}
-            </div>
-            {trend.length === 0 && (
-              <p className="text-center text-sm text-gray-500">No data available</p>
-            )}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-function SummaryCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg bg-white p-4 shadow">
-      <p className="text-sm font-medium text-gray-500">{label}</p>
-      <p className="mt-1 text-2xl font-semibold text-gray-900">{value}</p>
+        )}
+      </div>
     </div>
   );
 }
