@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ChurchImportRouteImport } from './routes/church/import'
+import { Route as ChurchRegisterRouteImport } from './routes/church/register'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChurchImportRoute = ChurchImportRouteImport.update({
+  id: '/church/import',
+  path: '/church/import',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChurchRegisterRoute = ChurchRegisterRouteImport.update({
+  id: '/church/register',
+  path: '/church/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/church/import': typeof ChurchImportRoute
+  '/church/register': typeof ChurchRegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/church/import': typeof ChurchImportRoute
+  '/church/register': typeof ChurchRegisterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/church/import': typeof ChurchImportRoute
+  '/church/register': typeof ChurchRegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/church/import' | '/church/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/church/import' | '/church/register'
+  id: '__root__' | '/' | '/church/import' | '/church/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ChurchImportRoute: typeof ChurchImportRoute
+  ChurchRegisterRoute: typeof ChurchRegisterRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/church/import': {
+      id: '/church/import'
+      path: '/church/import'
+      fullPath: '/church/import'
+      preLoaderRoute: typeof ChurchImportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/church/register': {
+      id: '/church/register'
+      path: '/church/register'
+      fullPath: '/church/register'
+      preLoaderRoute: typeof ChurchRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChurchImportRoute: ChurchImportRoute,
+  ChurchRegisterRoute: ChurchRegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

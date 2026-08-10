@@ -1,0 +1,61 @@
+{
+  "app": {
+    "name": "Theobase",
+    "tagline": "Church membership and giving platform"
+  },
+  "nav": {
+    "home": "Home",
+    "giving": "Giving",
+    "members": "Members",
+    "settings": "Settings"
+  },
+  "church": {
+    "register": "Register Your Church",
+    "name": "Church Name",
+    "address": "Address",
+    "conference": "Conference",
+    "submit": "Create Church",
+    "created": "Church registered successfully"
+  },
+  "member": {
+    "noMembers": "No members yet",
+    "noMembersHint": "Upload your membership roll or add the first person",
+    "addMember": "Add Member",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "dateOfBirth": "Date of Birth",
+    "baptismDate": "Baptism Date",
+    "gender": "Gender",
+    "save": "Save Member",
+    "delete": "Delete",
+    "directory": "Member Directory",
+    "uploadCsv": "Upload CSV",
+    "importing": "Importing members..."
+  },
+  "csv": {
+    "upload": "Upload Membership CSV",
+    "dropFile": "Drop CSV file here or click to browse",
+    "parsing": "Parsing...",
+    "resolved": "{count} members ready to import",
+    "flagged": "{count} rows need review",
+    "import": "Import {count} Members",
+    "error": "Error",
+    "fixAndConfirm": "Fix flagged rows and confirm import"
+  },
+  "sync": {
+    "synced": "Synced",
+    "pending": "{count} pending",
+    "offline": "Offline",
+    "staleWarning": "Last synced {time}. Pull to refresh."
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "email": "Email address",
+    "sendLink": "Send Magic Link",
+    "checkEmail": "Check your email for the login link.",
+    "signingIn": "Signing in..."
+  }
+}

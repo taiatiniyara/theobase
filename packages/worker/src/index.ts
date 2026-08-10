@@ -8,6 +8,8 @@ import {
   handleVerifyMfa,
   handleInvite,
 } from './auth/handlers';
+import { handleChurchRegister } from './auth/register';
+import { handleParseCsv } from './auth/csv';
 import { authenticate, requireChurchId } from './auth/middleware';
 import type { Env } from './env';
 
@@ -42,6 +44,14 @@ export default {
     if (path === '/auth/setup-mfa') return cors(await handleSetupMfa(request));
     if (path === '/auth/verify-mfa') return cors(await handleVerifyMfa(request, env));
     if (path === '/auth/invite') return cors(await handleInvite(request, env));
+
+    if (path === '/church/register' && request.method === 'POST') {
+      return cors(await handleChurchRegister(request, env));
+    }
+
+    if (path === '/church/parse-csv' && request.method === 'POST') {
+      return cors(await handleParseCsv(request));
+    }
 
     const churchMatch = path.match(/^\/church\/([^/]+)(\/.*)?$/);
     if (churchMatch) {

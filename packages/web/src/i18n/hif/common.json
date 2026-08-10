@@ -1,0 +1,61 @@
+{
+  "app": {
+    "name": "Theobase",
+    "tagline": "Church membership aur giving platform"
+  },
+  "nav": {
+    "home": "Home",
+    "giving": "Daan",
+    "members": "Member",
+    "settings": "Settings"
+  },
+  "church": {
+    "register": "Apna Church Register Karo",
+    "name": "Church Ke Naam",
+    "address": "Address",
+    "conference": "Conference",
+    "submit": "Church Banao",
+    "created": "Church register ho gaya"
+  },
+  "member": {
+    "noMembers": "Abhi koi member nai hai",
+    "noMembersHint": "Apna membership roll upload karo ya pahila member jodo",
+    "addMember": "Member Jodo",
+    "firstName": "Pahila Naam",
+    "lastName": "Akhri Naam",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "dateOfBirth": "Janam Din",
+    "baptismDate": "Baptism Din",
+    "gender": "Gender",
+    "save": "Member Bachao",
+    "delete": "Mitao",
+    "directory": "Member Directory",
+    "uploadCsv": "CSV Upload Karo",
+    "importing": "Member import hota hai..."
+  },
+  "csv": {
+    "upload": "Membership CSV Upload Karo",
+    "dropFile": "CSV file hian choro ya browse karo",
+    "parsing": "Parse hota hai...",
+    "resolved": "{count} member import ke liye taiyar",
+    "flagged": "{count} row dekhna padega",
+    "import": "{count} Member Import Karo",
+    "error": "Galti",
+    "fixAndConfirm": "Galti sudharo aur import confirm karo"
+  },
+  "sync": {
+    "synced": "Sync ho gaya",
+    "pending": "{count} baaki hai",
+    "offline": "Offline",
+    "staleWarning": "Akhri baar {time} sync hua. Pull to refresh."
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "email": "Email address",
+    "sendLink": "Magic Link Bhejo",
+    "checkEmail": "Apna email dekho login link ke liye.",
+    "signingIn": "Sign in hota hai..."
+  }
+}

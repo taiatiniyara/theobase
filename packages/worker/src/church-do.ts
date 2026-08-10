@@ -12,6 +12,7 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'household:create',
     'household:update',
     'household:delete',
+    'church:create',
     'church:update',
     'role:assign',
     'role:revoke',
@@ -92,6 +93,9 @@ const STATE_HANDLERS: Record<
   'giving_record:create': (p, s) => upsertEntity(s, 'givingRecords', p.id as string, p),
   'giving_record:delete': (p, s) => deleteEntity(s, 'givingRecords', p.id as string),
   'church:update': (p, s) => {
+    s.church = p;
+  },
+  'church:create': (p, s) => {
     s.church = p;
   },
 };

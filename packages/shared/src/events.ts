@@ -20,6 +20,7 @@ export type ChurchOperation =
   | 'giving_batch:commit'
   | 'giving_record:create'
   | 'giving_record:delete'
+  | 'church:create'
   | 'church:update'
   | 'role:assign'
   | 'role:revoke';
