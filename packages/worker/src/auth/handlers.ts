@@ -22,8 +22,9 @@ interface EmailMessage {
 
 export async function handleSendLink(
   request: Request,
-  env: { AUTH_KV: KVNamespace; AUTH_EMAIL: EmailBinding; APP_URL: string },
+  env: { AUTH_KV?: KVNamespace; AUTH_EMAIL: EmailBinding; APP_URL: string },
 ): Promise<Response> {
+  if (!env.AUTH_KV) return json({ error: 'KV namespace not configured. Create theobase-auth KV and bind it as AUTH_KV.' }, 500);
   const { email } = (await request.json()) as { email: string };
   if (!email) return json({ error: 'Email required' }, 400);
 
@@ -62,8 +63,9 @@ export async function handleSendLink(
 
 export async function handleVerify(
   request: Request,
-  env: { AUTH_KV: KVNamespace },
+  env: { AUTH_KV?: KVNamespace },
 ): Promise<Response> {
+  if (!env.AUTH_KV) return json({ error: 'KV namespace not configured.' }, 500);
   const url = new URL(request.url);
   const token = url.searchParams.get('token');
   if (!token) return json({ error: 'Token required' }, 400);

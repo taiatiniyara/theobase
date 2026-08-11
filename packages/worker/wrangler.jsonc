@@ -23,12 +23,6 @@
       "name": "AUTH_EMAIL",
     },
   ],
-  "kv_namespaces": [
-    {
-      "binding": "AUTH_KV",
-      "id": "REPLACE_ME_run_wrangler_kv_namespace_create_theobase_auth_and_paste_id_here",
-    },
-  ],
   "vars": {
     "APP_URL": "https://theobase.pages.dev",
   },

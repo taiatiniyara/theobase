@@ -2,7 +2,7 @@ import type { ChurchDO } from './church-do';
 
 export interface Env {
   CHURCH_DO: DurableObjectNamespace<ChurchDO>;
-  AUTH_KV: KVNamespace;
+  AUTH_KV?: KVNamespace;
   AUTH_EMAIL: {
     send(message: EmailMessage): Promise<void>;
   };
