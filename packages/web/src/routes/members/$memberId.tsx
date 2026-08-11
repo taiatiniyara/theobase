@@ -1,7 +1,7 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useAuth } from '../../lib/auth-store';
 import { useMembers, useAuditLog } from '../../lib/queries';
-import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Button } from '../../components/ui/button';
 import { Avatar, AvatarFallback } from '../../components/ui/avatar';
@@ -14,117 +14,84 @@ export const Route = createFileRoute('/members/$memberId')({
 function MemberProfilePage() {
   const { memberId } = Route.useParams();
   const { churchId } = useAuth();
+  const navigate = useNavigate();
   const { data: members, isLoading } = useMembers(churchId!);
   const { data: auditLog = [] } = useAuditLog(churchId!, memberId);
   const member = members?.find((m) => m.id === memberId);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-50 px-4 py-6">
-        <div className="mx-auto max-w-2xl">
-          <Card>
-            <CardContent className="space-y-4 p-6">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="h-6 animate-pulse rounded bg-neutral-200" />
-              ))}
-            </CardContent>
-          </Card>
-        </div>
+      <div className="px-4 py-6 max-w-2xl mx-auto space-y-4">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="h-20 animate-pulse rounded-lg bg-neutral-200" />
+        ))}
       </div>
     );
   }
 
   if (!member) {
     return (
-      <div className="min-h-screen bg-neutral-50 px-4 py-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-neutral-600">Member not found</p>
-        </div>
+      <div className="px-4 py-6 max-w-2xl mx-auto text-center">
+        <p className="text-neutral-500">Member not found</p>
       </div>
     );
   }
 
   const initials = `${member.firstName?.[0] ?? ''}${member.lastName?.[0] ?? ''}`;
 
+  const statusVariant = (s: string): 'success' | 'warning' | 'error' | 'default' => {
+    if (s === 'baptised') return 'success';
+    if (s === 'transfer-in' || s === 'transfer-out') return 'warning';
+    if (s === 'deceased' || s === 'removed') return 'error';
+    return 'default';
+  };
+
   return (
-    <div className="min-h-screen bg-neutral-50 px-4 py-6">
-      <div className="mx-auto max-w-2xl space-y-6">
-        <div className="flex items-center justify-between">
+    <div className="px-4 py-6 max-w-2xl mx-auto space-y-6">
+      <div className="flex items-center justify-between">
+        <Button variant="ghost" className="text-brand-600 -ml-3" onClick={() => navigate({ to: '/members' })}>
+          ← Members
+        </Button>
+        <Link to="/members/$memberId/edit" params={{ memberId }}>
+          <Button variant="secondary" size="sm">Edit</Button>
+        </Link>
+      </div>
+
+      <Card>
+        <CardHeader>
           <div className="flex items-center gap-4">
             <Avatar size="lg">
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-2xl font-bold text-neutral-900">
-                {member.firstName} {member.lastName}
-              </h1>
-              <p className="text-sm text-neutral-500">{member.email || 'No email'}</p>
+              <CardTitle>{member.firstName} {member.lastName}</CardTitle>
+              <div className="mt-1 flex flex-wrap items-center gap-2">
+                <Badge variant={statusVariant(member.membershipStatus)}>{member.membershipStatus}</Badge>
+                {member.gender && <span className="text-sm text-neutral-500">{member.gender}</span>}
+              </div>
             </div>
           </div>
-          <Link to="/members/$memberId/edit" params={{ memberId }}>
-            <Button variant="secondary">Edit</Button>
-          </Link>
-        </div>
+        </CardHeader>
+        <CardContent>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {member.email && <div><dt className="text-sm text-neutral-500">Email</dt><dd className="text-neutral-900 dark:text-neutral-100">{member.email}</dd></div>}
+            {member.phone && <div><dt className="text-sm text-neutral-500">Phone</dt><dd className="text-neutral-900 dark:text-neutral-100">{member.phone}</dd></div>}
+            {member.address && <div><dt className="text-sm text-neutral-500">Address</dt><dd className="text-neutral-900 dark:text-neutral-100">{member.address}</dd></div>}
+            {member.dateOfBirth && <div><dt className="text-sm text-neutral-500">Date of Birth</dt><dd className="text-neutral-900 dark:text-neutral-100">{member.dateOfBirth}</dd></div>}
+            {member.baptismDate && <div><dt className="text-sm text-neutral-500">Baptism Date</dt><dd className="text-neutral-900 dark:text-neutral-100">{member.baptismDate}</dd></div>}
+            {member.householdId && <div><dt className="text-sm text-neutral-500">Household</dt><dd className="text-neutral-900 dark:text-neutral-100">{member.householdId}</dd></div>}
+          </dl>
+        </CardContent>
+      </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Details</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <dt className="text-sm text-neutral-500">Status</dt>
-                <dd><Badge variant={member.membershipStatus === 'baptised' ? 'success' : 'default'}>{member.membershipStatus}</Badge></dd>
-              </div>
-              {member.gender && (
-                <div>
-                  <dt className="text-sm text-neutral-500">Gender</dt>
-                  <dd className="text-neutral-900">{member.gender}</dd>
-                </div>
-              )}
-              {member.dateOfBirth && (
-                <div>
-                  <dt className="text-sm text-neutral-500">Date of Birth</dt>
-                  <dd className="text-neutral-900">{member.dateOfBirth}</dd>
-                </div>
-              )}
-              {member.baptismDate && (
-                <div>
-                  <dt className="text-sm text-neutral-500">Baptism Date</dt>
-                  <dd className="text-neutral-900">{member.baptismDate}</dd>
-                </div>
-              )}
-              {member.phone && (
-                <div>
-                  <dt className="text-sm text-neutral-500">Phone</dt>
-                  <dd className="text-neutral-900">{member.phone}</dd>
-                </div>
-              )}
-              {member.address && (
-                <div>
-                  <dt className="text-sm text-neutral-500">Address</dt>
-                  <dd className="text-neutral-900">{member.address}</dd>
-                </div>
-              )}
-              {member.householdId && (
-                <div>
-                  <dt className="text-sm text-neutral-500">Household</dt>
-                  <dd className="text-neutral-900">{member.householdId}</dd>
-                </div>
-              )}
-            </dl>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Audit Log</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <AuditTimeline entries={auditLog} />
-          </CardContent>
-        </Card>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Audit Log</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <AuditTimeline entries={auditLog} />
+        </CardContent>
+      </Card>
     </div>
   );
 }

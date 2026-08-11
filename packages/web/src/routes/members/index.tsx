@@ -50,85 +50,44 @@ function MemberDirectoryPage() {
     () => [
       {
         accessorKey: 'name',
-        header: 'Name',
+        header: t('member.firstName'),
         sortingFn: 'alphanumeric',
         cell: ({ row }) => {
           const initials = `${row.original.firstName?.[0] ?? ''}${row.original.lastName?.[0] ?? ''}`;
           return (
-            <div className="flex items-center gap-3">
+            <Link to="/members/$memberId" params={{ memberId: row.original.id }} className="flex items-center gap-3">
               <Avatar size="sm">
                 <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
-              <span className="font-medium text-neutral-900">
+              <span className="font-medium text-neutral-900 dark:text-neutral-100">
                 {row.original.firstName} {row.original.lastName}
               </span>
-            </div>
+            </Link>
           );
-        },
-      },
-      {
-        accessorKey: 'email',
-        header: 'Email',
-        cell: ({ getValue }) => {
-          const value = getValue<string | null>();
-          return value ? (
-            <span className="text-neutral-600">{value}</span>
-          ) : (
-            <span className="text-neutral-400">—</span>
-          );
-        },
-      },
-      {
-        accessorKey: 'phone',
-        header: 'Phone',
-        cell: ({ getValue }) => {
-          const value = getValue<string | null>();
-          return value || <span className="text-neutral-400">—</span>;
         },
       },
       {
         accessorKey: 'membershipStatus',
-        header: 'Status',
+        header: t('member.status'),
         filterFn: 'equals',
-        cell: ({ getValue }) => {
-          const value = getValue<string>();
-          return (
-            <Badge variant={STATUS_BADGE_VARIANT[value] ?? 'default'}>
-              {value}
-            </Badge>
-          );
-        },
+        cell: ({ getValue }) => (
+          <Badge variant={STATUS_BADGE_VARIANT[getValue<string>()] ?? 'default'}>
+            {getValue<string>()}
+          </Badge>
+        ),
       },
       {
-        accessorKey: 'dateOfBirth',
-        header: 'DOB',
-        cell: ({ getValue }) => {
-          const value = getValue<string | null>();
-          return value || <span className="text-neutral-400">—</span>;
-        },
-      },
-      {
-        accessorKey: 'householdId',
-        header: 'Household',
-        cell: ({ getValue }) => {
-          const value = getValue<string | null>();
-          return value || <span className="text-neutral-400">—</span>;
-        },
+        accessorKey: 'email',
+        header: t('member.email'),
+        cell: ({ getValue }) => getValue<string | null>() ?? <span className="text-neutral-400">—</span>,
       },
       {
         id: 'actions',
         header: '',
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
-            <Link
-              to="/members/$memberId/edit"
-              params={{ memberId: row.original.id }}
-            >
-              <Button variant="ghost" size="sm">
-                {t('member.edit')}
-              </Button>
-            </Link>
-          </div>
+          <Link to="/members/$memberId/edit" params={{ memberId: row.original.id }}>
+            <Button variant="ghost" size="sm">{t('member.edit')}</Button>
+          </Link>
         ),
       },
     ],
@@ -149,171 +108,142 @@ function MemberDirectoryPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-50 px-4 py-6">
-        <div className="mx-auto max-w-5xl space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="h-8 w-48 animate-pulse rounded bg-neutral-200" />
-            <div className="flex gap-3">
-              <div className="h-12 w-28 animate-pulse rounded-md bg-neutral-200" />
-              <div className="h-12 w-28 animate-pulse rounded-md bg-neutral-200" />
-            </div>
-          </div>
-          <div className="h-12 w-full animate-pulse rounded-md bg-neutral-200" />
-          <div className="rounded-lg border border-neutral-200 bg-white">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div
-                key={i}
-                className="h-12 animate-pulse rounded bg-neutral-200"
-              />
-            ))}
-          </div>
+      <div className="px-4 py-6 max-w-5xl mx-auto space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="h-8 w-48 animate-pulse rounded-md bg-neutral-200" />
+          <div className="h-10 w-28 animate-pulse rounded-md bg-neutral-200" />
         </div>
+        <div className="h-10 w-full animate-pulse rounded-md bg-neutral-200" />
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="h-12 animate-pulse rounded-md bg-neutral-200" />
+        ))}
       </div>
     );
   }
 
   if (members.length === 0) {
     return (
-      <div className="min-h-screen bg-neutral-50 px-4 py-6">
-        <div className="mx-auto max-w-5xl">
-          <div className="flex flex-col items-center justify-center py-24 text-center">
-            <h2 className="text-xl font-semibold text-neutral-900">
-                {t('member.noMembers')}
-            </h2>
-            <p className="mt-2 text-neutral-500">              {t('member.noMembersHint')}</p>
-            <Link to="/members/add" className="mt-6">
-              <Button>                    {t('member.addMember')}</Button>
-            </Link>
-          </div>
+      <div className="px-4 py-6 max-w-5xl mx-auto">
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+            {t('member.noMembers')}
+          </h2>
+          <p className="mt-2 text-sm text-neutral-500">{t('member.noMembersHint')}</p>
+          <Link to="/members/add" className="mt-6">
+            <Button>{t('member.addMember')}</Button>
+          </Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 px-4 py-6">
-      <div className="mx-auto max-w-5xl space-y-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-neutral-900">
-              {t('member.directory')}
-          </h1>
-          <div className="flex gap-3">
-            <Link to="/members/add">
-              <Button>                    {t('member.addMember')}</Button>
-            </Link>
-            <Link to="/church/import">
-              <Button variant="secondary">                  {t('member.uploadCsv')}</Button>
-            </Link>
-          </div>
+    <div className="px-4 py-6 max-w-5xl mx-auto space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+          {t('member.directory')}
+        </h1>
+        <div className="flex gap-3">
+          <Link to="/members/add">
+            <Button>{t('member.addMember')}</Button>
+          </Link>
+          <Link to="/church/import">
+            <Button variant="secondary">{t('member.uploadCsv')}</Button>
+          </Link>
         </div>
+      </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Input
-            placeholder="Search members..."
-            value={globalFilter}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            className="sm:max-w-xs"
-          />
-          <Select
-            value={
-              (table.getColumn('membershipStatus')?.getFilterValue() as string) ?? ''
-            }
-            onValueChange={(value) =>
-              table.getColumn('membershipStatus')?.setFilterValue(value || undefined)
-            }
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <Input
+          placeholder={t('member.search')}
+          value={globalFilter}
+          onChange={(e) => setGlobalFilter(e.target.value)}
+          className="sm:max-w-xs"
+        />
+        <Select
+          value={(table.getColumn('membershipStatus')?.getFilterValue() as string) ?? ''}
+          onValueChange={(value) =>
+            table.getColumn('membershipStatus')?.setFilterValue(value || undefined)
+          }
+        >
+          <SelectTrigger className="sm:max-w-[180px]">
+            <SelectValue placeholder={t('member.status')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('member.status')}</SelectItem>
+            <SelectItem value="baptised">baptised</SelectItem>
+            <SelectItem value="profession">profession</SelectItem>
+            <SelectItem value="transfer-in">transfer-in</SelectItem>
+            <SelectItem value="transfer-out">transfer-out</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="hidden md:block rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 overflow-hidden shadow-sm">
+        <table className="w-full">
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className="px-4 py-3 text-left text-sm font-medium text-neutral-500 border-b border-neutral-200 dark:border-neutral-700 cursor-pointer select-none"
+                    onClick={header.column.getToggleSortingHandler()}
+                  >
+                    {flexRender(header.column.columnDef.header, header.getContext())}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr
+                key={row.id}
+                className="border-b border-neutral-100 dark:border-neutral-700 last:border-0 hover:bg-neutral-50 dark:hover:bg-neutral-750"
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className="px-4 py-3 text-sm">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="md:hidden space-y-3">
+        {table.getRowModel().rows.map((row) => (
+          <Link
+            key={row.id}
+            to="/members/$memberId"
+            params={{ memberId: row.original.id }}
+            className="block rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 shadow-sm p-4 space-y-2"
           >
-            <SelectTrigger className="sm:max-w-[180px]">
-              <SelectValue placeholder="All statuses" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All statuses</SelectItem>
-              <SelectItem value="baptised">baptised</SelectItem>
-              <SelectItem value="profession">profession</SelectItem>
-              <SelectItem value="transfer-in">transfer-in</SelectItem>
-              <SelectItem value="transfer-out">transfer-out</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="hidden md:block rounded-lg border border-neutral-200 bg-white overflow-hidden">
-          <table className="w-full">
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      className="px-4 py-3 text-left text-sm font-medium text-neutral-500 border-b border-neutral-200"
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-4 py-3">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="md:hidden space-y-3">
-          {table.getRowModel().rows.map((row) => (
-            <div
-              key={row.id}
-              className="rounded-lg border border-neutral-200 bg-white p-4 space-y-2"
-            >
-              <div className="flex items-center gap-3">
-                <Avatar size="sm">
-                  <AvatarFallback>
-                    {row.original.firstName?.[0] ?? ''}
-                    {row.original.lastName?.[0] ?? ''}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <div className="font-medium text-neutral-900">
-                    {row.original.firstName} {row.original.lastName}
-                  </div>
-                  <div className="text-sm text-neutral-500">
-                    {row.original.email || '—'}
-                  </div>
+            <div className="flex items-center gap-3">
+              <Avatar size="sm">
+                <AvatarFallback>
+                  {row.original.firstName?.[0] ?? ''}{row.original.lastName?.[0] ?? ''}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <div className="font-medium text-neutral-900 dark:text-neutral-100">
+                  {row.original.firstName} {row.original.lastName}
+                </div>
+                <div className="text-sm text-neutral-500">
+                  {row.original.email || '—'}
                 </div>
               </div>
-              <div className="flex items-center justify-between text-sm">
-                <Badge
-                  variant={
-                    STATUS_BADGE_VARIANT[row.original.membershipStatus] ?? 'default'
-                  }
-                >
-                  {row.original.membershipStatus}
-                </Badge>
-                <Link
-                  to="/members/$memberId/edit"
-                  params={{ memberId: row.original.id }}
-                >
-                  <Button variant="ghost" size="sm">
-                    {t('member.edit')}
-                  </Button>
-                </Link>
-              </div>
             </div>
-          ))}
-        </div>
+            <div className="flex items-center justify-between">
+              <Badge variant={STATUS_BADGE_VARIANT[row.original.membershipStatus] ?? 'default'}>
+                {row.original.membershipStatus}
+              </Badge>
+              <Button variant="ghost" size="sm">{t('member.edit')}</Button>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );
