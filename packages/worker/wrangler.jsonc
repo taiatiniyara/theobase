@@ -25,6 +25,24 @@
       },
     ],
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "theobase",
+      "database_id": "theobase-d1"
+    }
+  ],
+  "queues": {
+    "producers": [
+      { "queue": "error-queue", "binding": "ERROR_QUEUE" }
+    ]
+  },
+  "r2_buckets": [
+    { "binding": "ERROR_STORAGE", "bucket_name": "theobase-errors" }
+  ],
+  "triggers": {
+    "crons": ["0 3 1 * *"]
+  },
   "migrations": [
     {
       "tag": "v1",

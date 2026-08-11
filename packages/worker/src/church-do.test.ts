@@ -56,6 +56,27 @@ async function getState(): Promise<Record<string, unknown>> {
   return response.json();
 }
 
+async function doFetch(stub: DurableObjectStub<ChurchDO>, operation: string, payload: unknown): Promise<ChurchEvent> {
+  const response = await stub.fetch('http://localhost/mutate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({ operation, payload }),
+  });
+  expect(response.status).toBe(201);
+  return response.json() as Promise<ChurchEvent>;
+}
+
+async function doFetchStrict(stub: DurableObjectStub<ChurchDO>, operation: string, payload: unknown): Promise<Response> {
+  return stub.fetch('http://localhost/mutate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
+    body: JSON.stringify({ operation, payload }),
+  });
+}
+
 describe('ChurchDO', () => {
   it('appends an event to the log', async () => {
     const event = await mutate('member:create', {
@@ -243,5 +264,45 @@ describe('ChurchDO', () => {
     expect(entry!.status).toBe('pending-accept');
     expect(entry!.fromChurchId).toBe('church-a');
     expect(entry!.toChurchId).toBe('church-b');
+  });
+
+  it('rejects mutations on committed batches', async () => {
+    const doId = testEnv.CHURCH_DO.idFromName('batch-test-church');
+    const batchStub = testEnv.CHURCH_DO.get(doId);
+
+    await doFetch(batchStub, 'giving_batch:create', {
+      id: 'bt-1', churchId: 'batch-test-church', date: '2026-01-01',
+      counter1Id: 'c1', records: [{ id: 'r1', memberId: 'm1', amount: 100, type: 'tithe' }],
+    });
+    await doFetch(batchStub, 'giving_batch:counter2-confirm', {
+      batchId: 'bt-1', counter2Id: 'c2', records: [{ id: 'r1', memberId: 'm1', amount: 100, type: 'tithe' }],
+    });
+    await doFetch(batchStub, 'giving_batch:commit', { batchId: 'bt-1', records: [{ id: 'r1', memberId: 'm1', amount: 100, type: 'tithe' }] });
+
+    const res = await doFetchStrict(batchStub, 'giving_record:delete', { id: 'r1', batchId: 'bt-1' });
+    expect(res.status).toBe(403);
+  });
+
+  it('rejects batch commit when not ready', async () => {
+    const doId = testEnv.CHURCH_DO.idFromName('batch2-test-church');
+    const batchStub = testEnv.CHURCH_DO.get(doId);
+
+    await doFetch(batchStub, 'giving_batch:create', {
+      id: 'bt-2', churchId: 'batch2-test-church', date: '2026-01-01',
+      counter1Id: 'c1', records: [{ id: 'r2', memberId: 'm1', amount: 50 }],
+    });
+
+    const res = await doFetchStrict(batchStub, 'giving_batch:commit', { batchId: 'bt-2', records: [] });
+    expect(res.status).toBe(400);
+  });
+
+  it('generates insights', async () => {
+    const doId = testEnv.CHURCH_DO.idFromName('insight-church');
+    const insightStub = testEnv.CHURCH_DO.get(doId);
+
+    const res = await insightStub.fetch('http://localhost/insights');
+    expect(res.status).toBe(200);
+    const data = await res.json() as { insights: Array<Record<string, unknown>> };
+    expect(Array.isArray(data.insights)).toBe(true);
   });
 });

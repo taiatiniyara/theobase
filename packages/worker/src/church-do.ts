@@ -25,7 +25,11 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'contact:reject',
     'contact:update-request',
     'visitor:follow-up',
+    'giving_batch:create',
     'giving_batch:commit',
+    'giving_batch:deposit',
+    'giving_batch:counter2-confirm',
+    'giving_batch:reconcile',
     'report:submit',
   ],
   treasurer: [
