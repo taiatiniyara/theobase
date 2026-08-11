@@ -2,6 +2,8 @@
 
 The single source of truth for every visual decision in Theobase. Every component, layout, and token is defined here. AI agents building UI **must** start by reading this file.
 
+**Light mode only.** The platform does not support dark mode. All components use light backgrounds and neutral-900/700 text. Do not add `dark:` variants.
+
 ---
 
 ## Brand Identity
@@ -69,9 +71,8 @@ Usage:
 
 Usage:
 
-- **Light mode:** `neutral-50` page bg, `neutral-100` card bg, `neutral-700` body text, `neutral-900` headings.
-- **Dark mode (flipped):** `neutral-950` page bg, `neutral-800` card bg, `neutral-300` body text, `neutral-100` headings.
-- **Borders:** `neutral-200` on light bg, `neutral-700` on dark bg.
+- **neutral-50** page bg, **neutral-100** card bg, **neutral-700** body text, **neutral-900** headings.
+- **Borders:** `neutral-200`.
 
 #### Semantic
 
@@ -85,7 +86,7 @@ Usage:
 
 - **Light variants** for badge backgrounds and alert banners (text in the 700-weight variant of the same hue).
 - **Solid variants** for foreground elements: success dot, warning icon, error border.
-- Semantic colors do **not** change between light and dark mode.
+- Semantic colors are consistent everywhere.
 
 #### High-Contrast Mode
 
