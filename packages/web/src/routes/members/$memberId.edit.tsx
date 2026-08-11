@@ -73,16 +73,19 @@ function EditMemberPage() {
 
   async function handleStateChange() {
     if (!newState || !member) return;
-    const updatedMember = { ...member, membershipStatus: newState };
-    await stateChangeMutation.mutateAsync({
-      memberId,
-      prevState: member.membershipStatus,
-      newState,
-      updatedMember: updatedMember as Member,
-      reason: reason || undefined,
-    });
-    setNewState('');
-    setReason('');
+    try {
+      const updatedMember = { ...member, membershipStatus: newState };
+      await stateChangeMutation.mutateAsync({
+        memberId,
+        prevState: member.membershipStatus,
+        newState,
+        updatedMember: updatedMember as Member,
+        reason: reason || undefined,
+      });
+      setNewState('');
+      setReason('');
+    } catch {
+    }
   }
 
   function statusBadgeVariant(status: string): 'success' | 'warning' | 'error' | 'default' {
