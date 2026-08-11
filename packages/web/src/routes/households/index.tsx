@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { useMembers } from '../../lib/queries';
 import { postChurchMutation } from '../../lib/api';
 import { suggestHouseholds, type HouseholdSuggestion } from '@theobase/shared';
@@ -23,6 +24,7 @@ function HouseholdsPage() {
 
   if (isLoading) {
     return (
+      <RequireAuth allowedRoles={['clerk']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-3xl space-y-4">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -30,6 +32,7 @@ function HouseholdsPage() {
           ))}
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
@@ -68,16 +71,19 @@ function HouseholdsPage() {
 
   if (suggestions.length === 0 && rejected.size + confirmed.size === 0) {
     return (
+      <RequireAuth allowedRoles={['clerk']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-3xl text-center py-24">
           <h2 className="text-xl font-semibold text-neutral-900">No household suggestions</h2>
           <p className="mt-2 text-neutral-500">All members are already grouped or no patterns found.</p>
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
   return (
+    <RequireAuth allowedRoles={['clerk']}>
     <div className="px-4 py-6">
       <div className="mx-auto max-w-3xl space-y-6">
         <h1 className="text-2xl font-bold text-neutral-900">Household Suggestions</h1>
@@ -127,5 +133,6 @@ function HouseholdsPage() {
         })}
       </div>
     </div>
+    </RequireAuth>
   );
 }

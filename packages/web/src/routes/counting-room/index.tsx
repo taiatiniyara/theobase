@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { useMembers } from '../../lib/queries';
 import { postChurchMutation, fetchChurchState } from '../../lib/api';
 import { Button } from '../../components/ui/button';
@@ -145,6 +146,7 @@ function CountingRoomPage() {
 
   if (!batchOpen) {
     return (
+      <RequireAuth allowedRoles={['counter']}>
       <div className="px-4 py-6 max-w-md mx-auto">
         <div className="mx-auto max-w-md space-y-6">
           {snackbar && <Snackbar {...snackbar} onDismiss={() => setSnackbar(null)} />}
@@ -184,10 +186,12 @@ function CountingRoomPage() {
           </Card>
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
   return (
+    <RequireAuth allowedRoles={['counter']}>
     <div className="px-4 py-6 max-w-md mx-auto">
       <div className="mx-auto max-w-md space-y-6">
         {snackbar && <Snackbar {...snackbar} onDismiss={() => setSnackbar(null)} />}
@@ -315,5 +319,6 @@ function CountingRoomPage() {
         )}
       </div>
     </div>
+    </RequireAuth>
   );
 }

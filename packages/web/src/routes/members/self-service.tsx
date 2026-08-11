@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { useMembers } from '../../lib/queries';
 import { fetchChurchState, postChurchMutation } from '../../lib/api';
 import { useQuery } from '@tanstack/react-query';
@@ -36,6 +37,7 @@ function SelfServicePage() {
 
   if (membersLoading) {
     return (
+      <RequireAuth allowedRoles={['member']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-lg space-y-4">
           <div className="h-20 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
@@ -43,16 +45,19 @@ function SelfServicePage() {
           <div className="h-32 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
   if (!member) {
     return (
+      <RequireAuth allowedRoles={['member']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-lg text-center py-24">
           <p className="text-neutral-600">Member record not found.</p>
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
@@ -68,6 +73,7 @@ function SelfServicePage() {
 
   if (status === 'submitted') {
     return (
+      <RequireAuth allowedRoles={['member']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-lg">
           <Card>
@@ -79,12 +85,14 @@ function SelfServicePage() {
           </Card>
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
   const initials = `${member.firstName?.[0] ?? ''}${member.lastName?.[0] ?? ''}`;
 
   return (
+    <RequireAuth allowedRoles={['member']}>
     <div className="px-4 py-6">
       <div className="mx-auto max-w-lg space-y-6">
         <div className="flex items-center gap-4">
@@ -154,5 +162,6 @@ function SelfServicePage() {
         </Card>
       </div>
     </div>
+    </RequireAuth>
   );
 }

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../lib/auth-store';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Card } from '../components/ui/card';
+import { Card, CardContent } from '../components/ui/card';
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
@@ -14,12 +14,19 @@ function LoginPage() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
-  const search = useSearch({ strict: false }) as { token?: string };
-  const { login } = useAuth();
+  const search = useSearch({ strict: false }) as { token?: string; redirect?: string };
+  const { login, churchId } = useAuth();
+
+  useEffect(() => {
+    if (churchId) {
+      navigate({ to: search.redirect || '/' });
+    }
+  }, [churchId]);
 
   useEffect(() => {
     const token = search.token;
     if (token) {
+      setStatus('sending');
       fetch(`/auth/verify?token=${encodeURIComponent(token)}`)
         .then((res) => {
           if (!res.ok) throw new Error('Invalid token');
@@ -27,7 +34,6 @@ function LoginPage() {
         })
         .then((data: { token: string }) => {
           login(data.token);
-          navigate({ to: '/' });
         })
         .catch(() => {
           setStatus('error');
@@ -50,7 +56,7 @@ function LoginPage() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error((data as { message?: string }).message || 'Failed to send link');
+        throw new Error((data as Record<string, unknown>).message as string || 'Failed to send link');
       }
 
       setStatus('sent');
@@ -61,35 +67,78 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4">
-      <Card className="w-full max-w-md space-y-6">
-        <h1 className="text-xl font-bold">Sign In</h1>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4 dark:bg-neutral-950">
+      <div className="w-full max-w-sm">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-600 text-xl font-bold text-white shadow-lg shadow-brand-600/20">
+            T
+          </div>
+          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+            Sign in to Theobase
+          </h1>
+          <p className="mt-2 text-sm text-neutral-500">
+            Enter your email to receive a magic link.
+          </p>
+        </div>
 
-        {status === 'sent' ? (
-          <p className="text-sm text-neutral-600">Check your email for the login link.</p>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <label className="block">
-              <span className="text-sm font-medium text-neutral-700">Email</span>
-              <Input
-                type="email"
-                required
-                value={email}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-              />
-            </label>
+        <Card>
+          <CardContent className="p-6">
+            {status === 'sent' ? (
+              <div className="text-center space-y-4">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-success-light">
+                  <svg className="h-6 w-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">Check your email</h2>
+                  <p className="mt-1 text-sm text-neutral-500">
+                    We sent a magic link to <span className="font-medium text-neutral-700 dark:text-neutral-300">{email}</span>.
+                    Click the link to sign in.
+                  </p>
+                </div>
+                <p className="text-xs text-neutral-400">
+                  Didn't receive it? Check spam or{' '}
+                  <button type="button" onClick={() => setStatus('idle')} className="text-brand-600 hover:text-brand-700">
+                    try again
+                  </button>
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <label className="block">
+                  <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Email address</span>
+                  <Input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="mt-1.5"
+                  />
+                </label>
 
-            {status === 'error' && (
-              <p className="text-sm text-red-600">{errorMsg}</p>
+                {status === 'error' && (
+                  <div className="rounded-lg bg-error-light px-4 py-3 text-sm text-error-700 dark:bg-red-900/20 dark:text-red-400">
+                    {errorMsg}
+                  </div>
+                )}
+
+                <Button type="submit" className="w-full" isLoading={status === 'sending'}>
+                  {status === 'sending' ? 'Sending link...' : 'Send Login Link'}
+                </Button>
+              </form>
             )}
+          </CardContent>
+        </Card>
 
-            <Button type="submit" className="w-full" disabled={status === 'sending'}>
-              {status === 'sending' ? 'Sending...' : 'Send Login Link'}
-            </Button>
-          </form>
-        )}
-      </Card>
+        <p className="mt-6 text-center text-xs text-neutral-400">
+          New church?{' '}
+          <button type="button" onClick={() => navigate({ to: '/church/register' })} className="font-medium text-brand-600 hover:text-brand-700">
+            Register your church
+          </button>
+        </p>
+      </div>
     </div>
   );
 }

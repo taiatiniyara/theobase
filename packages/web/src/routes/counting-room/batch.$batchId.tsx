@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { fetchBatchCompare, postChurchMutation } from '../../lib/api';
 import { queryClient } from '../../lib/queries';
 import { Button } from '../../components/ui/button';
@@ -73,6 +74,7 @@ function BatchDetailPage() {
 
   if (isLoading) {
     return (
+      <RequireAuth allowedRoles={['counter']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-lg">
           {Array.from({ length: 3 }).map((_, i) => (
@@ -80,16 +82,19 @@ function BatchDetailPage() {
           ))}
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
   if (!data) {
     return (
+      <RequireAuth allowedRoles={['counter']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-lg text-center py-24">
           <p className="text-neutral-600">Batch not found.</p>
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
@@ -104,6 +109,7 @@ function BatchDetailPage() {
   };
 
   return (
+    <RequireAuth allowedRoles={['counter']}>
     <div className="px-4 py-6">
       <div className="mx-auto max-w-lg space-y-6">
         <div className="flex items-center justify-between">
@@ -231,5 +237,6 @@ function BatchDetailPage() {
         </div>
       </div>
     </div>
+    </RequireAuth>
   );
 }

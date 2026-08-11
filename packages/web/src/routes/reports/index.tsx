@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { fetchReport, postChurchMutation } from '../../lib/api';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
@@ -65,6 +66,7 @@ function ReportsPage() {
 
   if (isLoading) {
     return (
+      <RequireAuth allowedRoles={['clerk', 'treasurer']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-3xl space-y-4">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -72,11 +74,13 @@ function ReportsPage() {
           ))}
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
   if (submitted) {
     return (
+      <RequireAuth allowedRoles={['clerk', 'treasurer']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-lg">
           <Card>
@@ -88,10 +92,12 @@ function ReportsPage() {
           </Card>
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
   return (
+    <RequireAuth allowedRoles={['clerk', 'treasurer']}>
     <div className="px-4 py-6">
       <div className="mx-auto max-w-3xl space-y-6">
         <div className="flex items-center justify-between">
@@ -155,5 +161,6 @@ function ReportsPage() {
         )}
       </div>
     </div>
+    </RequireAuth>
   );
 }

@@ -12,6 +12,7 @@ import {
   type ColumnDef,
 } from '@tanstack/react-table';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { useMembers } from '../../lib/queries';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
@@ -108,6 +109,7 @@ function MemberDirectoryPage() {
 
   if (isLoading) {
     return (
+      <RequireAuth allowedRoles={['clerk', 'pastor', 'board-member']}>
       <div className="px-4 py-6 max-w-5xl mx-auto space-y-4">
         <div className="flex items-center justify-between">
           <div className="h-8 w-48 animate-pulse rounded-md bg-neutral-200" />
@@ -118,11 +120,13 @@ function MemberDirectoryPage() {
           <div key={i} className="h-12 animate-pulse rounded-md bg-neutral-200" />
         ))}
       </div>
+      </RequireAuth>
     );
   }
 
   if (members.length === 0) {
     return (
+      <RequireAuth allowedRoles={['clerk', 'pastor', 'board-member']}>
       <div className="px-4 py-6 max-w-5xl mx-auto">
         <div className="flex flex-col items-center justify-center py-24 text-center">
           <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
@@ -134,10 +138,12 @@ function MemberDirectoryPage() {
           </Link>
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
   return (
+    <RequireAuth allowedRoles={['clerk', 'pastor', 'board-member']}>
     <div className="px-4 py-6 max-w-5xl mx-auto space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
@@ -246,5 +252,6 @@ function MemberDirectoryPage() {
         ))}
       </div>
     </div>
+    </RequireAuth>
   );
 }

@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { fetchRemittance, postChurchMutation } from '../../lib/api';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
@@ -52,6 +53,7 @@ function RemittancePage() {
 
   if (isLoading) {
     return (
+      <RequireAuth allowedRoles={['treasurer']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-lg space-y-4">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -59,11 +61,13 @@ function RemittancePage() {
           ))}
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
   if (submitted) {
     return (
+      <RequireAuth allowedRoles={['treasurer']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-lg">
           <Card>
@@ -75,10 +79,12 @@ function RemittancePage() {
           </Card>
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
   return (
+    <RequireAuth allowedRoles={['treasurer']}>
     <div className="px-4 py-6">
       <div className="mx-auto max-w-lg space-y-6">
         <div className="flex items-center justify-between">
@@ -126,5 +132,6 @@ function RemittancePage() {
         )}
       </div>
     </div>
+    </RequireAuth>
   );
 }

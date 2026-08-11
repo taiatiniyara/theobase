@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { useAddMember } from '../../lib/queries';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { MemberForm } from '../../components/features/member-form';
@@ -20,6 +21,7 @@ function AddMemberPage() {
   }
 
   return (
+    <RequireAuth allowedRoles={['clerk']}>
     <div className="px-4 py-6 max-w-2xl mx-auto">
       <div className="mx-auto max-w-2xl">
         <Card>
@@ -36,5 +38,6 @@ function AddMemberPage() {
         </Card>
       </div>
     </div>
+    </RequireAuth>
   );
 }

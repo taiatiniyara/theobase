@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useCallback } from 'react';
 import { useSync } from '../../lib/sync-provider';
+import { RequireAuth } from '../../lib/auth-guard';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Card, CardTitle } from '../../components/ui/card';
@@ -69,6 +70,7 @@ function ChurchImportPage() {
 
   if (resolved.length === 0 && flagged.length === 0) {
     return (
+      <RequireAuth allowedRoles={['clerk']}>
       <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4">
         <Card className="w-full max-w-md space-y-4 text-center">
           <CardTitle>Upload Membership CSV</CardTitle>
@@ -84,10 +86,12 @@ function ChurchImportPage() {
           />
         </Card>
       </div>
+      </RequireAuth>
     );
   }
 
   return (
+    <RequireAuth allowedRoles={['clerk']}>
     <div className="min-h-screen bg-neutral-50 px-4 py-6">
       <div className="mx-auto max-w-2xl space-y-6">
         <h1 className="text-xl font-bold">Import Members</h1>
@@ -148,5 +152,6 @@ function ChurchImportPage() {
         ))}
       </div>
     </div>
+    </RequireAuth>
   );
 }

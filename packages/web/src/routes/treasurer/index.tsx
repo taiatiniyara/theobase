@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { useMembers } from '../../lib/queries';
 import { fetchChurchState, postChurchMutation } from '../../lib/api';
 import { Button } from '../../components/ui/button';
@@ -100,6 +101,7 @@ function TreasurerPage() {
   const totalGiving = givingRecords.reduce((s: number, r: Record<string, unknown>) => s + ((r.amount as number) ?? 0), 0);
 
   return (
+    <RequireAuth allowedRoles={['treasurer']}>
     <div className="px-4 py-6 max-w-4xl mx-auto">
       <div className="mx-auto max-w-4xl space-y-6">
         <div className="flex items-center justify-between">
@@ -263,5 +265,6 @@ function TreasurerPage() {
         </DialogContent>
       </Dialog>
     </div>
+    </RequireAuth>
   );
 }

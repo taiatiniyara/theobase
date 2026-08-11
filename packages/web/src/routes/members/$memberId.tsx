@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate, Outlet, useRouterState } from '@tanstack/react-router';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { useMembers, useAuditLog } from '../../lib/queries';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
@@ -23,27 +24,33 @@ function MemberProfilePage() {
 
   if (isLoading) {
     return (
+      <RequireAuth allowedRoles={['clerk', 'pastor', 'board-member']}>
       <div className="px-4 py-6 max-w-2xl mx-auto space-y-4">
         {Array.from({ length: 3 }).map((_, i) => (
           <div key={i} className="h-20 animate-pulse rounded-lg bg-neutral-200" />
         ))}
       </div>
+      </RequireAuth>
     );
   }
 
   if (isChildRoute) {
     return (
+      <RequireAuth allowedRoles={['clerk', 'pastor', 'board-member']}>
       <div className="px-4 py-6 max-w-2xl mx-auto">
         <Outlet />
       </div>
+      </RequireAuth>
     );
   }
 
   if (!member) {
     return (
+      <RequireAuth allowedRoles={['clerk', 'pastor', 'board-member']}>
       <div className="px-4 py-6 max-w-2xl mx-auto text-center">
         <p className="text-neutral-500">Member not found</p>
       </div>
+      </RequireAuth>
     );
   }
 
@@ -57,6 +64,7 @@ function MemberProfilePage() {
   };
 
   return (
+    <RequireAuth allowedRoles={['clerk', 'pastor', 'board-member']}>
     <div className="px-4 py-6 max-w-2xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <Button variant="ghost" className="text-brand-600 -ml-3" onClick={() => navigate({ to: '/members' })}>
@@ -103,5 +111,6 @@ function MemberProfilePage() {
         </CardContent>
       </Card>
     </div>
+    </RequireAuth>
   );
 }

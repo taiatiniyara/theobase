@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { useMembers, useUpdateMember, useDeleteMember, useStateChangeMutation } from '../../lib/queries';
 import { VALID_TRANSITIONS, type MembershipState } from '@theobase/shared';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
@@ -39,20 +40,24 @@ function EditMemberPage() {
 
   if (isLoading) {
     return (
+      <RequireAuth allowedRoles={['clerk']}>
       <div className="px-4 py-6 max-w-2xl mx-auto space-y-4">
         <div className="h-8 w-48 animate-pulse rounded bg-neutral-200" />
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="h-12 animate-pulse rounded bg-neutral-200" />
         ))}
       </div>
+      </RequireAuth>
     );
   }
 
   if (!member) {
     return (
+      <RequireAuth allowedRoles={['clerk']}>
       <div className="px-4 py-6 max-w-2xl mx-auto text-center">
         <p className="text-neutral-500">Member not found</p>
       </div>
+      </RequireAuth>
     );
   }
 
@@ -91,6 +96,7 @@ function EditMemberPage() {
   }
 
   return (
+    <RequireAuth allowedRoles={['clerk']}>
     <div className="px-4 py-6 max-w-2xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <Button variant="ghost" className="text-brand-600 -ml-3" onClick={() => navigate({ to: `/members/${memberId}` })}>
@@ -164,5 +170,6 @@ function EditMemberPage() {
         </CardContent>
       </Card>
     </div>
+    </RequireAuth>
   );
 }

@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { fetchChurchState, postChurchMutation } from '../../lib/api';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
@@ -33,6 +34,7 @@ function ConferenceRemittancesPage() {
 
   if (isLoading) {
     return (
+      <RequireAuth allowedRoles={['conference-treasurer', 'conference-president']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-3xl space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
@@ -40,10 +42,12 @@ function ConferenceRemittancesPage() {
           ))}
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
   return (
+    <RequireAuth allowedRoles={['conference-treasurer', 'conference-president']}>
     <div className="px-4 py-6">
       <div className="mx-auto max-w-3xl space-y-6">
         <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Tithe Remittances</h1>
@@ -81,5 +85,6 @@ function ConferenceRemittancesPage() {
         )}
       </div>
     </div>
+    </RequireAuth>
   );
 }

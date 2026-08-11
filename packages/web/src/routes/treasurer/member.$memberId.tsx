@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../lib/auth-store';
+import { RequireAuth } from '../../lib/auth-guard';
 import { fetchChurchState } from '../../lib/api';
 import { useMembers } from '../../lib/queries';
 import { Card, CardContent } from '../../components/ui/card';
@@ -73,15 +74,18 @@ function MemberGivingHistoryPage() {
 
   if (!member) {
     return (
+      <RequireAuth allowedRoles={['treasurer']}>
       <div className="px-4 py-6 max-w-3xl mx-auto">
         <div className="mx-auto max-w-3xl text-center py-24">
           <p className="text-neutral-600">Member not found.</p>
         </div>
       </div>
+      </RequireAuth>
     );
   }
 
   return (
+    <RequireAuth allowedRoles={['treasurer']}>
     <div className="px-4 py-6 max-w-3xl mx-auto">
       <div className="mx-auto max-w-3xl space-y-6">
         <button type="button" onClick={() => window.history.back()} className="inline-flex items-center gap-1 text-sm text-brand-600 hover:text-brand-700">
@@ -144,5 +148,6 @@ function MemberGivingHistoryPage() {
         )}
       </div>
     </div>
+    </RequireAuth>
   );
 }
