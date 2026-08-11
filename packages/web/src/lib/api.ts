@@ -39,6 +39,12 @@ export async function fetchReport(churchId: string, year: number): Promise<Recor
   return response.json() as Promise<Record<string, unknown>>;
 }
 
+export async function fetchRemittance(churchId: string, period: string): Promise<Record<string, unknown>> {
+  const response = await fetch(`${getWorkerUrl()}/${churchId}/remittance-generate/${period}`);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json() as Promise<Record<string, unknown>>;
+}
+
 export async function postChurchMutation(
   churchId: string,
   operation: string,

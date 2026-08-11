@@ -38,7 +38,9 @@ export type ChurchOperation =
   | 'visitor:follow-up'
   | 'report:submit'
   | 'report:approve'
-  | 'report:return';
+  | 'report:return'
+  | 'remittance:submit'
+  | 'remittance:receive';
 
 export type ChurchEventTyped = ChurchEvent<ChurchOperation>;
 

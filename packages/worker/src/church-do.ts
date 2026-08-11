@@ -35,6 +35,7 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'giving_batch:update',
     'giving_batch:commit',
     'giving_batch:deposit',
+    'remittance:submit',
   ],
   counter: [
     'giving_record:create',
@@ -51,7 +52,7 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
   ],
   interest: [],
   visitor: [],
-  'conference-treasurer': [],
+  'conference-treasurer': ['remittance:receive'],
   'conference-secretary': ['transfer:accept', 'report:approve', 'report:return'],
   'conference-president': [],
   auditor: ['transfer:accept'],
@@ -374,6 +375,28 @@ const STATE_HANDLERS: Record<
     }
     s.reports = reports;
   },
+  'remittance:submit': (p, s) => {
+    const remittances = (s.remittances as Array<Record<string, unknown>>) ?? [];
+    remittances.push({
+      id: crypto.randomUUID(),
+      churchId: p.churchId,
+      period: p.period,
+      amount: p.amount,
+      titheTotal: p.titheTotal,
+      status: 'submitted',
+      submittedBy: p.actor,
+      submittedAt: p.timestamp,
+    });
+    s.remittances = remittances;
+  },
+  'remittance:receive': (p, s) => {
+    const remittances = (s.remittances as Array<Record<string, unknown>>) ?? [];
+    const idx = remittances.findIndex(r => r.id === p.remittanceId);
+    if (idx !== -1) {
+      remittances[idx] = { ...remittances[idx], status: 'received', receivedBy: p.actor, receivedAt: p.timestamp };
+    }
+    s.remittances = remittances;
+  },
 };
 
 export class ChurchDO extends DurableObject {
@@ -475,6 +498,35 @@ export class ChurchDO extends DurableObject {
     const path = url.pathname;
 
     try {
+      if (request.method === 'GET' && path.startsWith('/remittance-generate/')) {
+        const period = path.split('/')[2]!;
+        const state = await this.reconstructState();
+        const givingRecords = Object.values((state.givingRecords as Record<string, Record<string, unknown>>) ?? {});
+        
+        const titheTotal = givingRecords
+          .filter((r: Record<string, unknown>) => r.type === 'tithe')
+          .reduce((s: number, r: Record<string, unknown>) => s + ((r.amount as number) ?? 0), 0);
+        
+        const offerings = givingRecords
+          .filter((r: Record<string, unknown>) => r.type === 'offering')
+          .reduce((s: number, r: Record<string, unknown>) => s + ((r.amount as number) ?? 0), 0);
+        
+        const categories: Record<string, number> = {};
+        for (const r of givingRecords as Array<Record<string, unknown>>) {
+          const cat = (r.category as string) ?? 'other';
+          categories[cat] = (categories[cat] ?? 0) + ((r.amount as number) ?? 0);
+        }
+        
+        return new Response(JSON.stringify({
+          period,
+          titheTotal,
+          offeringTotal: offerings,
+          totalGiving: titheTotal + offerings,
+          remitAmount: titheTotal * 0.1,
+          categories,
+        }), { headers: { 'Content-Type': 'application/json' } });
+      }
+
       if (request.method === 'GET' && path.startsWith('/report-generate/')) {
         const year = parseInt(path.split('/')[2]!, 10);
         const state = await this.reconstructState();

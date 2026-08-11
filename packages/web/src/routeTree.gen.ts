@@ -23,6 +23,8 @@ import { Route as HouseholdsIndexRouteImport } from './routes/households/index'
 import { Route as MembersSelfServiceRouteImport } from './routes/members/self-service'
 import { Route as ReportsIndexRouteImport } from './routes/reports/index'
 import { Route as ConferenceReportsRouteImport } from './routes/conference/reports'
+import { Route as ConferenceRemittancesRouteImport } from './routes/conference/remittances'
+import { Route as RemittanceIndexRouteImport } from './routes/remittance/index'
 import { Route as TreasurerIndexRouteImport } from './routes/treasurer/index'
 import { Route as TreasurerMemberMemberIdRouteImport } from './routes/treasurer/member.$memberId'
 import { Route as VisitorWelcomeRouteImport } from './routes/visitor/welcome'
@@ -112,6 +114,16 @@ const ConferenceReportsRoute = ConferenceReportsRouteImport.update({
   path: '/conference/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConferenceRemittancesRoute = ConferenceRemittancesRouteImport.update({
+  id: '/conference/remittances',
+  path: '/conference/remittances',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RemittanceIndexRoute = RemittanceIndexRouteImport.update({
+  id: '/remittance',
+  path: '/remittance',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -130,7 +142,9 @@ export interface FileRoutesByFullPath {
   '/treasurer': typeof TreasurerIndexRoute
   '/treasurer/member/$memberId': typeof TreasurerMemberMemberIdRoute
   '/reports': typeof ReportsIndexRoute
+  '/remittance': typeof RemittanceIndexRoute
   '/conference/reports': typeof ConferenceReportsRoute
+  '/conference/remittances': typeof ConferenceRemittancesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -166,10 +180,10 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room' | '/counting-room/batch/$batchId' | '/treasurer' | '/treasurer/member/$memberId' | '/reports' | '/conference/reports'
+  fullPaths: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room' | '/counting-room/batch/$batchId' | '/treasurer' | '/treasurer/member/$memberId' | '/reports' | '/remittance' | '/conference/reports' | '/conference/remittances'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room' | '/counting-room/batch/$batchId' | '/treasurer' | '/treasurer/member/$memberId' | '/reports' | '/conference/reports'
-  id: '__root__' | '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room' | '/counting-room/batch/$batchId' | '/treasurer' | '/treasurer/member/$memberId' | '/reports' | '/conference/reports'
+  to: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room' | '/counting-room/batch/$batchId' | '/treasurer' | '/treasurer/member/$memberId' | '/reports' | '/remittance' | '/conference/reports' | '/conference/remittances'
+  id: '__root__' | '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room' | '/counting-room/batch/$batchId' | '/treasurer' | '/treasurer/member/$memberId' | '/reports' | '/remittance' | '/conference/reports' | '/conference/remittances'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,7 +203,9 @@ export interface RootRouteChildren {
   TreasurerIndexRoute: typeof TreasurerIndexRoute
   TreasurerMemberMemberIdRoute: typeof TreasurerMemberMemberIdRoute
   ReportsIndexRoute: typeof ReportsIndexRoute
+  RemittanceIndexRoute: typeof RemittanceIndexRoute
   ConferenceReportsRoute: typeof ConferenceReportsRoute
+  ConferenceRemittancesRoute: typeof ConferenceRemittancesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -313,6 +329,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConferenceReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/conference/remittances': {
+      id: '/conference/remittances'
+      path: '/conference/remittances'
+      fullPath: '/conference/remittances'
+      preLoaderRoute: typeof ConferenceRemittancesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/remittance': {
+      id: '/remittance'
+      path: '/remittance'
+      fullPath: '/remittance'
+      preLoaderRoute: typeof RemittanceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -330,7 +360,9 @@ const rootRouteChildren: RootRouteChildren = {
   TreasurerIndexRoute: TreasurerIndexRoute,
   TreasurerMemberMemberIdRoute: TreasurerMemberMemberIdRoute,
   ReportsIndexRoute: ReportsIndexRoute,
+  RemittanceIndexRoute: RemittanceIndexRoute,
   ConferenceReportsRoute: ConferenceReportsRoute,
+  ConferenceRemittancesRoute: ConferenceRemittancesRoute,
   VisitorWelcomeRoute: VisitorWelcomeRoute,
   ChurchImportRoute: ChurchImportRoute,
   ChurchRegisterRoute: ChurchRegisterRoute,
