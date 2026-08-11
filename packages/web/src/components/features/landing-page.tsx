@@ -15,11 +15,7 @@ import {
 function WaveDivider() {
   return (
     <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none">
-      <svg
-        viewBox="0 0 1440 80"
-        className="h-10 w-full sm:h-16 lg:h-20"
-        preserveAspectRatio="none"
-      >
+      <svg viewBox="0 0 1440 80" className="h-10 w-full sm:h-16 lg:h-20" preserveAspectRatio="none">
         <path
           d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z"
           className="fill-white"
@@ -34,7 +30,7 @@ export function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-brand-950/95 backdrop-blur-md">
+      <header className="sticky top-0 z-50 bg-brand-950">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <img src="/logo-full-light.svg" alt="Theobase" className="h-4 w-auto sm:h-5" />
           <div className="flex items-center gap-2 sm:gap-4">
@@ -64,8 +60,8 @@ export function LandingPage() {
                 Membership. Giving. Reports. Built for the way SDA churches work.
               </h1>
               <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-brand-200 sm:text-lg">
-                From the counting room to the conference — the one place your
-                church officers can count on.
+                From the counting room to the conference — the one place your church officers can
+                count on.
               </p>
               <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                 <button
@@ -102,12 +98,8 @@ export function LandingPage() {
                   <div className="font-heading text-2xl font-bold tracking-wide text-neutral-900 sm:text-3xl">
                     {stat.value}
                   </div>
-                  <div className="mt-1 text-sm font-semibold text-neutral-900">
-                    {stat.label}
-                  </div>
-                  <div className="mt-1 text-xs leading-snug text-neutral-400">
-                    {stat.sub}
-                  </div>
+                  <div className="mt-1 text-sm font-semibold text-neutral-900">{stat.label}</div>
+                  <div className="mt-1 text-xs leading-snug text-neutral-400">{stat.sub}</div>
                 </div>
               ))}
             </div>
@@ -121,8 +113,7 @@ export function LandingPage() {
                 Three roles. One platform.
               </h2>
               <p className="mt-4 text-base leading-relaxed text-neutral-500">
-                Every church officer gets exactly the tools their job requires.
-                No more, no less.
+                Every church officer gets exactly the tools their job requires. No more, no less.
               </p>
             </div>
             <div className="mt-12 grid gap-6 sm:grid-cols-3">
@@ -134,9 +125,8 @@ export function LandingPage() {
                   Church Clerk
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-neutral-500">
-                  Track baptisms, transfers, and membership changes as they
-                  happen. The annual statistical report fills itself out. No
-                  Excel. No copying.
+                  Track baptisms, transfers, and membership changes as they happen. The annual
+                  statistical report fills itself out. No Excel. No copying.
                 </p>
                 <p className="mt-4 text-xs font-medium text-brand-600">
                   Upload your membership roll as CSV &rarr;
@@ -150,9 +140,8 @@ export function LandingPage() {
                   Counters
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-neutral-500">
-                  Two people count on a large, easy-to-tap keypad. Totals are
-                  compared. Match? Batch locks forever. Mismatch? Reconciled
-                  side by side.
+                  Two people count on a large, easy-to-tap keypad. Totals are compared. Match? Batch
+                  locks forever. Mismatch? Reconciled side by side.
                 </p>
                 <p className="mt-4 text-xs font-medium text-warning-700">
                   Dual-signoff enforced by software &rarr;
@@ -166,8 +155,8 @@ export function LandingPage() {
                   Treasurer
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-neutral-500">
-                  Giving records flow from the counting room automatically. The
-                  tithe remittance statement is pre-computed. Review and approve.
+                  Giving records flow from the counting room automatically. The tithe remittance
+                  statement is pre-computed. Review and approve.
                 </p>
                 <p className="mt-4 text-xs font-medium text-success-700">
                   One-tap remittance submission &rarr;
@@ -193,8 +182,8 @@ export function LandingPage() {
                   Polity enforced by software
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-neutral-500">
-                  Dual-signoff, role-based access, audit trail — all encoded into
-                  the platform so officers don&rsquo;t police each other.
+                  Dual-signoff, role-based access, audit trail — all encoded into the platform so
+                  officers don&rsquo;t police each other.
                 </p>
               </div>
               <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
@@ -205,8 +194,8 @@ export function LandingPage() {
                   Works offline. Syncs later.
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-neutral-500">
-                  Count offerings, update records, review reports — all without
-                  internet. Changes sync when you&rsquo;re back online.
+                  Count offerings, update records, review reports — all without internet. Changes
+                  sync when you&rsquo;re back online.
                 </p>
               </div>
               <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
@@ -217,8 +206,8 @@ export function LandingPage() {
                   Your data stays yours
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-neutral-500">
-                  Export full membership, giving history, and audit trail as CSV
-                  or JSON. No lock-in. Conference sees aggregates only.
+                  Export full membership, giving history, and audit trail as CSV or JSON. No
+                  lock-in. Conference sees aggregates only.
                 </p>
               </div>
               <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
@@ -229,8 +218,8 @@ export function LandingPage() {
                   Permanent audit trail
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-neutral-500">
-                  Every action leaves an unalterable record. Tamper with a record
-                  and the chain breaks — detectable instantly.
+                  Every action leaves an unalterable record. Tamper with a record and the chain
+                  breaks — detectable instantly.
                 </p>
               </div>
             </div>
@@ -244,9 +233,8 @@ export function LandingPage() {
                 Where we&rsquo;re headed
               </h2>
               <p className="mt-4 text-base leading-relaxed text-neutral-500">
-                From paper notebooks to a platform every SDA church officer
-                opens on Sabbath morning. Starting in the Pacific, expanding
-                conference by conference.
+                From paper notebooks to a platform every SDA church officer opens on Sabbath
+                morning. Starting in the Pacific, expanding conference by conference.
               </p>
             </div>
             <div className="mt-12 grid gap-6 sm:grid-cols-2">
@@ -256,9 +244,8 @@ export function LandingPage() {
                   Today
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-neutral-500">
-                  Paper notebooks in the counting room. Membership rolls in
-                  Excel. Reports assembled by hand. Hours of admin work every
-                  week.
+                  Paper notebooks in the counting room. Membership rolls in Excel. Reports assembled
+                  by hand. Hours of admin work every week.
                 </p>
               </div>
               <div className="rounded-2xl border border-brand-200 bg-brand-50 p-6 shadow-sm sm:p-8">
@@ -267,9 +254,8 @@ export function LandingPage() {
                   Tomorrow
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-neutral-600">
-                  One platform that understands SDA polity. Reports that fill
-                  themselves out. Works offline, scales globally, belongs to the
-                  church.
+                  One platform that understands SDA polity. Reports that fill themselves out. Works
+                  offline, scales globally, belongs to the church.
                 </p>
               </div>
             </div>
@@ -283,8 +269,8 @@ export function LandingPage() {
                 Ready to set up your church?
               </h2>
               <p className="mt-4 text-base leading-relaxed text-neutral-500">
-                Free for every local church. The Conference subscribes at
-                $3/church/month. No feature gates. Export your data anytime.
+                Free for every local church. The Conference subscribes at $3/church/month. No
+                feature gates. Export your data anytime.
               </p>
               <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                 <button
@@ -313,8 +299,12 @@ export function LandingPage() {
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
             <img src="/logo-full.svg" alt="Theobase" className="h-4 w-auto" />
             <div className="flex items-center gap-6 text-xs text-neutral-400">
-              <button type="button" onClick={() => navigate({ to: '/login' })}>Sign in</button>
-              <button type="button" onClick={() => navigate({ to: '/church/register' })}>Register</button>
+              <button type="button" onClick={() => navigate({ to: '/login' })}>
+                Sign in
+              </button>
+              <button type="button" onClick={() => navigate({ to: '/church/register' })}>
+                Register
+              </button>
             </div>
             <p className="text-xs text-neutral-400">&copy; {new Date().getFullYear()} Theobase</p>
           </div>
