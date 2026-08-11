@@ -498,6 +498,53 @@ export class ChurchDO extends DurableObject {
     const path = url.pathname;
 
     try {
+      if (request.method === 'GET' && path === '/insights') {
+        const state = await this.reconstructState();
+        const givingRecords = Object.values((state.givingRecords as Record<string, Record<string, unknown>>) ?? {}) as Array<Record<string, unknown>>;
+        const members = Object.values((state.members as Record<string, Record<string, unknown>>) ?? {}) as Array<Record<string, unknown>>;
+        const auditLog = (state.auditLog as Array<Record<string, unknown>>) ?? [];
+        const reports = (state.reports as Array<Record<string, unknown>>) ?? [];
+        const remittances = (state.remittances as Array<Record<string, unknown>>) ?? [];
+
+        const now = new Date();
+        const thisQuarter = Math.floor(now.getMonth() / 3);
+        const thisYear = now.getFullYear();
+        const prevQuarter = thisQuarter === 0 ? 3 : thisQuarter - 1;
+
+        function getQuarter(ts: number) { const d = new Date(ts); return Math.floor(d.getMonth() / 3); }
+
+        const thisQtrTithe = givingRecords
+          .filter(r => r.type === 'tithe' && getQuarter((r.createdAt as number) * 1000) === thisQuarter)
+          .reduce((s, r) => s + ((r.amount as number) ?? 0), 0);
+
+        const prevQtrTithe = givingRecords
+          .filter(r => r.type === 'tithe' && getQuarter((r.createdAt as number) * 1000) === prevQuarter)
+          .reduce((s, r) => s + ((r.amount as number) ?? 0), 0);
+
+        const givingDecline = prevQtrTithe > 0 && (prevQtrTithe - thisQtrTithe) / prevQtrTithe > 0.1;
+
+        const fourWeeksAgo = Date.now() - 28 * 24 * 60 * 60 * 1000;
+        const membersWithRecentGiving = new Set(
+          givingRecords.filter(r => (r.createdAt as number) * 1000 > fourWeeksAgo).map(r => r.memberId)
+        );
+        const inactiveMembers = members.filter(m => !membersWithRecentGiving.has(m.id as string)).length;
+
+        const unsubmittedReports = reports.filter(r => r.status !== 'submitted' && r.status !== 'approved').length;
+
+        const thisMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+        const titheRemitted = remittances.some(r => r.period === thisMonth && r.status === 'received');
+        const titheCollected = givingRecords.some(r => r.type === 'tithe');
+        const titheOverdue = titheCollected && !titheRemitted;
+
+        const insights = [];
+        if (givingDecline) insights.push({ type: 'giving-decline', title: 'Giving Decline', description: 'Tithe is down over 10% this quarter.', action: { label: 'View Treasurer', to: '/treasurer' } });
+        if (inactiveMembers > 0) insights.push({ type: 'inactive-members', title: 'Inactive Members', description: `${inactiveMembers} member(s) with no giving in 4 weeks.`, action: { label: 'View Members', to: '/members' } });
+        if (unsubmittedReports > 0) insights.push({ type: 'report-ready', title: 'Report Ready', description: 'Annual statistical report has data ready for review.', action: { label: 'View Reports', to: '/reports' } });
+        if (titheOverdue) insights.push({ type: 'tithe-overdue', title: 'Tithe Remittance Overdue', description: 'Tithe collected but not yet remitted this month.', action: { label: 'Submit Remittance', to: '/remittance' } });
+
+        return new Response(JSON.stringify({ insights }), { headers: { 'Content-Type': 'application/json' } });
+      }
+
       if (request.method === 'GET' && path.startsWith('/remittance-generate/')) {
         const period = path.split('/')[2]!;
         const state = await this.reconstructState();

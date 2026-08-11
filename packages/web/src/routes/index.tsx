@@ -1,55 +1,83 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { APP_NAME } from '@theobase/shared';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '../lib/auth-store';
+import { fetchInsights } from '../lib/api';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { Card } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
 
 export const Route = createFileRoute('/')({
-  component: Index,
+  component: DashboardPage,
 });
 
-function Index() {
+const INSIGHT_ICONS: Record<string, string> = {
+  'giving-decline': '📉',
+  'inactive-members': '👤',
+  'report-ready': '📋',
+  'tithe-overdue': '⏰',
+};
+
+function DashboardPage() {
+  const { churchId, churchName, role } = useAuth();
+  const navigate = useNavigate();
+  const goTo = useCallback((to: string) => navigate({ to } as never), [navigate]);
+  const { data } = useQuery({
+    queryKey: ['insights', churchId],
+    queryFn: () => fetchInsights(churchId!),
+    enabled: !!churchId,
+  });
+  const insights = data?.insights ?? [];
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4 dark:bg-neutral-950">
-      <div className="w-full max-w-md space-y-8 text-center">
-        <img src="/logo-icon.svg" alt={APP_NAME} className="mx-auto h-20 w-20" />
+    <div className="min-h-screen bg-neutral-50 px-4 py-6">
+      <div className="mx-auto max-w-4xl space-y-6">
+        <h1 className="text-2xl font-bold text-neutral-900">{churchName ?? 'Dashboard'}</h1>
 
-        <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">{APP_NAME}</h1>
-
-        <p className="text-base text-neutral-600 dark:text-neutral-400">
-          Church membership and giving platform for the Fiji Mission
-        </p>
-
-        <div className="flex items-center justify-center gap-3">
-          <Badge variant="success">v0.0.1</Badge>
-          <Badge variant="default">Offline-first</Badge>
-          <Badge variant="warning">PWA</Badge>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <Button variant="secondary" className="w-full justify-start gap-2 h-12" onClick={() => goTo('/members')}>👥 Members</Button>
+          <Button variant="secondary" className="w-full justify-start gap-2 h-12" onClick={() => goTo('/members/add')}>➕ Add Member</Button>
+          {(role === 'treasurer' || role === 'clerk' || role === 'operator') && (
+            <Button variant="secondary" className="w-full justify-start gap-2 h-12" onClick={() => goTo('/treasurer')}>💰 Treasurer</Button>
+          )}
+          {(role === 'counter' || role === 'operator') && (
+            <Button variant="secondary" className="w-full justify-start gap-2 h-12" onClick={() => goTo('/counting-room')}>🔢 Counting</Button>
+          )}
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
-          <Card className="bg-brand-100 dark:bg-brand-800 border-brand-200 dark:border-brand-700">
-            <div className="text-2xl font-bold tabular-nums text-brand-700 dark:text-brand-300">
-              $2,450
+        {insights.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold text-neutral-900 mb-3">Insights</h2>
+            <div className="flex gap-4 overflow-x-auto pb-2">
+              {insights.map((insight, i) => (
+                <Card key={i} className="min-w-[280px] flex-shrink-0">
+                  <CardHeader>
+                    <div className="flex items-start gap-3">
+                      <span className="text-2xl">{INSIGHT_ICONS[insight.type] ?? '📌'}</span>
+                      <div>
+                        <CardTitle className="text-base">{insight.title}</CardTitle>
+                        <p className="text-sm text-neutral-500 mt-1">{insight.description}</p>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <Button variant="ghost" size="sm" className="text-brand-600" onClick={() => goTo(insight.action.to)}>
+                      {insight.action.label} →
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-            <div className="mt-1 text-xs text-brand-600 dark:text-brand-400">This Week</div>
-          </Card>
-          <Card className="bg-brand-100 dark:bg-brand-800 border-brand-200 dark:border-brand-700">
-            <div className="text-2xl font-bold tabular-nums text-brand-700 dark:text-brand-300">
-              142
-            </div>
-            <div className="mt-1 text-xs text-brand-600 dark:text-brand-400">Members</div>
-          </Card>
-          <Card className="bg-brand-100 dark:bg-brand-800 border-brand-200 dark:border-brand-700">
-            <div className="text-2xl font-bold tabular-nums text-amber-700 dark:text-amber-300">
-              3
-            </div>
-            <div className="mt-1 text-xs text-amber-600 dark:text-amber-400">Pending</div>
-          </Card>
-        </div>
+          </div>
+        )}
 
-        <Button asChild>
-          <Link to="/">Get Started</Link>
-        </Button>
+        {insights.length === 0 && (
+          <Card>
+            <CardContent className="py-12 text-center">
+              <h2 className="text-lg font-semibold text-neutral-900">Welcome to Theobase</h2>
+              <p className="mt-2 text-neutral-500">Start by adding members or recording giving.</p>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
