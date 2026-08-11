@@ -7,6 +7,8 @@ on:
 jobs:
   deploy-pages:
     name: Deploy to Cloudflare Pages
+    if: github.event.repository.fork == false
+    continue-on-error: true
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -31,6 +33,8 @@ jobs:
 
   deploy-worker:
     name: Deploy Worker
+    if: github.event.repository.fork == false
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
