@@ -850,7 +850,7 @@ export class ChurchDO extends DurableObject {
         if (!authHeader?.startsWith('Bearer ')) {
           return versionedResponse({ error: 'Unauthorized' }, 401);
         }
-        const seedToken = (this.ctx as unknown as { env: { SEED_TOKEN?: string } }).env.SEED_TOKEN;
+        const seedToken = (this.ctx as unknown as { env?: { SEED_TOKEN?: string } }).env?.SEED_TOKEN;
         const isDemoSeed = seedToken ? authHeader === `Bearer ${seedToken}` : false;
         const user = isDemoSeed
           ? { sub: 'demo-seed@theobase.dev', churchId: 'demo', role: 'operator' as const, churchName: 'Demo', tokenVersion: 1 }
