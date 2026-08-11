@@ -109,13 +109,13 @@ font-family:
 
 Figtree is the primary body typeface, providing a warm, geometric character distinct from default system fonts. The system font stack fallback covers Arabic, Devanagari, Chinese, and Pacific Island scripts when Figtree lacks glyphs.
 
-**Headings — DM Serif Display (serif)**
+**Headings — Merriweather (serif)**
 ```css
 font-family:
-  'DM Serif Display', 'Figtree', Georgia, 'Times New Roman', serif;
+  'Merriweather', 'Figtree', Georgia, 'Times New Roman', serif;
 ```
 
-DM Serif Display is used for marketing and landing page headings. Its high-contrast serif character carries institutional gravitas and pairs naturally with Figtree&rsquo;s geometric warmth. The app interface (post-login) continues to use Figtree for all text. Apply via the `font-heading` utility class.
+Merriweather is designed for on-screen reading with low stroke contrast, staying crisp from hero size (text-6xl) down to card headings (text-base). It carries institutional gravitas while remaining approachable and warm — fitting for a tool used by church officers. The app interface (post-login) continues to use Figtree for all text. Apply via the `font-heading` utility class.
 
 Both fonts are loaded via Google Fonts in `index.html`.
 
@@ -145,7 +145,7 @@ Both fonts are loaded via Google Fonts in `index.html`.
 - **All financial data** (amounts, counts, dates in tabular context) must use `font-variant-numeric: tabular-nums`. This prevents layout shift as numbers change.
 - **RTL support:** Use CSS logical properties (`margin-inline-start`, `padding-inline-end`, `text-align: start`). Do not use `left`/`right` or `text-align: left`/`right`. The system font stack includes RTL-capable fonts.
 - **Line height:** Never set below 1.25 for readability. Financial numbers can use 1.1 for compact tables.
-- **Figtree** is the body font. **DM Serif Display** is the heading font for landing/marketing pages. The app interface uses Figtree exclusively. No additional custom fonts beyond these two.
+- **Figtree** is the body font. **Merriweather** is the heading font for landing/marketing pages. The app interface uses Figtree exclusively. No additional custom fonts beyond these two.
 
 ### Spacing
 

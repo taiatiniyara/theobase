@@ -15,7 +15,7 @@ function mockAuth(page: Parameters<Parameters<typeof test>[1]>[0]['page']) {
 test.describe('PWA offline sync', () => {
   test('installs service worker and caches app shell', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('h1')).toContainText('The operating system for SDA churches.');
+    await expect(page.locator('h1')).toContainText('Built for the way SDA churches work.');
   });
 
   test('enqueues intents to IndexedDB WAL when offline', async ({ page }) => {

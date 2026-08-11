@@ -26,12 +26,11 @@ export function LandingPage() {
           <div className="mx-auto max-w-6xl px-6 pb-24 pt-24 sm:pb-32 sm:pt-32">
             <div className="mx-auto max-w-2xl">
               <h1 className="font-heading text-4xl font-bold leading-tight tracking-wide text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-100">
-                The operating system for SDA churches.
+                Membership. Giving. Reports. Built for the way SDA churches work.
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-neutral-600 dark:text-neutral-400">
-                Membership. Giving. Reports. Built for Seventh-day Adventist polity,
-                from the counting room to the conference — so your officers can focus
-                on people, not paperwork.
+                From the counting room to the conference — the one place your church
+                officers can count on. Free for every local church.
               </p>
               <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
                 <button type="button" onClick={() => navigate({ to: '/church/register' })} className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-7 py-4 text-base font-semibold text-white shadow-lg shadow-brand-600/10 transition-all hover:bg-brand-700 hover:shadow-xl hover:shadow-brand-600/20 active:scale-[0.98]">
