@@ -9,6 +9,8 @@ import {
   household,
   givingBatch,
   givingRecord,
+  errorLog,
+  syncHealth,
 } from './schema';
 
 function schemasFor<T extends Parameters<typeof createInsertSchema>[0]>(table: T) {
@@ -27,6 +29,8 @@ const memberSchemas = schemasFor(member);
 const householdSchemas = schemasFor(household);
 const givingBatchSchemas = schemasFor(givingBatch);
 const givingRecordSchemas = schemasFor(givingRecord);
+const errorLogSchemas = schemasFor(errorLog);
+const syncHealthSchemas = schemasFor(syncHealth);
 
 export const {
   insert: insertConferenceSchema,
@@ -68,6 +72,14 @@ export const {
   select: selectGivingRecordSchema,
   update: updateGivingRecordSchema,
 } = givingRecordSchemas;
+export const {
+  insert: insertErrorLogSchema,
+  select: selectErrorLogSchema,
+} = errorLogSchemas;
+export const {
+  insert: insertSyncHealthSchema,
+  select: selectSyncHealthSchema,
+} = syncHealthSchemas;
 
 type SelectOf<S extends { select: z.ZodTypeAny }> = z.infer<S['select']>;
 type InsertOf<S extends { insert: z.ZodTypeAny }> = z.infer<S['insert']>;
@@ -89,3 +101,7 @@ export type InsertMember = InsertOf<typeof memberSchemas>;
 export type InsertHousehold = InsertOf<typeof householdSchemas>;
 export type InsertGivingBatch = InsertOf<typeof givingBatchSchemas>;
 export type InsertGivingRecord = InsertOf<typeof givingRecordSchemas>;
+export type ErrorLog = SelectOf<typeof errorLogSchemas>;
+export type SyncHealth = SelectOf<typeof syncHealthSchemas>;
+export type InsertErrorLog = InsertOf<typeof errorLogSchemas>;
+export type InsertSyncHealth = InsertOf<typeof syncHealthSchemas>;

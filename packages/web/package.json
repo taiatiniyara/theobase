@@ -22,6 +22,7 @@
     "@tanstack/react-router": "^1.170.25",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/router-plugin": "^1.168.29",
+    "@theobase/observability": "workspace:*",
     "@theobase/shared": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

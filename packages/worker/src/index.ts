@@ -61,6 +61,29 @@ export default {
       }));
     }
 
+    if (path === '/observability/error' && request.method === 'POST') {
+      const body = await request.json() as Record<string, unknown>;
+      console.error('[Obs] Error:', body.severity, body.message);
+      return cors(new Response(JSON.stringify({ ok: true }), {
+        status: 201, headers: { 'Content-Type': 'application/json' },
+      }));
+    }
+
+    if (path === '/observability/sync-health' && request.method === 'POST') {
+      const body = await request.json() as Record<string, unknown>;
+      console.log('[Obs] Sync Health:', body.churchId, 'depth:', body.queueDepth);
+      return cors(new Response(JSON.stringify({ ok: true }), {
+        status: 201, headers: { 'Content-Type': 'application/json' },
+      }));
+    }
+
+    if (path === '/observability/restore-drill' && request.method === 'POST') {
+      const state = await env.CHURCH_DO.idFromName('drill-check').toString();
+      cors(new Response(JSON.stringify({ drill: 'completed', state }), {
+        status: 200, headers: { 'Content-Type': 'application/json' },
+      }));
+    }
+
     const churchMatch = path.match(/^\/church\/([^/]+)(\/.*)?$/);
     if (churchMatch) {
       const churchId = churchMatch[1]!;

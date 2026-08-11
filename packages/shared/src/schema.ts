@@ -166,3 +166,27 @@ export const givingRecord = sqliteTable('giving_record', {
     .notNull()
     .default(sql`(unixepoch())`),
 });
+
+export const errorLog = sqliteTable('error_log', {
+  id: text('id').primaryKey(),
+  churchId: text('church_id'),
+  userId: text('user_id'),
+  severity: text('severity', { enum: ['error', 'warn', 'info'] }).notNull(),
+  type: text('type').notNull(),
+  message: text('message').notNull(),
+  stackTrace: text('stack_trace'),
+  breadcrumbTrail: text('breadcrumb_trail', { mode: 'json' }).$type<Array<Record<string, unknown>>>(),
+  deviceInfo: text('device_info', { mode: 'json' }).$type<Record<string, unknown>>(),
+  timestamp: integer('timestamp').notNull(),
+  resolved: integer('resolved', { mode: 'boolean' }).notNull().default(false),
+});
+
+export const syncHealth = sqliteTable('sync_health', {
+  id: text('id').primaryKey(),
+  churchId: text('church_id').notNull(),
+  queueDepth: integer('queue_depth').notNull(),
+  lastSyncAt: integer('last_sync_at').notNull(),
+  syncSuccessRate: real('sync_success_rate').notNull(),
+  doLatencyMs: integer('do_latency_ms').notNull(),
+  updatedAt: integer('updated_at').notNull().default(sql`(unixepoch())`),
+});

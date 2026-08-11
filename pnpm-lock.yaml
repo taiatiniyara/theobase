@@ -48,6 +48,16 @@ importers:
         specifier: ^4.1.0
         version: 4.1.10(jsdom@26.1.0(supports-color@10.2.2))(vite@7.3.6(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.49.2)(tsx@4.23.11))
 
+  packages/observability:
+    dependencies:
+      '@theobase/shared':
+        specifier: workspace:*
+        version: link:../shared
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
   packages/shared:
     dependencies:
       drizzle-orm:
@@ -93,6 +103,9 @@ importers:
       '@tanstack/router-plugin':
         specifier: ^1.168.29
         version: 1.168.29(@tanstack/react-router@1.170.25(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(esbuild@0.28.2)(rollup@4.62.4)(supports-color@10.2.2)(vite@7.3.6(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.49.2)(tsx@4.23.11))
+      '@theobase/observability':
+        specifier: workspace:*
+        version: link:../observability
       '@theobase/shared':
         specifier: workspace:*
         version: link:../shared

@@ -5,6 +5,7 @@ import { SyncProvider } from '../lib/sync-provider';
 import { AuthProvider, useAuth } from '../lib/auth-store';
 import { StaleDataWarning } from '../components/features/stale-data-warning';
 import { AppShell } from '../components/features/app-shell';
+import { ErrorBoundary } from '../components/features/error-boundary';
 
 export const Route = createRootRoute({
   component: RootLayout,
@@ -25,19 +26,21 @@ function AppContent() {
 
   if (!churchId) {
     return (
-      <>
+      <ErrorBoundary>
         <StaleDataWarning />
         <Outlet />
-      </>
+      </ErrorBoundary>
     );
   }
 
   return (
     <SyncProvider churchId={churchId}>
-      <StaleDataWarning />
-      <AppShell>
-        <Outlet />
-      </AppShell>
+      <ErrorBoundary churchId={churchId}>
+        <StaleDataWarning />
+        <AppShell>
+          <Outlet />
+        </AppShell>
+      </ErrorBoundary>
     </SyncProvider>
   );
 }
