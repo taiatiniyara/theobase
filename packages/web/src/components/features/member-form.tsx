@@ -93,7 +93,7 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
             onChange={(e) => setFirstName(e.target.value)}
           />
           {errors.firstName && (
-            <p className="mt-1 text-xs text-red-600">{errors.firstName}</p>
+            <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.firstName}</p>
           )}
         </label>
         <label className="block">
@@ -104,7 +104,7 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
             onChange={(e) => setLastName(e.target.value)}
           />
           {errors.lastName && (
-            <p className="mt-1 text-xs text-red-600">{errors.lastName}</p>
+            <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.lastName}</p>
           )}
         </label>
         <label className="block">
@@ -115,7 +115,7 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
             onChange={(e) => setEmail(e.target.value)}
           />
           {errors.email && (
-            <p className="mt-1 text-xs text-red-600">{errors.email}</p>
+            <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.email}</p>
           )}
         </label>
         <label className="block">
@@ -125,6 +125,9 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
+          {errors.phone && (
+            <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.phone}</p>
+          )}
         </label>
         <label className="block">
           <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.address')}</span>
@@ -132,6 +135,9 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
+          {errors.address && (
+            <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.address}</p>
+          )}
         </label>
         <label className="block">
           <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.dateOfBirth')}</span>
@@ -140,6 +146,9 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
             value={dateOfBirth}
             onChange={(e) => setDateOfBirth(e.target.value)}
           />
+          {errors.dateOfBirth && (
+            <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.dateOfBirth}</p>
+          )}
         </label>
         <label className="block">
           <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.baptismDate')}</span>
@@ -148,6 +157,9 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
             value={baptismDate}
             onChange={(e) => setBaptismDate(e.target.value)}
           />
+          {errors.baptismDate && (
+            <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.baptismDate}</p>
+          )}
         </label>
         <label className="block">
           <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.gender')}</span>
@@ -161,6 +173,9 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
               <SelectItem value="other">{t('member.other')}</SelectItem>
             </SelectContent>
           </Select>
+          {errors.gender && (
+            <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.gender}</p>
+          )}
         </label>
         <label className="block">
           <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.status')}</span>
@@ -175,8 +190,16 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
               <SelectItem value="transfer-out">transfer-out</SelectItem>
             </SelectContent>
           </Select>
+          {errors.membershipStatus && (
+            <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.membershipStatus}</p>
+          )}
         </label>
       </div>
+      {Object.keys(errors).length > 0 && (
+        <div className="rounded-md bg-error-light px-4 py-3 dark:bg-red-900/20">
+          <p className="text-sm text-error-700 dark:text-red-300">Please fix the errors above before saving.</p>
+        </div>
+      )}
       <div className="flex justify-end gap-3">
         <Button type="button" variant="ghost" onClick={onCancel}>
           {t('member.cancel')}
