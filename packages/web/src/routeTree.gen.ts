@@ -18,6 +18,7 @@ import { Route as MembersMemberIdEditRouteImport } from './routes/members/$membe
 import { Route as ChurchImportRouteImport } from './routes/church/import'
 import { Route as ChurchRegisterRouteImport } from './routes/church/register'
 import { Route as CountingRoomIndexRouteImport } from './routes/counting-room/index'
+import { Route as CountingRoomBatchBatchIdRouteImport } from './routes/counting-room/batch.$batchId'
 import { Route as HouseholdsIndexRouteImport } from './routes/households/index'
 import { Route as MembersSelfServiceRouteImport } from './routes/members/self-service'
 import { Route as VisitorWelcomeRouteImport } from './routes/visitor/welcome'
@@ -82,6 +83,11 @@ const CountingRoomIndexRoute = CountingRoomIndexRouteImport.update({
   path: '/counting-room',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CountingRoomBatchBatchIdRoute = CountingRoomBatchBatchIdRouteImport.update({
+  id: '/counting-room/batch/$batchId',
+  path: '/counting-room/batch/$batchId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/members/self-service': typeof MembersSelfServiceRoute
   '/visitor/welcome': typeof VisitorWelcomeRoute
   '/counting-room': typeof CountingRoomIndexRoute
+  '/counting-room/batch/$batchId': typeof CountingRoomBatchBatchIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -125,13 +132,14 @@ export interface FileRoutesById {
   '/members/self-service': typeof MembersSelfServiceRoute
   '/visitor/welcome': typeof VisitorWelcomeRoute
   '/counting-room': typeof CountingRoomIndexRoute
+  '/counting-room/batch/$batchId': typeof CountingRoomBatchBatchIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room'
+  fullPaths: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room' | '/counting-room/batch/$batchId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room'
-  id: '__root__' | '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room'
+  to: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room' | '/counting-room/batch/$batchId'
+  id: '__root__' | '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room' | '/counting-room/batch/$batchId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -147,6 +155,7 @@ export interface RootRouteChildren {
   MembersSelfServiceRoute: typeof MembersSelfServiceRoute
   VisitorWelcomeRoute: typeof VisitorWelcomeRoute
   CountingRoomIndexRoute: typeof CountingRoomIndexRoute
+  CountingRoomBatchBatchIdRoute: typeof CountingRoomBatchBatchIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -235,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountingRoomIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/counting-room/batch/$batchId': {
+      id: '/counting-room/batch/$batchId'
+      path: '/counting-room/batch/$batchId'
+      fullPath: '/counting-room/batch/$batchId'
+      preLoaderRoute: typeof CountingRoomBatchBatchIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -248,6 +264,7 @@ const rootRouteChildren: RootRouteChildren = {
   MembersSelfServiceRoute: MembersSelfServiceRoute,
   HouseholdsIndexRoute: HouseholdsIndexRoute,
   CountingRoomIndexRoute: CountingRoomIndexRoute,
+  CountingRoomBatchBatchIdRoute: CountingRoomBatchBatchIdRoute,
   VisitorWelcomeRoute: VisitorWelcomeRoute,
   ChurchImportRoute: ChurchImportRoute,
   ChurchRegisterRoute: ChurchRegisterRoute,

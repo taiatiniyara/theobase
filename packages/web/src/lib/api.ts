@@ -15,6 +15,24 @@ function getAuthToken(): string | null {
   return localStorage.getItem('token');
 }
 
+export async function fetchBatchCompare(churchId: string, batchId: string): Promise<{
+  batchId: string;
+  status: string;
+  counter1: { records: Array<Record<string, unknown>>; total: number };
+  counter2: { records: Array<Record<string, unknown>>; total: number };
+  totalsMatch: boolean;
+}> {
+  const response = await fetch(`${getWorkerUrl()}/${churchId}/batch-compare/${batchId}`);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json() as Promise<{
+    batchId: string;
+    status: string;
+    counter1: { records: Array<Record<string, unknown>>; total: number };
+    counter2: { records: Array<Record<string, unknown>>; total: number };
+    totalsMatch: boolean;
+  }>;
+}
+
 export async function postChurchMutation(
   churchId: string,
   operation: string,

@@ -25,6 +25,7 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'contact:reject',
     'contact:update-request',
     'visitor:follow-up',
+    'giving_batch:commit',
   ],
   treasurer: [
     'giving_record:create',
@@ -33,7 +34,12 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'giving_batch:update',
     'giving_batch:commit',
   ],
-  counter: ['giving_record:create'],
+  counter: [
+    'giving_record:create',
+    'giving_batch:create',
+    'giving_batch:counter2-confirm',
+    'giving_batch:reconcile',
+  ],
   pastor: [],
   'department-head': [],
   'board-member': [],
@@ -193,9 +199,57 @@ const STATE_HANDLERS: Record<
   'household:create': (p, s) => upsertEntity(s, 'households', p.id as string, p),
   'household:update': (p, s) => upsertEntity(s, 'households', p.id as string, p),
   'household:delete': (p, s) => deleteEntity(s, 'households', p.id as string),
-  'giving_batch:create': (p, s) => upsertEntity(s, 'givingBatches', p.id as string, p),
+  'giving_batch:create': (p, s) => {
+    upsertEntity(s, 'givingBatches', p.id as string, {
+      ...p,
+      counter1Id: p.counter1Id,
+      counter1Records: p.records,
+      counter1ConfirmedAt: p.timestamp,
+      status: 'counter1-confirmed',
+    });
+    const givingRecords = (s.givingRecords as Record<string, Record<string, unknown>>) ?? {};
+    const records = (p.records as Array<Record<string, unknown>>) ?? [];
+    for (const r of records) {
+      givingRecords[r.id as string] = r;
+    }
+    s.givingRecords = givingRecords;
+  },
   'giving_batch:update': (p, s) => upsertEntity(s, 'givingBatches', p.id as string, p),
-  'giving_batch:commit': (p, s) => upsertEntity(s, 'givingBatches', p.id as string, p),
+  'giving_batch:commit': (p, s) => {
+    const givingBatches = (s.givingBatches as Record<string, Record<string, unknown>>) ?? {};
+    const batch = givingBatches[p.batchId as string] ?? {};
+    givingBatches[p.batchId as string] = { ...batch, ...p, status: 'committed' };
+    s.givingBatches = givingBatches;
+    const givingRecords = (s.givingRecords as Record<string, Record<string, unknown>>) ?? {};
+    const records = (p.records as Array<Record<string, unknown>>) ?? [];
+    for (const r of records) {
+      givingRecords[r.id as string] = r;
+    }
+    s.givingRecords = givingRecords;
+  },
+  'giving_batch:counter2-confirm': (p, s) => {
+    const batches = (s.givingBatches as Record<string, Record<string, unknown>>) ?? {};
+    const batch = batches[p.batchId as string] ?? {};
+    batches[p.batchId as string] = {
+      ...batch,
+      counter2Id: p.counter2Id,
+      counter2Records: p.records,
+      counter2ConfirmedAt: p.timestamp,
+      status: 'counter2-confirmed',
+    };
+    s.givingBatches = batches;
+  },
+  'giving_batch:reconcile': (p, s) => {
+    const batches = (s.givingBatches as Record<string, Record<string, unknown>>) ?? {};
+    const batch = batches[p.batchId as string] ?? {};
+    batches[p.batchId as string] = {
+      ...batch,
+      reconciledRecords: p.records,
+      status: 'reconciled',
+      reconciledAt: p.timestamp,
+    };
+    s.givingBatches = batches;
+  },
   'giving_record:create': (p, s) => upsertEntity(s, 'givingRecords', p.id as string, p),
   'giving_record:delete': (p, s) => deleteEntity(s, 'givingRecords', p.id as string),
   'church:update': (p, s) => {
@@ -384,6 +438,29 @@ export class ChurchDO extends DurableObject {
     const path = url.pathname;
 
     try {
+      if (request.method === 'GET' && path.startsWith('/batch-compare/')) {
+        const batchId = path.split('/')[2];
+        const state = await this.reconstructState();
+        const batches = (state.givingBatches as Record<string, Record<string, unknown>>) ?? {};
+        const batch = batches[batchId!];
+        if (!batch) return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+
+        const c1Records = (batch.counter1Records as Array<Record<string, unknown>>) ?? [];
+        const c2Records = (batch.counter2Records as Array<Record<string, unknown>>) ?? [];
+        const match = batch.status === 'counter2-confirmed';
+        const total1 = c1Records.reduce((s: number, r) => s + (r.amount as number ?? 0), 0);
+        const total2 = c2Records.reduce((s: number, r) => s + (r.amount as number ?? 0), 0);
+
+        return new Response(JSON.stringify({
+          batchId,
+          status: batch.status,
+          counter1: { records: c1Records, total: total1 },
+          counter2: { records: c2Records, total: total2 },
+          totalsMatch: total1 === total2,
+          match,
+        }), { headers: { 'Content-Type': 'application/json' } });
+      }
+
       if (request.method === 'GET' && path === '/household-suggestions') {
         const state = await this.reconstructState();
         const members = Object.values((state.members as Record<string, Record<string, unknown>>) ?? {});

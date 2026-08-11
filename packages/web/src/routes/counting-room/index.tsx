@@ -1,8 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useMemo, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../lib/auth-store';
 import { useMembers } from '../../lib/queries';
-import { postChurchMutation } from '../../lib/api';
+import { postChurchMutation, fetchChurchState } from '../../lib/api';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Badge } from '../../components/ui/badge';
@@ -35,6 +36,7 @@ export const Route = createFileRoute('/counting-room')({
 
 function CountingRoomPage() {
   const { churchId } = useAuth();
+  const navigate = useNavigate();
   const { data: members = [] } = useMembers(churchId!);
   const [amount, setAmount] = useState('0');
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
@@ -101,21 +103,21 @@ function CountingRoomPage() {
   }
 
   async function handleConfirmBatch() {
-    for (const record of records) {
-      await postChurchMutation(churchId!, 'giving_record:create', {
-        id: record.id,
-        batchId,
-        memberId: record.memberId,
-        type: 'offering',
-        amount: record.amount,
-        category: record.category,
-      });
-    }
     await postChurchMutation(churchId!, 'giving_batch:create', {
       id: batchId,
       churchId,
       date: new Date().toISOString().split('T')[0],
       status: 'open',
+      counter1Id: 'current-user',
+      records: records.map(r => ({
+        id: r.id,
+        batchId,
+        memberId: r.memberId,
+        memberName: r.memberName,
+        type: 'offering',
+        amount: r.amount,
+        category: r.category,
+      })),
     });
     setRecords([]);
     setBatchOpen(false);
@@ -125,11 +127,49 @@ function CountingRoomPage() {
 
   const totalAmount = records.reduce((sum, r) => sum + r.amount, 0);
 
+  const { data: batches } = useQuery({
+    queryKey: ['batches', churchId],
+    queryFn: async () => {
+      const state = await fetchChurchState(churchId!);
+      const givingBatches = (state.givingBatches as Record<string, Record<string, unknown>>) ?? {};
+      return Object.values(givingBatches);
+    },
+    enabled: !!churchId,
+    refetchInterval: 5000,
+  });
+
+  const openBatches = (batches ?? []).filter((b: Record<string, unknown>) => b.status !== 'committed');
+
   if (!batchOpen) {
     return (
       <div className="min-h-screen bg-neutral-50 px-4 py-6">
         <div className="mx-auto max-w-md space-y-6">
           {snackbar && <Snackbar {...snackbar} onDismiss={() => setSnackbar(null)} />}
+          {openBatches.length > 0 && (
+            <Card>
+              <CardContent className="space-y-3 p-4">
+                <h2 className="text-lg font-semibold text-neutral-900">Active Batches</h2>
+                {openBatches.map((b: Record<string, unknown>) => (
+                  <div
+                    key={b.id as string}
+                    className="flex items-center justify-between rounded-md bg-neutral-50 px-3 py-3 hover:bg-neutral-100 cursor-pointer"
+                    onClick={() => navigate({ to: `/counting-room/batch/${b.id}` })}
+                    onKeyDown={(e) => e.key === 'Enter' && navigate({ to: `/counting-room/batch/${b.id}` })}
+                    role="button"
+                    tabIndex={0}
+                  >
+                      <div>
+                        <span className="text-sm font-medium">{b.date as string}</span>
+                        <p className="text-xs text-neutral-500">{b.status as string}</p>
+                      </div>
+                      <span className="text-sm tabular-nums">
+                        ${((b.counter1Records as Array<Record<string,unknown>>)?.reduce((s, r) => s + (r.amount as number ?? 0), 0) ?? 0).toFixed(2)}
+                      </span>
+                    </div>
+                  ))}
+              </CardContent>
+            </Card>
+          )}
           <Card>
             <CardContent className="py-12 text-center">
               <h1 className="text-2xl font-bold text-neutral-900">Counting Room</h1>

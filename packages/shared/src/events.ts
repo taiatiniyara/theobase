@@ -19,6 +19,8 @@ export type ChurchOperation =
   | 'giving_batch:create'
   | 'giving_batch:update'
   | 'giving_batch:commit'
+  | 'giving_batch:counter2-confirm'
+  | 'giving_batch:reconcile'
   | 'giving_record:create'
   | 'giving_record:delete'
   | 'church:create'
