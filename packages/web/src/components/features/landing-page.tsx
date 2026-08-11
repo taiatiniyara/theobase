@@ -34,7 +34,7 @@ export function LandingPage() {
           <div className="mx-auto max-w-6xl px-6 pb-24 pt-24 sm:pb-32 sm:pt-32">
             <div className="mx-auto max-w-2xl">
               <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
-                Pacific churches &middot; membership &middot; giving
+                Church management platform &middot; 215+ countries &middot; offline-first
               </p>
               <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-100">
                 Most churches still count offerings on paper.

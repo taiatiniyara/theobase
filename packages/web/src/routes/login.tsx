@@ -57,7 +57,9 @@ function LoginPage() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error((data as Record<string, unknown>).message as string || 'Failed to send link');
+        throw new Error(
+          ((data as Record<string, unknown>).message as string) || 'Failed to send link',
+        );
       }
 
       setStatus('sent');
@@ -71,14 +73,20 @@ function LoginPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4 dark:bg-neutral-950">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <img src="/logo-full.svg" alt="Theobase" className="mx-auto mb-6 h-8 w-auto dark:hidden" />
-          <img src="/logo-full-light.svg" alt="Theobase" className="mx-auto mb-6 hidden h-8 w-auto dark:block" />
+          <img
+            src="/logo-full.svg"
+            alt="Theobase"
+            className="mx-auto mb-6 h-8 w-auto dark:hidden"
+          />
+          <img
+            src="/logo-full-light.svg"
+            alt="Theobase"
+            className="mx-auto mb-6 hidden h-8 w-auto dark:block"
+          />
           <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
-            Sign in to Theobase
+            Sign in to your account
           </h1>
-          <p className="mt-2 text-sm text-neutral-500">
-            Enter your email to receive a magic link.
-          </p>
+          <p className="mt-2 text-sm text-neutral-500">Enter your email to receive a magic link.</p>
         </div>
 
         <Card>
@@ -86,20 +94,39 @@ function LoginPage() {
             {status === 'sent' ? (
               <div className="text-center space-y-4">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-success-light">
-                  <svg className="h-6 w-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <svg
+                    className="h-6 w-6 text-success"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 </div>
                 <div>
-                  <h2 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">Check your email</h2>
+                  <h2 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">
+                    Check your email
+                  </h2>
                   <p className="mt-1 text-sm text-neutral-500">
-                    We sent a magic link to <span className="font-medium text-neutral-700 dark:text-neutral-300">{email}</span>.
-                    Click the link to sign in.
+                    We sent a magic link to{' '}
+                    <span className="font-medium text-neutral-700 dark:text-neutral-300">
+                      {email}
+                    </span>
+                    . Click the link to sign in.
                   </p>
                 </div>
                 <p className="text-xs text-neutral-400">
                   Didn't receive it? Check spam or{' '}
-                  <button type="button" onClick={() => setStatus('idle')} className="text-brand-600 hover:text-brand-700">
+                  <button
+                    type="button"
+                    onClick={() => setStatus('idle')}
+                    className="text-brand-600 hover:text-brand-700"
+                  >
                     try again
                   </button>
                 </p>
@@ -107,7 +134,9 @@ function LoginPage() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <label className="block">
-                  <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Email address</span>
+                  <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                    Email address
+                  </span>
                   <Input
                     type="email"
                     required
@@ -134,7 +163,11 @@ function LoginPage() {
 
         <p className="mt-6 text-center text-xs text-neutral-400">
           New church?{' '}
-          <button type="button" onClick={() => navigate({ to: '/church/register' })} className="font-medium text-brand-600 hover:text-brand-700">
+          <button
+            type="button"
+            onClick={() => navigate({ to: '/church/register' })}
+            className="font-medium text-brand-600 hover:text-brand-700"
+          >
             Register your church
           </button>
         </p>

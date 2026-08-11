@@ -21,14 +21,13 @@
   "send_email": [
     {
       "name": "AUTH_EMAIL",
+      "remote": true,
     },
   ],
   "vars": {
     "APP_URL": "https://theobase.pages.dev",
   },
   "triggers": {
-    "crons": [
-      "0 0 1 * *",
-    ],
+    "crons": ["0 0 1 * *"],
   },
 }

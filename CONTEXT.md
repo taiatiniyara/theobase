@@ -148,14 +148,18 @@ The dashboard is proactive intelligence, not a passive rear-view mirror. Every s
 
 ### Design System & UX
 
-- **Brand Identity** — the Theobase logo is a geometric three-tier mountain peak in layered blue. Three variants in `branding/`:
-  - `logo-icon.svg` — mountain icon only, for favicons and app icons
-  - `logo-full.svg` — icon + "Theobase" wordmark (dark text), for light backgrounds
-  - `logo-full-light.svg` — icon + "Theobase" wordmark (light text), for dark backgrounds and dark mode headers
+- **Brand Identity** — the Theobase logo is a geometric three-tier mountain peak in layered blue. Variants:
+  - `logo-icon.svg` — mountain icon only, for favicons and app icons (in `packages/web/public/`)
+  - `logo-full.svg` — icon + "Theobase" wordmark (dark text), for light backgrounds (in `branding/` and `packages/web/public/`)
+  - `logo-full-light.svg` — icon + "Theobase" wordmark (light text), for dark backgrounds and dark mode headers (in `branding/` and `packages/web/public/`)
     The mountain motif represents foundation, elevation, and stability. The palette defines the entire design system.
+- **Typography** — Figtree is the primary brand typeface, loaded via `@fontsource/figtree`. Falls back through the system font stack (ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans) for full Unicode coverage (Arabic, Devanagari, CJK).
 - **Brand Palette** — defined in `docs/design-system.md`. Derived from the logo's layered blues: `brand-300` `#93C5FD`, `brand-400` `#60A5FA`, `brand-500` `#3B82F6`, `brand-600` `#2563EB`.
 - **Design System** — single source of truth for all UI decisions at `docs/design-system.md`. Defines brand tokens (from logo palette), typography, spacing, motion, three canonical layouts (Dashboard, Detail, Form), and a component catalog of shadcn/ui primitives styled with Theobase tokens. AI agents must read this file before building any UI. See `docs/adr/0005-design-system.md`.
 - **Clear Sync Status** — a small header indicator: green dot (synced), amber dot (pending), red dot (offline), with a badge count of queued changes. Tap for details. No intrusive modals.
+- **Marketing Landing Page** — the public-facing landing page at `/` for unauthenticated visitors. Explains the platform, surfaces the value proposition, and provides "Sign in" and "Register your church" call-to-action buttons. See `packages/web/src/components/features/landing-page.tsx`.
+- **Toast System** — a toast notification layer (`ToastProvider` + `Snackbar`) for transient feedback. Supports success, error, and warning variants with optional undo actions. Only one toast visible at a time; new toasts replace the current one. See `packages/web/src/lib/toast.tsx` and `packages/web/src/components/features/snackbar.tsx`.
+- **Role-Based Route Protection** — the `RequireAuth` component gates routes by role (`allowedRoles` prop). Unauthenticated users are redirected to login. Users whose role is not in the allowed list see an "Access Denied" screen. The operator role bypasses all role checks. See `packages/web/src/lib/auth-guard.tsx`.
 - **Skeleton Screen** — a placeholder UI that mimics the layout of loading content (grey blocks where text will appear). Feels faster than a spinner. All list views, member profiles, and report screens use skeleton loading states.
 - **Optimistic Update** — the UI updates immediately on a user action (e.g. adding a giving record), assuming success. If the sync layer later fails, the UI rolls back gracefully with an undo prompt. The user never waits for the server.
 - **Custom Numeric Keypad** — a large-tap calculator-style keypad for entering financial amounts, replacing the tiny system keyboard. Reduces entry errors in the counting room. Includes quick-access buttons for common denominations.
@@ -166,7 +170,7 @@ The dashboard is proactive intelligence, not a passive rear-view mirror. Every s
 
 ### Platform
 
-- **Tech Stack** — React 19 + TypeScript strict + Vite + Tailwind CSS v4 + shadcn/ui + Drizzle ORM + TanStack Query v5 + TanStack Table v8 + TanStack Router v1 + React Hook Form + Zod + i18next + ESLint + Prettier + Vitest + Playwright. See `docs/adr/0004-tech-stack.md`.
+- **Tech Stack** — React 19 + TypeScript strict + Vite + Tailwind CSS v4 + shadcn/ui + Drizzle ORM + TanStack Query v5 + TanStack Table v8 + TanStack Router v1 + Zod + i18next + ESLint + Prettier + Vitest + Playwright. See `docs/adr/0004-tech-stack.md`.
 - **i18n** — `i18next` + `react-i18next` with JSON namespaces (`common`, `membership`, `giving`, `reporting`). v1: English + Fijian Hindi. Locale resolution: member preference → church primary → browser → English fallback. Numbers/currencies via `Intl.NumberFormat`, dates via `Intl.DateTimeFormat`. RTL support via `dir="rtl"`. See `docs/adr/0011-i18n.md`.
 - **Monorepo** — pnpm workspaces: `packages/shared` (Drizzle schema, Zod, types, i18n), `packages/worker` (DO + Worker), `packages/web` (PWA). One tsconfig base. See `docs/adr/0004-tech-stack.md` and `docs/adr/0008-cicd.md`.
 - **Accessibility** — WCAG 2.2 AA enforced at two tiers. Automated (PR gate): `eslint-plugin-jsx-a11y` + `@axe-core/react` + `@axe-core/playwright`. Manual (release gate): screen reader (VoiceOver/NVDA/TalkBack), keyboard-only, 200% zoom, high contrast, reduced motion, focus trapping. Checklist in `docs/accessibility-checklist.md`. See `docs/adr/0012-accessibility.md`.

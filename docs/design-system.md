@@ -6,13 +6,13 @@ The single source of truth for every visual decision in Theobase. Every componen
 
 ## Brand Identity
 
-The Theobase logo is a geometric three-tier mountain peak — foundation, elevation, stability. Three SVG variants live in `branding/`:
+The Theobase logo is a geometric three-tier mountain peak — foundation, elevation, stability. SVG variants:
 
-| File                  | Usage                                                                                           |
-| --------------------- | ----------------------------------------------------------------------------------------------- |
-| `logo-icon.svg`       | Favicon, app icon, PWA manifest. Mountain icon only.                                            |
-| `logo-full.svg`       | Light backgrounds: login screen, light-mode header. Icon + wordmark in dark text.               |
-| `logo-full-light.svg` | Dark backgrounds: dark-mode header, onboarding, email templates. Icon + wordmark in light text. |
+| File                  | Location                        | Usage                                                                                           |
+| --------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `logo-icon.svg`       | `packages/web/public/`          | Favicon, app icon, PWA manifest. Mountain icon only.                                            |
+| `logo-full.svg`       | `branding/`, `packages/web/public/` | Light backgrounds: login screen, light-mode header. Icon + wordmark in dark text.               |
+| `logo-full-light.svg` | `branding/`, `packages/web/public/` | Dark backgrounds: dark-mode header, onboarding, email templates. Icon + wordmark in light text. |
 
 The brand palette is drawn directly from the layered peaks of the logo:
 
@@ -102,11 +102,11 @@ When `prefers-contrast: more` is active, all text must achieve WCAG AAA **7:1** 
 
 ```css
 font-family:
-  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
-  'Noto Sans Arabic', 'Noto Sans Devanagari', 'Noto Sans SC', sans-serif;
+  'Figtree', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+  'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
 ```
 
-Zero custom font downloads. System fonts load instantly and are familiar to every platform. The `Noto Sans` family covers Arabic, Devanagari, Chinese, and Pacific Island scripts as fallbacks when the system font lacks glyphs.
+Figtree is the primary brand typeface (loaded via `@fontsource/figtree`), providing a warm, geometric character distinct from default system fonts. The system font stack fallback covers Arabic, Devanagari, Chinese, and Pacific Island scripts when Figtree lacks glyphs.
 
 #### Scale
 
@@ -134,7 +134,7 @@ Zero custom font downloads. System fonts load instantly and are familiar to ever
 - **All financial data** (amounts, counts, dates in tabular context) must use `font-variant-numeric: tabular-nums`. This prevents layout shift as numbers change.
 - **RTL support:** Use CSS logical properties (`margin-inline-start`, `padding-inline-end`, `text-align: start`). Do not use `left`/`right` or `text-align: left`/`right`. The system font stack includes RTL-capable fonts.
 - **Line height:** Never set below 1.25 for readability. Financial numbers can use 1.1 for compact tables.
-- **No custom fonts.** Period.
+- **Figtree** is the single custom font. No additional custom fonts.
 
 ### Spacing
 
@@ -824,19 +824,16 @@ Shows the parsed monetary value (e.g., "Amount: $50.00") as the user types on th
 ## File Structure
 
 ```
-src/
+packages/web/src/
 ├── components/
-│   └── ui/           ← shadcn/ui primitives (button, input, select, card, badge, avatar, dialog, etc.)
+│   ├── ui/           ← shadcn/ui primitives (button, input, select, card, badge, avatar, dialog, etc.)
 │   └── features/     ← feature-specific components assembled from ui/ primitives
 ├── routes/            ← TanStack Router file-based routes (one file per screen)
-├── lib/               ← Shared logic: Query hooks, Zod schemas, DO client, utilities
-│   ├── queries/       ← TanStack Query hooks
-│   ├── schemas/       ← Zod validation schemas
-│   ├── client/        ← Durable Object RPC client
-│   └── utils/         ← formatters, date helpers, currency
+├── i18n/              ← i18next locale JSON files (en/, hif/)
+├── lib/               ← Shared logic: auth-store, sync, toast, queries, api client, utilities
 ├── styles/
 │   └── globals.css    ← Tailwind directives + design tokens as CSS custom properties
-└── hooks/             ← Shared React hooks
+└── main.tsx           ← App entry point
 ```
 
 All components in `src/components/ui/` map 1:1 to shadcn/ui primitives. Feature components in `src/components/features/` assemble primitives into domain components (MemberListItem, GivingRecordRow, BatchCard, NumericKeypad, etc.).

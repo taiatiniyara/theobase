@@ -74,20 +74,20 @@ npx wrangler queues create error-queue
 
 ### 3e. Update wrangler.jsonc
 
-Open `packages/worker/wrangler.jsonc` and replace the placeholder IDs with the real ones from the provisioning steps:
+Open `packages/worker/wrangler.jsonc` and add the KV and D1 bindings with the provisioned IDs:
 
 ```jsonc
 "kv_namespaces": [
   {
     "binding": "AUTH_KV",
-    "id": "<kv-namespace-id-from-3a>"     // was "theobase-auth"
+    "id": "<kv-namespace-id-from-3a>"
   }
 ],
 "d1_databases": [
   {
     "binding": "DB",
     "database_name": "theobase",
-    "database_id": "<d1-database-id-from-3b>"  // was "theobase-d1"
+    "database_id": "<d1-database-id-from-3b>"
   }
 ]
 ```
@@ -148,7 +148,7 @@ After deployment, wrangler prints the Worker URL (e.g. `https://theobase-worker.
 
 ## 8. Seed Demo Data
 
-The demo seed provisions "Suva Central SDA Church" under Fiji Mission with 120 synthetic members, 6 months of giving records, 24 committed batches, 2 active demo batches, and 13 demo user accounts across multiple roles.
+The demo seed provisions "Suva Central SDA Church" under Fiji Mission with 120 synthetic members, 6 months of giving records (24 committed weekly batches), 2 active demo batches, and 6 demo user accounts across key roles.
 
 ```sh
 curl -X POST https://theobase-worker.YOURSUBDOMAIN.workers.dev/church/seed-demo
@@ -160,19 +160,12 @@ Demo accounts (all use magic link login):
 
 | Email | Role |
 |-------|------|
-| `clerk@suva.theobase.app` | Church Clerk |
-| `treasurer@suva.theobase.app` | Church Treasurer |
-| `counter1@suva.theobase.app` | Counter |
-| `counter2@suva.theobase.app` | Counter |
-| `pastor@suva.theobase.app` | District Pastor |
-| `boardmember@suva.theobase.app` | Board Member |
-| `member@suva.theobase.app` | Member |
-| `interest@suva.theobase.app` | Bible Study Interest |
-| `conference-treasurer@fiji.theobase.app` | Conference Treasurer |
-| `conference-secretary@fiji.theobase.app` | Conference Secretary |
-| `conference-president@fiji.theobase.app` | Conference President |
-| `auditor@fiji.theobase.app` | Auditor |
-| `operator@theobase.app` | Platform Operator |
+| `clerk@suva.sda` | Church Clerk |
+| `treasurer@suva.sda` | Church Treasurer |
+| `counter1@suva.sda` | Counter |
+| `counter2@suva.sda` | Counter |
+| `pastor@suva.sda` | District Pastor |
+| `member@suva.sda` | Member |
 
 ## 9. Stripe Checkout
 
@@ -225,7 +218,7 @@ npx wrangler d1 execute theobase --remote --command "SELECT * FROM sync_health O
 
 ### Restore Drill
 
-A Worker Cron trigger (`0 3 1 * *` — first day of each month at 3 AM UTC) runs the restore drill: it picks a random church, replays its event log into a fresh DO, and verifies the state hash matches. A mismatch triggers a P1 alert.
+A Worker Cron trigger (`0 0 1 * *` — first day of each month at midnight UTC) runs the restore drill: it picks a random church, replays its event log into a fresh DO, and verifies the state hash matches. A mismatch triggers a P1 alert.
 
 ### R2 Error Storage
 

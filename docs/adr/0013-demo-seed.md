@@ -36,19 +36,12 @@ A seed script (`pnpm seed:demo`) that provisions a complete demo church:
 
 **Demo accounts**:
 
-- `clerk@suva.theobase.app` — church clerk
-- `treasurer@suva.theobase.app` — church treasurer
-- `counter1@suva.theobase.app` — counter
-- `counter2@suva.theobase.app` — counter
-- `pastor@suva.theobase.app` — district pastor
-- `boardmember@suva.theobase.app` — church board member (read-only)
-- `member@suva.theobase.app` — regular member (self-serve view)
-- `interest@suva.theobase.app` — Bible study interest (pre-baptism)
-- `conference-treasurer@fiji.theobase.app` — Fiji Mission treasurer (reviews remittances)
-- `conference-secretary@fiji.theobase.app` — Fiji Mission secretary (reviews annual reports)
-- `conference-president@fiji.theobase.app` — Fiji Mission president (top-level dashboard)
-- `auditor@fiji.theobase.app` — Conference-appointed auditor (read-only financial, assigned to Suva Central)
-- `operator@theobase.app` — platform operator (observability dashboard)
+- `clerk@suva.sda` — church clerk
+- `treasurer@suva.sda` — church treasurer
+- `counter1@suva.sda` — counter
+- `counter2@suva.sda` — counter
+- `pastor@suva.sda` — district pastor
+- `member@suva.sda` — regular member (self-serve view)
 
 **Conference**: "Fiji Mission" with Suva Central activated as a subscribed church.
 
