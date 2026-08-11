@@ -92,7 +92,7 @@ function TreasurerPage() {
   const totalGiving = givingRecords.reduce((s: number, r: Record<string, unknown>) => s + ((r.amount as number) ?? 0), 0);
 
   return (
-    <div className="min-h-screen bg-neutral-50 px-4 py-6">
+    <div className="px-4 py-6 max-w-4xl mx-auto">
       <div className="mx-auto max-w-4xl space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-neutral-900">Treasurer Dashboard</h1>

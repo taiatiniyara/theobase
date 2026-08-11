@@ -142,7 +142,7 @@ function CountingRoomPage() {
 
   if (!batchOpen) {
     return (
-      <div className="min-h-screen bg-neutral-50 px-4 py-6">
+      <div className="px-4 py-6 max-w-md mx-auto">
         <div className="mx-auto max-w-md space-y-6">
           {snackbar && <Snackbar {...snackbar} onDismiss={() => setSnackbar(null)} />}
           {openBatches.length > 0 && (
@@ -185,7 +185,7 @@ function CountingRoomPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 px-4 py-6">
+    <div className="px-4 py-6 max-w-md mx-auto">
       <div className="mx-auto max-w-md space-y-6">
         {snackbar && <Snackbar {...snackbar} onDismiss={() => setSnackbar(null)} />}
 

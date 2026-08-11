@@ -73,7 +73,7 @@ function MemberGivingHistoryPage() {
 
   if (!member) {
     return (
-      <div className="min-h-screen bg-neutral-50 px-4 py-6">
+      <div className="px-4 py-6 max-w-3xl mx-auto">
         <div className="mx-auto max-w-3xl text-center py-24">
           <p className="text-neutral-600">Member not found.</p>
         </div>
@@ -82,7 +82,7 @@ function MemberGivingHistoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 px-4 py-6">
+    <div className="px-4 py-6 max-w-3xl mx-auto">
       <div className="mx-auto max-w-3xl space-y-6">
         <h1 className="text-2xl font-bold text-neutral-900">
           {member.firstName} {member.lastName} — Giving History
