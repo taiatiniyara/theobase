@@ -33,6 +33,7 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'giving_batch:create',
     'giving_batch:update',
     'giving_batch:commit',
+    'giving_batch:deposit',
   ],
   counter: [
     'giving_record:create',
@@ -248,6 +249,12 @@ const STATE_HANDLERS: Record<
       status: 'reconciled',
       reconciledAt: p.timestamp,
     };
+    s.givingBatches = batches;
+  },
+  'giving_batch:deposit': (p, s) => {
+    const batches = (s.givingBatches as Record<string, Record<string, unknown>>) ?? {};
+    const batch = batches[p.batchId as string] ?? {};
+    batches[p.batchId as string] = { ...batch, status: 'deposited', depositDate: p.depositDate, depositRef: p.depositRef, depositedBy: p.actor, depositedAt: p.timestamp };
     s.givingBatches = batches;
   },
   'giving_record:create': (p, s) => upsertEntity(s, 'givingRecords', p.id as string, p),
@@ -546,6 +553,33 @@ export class ChurchDO extends DurableObject {
             status: 403,
             headers: { 'Content-Type': 'application/json' },
           });
+        }
+
+        if (body.operation === 'giving_batch:commit') {
+          const state = await this.reconstructState();
+          const batches = (state.givingBatches as Record<string, Record<string, unknown>>) ?? {};
+          const p = body.payload as { batchId: string };
+          const batch = batches[p.batchId];
+          if (!batch) {
+            return new Response(JSON.stringify({ error: 'Batch not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+          }
+          if (batch.status === 'counter2-confirmed' || batch.status === 'reconciled') {
+          } else {
+            return new Response(JSON.stringify({ error: 'Batch not ready for commit' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+          }
+        }
+
+        if (body.operation === 'giving_record:delete' || body.operation === 'giving_record:create') {
+          const state = await this.reconstructState();
+          const batches = (state.givingBatches as Record<string, Record<string, unknown>>) ?? {};
+          const p = body.payload as { batchId?: string };
+          const batch = p.batchId ? batches[p.batchId] : undefined;
+          if (batch && (batch.status === 'committed' || batch.status === 'deposited')) {
+            return new Response(
+              JSON.stringify({ error: 'Cannot modify records in a committed or deposited batch' }),
+              { status: 403, headers: { 'Content-Type': 'application/json' } },
+            );
+          }
         }
 
         if (body.operation === 'member:state-change') {

@@ -13,11 +13,13 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { path: '/', label: 'Home', icon: '⌂', minRole: null },
   { path: '/members', label: 'Members', icon: '👥', minRole: 'clerk' },
+  { path: '/treasurer', label: 'Treasurer', icon: '💰', minRole: 'treasurer' },
   { path: '/counting-room', label: 'Counting', icon: '🔢', minRole: 'counter' },
   { path: '/households', label: 'Households', icon: '🏠', minRole: 'clerk' },
 ];
 
 const ROLE_HIERARCHY: Record<string, number> = {
+  treasurer: 1,
   clerk: 1,
   counter: 1,
   operator: 2,
