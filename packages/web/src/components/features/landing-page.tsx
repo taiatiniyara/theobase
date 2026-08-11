@@ -62,10 +62,8 @@ export function LandingPage() {
       <header className="sticky top-0 z-50 border-b border-neutral-200/60 bg-white/80 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-950/80">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <img src="/logo-icon.svg" alt="Theobase" className="h-8 w-8" />
-            <span className="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
-              Theobase
-            </span>
+            <img src="/logo-full.svg" alt="Theobase" className="h-5 w-auto dark:hidden" />
+            <img src="/logo-full-light.svg" alt="Theobase" className="hidden h-5 w-auto dark:block" />
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -240,8 +238,8 @@ export function LandingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <div className="flex items-center gap-2">
-              <img src="/logo-icon.svg" alt="Theobase" className="h-6 w-6" />
-              <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">Theobase</span>
+              <img src="/logo-full.svg" alt="Theobase" className="h-4 w-auto dark:hidden" />
+              <img src="/logo-full-light.svg" alt="Theobase" className="hidden h-4 w-auto dark:block" />
             </div>
             <div className="flex items-center gap-6">
               <button type="button" onClick={() => navigate({ to: '/login' })} className="text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300">

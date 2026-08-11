@@ -71,7 +71,8 @@ function LoginPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4 dark:bg-neutral-950">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <img src="/logo-icon.svg" alt="Theobase" className="mx-auto mb-4 h-14 w-14" />
+          <img src="/logo-full.svg" alt="Theobase" className="mx-auto mb-6 h-8 w-auto dark:hidden" />
+          <img src="/logo-full-light.svg" alt="Theobase" className="mx-auto mb-6 hidden h-8 w-auto dark:block" />
           <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
             Sign in to Theobase
           </h1>
