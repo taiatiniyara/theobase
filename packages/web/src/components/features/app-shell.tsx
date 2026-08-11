@@ -2,7 +2,6 @@ import { type ReactNode } from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
 import { useAuth } from '../../lib/auth-store';
 import { SyncIndicator } from './sync-indicator';
-import { DarkModeToggle } from './dark-mode-toggle';
 import { cn } from '../../lib/utils';
 import {
   LayoutDashboard,
@@ -64,11 +63,10 @@ export function AppShell({ children }: AppShellProps) {
   });
 
   return (
-    <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-950">
-      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-neutral-200/60 bg-white md:flex md:flex-col dark:border-neutral-800 dark:bg-neutral-900">
-        <div className="flex h-14 items-center gap-3 border-b border-neutral-200/60 px-5 dark:border-neutral-800">
-          <img src="/logo-full.svg" alt="Theobase" className="h-5 w-auto dark:hidden" />
-          <img src="/logo-full-light.svg" alt="Theobase" className="hidden h-5 w-auto dark:block" />
+    <div className="flex min-h-screen bg-neutral-50">
+      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-neutral-200/60 bg-white md:flex md:flex-col">
+        <div className="flex h-14 items-center gap-3 border-b border-neutral-200/60 px-5">
+          <img src="/logo-full.svg" alt="Theobase" className="h-5 w-auto" />
         </div>
         {churchName && (
           <div className="px-5 pb-1 pt-4">
@@ -87,11 +85,11 @@ export function AppShell({ children }: AppShellProps) {
                 className={cn(
                   'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150',
                   isActive
-                    ? 'bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300'
-                    : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200',
+                    ? 'bg-brand-50 text-brand-700'
+                    : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900',
                 )}
               >
-                <span className={cn('transition-colors', isActive ? 'text-brand-600 dark:text-brand-400' : 'text-neutral-400 dark:text-neutral-500')}>
+                <span className={cn('transition-colors', isActive ? 'text-brand-600' : 'text-neutral-400')}>
                   {item.icon}
                 </span>
                 {item.label}
@@ -99,13 +97,13 @@ export function AppShell({ children }: AppShellProps) {
             );
           })}
         </nav>
-        <div className="border-t border-neutral-200/60 p-3 dark:border-neutral-800">
+        <div className="border-t border-neutral-200/60 p-3">
           <div className="flex items-center gap-3 rounded-lg px-3 py-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700 dark:bg-brand-800 dark:text-brand-300">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700">
               {initials}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="truncate text-sm font-medium text-neutral-900 dark:text-neutral-100">{email}</p>
+              <p className="truncate text-sm font-medium text-neutral-900">{email}</p>
               <p className="text-xs text-neutral-500 capitalize">{role}</p>
             </div>
           </div>
@@ -113,25 +111,23 @@ export function AppShell({ children }: AppShellProps) {
       </aside>
 
       <div className="flex flex-1 flex-col">
-        <header className="z-10 flex h-14 shrink-0 items-center justify-between border-b border-neutral-200/60 bg-white/80 px-4 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-950/80">
+        <header className="z-10 flex h-14 shrink-0 items-center justify-between border-b border-neutral-200/60 bg-white/80 px-4 backdrop-blur-sm">
           <div className="flex items-center gap-3 md:hidden">
-            <img src="/logo-full.svg" alt="Theobase" className="h-5 w-auto dark:hidden" />
-            <img src="/logo-full-light.svg" alt="Theobase" className="hidden h-5 w-auto dark:block" />
-            <span className="text-sm font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+            <img src="/logo-full.svg" alt="Theobase" className="h-5 w-auto" />
+            <span className="text-sm font-semibold tracking-tight text-neutral-900">
               {churchName ?? 'Theobase'}
             </span>
           </div>
           <div className="hidden md:block">
-            <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">{churchName}</span>
+            <span className="text-sm font-semibold text-neutral-700">{churchName}</span>
           </div>
           <div className="flex items-center gap-2">
             <SyncIndicator />
-            <DarkModeToggle />
             <button
               type="button"
               onClick={logout}
               aria-label="Log out"
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700 transition-colors hover:bg-brand-200 dark:bg-brand-800 dark:text-brand-300 dark:hover:bg-brand-700"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700 transition-colors hover:bg-brand-200"
             >
               {initials}
             </button>
@@ -140,7 +136,7 @@ export function AppShell({ children }: AppShellProps) {
 
         <main className="flex-1">{children}</main>
 
-        <nav className="z-10 flex h-16 shrink-0 items-center justify-around border-t border-neutral-200/60 bg-white/80 backdrop-blur-sm md:hidden dark:border-neutral-800 dark:bg-neutral-950/80">
+        <nav className="z-10 flex h-16 shrink-0 items-center justify-around border-t border-neutral-200/60 bg-white/80 backdrop-blur-sm md:hidden">
           {mobileItems.map((item) => {
             const isActive = currentPath === item.path || (item.path !== '/' && currentPath.startsWith(item.path + '/'));
             return (
@@ -149,7 +145,7 @@ export function AppShell({ children }: AppShellProps) {
                 to={item.path}
                 className={cn(
                   'flex flex-col items-center justify-center gap-0.5 px-3 py-2 text-[11px] font-medium transition-colors duration-150 min-w-[64px] min-h-[48px]',
-                  isActive ? 'text-brand-600 dark:text-brand-400' : 'text-neutral-400 dark:text-neutral-500',
+                  isActive ? 'text-brand-600' : 'text-neutral-400',
                 )}
               >
                 {item.icon}
