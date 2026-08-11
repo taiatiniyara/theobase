@@ -25,7 +25,7 @@ export function LandingPage() {
         <section className="relative border-b border-neutral-100 dark:border-neutral-800">
           <div className="mx-auto max-w-6xl px-6 pb-24 pt-24 sm:pb-32 sm:pt-32">
             <div className="mx-auto max-w-2xl">
-              <h1 className="font-heading text-4xl font-bold leading-tight tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-100">
+              <h1 className="font-heading text-4xl font-bold leading-tight tracking-wide text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-100">
                 The operating system for SDA churches.
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-neutral-600 dark:text-neutral-400">
@@ -49,7 +49,7 @@ export function LandingPage() {
         <section className="border-b border-neutral-100 py-24 dark:border-neutral-800 sm:py-32">
           <div className="mx-auto max-w-6xl px-6">
             <div className="mx-auto max-w-2xl">
-              <h2 className="font-heading text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+              <h2 className="font-heading text-3xl font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                 Where we&rsquo;re headed
               </h2>
               <p className="mt-6 text-lg leading-relaxed text-neutral-600 dark:text-neutral-400">
@@ -62,7 +62,7 @@ export function LandingPage() {
               </p>
               <div className="mt-10 grid gap-8 sm:grid-cols-2">
                 <div>
-                  <h3 className="font-heading text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                  <h3 className="font-heading text-lg font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                     Today
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
@@ -72,7 +72,7 @@ export function LandingPage() {
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-heading text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                  <h3 className="font-heading text-lg font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                     Tomorrow
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
@@ -91,7 +91,7 @@ export function LandingPage() {
           <div className="mx-auto max-w-6xl px-6">
             <div className="grid gap-16 lg:grid-cols-3">
               <div className="lg:col-span-1">
-                <h2 className="font-heading text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+                <h2 className="font-heading text-2xl font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                   How church officers use it
                 </h2>
               </div>
@@ -100,7 +100,7 @@ export function LandingPage() {
                   <div className="mb-3 text-xs font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
                     For the Church Clerk
                   </div>
-                  <h3 className="font-heading text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                  <h3 className="font-heading text-lg font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                     The annual statistical report fills itself out.
                   </h3>
                   <p className="mt-2 leading-relaxed text-neutral-500 dark:text-neutral-400">
@@ -119,7 +119,7 @@ export function LandingPage() {
                   <div className="mb-3 text-xs font-semibold uppercase tracking-wider text-warning-700 dark:text-warning-400">
                     For the Counting Room
                   </div>
-                  <h3 className="font-heading text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                  <h3 className="font-heading text-lg font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                     Two people count. The system checks the math.
                   </h3>
                   <p className="mt-2 leading-relaxed text-neutral-500 dark:text-neutral-400">
@@ -138,7 +138,7 @@ export function LandingPage() {
                   <div className="mb-3 text-xs font-semibold uppercase tracking-wider text-success-700 dark:text-success">
                     For the Treasurer
                   </div>
-                  <h3 className="font-heading text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                  <h3 className="font-heading text-lg font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                     The tithe remittance statement calculates itself.
                   </h3>
                   <p className="mt-2 leading-relaxed text-neutral-500 dark:text-neutral-400">
@@ -157,7 +157,7 @@ export function LandingPage() {
                   <div className="mb-3 text-xs font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
                     For Everyone
                   </div>
-                  <h3 className="font-heading text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                  <h3 className="font-heading text-lg font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                     Works offline. Syncs when you reconnect.
                   </h3>
                   <p className="mt-2 leading-relaxed text-neutral-500 dark:text-neutral-400">
@@ -175,13 +175,13 @@ export function LandingPage() {
           <div className="mx-auto max-w-6xl px-6">
             <div className="grid gap-16 lg:grid-cols-3">
               <div className="lg:col-span-1">
-                <h2 className="font-heading text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+                <h2 className="font-heading text-2xl font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                   What makes it different
                 </h2>
               </div>
               <div className="lg:col-span-2 space-y-10">
                 <div>
-                  <h3 className="font-heading text-base font-bold text-neutral-900 dark:text-neutral-100">
+                  <h3 className="font-heading text-base font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                     Built for the way SDA churches actually work.
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
@@ -191,7 +191,7 @@ export function LandingPage() {
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-heading text-base font-bold text-neutral-900 dark:text-neutral-100">
+                  <h3 className="font-heading text-base font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                     No IT department needed.
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
@@ -202,7 +202,7 @@ export function LandingPage() {
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-heading text-base font-bold text-neutral-900 dark:text-neutral-100">
+                  <h3 className="font-heading text-base font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                     Your data stays yours. Always.
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
@@ -212,7 +212,7 @@ export function LandingPage() {
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-heading text-base font-bold text-neutral-900 dark:text-neutral-100">
+                  <h3 className="font-heading text-base font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                     Every change is permanently recorded.
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
@@ -229,7 +229,7 @@ export function LandingPage() {
         <section className="py-24 sm:py-32">
           <div className="mx-auto max-w-6xl px-6">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="font-heading text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+              <h2 className="font-heading text-3xl font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                 $3 per church. Per month.
               </h2>
               <p className="mt-4 text-lg text-neutral-500 dark:text-neutral-400">
