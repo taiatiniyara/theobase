@@ -77,11 +77,15 @@
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
 
 @media (prefers-contrast: more) {
+  * {
+    border-color: currentColor !important;
+  }
   .text-brand-600 {
     color: var(--color-brand-700);
   }
@@ -93,5 +97,25 @@
   }
   .ring-brand-400 {
     --tw-ring-color: var(--color-brand-500);
+  }
+  .text-neutral-500,
+  .text-neutral-400,
+  .text-neutral-300,
+  .text-neutral-200 {
+    color: CanvasText !important;
+    opacity: 0.8;
+  }
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-brand-600);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (pointer: coarse) {
+  .touch-target-min {
+    min-height: 48px;
+    min-width: 48px;
   }
 }
