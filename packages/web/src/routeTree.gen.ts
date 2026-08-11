@@ -17,6 +17,7 @@ import { Route as MembersMemberIdRouteImport } from './routes/members/$memberId'
 import { Route as MembersMemberIdEditRouteImport } from './routes/members/$memberId.edit'
 import { Route as ChurchImportRouteImport } from './routes/church/import'
 import { Route as ChurchRegisterRouteImport } from './routes/church/register'
+import { Route as CountingRoomIndexRouteImport } from './routes/counting-room/index'
 import { Route as HouseholdsIndexRouteImport } from './routes/households/index'
 import { Route as MembersSelfServiceRouteImport } from './routes/members/self-service'
 import { Route as VisitorWelcomeRouteImport } from './routes/visitor/welcome'
@@ -76,6 +77,11 @@ const VisitorWelcomeRoute = VisitorWelcomeRouteImport.update({
   path: '/visitor/welcome',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CountingRoomIndexRoute = CountingRoomIndexRouteImport.update({
+  id: '/counting-room',
+  path: '/counting-room',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/households': typeof HouseholdsIndexRoute
   '/members/self-service': typeof MembersSelfServiceRoute
   '/visitor/welcome': typeof VisitorWelcomeRoute
+  '/counting-room': typeof CountingRoomIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/households': typeof HouseholdsIndexRoute
   '/members/self-service': typeof MembersSelfServiceRoute
   '/visitor/welcome': typeof VisitorWelcomeRoute
+  '/counting-room': typeof CountingRoomIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -116,13 +124,14 @@ export interface FileRoutesById {
   '/households': typeof HouseholdsIndexRoute
   '/members/self-service': typeof MembersSelfServiceRoute
   '/visitor/welcome': typeof VisitorWelcomeRoute
+  '/counting-room': typeof CountingRoomIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome'
+  fullPaths: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome'
-  id: '__root__' | '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome'
+  to: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room'
+  id: '__root__' | '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome' | '/counting-room'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -137,6 +146,7 @@ export interface RootRouteChildren {
   HouseholdsIndexRoute: typeof HouseholdsIndexRoute
   MembersSelfServiceRoute: typeof MembersSelfServiceRoute
   VisitorWelcomeRoute: typeof VisitorWelcomeRoute
+  CountingRoomIndexRoute: typeof CountingRoomIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -218,6 +228,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VisitorWelcomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/counting-room': {
+      id: '/counting-room'
+      path: '/counting-room'
+      fullPath: '/counting-room'
+      preLoaderRoute: typeof CountingRoomIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -230,6 +247,7 @@ const rootRouteChildren: RootRouteChildren = {
   MembersMemberIdEditRoute: MembersMemberIdEditRoute,
   MembersSelfServiceRoute: MembersSelfServiceRoute,
   HouseholdsIndexRoute: HouseholdsIndexRoute,
+  CountingRoomIndexRoute: CountingRoomIndexRoute,
   VisitorWelcomeRoute: VisitorWelcomeRoute,
   ChurchImportRoute: ChurchImportRoute,
   ChurchRegisterRoute: ChurchRegisterRoute,
