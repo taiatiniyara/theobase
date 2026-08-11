@@ -60,7 +60,8 @@ export function captureError(
 }
 
 export function getObservabilityWorkerUrl(): string {
-  return 'https://theobase-worker.theobase.workers.dev/observability';
+  const baseUrl = (typeof globalThis !== 'undefined' && (globalThis as Record<string, unknown>).WORKER_URL as string) || 'https://theobase-worker.theobase.workers.dev';
+  return `${baseUrl}/observability`;
 }
 
 export async function reportError(payload: ErrorPayload): Promise<boolean> {

@@ -68,12 +68,13 @@ export async function seedDemoChurch(env: Env): Promise<string> {
   const churchId = crypto.randomUUID();
   const doId = env.CHURCH_DO.idFromName(churchId);
   const stub = env.CHURCH_DO.get(doId);
+  const seedToken = env.SEED_TOKEN || '';
 
-  await doFetch(stub, 'church:create', { id: churchId, name: 'Suva Central SDA Church', address: '3 Thurston St, Suva', status: 'active' });
+  await doFetch(stub, seedToken, 'church:create', { id: churchId, name: 'DEMO: Suva Central SDA Church', address: '3 Thurston St, Suva', status: 'active' });
 
   for (let i = 0; i < 120; i++) {
     const m = randomMember(churchId, i);
-    await doFetch(stub, 'member:create', m);
+    await doFetch(stub, seedToken, 'member:create', m);
   }
 
   for (let batch = 0; batch < 24; batch++) {
@@ -88,14 +89,14 @@ export async function seedDemoChurch(env: Env): Promise<string> {
       records.push(randomGivingRecord(batchId, memberIndex, [daysAgoStart, daysAgoEnd]));
     }
 
-    await doFetch(stub, 'giving_batch:create', {
+    await doFetch(stub, seedToken, 'giving_batch:create', {
       id: batchId, churchId, date: new Date(Date.now() - daysAgoStart * 86400000).toISOString().split('T')[0],
       counter1Id: 'demo-counter1', records, status: 'counter1-confirmed',
     });
-    await doFetch(stub, 'giving_batch:counter2-confirm', {
+    await doFetch(stub, seedToken, 'giving_batch:counter2-confirm', {
       batchId, counter2Id: 'demo-counter2', records, timestamp: Date.now(),
     });
-    await doFetch(stub, 'giving_batch:commit', {
+    await doFetch(stub, seedToken, 'giving_batch:commit', {
       batchId, records, timestamp: Date.now(),
     });
   }
@@ -104,7 +105,7 @@ export async function seedDemoChurch(env: Env): Promise<string> {
   for (let r = 0; r < 45; r++) {
     pendingBatchRecords.push(randomGivingRecord('demo-batch-pending', Math.floor(Math.random() * 120), [0, 3]));
   }
-  await doFetch(stub, 'giving_batch:create', {
+  await doFetch(stub, seedToken, 'giving_batch:create', {
     id: 'demo-batch-pending', churchId, date: new Date().toISOString().split('T')[0],
     counter1Id: 'demo-counter1', records: pendingBatchRecords, status: 'counter1-confirmed',
   });
@@ -116,11 +117,11 @@ export async function seedDemoChurch(env: Env): Promise<string> {
     disputedRecords1.push({ ...rec });
     disputedRecords2.push({ ...rec, amount: (rec.amount as number) + Math.random() * 10 });
   }
-  await doFetch(stub, 'giving_batch:create', {
+  await doFetch(stub, seedToken, 'giving_batch:create', {
     id: 'demo-batch-disputed', churchId, date: new Date(Date.now() - 5 * 86400000).toISOString().split('T')[0],
     counter1Id: 'demo-counter1', records: disputedRecords1, status: 'counter1-confirmed',
   });
-  await doFetch(stub, 'giving_batch:counter2-confirm', {
+  await doFetch(stub, seedToken, 'giving_batch:counter2-confirm', {
     batchId: 'demo-batch-disputed', counter2Id: 'demo-counter2', records: disputedRecords2, timestamp: Date.now(),
   });
 
@@ -133,7 +134,7 @@ export async function seedDemoChurch(env: Env): Promise<string> {
     { email: 'member@suva.sda', role: 'member' as const, name: 'Salote Mem' },
   ];
   for (const u of demoUsers) {
-    await doFetch(stub, 'role:assign', {
+    await doFetch(stub, seedToken, 'role:assign', {
       userId: `demo-${u.email}`,
       churchId,
       role: u.role,
@@ -146,10 +147,10 @@ export async function seedDemoChurch(env: Env): Promise<string> {
   return churchId;
 }
 
-async function doFetch(stub: DurableObjectStub<ChurchDO>, operation: string, payload: unknown): Promise<void> {
+async function doFetch(stub: DurableObjectStub<ChurchDO>, seedToken: string, operation: string, payload: unknown): Promise<void> {
   const response = await stub.fetch('http://localhost/mutate', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer demo-seed-token' },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${seedToken}` },
     body: JSON.stringify({ operation, payload }),
   });
   if (!response.ok) {

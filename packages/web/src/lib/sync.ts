@@ -8,13 +8,16 @@ export type SyncResult = {
   error?: string;
 };
 
+const WORKER_URL = import.meta.env.VITE_WORKER_URL || 'https://theobase-worker.theobase.workers.dev';
+const WORKER_WS_URL = import.meta.env.VITE_WORKER_URL ? import.meta.env.VITE_WORKER_URL.replace(/^https?/, 'wss') : 'wss://theobase-worker.theobase.workers.dev';
+
 function getWorkerWsUrl(): string {
-  const origin = import.meta.env.PROD ? 'wss://theobase-worker.theobase.workers.dev' : 'ws://localhost:8787';
+  const origin = import.meta.env.PROD ? WORKER_WS_URL : 'ws://localhost:8787';
   return `${origin}/church`;
 }
 
 function getWorkerUrl(): string {
-  const origin = import.meta.env.PROD ? 'https://theobase-worker.theobase.workers.dev' : '';
+  const origin = import.meta.env.PROD ? WORKER_URL : '';
   return `${origin}/church`;
 }
 

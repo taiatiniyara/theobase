@@ -24,10 +24,12 @@ export async function runRestoreDrill(env: Env): Promise<{
     const drillDoId = env.CHURCH_DO.idFromName(`drill-${churchId}`);
     const drillStub = env.CHURCH_DO.get(drillDoId);
 
+    const seedToken = env.SEED_TOKEN || '';
+
     for (const event of events) {
       await drillStub.fetch('http://localhost/mutate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer demo-seed-token' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${seedToken}` },
         body: JSON.stringify({ operation: event.operation, payload: event.payload }),
       });
     }

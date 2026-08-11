@@ -1,10 +1,11 @@
+const WORKER_URL = import.meta.env.VITE_WORKER_URL || 'https://theobase-worker.theobase.workers.dev';
+
 export function getWorkerUrl(): string {
-  const origin = import.meta.env.PROD ? 'https://theobase-worker.theobase.workers.dev' : '';
-  return `${origin}/church`;
+  return `${WORKER_URL}/church`;
 }
 
 export function getAuthWorkerUrl(): string {
-  return import.meta.env.PROD ? 'https://theobase-worker.theobase.workers.dev' : '';
+  return WORKER_URL;
 }
 
 function getAuthToken(): string | null {

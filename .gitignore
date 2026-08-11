@@ -6,3 +6,7 @@ dist
 .dev.vars
 graphify-out
 .scratch/
+.wrangler/
+test-results/
+.DS_Store
+*.log

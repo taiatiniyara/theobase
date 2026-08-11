@@ -10,6 +10,7 @@ export interface Env {
   DB?: D1Database;
   ERROR_QUEUE?: Queue;
   ERROR_STORAGE?: R2Bucket;
+  SEED_TOKEN?: string;
 }
 
 interface EmailMessage {

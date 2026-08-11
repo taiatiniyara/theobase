@@ -1,0 +1,25 @@
+---
+name: Configuration template
+about: Request a new conference/church configuration
+title: 'config: '
+labels: ['config']
+assignees: ''
+---
+
+## Conference / Church
+
+- **Conference name**:
+- **Church name** (if single church):
+- **Country**:
+
+## Requirements
+
+- **Languages needed**:
+- **Currency**:
+- **Reporting formats**:
+- **Any local polity variations**:
+
+## Contact
+
+- **Conference admin email**:
+- **Preferred timeline**:
