@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Theobase Works</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent2: #a78bfa;
+    --green: #4ade80;
+    --amber: #fbbf24;
+    --red: #f87171;
+    --pink: #f472b6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header {
+    text-align: center;
+    padding: 4rem 1rem 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { font-size: 2.5rem; color: var(--accent); }
+  header p { color: var(--muted); max-width: 600px; margin: 0.5rem auto 0; }
+  section {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  section h2 { color: var(--accent); font-size: 1.5rem; margin-bottom: 0.25rem; }
+  section > p { color: var(--muted); margin-bottom: 1.5rem; }
+  .diagram { margin-top: 1rem; display: flex; justify-content: center; }
+  svg text.title { fill: var(--accent); font-weight: 700; font-size: 13px; }
+  svg text.label { fill: var(--text); font-size: 11px; }
+  svg text.small { fill: var(--muted); font-size: 10px; }
+  svg rect.card { fill: var(--card); stroke: var(--border); stroke-width: 1.5; rx: 6; }
+  svg rect.accent-card { fill: #0c2d48; stroke: var(--accent); stroke-width: 1.5; rx: 6; }
+  svg rect.green-card { fill: #0f2d1e; stroke: var(--green); stroke-width: 1.5; rx: 6; }
+  svg rect.amber-card { fill: #2d240f; stroke: var(--amber); stroke-width: 1.5; rx: 6; }
+  svg rect.purple-card { fill: #1e0f2d; stroke: var(--accent2); stroke-width: 1.5; rx: 6; }
+  .columns { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem; }
+  .col { flex: 1; min-width: 280px; }
+  .col h3 { color: var(--accent); font-size: 1.1rem; margin-bottom: 0.5rem; }
+  .col ul { list-style: none; }
+  .col li { padding: 0.3rem 0; color: var(--muted); font-size: 0.9rem; }
+  .col li::before { content: "– "; color: var(--accent); }
+  .badge {
+    display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px;
+    font-size: 0.75rem; font-weight: 600;
+  }
+  .badge-online { background: #0f2d1e; color: var(--green); }
+  .badge-offline { background: #2d240f; color: var(--amber); }
+  .badge-cloudflare { background: #0c2d48; color: var(--accent); }
+  .flow-row {
+    display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+    margin: 1rem 0;
+  }
+  .flow-step {
+    padding: 0.5rem 0.75rem; background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; font-size: 0.85rem; white-space: nowrap;
+  }
+  .flow-arrow { color: var(--accent); font-size: 1.2rem; }
+  .principle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .principle-card {
+    padding: 1.25rem; background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .principle-card h4 { color: var(--accent2); margin-bottom: 0.5rem; }
+  .principle-card p { color: var(--muted); font-size: 0.85rem; }
+  footer {
+    text-align: center; padding: 2rem 1rem;
+    color: var(--muted); font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>How Theobase Works</h1>
+  <p>A global, offline-first church management platform for Seventh-day Adventist grassroots operations, built on Cloudflare's edge.</p>
+</header>
+
+<!-- PRINCIPLES -->
+<section>
+  <h2>Design Principles</h2>
+  <p>The four principles that shape every decision in Theobase.</p>
+  <div class="principle-grid">
+    <div class="principle-card">
+      <h4>System Does the Work</h4>
+      <p>Humans approve. The system populates, computes, and derives — never expect users to compile data by hand.</p>
+    </div>
+    <div class="principle-card">
+      <h4>Self-Teaching</h4>
+      <p>No manual needed. The UI guides first-time users through their tasks with inline prompts and progressive disclosure.</p>
+    </div>
+    <div class="principle-card">
+      <h4>Zero-Assembly Reporting</h4>
+      <p>Every report is derived from live data. Annual statistical reports, tithe remittances — all auto-generated, never hand-compiled.</p>
+    </div>
+    <div class="principle-card">
+      <h4>Surface, Don't Wait</h4>
+      <p>Proactive intelligence. "Giving is down 12% this quarter." "The annual report is ready for review." — surfaced before you ask.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CLOUDFLARE ARCHITECTURE -->
+<section>
+  <h2>Platform Architecture</h2>
+  <p>The entire system runs on Cloudflare's edge — zero traditional servers, zero containers.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 960 520" width="100%" max-width="960">
+      <rect x="20" y="220" width="180" height="80" rx="8" class="accent-card"/>
+      <text x="110" y="252" text-anchor="middle" class="title">PWA</text>
+      <text x="110" y="270" text-anchor="middle" class="small">React 19 + TanStack</text>
+      <text x="110" y="286" text-anchor="middle" class="small">IndexedDB WAL</text>
+
+      <text x="245" y="258" text-anchor="middle" class="label" font-size="20">→</text>
+
+      <rect x="270" y="215" width="180" height="90" rx="8" class="accent-card"/>
+      <text x="360" y="247" text-anchor="middle" class="title">Worker</text>
+      <text x="360" y="265" text-anchor="middle" class="small">API Gateway + Auth</text>
+      <text x="360" y="283" text-anchor="middle" class="small">Routes to ChurchDO</text>
+
+      <text x="495" y="258" text-anchor="middle" class="label" font-size="20">→</text>
+
+      <rect x="520" y="100" width="200" height="320" rx="8" class="green-card"/>
+      <text x="620" y="128" text-anchor="middle" class="title">ChurchDO</text>
+      <text x="620" y="146" text-anchor="middle" class="small">Durable Object</text>
+      <text x="620" y="164" text-anchor="middle" class="small">(one per church)</text>
+      <line x1="560" y1="180" x2="680" y2="180" stroke="var(--border)"/>
+      <text x="620" y="200" text-anchor="middle" class="title">Append-Only</text>
+      <text x="620" y="218" text-anchor="middle" class="title">Event Log</text>
+      <text x="620" y="240" text-anchor="middle" class="small">SHA-256 hash chain</text>
+      <text x="620" y="260" text-anchor="middle" class="small">37 operation types</text>
+      <text x="620" y="280" text-anchor="middle" class="small">State = replay(events)</text>
+      <text x="620" y="300" text-anchor="middle" class="small">Tamper-evident</text>
+      <line x1="560" y1="316" x2="680" y2="316" stroke="var(--border)"/>
+      <text x="620" y="336" text-anchor="middle" class="title">Role-Based Gates</text>
+      <text x="620" y="356" text-anchor="middle" class="small">14 roles, per-operation</text>
+      <text x="620" y="374" text-anchor="middle" class="small">permissions</text>
+      <text x="620" y="400" text-anchor="middle" class="small">State machine enforcement</text>
+
+      <line x1="720" y1="240" x2="760" y2="190" stroke="var(--accent)" stroke-width="1.5"/>
+      <rect x="760" y="165" width="180" height="50" rx="6" class="card"/>
+      <text x="850" y="188" text-anchor="middle" class="label">D1 SQL</text>
+      <text x="850" y="204" text-anchor="middle" class="small">Cross-church analytics</text>
+
+      <line x1="720" y1="270" x2="760" y2="270" stroke="var(--accent)" stroke-width="1.5"/>
+      <rect x="760" y="245" width="180" height="50" rx="6" class="card"/>
+      <text x="850" y="268" text-anchor="middle" class="label">R2 Storage</text>
+      <text x="850" y="284" text-anchor="middle" class="small">Photos, documents</text>
+
+      <line x1="720" y1="300" x2="760" y2="340" stroke="var(--accent)" stroke-width="1.5"/>
+      <rect x="760" y="325" width="180" height="50" rx="6" class="card"/>
+      <text x="850" y="348" text-anchor="middle" class="label">Queues + KV + Email</text>
+      <text x="850" y="364" text-anchor="middle" class="small">Async + rate limits</text>
+
+      <text x="480" y="480" text-anchor="middle" class="small">All on Cloudflare Edge | ~0ms cold start | Global distribution</text>
+    </svg>
+  </div>
+</section>
+
+<!-- EVENT-SOURCED ARCHITECTURE -->
+<section>
+  <h2>Event-Sourced Church State</h2>
+  <p>Every church is a Durable Object. Its state is not stored in a database — it's <em>reconstructed</em> from a cryptographically chained append-only log.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 960 340" width="100%" max-width="960">
+      <rect x="10" y="20" width="100" height="280" rx="4" class="card"/>
+      <text x="60" y="45" text-anchor="middle" class="small">Event #1</text>
+      <text x="60" y="62" text-anchor="middle" class="small" font-size="9">member:create</text>
+      <rect x="20" y="82" width="80" height="20" rx="3" fill="var(--card)" stroke="var(--green)" stroke-width="1"/>
+      <text x="60" y="96" text-anchor="middle" class="small" fill="var(--green)">hash=abc123</text>
+
+      <rect x="120" y="20" width="100" height="280" rx="4" class="card"/>
+      <text x="170" y="45" text-anchor="middle" class="small">Event #2</text>
+      <text x="170" y="62" text-anchor="middle" class="small" font-size="9">baptised→prof</text>
+      <rect x="130" y="82" width="80" height="20" rx="3" fill="var(--card)" stroke="var(--green)" stroke-width="1"/>
+      <text x="170" y="96" text-anchor="middle" class="small" fill="var(--green)">hash=def456</text>
+
+      <rect x="230" y="20" width="100" height="280" rx="4" class="card"/>
+      <text x="280" y="45" text-anchor="middle" class="small">Event #3</text>
+      <text x="280" y="62" text-anchor="middle" class="small" font-size="9">batch:counter1</text>
+      <rect x="240" y="82" width="80" height="20" rx="3" fill="var(--card)" stroke="var(--green)" stroke-width="1"/>
+      <text x="280" y="96" text-anchor="middle" class="small" fill="var(--green)">hash=ghi789</text>
+
+      <rect x="340" y="20" width="100" height="280" rx="4" class="card"/>
+      <text x="390" y="45" text-anchor="middle" class="small">Event #4</text>
+      <text x="390" y="62" text-anchor="middle" class="small" font-size="9">bitcoin→acc</text>
+      <rect x="350" y="82" width="80" height="20" rx="3" fill="var(--card)" stroke="var(--green)" stroke-width="1"/>
+      <text x="390" y="96" text-anchor="middle" class="small" fill="var(--green)">hash=jkl012</text>
+
+      <rect x="450" y="20" width="100" height="280" rx="4" class="card"/>
+      <text x="500" y="45" text-anchor="middle" class="small">Event #N</text>
+      <text x="500" y="62" text-anchor="middle" class="small" font-size="9">remit:submit</text>
+      <rect x="460" y="82" width="80" height="20" rx="3" fill="var(--card)" stroke="var(--green)" stroke-width="1"/>
+      <text x="500" y="96" text-anchor="middle" class="small" fill="var(--green)">hash=xyz999</text>
+
+      <text x="115" y="160" text-anchor="middle" class="label" font-size="18">→</text>
+      <text x="225" y="160" text-anchor="middle" class="label" font-size="18">→</text>
+      <text x="335" y="160" text-anchor="middle" class="label" font-size="18">→</text>
+      <text x="445" y="160" text-anchor="middle" class="label" font-size="18">→</text>
+
+      <line x1="170" y1="92" x2="230" y2="92" stroke="var(--green)" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="200" y="84" text-anchor="middle" class="small" fill="var(--green)" font-size="9">prevHash</text>
+
+      <line x1="280" y1="92" x2="340" y2="92" stroke="var(--green)" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="310" y="84" text-anchor="middle" class="small" fill="var(--green)" font-size="9">prevHash</text>
+
+      <line x1="390" y1="92" x2="450" y2="92" stroke="var(--green)" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="420" y="84" text-anchor="middle" class="small" fill="var(--green)" font-size="9">prevHash</text>
+
+      <text x="280" y="210" text-anchor="middle" class="small" fill="var(--amber)">hash = SHA-256(prevHash : operation : payload : actor : timestamp)</text>
+      <text x="280" y="230" text-anchor="middle" class="small">Each event links to the previous. Modifying any event breaks the chain → tamper-evident.</text>
+
+      <rect x="640" y="40" width="300" height="100" rx="8" class="purple-card"/>
+      <text x="790" y="70" text-anchor="middle" class="title">Materialized State</text>
+      <text x="790" y="90" text-anchor="middle" class="small">{ members: [...], households: [...],</text>
+      <text x="790" y="108" text-anchor="middle" class="small">  batches: [...], reports: [...] }</text>
+      <text x="790" y="128" text-anchor="middle" class="small">← STATE_HANDLERS replay every event</text>
+
+      <line x1="555" y1="90" x2="635" y2="90" stroke="var(--accent2)" stroke-width="2" marker-end="url(#arrowPurple)"/>
+      <text x="595" y="80" text-anchor="middle" class="small" fill="var(--accent2)">replay</text>
+
+      <defs>
+        <marker id="arrowPurple" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent2)"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+</section>
+
+<!-- DATA FLOW - WRITE PATH -->
+<section>
+  <h2>Write Path: Offline-First Mutations</h2>
+  <p>Every write is an asynchronous intent. The PWA works offline with IndexedDB, then flushes to the server when connectivity returns.</p>
+  <div class="flow-row">
+    <span class="flow-step">User taps action</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">TanStack Query<br/><span class="badge badge-online">optimistic update</span></span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Intent written to<br/><span class="badge badge-offline">IndexedDB WAL</span></span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step"><span class="badge badge-offline">Offline OK</span><br/>UI responds instantly</span>
+  </div>
+  <div class="flow-row" style="margin-top:-0.25rem">
+    <span style="width:140px"></span>
+    <span class="flow-arrow" style="font-size:1.5rem">↓</span>
+  </div>
+  <div class="flow-row" style="margin-top:-0.25rem">
+    <span style="width:140px"></span>
+    <span class="flow-step">sync.ts flushes<br/>via WebSocket / HTTP</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Worker validates<br/>JWT + role + church</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step"><span class="badge badge-cloudflare">ChurchDO /mutate</span><br/>+ canOperate() + rules</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Event appended<br/>to hash chain</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Intent removed<br/>from IndexedDB</span>
+  </div>
+</section>
+
+<!-- COUNTING ROOM -->
+<section>
+  <h2>Counting Room: Dual-Signoff Batch Workflow</h2>
+  <p>Financial integrity requires two independent counters to confirm every giving batch before the treasurer commits it.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 960 260" width="100%" max-width="960">
+      <rect x="20" y="60" width="160" height="70" rx="8" class="card"/>
+      <text x="100" y="88" text-anchor="middle" class="title">Batch Created</text>
+      <text x="100" y="106" text-anchor="middle" class="small">Status: open</text>
+
+      <line x1="180" y1="95" x2="240" y2="60" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="180" y1="95" x2="240" y2="130" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+      <rect x="245" y="30" width="170" height="60" rx="8" class="amber-card"/>
+      <text x="330" y="58" text-anchor="middle" class="title">Counter 1</text>
+      <text x="330" y="76" text-anchor="middle" class="small">Records amounts independently</text>
+
+      <rect x="245" y="100" width="170" height="60" rx="8" class="amber-card"/>
+      <text x="330" y="128" text-anchor="middle" class="title">Counter 2</text>
+      <text x="330" y="146" text-anchor="middle" class="small">Records amounts independently</text>
+
+      <line x1="415" y1="60" x2="490" y2="70" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="415" y1="130" x2="490" y2="120" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+      <rect x="495" y="40" width="200" height="110" rx="8" class="card"/>
+      <text x="595" y="68" text-anchor="middle" class="title">Batch Comparison</text>
+      <text x="595" y="88" text-anchor="middle" class="small">counter1 == counter2 ?</text>
+      <rect x="520" y="100" width="60" height="22" rx="4" fill="#0f2d1e" stroke="var(--green)" stroke-width="1"/>
+      <text x="550" y="115" text-anchor="middle" class="small" fill="var(--green)">Yes →</text>
+      <rect x="620" y="100" width="60" height="22" rx="4" fill="#2d0f0f" stroke="var(--red)" stroke-width="1"/>
+      <text x="650" y="115" text-anchor="middle" class="small" fill="var(--red)">No →</text>
+      <text x="595" y="140" text-anchor="middle" class="small" fill="var(--red)" font-size="9">Dispute → Reconcile</text>
+
+      <line x1="700" y1="95" x2="750" y2="95" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+      <rect x="755" y="60" width="180" height="70" rx="8" class="green-card"/>
+      <text x="845" y="88" text-anchor="middle" class="title">Treasurer Commits</text>
+      <text x="845" y="106" text-anchor="middle" class="small">Records become immutable</text>
+
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+</section>
+
+<!-- MEMBERSHIP STATE MACHINE -->
+<section>
+  <h2>Membership Lifecycle State Machine</h2>
+  <p>Every member moves through exactly six states. Invalid transitions are rejected by the Durable Object.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 960 260" width="100%" max-width="960">
+      <rect x="30" y="90" width="120" height="50" rx="25" class="accent-card"/>
+      <text x="90" y="120" text-anchor="middle" class="title">Baptised</text>
+
+      <rect x="280" y="30" width="120" height="50" rx="25" class="accent-card"/>
+      <text x="340" y="60" text-anchor="middle" class="title">Profession</text>
+
+      <rect x="280" y="160" width="120" height="50" rx="25" class="purple-card"/>
+      <text x="340" y="190" text-anchor="middle" class="title">Transfer-Out</text>
+
+      <rect x="530" y="160" width="120" height="50" rx="25" class="purple-card"/>
+      <text x="590" y="190" text-anchor="middle" class="title">Transfer-In</text>
+
+      <rect x="780" y="90" width="120" height="50" rx="25" fill="#2d0f0f" stroke="var(--red)" stroke-width="1.5"/>
+      <text x="840" y="112" text-anchor="middle" class="title" fill="var(--red)">Deceased</text>
+      <text x="840" y="128" text-anchor="middle" class="small" fill="var(--red)">/ Removed</text>
+
+      <line x1="150" y1="115" x2="275" y2="55" stroke="var(--green)" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+      <line x1="150" y1="115" x2="275" y2="185" stroke="var(--accent2)" stroke-width="1.5" marker-end="url(#arrowPurple2)"/>
+      <line x1="400" y1="185" x2="525" y2="185" stroke="var(--accent2)" stroke-width="1.5" marker-end="url(#arrowPurple2)"/>
+      <line x1="340" y1="80" x2="340" y2="185" stroke="var(--green)" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <text x="360" y="130" class="small" fill="var(--green)">also valid</text>
+      <line x1="530" y1="185" x2="775" y2="115" stroke="var(--red)" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+      <line x1="400" y1="55" x2="775" y2="110" stroke="var(--red)" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+      <text x="480" y="240" text-anchor="middle" class="small" fill="var(--green)">Valid transitions enforced by STATE_HANDLERS in ChurchDO</text>
+      <text x="480" y="255" text-anchor="middle" class="small" fill="var(--red)">Invalid (e.g. deceased → baptised) → HTTP 400</text>
+
+      <defs>
+        <marker id="arrowGreen" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--green)"/>
+        </marker>
+        <marker id="arrowPurple2" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent2)"/>
+        </marker>
+        <marker id="arrowRed" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--red)"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+</section>
+
+<!-- AUTH FLOW -->
+<section>
+  <h2>Authentication: Passwordless Magic Links + MFA</h2>
+  <p>No passwords. Users authenticate via single-use magic links sent to their email. Financial roles require TOTP-based MFA.</p>
+  <div class="flow-row">
+    <span class="flow-step">User enters email</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Worker sends magic link<br/>via Cloudflare Email</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">10-min expiry<br/>single-use (KV)</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">User clicks link<br/>→ 7-day JWT session</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Treasurer / Counter?<br/><span class="badge badge-offline">TOTP MFA required</span></span>
+  </div>
+  <p style="margin-top:1rem; color:var(--muted); font-size:0.85rem;">
+    Dual cookie delivery: httpOnly (automatic) + non-httpOnly (for offline Service Worker header attachment).
+    Refresh every 24h. <code>tokenVersion</code> increment invalidates all sessions on role change.
+  </p>
+</section>
+
+<!-- ROLE MATRIX SUMMARY -->
+<section>
+  <h2>Role-Based Access Control</h2>
+  <p>14 roles, each with explicit per-operation permissions enforced by both the Worker and the ChurchDO.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 960 300" width="100%" max-width="960">
+      <!-- Roles -->
+      <rect x="20" y="30" width="130" height="24" rx="4" class="card"/>
+      <text x="85" y="47" text-anchor="middle" class="small">operator</text>
+      <rect x="20" y="60" width="130" height="24" rx="4" class="card"/>
+      <text x="85" y="77" text-anchor="middle" class="small">clerk</text>
+      <rect x="20" y="90" width="130" height="24" rx="4" class="card"/>
+      <text x="85" y="107" text-anchor="middle" class="small">treasurer</text>
+      <rect x="20" y="120" width="130" height="24" rx="4" class="card"/>
+      <text x="85" y="137" text-anchor="middle" class="small">counter</text>
+      <rect x="20" y="150" width="130" height="24" rx="4" class="card"/>
+      <text x="85" y="167" text-anchor="middle" class="small">pastor</text>
+      <rect x="20" y="180" width="130" height="24" rx="4" class="card"/>
+      <text x="85" y="197" text-anchor="middle" class="small">member</text>
+      <rect x="20" y="210" width="130" height="24" rx="4" class="card"/>
+      <text x="85" y="227" text-anchor="middle" class="small">conference_admin</text>
+      <rect x="20" y="240" width="130" height="24" rx="4" class="card"/>
+      <text x="85" y="257" text-anchor="middle" class="small">visitor</text>
+
+      <text x="165" y="47" class="small">→ all operations (bypass)</text>
+      <text x="165" y="77" class="small">→ members, households, reports, invites</text>
+      <text x="165" y="107" class="small">→ giving batches (commit), remittances, MFA</text>
+      <text x="165" y="137" class="small">→ giving records (own batch), MFA</text>
+      <text x="165" y="167" class="small">→ view members, visitors, pastoral notes</text>
+      <text x="165" y="197" class="small">→ view own giving history, request updates</text>
+      <text x="165" y="227" class="small">→ aggregate analytics (no PII)</text>
+      <text x="165" y="257" class="small">→ QR self-register as Bible Study Interest</text>
+
+      <rect x="180" y="5" width="760" height="290" rx="6" fill="none" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="560" y="20" text-anchor="middle" class="small" fill="var(--muted)">Worker middleware: requireRole() + requireChurchId() + authenticate() | DO: canOperate() on every /mutate</text>
+    </svg>
+  </div>
+</section>
+
+<!-- PROACTIVE INTEL -->
+<section>
+  <h2>Proactive Intelligence</h2>
+  <p>The ChurchDO doesn't wait to be asked — it computes insights from live state and surfaces them to the dashboard.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 960 170" width="100%" max-width="960">
+      <rect x="10" y="40" width="140" height="60" rx="8" class="green-card"/>
+      <text x="80" y="65" text-anchor="middle" class="title">ChurchDO</text>
+      <text x="80" y="83" text-anchor="middle" class="small">GET /insights</text>
+
+      <line x1="155" y1="70" x2="210" y2="30" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arrowAmber)"/>
+      <line x1="155" y1="70" x2="210" y2="70" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arrowAmber)"/>
+      <line x1="155" y1="70" x2="210" y2="110" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arrowAmber)"/>
+
+      <rect x="220" y="10" width="230" height="40" rx="6" class="card"/>
+      <text x="335" y="35" text-anchor="middle" class="small">📉 Giving down 12% this quarter</text>
+      <rect x="220" y="55" width="230" height="40" rx="6" class="card"/>
+      <text x="335" y="80" text-anchor="middle" class="small">👤 8 members inactive 4+ weeks</text>
+      <rect x="220" y="100" width="230" height="40" rx="6" class="card"/>
+      <text x="335" y="125" text-anchor="middle" class="small">📋 Annual report ready for review</text>
+
+      <line x1="455" y1="30" x2="520" y2="30" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arrowAmber)"/>
+      <line x1="455" y1="75" x2="520" y2="75" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arrowAmber)"/>
+      <line x1="455" y1="120" x2="520" y2="120" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arrowAmber)"/>
+
+      <rect x="530" y="10" width="260" height="40" rx="6" fill="var(--card)" stroke="var(--green)" stroke-width="1"/>
+      <text x="660" y="35" text-anchor="middle" class="small">→ "Review giving trends"</text>
+      <rect x="530" y="55" width="260" height="40" rx="6" fill="var(--card)" stroke="var(--green)" stroke-width="1"/>
+      <text x="660" y="80" text-anchor="middle" class="small">→ "Check member directory"</text>
+      <rect x="530" y="100" width="260" height="40" rx="6" fill="var(--card)" stroke="var(--green)" stroke-width="1"/>
+      <text x="660" y="125" text-anchor="middle" class="small">→ "Generate now"</text>
+
+      <defs>
+        <marker id="arrowAmber" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--amber)"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+</section>
+
+<!-- RESTORE DRILL -->
+<section>
+  <h2>Backup Verification: Monthly Restore Drill</h2>
+  <p>Every month, a cron trigger picks a demo church, replays its entire event log into a fresh Durable Object, and compares the state hashes. Failure triggers a P1 alert.</p>
+  <div class="flow-row">
+    <span class="flow-step"><span class="badge badge-cloudflare">Cron Trigger</span><br/>1st of month</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Pick demo church</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Replay all events<br/>into fresh DO</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Compare state<br/>hashes</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">✓ Match → log to D1<br/>✗ Mismatch → P1 alert</span>
+  </div>
+  <p style="margin-top:1rem; color:var(--muted); font-size:0.85rem;">
+    This validates that every DO's state is fully reconstructable from its event log and that the hash chain is intact.
+  </p>
+</section>
+
+<!-- TECH STACK SUMMARY -->
+<section>
+  <h2>Technology Stack</h2>
+  <div class="columns">
+    <div class="col">
+      <h3>Platform</h3>
+      <ul>
+        <li>Cloudflare Workers (API Gateway)</li>
+        <li>Durable Objects (per-church state)</li>
+        <li>D1 (cross-church analytics)</li>
+        <li>R2 (photos, docs, backups)</li>
+        <li>Queues (async error ingestion)</li>
+        <li>KV (rate limiting, magic links)</li>
+        <li>Email Routing (transactional)</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Backend</h3>
+      <ul>
+        <li>TypeScript + Hono</li>
+        <li>Drizzle ORM + Zod</li>
+        <li>Append-only event log</li>
+        <li>SHA-256 hash chain</li>
+        <li>37 operation types</li>
+        <li>14 roles, per-op permissions</li>
+        <li>Finite state machine (6 states)</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Frontend</h3>
+      <ul>
+        <li>React 19 + TypeScript</li>
+        <li>TanStack Router + Query v5</li>
+        <li>TanStack Table v8</li>
+        <li>Tailwind CSS v4 + shadcn/ui</li>
+        <li>i18next (en + Fijian Hindi)</li>
+        <li>IndexedDB WAL (offline)</li>
+        <li>WebSocket + HTTP sync</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Security</h3>
+      <ul>
+        <li>Passwordless magic links</li>
+        <li>RS256 JWT (7-day session)</li>
+        <li>TOTP MFA for financial roles</li>
+        <li>Defense in depth (Worker + DO)</li>
+        <li>Tamper-evident event chain</li>
+        <li>Data classification (PII isolation)</li>
+        <li>Right-to-erasure redaction</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Theobase — <code>theobase.app</code> — Cloudflare edge-native church management for SDA conferences and missions.
+</footer>
+
+</body>
+</html>
