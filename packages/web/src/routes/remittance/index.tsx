@@ -17,6 +17,7 @@ function RemittancePage() {
   const [period, setPeriod] = useState(defaultPeriod);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ['remittance', churchId, period],
@@ -28,19 +29,30 @@ function RemittancePage() {
 
   async function handleSubmit() {
     setSubmitting(true);
-    await postChurchMutation(churchId!, 'remittance:submit', {
-      churchId,
-      period,
-      amount: report?.remitAmount,
-      titheTotal: report?.titheTotal,
-    });
-    setSubmitting(false);
-    setSubmitted(true);
+    setSubmitError(null);
+    try {
+      const res = await postChurchMutation(churchId!, 'remittance:submit', {
+        churchId,
+        period,
+        amount: report?.remitAmount,
+        titheTotal: report?.titheTotal,
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const err = await res.json().catch(() => ({}));
+        setSubmitError((err as Record<string, unknown>).error as string ?? 'Failed to submit remittance.');
+      }
+    } catch {
+      setSubmitError('Network error. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-50 px-4 py-6">
+      <div className="px-4 py-6">
         <div className="mx-auto max-w-lg space-y-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="h-20 animate-pulse rounded-lg bg-neutral-200" />
@@ -52,7 +64,7 @@ function RemittancePage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-neutral-50 px-4 py-6">
+      <div className="px-4 py-6">
         <div className="mx-auto max-w-lg">
           <Card>
             <CardContent className="py-12 text-center">
@@ -67,7 +79,7 @@ function RemittancePage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 px-4 py-6">
+    <div className="px-4 py-6">
       <div className="mx-auto max-w-lg space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-neutral-900">Tithe Remittance</h1>
@@ -104,7 +116,10 @@ function RemittancePage() {
               </CardContent>
             </Card>
 
-            <Button className="w-full" size="lg" onClick={handleSubmit} disabled={submitting}>
+            {submitError && (
+              <div className="rounded-md bg-error-light px-4 py-3 text-sm text-error-700">{submitError}</div>
+            )}
+            <Button className="w-full" size="lg" onClick={handleSubmit} disabled={submitting} isLoading={submitting}>
               {submitting ? 'Submitting...' : 'Approve and Submit Remittance'}
             </Button>
           </>

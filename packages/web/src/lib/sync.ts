@@ -8,6 +8,11 @@ export type SyncResult = {
   error?: string;
 };
 
+function getWorkerWsUrl(): string {
+  const origin = import.meta.env.PROD ? 'wss://theobase-worker.theobase.workers.dev' : 'ws://localhost:8787';
+  return `${origin}/church`;
+}
+
 function getWorkerUrl(): string {
   const origin = import.meta.env.PROD ? 'https://theobase-worker.theobase.workers.dev' : '';
   return `${origin}/church`;
@@ -72,6 +77,31 @@ async function flushIntent(intent: WalIntent, churchId: string): Promise<SyncRes
   }
 }
 
+export async function flushIntentWs(
+  ws: WebSocket,
+  intent: WalIntent,
+): Promise<SyncResult> {
+  return new Promise((resolve) => {
+    function handler(event: MessageEvent) {
+      const data = JSON.parse(event.data as string);
+      if (data.intentId === intent.id) {
+        ws.removeEventListener('message', handler);
+        resolve({ intentId: intent.id, success: data.success, error: data.error });
+      }
+    }
+    ws.addEventListener('message', handler);
+    ws.send(JSON.stringify({
+      operation: intent.operation,
+      payload: intent.payload,
+      intentId: intent.id,
+    }));
+    setTimeout(() => {
+      ws.removeEventListener('message', handler);
+      resolve({ intentId: intent.id, success: false, error: 'WebSocket timeout' });
+    }, 15000);
+  });
+}
+
 export async function flushWal(churchId: string): Promise<SyncResult[]> {
   const intents = await getPendingIntents();
   setPendingCount(intents.length);
@@ -98,13 +128,44 @@ export async function flushWal(churchId: string): Promise<SyncResult[]> {
   return results;
 }
 
+let wsConnection: WebSocket | null = null;
 let pollInterval: ReturnType<typeof setInterval> | null = null;
 
+function connectWebSocket(churchId: string, token: string | null): void {
+  const url = `${getWorkerWsUrl()}/${churchId}/ws?token=${encodeURIComponent(token ?? '')}`;
+  wsConnection = new WebSocket(url);
+
+  wsConnection.addEventListener('open', () => {
+    flushWal(churchId).catch(() => {});
+  });
+
+  wsConnection.addEventListener('close', () => {
+    wsConnection = null;
+  });
+
+  wsConnection.addEventListener('error', () => {
+    if (wsConnection) {
+      wsConnection.close();
+      wsConnection = null;
+    }
+  });
+}
+
 export function startSyncPolling(churchId: string, intervalMs = 10000): () => void {
+  const token = getAuthToken();
+
+  try {
+    connectWebSocket(churchId, token);
+  } catch {
+    // WebSocket fallback handled by polling
+  }
+
   if (pollInterval) clearInterval(pollInterval);
 
   pollInterval = setInterval(() => {
-    flushWal(churchId).catch(() => {});
+    if (!wsConnection) {
+      flushWal(churchId).catch(() => {});
+    }
   }, intervalMs);
 
   const handleOnline = () => {
@@ -115,6 +176,10 @@ export function startSyncPolling(churchId: string, intervalMs = 10000): () => vo
 
   return () => {
     if (pollInterval) clearInterval(pollInterval);
+    if (wsConnection) {
+      wsConnection.close();
+      wsConnection = null;
+    }
     window.removeEventListener('online', handleOnline);
   };
 }

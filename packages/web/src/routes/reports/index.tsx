@@ -30,6 +30,7 @@ function ReportsPage() {
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
   const { data, isLoading } = useQuery({
@@ -42,18 +43,29 @@ function ReportsPage() {
 
   async function handleSubmit() {
     setSubmitting(true);
-    await postChurchMutation(churchId!, 'report:submit', {
-      churchId,
-      year: selectedYear,
-      data: report,
-    });
-    setSubmitting(false);
-    setSubmitted(true);
+    setSubmitError(null);
+    try {
+      const res = await postChurchMutation(churchId!, 'report:submit', {
+        churchId,
+        year: selectedYear,
+        data: report,
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const err = await res.json().catch(() => ({}));
+        setSubmitError((err as Record<string, unknown>).error as string ?? 'Failed to submit report.');
+      }
+    } catch {
+      setSubmitError('Network error. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-50 px-4 py-6">
+      <div className="px-4 py-6">
         <div className="mx-auto max-w-3xl space-y-4">
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="h-16 animate-pulse rounded-lg bg-neutral-200" />
@@ -65,7 +77,7 @@ function ReportsPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-neutral-50 px-4 py-6">
+      <div className="px-4 py-6">
         <div className="mx-auto max-w-lg">
           <Card>
             <CardContent className="py-12 text-center">
@@ -80,7 +92,7 @@ function ReportsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 px-4 py-6">
+    <div className="px-4 py-6">
       <div className="mx-auto max-w-3xl space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-neutral-900">Annual Statistical Report</h1>
@@ -125,6 +137,9 @@ function ReportsPage() {
               </Card>
             ))}
 
+            {submitError && (
+              <div className="rounded-md bg-error-light px-4 py-3 text-sm text-error-700 mb-4">{submitError}</div>
+            )}
             <div className="rounded-lg border border-neutral-200 bg-white p-6">
               <div className="flex items-center justify-between">
                 <div>

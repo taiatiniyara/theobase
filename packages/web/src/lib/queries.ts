@@ -101,12 +101,13 @@ export function useDeleteMember(churchId: string) {
 export function useStateChangeMutation(churchId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (params: { memberId: string; prevState: string; newState: string; updatedMember: Member }) =>
+    mutationFn: (params: { memberId: string; prevState: string; newState: string; updatedMember: Member; reason?: string }) =>
       postChurchMutation(churchId, 'member:state-change', {
         memberId: params.memberId,
         prevState: params.prevState,
         newState: params.newState,
         updatedMember: params.updatedMember,
+        reason: params.reason ?? null,
       }),
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: memberKeys.list(churchId) });

@@ -190,3 +190,25 @@ export const syncHealth = sqliteTable('sync_health', {
   doLatencyMs: integer('do_latency_ms').notNull(),
   updatedAt: integer('updated_at').notNull().default(sql`(unixepoch())`),
 });
+
+export const costMetrics = sqliteTable('cost_metrics', {
+  id: text('id').primaryKey(),
+  churchId: text('church_id').notNull().references(() => church.id),
+  month: integer('month').notNull(),
+  doRequestCount: integer('do_request_count').notNull().default(0),
+  doGbSeconds: real('do_gb_seconds').notNull().default(0),
+  d1Reads: integer('d1_reads').notNull().default(0),
+  d1Writes: integer('d1_writes').notNull().default(0),
+  r2StorageBytes: integer('r2_storage_bytes').notNull().default(0),
+  estimatedCost: real('estimated_cost').notNull().default(0),
+  updatedAt: integer('updated_at').notNull().default(sql`(unixepoch())`),
+});
+
+export const restoreDrill = sqliteTable('restore_drill', {
+  id: text('id').primaryKey(),
+  churchId: text('church_id').notNull().references(() => church.id),
+  success: integer('success', { mode: 'boolean' }).notNull(),
+  durationMs: integer('duration_ms').notNull(),
+  stateHashMatch: integer('state_hash_match', { mode: 'boolean' }).notNull(),
+  timestamp: integer('timestamp').notNull(),
+});

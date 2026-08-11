@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '../../lib/auth-store';
 import { fetchChurchState, postChurchMutation } from '../../lib/api';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
@@ -11,27 +12,34 @@ export const Route = createFileRoute('/conference/reports')({
 });
 
 function ConferenceReportsPage() {
+  const { churchId } = useAuth();
   const queryClient = useQueryClient();
   const [reason, setReason] = useState('');
   const [returningId, setReturningId] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState<string | null>(null);
 
-  const { data: state } = useQuery({
-    queryKey: ['church-state', 'default-church'],
-    queryFn: () => fetchChurchState('default-church'),
+  const { data: state, isLoading } = useQuery({
+    queryKey: ['church-state', churchId],
+    queryFn: () => fetchChurchState(churchId!),
+    enabled: !!churchId,
   });
 
   const reports = (state?.reports as Array<Record<string, unknown>>) ?? [];
 
   async function handleApprove(reportId: string) {
-    await postChurchMutation('default-church', 'report:approve', { reportId });
-    queryClient.invalidateQueries({ queryKey: ['church-state', 'default-church'] });
+    setSubmitting(`approve-${reportId}`);
+    await postChurchMutation(churchId!, 'report:approve', { reportId });
+    queryClient.invalidateQueries({ queryKey: ['church-state', churchId] });
+    setSubmitting(null);
   }
 
   async function handleReturn(reportId: string) {
-    await postChurchMutation('default-church', 'report:return', { reportId, reason });
-    queryClient.invalidateQueries({ queryKey: ['church-state', 'default-church'] });
+    setSubmitting(`return-${reportId}`);
+    await postChurchMutation(churchId!, 'report:return', { reportId, reason });
+    queryClient.invalidateQueries({ queryKey: ['church-state', churchId] });
     setReturningId(null);
     setReason('');
+    setSubmitting(null);
   }
 
   const statusVariant = (status: string) => {
@@ -47,17 +55,37 @@ function ConferenceReportsPage() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-neutral-50 px-4 py-6">
-      <div className="mx-auto max-w-3xl space-y-6">
-        <h1 className="text-2xl font-bold text-neutral-900">Conference Reports</h1>
+  if (isLoading) {
+    return (
+      <div className="px-4 py-6">
+        <div className="mx-auto max-w-3xl space-y-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="h-32 animate-pulse rounded-lg bg-neutral-200" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
-        {reports.length === 0 ? (
+  return (
+    <div className="px-4 py-6">
+      <div className="mx-auto max-w-3xl space-y-6">
+        <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Conference Reports</h1>
+
+        {isLoading ? (
+          <div className="space-y-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-32 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
+            ))}
+          </div>
+        ) : reports.length === 0 ? (
           <p className="text-center text-neutral-500 py-12">No reports submitted yet.</p>
         ) : (
           <div className="space-y-4">
-            {reports.map((r: Record<string, unknown>) => (
-              <Card key={r.id as string}>
+            {reports.map((r: Record<string, unknown>) => {
+              const rid = r.id as string;
+              return (
+              <Card key={rid}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
@@ -76,24 +104,29 @@ function ConferenceReportsPage() {
                   )}
                   {r.status === 'submitted' && (
                     <div className="flex gap-3">
-                      <Button onClick={() => handleApprove(r.id as string)}>Approve</Button>
-                      {returningId === r.id ? (
+                      <Button onClick={() => handleApprove(rid)} isLoading={submitting === `approve-${rid}`}>
+                        {submitting === `approve-${rid}` ? 'Approving...' : 'Approve'}
+                      </Button>
+                      {returningId === rid ? (
                         <div className="flex-1 flex gap-2">
-                          <input
-                            className="flex-1 rounded-md border border-neutral-300 px-3 py-1 text-sm"
-                            placeholder="Reason for return..."
-                            value={reason}
-                            onChange={e => setReason(e.target.value)}
-                          />
-                          <Button variant="secondary" onClick={() => handleReturn(r.id as string)}>
-                            Return
+                          <label className="flex-1">
+                            <span className="sr-only">Reason for return</span>
+                            <input
+                              className="h-12 w-full rounded-md border border-neutral-300 px-3 text-sm"
+                              placeholder="Reason for return..."
+                              value={reason}
+                              onChange={e => setReason(e.target.value)}
+                            />
+                          </label>
+                          <Button variant="secondary" onClick={() => handleReturn(rid)} isLoading={submitting === `return-${rid}`}>
+                            {submitting === `return-${rid}` ? 'Returning...' : 'Return'}
                           </Button>
                           <Button variant="ghost" onClick={() => setReturningId(null)}>
                             Cancel
                           </Button>
                         </div>
                       ) : (
-                        <Button variant="ghost" onClick={() => setReturningId(r.id as string)}>
+                        <Button variant="ghost" onClick={() => setReturningId(rid)}>
                           Return for Revision
                         </Button>
                       )}
@@ -101,7 +134,8 @@ function ConferenceReportsPage() {
                   )}
                 </CardContent>
               </Card>
-            ))}
+            );
+            })}
           </div>
         )}
       </div>

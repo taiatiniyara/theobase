@@ -9,15 +9,18 @@ const SelectValue = SelectPrimitive.Value;
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & { error?: boolean }
+>(({ className, children, error, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      'flex h-12 w-full items-center justify-between rounded-md border border-neutral-300 bg-white px-4 text-base text-neutral-900',
-      'focus:border-brand-500 focus:ring-2 focus:ring-brand-400 focus:ring-offset-0 focus:outline-none',
-      'disabled:bg-neutral-100 disabled:text-neutral-400 disabled:cursor-not-allowed',
-      'dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100',
+      'flex h-12 w-full items-center justify-between rounded-lg border bg-white px-4 text-sm text-neutral-900',
+      'focus:border-brand-500 focus:ring-2 focus:ring-brand-400/20 focus:ring-offset-0 focus:outline-none',
+      'disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-not-allowed',
+      'dark:bg-neutral-900 dark:text-neutral-100',
+      error
+        ? 'border-error ring-2 ring-red-300 dark:border-error dark:ring-red-700'
+        : 'border-neutral-300 dark:border-neutral-700',
       '[&>span]:line-clamp-1',
       className,
     )}

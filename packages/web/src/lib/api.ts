@@ -3,16 +3,23 @@ export function getWorkerUrl(): string {
   return `${origin}/church`;
 }
 
+function getAuthToken(): string | null {
+  return localStorage.getItem('token');
+}
+
+function authHeaders(): Record<string, string> {
+  const token = getAuthToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 export async function fetchChurchState(churchId: string): Promise<Record<string, unknown>> {
-  const response = await fetch(`${getWorkerUrl()}/${churchId}/state`);
+  const response = await fetch(`${getWorkerUrl()}/${churchId}/state`, {
+    headers: { ...authHeaders() },
+  });
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`);
   }
   return response.json() as Promise<Record<string, unknown>>;
-}
-
-function getAuthToken(): string | null {
-  return localStorage.getItem('token');
 }
 
 export async function fetchBatchCompare(churchId: string, batchId: string): Promise<{
@@ -22,7 +29,9 @@ export async function fetchBatchCompare(churchId: string, batchId: string): Prom
   counter2: { records: Array<Record<string, unknown>>; total: number };
   totalsMatch: boolean;
 }> {
-  const response = await fetch(`${getWorkerUrl()}/${churchId}/batch-compare/${batchId}`);
+  const response = await fetch(`${getWorkerUrl()}/${churchId}/batch-compare/${batchId}`, {
+    headers: { ...authHeaders() },
+  });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   return response.json() as Promise<{
     batchId: string;
@@ -34,19 +43,25 @@ export async function fetchBatchCompare(churchId: string, batchId: string): Prom
 }
 
 export async function fetchReport(churchId: string, year: number): Promise<Record<string, unknown>> {
-  const response = await fetch(`${getWorkerUrl()}/${churchId}/report-generate/${year}`);
+  const response = await fetch(`${getWorkerUrl()}/${churchId}/report-generate/${year}`, {
+    headers: { ...authHeaders() },
+  });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   return response.json() as Promise<Record<string, unknown>>;
 }
 
 export async function fetchRemittance(churchId: string, period: string): Promise<Record<string, unknown>> {
-  const response = await fetch(`${getWorkerUrl()}/${churchId}/remittance-generate/${period}`);
+  const response = await fetch(`${getWorkerUrl()}/${churchId}/remittance-generate/${period}`, {
+    headers: { ...authHeaders() },
+  });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   return response.json() as Promise<Record<string, unknown>>;
 }
 
 export async function fetchInsights(churchId: string): Promise<{ insights: Array<{ type: string; title: string; description: string; action: { label: string; to: string } }> }> {
-  const response = await fetch(`${getWorkerUrl()}/${churchId}/insights`);
+  const response = await fetch(`${getWorkerUrl()}/${churchId}/insights`, {
+    headers: { ...authHeaders() },
+  });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   return response.json() as Promise<{ insights: Array<{ type: string; title: string; description: string; action: { label: string; to: string } }> }>;
 }

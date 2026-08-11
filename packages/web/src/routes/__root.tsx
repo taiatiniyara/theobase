@@ -35,7 +35,7 @@ function AppContent() {
 
   return (
     <SyncProvider churchId={churchId}>
-      <ErrorBoundary churchId={churchId}>
+      <ErrorBoundary>
         <StaleDataWarning />
         <AppShell>
           <Outlet />

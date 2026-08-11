@@ -5,7 +5,7 @@ import { cn } from '../../lib/utils';
 
 const STATUS_CONFIG: Record<SyncStatus, { dot: string; label: string }> = {
   synced: { dot: 'bg-success', label: 'Synced' },
-  pending: { dot: 'bg-warning', label: 'Synced' },
+  pending: { dot: 'bg-warning', label: 'Syncing' },
   offline: { dot: 'bg-error', label: 'Offline' },
 };
 

@@ -1,44 +1,50 @@
 import { Component, type ReactNode } from 'react';
 import { captureError, reportError } from '../../lib/observability';
+import { Button } from '../ui/button';
 
-interface Props {
+interface ErrorBoundaryProps {
   children: ReactNode;
-  churchId?: string;
+  fallback?: ReactNode;
 }
 
-interface State {
+interface ErrorBoundaryState {
   hasError: boolean;
-  error: string | null;
+  error: Error | null;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { hasError: false, error: null };
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  state: ErrorBoundaryState = { hasError: false, error: null };
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
   }
 
-  static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error: error.message };
+  componentDidCatch(error: Error): void {
+    const payload = captureError(error, { severity: 'error' });
+    reportError(payload).catch(() => {});
   }
 
-  componentDidCatch(error: Error, _info: React.ErrorInfo): void {
-    const payload = captureError(error, { churchId: this.props.churchId });
-    reportError(payload);
-  }
+  handleReload = () => {
+    window.location.reload();
+  };
 
-  render(): ReactNode {
+  render() {
     if (this.state.hasError) {
+      if (this.props.fallback) return this.props.fallback;
+
       return (
-        <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">
-          <div className="max-w-md text-center">
-            <h1 className="text-xl font-bold text-neutral-900">Something went wrong</h1>
-            <p className="mt-2 text-sm text-neutral-500">{this.state.error}</p>
-            <button
-              onClick={() => { this.setState({ hasError: false, error: null }); window.location.reload(); }}
-              className="mt-4 rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
-            >
-              Reload
-            </button>
+        <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4 dark:bg-neutral-950">
+          <div className="max-w-md text-center space-y-6">
+            <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">Something went wrong</h1>
+            <p className="text-neutral-500 dark:text-neutral-400">
+              An unexpected error occurred. Try reloading the page.
+            </p>
+            {this.state.error?.message && (
+              <p className="rounded-md bg-error-light px-4 py-2 text-sm text-error-700 dark:bg-red-900/20 dark:text-red-300">
+                {this.state.error.message}
+              </p>
+            )}
+            <Button onClick={this.handleReload}>Reload Page</Button>
           </div>
         </div>
       );

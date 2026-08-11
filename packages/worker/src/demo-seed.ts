@@ -100,6 +100,49 @@ export async function seedDemoChurch(env: Env): Promise<string> {
     });
   }
 
+  const pendingBatchRecords: Array<Record<string, unknown>> = [];
+  for (let r = 0; r < 45; r++) {
+    pendingBatchRecords.push(randomGivingRecord('demo-batch-pending', Math.floor(Math.random() * 120), [0, 3]));
+  }
+  await doFetch(stub, 'giving_batch:create', {
+    id: 'demo-batch-pending', churchId, date: new Date().toISOString().split('T')[0],
+    counter1Id: 'demo-counter1', records: pendingBatchRecords, status: 'counter1-confirmed',
+  });
+
+  const disputedRecords1: Array<Record<string, unknown>> = [];
+  const disputedRecords2: Array<Record<string, unknown>> = [];
+  for (let r = 0; r < 50; r++) {
+    const rec = randomGivingRecord('demo-batch-disputed', Math.floor(Math.random() * 120), [3, 7]);
+    disputedRecords1.push({ ...rec });
+    disputedRecords2.push({ ...rec, amount: (rec.amount as number) + Math.random() * 10 });
+  }
+  await doFetch(stub, 'giving_batch:create', {
+    id: 'demo-batch-disputed', churchId, date: new Date(Date.now() - 5 * 86400000).toISOString().split('T')[0],
+    counter1Id: 'demo-counter1', records: disputedRecords1, status: 'counter1-confirmed',
+  });
+  await doFetch(stub, 'giving_batch:counter2-confirm', {
+    batchId: 'demo-batch-disputed', counter2Id: 'demo-counter2', records: disputedRecords2, timestamp: Date.now(),
+  });
+
+  const demoUsers = [
+    { email: 'clerk@suva.sda', role: 'clerk' as const, name: 'Jone Clerks' },
+    { email: 'treasurer@suva.sda', role: 'treasurer' as const, name: 'Mere Treas' },
+    { email: 'counter1@suva.sda', role: 'counter' as const, name: 'Peni Count' },
+    { email: 'counter2@suva.sda', role: 'counter' as const, name: 'Ana Count' },
+    { email: 'pastor@suva.sda', role: 'pastor' as const, name: 'Tevita Past' },
+    { email: 'member@suva.sda', role: 'member' as const, name: 'Salote Mem' },
+  ];
+  for (const u of demoUsers) {
+    await doFetch(stub, 'role:assign', {
+      userId: `demo-${u.email}`,
+      churchId,
+      role: u.role,
+      email: u.email,
+      name: u.name,
+      timestamp: Date.now(),
+    });
+  }
+
   return churchId;
 }
 

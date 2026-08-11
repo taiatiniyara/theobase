@@ -46,6 +46,7 @@ function CountingRoomPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [snackbar, setSnackbar] = useState<{ message: string; onUndo?: () => void } | null>(null);
   const [batchId] = useState(() => crypto.randomUUID());
+  const [confirming, setConfirming] = useState(false);
 
   const filteredMembers = useMemo(() => {
     if (!searchQuery) return members.slice(0, 10);
@@ -103,6 +104,7 @@ function CountingRoomPage() {
   }
 
   async function handleConfirmBatch() {
+    setConfirming(true);
     await postChurchMutation(churchId!, 'giving_batch:create', {
       id: batchId,
       churchId,
@@ -114,13 +116,14 @@ function CountingRoomPage() {
         batchId,
         memberId: r.memberId,
         memberName: r.memberName,
-        type: 'offering',
+        type: r.category === 'tithe' ? 'tithe' : 'offering',
         amount: r.amount,
         category: r.category,
       })),
     });
     setRecords([]);
     setBatchOpen(false);
+    setConfirming(false);
     setSnackbar({ message: 'Batch confirmed!' });
     try { navigator.vibrate?.(100); } catch {/* noop */}
   }
@@ -306,8 +309,8 @@ function CountingRoomPage() {
 
         {/* Confirm batch */}
         {records.length > 0 && (
-          <Button className="w-full" size="lg" onClick={handleConfirmBatch}>
-            Confirm Batch — {records.length} record{records.length !== 1 ? 's' : ''} · ${totalAmount.toFixed(2)}
+          <Button className="w-full" size="lg" onClick={handleConfirmBatch} isLoading={confirming}>
+            {confirming ? 'Confirming...' : `Confirm Batch — ${records.length} record${records.length !== 1 ? 's' : ''} · $${totalAmount.toFixed(2)}`}
           </Button>
         )}
       </div>

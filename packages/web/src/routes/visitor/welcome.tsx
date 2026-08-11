@@ -17,6 +17,7 @@ function VisitorWelcomePage() {
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const search = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
   const churchId = search.get('churchId') || 'default-church';
@@ -24,15 +25,25 @@ function VisitorWelcomePage() {
   async function handleFollowUp(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    await postChurchMutation(churchId, 'visitor:follow-up', {
-      churchId,
-      name,
-      email: email || null,
-      phone: phone || null,
-      message: message || null,
-    });
-    setLoading(false);
-    setSubmitted(true);
+    setError(null);
+    try {
+      const res = await postChurchMutation(churchId, 'visitor:follow-up', {
+        churchId,
+        name,
+        email: email || null,
+        phone: phone || null,
+        message: message || null,
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        setError('Failed to send request. Please try again.');
+      }
+    } catch {
+      setError('Network error. Please check your connection and try again.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (submitted) {
@@ -61,6 +72,9 @@ function VisitorWelcomePage() {
             <p className="text-sm text-neutral-600"><strong>Sabbath School:</strong> Saturday 9:30 AM</p>
           </div>
 
+          {error && (
+            <div className="rounded-md bg-error-light px-4 py-3 text-sm text-error-700">{error}</div>
+          )}
           {!showForm ? (
             <div className="flex flex-col gap-3 pt-4">
               <Button onClick={() => setShowForm(true)} className="w-full">
@@ -72,10 +86,22 @@ function VisitorWelcomePage() {
             </div>
           ) : (
             <form onSubmit={handleFollowUp} className="space-y-4 pt-4">
-              <Input required placeholder="Your Name" value={name} onChange={e => setName(e.target.value)} />
-              <Input type="email" placeholder="Email (optional)" value={email} onChange={e => setEmail(e.target.value)} />
-              <Input type="tel" placeholder="Phone (optional)" value={phone} onChange={e => setPhone(e.target.value)} />
-              <Input placeholder="Message (optional)" value={message} onChange={e => setMessage(e.target.value)} />
+              <label className="block">
+                <span className="text-sm font-medium text-neutral-700">Your Name</span>
+                <Input required value={name} onChange={e => setName(e.target.value)} />
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-neutral-700">Email (optional)</span>
+                <Input type="email" value={email} onChange={e => setEmail(e.target.value)} />
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-neutral-700">Phone (optional)</span>
+                <Input type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-neutral-700">Message (optional)</span>
+                <Input value={message} onChange={e => setMessage(e.target.value)} />
+              </label>
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? 'Sending...' : 'Send Request'}
               </Button>

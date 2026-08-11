@@ -1,6 +1,6 @@
 import { DurableObject } from 'cloudflare:workers';
 import type { ChurchEvent, ChurchOperation, Role } from '@theobase/shared';
-import { isValidTransition, suggestHouseholds, type MembershipState } from '@theobase/shared';
+import { isValidTransition, suggestHouseholds, type MembershipState, APP_VERSION } from '@theobase/shared';
 import { verify } from './auth/jwt';
 
 const LAST_HASH_KEY = 'lastHash';
@@ -11,6 +11,7 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'member:update',
     'member:delete',
     'member:state-change',
+    'member:erasure',
     'household:create',
     'household:update',
     'household:delete',
@@ -25,11 +26,6 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'contact:reject',
     'contact:update-request',
     'visitor:follow-up',
-    'giving_batch:create',
-    'giving_batch:commit',
-    'giving_batch:deposit',
-    'giving_batch:counter2-confirm',
-    'giving_batch:reconcile',
     'report:submit',
   ],
   treasurer: [
@@ -40,6 +36,7 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'giving_batch:commit',
     'giving_batch:deposit',
     'remittance:submit',
+    'report:submit',
   ],
   counter: [
     'giving_record:create',
@@ -52,14 +49,14 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
   'board-member': [],
   member: [
     'contact:update-request',
-    'visitor:follow-up',
+    'contact:self-data',
   ],
   interest: [],
-  visitor: [],
-  'conference-treasurer': ['remittance:receive'],
-  'conference-secretary': ['transfer:accept', 'report:approve', 'report:return'],
+  visitor: ['visitor:follow-up'],
+  'conference-treasurer': ['remittance:receive', 'report:submit', 'report:view', 'bill:manage'],
+  'conference-secretary': ['transfer:accept', 'report:approve', 'report:return', 'church:activate', 'report:view'],
   'conference-president': [],
-  auditor: ['transfer:accept'],
+  auditor: [],
   operator: [],
 };
 
@@ -79,6 +76,17 @@ async function sha256(data: string): Promise<string> {
 
 function now(): number {
   return Date.now();
+}
+
+function versionedResponse(body: unknown, status = 200, extraHeaders: Record<string, string> = {}): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-DO-Version': APP_VERSION,
+      ...extraHeaders,
+    },
+  });
 }
 
 type EntityMap = Record<string, unknown>;
@@ -401,6 +409,65 @@ const STATE_HANDLERS: Record<
     }
     s.remittances = remittances;
   },
+  'member:erasure': (p, s) => {
+    const members = (s.members as Record<string, Record<string, unknown>>) ?? {};
+    const member = members[p.memberId as string];
+    if (member) {
+      const redactedId = `redacted-member-${crypto.randomUUID()}`;
+      members[p.memberId as string] = {
+        id: redactedId,
+        churchId: member.churchId,
+        firstName: '[Redacted]',
+        lastName: '[Redacted]',
+        email: null,
+        phone: null,
+        address: null,
+        dateOfBirth: null,
+        gender: null,
+        baptismDate: null,
+        membershipStatus: 'removed',
+        householdId: null,
+        createdAt: member.createdAt,
+        updatedAt: p.timestamp,
+        redactedBy: p.actor,
+        redactedAt: p.timestamp,
+        redactedReason: p.reason ?? 'Member requested erasure',
+      };
+      s.members = members;
+    }
+    const auditLog = (s.auditLog as Array<Record<string, unknown>>) ?? [];
+    auditLog.push({
+      memberId: p.memberId,
+      prevState: 'active',
+      newState: 'redacted',
+      actor: p.actor,
+      timestamp: p.timestamp,
+      reason: p.reason ?? 'Right to erasure exercised',
+      operation: 'member:erasure',
+    });
+    s.auditLog = auditLog;
+  },
+  'church:activate': (p, s) => {
+    const church = (s.church as Record<string, unknown>) ?? {};
+    s.church = { ...church, status: p.status ?? 'active', activatedBy: p.actor, activatedAt: p.timestamp };
+  },
+  'contact:self-data': (_p, _s) => {
+  },
+  'report:view': (_p, _s) => {
+  },
+  'bill:manage': (p, s) => {
+    const billing = (s.billingRecords as Array<Record<string, unknown>>) ?? [];
+    billing.push({
+      id: crypto.randomUUID(),
+      churchId: p.churchId,
+      action: p.action,
+      amount: p.amount,
+      period: p.period,
+      actor: p.actor,
+      timestamp: p.timestamp,
+    });
+    s.billingRecords = billing;
+  },
 };
 
 export class ChurchDO extends DurableObject {
@@ -486,6 +553,41 @@ export class ChurchDO extends DurableObject {
     return { valid: true };
   }
 
+  async handleWebSocket(ws: WebSocket, token: string): Promise<void> {
+    ws.addEventListener('message', async (msg) => {
+      try {
+        const data = JSON.parse(msg.data as string) as {
+          operation: ChurchOperation;
+          payload: unknown;
+          intentId: string;
+        };
+
+        const user = token
+          ? (await verify(token)).payload
+          : { sub: 'anonymous', churchId: '', role: 'member' as const, tokenVersion: 0 };
+
+        if (!canOperate(user.role, data.operation)) {
+          ws.send(JSON.stringify({ intentId: data.intentId, success: false, error: 'Forbidden' }));
+          return;
+        }
+
+        const event = await this.appendEvent(data.operation, data.payload, user.sub);
+        ws.send(JSON.stringify({ intentId: data.intentId, success: true, event }));
+      } catch (err) {
+        ws.send(
+          JSON.stringify({
+            success: false,
+            error: err instanceof Error ? err.message : 'Unknown error',
+          }),
+        );
+      }
+    });
+
+    ws.addEventListener('close', () => {
+      ws.removeEventListener('message', () => {});
+    });
+  }
+
   async reconstructState(): Promise<Record<string, unknown>> {
     await this.initialize();
 
@@ -500,6 +602,17 @@ export class ChurchDO extends DurableObject {
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
     const path = url.pathname;
+
+    const upgradeHeader = request.headers.get('Upgrade');
+    if (upgradeHeader === 'websocket' && path === '/ws') {
+      const pair = new WebSocketPair();
+      const [client, server] = Object.values(pair);
+      if (!client || !server) return new Response('WebSocket pair failed', { status: 500 });
+      server.accept();
+      const wsUrl = new URL(request.url);
+      this.handleWebSocket(server, wsUrl.searchParams.get('token') ?? '');
+      return new Response(null, { status: 101, webSocket: client as WebSocket });
+    }
 
     try {
       if (request.method === 'GET' && path === '/insights') {
@@ -544,7 +657,7 @@ export class ChurchDO extends DurableObject {
         if (unsubmittedReports > 0) insights.push({ type: 'report-ready', title: 'Report Ready', description: 'Annual statistical report has data ready for review.', action: { label: 'View Reports', to: '/reports' } });
         if (titheOverdue) insights.push({ type: 'tithe-overdue', title: 'Tithe Remittance Overdue', description: 'Tithe collected but not yet remitted this month.', action: { label: 'Submit Remittance', to: '/remittance' } });
 
-        return new Response(JSON.stringify({ insights }), { headers: { 'Content-Type': 'application/json' } });
+        return versionedResponse({ insights });
       }
 
       if (request.method === 'GET' && path.startsWith('/remittance-generate/')) {
@@ -566,14 +679,14 @@ export class ChurchDO extends DurableObject {
           categories[cat] = (categories[cat] ?? 0) + ((r.amount as number) ?? 0);
         }
         
-        return new Response(JSON.stringify({
+        return versionedResponse({
           period,
           titheTotal,
           offeringTotal: offerings,
           totalGiving: titheTotal + offerings,
           remitAmount: titheTotal * 0.1,
           categories,
-        }), { headers: { 'Content-Type': 'application/json' } });
+        });
       }
 
       if (request.method === 'GET' && path.startsWith('/report-generate/')) {
@@ -608,11 +721,11 @@ export class ChurchDO extends DurableObject {
           else if (newState === 'removed') target.removed++;
         }
 
-        return new Response(JSON.stringify({
+        return versionedResponse({
           year,
           totalMembers: members.length,
           quarters: { q1, q2, q3, q4 },
-        }), { headers: { 'Content-Type': 'application/json' } });
+        });
       }
 
       if (request.method === 'GET' && path.startsWith('/batch-compare/')) {
@@ -620,7 +733,7 @@ export class ChurchDO extends DurableObject {
         const state = await this.reconstructState();
         const batches = (state.givingBatches as Record<string, Record<string, unknown>>) ?? {};
         const batch = batches[batchId!];
-        if (!batch) return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+        if (!batch) return versionedResponse({ error: 'Not found' }, 404);
 
         const c1Records = (batch.counter1Records as Array<Record<string, unknown>>) ?? [];
         const c2Records = (batch.counter2Records as Array<Record<string, unknown>>) ?? [];
@@ -628,67 +741,97 @@ export class ChurchDO extends DurableObject {
         const total1 = c1Records.reduce((s: number, r) => s + (r.amount as number ?? 0), 0);
         const total2 = c2Records.reduce((s: number, r) => s + (r.amount as number ?? 0), 0);
 
-        return new Response(JSON.stringify({
+        return versionedResponse({
           batchId,
           status: batch.status,
           counter1: { records: c1Records, total: total1 },
           counter2: { records: c2Records, total: total2 },
           totalsMatch: total1 === total2,
           match,
-        }), { headers: { 'Content-Type': 'application/json' } });
+        });
       }
 
       if (request.method === 'GET' && path === '/household-suggestions') {
         const state = await this.reconstructState();
         const members = Object.values((state.members as Record<string, Record<string, unknown>>) ?? {});
         const suggestions = suggestHouseholds(members as Parameters<typeof suggestHouseholds>[0]);
-        return new Response(JSON.stringify(suggestions), {
-          headers: { 'Content-Type': 'application/json' },
-        });
+        return versionedResponse(suggestions);
       }
 
       if (request.method === 'GET' && path === '/pending-updates') {
         const state = await this.reconstructState();
-        return new Response(JSON.stringify(state.pendingContactUpdates ?? []), {
-          headers: { 'Content-Type': 'application/json' },
-        });
+        return versionedResponse(state.pendingContactUpdates ?? []);
       }
 
       if (request.method === 'GET' && path === '/interests') {
         const state = await this.reconstructState();
-        return new Response(JSON.stringify(state.interests ?? []), {
-          headers: { 'Content-Type': 'application/json' },
-        });
+        return versionedResponse(state.interests ?? []);
       }
 
       if (request.method === 'GET' && path === '/qr') {
         const state = await this.reconstructState();
         const church = state.church as Record<string, unknown> | undefined;
-        return new Response(JSON.stringify({
+        return versionedResponse({
           churchId: church?.id,
           churchName: church?.name,
           welcomeMessage: `Welcome to ${church?.name ?? 'our church'}!`,
-        }), { headers: { 'Content-Type': 'application/json' } });
+        });
       }
 
       if (request.method === 'GET' && path === '/events') {
         const events = await this.getEvents();
-        return new Response(JSON.stringify(events), {
-          headers: { 'Content-Type': 'application/json' },
-        });
+        return versionedResponse(events);
       }
 
       if (request.method === 'GET' && path === '/verify') {
         const result = await this.verifyHashChain();
-        return new Response(JSON.stringify(result), {
-          headers: { 'Content-Type': 'application/json' },
-        });
+        return versionedResponse(result);
       }
 
       if (request.method === 'GET' && path === '/state') {
         const state = await this.reconstructState();
-        return new Response(JSON.stringify(state), {
-          headers: { 'Content-Type': 'application/json' },
+        return versionedResponse(state);
+      }
+
+      if (request.method === 'GET' && path === '/smart-defaults') {
+        const state = await this.reconstructState();
+        const givingBatches = Object.values((state.givingBatches as Record<string, Record<string, unknown>>) ?? {});
+        const givingRecords = Object.values((state.givingRecords as Record<string, Record<string, unknown>>) ?? {}) as Array<Record<string, unknown>>;
+
+        const sortedBatches = givingBatches.sort((a, b) => ((b.date as string) ?? '').localeCompare((a.date as string) ?? ''));
+        const lastBatch = sortedBatches[0];
+
+        const recentMembers = new Map<string, number>();
+        const recentCategories = new Map<string, number>();
+
+        if (lastBatch) {
+          const batchRecords = givingRecords.filter(r => r.batchId === lastBatch.id);
+          for (const r of batchRecords) {
+            const mid = r.memberId as string;
+            if (mid) recentMembers.set(mid, (recentMembers.get(mid) ?? 0) + 1);
+            const cat = r.category as string;
+            if (cat) recentCategories.set(cat, (recentCategories.get(cat) ?? 0) + 1);
+          }
+        }
+
+        const sortedMembers = [...recentMembers.entries()]
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 20)
+          .map(([id]) => {
+            const members = state.members as Record<string, Record<string, unknown>> ?? {};
+            const m = members[id];
+            return m ? { id, firstName: m.firstName, lastName: m.lastName } : null;
+          })
+          .filter(Boolean);
+
+        const sortedCategories = [...recentCategories.entries()]
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 10)
+          .map(([cat]) => cat);
+
+        return versionedResponse({
+          recentMembers: sortedMembers,
+          recentCategories: sortedCategories,
         });
       }
 
@@ -699,18 +842,13 @@ export class ChurchDO extends DurableObject {
           const p = event.payload as Record<string, unknown>;
           return p?.memberId === memberId;
         });
-        return new Response(JSON.stringify(filtered), {
-          headers: { 'Content-Type': 'application/json' },
-        });
+        return versionedResponse(filtered);
       }
 
       if (request.method === 'POST' && path === '/mutate') {
         const authHeader = request.headers.get('Authorization');
         if (!authHeader?.startsWith('Bearer ')) {
-          return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' },
-          });
+          return versionedResponse({ error: 'Unauthorized' }, 401);
         }
         const isDemoSeed = authHeader === 'Bearer demo-seed-token';
         const user = isDemoSeed
@@ -722,10 +860,7 @@ export class ChurchDO extends DurableObject {
           payload: unknown;
         };
         if (!canOperate(user.role, body.operation)) {
-          return new Response(JSON.stringify({ error: 'Forbidden' }), {
-            status: 403,
-            headers: { 'Content-Type': 'application/json' },
-          });
+          return versionedResponse({ error: 'Forbidden' }, 403);
         }
 
         if (body.operation === 'giving_batch:commit') {
@@ -734,11 +869,11 @@ export class ChurchDO extends DurableObject {
           const p = body.payload as { batchId: string };
           const batch = batches[p.batchId];
           if (!batch) {
-            return new Response(JSON.stringify({ error: 'Batch not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+            return versionedResponse({ error: 'Batch not found' }, 404);
           }
           if (batch.status === 'counter2-confirmed' || batch.status === 'reconciled') {
           } else {
-            return new Response(JSON.stringify({ error: 'Batch not ready for commit' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+            return versionedResponse({ error: 'Batch not ready for commit' }, 400);
           }
         }
 
@@ -748,9 +883,9 @@ export class ChurchDO extends DurableObject {
           const p = body.payload as { batchId?: string };
           const batch = p.batchId ? batches[p.batchId] : undefined;
           if (batch && (batch.status === 'committed' || batch.status === 'deposited')) {
-            return new Response(
-              JSON.stringify({ error: 'Cannot modify records in a committed or deposited batch' }),
-              { status: 403, headers: { 'Content-Type': 'application/json' } },
+            return versionedResponse(
+              { error: 'Cannot modify records in a committed or deposited batch' },
+              403,
             );
           }
         }
@@ -758,9 +893,9 @@ export class ChurchDO extends DurableObject {
         if (body.operation === 'member:state-change') {
           const p = body.payload as { memberId: string; prevState: string; newState: string };
           if (!isValidTransition(p.prevState as MembershipState, p.newState as MembershipState)) {
-            return new Response(
-              JSON.stringify({ error: `Invalid transition: ${p.prevState} -> ${p.newState}` }),
-              { status: 400, headers: { 'Content-Type': 'application/json' } },
+            return versionedResponse(
+              { error: `Invalid transition: ${p.prevState} -> ${p.newState}` },
+              400,
             );
           }
           const state = await this.reconstructState();
@@ -776,17 +911,14 @@ export class ChurchDO extends DurableObject {
         }
 
         const event = await this.appendEvent(body.operation, body.payload, user.sub);
-        return new Response(JSON.stringify(event), {
-          status: 201,
-          headers: { 'Content-Type': 'application/json' },
-        });
+        return versionedResponse(event, 201);
       }
 
       return new Response('Not Found', { status: 404 });
     } catch (err) {
-      return new Response(
-        JSON.stringify({ error: err instanceof Error ? err.message : 'Unknown error' }),
-        { status: 500, headers: { 'Content-Type': 'application/json' } },
+      return versionedResponse(
+        { error: err instanceof Error ? err.message : 'Unknown error' },
+        500,
       );
     }
   }

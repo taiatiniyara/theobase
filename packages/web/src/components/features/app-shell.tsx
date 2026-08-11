@@ -1,20 +1,28 @@
 import { type ReactNode } from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
 import { useAuth } from '../../lib/auth-store';
+import { SyncIndicator } from './sync-indicator';
+import { DarkModeToggle } from './dark-mode-toggle';
 import { cn } from '../../lib/utils';
+import {
+  LayoutDashboard,
+  Users,
+  Coins,
+  DollarSign,
+} from 'lucide-react';
 
 interface NavItem {
   path: string;
   label: string;
-  icon: string;
+  icon: ReactNode;
   minRole?: string;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { path: '/', label: 'Home', icon: '⌂' },
-  { path: '/members', label: 'Members', icon: '👥', minRole: 'clerk' },
-  { path: '/counting-room', label: 'Giving', icon: '🔢', minRole: 'counter' },
-  { path: '/treasurer', label: 'Giving', icon: '💰', minRole: 'treasurer' },
+  { path: '/', label: 'Dashboard', icon: <LayoutDashboard className="h-5 w-5" /> },
+  { path: '/members', label: 'Members', icon: <Users className="h-5 w-5" />, minRole: 'clerk' },
+  { path: '/counting-room', label: 'Counting Room', icon: <Coins className="h-5 w-5" />, minRole: 'counter' },
+  { path: '/treasurer', label: 'Treasurer', icon: <DollarSign className="h-5 w-5" />, minRole: 'treasurer' },
 ];
 
 const ROLE_ORDER: Record<string, number> = { clerk: 1, treasurer: 1, counter: 1, operator: 99 };
@@ -42,94 +50,114 @@ export function AppShell({ children }: AppShellProps) {
   const { location } = useRouterState();
   const currentPath = location.pathname;
 
-  const initials = email
-    ? email.slice(0, 2).toUpperCase()
-    : '??';
+  const initials = email ? email.slice(0, 2).toUpperCase() : '??';
 
-  const bottomItems = NAV_ITEMS.filter((item) => {
+  const desItems = NAV_ITEMS.filter((i) => roleCanSee(role, i.minRole));
+
+  const givingTab = resolveGivingTab(role);
+  const mobileItems = NAV_ITEMS.filter((item) => {
     if (!roleCanSee(role, item.minRole)) return false;
-
-    const givingTab = resolveGivingTab(role);
-    if (item.path === '/counting-room' && givingTab !== '/counting-room') return false;
-    if (item.path === '/treasurer' && givingTab !== '/treasurer') return false;
-
     if (item.path === '/counting-room' || item.path === '/treasurer') {
       return givingTab === item.path;
     }
-
     return true;
   });
 
   return (
     <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-950">
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r border-neutral-200 bg-white md:block dark:border-neutral-800 dark:bg-neutral-900">
-        <div className="flex h-14 items-center gap-3 border-b border-neutral-200 px-4 dark:border-neutral-800">
-          <img src="/branding/logo-icon.svg" alt="Theobase" className="h-8 w-8" />
-          <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Theobase</span>
+      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-neutral-200/60 bg-white md:flex md:flex-col dark:border-neutral-800 dark:bg-neutral-900">
+        <div className="flex h-14 items-center gap-3 border-b border-neutral-200/60 px-5 dark:border-neutral-800">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
+            T
+          </div>
+          <span className="text-base font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+            Theobase
+          </span>
         </div>
         {churchName && (
-          <div className="px-4 pb-2 pt-3 text-sm text-neutral-500">{churchName}</div>
+          <div className="px-5 pb-1 pt-4">
+            <p className="text-xs font-medium uppercase tracking-wider text-neutral-400">
+              {churchName}
+            </p>
+          </div>
         )}
-        <nav className="mt-2 flex flex-col gap-1 px-2">
-          {NAV_ITEMS.filter((i) => roleCanSee(role, i.minRole)).map((item) => {
+        <nav className="flex-1 space-y-0.5 px-3 py-3">
+          {desItems.map((item) => {
             const isActive = currentPath === item.path || currentPath.startsWith(item.path + '/');
             return (
               <Link
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  'flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors duration-150',
+                  'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150',
                   isActive
-                    ? 'border-l-2 border-brand-600 bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-300'
-                    : 'text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800',
+                    ? 'bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300'
+                    : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200',
                 )}
               >
-                <span aria-hidden="true" className="text-base">{item.icon}</span>
-                <span>{item.label}</span>
+                <span className={cn('transition-colors', isActive ? 'text-brand-600 dark:text-brand-400' : 'text-neutral-400 dark:text-neutral-500')}>
+                  {item.icon}
+                </span>
+                {item.label}
               </Link>
             );
           })}
         </nav>
+        <div className="border-t border-neutral-200/60 p-3 dark:border-neutral-800">
+          <div className="flex items-center gap-3 rounded-lg px-3 py-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700 dark:bg-brand-800 dark:text-brand-300">
+              {initials}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="truncate text-sm font-medium text-neutral-900 dark:text-neutral-100">{email}</p>
+              <p className="text-xs text-neutral-500 capitalize">{role}</p>
+            </div>
+          </div>
+        </div>
       </aside>
 
       <div className="flex flex-1 flex-col">
-        <header className="z-10 flex h-14 shrink-0 items-center justify-between border-b border-neutral-200 bg-neutral-50 px-4 dark:border-neutral-800 dark:bg-neutral-950">
+        <header className="z-10 flex h-14 shrink-0 items-center justify-between border-b border-neutral-200/60 bg-white/80 px-4 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-950/80">
           <div className="flex items-center gap-3 md:hidden">
-            <img src="/branding/logo-icon.svg" alt="Theobase" className="h-7 w-7" />
-            <span className="text-base font-semibold text-neutral-900 dark:text-neutral-100">Theobase</span>
+            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-brand-600 text-xs font-bold text-white">
+              T
+            </div>
+            <span className="text-sm font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+              {churchName ?? 'Theobase'}
+            </span>
           </div>
           <div className="hidden md:block">
-            <span className="text-base font-semibold text-neutral-900 dark:text-neutral-100">{churchName}</span>
+            <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">{churchName}</span>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-neutral-500 sm:inline">{email}</span>
+          <div className="flex items-center gap-2">
+            <SyncIndicator />
+            <DarkModeToggle />
             <button
               type="button"
               onClick={logout}
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-xs font-medium text-brand-700 dark:bg-brand-900 dark:text-brand-300"
+              aria-label="Log out"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700 transition-colors hover:bg-brand-200 dark:bg-brand-800 dark:text-brand-300 dark:hover:bg-brand-700"
             >
               {initials}
             </button>
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        <main className="flex-1">{children}</main>
 
-        <nav className="z-10 flex h-16 shrink-0 items-center justify-around border-t border-neutral-200 bg-white md:hidden dark:border-neutral-800 dark:bg-neutral-900">
-          {bottomItems.map((item) => {
+        <nav className="z-10 flex h-16 shrink-0 items-center justify-around border-t border-neutral-200/60 bg-white/80 backdrop-blur-sm md:hidden dark:border-neutral-800 dark:bg-neutral-950/80">
+          {mobileItems.map((item) => {
             const isActive = currentPath === item.path || (item.path !== '/' && currentPath.startsWith(item.path + '/'));
             return (
               <Link
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  'flex flex-col items-center gap-0.5 px-2 py-2 text-xs font-medium transition-colors duration-150 min-w-[64px] min-h-[48px] justify-center',
-                  isActive
-                    ? 'text-brand-600'
-                    : 'text-neutral-500',
+                  'flex flex-col items-center justify-center gap-0.5 px-3 py-2 text-[11px] font-medium transition-colors duration-150 min-w-[64px] min-h-[48px]',
+                  isActive ? 'text-brand-600 dark:text-brand-400' : 'text-neutral-400 dark:text-neutral-500',
                 )}
               >
-                <span className="text-xl">{item.icon}</span>
+                {item.icon}
                 <span>{item.label}</span>
               </Link>
             );

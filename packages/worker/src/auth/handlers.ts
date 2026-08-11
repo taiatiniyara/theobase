@@ -102,6 +102,11 @@ export async function handleVerify(
     `session=${sessionToken}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${SESSION_EXPIRY_MS / 1000}`,
   );
 
+  response.headers.append(
+    'Set-Cookie',
+    `session_noh=${sessionToken}; Secure; SameSite=Lax; Path=/; Max-Age=${SESSION_EXPIRY_MS / 1000}`,
+  );
+
   return response;
 }
 

@@ -8,6 +8,7 @@ import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Badge } from '../../components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../components/ui/dialog';
 import {
   Select,
   SelectTrigger,
@@ -43,6 +44,9 @@ function TreasurerPage() {
   const [extDate, setExtDate] = useState(new Date().toISOString().split('T')[0]);
   const [extPaymentMethod, setExtPaymentMethod] = useState('electronic');
   const [extLoading, setExtLoading] = useState(false);
+  const [depositDialogBatchId, setDepositDialogBatchId] = useState<string | null>(null);
+  const [depositDate, setDepositDate] = useState(new Date().toISOString().split('T')[0]);
+  const [depositRef, setDepositRef] = useState('');
 
   const { data: state } = useQuery({
     queryKey: ['church-state', churchId],
@@ -56,15 +60,19 @@ function TreasurerPage() {
   const givingRecords = Object.values((state?.givingRecords as Record<string, Record<string, unknown>>) ?? {});
 
   async function handleMarkDeposited(batchId: string) {
-    const date = prompt('Enter bank deposit date (YYYY-MM-DD):', new Date().toISOString().split('T')[0]);
-    if (!date) return;
-    const ref = prompt('Enter deposit reference number:');
-    if (!ref) return;
+    setDepositDialogBatchId(batchId);
+    setDepositDate(new Date().toISOString().split('T')[0]);
+    setDepositRef('');
+  }
+
+  async function confirmDeposit() {
+    if (!depositDialogBatchId) return;
     await postChurchMutation(churchId!, 'giving_batch:deposit', {
-      batchId,
-      depositDate: date,
-      depositRef: ref,
+      batchId: depositDialogBatchId,
+      depositDate: depositDate,
+      depositRef: depositRef,
     });
+    setDepositDialogBatchId(null);
     queryClient.invalidateQueries({ queryKey: ['church-state', churchId] });
   }
 
@@ -224,6 +232,36 @@ function TreasurerPage() {
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={depositDialogBatchId !== null} onOpenChange={(open) => { if (!open) setDepositDialogBatchId(null); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Mark Batch as Deposited</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <label className="block">
+              <span className="text-sm font-medium text-neutral-700">Bank Deposit Date</span>
+              <Input
+                type="date"
+                value={depositDate}
+                onChange={e => setDepositDate(e.target.value)}
+              />
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium text-neutral-700">Deposit Reference Number</span>
+              <Input
+                placeholder="Enter reference number"
+                value={depositRef}
+                onChange={e => setDepositRef(e.target.value)}
+              />
+            </label>
+            <div className="flex gap-3 justify-end">
+              <Button variant="ghost" onClick={() => setDepositDialogBatchId(null)}>Cancel</Button>
+              <Button onClick={confirmDeposit}>Confirm Deposit</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

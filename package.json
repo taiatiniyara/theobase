@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "deploy": "pnpm --filter @theobase/shared build && pnpm --filter @theobase/web build && pnpm --filter @theobase/worker deploy",
-    "db:migrate": "pnpm --filter @theobase/worker db:generate && pnpm --filter @theobase/worker db:migrate"
+    "db:migrate": "pnpm --filter @theobase/worker db:generate && pnpm --filter @theobase/worker db:migrate",
+    "seed:demo": "pnpm --filter @theobase/worker seed:demo"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

@@ -15,7 +15,7 @@ beforeAll(async () => {
   authToken = await signSession({
     sub: 'test-user',
     churchId: 'test-church',
-    role: 'clerk',
+    role: 'operator',
     tokenVersion: 1,
   });
 

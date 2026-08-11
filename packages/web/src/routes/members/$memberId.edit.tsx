@@ -74,6 +74,7 @@ function EditMemberPage() {
       prevState: member.membershipStatus,
       newState,
       updatedMember: updatedMember as Member,
+      reason: reason || undefined,
     });
     setNewState('');
     setReason('');

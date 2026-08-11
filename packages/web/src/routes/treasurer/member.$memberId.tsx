@@ -5,8 +5,8 @@ import { useAuth } from '../../lib/auth-store';
 import { fetchChurchState } from '../../lib/api';
 import { useMembers } from '../../lib/queries';
 import { Card, CardContent } from '../../components/ui/card';
-import { Input } from '../../components/ui/input';
 import { Badge } from '../../components/ui/badge';
+import { Input } from '../../components/ui/input';
 import {
   useReactTable,
   getCoreRowModel,
@@ -84,7 +84,10 @@ function MemberGivingHistoryPage() {
   return (
     <div className="px-4 py-6 max-w-3xl mx-auto">
       <div className="mx-auto max-w-3xl space-y-6">
-        <h1 className="text-2xl font-bold text-neutral-900">
+        <button type="button" onClick={() => window.history.back()} className="inline-flex items-center gap-1 text-sm text-brand-600 hover:text-brand-700">
+          ← Back
+        </button>
+        <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
           {member.firstName} {member.lastName} — Giving History
         </h1>
 

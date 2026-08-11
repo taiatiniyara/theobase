@@ -73,7 +73,7 @@ function BatchDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-50 px-4 py-6">
+      <div className="px-4 py-6">
         <div className="mx-auto max-w-lg">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="h-16 animate-pulse rounded-lg bg-neutral-200 mb-4" />
@@ -85,7 +85,7 @@ function BatchDetailPage() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-neutral-50 px-4 py-6">
+      <div className="px-4 py-6">
         <div className="mx-auto max-w-lg text-center py-24">
           <p className="text-neutral-600">Batch not found.</p>
         </div>
@@ -104,7 +104,7 @@ function BatchDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 px-4 py-6">
+    <div className="px-4 py-6">
       <div className="mx-auto max-w-lg space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-neutral-900">Batch Details</h1>

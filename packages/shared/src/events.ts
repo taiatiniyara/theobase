@@ -13,6 +13,7 @@ export type ChurchOperation =
   | 'member:update'
   | 'member:delete'
   | 'member:state-change'
+  | 'member:erasure'
   | 'household:create'
   | 'household:update'
   | 'household:delete'
@@ -26,6 +27,7 @@ export type ChurchOperation =
   | 'giving_record:delete'
   | 'church:create'
   | 'church:update'
+  | 'church:activate'
   | 'role:assign'
   | 'role:revoke'
   | 'transfer:initiate'
@@ -35,12 +37,15 @@ export type ChurchOperation =
   | 'contact:update-request'
   | 'contact:approve'
   | 'contact:reject'
+  | 'contact:self-data'
   | 'visitor:follow-up'
   | 'report:submit'
   | 'report:approve'
   | 'report:return'
+  | 'report:view'
   | 'remittance:submit'
-  | 'remittance:receive';
+  | 'remittance:receive'
+  | 'bill:manage';
 
 export type ChurchEventTyped = ChurchEvent<ChurchOperation>;
 

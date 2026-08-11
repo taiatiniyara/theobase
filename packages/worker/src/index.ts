@@ -17,6 +17,10 @@ export { ChurchDO };
 export type { Env };
 
 export default {
+  async scheduled(_controller: ScheduledController, env: Env, _ctx: ExecutionContext): Promise<void> {
+    const { runRestoreDrill } = await import('./restore-drill');
+    await runRestoreDrill(env);
+  },
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     const path = url.pathname;
@@ -78,8 +82,17 @@ export default {
     }
 
     if (path === '/observability/restore-drill' && request.method === 'POST') {
+      const { runRestoreDrill } = await import('./restore-drill');
+      const result = await runRestoreDrill(env);
+      return cors(new Response(JSON.stringify(result), {
+        status: result.success ? 200 : 500,
+        headers: { 'Content-Type': 'application/json' },
+      }));
+    }
+
+    if (path === '/observability/restore-drill' && request.method === 'GET') {
       const state = await env.CHURCH_DO.idFromName('drill-check').toString();
-      cors(new Response(JSON.stringify({ drill: 'completed', state }), {
+      return cors(new Response(JSON.stringify({ drill: 'status', state }), {
         status: 200, headers: { 'Content-Type': 'application/json' },
       }));
     }

@@ -11,6 +11,8 @@ import {
   givingRecord,
   errorLog,
   syncHealth,
+  costMetrics,
+  restoreDrill,
 } from './schema';
 
 function schemasFor<T extends Parameters<typeof createInsertSchema>[0]>(table: T) {
@@ -31,6 +33,8 @@ const givingBatchSchemas = schemasFor(givingBatch);
 const givingRecordSchemas = schemasFor(givingRecord);
 const errorLogSchemas = schemasFor(errorLog);
 const syncHealthSchemas = schemasFor(syncHealth);
+const costMetricsSchemas = schemasFor(costMetrics);
+const restoreDrillSchemas = schemasFor(restoreDrill);
 
 export const {
   insert: insertConferenceSchema,
@@ -80,6 +84,14 @@ export const {
   insert: insertSyncHealthSchema,
   select: selectSyncHealthSchema,
 } = syncHealthSchemas;
+export const {
+  insert: insertCostMetricsSchema,
+  select: selectCostMetricsSchema,
+} = costMetricsSchemas;
+export const {
+  insert: insertRestoreDrillSchema,
+  select: selectRestoreDrillSchema,
+} = restoreDrillSchemas;
 
 type SelectOf<S extends { select: z.ZodTypeAny }> = z.infer<S['select']>;
 type InsertOf<S extends { insert: z.ZodTypeAny }> = z.infer<S['insert']>;
@@ -103,5 +115,9 @@ export type InsertGivingBatch = InsertOf<typeof givingBatchSchemas>;
 export type InsertGivingRecord = InsertOf<typeof givingRecordSchemas>;
 export type ErrorLog = SelectOf<typeof errorLogSchemas>;
 export type SyncHealth = SelectOf<typeof syncHealthSchemas>;
+export type CostMetrics = SelectOf<typeof costMetricsSchemas>;
+export type RestoreDrill = SelectOf<typeof restoreDrillSchemas>;
 export type InsertErrorLog = InsertOf<typeof errorLogSchemas>;
 export type InsertSyncHealth = InsertOf<typeof syncHealthSchemas>;
+export type InsertCostMetrics = InsertOf<typeof costMetricsSchemas>;
+export type InsertRestoreDrill = InsertOf<typeof restoreDrillSchemas>;

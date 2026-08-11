@@ -86,7 +86,7 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label className="block">
-          <span className="text-sm font-medium text-neutral-700">{t('member.firstName')}</span>
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.firstName')}</span>
           <Input
             required
             value={firstName}
@@ -97,7 +97,7 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
           )}
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-neutral-700">{t('member.lastName')}</span>
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.lastName')}</span>
           <Input
             required
             value={lastName}
@@ -108,7 +108,7 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
           )}
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-neutral-700">{t('member.email')}</span>
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.email')}</span>
           <Input
             type="email"
             value={email}
@@ -119,7 +119,7 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
           )}
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-neutral-700">{t('member.phone')}</span>
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.phone')}</span>
           <Input
             type="tel"
             value={phone}
@@ -127,14 +127,14 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
           />
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-neutral-700">{t('member.address')}</span>
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.address')}</span>
           <Input
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-neutral-700">{t('member.dateOfBirth')}</span>
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.dateOfBirth')}</span>
           <Input
             type="date"
             value={dateOfBirth}
@@ -142,7 +142,7 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
           />
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-neutral-700">{t('member.baptismDate')}</span>
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.baptismDate')}</span>
           <Input
             type="date"
             value={baptismDate}
@@ -150,7 +150,7 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
           />
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-neutral-700">{t('member.gender')}</span>
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.gender')}</span>
           <Select value={gender} onValueChange={setGender}>
             <SelectTrigger>
               <SelectValue placeholder={t('member.gender')} />
@@ -163,7 +163,7 @@ export function MemberForm({ member, onSubmit, onCancel, isLoading }: MemberForm
           </Select>
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-neutral-700">{t('member.status')}</span>
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('member.status')}</span>
           <Select value={membershipStatus} onValueChange={(v) => setMembershipStatus(v as typeof membershipStatus)}>
             <SelectTrigger>
               <SelectValue />

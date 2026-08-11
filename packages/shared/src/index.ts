@@ -7,3 +7,4 @@ export * from './events';
 export * from './auth';
 export * from './stateMachine';
 export * from './household';
+export * from './dataClassification';

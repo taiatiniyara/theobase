@@ -26,4 +26,9 @@
   "vars": {
     "APP_URL": "https://theobase.pages.dev",
   },
+  "triggers": {
+    "crons": [
+      "0 0 1 * *",
+    ],
+  },
 }
