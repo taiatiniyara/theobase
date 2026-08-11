@@ -26,6 +26,7 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'contact:update-request',
     'visitor:follow-up',
     'giving_batch:commit',
+    'report:submit',
   ],
   treasurer: [
     'giving_record:create',
@@ -51,7 +52,7 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
   interest: [],
   visitor: [],
   'conference-treasurer': [],
-  'conference-secretary': ['transfer:accept'],
+  'conference-secretary': ['transfer:accept', 'report:approve', 'report:return'],
   'conference-president': [],
   auditor: ['transfer:accept'],
   operator: [],
@@ -344,6 +345,35 @@ const STATE_HANDLERS: Record<
     });
     s.householdSuggestions = suggestions;
   },
+  'report:submit': (p, s) => {
+    const reports = (s.reports as Array<Record<string, unknown>>) ?? [];
+    reports.push({
+      id: crypto.randomUUID(),
+      churchId: p.churchId,
+      year: p.year,
+      data: p.data,
+      status: 'submitted',
+      submittedBy: p.actor,
+      submittedAt: p.timestamp,
+    });
+    s.reports = reports;
+  },
+  'report:approve': (p, s) => {
+    const reports = (s.reports as Array<Record<string, unknown>>) ?? [];
+    const idx = reports.findIndex(r => r.id === p.reportId);
+    if (idx !== -1) {
+      reports[idx] = { ...reports[idx], status: 'approved', approvedBy: p.actor, approvedAt: p.timestamp };
+    }
+    s.reports = reports;
+  },
+  'report:return': (p, s) => {
+    const reports = (s.reports as Array<Record<string, unknown>>) ?? [];
+    const idx = reports.findIndex(r => r.id === p.reportId);
+    if (idx !== -1) {
+      reports[idx] = { ...reports[idx], status: 'returned', returnedBy: p.actor, returnReason: p.reason, returnedAt: p.timestamp };
+    }
+    s.reports = reports;
+  },
 };
 
 export class ChurchDO extends DurableObject {
@@ -445,6 +475,45 @@ export class ChurchDO extends DurableObject {
     const path = url.pathname;
 
     try {
+      if (request.method === 'GET' && path.startsWith('/report-generate/')) {
+        const year = parseInt(path.split('/')[2]!, 10);
+        const state = await this.reconstructState();
+        const members = Object.values((state.members as Record<string, Record<string, unknown>>) ?? {});
+        const auditLog = (state.auditLog as Array<Record<string, unknown>>) ?? [];
+
+        const q1 = { baptised: 0, profession: 0, transferIn: 0, transferOut: 0, deceased: 0, removed: 0 };
+        const q2 = { ...q1 };
+        const q3 = { ...q1 };
+        const q4 = { ...q1 };
+
+        function getQuarter(ts: number): number {
+          const d = new Date(ts);
+          return Math.floor(d.getMonth() / 3) + 1;
+        }
+
+        for (const event of auditLog) {
+          const ts = event.timestamp as number;
+          if (!ts) continue;
+          const d = new Date(ts);
+          if (d.getFullYear() !== year) continue;
+          const q = getQuarter(ts);
+          const target = q === 1 ? q1 : q === 2 ? q2 : q === 3 ? q3 : q4;
+          const newState = event.newState as string;
+          if (newState === 'baptised') target.baptised++;
+          else if (newState === 'profession') target.profession++;
+          else if (newState === 'transfer-in') target.transferIn++;
+          else if (newState === 'transfer-out') target.transferOut++;
+          else if (newState === 'deceased') target.deceased++;
+          else if (newState === 'removed') target.removed++;
+        }
+
+        return new Response(JSON.stringify({
+          year,
+          totalMembers: members.length,
+          quarters: { q1, q2, q3, q4 },
+        }), { headers: { 'Content-Type': 'application/json' } });
+      }
+
       if (request.method === 'GET' && path.startsWith('/batch-compare/')) {
         const batchId = path.split('/')[2];
         const state = await this.reconstructState();

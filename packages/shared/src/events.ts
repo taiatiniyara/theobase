@@ -35,7 +35,10 @@ export type ChurchOperation =
   | 'contact:update-request'
   | 'contact:approve'
   | 'contact:reject'
-  | 'visitor:follow-up';
+  | 'visitor:follow-up'
+  | 'report:submit'
+  | 'report:approve'
+  | 'report:return';
 
 export type ChurchEventTyped = ChurchEvent<ChurchOperation>;
 
