@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../lib/auth-store';
+import { getAuthWorkerUrl } from '../lib/api';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent } from '../components/ui/card';
@@ -27,7 +28,7 @@ function LoginPage() {
     const token = search.token;
     if (token) {
       setStatus('sending');
-      fetch(`/auth/verify?token=${encodeURIComponent(token)}`)
+      fetch(`${getAuthWorkerUrl()}/auth/verify?token=${encodeURIComponent(token)}`)
         .then((res) => {
           if (!res.ok) throw new Error('Invalid token');
           return res.json();
@@ -48,7 +49,7 @@ function LoginPage() {
     setErrorMsg('');
 
     try {
-      const res = await fetch('/auth/send-link', {
+      const res = await fetch(`${getAuthWorkerUrl()}/auth/send-link`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),

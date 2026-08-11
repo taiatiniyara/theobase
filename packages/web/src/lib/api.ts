@@ -3,6 +3,10 @@ export function getWorkerUrl(): string {
   return `${origin}/church`;
 }
 
+export function getAuthWorkerUrl(): string {
+  return import.meta.env.PROD ? 'https://theobase-worker.theobase.workers.dev' : '';
+}
+
 function getAuthToken(): string | null {
   return localStorage.getItem('token');
 }

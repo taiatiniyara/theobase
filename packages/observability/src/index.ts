@@ -60,11 +60,7 @@ export function captureError(
 }
 
 export function getObservabilityWorkerUrl(): string {
-  try {
-    return typeof window !== 'undefined' ? '/observability' : 'https://theobase-worker.theobase.workers.dev/observability';
-  } catch {
-    return 'https://theobase-worker.theobase.workers.dev/observability';
-  }
+  return 'https://theobase-worker.theobase.workers.dev/observability';
 }
 
 export async function reportError(payload: ErrorPayload): Promise<boolean> {

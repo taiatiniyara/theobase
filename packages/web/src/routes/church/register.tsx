@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useAuth } from '../../lib/auth-store';
+import { getAuthWorkerUrl } from '../../lib/api';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Card, CardContent } from '../../components/ui/card';
@@ -22,7 +23,7 @@ function ChurchRegisterPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/church/register', {
+      const res = await fetch(`${getAuthWorkerUrl()}/church/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, address }),
