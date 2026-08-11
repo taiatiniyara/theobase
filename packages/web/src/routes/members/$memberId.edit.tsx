@@ -85,6 +85,7 @@ function EditMemberPage() {
       setNewState('');
       setReason('');
     } catch {
+      // mutation failure handled gracefully by isPending/error state
     }
   }
 

@@ -101,14 +101,18 @@ export function useDeleteMember(churchId: string) {
 export function useStateChangeMutation(churchId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (params: { memberId: string; prevState: string; newState: string; updatedMember: Member; reason?: string }) =>
-      postChurchMutation(churchId, 'member:state-change', {
+    mutationFn: async (params: { memberId: string; prevState: string; newState: string; updatedMember: Member; reason?: string }) => {
+      const res = await postChurchMutation(churchId, 'member:state-change', {
         memberId: params.memberId,
         prevState: params.prevState,
         newState: params.newState,
         updatedMember: params.updatedMember,
         reason: params.reason ?? null,
-      }),
+      });
+      const body = (await res.json()) as { error?: string };
+      if (!res.ok) throw new Error(body.error || `State change failed (${res.status})`);
+      return body;
+    },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: memberKeys.list(churchId) });
     },
