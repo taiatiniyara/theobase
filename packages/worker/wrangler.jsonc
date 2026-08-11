@@ -1,22 +1,9 @@
 {
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
   "name": "theobase-worker",
   "main": "src/index.ts",
   "compatibility_date": "2025-08-10",
   "compatibility_flags": ["nodejs_compat"],
-  "kv_namespaces": [
-    {
-      "binding": "AUTH_KV",
-      "id": "theobase-auth",
-    },
-  ],
-  "send_email": [
-    {
-      "name": "AUTH_EMAIL",
-    },
-  ],
-  "vars": {
-    "APP_URL": "http://localhost:8787",
-  },
   "durable_objects": {
     "bindings": [
       {
@@ -25,28 +12,24 @@
       },
     ],
   },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "theobase",
-      "database_id": "theobase-d1"
-    }
-  ],
-  "queues": {
-    "producers": [
-      { "queue": "error-queue", "binding": "ERROR_QUEUE" }
-    ]
-  },
-  "r2_buckets": [
-    { "binding": "ERROR_STORAGE", "bucket_name": "theobase-errors" }
-  ],
-  "triggers": {
-    "crons": ["0 3 1 * *"]
-  },
   "migrations": [
     {
       "tag": "v1",
       "new_classes": ["ChurchDO"],
     },
   ],
+  "send_email": [
+    {
+      "name": "AUTH_EMAIL",
+    },
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "AUTH_KV",
+      "id": "REPLACE_ME_run_wrangler_kv_namespace_create_theobase_auth_and_paste_id_here",
+    },
+  ],
+  "vars": {
+    "APP_URL": "https://theobase.pages.dev",
+  },
 }

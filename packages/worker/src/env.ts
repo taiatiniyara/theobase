@@ -7,9 +7,9 @@ export interface Env {
     send(message: EmailMessage): Promise<void>;
   };
   APP_URL: string;
-  DB: D1Database;
-  ERROR_QUEUE: Queue;
-  ERROR_STORAGE: R2Bucket;
+  DB?: D1Database;
+  ERROR_QUEUE?: Queue;
+  ERROR_STORAGE?: R2Bucket;
 }
 
 interface EmailMessage {
