@@ -48,7 +48,7 @@ export function RequireAuth({ children, allowedRoles }: RequireAuthProps) {
 
   if (!churchId && !isPublic) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-neutral-50 dark:bg-neutral-950">
+      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
         <p className="text-neutral-500">Redirecting to login...</p>
       </div>
     );
@@ -56,9 +56,9 @@ export function RequireAuth({ children, allowedRoles }: RequireAuthProps) {
 
   if (allowedRoles && allowedRoles.length > 0 && role && !allowedRoles.includes(role) && role !== 'operator') {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-neutral-50 dark:bg-neutral-950">
+      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
         <div className="max-w-md text-center space-y-4">
-          <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">Access Denied</h1>
+          <h1 className="text-xl font-semibold text-neutral-900">Access Denied</h1>
           <p className="text-neutral-500">You don't have permission to access this page.</p>
           <button
             type="button"

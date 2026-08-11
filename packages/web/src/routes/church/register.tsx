@@ -45,15 +45,14 @@ function ChurchRegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4 dark:bg-neutral-950">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <img src="/logo-full.svg" alt="Theobase" className="mx-auto mb-6 h-8 w-auto dark:hidden" />
-          <img src="/logo-full-light.svg" alt="Theobase" className="mx-auto mb-6 hidden h-8 w-auto dark:block" />
-          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+          <img src="/logo-full.svg" alt="Theobase" className="mx-auto mb-6 h-8 w-auto" />
+          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
             Register your church
           </h1>
-          <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="mt-2 text-sm text-neutral-500">
             Set up your church on Theobase to start managing membership and giving.
           </p>
         </div>
@@ -61,13 +60,13 @@ function ChurchRegisterPage() {
         <Card>
           <CardContent className="p-6 space-y-4">
             {error && (
-              <div className="rounded-lg bg-error-light px-4 py-3 text-sm text-error-700 dark:bg-red-900/20 dark:text-red-400">
+              <div className="rounded-lg bg-error-light px-4 py-3 text-sm text-error-700">
                 {error}
               </div>
             )}
             <form onSubmit={handleSubmit} className="space-y-4">
               <label className="block">
-                <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Church Name</span>
+                <span className="text-sm font-medium text-neutral-700">Church Name</span>
                 <Input
                   required
                   autoFocus
@@ -78,7 +77,7 @@ function ChurchRegisterPage() {
                 />
               </label>
               <label className="block">
-                <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Address</span>
+                <span className="text-sm font-medium text-neutral-700">Address</span>
                 <Input
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
@@ -93,12 +92,12 @@ function ChurchRegisterPage() {
           </CardContent>
         </Card>
 
-        <p className="mt-6 text-center text-xs text-neutral-400 dark:text-neutral-500">
+        <p className="mt-6 text-center text-xs text-neutral-400">
           Already have a church?{' '}
           <button
             type="button"
             onClick={() => navigate({ to: '/login' })}
-            className="font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300"
+            className="font-medium text-brand-600 hover:text-brand-700:text-brand-300"
           >
             Sign in
           </button>

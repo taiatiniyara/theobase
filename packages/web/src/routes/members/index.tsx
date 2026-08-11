@@ -60,7 +60,7 @@ function MemberDirectoryPage() {
               <Avatar size="sm">
                 <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
-              <span className="font-medium text-neutral-900 dark:text-neutral-100">
+              <span className="font-medium text-neutral-900">
                 {row.original.firstName} {row.original.lastName}
               </span>
             </Link>
@@ -129,7 +129,7 @@ function MemberDirectoryPage() {
       <RequireAuth allowedRoles={['clerk', 'pastor', 'board-member']}>
       <div className="px-4 py-6 max-w-5xl mx-auto">
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+          <h2 className="text-xl font-semibold text-neutral-900">
             {t('member.noMembers')}
           </h2>
           <p className="mt-2 text-sm text-neutral-500">{t('member.noMembersHint')}</p>
@@ -146,7 +146,7 @@ function MemberDirectoryPage() {
     <RequireAuth allowedRoles={['clerk', 'pastor', 'board-member']}>
     <div className="px-4 py-6 max-w-5xl mx-auto space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+        <h1 className="text-xl font-semibold text-neutral-900">
           {t('member.directory')}
         </h1>
         <div className="flex gap-3">
@@ -185,7 +185,7 @@ function MemberDirectoryPage() {
         </Select>
       </div>
 
-      <div className="hidden md:block rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 overflow-hidden shadow-sm">
+      <div className="hidden md:block rounded-lg border border-neutral-200 bg-white overflow-hidden shadow-sm">
         <table className="w-full">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -193,7 +193,7 @@ function MemberDirectoryPage() {
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-4 py-3 text-left text-sm font-medium text-neutral-500 border-b border-neutral-200 dark:border-neutral-700 cursor-pointer select-none"
+                    className="px-4 py-3 text-left text-sm font-medium text-neutral-500 border-b border-neutral-200 cursor-pointer select-none"
                     onClick={header.column.getToggleSortingHandler()}
                   >
                     {flexRender(header.column.columnDef.header, header.getContext())}
@@ -206,7 +206,7 @@ function MemberDirectoryPage() {
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className="border-b border-neutral-100 dark:border-neutral-700 last:border-0 hover:bg-neutral-50 dark:hover:bg-neutral-750"
+                className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50:bg-neutral-750"
               >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="px-4 py-3 text-sm">
@@ -225,7 +225,7 @@ function MemberDirectoryPage() {
             key={row.id}
             to="/members/$memberId"
             params={{ memberId: row.original.id }}
-            className="block rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 shadow-sm p-4 space-y-2"
+            className="block rounded-lg border border-neutral-200 bg-white shadow-sm p-4 space-y-2"
           >
             <div className="flex items-center gap-3">
               <Avatar size="sm">
@@ -234,7 +234,7 @@ function MemberDirectoryPage() {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <div className="font-medium text-neutral-900 dark:text-neutral-100">
+                <div className="font-medium text-neutral-900">
                   {row.original.firstName} {row.original.lastName}
                 </div>
                 <div className="text-sm text-neutral-500">

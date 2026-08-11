@@ -70,20 +70,15 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4 dark:bg-neutral-950">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <img
             src="/logo-full.svg"
             alt="Theobase"
-            className="mx-auto mb-6 h-8 w-auto dark:hidden"
+            className="mx-auto mb-6 h-8 w-auto"
           />
-          <img
-            src="/logo-full-light.svg"
-            alt="Theobase"
-            className="mx-auto mb-6 hidden h-8 w-auto dark:block"
-          />
-          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
             Sign in to your account
           </h1>
           <p className="mt-2 text-sm text-neutral-500">Enter your email to receive a magic link.</p>
@@ -109,12 +104,12 @@ function LoginPage() {
                   </svg>
                 </div>
                 <div>
-                  <h2 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">
+                  <h2 className="text-base font-semibold text-neutral-900">
                     Check your email
                   </h2>
                   <p className="mt-1 text-sm text-neutral-500">
                     We sent a magic link to{' '}
-                    <span className="font-medium text-neutral-700 dark:text-neutral-300">
+                    <span className="font-medium text-neutral-700">
                       {email}
                     </span>
                     . Click the link to sign in.
@@ -134,7 +129,7 @@ function LoginPage() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <label className="block">
-                  <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                  <span className="text-sm font-medium text-neutral-700">
                     Email address
                   </span>
                   <Input
@@ -148,7 +143,7 @@ function LoginPage() {
                 </label>
 
                 {status === 'error' && (
-                  <div className="rounded-lg bg-error-light px-4 py-3 text-sm text-error-700 dark:bg-red-900/20 dark:text-red-400">
+                  <div className="rounded-lg bg-error-light px-4 py-3 text-sm text-error-700">
                     {errorMsg}
                   </div>
                 )}

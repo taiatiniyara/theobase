@@ -152,26 +152,26 @@ function CountingRoomPage() {
   if (!batchOpen) {
     return (
       <RequireAuth allowedRoles={['counter']}>
-      <div className="min-h-screen bg-neutral-50 px-4 py-6 dark:bg-neutral-950">
+      <div className="min-h-screen bg-neutral-50 px-4 py-6">
         <div className="mx-auto max-w-md space-y-6">
           {openBatches.length > 0 && (
             <Card>
               <CardContent className="space-y-3 p-4">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Active Batches</h2>
+                <h2 className="text-lg font-semibold text-neutral-900">Active Batches</h2>
                 {openBatches.map((b: Record<string, unknown>) => (
                   <div
                     key={b.id as string}
-                    className="flex items-center justify-between rounded-md bg-neutral-50 px-3 py-3 hover:bg-neutral-100 cursor-pointer dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                    className="flex items-center justify-between rounded-md bg-neutral-50 px-3 py-3 hover:bg-neutral-100 cursor-pointer:bg-neutral-700"
                     onClick={() => navigate({ to: `/counting-room/batch/${b.id}` })}
                     onKeyDown={(e) => e.key === 'Enter' && navigate({ to: `/counting-room/batch/${b.id}` })}
                     role="button"
                     tabIndex={0}
                   >
                       <div>
-                        <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{b.date as string}</span>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400">{b.status as string}</p>
+                        <span className="text-sm font-medium text-neutral-900">{b.date as string}</span>
+                        <p className="text-xs text-neutral-500">{b.status as string}</p>
                       </div>
-                      <span className="text-sm tabular-nums text-neutral-900 dark:text-neutral-100">
+                      <span className="text-sm tabular-nums text-neutral-900">
                         ${((b.counter1Records as Array<Record<string,unknown>>)?.reduce((s, r) => s + (r.amount as number ?? 0), 0) ?? 0).toFixed(2)}
                       </span>
                     </div>
@@ -181,8 +181,8 @@ function CountingRoomPage() {
           )}
           <Card>
             <CardContent className="py-12 text-center">
-              <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Counting Room</h1>
-              <p className="mt-2 text-neutral-500 dark:text-neutral-400">Open a new batch to record today's giving.</p>
+              <h1 className="text-2xl font-bold text-neutral-900">Counting Room</h1>
+              <p className="mt-2 text-neutral-500">Open a new batch to record today's giving.</p>
               <Button className="mt-6" onClick={() => setBatchOpen(true)} size="lg">
                 Open New Batch
               </Button>
@@ -197,7 +197,7 @@ function CountingRoomPage() {
   if (membersLoading) {
     return (
       <RequireAuth allowedRoles={['counter']}>
-      <div className="min-h-screen bg-neutral-50 px-4 py-6 dark:bg-neutral-950">
+      <div className="min-h-screen bg-neutral-50 px-4 py-6">
         <div className="mx-auto max-w-md space-y-6">
           <div className="flex items-center justify-between">
             <SkeletonLine width="w-40" />
@@ -215,22 +215,22 @@ function CountingRoomPage() {
 
   return (
     <RequireAuth allowedRoles={['counter']}>
-    <div className="min-h-screen bg-neutral-50 px-4 py-6 dark:bg-neutral-950">
+    <div className="min-h-screen bg-neutral-50 px-4 py-6">
       <div className="mx-auto max-w-md space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">New Batch</h1>
-          <span className="text-sm text-neutral-500 dark:text-neutral-400">{new Date().toLocaleDateString()}</span>
+          <h1 className="text-xl font-bold text-neutral-900">New Batch</h1>
+          <span className="text-sm text-neutral-500">{new Date().toLocaleDateString()}</span>
         </div>
 
-        <div className="rounded-lg bg-white border border-neutral-200 p-4 dark:bg-neutral-900 dark:border-neutral-700">
-          <div className="text-sm text-neutral-500 dark:text-neutral-400">Batch Total</div>
-          <div className="text-2xl font-bold tabular-nums text-neutral-900 dark:text-neutral-100">${totalAmount.toFixed(2)}</div>
-          <div className="text-sm text-neutral-500 dark:text-neutral-400">{records.length} record{records.length !== 1 ? 's' : ''}</div>
+        <div className="rounded-lg bg-white border border-neutral-200 p-4">
+          <div className="text-sm text-neutral-500">Batch Total</div>
+          <div className="text-2xl font-bold tabular-nums text-neutral-900">${totalAmount.toFixed(2)}</div>
+          <div className="text-sm text-neutral-500">{records.length} record{records.length !== 1 ? 's' : ''}</div>
         </div>
 
         <Card>
           <CardContent className="space-y-4 p-4">
-            <div className="text-center text-3xl font-bold tabular-nums text-neutral-900 py-4 dark:text-neutral-100">
+            <div className="text-center text-3xl font-bold tabular-nums text-neutral-900 py-4">
               ${amount}
             </div>
 
@@ -263,18 +263,18 @@ function CountingRoomPage() {
                 <button
                   key={m.id}
                   type="button"
-                  className={`w-full rounded-md px-3 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800 dark:text-neutral-200 ${selectedMember?.id === m.id ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300' : ''}`}
+                  className={`w-full rounded-md px-3 py-2 text-left text-sm hover:bg-neutral-50:bg-neutral-800 ${selectedMember?.id === m.id ? 'bg-brand-50 text-brand-700' : ''}`}
                   onClick={() => setSelectedMember(m)}
                 >
                   {m.firstName} {m.lastName}
                 </button>
               ))}
               {filteredMembers.length === 0 && (
-                <p className="text-sm text-neutral-400 dark:text-neutral-500 text-center py-2">No members found</p>
+                <p className="text-sm text-neutral-400 text-center py-2">No members found</p>
               )}
             </div>
             {selectedMember && (
-              <div className="rounded-md bg-brand-50 px-3 py-2 text-sm text-brand-700 dark:bg-brand-900/30 dark:text-brand-300">
+              <div className="rounded-md bg-brand-50 px-3 py-2 text-sm text-brand-700">
                 Selected: {selectedMember.firstName} {selectedMember.lastName}
               </div>
             )}
@@ -288,7 +288,7 @@ function CountingRoomPage() {
                 <button
                   key={c.value}
                   type="button"
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${selectedCategory === c.value ? 'bg-brand-600 text-white dark:bg-brand-500' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'}`}
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${selectedCategory === c.value ? 'bg-brand-600 text-white' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200:bg-neutral-700'}`}
                   onClick={() => setSelectedCategory(c.value)}
                 >
                   {c.label}
@@ -301,25 +301,25 @@ function CountingRoomPage() {
         {records.length > 0 && (
           <Card>
             <CardContent className="p-4 space-y-2">
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Records</h2>
+              <h2 className="text-lg font-semibold text-neutral-900">Records</h2>
               {records.map(record => (
                 <div
                   key={record.id}
-                  className="flex items-center justify-between rounded-lg bg-neutral-50 px-3 py-2 dark:bg-neutral-800"
+                  className="flex items-center justify-between rounded-lg bg-neutral-50 px-3 py-2"
                   style={{ overflowX: 'auto' }}
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <button
                       type="button"
                       onClick={() => handleRemoveRecord(record.id)}
-                      className="mr-2 text-neutral-400 hover:text-error dark:text-neutral-500 dark:hover:text-red-400"
+                      className="mr-2 text-neutral-400 hover:text-error:text-red-400"
                     >
                       ×
                     </button>
-                    <span className="text-sm truncate text-neutral-900 dark:text-neutral-100">{record.memberName}</span>
+                    <span className="text-sm truncate text-neutral-900">{record.memberName}</span>
                     <Badge>{record.category}</Badge>
                   </div>
-                  <span className="text-sm font-medium tabular-nums ml-2 shrink-0 text-neutral-900 dark:text-neutral-100">${record.amount.toFixed(2)}</span>
+                  <span className="text-sm font-medium tabular-nums ml-2 shrink-0 text-neutral-900">${record.amount.toFixed(2)}</span>
                 </div>
               ))}
             </CardContent>

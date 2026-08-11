@@ -15,10 +15,10 @@ export function NumericKeypad({ onNumber, onDecimal, onBackspace, onEnter }: Num
   function handleBackspace() { vibrate(); onBackspace(); }
   function handleEnter() { vibrate(); onEnter(); }
 
-  const keyClass = "flex h-14 w-14 items-center justify-center rounded-md bg-white text-2xl font-semibold text-neutral-900 select-none active:scale-95 transition-all duration-100 dark:bg-neutral-700 dark:text-neutral-100 border border-neutral-200 dark:border-neutral-600 touch-target-min";
+  const keyClass = "flex h-14 w-14 items-center justify-center rounded-md bg-white text-2xl font-semibold text-neutral-900 select-none active:scale-95 transition-all duration-100 border border-neutral-200 touch-target-min";
 
   return (
-    <div className="space-y-2 rounded-t-lg bg-neutral-100 p-4 dark:bg-neutral-800">
+    <div className="space-y-2 rounded-t-lg bg-neutral-100 p-4">
       <div className="grid grid-cols-3 gap-2">
         {['1','2','3','4','5','6','7','8','9'].map(d => (
           <button key={d} type="button" className={keyClass} onClick={() => handleNumber(d)}>{d}</button>
@@ -31,7 +31,7 @@ export function NumericKeypad({ onNumber, onDecimal, onBackspace, onEnter }: Num
           </svg>
         </button>
       </div>
-      <button type="button" className="flex h-14 w-full items-center justify-center rounded-md bg-brand-600 text-lg font-semibold text-white hover:bg-brand-700 active:bg-brand-800 dark:hover:bg-brand-500" onClick={handleEnter}>
+      <button type="button" className="flex h-14 w-full items-center justify-center rounded-md bg-brand-600 text-lg font-semibold text-white hover:bg-brand-700 active:bg-brand-800:bg-brand-500" onClick={handleEnter}>
         Enter
       </button>
     </div>

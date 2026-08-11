@@ -56,7 +56,7 @@ function DashboardPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-10 px-5 py-8 sm:px-6 lg:px-8">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+        <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
           {churchName ?? 'Dashboard'}
         </h1>
         <p className="mt-1 text-sm text-neutral-500">Your church at a glance</p>
@@ -66,7 +66,7 @@ function DashboardPage() {
         <div className="mb-4 flex items-center gap-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">Insights</span>
           {insights.length > 0 && (
-            <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-brand-100 px-1.5 text-[11px] font-semibold text-brand-700 dark:bg-brand-900 dark:text-brand-300">
+            <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-brand-100 px-1.5 text-[11px] font-semibold text-brand-700">
               {insights.length}
             </span>
           )}
@@ -74,7 +74,7 @@ function DashboardPage() {
         {isLoading ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-36 animate-pulse rounded-xl bg-neutral-100 dark:bg-neutral-800" />
+              <div key={i} className="h-36 animate-pulse rounded-xl bg-neutral-100" />
             ))}
           </div>
         ) : isError ? (
@@ -92,12 +92,12 @@ function DashboardPage() {
                   key={i}
                   type="button"
                   onClick={() => goTo(insight.action.to)}
-                  className="group rounded-xl border border-neutral-200/60 bg-white p-5 text-left shadow-sm transition-all hover:border-brand-200 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-brand-800"
+                  className="group rounded-xl border border-neutral-200/60 bg-white p-5 text-left shadow-sm transition-all hover:border-brand-200 hover:shadow-md:border-brand-800"
                 >
-                  <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-400">
+                  <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="text-sm font-semibold text-neutral-900 group-hover:text-brand-700 dark:text-neutral-100 dark:group-hover:text-brand-400">
+                  <h3 className="text-sm font-semibold text-neutral-900 group-hover:text-brand-700:text-brand-400">
                     {insight.title}
                   </h3>
                   <p className="mt-1 text-xs leading-relaxed text-neutral-500">{insight.description}</p>
@@ -112,11 +112,11 @@ function DashboardPage() {
           <Card>
             <CardContent className="p-10 text-center">
               <div className="mb-4 flex items-center justify-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-400">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
                   <FileText className="h-7 w-7" />
                 </div>
               </div>
-              <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">No insights yet</h3>
+              <h3 className="text-base font-semibold text-neutral-900">No insights yet</h3>
               <p className="mx-auto mt-1 max-w-sm text-sm text-neutral-500">
                 Insights will appear as activity flows in — giving patterns, report reminders, and member updates.
               </p>
@@ -134,12 +134,12 @@ function DashboardPage() {
             <Link
               key={action.to}
               to={action.to}
-              className="group flex flex-col items-center gap-3 rounded-xl border border-neutral-200/60 bg-white p-5 text-center shadow-sm transition-all hover:border-brand-200 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-brand-800"
+              className="group flex flex-col items-center gap-3 rounded-xl border border-neutral-200/60 bg-white p-5 text-center shadow-sm transition-all hover:border-brand-200 hover:shadow-md:border-brand-800"
             >
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-100 dark:bg-brand-950 dark:text-brand-400 dark:group-hover:bg-brand-900">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-100:bg-brand-900">
                 <action.icon className="h-5 w-5" />
               </div>
-              <span className="text-sm font-medium text-neutral-700 group-hover:text-neutral-900 dark:text-neutral-300 dark:group-hover:text-neutral-100">
+              <span className="text-sm font-medium text-neutral-700 group-hover:text-neutral-900:text-neutral-100">
                 {action.label}
               </span>
             </Link>
@@ -177,10 +177,10 @@ function DashboardPage() {
           ].map((item) => (
             <Card key={item.step}>
               <CardContent className="p-5">
-                <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-100 text-xs font-bold text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">
+                <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-100 text-xs font-bold text-neutral-500">
                   {item.step}
                 </div>
-                <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{item.title}</h3>
+                <h3 className="text-sm font-semibold text-neutral-900">{item.title}</h3>
                 <p className="mt-1 text-xs leading-relaxed text-neutral-500">{item.desc}</p>
                 {item.link ? (
                   <Link to={item.link} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700">

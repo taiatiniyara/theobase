@@ -9,13 +9,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          'bg-brand-600 text-white shadow-sm hover:bg-brand-700 active:bg-brand-800 dark:bg-brand-600 dark:hover:bg-brand-500 dark:shadow-brand-900/20',
+          'bg-brand-600 text-white shadow-sm hover:bg-brand-700 active:bg-brand-800:bg-brand-500',
         secondary:
-          'bg-white text-neutral-700 shadow-sm border border-neutral-200 hover:bg-neutral-50 active:bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-700 dark:hover:bg-neutral-700',
+          'bg-white text-neutral-700 shadow-sm border border-neutral-200 hover:bg-neutral-50 active:bg-neutral-100:bg-neutral-700',
         ghost:
-          'text-neutral-600 hover:bg-neutral-100 active:bg-neutral-200 dark:text-neutral-400 dark:hover:bg-neutral-800',
+          'text-neutral-600 hover:bg-neutral-100 active:bg-neutral-200:bg-neutral-800',
         destructive:
-          'bg-error text-white shadow-sm hover:bg-error-700 active:bg-red-800 dark:hover:bg-red-700',
+          'bg-error text-white shadow-sm hover:bg-error-700 active:bg-red-800:bg-red-700',
       },
       size: {
         sm: 'h-8 px-3 text-xs touch-target-min',

@@ -93,19 +93,19 @@ function ChurchImportPage() {
   if (resolved.length === 0 && flagged.length === 0) {
     return (
       <RequireAuth allowedRoles={['clerk']}>
-      <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4 dark:bg-neutral-950">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4">
         <Card className="w-full max-w-md space-y-4 text-center">
           <CardTitle>Upload Membership CSV</CardTitle>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">Drop a CSV file here or click to browse</p>
+          <p className="text-sm text-neutral-500">Drop a CSV file here or click to browse</p>
           {parsing && (
             <div className="space-y-2">
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-3/4" />
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">Parsing file...</p>
+              <p className="text-sm text-neutral-500">Parsing file...</p>
             </div>
           )}
           {parseError && (
-            <div className="rounded-md bg-error-light px-4 py-3 text-sm text-error-700 dark:bg-red-900/20 dark:text-red-400">
+            <div className="rounded-md bg-error-light px-4 py-3 text-sm text-error-700">
               {parseError}
               <button
                 type="button"
@@ -124,7 +124,7 @@ function ChurchImportPage() {
               const file = e.target.files?.[0];
               if (file) handleFile(file);
             }}
-            className="block w-full text-sm text-neutral-500 dark:text-neutral-400 file:mr-4 file:rounded-md file:border-0 file:bg-brand-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-brand-700"
+            className="block w-full text-sm text-neutral-500 file:mr-4 file:rounded-md file:border-0 file:bg-brand-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-brand-700"
           />
         </Card>
       </div>
@@ -134,15 +134,15 @@ function ChurchImportPage() {
 
   return (
     <RequireAuth allowedRoles={['clerk']}>
-    <div className="min-h-screen bg-neutral-50 px-4 py-6 dark:bg-neutral-950">
+    <div className="min-h-screen bg-neutral-50 px-4 py-6">
       <div className="mx-auto max-w-2xl space-y-6">
-        <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">Import Members</h1>
+        <h1 className="text-xl font-bold text-neutral-900">Import Members</h1>
 
         {resolved.length > 0 && (
           <Card>
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{resolved.length} members ready</span>
+                <span className="text-sm font-medium text-neutral-900">{resolved.length} members ready</span>
                 <Badge variant="success" className="ml-2">
                   Valid
                 </Badge>
@@ -157,33 +157,33 @@ function ChurchImportPage() {
         {flagged.map((row, i) => (
           <Card key={i}>
             <div className="mb-2 flex items-center gap-2">
-              <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">Row {row.row}</span>
+              <span className="text-sm font-medium text-neutral-900">Row {row.row}</span>
               <Badge variant="error">{row.errors.join(', ')}</Badge>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <label className="block">
-                <span className="text-xs text-neutral-500 dark:text-neutral-400">First Name</span>
+                <span className="text-xs text-neutral-500">First Name</span>
                 <Input
                   value={row.data.firstname ?? ''}
                   onChange={(e) => updateFlagged(i, 'firstname', e.target.value)}
                 />
               </label>
               <label className="block">
-                <span className="text-xs text-neutral-500 dark:text-neutral-400">Last Name</span>
+                <span className="text-xs text-neutral-500">Last Name</span>
                 <Input
                   value={row.data.lastname ?? ''}
                   onChange={(e) => updateFlagged(i, 'lastname', e.target.value)}
                 />
               </label>
               <label className="block">
-                <span className="text-xs text-neutral-500 dark:text-neutral-400">Email</span>
+                <span className="text-xs text-neutral-500">Email</span>
                 <Input
                   value={row.data.email ?? ''}
                   onChange={(e) => updateFlagged(i, 'email', e.target.value)}
                 />
               </label>
               <label className="block">
-                <span className="text-xs text-neutral-500 dark:text-neutral-400">Phone</span>
+                <span className="text-xs text-neutral-500">Phone</span>
                 <Input
                   value={row.data.phone ?? ''}
                   onChange={(e) => updateFlagged(i, 'phone', e.target.value)}

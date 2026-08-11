@@ -17,10 +17,10 @@ const SelectTrigger = React.forwardRef<
       'flex h-12 w-full items-center justify-between rounded-lg border bg-white px-4 text-sm text-neutral-900',
       'focus:border-brand-500 focus:ring-2 focus:ring-brand-400/20 focus:ring-offset-0 focus:outline-none',
       'disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-not-allowed',
-      'dark:bg-neutral-900 dark:text-neutral-100',
+      '',
       error
-        ? 'border-error ring-2 ring-red-300 dark:border-error dark:ring-red-700'
-        : 'border-neutral-300 dark:border-neutral-700',
+        ? 'border-error ring-2 ring-red-300'
+        : 'border-neutral-300',
       '[&>span]:line-clamp-1',
       className,
     )}
@@ -43,7 +43,7 @@ const SelectContent = React.forwardRef<
       ref={ref}
       className={cn(
         'relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border border-neutral-200 bg-white shadow-md',
-        'dark:bg-neutral-800 dark:border-neutral-700',
+        '',
         'animate-in fade-in-0 zoom-in-95',
         position === 'popper' && 'data-[side=bottom]:translate-y-1 data-[side=top]:-translate-y-1',
         className,
@@ -74,7 +74,7 @@ const SelectItem = React.forwardRef<
     className={cn(
       'relative flex w-full cursor-pointer items-center rounded-md px-4 py-3 text-base text-neutral-900',
       'data-[highlighted]:bg-brand-100 data-[highlighted]:text-brand-700 focus:outline-none',
-      'dark:text-neutral-100 dark:data-[highlighted]:bg-brand-800',
+      '[highlighted]:bg-brand-800',
       className,
     )}
     {...props}

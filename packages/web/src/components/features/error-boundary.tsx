@@ -33,14 +33,14 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       if (this.props.fallback) return this.props.fallback;
 
       return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4 dark:bg-neutral-950">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4">
           <div className="max-w-md text-center space-y-6">
-            <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">Something went wrong</h1>
-            <p className="text-neutral-500 dark:text-neutral-400">
+            <h1 className="text-xl font-bold text-neutral-900">Something went wrong</h1>
+            <p className="text-neutral-500">
               An unexpected error occurred. Try reloading the page.
             </p>
             {this.state.error?.message && (
-              <p className="rounded-md bg-error-light px-4 py-2 text-sm text-error-700 dark:bg-red-900/20 dark:text-red-300">
+              <p className="rounded-md bg-error-light px-4 py-2 text-sm text-error-700">
                 {this.state.error.message}
               </p>
             )}

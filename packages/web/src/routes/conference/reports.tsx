@@ -76,8 +76,8 @@ function ConferenceReportsPage() {
       <RequireAuth allowedRoles={['conference-secretary', 'conference-president']}>
         <div className="px-4 py-6">
           <div className="mx-auto max-w-3xl text-center py-24">
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">Failed to load reports</h2>
-            <p className="mt-2 text-neutral-500 dark:text-neutral-400">Something went wrong while fetching conference data.</p>
+            <h2 className="text-xl font-semibold text-neutral-900">Failed to load reports</h2>
+            <p className="mt-2 text-neutral-500">Something went wrong while fetching conference data.</p>
             <Button
               className="mt-4"
               onClick={() => queryClient.invalidateQueries({ queryKey: ['church-state', churchId] })}
@@ -108,10 +108,10 @@ function ConferenceReportsPage() {
     <RequireAuth allowedRoles={['conference-secretary', 'conference-president']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-3xl space-y-6">
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Conference Reports</h1>
+          <h1 className="text-2xl font-bold text-neutral-900">Conference Reports</h1>
 
           {reports.length === 0 ? (
-            <p className="py-12 text-center text-neutral-500 dark:text-neutral-400">No reports submitted yet.</p>
+            <p className="py-12 text-center text-neutral-500">No reports submitted yet.</p>
           ) : (
             <div className="space-y-4">
               {reports.map((r: Record<string, unknown>) => {
@@ -122,7 +122,7 @@ function ConferenceReportsPage() {
                       <div className="flex items-center justify-between">
                         <div>
                           <CardTitle>{(r.data as Record<string, unknown>)?.year as number} Report</CardTitle>
-                          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                          <p className="text-sm text-neutral-500">
                             Church: {r.churchId as string} ·{' '}
                             {r.submittedAt ? new Date(r.submittedAt as number).toLocaleDateString() : ''}
                           </p>
@@ -132,7 +132,7 @@ function ConferenceReportsPage() {
                     </CardHeader>
                     <CardContent>
                       {r.status === 'returned' && (
-                        <p className="mb-3 text-sm text-red-600 dark:text-red-400">Reason: {r.returnReason as string}</p>
+                        <p className="mb-3 text-sm text-red-600">Reason: {r.returnReason as string}</p>
                       )}
                       {r.status === 'submitted' && (
                         <div className="flex gap-3">
@@ -144,7 +144,7 @@ function ConferenceReportsPage() {
                               <label className="flex-1">
                                 <span className="sr-only">Reason for return</span>
                                 <input
-                                  className="h-12 w-full rounded-md border border-neutral-300 px-3 text-sm dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100"
+                                  className="h-12 w-full rounded-md border border-neutral-300 px-3 text-sm"
                                   placeholder="Reason for return..."
                                   value={reason}
                                   onChange={e => setReason(e.target.value)}

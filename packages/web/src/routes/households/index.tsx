@@ -32,8 +32,8 @@ function HouseholdsPage() {
       <RequireAuth allowedRoles={['clerk']}>
         <div className="px-4 py-6">
           <div className="mx-auto max-w-3xl text-center py-24">
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">Failed to load members</h2>
-            <p className="mt-2 text-neutral-500 dark:text-neutral-400">Something went wrong while fetching member data.</p>
+            <h2 className="text-xl font-semibold text-neutral-900">Failed to load members</h2>
+            <p className="mt-2 text-neutral-500">Something went wrong while fetching member data.</p>
             <Button
               className="mt-4"
               onClick={() => queryClient.invalidateQueries({ queryKey: ['members', 'list', churchId] })}
@@ -113,8 +113,8 @@ function HouseholdsPage() {
       <RequireAuth allowedRoles={['clerk']}>
         <div className="px-4 py-6">
           <div className="mx-auto max-w-3xl text-center py-24">
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">No household suggestions</h2>
-            <p className="mt-2 text-neutral-500 dark:text-neutral-400">All members are already grouped or no patterns found.</p>
+            <h2 className="text-xl font-semibold text-neutral-900">No household suggestions</h2>
+            <p className="mt-2 text-neutral-500">All members are already grouped or no patterns found.</p>
           </div>
         </div>
       </RequireAuth>
@@ -125,10 +125,10 @@ function HouseholdsPage() {
     <RequireAuth allowedRoles={['clerk']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-3xl space-y-6">
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Household Suggestions</h1>
+          <h1 className="text-2xl font-bold text-neutral-900">Household Suggestions</h1>
 
           {visibleSuggestions.length === 0 && (confirmed.size > 0 || rejected.size > 0) && (
-            <p className="text-center text-neutral-500 dark:text-neutral-400 py-12">All suggestions reviewed.</p>
+            <p className="text-center text-neutral-500 py-12">All suggestions reviewed.</p>
           )}
 
           {visibleSuggestions.map((s, i) => {
@@ -139,7 +139,7 @@ function HouseholdsPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <CardTitle>{s.suggestedName}</CardTitle>
-                      <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Based on {s.reason.replace('-', ' ')}</p>
+                      <p className="mt-1 text-sm text-neutral-500">Based on {s.reason.replace('-', ' ')}</p>
                     </div>
                     <Badge variant="warning">Suggestion</Badge>
                   </div>
@@ -151,9 +151,9 @@ function HouseholdsPage() {
                       if (!member) return null;
                       const initials = `${member.firstName?.[0] ?? ''}${member.lastName?.[0] ?? ''}`;
                       return (
-                        <div key={id} className="flex items-center gap-2 rounded-full bg-neutral-100 px-3 py-1 dark:bg-neutral-700/50">
+                        <div key={id} className="flex items-center gap-2 rounded-full bg-neutral-100 px-3 py-1">
                           <Avatar size="sm"><AvatarFallback>{initials}</AvatarFallback></Avatar>
-                          <span className="text-sm dark:text-neutral-200">{member.firstName} {member.lastName}</span>
+                          <span className="text-sm">{member.firstName} {member.lastName}</span>
                         </div>
                       );
                     })}

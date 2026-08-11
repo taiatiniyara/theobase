@@ -92,12 +92,12 @@ function MemberProfilePage() {
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {member.email && <div><dt className="text-sm text-neutral-500">Email</dt><dd className="text-neutral-900 dark:text-neutral-100">{member.email}</dd></div>}
-            {member.phone && <div><dt className="text-sm text-neutral-500">Phone</dt><dd className="text-neutral-900 dark:text-neutral-100">{member.phone}</dd></div>}
-            {member.address && <div><dt className="text-sm text-neutral-500">Address</dt><dd className="text-neutral-900 dark:text-neutral-100">{member.address}</dd></div>}
-            {member.dateOfBirth && <div><dt className="text-sm text-neutral-500">Date of Birth</dt><dd className="text-neutral-900 dark:text-neutral-100">{member.dateOfBirth}</dd></div>}
-            {member.baptismDate && <div><dt className="text-sm text-neutral-500">Baptism Date</dt><dd className="text-neutral-900 dark:text-neutral-100">{member.baptismDate}</dd></div>}
-            {member.householdId && <div><dt className="text-sm text-neutral-500">Household</dt><dd className="text-neutral-900 dark:text-neutral-100">{member.householdId}</dd></div>}
+            {member.email && <div><dt className="text-sm text-neutral-500">Email</dt><dd className="text-neutral-900">{member.email}</dd></div>}
+            {member.phone && <div><dt className="text-sm text-neutral-500">Phone</dt><dd className="text-neutral-900">{member.phone}</dd></div>}
+            {member.address && <div><dt className="text-sm text-neutral-500">Address</dt><dd className="text-neutral-900">{member.address}</dd></div>}
+            {member.dateOfBirth && <div><dt className="text-sm text-neutral-500">Date of Birth</dt><dd className="text-neutral-900">{member.dateOfBirth}</dd></div>}
+            {member.baptismDate && <div><dt className="text-sm text-neutral-500">Baptism Date</dt><dd className="text-neutral-900">{member.baptismDate}</dd></div>}
+            {member.householdId && <div><dt className="text-sm text-neutral-500">Household</dt><dd className="text-neutral-900">{member.householdId}</dd></div>}
           </dl>
         </CardContent>
       </Card>

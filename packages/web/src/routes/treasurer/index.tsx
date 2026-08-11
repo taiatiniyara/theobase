@@ -121,12 +121,12 @@ function TreasurerPage() {
       <div className="px-4 py-6 max-w-4xl mx-auto">
         <div className="mx-auto max-w-4xl space-y-6">
           <div className="flex items-center justify-between">
-            <div className="h-8 w-56 animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-700" />
-            <div className="h-10 w-40 animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-700" />
+            <div className="h-8 w-56 animate-pulse rounded-md bg-neutral-200" />
+            <div className="h-10 w-40 animate-pulse rounded-md bg-neutral-200" />
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-24 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
+              <div key={i} className="h-24 animate-pulse rounded-lg bg-neutral-200" />
             ))}
           </div>
           <SkeletonCard />
@@ -145,8 +145,8 @@ function TreasurerPage() {
           <Card>
             <CardContent className="py-12 text-center">
               <AlertTriangle className="mx-auto h-10 w-10 text-warning" />
-              <h2 className="mt-4 text-lg font-semibold text-neutral-900 dark:text-neutral-100">Failed to Load</h2>
-              <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">Could not load church state data. Please try again.</p>
+              <h2 className="mt-4 text-lg font-semibold text-neutral-900">Failed to Load</h2>
+              <p className="mt-2 text-sm text-neutral-500">Could not load church state data. Please try again.</p>
               <Button className="mt-6" variant="ghost" onClick={() => queryClient.invalidateQueries({ queryKey: ['church-state', churchId] })}>
                 Retry
               </Button>
@@ -163,7 +163,7 @@ function TreasurerPage() {
     <div className="px-4 py-6 max-w-4xl mx-auto">
       <div className="mx-auto max-w-4xl space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Treasurer Dashboard</h1>
+          <h1 className="text-2xl font-bold text-neutral-900">Treasurer Dashboard</h1>
           <Button onClick={() => setShowExternalForm(!showExternalForm)}>
             {showExternalForm ? 'Cancel' : 'Add External Record'}
           </Button>
@@ -172,20 +172,20 @@ function TreasurerPage() {
         <Card>
           <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6">
             <div>
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">Total Giving</div>
-              <div className="text-xl font-bold tabular-nums text-neutral-900 dark:text-neutral-100">${totalGiving.toFixed(2)}</div>
+              <div className="text-sm text-neutral-500">Total Giving</div>
+              <div className="text-xl font-bold tabular-nums text-neutral-900">${totalGiving.toFixed(2)}</div>
             </div>
             <div>
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">Committed Batches</div>
-              <div className="text-xl font-bold tabular-nums text-neutral-900 dark:text-neutral-100">{committedBatches.length}</div>
+              <div className="text-sm text-neutral-500">Committed Batches</div>
+              <div className="text-xl font-bold tabular-nums text-neutral-900">{committedBatches.length}</div>
             </div>
             <div>
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">Total Records</div>
-              <div className="text-xl font-bold tabular-nums text-neutral-900 dark:text-neutral-100">{givingRecords.length}</div>
+              <div className="text-sm text-neutral-500">Total Records</div>
+              <div className="text-xl font-bold tabular-nums text-neutral-900">{givingRecords.length}</div>
             </div>
             <div>
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">Deposited</div>
-              <div className="text-xl font-bold tabular-nums text-neutral-900 dark:text-neutral-100">{batches.filter(b => b.status === 'deposited').length}</div>
+              <div className="text-sm text-neutral-500">Deposited</div>
+              <div className="text-xl font-bold tabular-nums text-neutral-900">{batches.filter(b => b.status === 'deposited').length}</div>
             </div>
           </CardContent>
         </Card>
@@ -238,9 +238,9 @@ function TreasurerPage() {
           <CardContent>
             {committedBatches.length === 0 ? (
               <div className="py-8 text-center">
-                <Inbox className="mx-auto h-10 w-10 text-neutral-400 dark:text-neutral-500" />
-                <p className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">No committed batches yet.</p>
-                <p className="text-xs text-neutral-400 dark:text-neutral-500">Batches will appear here once counters submit their records.</p>
+                <Inbox className="mx-auto h-10 w-10 text-neutral-400" />
+                <p className="mt-3 text-sm text-neutral-500">No committed batches yet.</p>
+                <p className="text-xs text-neutral-400">Batches will appear here once counters submit their records.</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -248,16 +248,16 @@ function TreasurerPage() {
                   const c1Records = (b.counter1Records as Array<Record<string, unknown>>) ?? [];
                   const total = c1Records.reduce((s, r) => s + ((r.amount as number) ?? 0), 0);
                   return (
-                    <div key={b.id as string} className="flex items-center justify-between rounded-md bg-neutral-50 dark:bg-neutral-800 px-4 py-3">
+                    <div key={b.id as string} className="flex items-center justify-between rounded-md bg-neutral-50 px-4 py-3">
                       <div>
-                        <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{b.date as string}</div>
-                        <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                        <div className="text-sm font-medium text-neutral-900">{b.date as string}</div>
+                        <div className="text-xs text-neutral-500">
                           {c1Records.length} records · {b.status as string}
                           {(b as Record<string, unknown>).depositRef ? ` · Ref: ${(b as Record<string, unknown>).depositRef}` : ''}
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-sm font-bold tabular-nums text-neutral-900 dark:text-neutral-100">${total.toFixed(2)}</span>
+                        <span className="text-sm font-bold tabular-nums text-neutral-900">${total.toFixed(2)}</span>
                         {b.status !== 'deposited' && (
                           <Button variant="ghost" size="sm" onClick={() => handleMarkDeposited(b.id as string)}>
                             Mark Deposited
@@ -278,14 +278,14 @@ function TreasurerPage() {
         <Card>
           <CardHeader>
             <CardTitle>Member Giving History</CardTitle>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">Select a member to view their full giving history.</p>
+            <p className="text-sm text-neutral-500">Select a member to view their full giving history.</p>
           </CardHeader>
           <CardContent>
             {members.length === 0 ? (
               <div className="py-6 text-center">
-                <Inbox className="mx-auto h-8 w-8 text-neutral-400 dark:text-neutral-500" />
-                <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">No members found.</p>
-                <Link to="/members" className="mt-3 inline-flex items-center gap-1 text-sm text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
+                <Inbox className="mx-auto h-8 w-8 text-neutral-400" />
+                <p className="mt-2 text-sm text-neutral-500">No members found.</p>
+                <Link to="/members" className="mt-3 inline-flex items-center gap-1 text-sm text-brand-600 hover:text-brand-700:text-brand-300">
                   View Members <ChevronRight className="h-3 w-3" />
                 </Link>
               </div>
@@ -295,7 +295,7 @@ function TreasurerPage() {
                   <button
                     key={m.id}
                     type="button"
-                    className="rounded-md px-3 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:bg-neutral-800"
+                    className="rounded-md px-3 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50:bg-neutral-800"
                     onClick={() => navigate({ to: `/treasurer/member/${m.id}` })}
                   >
                     {m.firstName} {m.lastName}
@@ -314,7 +314,7 @@ function TreasurerPage() {
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <label className="block">
-              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Bank Deposit Date</span>
+              <span className="text-sm font-medium text-neutral-700">Bank Deposit Date</span>
               <Input
                 type="date"
                 value={depositDate}
@@ -322,7 +322,7 @@ function TreasurerPage() {
               />
             </label>
             <label className="block">
-              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Deposit Reference Number</span>
+              <span className="text-sm font-medium text-neutral-700">Deposit Reference Number</span>
               <Input
                 placeholder="Enter reference number"
                 value={depositRef}

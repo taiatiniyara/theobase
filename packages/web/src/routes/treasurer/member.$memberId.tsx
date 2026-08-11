@@ -58,11 +58,11 @@ function MemberGivingHistoryPage() {
   const grandTotal = memberRecords.reduce((s, r) => s + r.amount, 0);
 
   const columns = useMemo<ColumnDef<GivingRecord>[]>(() => [
-    { accessorKey: 'batchId', header: 'Batch', cell: ({ getValue }) => <span className="text-xs font-mono text-neutral-700 dark:text-neutral-300">{getValue<string>().slice(0, 8)}</span> },
+    { accessorKey: 'batchId', header: 'Batch', cell: ({ getValue }) => <span className="text-xs font-mono text-neutral-700">{getValue<string>().slice(0, 8)}</span> },
     { accessorKey: 'type', header: 'Type', cell: ({ getValue }) => <Badge variant={getValue<string>() === 'tithe' ? 'success' : 'default'}>{getValue<string>()}</Badge> },
-    { accessorKey: 'category', header: 'Category', cell: ({ getValue }) => <span className="text-neutral-700 dark:text-neutral-300">{getValue<string>()}</span> },
-    { accessorKey: 'amount', header: 'Amount', cell: ({ getValue }) => <span className="tabular-nums font-medium text-neutral-900 dark:text-neutral-100">${getValue<number>().toFixed(2)}</span> },
-    { accessorKey: 'paymentMethod', header: 'Method', cell: ({ getValue }) => <span className="text-neutral-700 dark:text-neutral-300">{getValue<string>()}</span> },
+    { accessorKey: 'category', header: 'Category', cell: ({ getValue }) => <span className="text-neutral-700">{getValue<string>()}</span> },
+    { accessorKey: 'amount', header: 'Amount', cell: ({ getValue }) => <span className="tabular-nums font-medium text-neutral-900">${getValue<number>().toFixed(2)}</span> },
+    { accessorKey: 'paymentMethod', header: 'Method', cell: ({ getValue }) => <span className="text-neutral-700">{getValue<string>()}</span> },
   ], []);
 
   const table = useReactTable({
@@ -84,8 +84,8 @@ function MemberGivingHistoryPage() {
           <Card>
             <CardContent className="py-12 text-center">
               <AlertTriangle className="mx-auto h-10 w-10 text-warning" />
-              <h2 className="mt-4 text-lg font-semibold text-neutral-900 dark:text-neutral-100">Failed to Load</h2>
-              <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">Could not load giving records. Please try again.</p>
+              <h2 className="mt-4 text-lg font-semibold text-neutral-900">Failed to Load</h2>
+              <p className="mt-2 text-sm text-neutral-500">Could not load giving records. Please try again.</p>
               <Button className="mt-6" variant="ghost" onClick={() => queryClient.invalidateQueries({ queryKey: ['church-state', churchId] })}>
                 Retry
               </Button>
@@ -104,9 +104,9 @@ function MemberGivingHistoryPage() {
         <div className="mx-auto max-w-3xl">
           <Card>
             <CardContent className="py-12 text-center">
-              <UserX className="mx-auto h-10 w-10 text-neutral-400 dark:text-neutral-500" />
-              <h2 className="mt-4 text-lg font-semibold text-neutral-900 dark:text-neutral-100">Member Not Found</h2>
-              <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">This member does not exist or may have been removed.</p>
+              <UserX className="mx-auto h-10 w-10 text-neutral-400" />
+              <h2 className="mt-4 text-lg font-semibold text-neutral-900">Member Not Found</h2>
+              <p className="mt-2 text-sm text-neutral-500">This member does not exist or may have been removed.</p>
               <Button className="mt-6" variant="ghost" onClick={() => window.history.back()}>
                 Go Back
               </Button>
@@ -123,11 +123,11 @@ function MemberGivingHistoryPage() {
       <RequireAuth allowedRoles={['treasurer']}>
       <div className="px-4 py-6 max-w-3xl mx-auto">
         <div className="mx-auto max-w-3xl space-y-6">
-          <div className="h-6 w-24 animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-700" />
-          <div className="h-8 w-72 animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-700" />
+          <div className="h-6 w-24 animate-pulse rounded-md bg-neutral-200" />
+          <div className="h-8 w-72 animate-pulse rounded-md bg-neutral-200" />
           <div className="grid grid-cols-3 gap-4">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-24 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
+              <div key={i} className="h-24 animate-pulse rounded-lg bg-neutral-200" />
             ))}
           </div>
           <SkeletonCard />
@@ -141,30 +141,30 @@ function MemberGivingHistoryPage() {
     <RequireAuth allowedRoles={['treasurer']}>
     <div className="px-4 py-6 max-w-3xl mx-auto">
       <div className="mx-auto max-w-3xl space-y-6">
-        <button type="button" onClick={() => window.history.back()} className="inline-flex items-center gap-1 text-sm text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
+        <button type="button" onClick={() => window.history.back()} className="inline-flex items-center gap-1 text-sm text-brand-600 hover:text-brand-700:text-brand-300">
           ← Back
         </button>
-        <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+        <h1 className="text-2xl font-bold text-neutral-900">
           {member.firstName} {member.lastName} — Giving History
         </h1>
 
         <div className="grid grid-cols-3 gap-4">
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">Tithe</div>
-              <div className="text-xl font-bold tabular-nums text-neutral-900 dark:text-neutral-100">${titheTotal.toFixed(2)}</div>
+              <div className="text-sm text-neutral-500">Tithe</div>
+              <div className="text-xl font-bold tabular-nums text-neutral-900">${titheTotal.toFixed(2)}</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">Offerings</div>
-              <div className="text-xl font-bold tabular-nums text-neutral-900 dark:text-neutral-100">${offeringTotal.toFixed(2)}</div>
+              <div className="text-sm text-neutral-500">Offerings</div>
+              <div className="text-xl font-bold tabular-nums text-neutral-900">${offeringTotal.toFixed(2)}</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">Total</div>
-              <div className="text-xl font-bold tabular-nums text-neutral-900 dark:text-neutral-100">${grandTotal.toFixed(2)}</div>
+              <div className="text-sm text-neutral-500">Total</div>
+              <div className="text-xl font-bold tabular-nums text-neutral-900">${grandTotal.toFixed(2)}</div>
             </CardContent>
           </Card>
         </div>
@@ -173,18 +173,18 @@ function MemberGivingHistoryPage() {
 
         {memberRecords.length === 0 ? (
           <div className="py-12 text-center">
-            <Inbox className="mx-auto h-10 w-10 text-neutral-400 dark:text-neutral-500" />
-            <p className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">No giving records found for this member.</p>
-            <p className="text-xs text-neutral-400 dark:text-neutral-500">Records will appear here once counters add entries for {member.firstName}.</p>
+            <Inbox className="mx-auto h-10 w-10 text-neutral-400" />
+            <p className="mt-3 text-sm text-neutral-500">No giving records found for this member.</p>
+            <p className="text-xs text-neutral-400">Records will appear here once counters add entries for {member.firstName}.</p>
           </div>
         ) : (
-          <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden">
+          <div className="rounded-lg border border-neutral-200 bg-white overflow-hidden">
             <table className="w-full">
               <thead>
                 {table.getHeaderGroups().map(hg => (
                   <tr key={hg.id}>
                     {hg.headers.map(h => (
-                      <th key={h.id} className="px-4 py-3 text-left text-sm font-medium text-neutral-500 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-700 cursor-pointer" onClick={h.column.getToggleSortingHandler()}>
+                      <th key={h.id} className="px-4 py-3 text-left text-sm font-medium text-neutral-500 border-b border-neutral-200 cursor-pointer" onClick={h.column.getToggleSortingHandler()}>
                         {flexRender(h.column.columnDef.header, h.getContext())}
                       </th>
                     ))}
@@ -193,7 +193,7 @@ function MemberGivingHistoryPage() {
               </thead>
               <tbody>
                 {table.getRowModel().rows.map(row => (
-                  <tr key={row.id} className="border-b border-neutral-100 dark:border-neutral-800 last:border-0 hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+                  <tr key={row.id} className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50:bg-neutral-800/50">
                     {row.getVisibleCells().map(cell => (
                       <td key={cell.id} className="px-4 py-3">{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
                     ))}

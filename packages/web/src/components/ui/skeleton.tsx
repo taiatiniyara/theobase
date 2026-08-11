@@ -6,7 +6,7 @@ interface SkeletonProps {
 
 export function Skeleton({ className }: SkeletonProps) {
   return (
-    <div className={cn('animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-700', className)} />
+    <div className={cn('animate-pulse rounded-md bg-neutral-200', className)} />
   );
 }
 
@@ -33,7 +33,7 @@ export function SkeletonListItem() {
 
 export function SkeletonCard() {
   return (
-    <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+    <div className="rounded-lg border border-neutral-200 bg-white p-4">
       <SkeletonLine width="w-2/3" />
       <div className="mt-3 space-y-2">
         <SkeletonLine width="w-full" />

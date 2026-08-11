@@ -46,8 +46,8 @@ function ConferenceRemittancesPage() {
       <RequireAuth allowedRoles={['conference-treasurer', 'conference-president']}>
         <div className="px-4 py-6">
           <div className="mx-auto max-w-3xl text-center py-24">
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">Failed to load remittances</h2>
-            <p className="mt-2 text-neutral-500 dark:text-neutral-400">Something went wrong while fetching remittance data.</p>
+            <h2 className="text-xl font-semibold text-neutral-900">Failed to load remittances</h2>
+            <p className="mt-2 text-neutral-500">Something went wrong while fetching remittance data.</p>
             <Button
               className="mt-4"
               onClick={() => queryClient.invalidateQueries({ queryKey: ['church-state', churchId] })}
@@ -78,9 +78,9 @@ function ConferenceRemittancesPage() {
     <RequireAuth allowedRoles={['conference-treasurer', 'conference-president']}>
       <div className="px-4 py-6">
         <div className="mx-auto max-w-3xl space-y-6">
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Tithe Remittances</h1>
+          <h1 className="text-2xl font-bold text-neutral-900">Tithe Remittances</h1>
           {remittances.length === 0 ? (
-            <p className="py-12 text-center text-neutral-500 dark:text-neutral-400">No remittances submitted yet.</p>
+            <p className="py-12 text-center text-neutral-500">No remittances submitted yet.</p>
           ) : (
             <div className="space-y-4">
               {remittances.map((r: Record<string, unknown>) => {
@@ -91,14 +91,14 @@ function ConferenceRemittancesPage() {
                       <div className="flex items-center justify-between">
                         <div>
                           <CardTitle>{r.period as string}</CardTitle>
-                          <p className="text-sm text-neutral-500 dark:text-neutral-400">Church: {r.churchId as string}</p>
+                          <p className="text-sm text-neutral-500">Church: {r.churchId as string}</p>
                         </div>
                         <Badge variant={r.status === 'received' ? 'success' : 'warning'}>{r.status as string}</Badge>
                       </div>
                     </CardHeader>
                     <CardContent>
                       <div className="flex items-center justify-between">
-                        <span className="text-xl font-bold tabular-nums text-neutral-900 dark:text-neutral-100">${(r.amount as number).toFixed(2)}</span>
+                        <span className="text-xl font-bold tabular-nums text-neutral-900">${(r.amount as number).toFixed(2)}</span>
                         {r.status !== 'received' && (
                           <Button onClick={() => handleReceive(rimId)} isLoading={submitting === rimId}>
                             {submitting === rimId ? 'Marking...' : 'Mark Received'}
