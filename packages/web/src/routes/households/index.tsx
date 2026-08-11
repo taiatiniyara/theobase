@@ -10,7 +10,7 @@ import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
 import { Avatar, AvatarFallback } from '../../components/ui/avatar';
 
-export const Route = createFileRoute('/households')({
+export const Route = createFileRoute('/households/')({
   component: HouseholdsPage,
 });
 

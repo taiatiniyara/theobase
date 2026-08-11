@@ -90,7 +90,7 @@ test.describe('Member lifecycle', () => {
     await setupAuthAndNavigate(page, '/members/some-member-id');
 
     await expect(page.getByRole('heading', { name: 'John Doe' })).toBeVisible();
-    await expect(page.getByText('baptised')).toBeVisible();
+    await expect(page.getByText('baptised', { exact: true })).toBeVisible();
     await expect(page.getByText('baptised → baptised')).toBeVisible();
     await expect(page.getByText('Initial registration')).toBeVisible();
 
@@ -104,7 +104,7 @@ test.describe('Member lifecycle', () => {
     await mockStateRoute(page, { 'some-member-id': changedMember }, updatedAuditLog);
     await page.reload();
 
-    await expect(page.getByText('profession')).toBeVisible();
+    await expect(page.getByText('profession', { exact: true })).toBeVisible();
     await expect(page.getByText('baptised → profession')).toBeVisible();
     await expect(page.getByText('Transferred to profession')).toBeVisible();
   });
@@ -117,20 +117,16 @@ test.describe('Member lifecycle', () => {
 
     await setupAuthAndNavigate(page, '/members/some-member-id/edit');
 
-    await expect(page.getByText('baptised')).toBeVisible();
-
-    const trigger = page.getByRole('combobox', { name: 'Status' }).or(
-      page.locator('[role="combobox"]').first(),
-    );
-    await trigger.click();
+    await expect(page.getByText('Membership Status')).toBeVisible();
+    await page.getByText('Select new status').click();
 
     const professionOption = page.getByRole('option', { name: 'profession' });
     await expect(professionOption).toBeVisible();
     await professionOption.click();
 
-    await expect(page.getByText('Change to profession')).toBeVisible();
-    await page.getByRole('button', { name: 'Change to profession' }).click();
+    await expect(page.getByText(/Change to profession/)).toBeVisible();
+    await page.getByRole('button', { name: /Change to profession/ }).click();
 
-    await expect(page.getByText('Change to profession')).toBeVisible();
+    await expect(page.getByText(/Change to profession/)).toBeVisible();
   });
 });

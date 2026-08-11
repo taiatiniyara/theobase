@@ -27,7 +27,7 @@ const CATEGORIES = [
   { value: 'adra', label: 'ADRA' },
 ];
 
-export const Route = createFileRoute('/treasurer')({
+export const Route = createFileRoute('/treasurer/')({
   component: TreasurerPage,
 });
 

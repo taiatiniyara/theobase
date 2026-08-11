@@ -1,9 +1,21 @@
 import { test, expect } from '@playwright/test';
 
+const MOCK_JWT =
+  'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwiY2h1cmNoSWQiOiJ0ZXN0LWNodXJjaCIsInJvbGUiOiJjbGVyayIsInRva2VuVmVyc2lvbiI6MSwiaWF0IjoxLCJleHAiOjk5OTk5OTk5OTl9.dummy';
+
+function mockAuth(page: Parameters<Parameters<typeof test>[1]>[0]['page']) {
+  return page.evaluate((token) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('churchId', 'test-church');
+    localStorage.setItem('role', 'clerk');
+    localStorage.setItem('email', 'test@example.com');
+  }, MOCK_JWT);
+}
+
 test.describe('PWA offline sync', () => {
   test('installs service worker and caches app shell', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('h1')).toHaveText('Theobase');
+    await expect(page.locator('h1')).toContainText('Dashboard');
   });
 
   test('enqueues intents to IndexedDB WAL when offline', async ({ page }) => {
@@ -71,8 +83,9 @@ test.describe('PWA offline sync', () => {
 
   test('sync indicator renders on page', async ({ page }) => {
     await page.goto('/');
+    await mockAuth(page);
+    await page.reload();
     await page.waitForTimeout(500);
-    const indicator = page.locator('[class*="rounded-full"]').first();
-    await expect(indicator).toBeAttached();
+    await expect(page.getByText(/Synced|Syncing|Offline/)).toBeVisible();
   });
 });

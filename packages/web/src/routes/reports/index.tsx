@@ -21,7 +21,7 @@ interface ReportData {
   quarters: { q1: QuarterData; q2: QuarterData; q3: QuarterData; q4: QuarterData };
 }
 
-export const Route = createFileRoute('/reports')({
+export const Route = createFileRoute('/reports/')({
   component: ReportsPage,
 });
 

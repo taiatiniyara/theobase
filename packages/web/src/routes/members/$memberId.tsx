@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate, Outlet, useRouterState } from '@tanstack/react-router';
 import { useAuth } from '../../lib/auth-store';
 import { useMembers, useAuditLog } from '../../lib/queries';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
@@ -18,6 +18,8 @@ function MemberProfilePage() {
   const { data: members, isLoading } = useMembers(churchId!);
   const { data: auditLog = [] } = useAuditLog(churchId!, memberId);
   const member = members?.find((m) => m.id === memberId);
+  const { location } = useRouterState();
+  const isChildRoute = location.pathname.endsWith('/edit');
 
   if (isLoading) {
     return (
@@ -25,6 +27,14 @@ function MemberProfilePage() {
         {Array.from({ length: 3 }).map((_, i) => (
           <div key={i} className="h-20 animate-pulse rounded-lg bg-neutral-200" />
         ))}
+      </div>
+    );
+  }
+
+  if (isChildRoute) {
+    return (
+      <div className="px-4 py-6 max-w-2xl mx-auto">
+        <Outlet />
       </div>
     );
   }

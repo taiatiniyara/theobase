@@ -30,7 +30,7 @@ interface GivingRecord {
   category: string;
 }
 
-export const Route = createFileRoute('/counting-room')({
+export const Route = createFileRoute('/counting-room/')({
   component: CountingRoomPage,
 });
 

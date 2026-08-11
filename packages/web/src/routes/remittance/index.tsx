@@ -6,7 +6,7 @@ import { fetchRemittance, postChurchMutation } from '../../lib/api';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 
-export const Route = createFileRoute('/remittance')({
+export const Route = createFileRoute('/remittance/')({
   component: RemittancePage,
 });
 

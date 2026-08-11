@@ -33,7 +33,7 @@ const STATUS_BADGE_VARIANT: Record<string, 'success' | 'warning' | 'error' | 'de
   'transfer-out': 'error',
 };
 
-export const Route = createFileRoute('/members')({
+export const Route = createFileRoute('/members/')({
   component: MemberDirectoryPage,
 });
 
