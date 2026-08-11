@@ -13,7 +13,8 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { path: '/', label: 'Home', icon: '⌂', minRole: null },
   { path: '/members', label: 'Members', icon: '👥', minRole: 'clerk' },
-] as const;
+  { path: '/households', label: 'Households', icon: '🏠', minRole: 'clerk' },
+];
 
 const ROLE_HIERARCHY: Record<string, number> = {
   clerk: 1,

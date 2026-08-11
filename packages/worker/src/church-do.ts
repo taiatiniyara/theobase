@@ -1,6 +1,6 @@
 import { DurableObject } from 'cloudflare:workers';
 import type { ChurchEvent, ChurchOperation, Role } from '@theobase/shared';
-import { isValidTransition, type MembershipState } from '@theobase/shared';
+import { isValidTransition, suggestHouseholds, type MembershipState } from '@theobase/shared';
 import { verify } from './auth/jwt';
 
 const LAST_HASH_KEY = 'lastHash';
@@ -21,6 +21,10 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
     'transfer:initiate',
     'transfer:accept',
     'transfer:reject',
+    'contact:approve',
+    'contact:reject',
+    'contact:update-request',
+    'visitor:follow-up',
   ],
   treasurer: [
     'giving_record:create',
@@ -33,7 +37,10 @@ const ROLE_PERMISSIONS: Record<string, ChurchOperation[]> = {
   pastor: [],
   'department-head': [],
   'board-member': [],
-  member: [],
+  member: [
+    'contact:update-request',
+    'visitor:follow-up',
+  ],
   interest: [],
   visitor: [],
   'conference-treasurer': [],
@@ -197,6 +204,85 @@ const STATE_HANDLERS: Record<
   'church:create': (p, s) => {
     s.church = p;
   },
+  'contact:update-request': (p, s) => {
+    const pending = (s.pendingContactUpdates as Array<Record<string, unknown>>) ?? [];
+    pending.push({
+      memberId: p.memberId,
+      updates: p.updates,
+      requestedAt: p.timestamp,
+      actor: p.actor,
+      status: 'pending',
+    });
+    s.pendingContactUpdates = pending;
+    const auditLog = (s.auditLog as Array<Record<string, unknown>>) ?? [];
+    auditLog.push({
+      memberId: p.memberId,
+      prevState: 'submitted',
+      newState: 'pending-approval',
+      actor: p.actor,
+      timestamp: p.timestamp,
+      reason: 'Contact update requested',
+      operation: 'contact:update-request',
+    });
+    s.auditLog = auditLog;
+  },
+  'contact:approve': (p, s) => {
+    const member = (p.updatedMember as Record<string, unknown>) ?? {};
+    upsertEntity(s, 'members', p.memberId as string, member);
+    const pending = (s.pendingContactUpdates as Array<Record<string, unknown>>) ?? [];
+    s.pendingContactUpdates = pending.filter(u => u.memberId !== p.memberId);
+    const auditLog = (s.auditLog as Array<Record<string, unknown>>) ?? [];
+    auditLog.push({
+      memberId: p.memberId,
+      prevState: 'pending-approval',
+      newState: 'approved',
+      actor: p.actor,
+      timestamp: p.timestamp,
+      reason: 'Contact update approved',
+      operation: 'contact:approve',
+    });
+    s.auditLog = auditLog;
+  },
+  'contact:reject': (p, s) => {
+    const pending = (s.pendingContactUpdates as Array<Record<string, unknown>>) ?? [];
+    s.pendingContactUpdates = pending.filter(u => u.memberId !== p.memberId);
+    const auditLog = (s.auditLog as Array<Record<string, unknown>>) ?? [];
+    auditLog.push({
+      memberId: p.memberId,
+      prevState: 'pending-approval',
+      newState: 'rejected',
+      actor: p.actor,
+      timestamp: p.timestamp,
+      reason: p.reason ?? 'Contact update rejected',
+      operation: 'contact:reject',
+    });
+    s.auditLog = auditLog;
+  },
+  'visitor:follow-up': (p, s) => {
+    const interests = (s.interests as Array<Record<string, unknown>>) ?? [];
+    interests.push({
+      id: crypto.randomUUID(),
+      churchId: p.churchId,
+      name: p.name,
+      email: p.email ?? null,
+      phone: p.phone ?? null,
+      message: p.message ?? null,
+      createdAt: p.timestamp,
+      status: 'new',
+    });
+    s.interests = interests;
+  },
+  'household:suggestions': (p, s) => {
+    const suggestions = (s.householdSuggestions as Array<Record<string, unknown>>) ?? [];
+    suggestions.push({
+      memberIds: p.memberIds,
+      suggestedName: p.suggestedName,
+      reason: p.reason,
+      generatedAt: p.timestamp,
+      confirmed: false,
+    });
+    s.householdSuggestions = suggestions;
+  },
 };
 
 export class ChurchDO extends DurableObject {
@@ -298,6 +384,39 @@ export class ChurchDO extends DurableObject {
     const path = url.pathname;
 
     try {
+      if (request.method === 'GET' && path === '/household-suggestions') {
+        const state = await this.reconstructState();
+        const members = Object.values((state.members as Record<string, Record<string, unknown>>) ?? {});
+        const suggestions = suggestHouseholds(members as Parameters<typeof suggestHouseholds>[0]);
+        return new Response(JSON.stringify(suggestions), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      if (request.method === 'GET' && path === '/pending-updates') {
+        const state = await this.reconstructState();
+        return new Response(JSON.stringify(state.pendingContactUpdates ?? []), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      if (request.method === 'GET' && path === '/interests') {
+        const state = await this.reconstructState();
+        return new Response(JSON.stringify(state.interests ?? []), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      if (request.method === 'GET' && path === '/qr') {
+        const state = await this.reconstructState();
+        const church = state.church as Record<string, unknown> | undefined;
+        return new Response(JSON.stringify({
+          churchId: church?.id,
+          churchName: church?.name,
+          welcomeMessage: `Welcome to ${church?.name ?? 'our church'}!`,
+        }), { headers: { 'Content-Type': 'application/json' } });
+      }
+
       if (request.method === 'GET' && path === '/events') {
         const events = await this.getEvents();
         return new Response(JSON.stringify(events), {

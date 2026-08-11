@@ -17,6 +17,9 @@ import { Route as MembersMemberIdRouteImport } from './routes/members/$memberId'
 import { Route as MembersMemberIdEditRouteImport } from './routes/members/$memberId.edit'
 import { Route as ChurchImportRouteImport } from './routes/church/import'
 import { Route as ChurchRegisterRouteImport } from './routes/church/register'
+import { Route as HouseholdsIndexRouteImport } from './routes/households/index'
+import { Route as MembersSelfServiceRouteImport } from './routes/members/self-service'
+import { Route as VisitorWelcomeRouteImport } from './routes/visitor/welcome'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,6 +61,21 @@ const ChurchRegisterRoute = ChurchRegisterRouteImport.update({
   path: '/church/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HouseholdsIndexRoute = HouseholdsIndexRouteImport.update({
+  id: '/households',
+  path: '/households',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MembersSelfServiceRoute = MembersSelfServiceRouteImport.update({
+  id: '/members/self-service',
+  path: '/members/self-service',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VisitorWelcomeRoute = VisitorWelcomeRouteImport.update({
+  id: '/visitor/welcome',
+  path: '/visitor/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +86,9 @@ export interface FileRoutesByFullPath {
   '/members/$memberId/edit': typeof MembersMemberIdEditRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
+  '/households': typeof HouseholdsIndexRoute
+  '/members/self-service': typeof MembersSelfServiceRoute
+  '/visitor/welcome': typeof VisitorWelcomeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +99,9 @@ export interface FileRoutesByTo {
   '/members/$memberId/edit': typeof MembersMemberIdEditRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
+  '/households': typeof HouseholdsIndexRoute
+  '/members/self-service': typeof MembersSelfServiceRoute
+  '/visitor/welcome': typeof VisitorWelcomeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,13 +113,16 @@ export interface FileRoutesById {
   '/members/$memberId/edit': typeof MembersMemberIdEditRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
+  '/households': typeof HouseholdsIndexRoute
+  '/members/self-service': typeof MembersSelfServiceRoute
+  '/visitor/welcome': typeof VisitorWelcomeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/church/import' | '/church/register'
+  fullPaths: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/church/import' | '/church/register'
-  id: '__root__' | '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/church/import' | '/church/register'
+  to: '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome'
+  id: '__root__' | '/' | '/login' | '/members' | '/members/add' | '/members/$memberId' | '/members/$memberId/edit' | '/members/self-service' | '/church/import' | '/church/register' | '/households' | '/visitor/welcome'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -107,6 +134,9 @@ export interface RootRouteChildren {
   MembersMemberIdEditRoute: typeof MembersMemberIdEditRoute
   ChurchImportRoute: typeof ChurchImportRoute
   ChurchRegisterRoute: typeof ChurchRegisterRoute
+  HouseholdsIndexRoute: typeof HouseholdsIndexRoute
+  MembersSelfServiceRoute: typeof MembersSelfServiceRoute
+  VisitorWelcomeRoute: typeof VisitorWelcomeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -167,6 +197,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChurchRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/households': {
+      id: '/households'
+      path: '/households'
+      fullPath: '/households'
+      preLoaderRoute: typeof HouseholdsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/members/self-service': {
+      id: '/members/self-service'
+      path: '/members/self-service'
+      fullPath: '/members/self-service'
+      preLoaderRoute: typeof MembersSelfServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/visitor/welcome': {
+      id: '/visitor/welcome'
+      path: '/visitor/welcome'
+      fullPath: '/visitor/welcome'
+      preLoaderRoute: typeof VisitorWelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -177,6 +228,9 @@ const rootRouteChildren: RootRouteChildren = {
   MembersAddRoute: MembersAddRoute,
   MembersMemberIdRoute: MembersMemberIdRoute,
   MembersMemberIdEditRoute: MembersMemberIdEditRoute,
+  MembersSelfServiceRoute: MembersSelfServiceRoute,
+  HouseholdsIndexRoute: HouseholdsIndexRoute,
+  VisitorWelcomeRoute: VisitorWelcomeRoute,
   ChurchImportRoute: ChurchImportRoute,
   ChurchRegisterRoute: ChurchRegisterRoute,
 }

@@ -27,7 +27,12 @@ export type ChurchOperation =
   | 'role:revoke'
   | 'transfer:initiate'
   | 'transfer:accept'
-  | 'transfer:reject';
+  | 'transfer:reject'
+  | 'household:suggestions'
+  | 'contact:update-request'
+  | 'contact:approve'
+  | 'contact:reject'
+  | 'visitor:follow-up';
 
 export type ChurchEventTyped = ChurchEvent<ChurchOperation>;
 
@@ -43,4 +48,12 @@ export interface TransferPayload {
   fromChurchId: string;
   toChurchId: string;
   reason?: string;
+}
+
+export interface VisitorFollowUpPayload {
+  churchId: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  message?: string;
 }
