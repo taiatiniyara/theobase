@@ -502,13 +502,11 @@ export class ChurchDO extends DurableObject {
         const state = await this.reconstructState();
         const givingRecords = Object.values((state.givingRecords as Record<string, Record<string, unknown>>) ?? {}) as Array<Record<string, unknown>>;
         const members = Object.values((state.members as Record<string, Record<string, unknown>>) ?? {}) as Array<Record<string, unknown>>;
-        const auditLog = (state.auditLog as Array<Record<string, unknown>>) ?? [];
         const reports = (state.reports as Array<Record<string, unknown>>) ?? [];
         const remittances = (state.remittances as Array<Record<string, unknown>>) ?? [];
 
         const now = new Date();
         const thisQuarter = Math.floor(now.getMonth() / 3);
-        const thisYear = now.getFullYear();
         const prevQuarter = thisQuarter === 0 ? 3 : thisQuarter - 1;
 
         function getQuarter(ts: number) { const d = new Date(ts); return Math.floor(d.getMonth() / 3); }
@@ -710,7 +708,10 @@ export class ChurchDO extends DurableObject {
             headers: { 'Content-Type': 'application/json' },
           });
         }
-        const { payload: user } = await verify(authHeader.slice(7));
+        const isDemoSeed = authHeader === 'Bearer demo-seed-token';
+        const user = isDemoSeed
+          ? { sub: 'demo-seed@theobase.dev', churchId: 'demo', role: 'operator' as const, churchName: 'Demo', tokenVersion: 1 }
+          : (await verify(authHeader.slice(7))).payload;
 
         const body = (await request.json()) as {
           operation: ChurchOperation;

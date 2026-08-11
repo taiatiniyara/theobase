@@ -1,0 +1,115 @@
+import { ChurchDO } from './church-do';
+import type { Env } from './env';
+
+const FIJIAN_FIRST_NAMES = [
+  'Jone', 'Mere', 'Savenaca', 'Litia', 'Tevita', 'Ana', 'Peni', 'Salote',
+  'Ratu', 'Adi', 'Josaia', 'Vasiti', 'Emosi', 'Asenaca', 'Samuela', 'Mereoni',
+  'Isikeli', 'Nanise', 'Aporosa', 'Raijieli', 'Sairusi', 'Elenoa', 'Jope', 'Makelesi',
+];
+
+const FIJIAN_LAST_NAMES = [
+  'Naivalu', 'Vakalalabure', 'Tuisawau', 'Nalewavada', 'Tora', 'Rokotakala',
+  'Cakobau', 'Koroi', 'Ramasi', 'Vosailagi', 'Drodrolagi', 'Tawake', 'Nadredre',
+  'Vosarogo', 'Buliruarua', 'Saukuru', 'Tiko', 'Ramaka', 'Ravuso', 'Anda',
+];
+
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)]!;
+}
+
+function randomMember(churchId: string, i: number): Record<string, unknown> {
+  const fn = pick(FIJIAN_FIRST_NAMES);
+  const ln = pick(FIJIAN_LAST_NAMES);
+  const gender = Math.random() > 0.5 ? 'male' : 'female';
+  const statuses = ['baptised', 'baptised', 'baptised', 'baptised', 'profession', 'transfer-in'];
+  const status = pick(statuses);
+  const year = 1950 + Math.floor(Math.random() * 50);
+  const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+  const day = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0');
+
+  return {
+    id: `demo-member-${i}`,
+    churchId,
+    firstName: fn,
+    lastName: ln,
+    email: `${fn.toLowerCase()}.${ln.toLowerCase()}@demo.church`,
+    phone: `+679 ${String(Math.floor(Math.random() * 9000000) + 1000000)}`,
+    address: `${Math.floor(Math.random() * 50) + 1} ${pick(['Bau Rd', 'Princes Rd', 'Queen Elizabeth Dr', 'Ratu Mara Rd', 'Victoria Pde', 'Toorak Rd'])}`,
+    dateOfBirth: `${year}-${month}-${day}`,
+    gender,
+    baptismDate: `${year + 15}-${month}-${day}`,
+    membershipStatus: status,
+    createdAt: Date.now() - Math.floor(Math.random() * 15552000000),
+    updatedAt: Date.now(),
+  };
+}
+
+const CATEGORIES = ['tithe', 'sabbath-school', 'local-church-budget', 'conference-advance', 'world-budget', 'building-fund', 'adra'];
+
+function randomGivingRecord(batchId: string, memberIndex: number, daysAgoRange: [number, number]): Record<string, unknown> {
+  const type = Math.random() > 0.4 ? 'tithe' : 'offering';
+  const baseAmount = type === 'tithe' ? pick([20, 30, 40, 50, 75, 100, 150]) : pick([5, 10, 15, 20, 25, 50]);
+  const amount = Math.round((baseAmount + Math.random() * 20) * 100) / 100;
+  const daysAgo = daysAgoRange[0] + Math.floor(Math.random() * (daysAgoRange[1] - daysAgoRange[0]));
+
+  return {
+    id: crypto.randomUUID(),
+    batchId,
+    memberId: `demo-member-${memberIndex}`,
+    type,
+    amount,
+    category: pick(CATEGORIES),
+    paymentMethod: pick(['envelope', 'cash', 'electronic']),
+    createdAt: (Date.now() - daysAgo * 86400000) / 1000,
+  };
+}
+
+export async function seedDemoChurch(env: Env): Promise<string> {
+  const churchId = crypto.randomUUID();
+  const doId = env.CHURCH_DO.idFromName(churchId);
+  const stub = env.CHURCH_DO.get(doId);
+
+  await doFetch(stub, 'church:create', { id: churchId, name: 'Suva Central SDA Church', address: '3 Thurston St, Suva', status: 'active' });
+
+  for (let i = 0; i < 120; i++) {
+    const m = randomMember(churchId, i);
+    await doFetch(stub, 'member:create', m);
+  }
+
+  for (let batch = 0; batch < 24; batch++) {
+    const batchId = `demo-batch-${batch}`;
+    const daysAgoStart = batch * 7;
+    const daysAgoEnd = daysAgoStart + 7;
+    const records: Array<Record<string, unknown>> = [];
+    const recordCount = 40 + Math.floor(Math.random() * 60);
+
+    for (let r = 0; r < recordCount; r++) {
+      const memberIndex = Math.floor(Math.random() * 120);
+      records.push(randomGivingRecord(batchId, memberIndex, [daysAgoStart, daysAgoEnd]));
+    }
+
+    await doFetch(stub, 'giving_batch:create', {
+      id: batchId, churchId, date: new Date(Date.now() - daysAgoStart * 86400000).toISOString().split('T')[0],
+      counter1Id: 'demo-counter1', records, status: 'counter1-confirmed',
+    });
+    await doFetch(stub, 'giving_batch:counter2-confirm', {
+      batchId, counter2Id: 'demo-counter2', records, timestamp: Date.now(),
+    });
+    await doFetch(stub, 'giving_batch:commit', {
+      batchId, records, timestamp: Date.now(),
+    });
+  }
+
+  return churchId;
+}
+
+async function doFetch(stub: DurableObjectStub<ChurchDO>, operation: string, payload: unknown): Promise<void> {
+  const response = await stub.fetch('http://localhost/mutate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer demo-seed-token' },
+    body: JSON.stringify({ operation, payload }),
+  });
+  if (!response.ok) {
+    throw new Error(`Seed failed for ${operation}: ${response.status}`);
+  }
+}

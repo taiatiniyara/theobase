@@ -53,6 +53,14 @@ export default {
       return cors(await handleParseCsv(request));
     }
 
+    if (path === '/church/seed-demo' && request.method === 'POST') {
+      const { seedDemoChurch } = await import('./demo-seed');
+      const churchId = await seedDemoChurch(env);
+      return cors(new Response(JSON.stringify({ churchId, message: 'Demo church seeded successfully' }), {
+        status: 201, headers: { 'Content-Type': 'application/json' },
+      }));
+    }
+
     const churchMatch = path.match(/^\/church\/([^/]+)(\/.*)?$/);
     if (churchMatch) {
       const churchId = churchMatch[1]!;
