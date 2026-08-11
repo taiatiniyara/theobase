@@ -67,8 +67,8 @@ export function AppShell({ children }: AppShellProps) {
     <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-950">
       <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-neutral-200/60 bg-white md:flex md:flex-col dark:border-neutral-800 dark:bg-neutral-900">
         <div className="flex h-14 items-center gap-3 border-b border-neutral-200/60 px-5 dark:border-neutral-800">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
-            T
+          <div className="flex h-8 w-8 items-center justify-center">
+            <img src="/logo-icon.svg" alt="Theobase" className="h-8 w-8" />
           </div>
           <span className="text-base font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
             Theobase
@@ -119,9 +119,7 @@ export function AppShell({ children }: AppShellProps) {
       <div className="flex flex-1 flex-col">
         <header className="z-10 flex h-14 shrink-0 items-center justify-between border-b border-neutral-200/60 bg-white/80 px-4 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-950/80">
           <div className="flex items-center gap-3 md:hidden">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-brand-600 text-xs font-bold text-white">
-              T
-            </div>
+            <img src="/logo-icon.svg" alt="Theobase" className="h-7 w-7" />
             <span className="text-sm font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
               {churchName ?? 'Theobase'}
             </span>
