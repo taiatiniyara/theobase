@@ -32,5 +32,5 @@ export const SESSION_REFRESH_MS = 24 * 60 * 60 * 1000;
 
 export const MFA_REQUIRED_ROLES: Role[] = ['treasurer', 'counter'];
 
-export const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
-export const RATE_LIMIT_MAX_ATTEMPTS = 5;
+export const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+export const RATE_LIMIT_MAX_ATTEMPTS = 20;
