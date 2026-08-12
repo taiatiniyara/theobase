@@ -4,6 +4,7 @@ import {
   ORG_LEVELS,
   ORG_KINDS,
   ORG_STATUSES,
+  PLACEMENT_REQUEST_STATUSES,
   GRANT_ROLES,
   TRANSFER_STATUSES,
   ORG_AUDIT_ACTIONS,
@@ -62,6 +63,22 @@ export const roleGrant = sqliteTable('role_grant', {
     .references((): AnySQLiteColumn => orgUnit.id),
   role: text('role', { enum: GRANT_ROLES }).notNull(),
   expiresAt: integer('expires_at'),
+  createdAt: integer('created_at')
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
+export const placementRequest = sqliteTable('placement_request', {
+  id: text('id').primaryKey(),
+  requestedBy: text('requested_by').notNull(),
+  name: text('name').notNull(),
+  territory: text('territory').notNull(),
+  suggestedParentId: text('suggested_parent_id')
+    .notNull()
+    .references((): AnySQLiteColumn => orgUnit.id),
+  status: text('status', { enum: PLACEMENT_REQUEST_STATUSES })
+    .notNull()
+    .default('pending'),
   createdAt: integer('created_at')
     .notNull()
     .default(sql`(unixepoch())`),

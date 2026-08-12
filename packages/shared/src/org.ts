@@ -36,6 +36,9 @@ export type OrgKind = (typeof ORG_KINDS)[number];
 export const ORG_STATUSES = ['organized', 'constituted', 'attached', 'inactive'] as const;
 export type OrgStatus = (typeof ORG_STATUSES)[number];
 
+export const PLACEMENT_REQUEST_STATUSES = ['pending', 'confirmed', 'rejected'] as const;
+export type PlacementRequestStatus = (typeof PLACEMENT_REQUEST_STATUSES)[number];
+
 export const ORG_FACETS = ['tenant', 'subscribable', 'aggregator', 'non-entity', 'institution'] as const;
 export type OrgFacet = (typeof ORG_FACETS)[number];
 
@@ -135,6 +138,7 @@ export const ORG_AUDIT_ACTIONS = [
   'unit:promote',
   'unit:deactivate',
   'unit:delete',
+  'unit:requested',
   'grant:grant',
   'grant:revoke',
   'grant:expire',

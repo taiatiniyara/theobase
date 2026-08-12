@@ -18,6 +18,7 @@ import {
   roleGrant,
   transfer,
   orgAudit,
+  placementRequest,
 } from './schema';
 
 function schemasFor<T extends Parameters<typeof createInsertSchema>[0]>(table: T) {
@@ -45,6 +46,7 @@ const churchExtensionSchemas = schemasFor(churchExtension);
 const roleGrantSchemas = schemasFor(roleGrant);
 const transferSchemas = schemasFor(transfer);
 const orgAuditSchemas = schemasFor(orgAudit);
+const placementRequestSchemas = schemasFor(placementRequest);
 
 export const {
   insert: insertConferenceSchema,
@@ -126,6 +128,11 @@ export const {
   insert: insertOrgAuditSchema,
   select: selectOrgAuditSchema,
 } = orgAuditSchemas;
+export const {
+  insert: insertPlacementRequestSchema,
+  select: selectPlacementRequestSchema,
+  update: updatePlacementRequestSchema,
+} = placementRequestSchemas;
 
 type SelectOf<S extends { select: z.ZodTypeAny }> = z.infer<S['select']>;
 type InsertOf<S extends { insert: z.ZodTypeAny }> = z.infer<S['insert']>;
@@ -160,7 +167,9 @@ export type ChurchExtension = SelectOf<typeof churchExtensionSchemas>;
 export type RoleGrant = SelectOf<typeof roleGrantSchemas>;
 export type Transfer = SelectOf<typeof transferSchemas>;
 export type OrgAudit = SelectOf<typeof orgAuditSchemas>;
+export type PlacementRequest = SelectOf<typeof placementRequestSchemas>;
 export type InsertOrgUnit = InsertOf<typeof orgUnitSchemas>;
 export type InsertChurchExtension = InsertOf<typeof churchExtensionSchemas>;
 export type InsertRoleGrant = InsertOf<typeof roleGrantSchemas>;
 export type InsertOrgAudit = InsertOf<typeof orgAuditSchemas>;
+export type InsertPlacementRequest = InsertOf<typeof placementRequestSchemas>;

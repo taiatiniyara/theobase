@@ -10,6 +10,7 @@ import {
 } from './auth/handlers';
 import { handleChurchRegister } from './auth/register';
 import { handleParseCsv } from './auth/csv';
+import { handlePlacementRequest } from './org/placement';
 import { authenticate, requireChurchId } from './auth/middleware';
 import type { Env } from './env';
 
@@ -56,6 +57,10 @@ export default {
 
     if (path === '/church/parse-csv' && request.method === 'POST') {
       return cors(await handleParseCsv(request));
+    }
+
+    if (path === '/placement/request' && request.method === 'POST') {
+      return cors(await handlePlacementRequest(request, env));
     }
 
     if (path === '/church/seed-demo' && request.method === 'POST') {

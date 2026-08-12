@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthVerifyRouteImport } from './routes/auth/verify'
 import { Route as ChurchImportRouteImport } from './routes/church/import'
 import { Route as ChurchRegisterRouteImport } from './routes/church/register'
+import { Route as ConferencePlacementRouteImport } from './routes/conference/placement'
 import { Route as ConferenceRemittancesRouteImport } from './routes/conference/remittances'
 import { Route as ConferenceReportsRouteImport } from './routes/conference/reports'
 import { Route as CountingRoomIndexRouteImport } from './routes/counting-room/index'
@@ -53,6 +54,11 @@ const ChurchImportRoute = ChurchImportRouteImport.update({
 const ChurchRegisterRoute = ChurchRegisterRouteImport.update({
   id: '/church/register',
   path: '/church/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConferencePlacementRoute = ConferencePlacementRouteImport.update({
+  id: '/conference/placement',
+  path: '/conference/placement',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConferenceRemittancesRoute = ConferenceRemittancesRouteImport.update({
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/auth/verify': typeof AuthVerifyRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
+  '/conference/placement': typeof ConferencePlacementRoute
   '/conference/remittances': typeof ConferenceRemittancesRoute
   '/conference/reports': typeof ConferenceReportsRoute
   '/members/$memberId': typeof MembersMemberIdRouteWithChildren
@@ -160,6 +167,7 @@ export interface FileRoutesByTo {
   '/auth/verify': typeof AuthVerifyRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
+  '/conference/placement': typeof ConferencePlacementRoute
   '/conference/remittances': typeof ConferenceRemittancesRoute
   '/conference/reports': typeof ConferenceReportsRoute
   '/members/$memberId': typeof MembersMemberIdRouteWithChildren
@@ -183,6 +191,7 @@ export interface FileRoutesById {
   '/auth/verify': typeof AuthVerifyRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
+  '/conference/placement': typeof ConferencePlacementRoute
   '/conference/remittances': typeof ConferenceRemittancesRoute
   '/conference/reports': typeof ConferenceReportsRoute
   '/members/$memberId': typeof MembersMemberIdRouteWithChildren
@@ -207,6 +216,7 @@ export interface FileRouteTypes {
     | '/auth/verify'
     | '/church/import'
     | '/church/register'
+    | '/conference/placement'
     | '/conference/remittances'
     | '/conference/reports'
     | '/members/$memberId'
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/auth/verify'
     | '/church/import'
     | '/church/register'
+    | '/conference/placement'
     | '/conference/remittances'
     | '/conference/reports'
     | '/members/$memberId'
@@ -251,6 +262,7 @@ export interface FileRouteTypes {
     | '/auth/verify'
     | '/church/import'
     | '/church/register'
+    | '/conference/placement'
     | '/conference/remittances'
     | '/conference/reports'
     | '/members/$memberId'
@@ -274,6 +286,7 @@ export interface RootRouteChildren {
   AuthVerifyRoute: typeof AuthVerifyRoute
   ChurchImportRoute: typeof ChurchImportRoute
   ChurchRegisterRoute: typeof ChurchRegisterRoute
+  ConferencePlacementRoute: typeof ConferencePlacementRoute
   ConferenceRemittancesRoute: typeof ConferenceRemittancesRoute
   ConferenceReportsRoute: typeof ConferenceReportsRoute
   MembersMemberIdRoute: typeof MembersMemberIdRouteWithChildren
@@ -325,6 +338,13 @@ declare module '@tanstack/react-router' {
       path: '/church/register'
       fullPath: '/church/register'
       preLoaderRoute: typeof ChurchRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conference/placement': {
+      id: '/conference/placement'
+      path: '/conference/placement'
+      fullPath: '/conference/placement'
+      preLoaderRoute: typeof ConferencePlacementRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/conference/remittances': {
@@ -453,6 +473,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthVerifyRoute: AuthVerifyRoute,
   ChurchImportRoute: ChurchImportRoute,
   ChurchRegisterRoute: ChurchRegisterRoute,
+  ConferencePlacementRoute: ConferencePlacementRoute,
   ConferenceRemittancesRoute: ConferenceRemittancesRoute,
   ConferenceReportsRoute: ConferenceReportsRoute,
   MembersMemberIdRoute: MembersMemberIdRouteWithChildren,
