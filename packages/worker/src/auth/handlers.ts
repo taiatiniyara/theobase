@@ -6,7 +6,10 @@ import {
   RATE_LIMIT_WINDOW_MS,
   RATE_LIMIT_MAX_ATTEMPTS,
 } from '@theobase/shared';
-import type { Role } from '@theobase/shared';
+import type { Role, JwtPayload } from '@theobase/shared';
+import { drizzle } from 'drizzle-orm/d1';
+import { eq, and, or, isNull, gt, asc } from 'drizzle-orm';
+import { user as userTable, roleGrant } from '@theobase/shared';
 
 interface EmailBinding {
   send(message: EmailMessage): Promise<void>;
@@ -49,6 +52,8 @@ export async function handleSendLink(
     churchId: '',
     role: 'member' as Role,
     tokenVersion: 0,
+    unitId: null,
+    isSuperAdmin: false,
   });
 
   const tokenHash = await hashForKV(token);
@@ -71,7 +76,7 @@ export async function handleSendLink(
 
 export async function handleVerify(
   request: Request,
-  env: { theobase_auth?: KVNamespace },
+  env: { theobase_auth?: KVNamespace; DB?: D1Database },
 ): Promise<Response> {
   if (!env.theobase_auth) return json({ error: 'KV namespace not configured.' }, 500);
   const url = new URL(request.url);
@@ -87,20 +92,71 @@ export async function handleVerify(
   const { payload } = await verify(token);
   if (!payload) return json({ error: 'Invalid token' }, 401);
 
-  const sessionToken = await signSession({
+  const sessionClaims: JwtPayload = {
     sub: payload.sub,
     churchId: payload.churchId,
     role: payload.role,
     tokenVersion: payload.tokenVersion,
-  });
+    unitId: null,
+    isSuperAdmin: false,
+    iat: 0,
+    exp: 0,
+  };
+
+  if (env.DB) {
+    const db = drizzle(env.DB);
+    const profile = await db
+      .select()
+      .from(userTable)
+      .where(eq(userTable.email, payload.sub))
+      .get();
+
+    if (profile) {
+      sessionClaims.sub = profile.id;
+      sessionClaims.tokenVersion = profile.tokenVersion;
+      if (profile.isSuperAdmin) {
+        sessionClaims.churchId = '';
+        sessionClaims.role = 'operator';
+        sessionClaims.unitId = null;
+        sessionClaims.isSuperAdmin = true;
+      } else {
+        const activeUnitId = url.searchParams.get('unit');
+        const nowSec = Math.floor(Date.now() / 1000);
+        const grants = await db
+          .select()
+          .from(roleGrant)
+          .where(
+            and(
+              eq(roleGrant.userId, profile.id),
+              or(isNull(roleGrant.expiresAt), gt(roleGrant.expiresAt, nowSec)),
+            ),
+          )
+          .orderBy(asc(roleGrant.createdAt))
+          .all();
+
+        if (grants.length > 0) {
+          const active = activeUnitId
+            ? grants.find(g => g.unitId === activeUnitId) ?? grants[0]!
+            : grants[0]!;
+          sessionClaims.churchId = active.unitId;
+          sessionClaims.role = active.role;
+          sessionClaims.unitId = active.unitId;
+        }
+      }
+    }
+  }
+
+  const sessionToken = await signSession(sessionClaims);
 
   const response = json(
     {
       token: sessionToken,
       user: {
-        id: payload.sub,
-        churchId: payload.churchId,
-        role: payload.role,
+        id: sessionClaims.sub,
+        churchId: sessionClaims.churchId,
+        role: sessionClaims.role,
+        unitId: sessionClaims.unitId,
+        isSuperAdmin: sessionClaims.isSuperAdmin,
       },
     },
     200,
@@ -131,6 +187,8 @@ export async function handleRefresh(request: Request): Promise<Response> {
       churchId: payload.churchId,
       role: payload.role,
       tokenVersion: payload.tokenVersion,
+      unitId: payload.unitId ?? null,
+      isSuperAdmin: payload.isSuperAdmin ?? false,
     });
     return json({ token: sessionToken });
   } catch {
@@ -173,6 +231,8 @@ export async function handleVerifyMfa(request: Request, _env: unknown): Promise<
       churchId: payload.churchId,
       role: payload.role,
       tokenVersion: payload.tokenVersion + 1,
+      unitId: payload.unitId ?? null,
+      isSuperAdmin: payload.isSuperAdmin ?? false,
     });
     return json({ token: sessionToken });
   } catch {

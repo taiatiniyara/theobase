@@ -13,6 +13,8 @@ describe('auth — JWT', () => {
       churchId: 'church-1',
       role: 'clerk',
       tokenVersion: 1,
+      unitId: null,
+      isSuperAdmin: false,
     });
 
     const { payload } = await verify(token);
@@ -28,6 +30,8 @@ describe('auth — JWT', () => {
       churchId: 'church-1',
       role: 'treasurer',
       tokenVersion: 2,
+      unitId: null,
+      isSuperAdmin: false,
     });
 
     const { payload } = await verify(token);
@@ -41,6 +45,8 @@ describe('auth — JWT', () => {
       churchId: 'church-1',
       role: 'clerk',
       tokenVersion: 1,
+      unitId: null,
+      isSuperAdmin: false,
     });
 
     await expect(verify(token)).resolves.toBeDefined();
@@ -52,6 +58,8 @@ describe('auth — JWT', () => {
       churchId: 'church-1',
       role: 'clerk',
       tokenVersion: 1,
+      unitId: null,
+      isSuperAdmin: false,
     });
 
     const tampered = token.slice(0, -4) + 'xxxx';

@@ -47,6 +47,8 @@ export async function handleChurchRegister(request: Request, env: Env): Promise<
       churchId,
       role: 'clerk' as Role,
       tokenVersion: 1,
+      unitId: null,
+      isSuperAdmin: false,
     });
 
     if (env.theobase_auth) {

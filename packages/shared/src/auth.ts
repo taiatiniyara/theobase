@@ -22,6 +22,9 @@ export interface JwtPayload {
   churchId: string;
   role: Role;
   tokenVersion: number;
+  /** Active grant's org unit when the session is grant-scoped (ADR-0018 §7). */
+  unitId: string | null;
+  isSuperAdmin: boolean;
   iat: number;
   exp: number;
 }

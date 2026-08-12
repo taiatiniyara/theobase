@@ -17,6 +17,8 @@ beforeAll(async () => {
     churchId: 'test-church',
     role: 'operator',
     tokenVersion: 1,
+    unitId: null,
+    isSuperAdmin: true,
   });
 
   const id = testEnv.CHURCH_DO.newUniqueId();
@@ -107,6 +109,8 @@ describe('ChurchDO', () => {
       churchId: 'test-church',
       role: 'member',
       tokenVersion: 1,
+      unitId: null,
+      isSuperAdmin: false,
     });
 
     const response = await stub.fetch(

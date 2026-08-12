@@ -117,7 +117,7 @@ export default {
       const churchId = churchMatch[1]!;
       const doPath = churchMatch[2] ?? '/';
 
-      const authed = await authenticate(request);
+      const authed = await authenticate(request, env);
       if (doPath !== '/state') {
         if (!authed)
           return cors(
