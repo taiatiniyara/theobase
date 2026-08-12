@@ -176,7 +176,7 @@ function TreasurerPage() {
               <div className="text-xl font-bold tabular-nums text-neutral-900">${totalGiving.toFixed(2)}</div>
             </div>
             <div>
-              <div className="text-sm text-neutral-500">Committed Batches</div>
+              <div className="text-sm text-neutral-500">Finalised Batches</div>
               <div className="text-xl font-bold tabular-nums text-neutral-900">{committedBatches.length}</div>
             </div>
             <div>
@@ -234,12 +234,12 @@ function TreasurerPage() {
         )}
 
         <Card>
-          <CardHeader><CardTitle>Committed Batches</CardTitle></CardHeader>
+          <CardHeader><CardTitle>Finalised Batches</CardTitle></CardHeader>
           <CardContent>
             {committedBatches.length === 0 ? (
               <div className="py-8 text-center">
                 <Inbox className="mx-auto h-10 w-10 text-neutral-400" />
-                <p className="mt-3 text-sm text-neutral-500">No committed batches yet.</p>
+                <p className="mt-3 text-sm text-neutral-500">No finalised batches yet.</p>
                 <p className="text-xs text-neutral-400">Batches will appear here once counters submit their records.</p>
               </div>
             ) : (

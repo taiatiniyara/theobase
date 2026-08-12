@@ -67,9 +67,9 @@ function BatchDetailPage() {
       });
       setReconcileMode(false);
       queryClient.invalidateQueries({ queryKey: ['batch', batchId] });
-      toast('Batch reconciled!', 'success');
+      toast('Differences resolved!', 'success');
     } catch {
-      toast('Reconciliation failed. Please try again.', 'error');
+      toast('Could not resolve differences. Please try again.', 'error');
     } finally {
       setSubmitting(false);
     }
@@ -84,10 +84,10 @@ function BatchDetailPage() {
         records: allRecords,
         timestamp: Date.now(),
       });
-      toast('Batch committed!', 'success');
+      toast('Batch finalised!', 'success');
       navigate({ to: '/counting-room' });
     } catch {
-      toast('Commit failed. Please try again.', 'error');
+      toast('Could not finalise batch. Please try again.', 'error');
       setSubmitting(false);
     }
   }
@@ -141,9 +141,9 @@ function BatchDetailPage() {
   const statusBadge = (status: string) => {
     switch (status) {
       case 'counter1-confirmed': return <Badge variant="warning">Waiting for Counter 2</Badge>;
-      case 'counter2-confirmed': return data.totalsMatch ? <Badge variant="success">Ready to Commit</Badge> : <Badge variant="error">Disputed</Badge>;
-      case 'committed': return <Badge variant="success">Committed</Badge>;
-      case 'reconciled': return <Badge variant="success">Reconciled — Ready to Commit</Badge>;
+      case 'counter2-confirmed': return data.totalsMatch ? <Badge variant="success">Ready to Finalise</Badge> : <Badge variant="error">Totals Don&rsquo;t Match</Badge>;
+      case 'committed': return <Badge variant="success">Finalised</Badge>;
+      case 'reconciled': return <Badge variant="success">Differences Resolved — Ready to Finalise</Badge>;
       default: return <Badge variant="default">{status}</Badge>;
     }
   };
@@ -225,7 +225,7 @@ function BatchDetailPage() {
 
         <div className="space-y-3">
           {data.status === 'committed' && (
-            <p className="text-center text-success font-medium">This batch has been committed.</p>
+            <p className="text-center text-success font-medium">This batch has been finalised.</p>
           )}
 
           {data.status === 'counter1-confirmed' && isCounter2 && (
@@ -236,7 +236,7 @@ function BatchDetailPage() {
 
           {(data.status === 'counter2-confirmed' || data.status === 'reconciled') && (
             <Button className="w-full" onClick={handleCommit} disabled={submitting}>
-              {submitting ? 'Committing...' : `Commit Batch — $${data.counter1.total.toFixed(2)}`}
+              {submitting ? 'Finalising...' : `Finalise Batch — $${data.counter1.total.toFixed(2)}`}
             </Button>
           )}
 
@@ -244,7 +244,7 @@ function BatchDetailPage() {
             <>
               {!reconcileMode ? (
                 <Button variant="secondary" className="w-full" onClick={() => setReconcileMode(true)}>
-                  Reconcile Differences
+                  Resolve Differences
                 </Button>
               ) : (
                 <Card>
@@ -262,7 +262,7 @@ function BatchDetailPage() {
                     <div className="flex gap-3">
                       <Button variant="ghost" onClick={() => setReconcileMode(false)}>Cancel</Button>
                       <Button onClick={handleReconcile} disabled={submitting}>
-                        {submitting ? 'Reconciling...' : 'Confirm Reconciliation'}
+                        {submitting ? 'Resolving...' : 'Confirm Adjustments'}
                       </Button>
                     </div>
                   </CardContent>

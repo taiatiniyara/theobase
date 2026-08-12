@@ -31,9 +31,19 @@ const INSIGHT_ICONS: Record<string, typeof TrendingDown> = {
 
 const QUICK_ACTIONS = [
   { label: 'Add Member', to: '/members/add', icon: UserPlus, roles: ['clerk', 'operator'] },
-  { label: 'Members', to: '/members', icon: Users, roles: ['clerk', 'treasurer', 'pastor', 'operator'] },
+  {
+    label: 'Members',
+    to: '/members',
+    icon: Users,
+    roles: ['clerk', 'treasurer', 'pastor', 'operator'],
+  },
   { label: 'Counting Room', to: '/counting-room', icon: PiggyBank, roles: ['counter', 'operator'] },
-  { label: 'Treasurer', to: '/treasurer', icon: ArrowUpRight, roles: ['treasurer', 'clerk', 'operator'] },
+  {
+    label: 'Treasurer',
+    to: '/treasurer',
+    icon: ArrowUpRight,
+    roles: ['treasurer', 'clerk', 'operator'],
+  },
   { label: 'Reports', to: '/reports', icon: FileText, roles: ['clerk', 'treasurer', 'operator'] },
   { label: 'Import CSV', to: '/church/import', icon: FileDown, roles: ['clerk', 'operator'] },
   { label: 'Households', to: '/households', icon: Home, roles: ['clerk', 'operator'] },
@@ -51,7 +61,7 @@ function DashboardPage() {
   });
   const insights = data?.insights ?? [];
 
-  const visibleActions = QUICK_ACTIONS.filter(a => a.roles.includes(role ?? ''));
+  const visibleActions = QUICK_ACTIONS.filter((a) => a.roles.includes(role ?? ''));
 
   return (
     <div className="mx-auto max-w-6xl space-y-10 px-5 py-8 sm:px-6 lg:px-8">
@@ -64,9 +74,11 @@ function DashboardPage() {
 
       <section>
         <div className="mb-4 flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">Insights</span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
+            Insights
+          </span>
           {insights.length > 0 && (
-            <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-brand-100 px-1.5 text-[11px] font-semibold text-brand-700">
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-100 px-1.5 text-[11px] font-semibold text-brand-700">
               {insights.length}
             </span>
           )}
@@ -100,7 +112,9 @@ function DashboardPage() {
                   <h3 className="text-sm font-semibold text-neutral-900 group-hover:text-brand-700:text-brand-400">
                     {insight.title}
                   </h3>
-                  <p className="mt-1 text-xs leading-relaxed text-neutral-500">{insight.description}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-neutral-500">
+                    {insight.description}
+                  </p>
                   <div className="mt-3">
                     <Badge variant="default">{insight.action.label} →</Badge>
                   </div>
@@ -118,7 +132,8 @@ function DashboardPage() {
               </div>
               <h3 className="text-base font-semibold text-neutral-900">No insights yet</h3>
               <p className="mx-auto mt-1 max-w-sm text-sm text-neutral-500">
-                Insights will appear as activity flows in — giving patterns, report reminders, and member updates.
+                Insights will appear as activity flows in — giving patterns, report reminders, and
+                member updates.
               </p>
             </CardContent>
           </Card>
@@ -127,7 +142,9 @@ function DashboardPage() {
 
       <section>
         <div className="mb-4 flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">Quick Actions</span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
+            Quick Actions
+          </span>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {visibleActions.map((action) => (
@@ -149,7 +166,9 @@ function DashboardPage() {
 
       <section>
         <div className="mb-4 flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">Getting Started</span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
+            Getting Started
+          </span>
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
           {[
@@ -162,8 +181,8 @@ function DashboardPage() {
             },
             {
               step: 2,
-              title: 'Count today\'s offering',
-              desc: 'Open a batch in the counting room. Two counters confirm before committing.',
+              title: "Count today's offering",
+              desc: 'Open a batch in the counting room. Two counters confirm before finalising.',
               link: '/counting-room',
               linkLabel: 'Open counting room',
             },
@@ -183,11 +202,16 @@ function DashboardPage() {
                 <h3 className="text-sm font-semibold text-neutral-900">{item.title}</h3>
                 <p className="mt-1 text-xs leading-relaxed text-neutral-500">{item.desc}</p>
                 {item.link ? (
-                  <Link to={item.link} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700">
+                  <Link
+                    to={item.link}
+                    className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700"
+                  >
                     {item.linkLabel} →
                   </Link>
                 ) : (
-                  <span className="mt-3 inline-block text-xs text-neutral-400">{item.linkLabel}</span>
+                  <span className="mt-3 inline-block text-xs text-neutral-400">
+                    {item.linkLabel}
+                  </span>
                 )}
               </CardContent>
             </Card>

@@ -4,8 +4,8 @@ import { getSyncState, subscribe } from '../../lib/sync-state';
 import { cn } from '../../lib/utils';
 
 const STATUS_CONFIG: Record<SyncStatus, { dot: string; label: string }> = {
-  synced: { dot: 'bg-success', label: 'Synced' },
-  pending: { dot: 'bg-warning', label: 'Syncing' },
+  synced: { dot: 'bg-success', label: 'Up to date' },
+  pending: { dot: 'bg-warning', label: 'Saving' },
   offline: { dot: 'bg-error', label: 'Offline' },
 };
 
@@ -27,7 +27,7 @@ export function SyncIndicator() {
         )}
       />
       <span className="text-xs font-medium text-neutral-500">
-        {state.status === 'pending' ? `${state.pendingCount} pending` : config.label}
+        {state.status === 'pending' ? `${state.pendingCount} waiting` : config.label}
       </span>
     </div>
   );

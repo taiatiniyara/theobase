@@ -40,12 +40,12 @@
     "save": "Save Member",
     "search": "Search members...",
     "status": "Status",
-    "uploadCsv": "Upload CSV"
+    "uploadCsv": "Upload Spreadsheet"
   },
   "csv": {
-    "upload": "Upload Membership CSV",
-    "dropFile": "Drop CSV file here or click to browse",
-    "parsing": "Parsing...",
+    "upload": "Upload Membership Spreadsheet",
+    "dropFile": "Drop a spreadsheet file here or click to browse",
+    "parsing": "Reading file...",
     "resolved": "{count} members ready to import",
     "flagged": "{count} rows need review",
     "import": "Import {count} Members",
@@ -53,16 +53,16 @@
     "fixAndConfirm": "Fix flagged rows and confirm import"
   },
   "sync": {
-    "synced": "Synced",
-    "pending": "{count} pending",
+    "synced": "Up to date",
+    "pending": "{count} waiting",
     "offline": "Offline",
-    "staleWarning": "Last synced {time}. Pull to refresh."
+    "staleWarning": "Last updated {time}. Swipe down to reload."
   },
   "auth": {
     "signIn": "Sign In",
     "email": "Email address",
-    "sendLink": "Send Magic Link",
-    "checkEmail": "Check your email for the login link.",
+    "sendLink": "Send Sign-in Link",
+    "checkEmail": "Check your email for the sign-in link.",
     "signingIn": "Signing in..."
   }
 }

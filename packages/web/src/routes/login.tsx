@@ -81,7 +81,7 @@ function LoginPage() {
           <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
             Sign in to your account
           </h1>
-          <p className="mt-2 text-sm text-neutral-500">Enter your email to receive a magic link.</p>
+          <p className="mt-2 text-sm text-neutral-500">Enter your email to receive a sign-in link.</p>
         </div>
 
         <Card>
@@ -108,7 +108,7 @@ function LoginPage() {
                     Check your email
                   </h2>
                   <p className="mt-1 text-sm text-neutral-500">
-                    We sent a magic link to{' '}
+                    We sent a sign-in link to{' '}
                     <span className="font-medium text-neutral-700">
                       {email}
                     </span>

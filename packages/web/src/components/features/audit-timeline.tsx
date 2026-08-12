@@ -12,7 +12,7 @@ interface AuditTimelineProps {
   emptyMessage?: string;
 }
 
-export function AuditTimeline({ entries, emptyMessage = 'No audit events yet.' }: AuditTimelineProps) {
+export function AuditTimeline({ entries, emptyMessage = 'No changes recorded yet.' }: AuditTimelineProps) {
   if (entries.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">

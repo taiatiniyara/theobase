@@ -24,7 +24,7 @@ export function StaleDataWarning() {
 
   return (
     <div className="bg-warning-light border-b border-amber-200 px-4 py-2 text-center text-sm text-warning-700">
-      Last synced {lastSync}. Pull to refresh.
+      Last updated {lastSync}. Swipe down to reload.
     </div>
   );
 }

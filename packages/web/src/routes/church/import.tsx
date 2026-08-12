@@ -47,10 +47,10 @@ function ChurchImportPage() {
       const result = (await res.json()) as { resolved: CsvRow[]; flagged: FlaggedRow[] };
       setResolved(result.resolved);
       setFlagged(result.flagged);
-      toast(`Parsed ${result.resolved.length + result.flagged.length} rows`, 'success');
+      toast(`Read ${result.resolved.length + result.flagged.length} rows from file`, 'success');
     } catch (err) {
-      setParseError(err instanceof Error ? err.message : 'Parse failed');
-      toast('Failed to parse CSV file', 'error');
+      setParseError(err instanceof Error ? err.message : 'Read failed');
+      toast('Could not read spreadsheet file', 'error');
     } finally {
       setParsing(false);
     }
@@ -95,13 +95,13 @@ function ChurchImportPage() {
       <RequireAuth allowedRoles={['clerk']}>
       <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4">
         <Card className="w-full max-w-md space-y-4 text-center">
-          <CardTitle>Upload Membership CSV</CardTitle>
-          <p className="text-sm text-neutral-500">Drop a CSV file here or click to browse</p>
+          <CardTitle>Upload Membership Spreadsheet</CardTitle>
+          <p className="text-sm text-neutral-500">Drop a spreadsheet file here or click to browse</p>
           {parsing && (
             <div className="space-y-2">
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-3/4" />
-              <p className="text-sm text-neutral-500">Parsing file...</p>
+              <p className="text-sm text-neutral-500">Reading file...</p>
             </div>
           )}
           {parseError && (

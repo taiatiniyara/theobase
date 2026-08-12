@@ -104,7 +104,7 @@ function MemberProfilePage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Audit Log</CardTitle>
+          <CardTitle>Change History</CardTitle>
         </CardHeader>
         <CardContent>
           <AuditTimeline entries={auditLog} />

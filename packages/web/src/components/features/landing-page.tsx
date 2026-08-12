@@ -91,7 +91,7 @@ export function LandingPage() {
  {[
  { label: 'Role types', value: '14', sub: 'SDA polity enforced by software' },
  { label: 'Counters per batch', value: '2', sub: 'Dual-signoff is the only way' },
- { label: 'Works offline', value: 'Always', sub: 'Syncs when you reconnect' },
+ { label: 'Works offline', value: 'Always', sub: 'Updates when you reconnect' },
  { label: 'Per church', value: '$3/mo', sub: 'Paid by the Conference' },
  ].map((stat) => (
  <div key={stat.label} className="text-center">
@@ -129,7 +129,7 @@ export function LandingPage() {
  statistical report fills itself out. No Excel. No copying.
  </p>
  <p className="mt-4 text-xs font-medium text-brand-600">
- Upload your membership roll as CSV &rarr;
+ Upload your membership roll as spreadsheet &rarr;
  </p>
  </div>
  <div className="group rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md sm:p-8">
@@ -141,7 +141,7 @@ export function LandingPage() {
  </h3>
  <p className="mt-3 text-sm leading-relaxed text-neutral-500">
  Two people count on a large, easy-to-tap keypad. Totals are compared. Match? Batch
- locks forever. Mismatch? Reconciled side by side.
+ locks forever. Don&rsquo;t match? Resolve differences side by side.
  </p>
  <p className="mt-4 text-xs font-medium text-warning-700">
  Dual-signoff enforced by software &rarr;
@@ -156,7 +156,7 @@ export function LandingPage() {
  </h3>
  <p className="mt-3 text-sm leading-relaxed text-neutral-500">
  Giving records flow from the counting room automatically. The tithe remittance
- statement is pre-computed. Review and approve.
+ statement is filled in automatically. Review and approve.
  </p>
  <p className="mt-4 text-xs font-medium text-success-700">
  One-tap remittance submission &rarr;
@@ -182,7 +182,7 @@ export function LandingPage() {
  Polity enforced by software
  </h3>
  <p className="mt-2 text-sm leading-relaxed text-neutral-500">
- Dual-signoff, role-based access, audit trail — all encoded into the platform so
+ Dual-signoff, role-based access, change history — all built into the platform so
  officers don&rsquo;t police each other.
  </p>
  </div>
@@ -206,7 +206,7 @@ export function LandingPage() {
  Your data stays yours
  </h3>
  <p className="mt-2 text-sm leading-relaxed text-neutral-500">
- Export full membership, giving history, and audit trail as CSV or JSON. No
+ Export full membership, giving history, and change log as spreadsheet
  lock-in. Conference sees aggregates only.
  </p>
  </div>
@@ -215,11 +215,11 @@ export function LandingPage() {
  <History className="h-5 w-5" />
  </div>
  <h3 className="font-heading text-base font-bold text-neutral-900">
- Permanent audit trail
- </h3>
- <p className="mt-2 text-sm leading-relaxed text-neutral-500">
- Every action leaves an unalterable record. Tamper with a record and the chain
- breaks — detectable instantly.
+Permanent change history
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-neutral-500">
+                  Every action leaves an unalterable record. Tamper with a record
+                  and it&rsquo;s immediately visible.
  </p>
  </div>
  </div>
