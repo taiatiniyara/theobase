@@ -86,6 +86,6 @@ test.describe('PWA offline sync', () => {
     await mockAuth(page);
     await page.reload();
     await page.waitForTimeout(500);
-    await expect(page.getByText(/Synced|Syncing|Offline/)).toBeVisible();
+    await expect(page.getByText(/Up to date|Saving|Offline/)).toBeVisible();
   });
 });
