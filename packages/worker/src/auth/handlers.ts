@@ -56,7 +56,7 @@ export async function handleSendLink(
     expirationTtl: MAGIC_LINK_EXPIRY_MS / 1000,
   });
 
-  const loginUrl = `${env.APP_URL}/auth/verify?token=${token}`;
+  const loginUrl = `${env.APP_URL}/login?token=${token}`;
 
   await env.AUTH_EMAIL.send({
     from: 'Theobase <noreply@theobase.app>',
