@@ -13,6 +13,7 @@ export default defineConfig(async () => {
         main: './src/index.ts',
         miniflare: {
           bindings: { TEST_MIGRATIONS: migrations },
+          kvNamespaces: { theobase_auth: 'test' },
         },
       }),
     ],
