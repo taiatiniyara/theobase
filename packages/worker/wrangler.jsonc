@@ -37,4 +37,12 @@
       "remote": true,
     },
   ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "theobase",
+      "database_id": "<d1-database-id-from-3b>",
+      "migrations_dir": "drizzle",
+    },
+  ],
 }

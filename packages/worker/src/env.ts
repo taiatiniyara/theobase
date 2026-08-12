@@ -11,6 +11,7 @@ export interface Env {
   ERROR_QUEUE?: Queue;
   ERROR_STORAGE?: R2Bucket;
   SEED_TOKEN?: string;
+  SEED_OPERATOR_EMAIL?: string;
 }
 
 interface EmailMessage {

@@ -1,5 +1,14 @@
-import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, real, type AnySQLiteColumn } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
+import {
+  ORG_LEVELS,
+  ORG_KINDS,
+  ORG_STATUSES,
+  GRANT_ROLES,
+  TRANSFER_STATUSES,
+  ORG_AUDIT_ACTIONS,
+  type OrgFacet,
+} from './org';
 
 export const conference = sqliteTable('conference', {
   id: text('id').primaryKey(),
@@ -7,6 +16,85 @@ export const conference = sqliteTable('conference', {
   createdAt: integer('created_at')
     .notNull()
     .default(sql`(unixepoch())`),
+});
+
+// ─── ADR-0018: SDA organization hierarchy ────────────────────────────
+// Single recursive tree. The church below is an extension keyed by the
+// SAME row id as its org_unit row (tenant + DO + billing).
+
+export const orgUnit = sqliteTable('org_unit', {
+  id: text('id').primaryKey(),
+  parentId: text('parent_id').references((): AnySQLiteColumn => orgUnit.id),
+  name: text('name').notNull(),
+  level: text('level', { enum: ORG_LEVELS }).notNull(),
+  kind: text('kind', { enum: ORG_KINDS }).notNull(),
+  status: text('status', { enum: ORG_STATUSES }).notNull().default('organized'),
+  code: text('code'),
+  facets: text('facets', { mode: 'json' }).$type<OrgFacet[]>().notNull(),
+  meta: text('meta', { mode: 'json' }).$type<Record<string, unknown>>(),
+  createdAt: integer('created_at')
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at')
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
+export const churchExtension = sqliteTable('church_extension', {
+  id: text('id')
+    .primaryKey()
+    .references((): AnySQLiteColumn => orgUnit.id),
+  doClass: text('do_class').notNull(),
+  address: text('address'),
+  status: text('status', { enum: ['active', 'inactive', 'suspended'] })
+    .notNull()
+    .default('active'),
+  createdAt: integer('created_at')
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
+export const roleGrant = sqliteTable('role_grant', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  unitId: text('unit_id')
+    .notNull()
+    .references((): AnySQLiteColumn => orgUnit.id),
+  role: text('role', { enum: GRANT_ROLES }).notNull(),
+  expiresAt: integer('expires_at'),
+  createdAt: integer('created_at')
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
+export const transfer = sqliteTable('transfer', {
+  id: text('id').primaryKey(),
+  memberId: text('member_id').notNull(),
+  fromUnitId: text('from_unit_id')
+    .notNull()
+    .references((): AnySQLiteColumn => orgUnit.id),
+  toUnitId: text('to_unit_id')
+    .notNull()
+    .references((): AnySQLiteColumn => orgUnit.id),
+  status: text('status', { enum: TRANSFER_STATUSES }).notNull().default('pending-accept'),
+  initiatedBy: text('initiated_by').notNull(),
+  initiatedAt: integer('initiated_at').notNull(),
+  acceptedBy: text('accepted_by'),
+  acceptedAt: integer('accepted_at'),
+  rejectedBy: text('rejected_by'),
+  reason: text('reason'),
+});
+
+export const orgAudit = sqliteTable('org_audit', {
+  id: text('id').primaryKey(),
+  actor: text('actor').notNull(),
+  action: text('action', { enum: ORG_AUDIT_ACTIONS }).notNull(),
+  unitId: text('unit_id').references((): AnySQLiteColumn => orgUnit.id),
+  grantId: text('grant_id'),
+  before: text('before', { mode: 'json' }).$type<Record<string, unknown>>(),
+  after: text('after', { mode: 'json' }).$type<Record<string, unknown>>(),
+  reason: text('reason'),
+  timestamp: integer('timestamp').notNull(),
 });
 
 export const church = sqliteTable('church', {
@@ -29,6 +117,7 @@ export const user = sqliteTable('user', {
   email: text('email').notNull().unique(),
   name: text('name').notNull(),
   tokenVersion: integer('token_version').notNull().default(1),
+  isSuperAdmin: integer('is_super_admin', { mode: 'boolean' }).notNull().default(false),
   mfaEnabled: integer('mfa_enabled', { mode: 'boolean' }).notNull().default(false),
   mfaSecret: text('mfa_secret'),
   createdAt: integer('created_at')

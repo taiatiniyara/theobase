@@ -13,6 +13,11 @@ import {
   syncHealth,
   costMetrics,
   restoreDrill,
+  orgUnit,
+  churchExtension,
+  roleGrant,
+  transfer,
+  orgAudit,
 } from './schema';
 
 function schemasFor<T extends Parameters<typeof createInsertSchema>[0]>(table: T) {
@@ -35,6 +40,11 @@ const errorLogSchemas = schemasFor(errorLog);
 const syncHealthSchemas = schemasFor(syncHealth);
 const costMetricsSchemas = schemasFor(costMetrics);
 const restoreDrillSchemas = schemasFor(restoreDrill);
+const orgUnitSchemas = schemasFor(orgUnit);
+const churchExtensionSchemas = schemasFor(churchExtension);
+const roleGrantSchemas = schemasFor(roleGrant);
+const transferSchemas = schemasFor(transfer);
+const orgAuditSchemas = schemasFor(orgAudit);
 
 export const {
   insert: insertConferenceSchema,
@@ -92,6 +102,30 @@ export const {
   insert: insertRestoreDrillSchema,
   select: selectRestoreDrillSchema,
 } = restoreDrillSchemas;
+export const {
+  insert: insertOrgUnitSchema,
+  select: selectOrgUnitSchema,
+  update: updateOrgUnitSchema,
+} = orgUnitSchemas;
+export const {
+  insert: insertChurchExtensionSchema,
+  select: selectChurchExtensionSchema,
+  update: updateChurchExtensionSchema,
+} = churchExtensionSchemas;
+export const {
+  insert: insertRoleGrantSchema,
+  select: selectRoleGrantSchema,
+  update: updateRoleGrantSchema,
+} = roleGrantSchemas;
+export const {
+  insert: insertTransferSchema,
+  select: selectTransferSchema,
+  update: updateTransferSchema,
+} = transferSchemas;
+export const {
+  insert: insertOrgAuditSchema,
+  select: selectOrgAuditSchema,
+} = orgAuditSchemas;
 
 type SelectOf<S extends { select: z.ZodTypeAny }> = z.infer<S['select']>;
 type InsertOf<S extends { insert: z.ZodTypeAny }> = z.infer<S['insert']>;
@@ -121,3 +155,12 @@ export type InsertErrorLog = InsertOf<typeof errorLogSchemas>;
 export type InsertSyncHealth = InsertOf<typeof syncHealthSchemas>;
 export type InsertCostMetrics = InsertOf<typeof costMetricsSchemas>;
 export type InsertRestoreDrill = InsertOf<typeof restoreDrillSchemas>;
+export type OrgUnit = SelectOf<typeof orgUnitSchemas>;
+export type ChurchExtension = SelectOf<typeof churchExtensionSchemas>;
+export type RoleGrant = SelectOf<typeof roleGrantSchemas>;
+export type Transfer = SelectOf<typeof transferSchemas>;
+export type OrgAudit = SelectOf<typeof orgAuditSchemas>;
+export type InsertOrgUnit = InsertOf<typeof orgUnitSchemas>;
+export type InsertChurchExtension = InsertOf<typeof churchExtensionSchemas>;
+export type InsertRoleGrant = InsertOf<typeof roleGrantSchemas>;
+export type InsertOrgAudit = InsertOf<typeof orgAuditSchemas>;

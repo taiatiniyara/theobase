@@ -66,6 +66,20 @@ export default {
       }));
     }
 
+    if (path === '/op/seed' && request.method === 'POST') {
+      const seedToken = env.SEED_TOKEN || '';
+      if (!seedToken || request.headers.get('Authorization') !== `Bearer ${seedToken}`) {
+        return cors(new Response(JSON.stringify({ error: 'Unauthorized' }), {
+          status: 401, headers: { 'Content-Type': 'application/json' },
+        }));
+      }
+      const { seedOrgHierarchy } = await import('./org-seed');
+      const result = await seedOrgHierarchy(env);
+      return cors(new Response(JSON.stringify(result), {
+        status: 201, headers: { 'Content-Type': 'application/json' },
+      }));
+    }
+
     if (path === '/observability/error' && request.method === 'POST') {
       const body = await request.json() as Record<string, unknown>;
       console.error('[Obs] Error:', body.severity, body.message);
