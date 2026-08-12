@@ -8,8 +8,8 @@ export type SyncResult = {
   error?: string;
 };
 
-const WORKER_URL = import.meta.env.VITE_WORKER_URL || 'https://theobase-worker.theobase.workers.dev';
-const WORKER_WS_URL = import.meta.env.VITE_WORKER_URL ? import.meta.env.VITE_WORKER_URL.replace(/^https?/, 'wss') : 'wss://theobase-worker.theobase.workers.dev';
+const WORKER_URL = import.meta.env.VITE_WORKER_URL || 'https://theobase-worker.mail-e22.workers.dev';
+const WORKER_WS_URL = import.meta.env.VITE_WORKER_URL ? import.meta.env.VITE_WORKER_URL.replace(/^https?/, 'wss') : 'wss://theobase-worker.mail-e22.workers.dev';
 
 function getWorkerWsUrl(): string {
   const origin = import.meta.env.PROD ? WORKER_WS_URL : 'ws://localhost:8787';

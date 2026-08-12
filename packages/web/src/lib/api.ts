@@ -1,4 +1,4 @@
-const WORKER_URL = import.meta.env.VITE_WORKER_URL || 'https://theobase-worker.theobase.workers.dev';
+const WORKER_URL = import.meta.env.VITE_WORKER_URL || 'https://theobase-worker.mail-e22.workers.dev';
 
 export function getWorkerUrl(): string {
   return `${WORKER_URL}/church`;

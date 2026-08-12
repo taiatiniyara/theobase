@@ -60,7 +60,7 @@ export function captureError(
 }
 
 export function getObservabilityWorkerUrl(): string {
-  const baseUrl = (typeof globalThis !== 'undefined' && (globalThis as Record<string, unknown>).WORKER_URL as string) || 'https://theobase-worker.theobase.workers.dev';
+  const baseUrl = (typeof globalThis !== 'undefined' && (globalThis as Record<string, unknown>).WORKER_URL as string) || 'https://theobase-worker.mail-e22.workers.dev';
   return `${baseUrl}/observability`;
 }
 
