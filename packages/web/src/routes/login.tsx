@@ -1,20 +1,13 @@
-import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../lib/auth-store';
 import { getAuthWorkerUrl } from '../lib/api';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent } from '../components/ui/card';
-import { z } from 'zod';
-
-const loginSearchSchema = z.object({
-  token: z.string().optional(),
-  redirect: z.string().optional(),
-});
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
-  validateSearch: loginSearchSchema,
 });
 
 function LoginPage() {
@@ -22,33 +15,13 @@ function LoginPage() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
-  const search = useSearch({ from: '/login' });
-  const { login, churchId } = useAuth();
+  const { churchId } = useAuth();
 
   useEffect(() => {
     if (churchId) {
-      navigate({ to: search.redirect || '/' });
+      navigate({ to: '/' });
     }
   }, [churchId]);
-
-  useEffect(() => {
-    const token = search.token;
-    if (token) {
-      setStatus('sending');
-      fetch(`${getAuthWorkerUrl()}/auth/verify?token=${encodeURIComponent(token)}`)
-        .then((res) => {
-          if (!res.ok) throw new Error('Invalid token');
-          return res.json();
-        })
-        .then((data: { token: string }) => {
-          login(data.token);
-        })
-        .catch(() => {
-          setStatus('error');
-          setErrorMsg('Invalid or expired link. Please try again.');
-        });
-    }
-  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
