@@ -79,7 +79,7 @@ export async function seedOrgHierarchy(env: Env): Promise<OrgSeedResult> {
   if (!env.DB) throw new Error('DB (D1) binding not configured');
 
   const db = drizzle(env.DB);
-  const operatorEmail = env.SEED_OPERATOR_EMAIL ?? 'operator@theobase.app';
+  const operatorEmail = env.SEED_OPERATOR_EMAIL ?? 'taiatiniyara@gmail.com';
   const now = Math.floor(Date.now() / 1000);
 
   const existingOperator = await db.select({ id: user.id }).from(user).where(eq(user.email, operatorEmail)).get();
@@ -93,7 +93,7 @@ export async function seedOrgHierarchy(env: Env): Promise<OrgSeedResult> {
       .values({
         id: operatorId,
         email: operatorEmail,
-        name: 'Operator',
+        name: 'Taia Tiniyara',
         isSuperAdmin: true,
         tokenVersion: 1,
       })

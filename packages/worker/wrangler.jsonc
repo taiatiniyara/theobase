@@ -1,6 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
   "name": "theobase-worker",
+  "account_id": "2e2276433c73f18451f3f2fd50adddb7",
   "main": "src/index.ts",
   "compatibility_date": "2025-08-10",
   "compatibility_flags": ["nodejs_compat"],
@@ -41,7 +42,7 @@
     {
       "binding": "DB",
       "database_name": "theobase",
-      "database_id": "<d1-database-id-from-3b>",
+      "database_id": "030a7b51-45c8-465f-924d-0b547cd63997",
       "migrations_dir": "drizzle",
     },
   ],
