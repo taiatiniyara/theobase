@@ -20,6 +20,13 @@ interface EmailMessage {
   htmlBody?: string;
 }
 
+async function hashForKV(input: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 export async function handleSendLink(
   request: Request,
   env: { theobase_auth?: KVNamespace; AUTH_EMAIL: EmailBinding; APP_URL: string },
@@ -44,7 +51,8 @@ export async function handleSendLink(
     tokenVersion: 0,
   });
 
-  await env.theobase_auth.put(`token:${token}`, 'valid', {
+  const tokenHash = await hashForKV(token);
+  await env.theobase_auth.put(`token:${tokenHash}`, 'valid', {
     expirationTtl: MAGIC_LINK_EXPIRY_MS / 1000,
   });
 
@@ -70,10 +78,11 @@ export async function handleVerify(
   const token = url.searchParams.get('token');
   if (!token) return json({ error: 'Token required' }, 400);
 
-  const stored = await env.theobase_auth.get(`token:${token}`);
+  const tokenHash = await hashForKV(token);
+  const stored = await env.theobase_auth.get(`token:${tokenHash}`);
   if (!stored) return json({ error: 'Invalid or expired token' }, 401);
 
-  await env.theobase_auth.delete(`token:${token}`);
+  await env.theobase_auth.delete(`token:${tokenHash}`);
 
   const { payload } = await verify(token);
   if (!payload) return json({ error: 'Invalid token' }, 401);
