@@ -42,6 +42,7 @@ export default {
       return resp;
     };
 
+    try {
     if (path === '/auth/send-link') return cors(await handleSendLink(request, env));
     if (path === '/auth/verify') return cors(await handleVerify(request, env));
     if (path === '/auth/refresh') return cors(await handleRefresh(request));
@@ -132,5 +133,14 @@ export default {
     return new Response(`Hello from ${APP_NAME} Worker!`, {
       headers: { 'Content-Type': 'text/plain' },
     });
+    } catch (err) {
+      console.error('[Worker] Unhandled error:', err);
+      return cors(new Response(JSON.stringify({
+        error: err instanceof Error ? err.message : 'Internal server error',
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      }));
+    }
   },
 } satisfies ExportedHandler<Env>;
