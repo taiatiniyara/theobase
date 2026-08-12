@@ -17,6 +17,13 @@ import {
  Check,
  ChevronDown,
  Mail,
+ Layers,
+ Users,
+ CalendarDays,
+ MessageSquare,
+ HeartHandshake,
+ BookOpen,
+ Smartphone,
 } from 'lucide-react';
 
 function WaveDivider() {
@@ -81,6 +88,10 @@ function PhoneMockup() {
 
 const FAQS = [
  {
+  q: 'Is Theobase just membership and finances?',
+  a: 'No — that&rsquo;s where it starts. Theobase is being built as the central platform for church operations. Membership and finances ship first because every church runs on them; Sabbath School, communication, and department ministries follow on the same foundation.',
+ },
+ {
   q: 'Is our data safe?',
   a: 'Everything is encrypted. Roles control who sees what, and every change leaves an unalterable record. Your data belongs to your church — and exports anytime.',
  },
@@ -94,7 +105,7 @@ const FAQS = [
  },
  {
   q: 'How much does it cost?',
-  a: 'Free for every local church. The Conference subscribes at $3 per church per month. No feature gates, no surprises.',
+  a: 'Free for every local church. The Conference subscribes at $3 per church per month. No feature gates — every module that ships is included, no surprises.',
  },
  {
   q: 'How do we get started?',
@@ -102,10 +113,68 @@ const FAQS = [
  },
 ];
 
+const LIVE_MODULES = [
+ {
+  title: 'Membership',
+  desc: 'The roll, households, and lifecycle — kept as one record the whole church trusts.',
+  icon: UserCheck,
+  tag: 'Live today',
+ },
+ {
+  title: 'Finances',
+  desc: 'Counting room, giving, and remittance — dual-signoff enforced by software.',
+  icon: Calculator,
+  tag: 'Live today',
+ },
+ {
+  title: 'Reporting',
+  desc: 'Annual statistics, tithe remittance, financial statements — derived, not assembled.',
+  icon: FileText,
+  tag: 'Live today',
+ },
+];
+
+const ROADMAP_MODULES = [
+ {
+  title: 'Sabbath School',
+  desc: 'Class rosters, check-in, and lesson distribution — the church&rsquo;s biggest weekly ministry.',
+  icon: CalendarDays,
+ },
+ {
+  title: 'Communication',
+  desc: 'Announcements, prayer requests, and milestone reminders, delivered how members prefer.',
+  icon: MessageSquare,
+ },
+ {
+  title: 'Department ministries',
+  desc: 'Pathfinders, Health, Women&rsquo;s, Men&rsquo;s — rosters and coordination for every ministry team.',
+  icon: Users,
+ },
+ {
+  title: 'Visitation & care',
+  desc: 'Pastoral visits, Bible study interests, and baptismal class tracking.',
+  icon: HeartHandshake,
+ },
+ {
+  title: 'Member self-service',
+  desc: 'Giving history, tax receipts, and contact updates — straight from each member&rsquo;s phone.',
+  icon: Smartphone,
+ },
+ {
+  title: 'Yearbook & Conference bridge',
+  desc: 'Your data feeds the Adventist Yearbook and upstream systems automatically. No double-entry.',
+  icon: BookOpen,
+ },
+];
+
 export function LandingPage() {
  const navigate = useNavigate();
  const [email, setEmail] = useState('');
  const [submitted, setSubmitted] = useState(false);
+
+ const goToRoadmap = () => {
+  document.getElementById('roadmap')?.scrollIntoView({ behavior: 'smooth' });
+ };
 
  return (
  <div className="min-h-screen bg-white">
@@ -135,12 +204,17 @@ export function LandingPage() {
  <section className="relative bg-brand-950 pb-40 pt-20 sm:pb-48 sm:pt-28 lg:pt-36">
  <div className="mx-auto max-w-6xl px-4 sm:px-6">
  <div className="mx-auto max-w-3xl text-center">
- <h1 className="font-heading text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
- Take care of the mundane. Focus on the gospel.
+ <span className="inline-flex items-center gap-2 rounded-full border border-brand-700 bg-brand-900/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-200">
+ <Layers className="h-3.5 w-3.5" />
+ A platform for church operations
+ </span>
+ <h1 className="mt-6 font-heading text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
+ One platform for everything your church runs on.
  </h1>
  <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-brand-200 sm:text-lg">
- Theobase handles the membership roll, the offering count, and the conference
- reports — so your church can pour its time into what actually matters.
+ Theobase is becoming the central platform for church operations. It starts where the
+ paperwork hurts most — membership and finances — and grows from there, so the mundane
+ is handled and the gospel gets your people&rsquo;s time.
  </p>
  <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
  <button
@@ -153,10 +227,10 @@ export function LandingPage() {
  </button>
  <button
  type="button"
- onClick={() => navigate({ to: '/church/register' })}
+ onClick={goToRoadmap}
  className="rounded-xl px-7 py-4 text-base font-medium text-brand-200 transition-colors hover:text-white"
  >
- Talk to the Conference
+ See the roadmap
  </button>
  </div>
  </div>
@@ -210,6 +284,59 @@ export function LandingPage() {
  </div>
  </section>
 
+ <section className="border-t border-neutral-100 bg-neutral-50 py-20 sm:py-28">
+ <div className="mx-auto max-w-6xl px-4 sm:px-6">
+ <div className="mx-auto max-w-3xl text-center">
+ <h2 className="font-heading text-2xl font-bold text-neutral-900 sm:text-3xl">
+ Not another app for one job. A foundation.
+ </h2>
+ <p className="mt-4 text-base leading-relaxed text-neutral-500">
+ Churches don&rsquo;t run on one app — they run on Excel sheets, paper notebooks, and a
+ dozen disconnected tools. Theobase is built the other way: one foundation, one source
+ of truth, and every module on top of it. No importing the same names into three
+ systems. No re-keying the same numbers twice.
+ </p>
+ </div>
+ <div className="mx-auto mt-12 max-w-4xl">
+ <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
+ <div className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
+ Modules on the platform
+ </div>
+ <div className="mt-4 grid gap-4 sm:grid-cols-3">
+ {LIVE_MODULES.map((mod) => (
+ <div
+ key={mod.title}
+ className="rounded-2xl border border-brand-200 bg-brand-50 p-5"
+ >
+ <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 text-brand-600">
+ <mod.icon className="h-5 w-5" />
+ </div>
+ <div className="text-xs font-semibold uppercase tracking-wider text-brand-600">
+ {mod.tag}
+ </div>
+ <h3 className="mt-1 font-heading text-base font-bold text-neutral-900">
+ {mod.title}
+ </h3>
+ <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+ {mod.desc}
+ </p>
+ </div>
+ ))}
+ </div>
+ <div className="mt-6 flex items-center gap-3 rounded-2xl bg-brand-950 px-6 py-5">
+ <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-800 text-brand-200">
+ <Layers className="h-5 w-5" />
+ </div>
+ <p className="text-sm font-medium leading-relaxed text-brand-100">
+ The Theobase foundation — one record, one login, one source of truth. Every future
+ module is built on it, so nothing is ever entered twice.
+ </p>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
+
  <section className="border-t border-neutral-100 py-20 sm:py-28">
  <div className="mx-auto max-w-6xl px-4 sm:px-6">
  <div className="mx-auto max-w-3xl text-center">
@@ -217,8 +344,9 @@ export function LandingPage() {
  Three officers. One record they can trust.
  </h2>
  <p className="mt-4 text-base leading-relaxed text-neutral-500">
- Everyone who touches the records gets exactly what their job needs — so the
- paperwork moves fast and the church moves on to ministry.
+ The platform starts with the two systems every church runs on. Each officer gets
+ exactly what their job needs — so the paperwork moves fast and the church moves on to
+ ministry.
  </p>
  </div>
  <div className="mt-12 grid gap-6 sm:grid-cols-3">
@@ -261,7 +389,7 @@ export function LandingPage() {
  </h3>
  <p className="mt-3 text-sm leading-relaxed text-neutral-500">
  Giving flows in from the counting room automatically. The tithe remittance statement
- is already drafted — review, approve, and it\u2019s on its way.
+ is already drafted — review, approve, and it&rsquo;s on its way.
  </p>
  <p className="mt-4 text-xs font-medium text-success-700">
  One tap to the Conference &rarr;
@@ -271,7 +399,45 @@ export function LandingPage() {
  </div>
  </section>
 
- <section className="bg-neutral-50 py-20 sm:py-28">
+ <section id="roadmap" className="border-t border-neutral-100 bg-neutral-50 py-20 sm:py-28">
+ <div className="mx-auto max-w-6xl px-4 sm:px-6">
+ <div className="mx-auto max-w-3xl text-center">
+ <span className="text-xs font-semibold uppercase tracking-wider text-brand-600">
+ The roadmap
+ </span>
+ <h2 className="mt-3 font-heading text-2xl font-bold text-neutral-900 sm:text-3xl">
+ Where the platform is going
+ </h2>
+ <p className="mt-4 text-base leading-relaxed text-neutral-500">
+ Membership and finances ship first. The rest of church operations joins on the same
+ foundation — every module included, no feature gates.
+ </p>
+ </div>
+ <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+ {ROADMAP_MODULES.map((mod) => (
+ <div key={mod.title} className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
+ <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-neutral-100 text-neutral-500">
+ <mod.icon className="h-5 w-5" />
+ </div>
+ <h3 className="font-heading text-base font-bold text-neutral-900">
+ {mod.title}
+ </h3>
+ <p className="mt-2 text-sm leading-relaxed text-neutral-500">
+ {mod.desc}
+ </p>
+ <div className="mt-4">
+ <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1 text-xs font-semibold text-neutral-500">
+ <Sparkles className="h-3.5 w-3.5" />
+ Coming next
+ </span>
+ </div>
+ </div>
+ ))}
+ </div>
+ </div>
+ </section>
+
+ <section className="border-t border-neutral-100 py-20 sm:py-28">
  <div className="mx-auto max-w-6xl px-4 sm:px-6">
  <div className="mx-auto max-w-3xl text-center">
  <h2 className="font-heading text-2xl font-bold text-neutral-900 sm:text-3xl">
@@ -346,11 +512,11 @@ export function LandingPage() {
  <Wifi className="h-5 w-5" />
  </div>
  <h3 className="font-heading text-base font-bold text-neutral-900">
- The offering gets counted even when the internet doesn\u2019t
+ The offering gets counted even when the internet doesn&rsquo;t
  </h3>
  <p className="mt-2 text-sm leading-relaxed text-neutral-500">
  Count, update records, and review reports offline. Everything syncs the moment
- they\u2019re back online.
+ they&rsquo;re back online.
  </p>
  </div>
  <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
@@ -373,7 +539,7 @@ export function LandingPage() {
  Someone always knows what changed
  </h3>
  <p className="mt-2 text-sm leading-relaxed text-neutral-500">
- Every action leaves an unalterable record. Tamper with a record and it\u2019s
+ Every action leaves an unalterable record. Tamper with a record and it&rsquo;s
  immediately visible.
  </p>
  </div>
@@ -382,43 +548,6 @@ export function LandingPage() {
  </section>
 
  <section className="border-t border-neutral-100 bg-neutral-50 py-20 sm:py-28">
- <div className="mx-auto max-w-6xl px-4 sm:px-6">
- <div className="mx-auto max-w-3xl text-center">
- <h2 className="font-heading text-2xl font-bold text-neutral-900 sm:text-3xl">
- A different kind of week
- </h2>
- <p className="mt-4 text-base leading-relaxed text-neutral-500">
- From paper notebooks to a platform every officer opens on Sabbath morning — so the
- time a church spends on admin becomes time for people. Starting in the Pacific,
- expanding conference by conference.
- </p>
- </div>
- <div className="mt-12 grid gap-6 sm:grid-cols-2">
- <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
- <FileText className="mb-4 h-8 w-8 text-warning-600" />
- <div className="text-xs font-semibold uppercase text-warning-600">
- Today
- </div>
- <p className="mt-3 text-sm leading-relaxed text-neutral-500">
- Notebooks in the counting room. Membership rolls in Excel. Reports assembled by hand
- and delivered in person. Hours of admin every week.
- </p>
- </div>
- <div className="rounded-2xl border border-brand-200 bg-brand-50 p-6 shadow-sm sm:p-8">
- <Sparkles className="mb-4 h-8 w-8 text-brand-600" />
- <div className="text-xs font-semibold uppercase text-brand-600">
- Tomorrow
- </div>
- <p className="mt-3 text-sm leading-relaxed text-neutral-600">
- One record the whole church trusts. Reports that fill themselves out. Hours of
- admin given back — as time for gospel work.
- </p>
- </div>
- </div>
- </div>
- </section>
-
- <section className="py-20 sm:py-28">
  <div className="mx-auto max-w-3xl px-4 sm:px-6">
  <h2 className="text-center font-heading text-2xl font-bold text-neutral-900 sm:text-3xl">
  Questions we hear a lot
