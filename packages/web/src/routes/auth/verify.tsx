@@ -8,9 +8,16 @@ export const Route = createFileRoute('/auth/verify')({
 });
 
 function VerifyPage() {
-  const { login } = useAuth();
+  const { login, churchId } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (churchId) {
+      navigate({ to: '/' });
+      return;
+    }
+  }, [churchId]);
 
   useEffect(() => {
     const token = new URLSearchParams(window.location.search).get('token');
@@ -23,6 +30,7 @@ function VerifyPage() {
         if (!res.ok) throw new Error('Invalid or expired link.');
         const data = (await res.json()) as { token: string };
         login(data.token);
+        navigate({ to: '/church/register' });
       })
       .catch((err: Error) => {
         setError(err.message);
