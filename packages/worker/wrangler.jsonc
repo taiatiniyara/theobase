@@ -1,46 +1,40 @@
 {
-	"$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
-	"name": "theobase-worker",
-	"main": "src/index.ts",
-	"compatibility_date": "2025-08-10",
-	"compatibility_flags": [
-		"nodejs_compat"
-	],
-	"durable_objects": {
-		"bindings": [
-			{
-				"name": "CHURCH_DO",
-				"class_name": "ChurchDO",
-			},
-		],
-	},
-	"migrations": [
-		{
-			"tag": "v1",
-			"new_classes": [
-				"ChurchDO"
-			],
-		},
-	],
-	"send_email": [
-		{
-			"name": "AUTH_EMAIL",
-			"remote": true,
-		},
-	],
-	"vars": {
-		"APP_URL": "https://theobase.app",
-	},
-	"triggers": {
-		"crons": [
-			"0 0 1 * *"
-		],
-	},
-	"kv_namespaces": [
-		{
-			"binding": "AUTH_KV",
-			"id": "db7f506e520c46c7a53e46eb70735929",
-			"remote": true
-		}
-	],
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
+  "name": "theobase-worker",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-08-10",
+  "compatibility_flags": ["nodejs_compat"],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CHURCH_DO",
+        "class_name": "ChurchDO",
+      },
+    ],
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["ChurchDO"],
+    },
+  ],
+  "send_email": [
+    {
+      "name": "AUTH_EMAIL",
+      "remote": true,
+    },
+  ],
+  "vars": {
+    "APP_URL": "https://theobase.app",
+  },
+  "triggers": {
+    "crons": ["0 0 1 * *"],
+  },
+  "kv_namespaces": [
+    {
+      "binding": "theobase_auth",
+      "id": "db7f506e520c46c7a53e46eb70735929",
+      "remote": true,
+    },
+  ],
 }

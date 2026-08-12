@@ -22,18 +22,18 @@ interface EmailMessage {
 
 export async function handleSendLink(
   request: Request,
-  env: { AUTH_KV?: KVNamespace; AUTH_EMAIL: EmailBinding; APP_URL: string },
+  env: { theobase_auth?: KVNamespace; AUTH_EMAIL: EmailBinding; APP_URL: string },
 ): Promise<Response> {
-  if (!env.AUTH_KV) return json({ error: 'KV namespace not configured. Create theobase-auth KV and bind it as AUTH_KV.' }, 500);
+  if (!env.theobase_auth) return json({ error: 'KV namespace not configured. Create theobase-auth KV and bind it as theobase_auth.' }, 500);
   const { email } = (await request.json()) as { email: string };
   if (!email) return json({ error: 'Email required' }, 400);
 
   const rateKey = `rate:${email}`;
-  const attempts = parseInt((await env.AUTH_KV.get(rateKey)) ?? '0');
+  const attempts = parseInt((await env.theobase_auth.get(rateKey)) ?? '0');
   if (attempts >= RATE_LIMIT_MAX_ATTEMPTS) {
     return json({ error: 'Too many attempts. Try again later.' }, 429);
   }
-  await env.AUTH_KV.put(rateKey, String(attempts + 1), {
+  await env.theobase_auth.put(rateKey, String(attempts + 1), {
     expirationTtl: RATE_LIMIT_WINDOW_MS / 1000,
   });
 
@@ -44,7 +44,7 @@ export async function handleSendLink(
     tokenVersion: 0,
   });
 
-  await env.AUTH_KV.put(`token:${token}`, 'valid', {
+  await env.theobase_auth.put(`token:${token}`, 'valid', {
     expirationTtl: MAGIC_LINK_EXPIRY_MS / 1000,
   });
 
@@ -63,17 +63,17 @@ export async function handleSendLink(
 
 export async function handleVerify(
   request: Request,
-  env: { AUTH_KV?: KVNamespace },
+  env: { theobase_auth?: KVNamespace },
 ): Promise<Response> {
-  if (!env.AUTH_KV) return json({ error: 'KV namespace not configured.' }, 500);
+  if (!env.theobase_auth) return json({ error: 'KV namespace not configured.' }, 500);
   const url = new URL(request.url);
   const token = url.searchParams.get('token');
   if (!token) return json({ error: 'Token required' }, 400);
 
-  const stored = await env.AUTH_KV.get(`token:${token}`);
+  const stored = await env.theobase_auth.get(`token:${token}`);
   if (!stored) return json({ error: 'Invalid or expired token' }, 401);
 
-  await env.AUTH_KV.delete(`token:${token}`);
+  await env.theobase_auth.delete(`token:${token}`);
 
   const { payload } = await verify(token);
   if (!payload) return json({ error: 'Invalid token' }, 401);
