@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../lib/auth-store';
 import { getAuthWorkerUrl } from '../../lib/api';
 import { Button } from '../../components/ui/button';
@@ -16,29 +16,37 @@ function ChurchRegisterPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, token, churchId, email } = useAuth();
+
+  useEffect(() => {
+    if (churchId) {
+      navigate({ to: '/' });
+    }
+  }, [churchId]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
       const res = await fetch(`${getAuthWorkerUrl()}/church/register`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, address }),
+        headers,
+        body: JSON.stringify({ name, address: address || undefined }),
       });
       if (res.ok) {
         const data = (await res.json()) as { churchId: string; token: string };
         login(data.token);
-        localStorage.setItem('churchId', data.churchId);
         navigate({ to: '/' });
       } else {
         const err = await res.json().catch(() => ({ error: `Server error (${res.status})` }));
         setError((err as { error?: string }).error ?? `Server error (${res.status})`);
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Network error. Check your connection.');
+      setError(e instanceof Error ? e.message : 'Connection problem. Please check your internet.');
     } finally {
       setLoading(false);
     }
@@ -50,10 +58,10 @@ function ChurchRegisterPage() {
         <div className="mb-8 text-center">
           <img src="/logo-full.svg" alt="Theobase" className="mx-auto mb-6 h-8 w-auto" />
           <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
-            Register your church
+            Set up your church
           </h1>
           <p className="mt-2 text-sm text-neutral-500">
-            Set up your church on Theobase to start managing membership and giving.
+            {email ? `Signed in as ${email}` : 'Set up your church on Theobase to start managing membership and giving.'}
           </p>
         </div>
 
@@ -86,7 +94,7 @@ function ChurchRegisterPage() {
                 />
               </label>
               <Button type="submit" className="w-full" isLoading={loading}>
-                {loading ? 'Creating church...' : 'Create Church'}
+                {loading ? 'Setting up your church...' : 'Create Church'}
               </Button>
             </form>
           </CardContent>
@@ -97,7 +105,7 @@ function ChurchRegisterPage() {
           <button
             type="button"
             onClick={() => navigate({ to: '/login' })}
-            className="font-medium text-brand-600 hover:text-brand-700:text-brand-300"
+            className="font-medium text-brand-600 hover:text-brand-700"
           >
             Sign in
           </button>
