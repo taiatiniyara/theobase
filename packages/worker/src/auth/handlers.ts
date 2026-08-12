@@ -16,8 +16,8 @@ interface EmailMessage {
   from: string;
   to: string;
   subject: string;
-  textBody?: string;
-  htmlBody?: string;
+  text?: string;
+  html?: string;
 }
 
 async function hashForKV(input: string): Promise<string> {
@@ -62,8 +62,8 @@ export async function handleSendLink(
     from: 'Theobase <noreply@theobase.app>',
     to: email,
     subject: 'Sign in to Theobase',
-    textBody: `Click this link to sign in: ${loginUrl}\n\nThis link expires in 10 minutes.`,
-    htmlBody: `<p>Click <a href="${loginUrl}">here</a> to sign in to Theobase.</p><p>This link expires in 10 minutes.</p>`,
+    text: `Click this link to sign in: ${loginUrl}\n\nThis link expires in 10 minutes.`,
+    html: `<p>Click <a href="${loginUrl}">here</a> to sign in to Theobase.</p><p>This link expires in 10 minutes.</p>`,
   });
 
   return json({ message: 'Check your email for the login link.' });
@@ -200,8 +200,8 @@ export async function handleInvite(
       from: 'Theobase <noreply@theobase.app>',
       to: email,
       subject: `You've been invited as ${role} on Theobase`,
-      textBody: `You've been invited to join Theobase as ${role}. Click here to accept: ${inviteUrl}`,
-      htmlBody: `<p>You've been invited to join Theobase as <strong>${role}</strong>.</p><p><a href="${inviteUrl}">Accept Invitation</a></p>`,
+      text: `You've been invited to join Theobase as ${role}. Click here to accept: ${inviteUrl}`,
+      html: `<p>You've been invited to join Theobase as <strong>${role}</strong>.</p><p><a href="${inviteUrl}">Accept Invitation</a></p>`,
     });
 
     return json({ message: 'Invitation sent.' });

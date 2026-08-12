@@ -17,6 +17,6 @@ interface EmailMessage {
   from: string;
   to: string;
   subject: string;
-  textBody?: string;
-  htmlBody?: string;
+  text?: string;
+  html?: string;
 }
