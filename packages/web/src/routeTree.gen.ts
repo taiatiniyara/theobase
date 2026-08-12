@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthVerifyRouteImport } from './routes/auth/verify'
 import { Route as ChurchImportRouteImport } from './routes/church/import'
 import { Route as ChurchRegisterRouteImport } from './routes/church/register'
 import { Route as ConferenceRemittancesRouteImport } from './routes/conference/remittances'
@@ -37,6 +38,11 @@ const IndexRoute = IndexRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthVerifyRoute = AuthVerifyRouteImport.update({
+  id: '/auth/verify',
+  path: '/auth/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChurchImportRoute = ChurchImportRouteImport.update({
@@ -129,6 +135,7 @@ const TreasurerMemberMemberIdRoute = TreasurerMemberMemberIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/auth/verify': typeof AuthVerifyRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
   '/conference/remittances': typeof ConferenceRemittancesRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/auth/verify': typeof AuthVerifyRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
   '/conference/remittances': typeof ConferenceRemittancesRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/auth/verify': typeof AuthVerifyRoute
   '/church/import': typeof ChurchImportRoute
   '/church/register': typeof ChurchRegisterRoute
   '/conference/remittances': typeof ConferenceRemittancesRoute
@@ -195,6 +204,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/auth/verify'
     | '/church/import'
     | '/church/register'
     | '/conference/remittances'
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/auth/verify'
     | '/church/import'
     | '/church/register'
     | '/conference/remittances'
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/login'
+    | '/auth/verify'
     | '/church/import'
     | '/church/register'
     | '/conference/remittances'
@@ -259,6 +271,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
+  AuthVerifyRoute: typeof AuthVerifyRoute
   ChurchImportRoute: typeof ChurchImportRoute
   ChurchRegisterRoute: typeof ChurchRegisterRoute
   ConferenceRemittancesRoute: typeof ConferenceRemittancesRoute
@@ -291,6 +304,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/verify': {
+      id: '/auth/verify'
+      path: '/auth/verify'
+      fullPath: '/auth/verify'
+      preLoaderRoute: typeof AuthVerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/church/import': {
@@ -430,6 +450,7 @@ const MembersMemberIdRouteWithChildren = MembersMemberIdRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
+  AuthVerifyRoute: AuthVerifyRoute,
   ChurchImportRoute: ChurchImportRoute,
   ChurchRegisterRoute: ChurchRegisterRoute,
   ConferenceRemittancesRoute: ConferenceRemittancesRoute,
