@@ -13,10 +13,12 @@ export const Route = createFileRoute('/church/register')({
 function ChurchRegisterPage() {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
+  const [clerkEmail, setClerkEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
   const navigate = useNavigate();
-  const { login, token, churchId, email } = useAuth();
+  const { churchId } = useAuth();
 
   useEffect(() => {
     if (churchId) {
@@ -29,27 +31,48 @@ function ChurchRegisterPage() {
     setLoading(true);
     setError(null);
     try {
-      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      if (token) headers['Authorization'] = `Bearer ${token}`;
-
       const res = await fetch(`${getAuthWorkerUrl()}/church/register`, {
         method: 'POST',
-        headers,
-        body: JSON.stringify({ name, address: address || undefined }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, address: address || undefined, email: clerkEmail }),
       });
-      if (res.ok) {
-        const data = (await res.json()) as { churchId: string; token: string };
-        login(data.token);
-        navigate({ to: '/' });
-      } else {
+      if (!res.ok) {
         const err = await res.json().catch(() => ({ error: `Server error (${res.status})` }));
         setError((err as { error?: string }).error ?? `Server error (${res.status})`);
+      } else {
+        setDone(true);
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Connection problem. Please check your internet.');
     } finally {
       setLoading(false);
     }
+  }
+
+  if (done) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4">
+        <div className="w-full max-w-sm text-center">
+          <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-success-light">
+            <svg className="h-6 w-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h1 className="text-xl font-semibold text-neutral-900">Church created</h1>
+          <p className="mt-2 text-sm text-neutral-500">
+            We sent a sign-in link to <span className="font-medium text-neutral-700">{clerkEmail}</span>.
+            Open it to access your church dashboard.
+          </p>
+          <button
+            type="button"
+            onClick={() => navigate({ to: '/login' })}
+            className="mt-6 text-sm font-medium text-brand-600 hover:text-brand-700"
+          >
+            Go to sign in
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -61,7 +84,7 @@ function ChurchRegisterPage() {
             Set up your church
           </h1>
           <p className="mt-2 text-sm text-neutral-500">
-            {email ? `Signed in as ${email}` : 'Set up your church on Theobase to start managing membership and giving.'}
+            Create your church on Theobase and get instant access as clerk.
           </p>
         </div>
 
@@ -93,8 +116,22 @@ function ChurchRegisterPage() {
                   className="mt-1.5"
                 />
               </label>
+              <label className="block">
+                <span className="text-sm font-medium text-neutral-700">Your Email</span>
+                <Input
+                  required
+                  type="email"
+                  value={clerkEmail}
+                  onChange={(e) => setClerkEmail(e.target.value)}
+                  placeholder="clerk@example.com"
+                  className="mt-1.5"
+                />
+                <p className="mt-1 text-xs text-neutral-400">
+                  You&rsquo;ll receive a sign-in link at this address.
+                </p>
+              </label>
               <Button type="submit" className="w-full" isLoading={loading}>
-                {loading ? 'Setting up your church...' : 'Create Church'}
+                {loading ? 'Creating church...' : 'Create Church'}
               </Button>
             </form>
           </CardContent>
