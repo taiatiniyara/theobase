@@ -52,13 +52,13 @@ function ChurchRegisterPage() {
   const [done, setDone] = useState(false);
   const [parentName, setParentName] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { churchId } = useAuth();
+  const { churchId, role } = useAuth();
 
   useEffect(() => {
-    if (churchId) {
+    if (churchId || role === 'operator') {
       navigate({ to: '/' });
     }
-  }, [churchId]);
+  }, [churchId, role]);
 
   useEffect(() => {
     let cancelled = false;

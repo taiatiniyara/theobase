@@ -28,9 +28,17 @@ function VerifyPage() {
     fetch(`${getAuthWorkerUrl()}/auth/verify?token=${encodeURIComponent(token)}`)
       .then(async (res) => {
         if (!res.ok) throw new Error('Invalid or expired link.');
-        const data = (await res.json()) as { token: string };
+        const data = (await res.json()) as {
+          token: string;
+          user?: { churchId?: string; role?: string; isSuperAdmin?: boolean };
+        };
         login(data.token);
-        navigate({ to: '/church/register' });
+        const isOperator = data.user?.isSuperAdmin || data.user?.role === 'operator';
+        if (isOperator || data.user?.churchId) {
+          navigate({ to: '/' });
+        } else {
+          navigate({ to: '/church/register' });
+        }
       })
       .catch((err: Error) => {
         setError(err.message);
