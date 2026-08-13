@@ -11,6 +11,7 @@ export default defineConfig(async () => {
       cloudflareTest({
         wrangler: { configPath: './wrangler.jsonc' },
         main: './src/index.ts',
+        remoteBindings: false,
         miniflare: {
           bindings: { TEST_MIGRATIONS: migrations },
           kvNamespaces: { theobase_auth: 'test' },
