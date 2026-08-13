@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
 import { fetchPlacementRequests, confirmPlacementRequest } from '../../lib/api';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
@@ -116,3 +117,7 @@ function PlacementQueuePage() {
 }
 
 export default PlacementQueuePage;
+
+export const Route = createFileRoute('/operator/queue')({
+  component: PlacementQueuePage,
+});

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createFileRoute } from '@tanstack/react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../lib/auth-store';
 import {
@@ -591,3 +592,7 @@ function OperatorDashboard() {
 }
 
 export default OperatorDashboard;
+
+export const Route = createFileRoute('/operator/')({
+  component: OperatorDashboard,
+});

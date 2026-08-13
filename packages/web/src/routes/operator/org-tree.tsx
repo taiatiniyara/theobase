@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
 import { fetchOrgTree } from '../../lib/api';
 import { Card, CardContent } from '../../components/ui/card';
 
@@ -105,3 +106,7 @@ function OrgTreePage() {
 }
 
 export default OrgTreePage;
+
+export const Route = createFileRoute('/operator/org-tree')({
+  component: OrgTreePage,
+});

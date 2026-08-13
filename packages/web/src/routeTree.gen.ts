@@ -23,6 +23,9 @@ import { Route as MembersIndexRouteImport } from './routes/members/index'
 import { Route as MembersMemberIdRouteImport } from './routes/members/$memberId'
 import { Route as MembersAddRouteImport } from './routes/members/add'
 import { Route as MembersSelfServiceRouteImport } from './routes/members/self-service'
+import { Route as OperatorIndexRouteImport } from './routes/operator/index'
+import { Route as OperatorOrgTreeRouteImport } from './routes/operator/org-tree'
+import { Route as OperatorQueueRouteImport } from './routes/operator/queue'
 import { Route as RemittanceIndexRouteImport } from './routes/remittance/index'
 import { Route as ReportsIndexRouteImport } from './routes/reports/index'
 import { Route as TreasurerIndexRouteImport } from './routes/treasurer/index'
@@ -101,6 +104,21 @@ const MembersSelfServiceRoute = MembersSelfServiceRouteImport.update({
   path: '/members/self-service',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OperatorIndexRoute = OperatorIndexRouteImport.update({
+  id: '/operator/',
+  path: '/operator/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OperatorOrgTreeRoute = OperatorOrgTreeRouteImport.update({
+  id: '/operator/org-tree',
+  path: '/operator/org-tree',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OperatorQueueRoute = OperatorQueueRouteImport.update({
+  id: '/operator/queue',
+  path: '/operator/queue',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RemittanceIndexRoute = RemittanceIndexRouteImport.update({
   id: '/remittance/',
   path: '/remittance/',
@@ -150,10 +168,13 @@ export interface FileRoutesByFullPath {
   '/members/$memberId': typeof MembersMemberIdRouteWithChildren
   '/members/add': typeof MembersAddRoute
   '/members/self-service': typeof MembersSelfServiceRoute
+  '/operator/org-tree': typeof OperatorOrgTreeRoute
+  '/operator/queue': typeof OperatorQueueRoute
   '/visitor/welcome': typeof VisitorWelcomeRoute
   '/counting-room/': typeof CountingRoomIndexRoute
   '/households/': typeof HouseholdsIndexRoute
   '/members/': typeof MembersIndexRoute
+  '/operator/': typeof OperatorIndexRoute
   '/remittance/': typeof RemittanceIndexRoute
   '/reports/': typeof ReportsIndexRoute
   '/treasurer/': typeof TreasurerIndexRoute
@@ -173,10 +194,13 @@ export interface FileRoutesByTo {
   '/members/$memberId': typeof MembersMemberIdRouteWithChildren
   '/members/add': typeof MembersAddRoute
   '/members/self-service': typeof MembersSelfServiceRoute
+  '/operator/org-tree': typeof OperatorOrgTreeRoute
+  '/operator/queue': typeof OperatorQueueRoute
   '/visitor/welcome': typeof VisitorWelcomeRoute
   '/counting-room': typeof CountingRoomIndexRoute
   '/households': typeof HouseholdsIndexRoute
   '/members': typeof MembersIndexRoute
+  '/operator': typeof OperatorIndexRoute
   '/remittance': typeof RemittanceIndexRoute
   '/reports': typeof ReportsIndexRoute
   '/treasurer': typeof TreasurerIndexRoute
@@ -197,10 +221,13 @@ export interface FileRoutesById {
   '/members/$memberId': typeof MembersMemberIdRouteWithChildren
   '/members/add': typeof MembersAddRoute
   '/members/self-service': typeof MembersSelfServiceRoute
+  '/operator/org-tree': typeof OperatorOrgTreeRoute
+  '/operator/queue': typeof OperatorQueueRoute
   '/visitor/welcome': typeof VisitorWelcomeRoute
   '/counting-room/': typeof CountingRoomIndexRoute
   '/households/': typeof HouseholdsIndexRoute
   '/members/': typeof MembersIndexRoute
+  '/operator/': typeof OperatorIndexRoute
   '/remittance/': typeof RemittanceIndexRoute
   '/reports/': typeof ReportsIndexRoute
   '/treasurer/': typeof TreasurerIndexRoute
@@ -222,10 +249,13 @@ export interface FileRouteTypes {
     | '/members/$memberId'
     | '/members/add'
     | '/members/self-service'
+    | '/operator/org-tree'
+    | '/operator/queue'
     | '/visitor/welcome'
     | '/counting-room/'
     | '/households/'
     | '/members/'
+    | '/operator/'
     | '/remittance/'
     | '/reports/'
     | '/treasurer/'
@@ -245,10 +275,13 @@ export interface FileRouteTypes {
     | '/members/$memberId'
     | '/members/add'
     | '/members/self-service'
+    | '/operator/org-tree'
+    | '/operator/queue'
     | '/visitor/welcome'
     | '/counting-room'
     | '/households'
     | '/members'
+    | '/operator'
     | '/remittance'
     | '/reports'
     | '/treasurer'
@@ -268,10 +301,13 @@ export interface FileRouteTypes {
     | '/members/$memberId'
     | '/members/add'
     | '/members/self-service'
+    | '/operator/org-tree'
+    | '/operator/queue'
     | '/visitor/welcome'
     | '/counting-room/'
     | '/households/'
     | '/members/'
+    | '/operator/'
     | '/remittance/'
     | '/reports/'
     | '/treasurer/'
@@ -292,10 +328,13 @@ export interface RootRouteChildren {
   MembersMemberIdRoute: typeof MembersMemberIdRouteWithChildren
   MembersAddRoute: typeof MembersAddRoute
   MembersSelfServiceRoute: typeof MembersSelfServiceRoute
+  OperatorOrgTreeRoute: typeof OperatorOrgTreeRoute
+  OperatorQueueRoute: typeof OperatorQueueRoute
   VisitorWelcomeRoute: typeof VisitorWelcomeRoute
   CountingRoomIndexRoute: typeof CountingRoomIndexRoute
   HouseholdsIndexRoute: typeof HouseholdsIndexRoute
   MembersIndexRoute: typeof MembersIndexRoute
+  OperatorIndexRoute: typeof OperatorIndexRoute
   RemittanceIndexRoute: typeof RemittanceIndexRoute
   ReportsIndexRoute: typeof ReportsIndexRoute
   TreasurerIndexRoute: typeof TreasurerIndexRoute
@@ -403,6 +442,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MembersSelfServiceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/operator/': {
+      id: '/operator/'
+      path: '/operator'
+      fullPath: '/operator/'
+      preLoaderRoute: typeof OperatorIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/operator/org-tree': {
+      id: '/operator/org-tree'
+      path: '/operator/org-tree'
+      fullPath: '/operator/org-tree'
+      preLoaderRoute: typeof OperatorOrgTreeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/operator/queue': {
+      id: '/operator/queue'
+      path: '/operator/queue'
+      fullPath: '/operator/queue'
+      preLoaderRoute: typeof OperatorQueueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/remittance/': {
       id: '/remittance/'
       path: '/remittance'
@@ -479,10 +539,13 @@ const rootRouteChildren: RootRouteChildren = {
   MembersMemberIdRoute: MembersMemberIdRouteWithChildren,
   MembersAddRoute: MembersAddRoute,
   MembersSelfServiceRoute: MembersSelfServiceRoute,
+  OperatorOrgTreeRoute: OperatorOrgTreeRoute,
+  OperatorQueueRoute: OperatorQueueRoute,
   VisitorWelcomeRoute: VisitorWelcomeRoute,
   CountingRoomIndexRoute: CountingRoomIndexRoute,
   HouseholdsIndexRoute: HouseholdsIndexRoute,
   MembersIndexRoute: MembersIndexRoute,
+  OperatorIndexRoute: OperatorIndexRoute,
   RemittanceIndexRoute: RemittanceIndexRoute,
   ReportsIndexRoute: ReportsIndexRoute,
   TreasurerIndexRoute: TreasurerIndexRoute,

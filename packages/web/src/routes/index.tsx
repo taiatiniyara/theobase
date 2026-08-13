@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../lib/auth-store';
 import { fetchInsights } from '../lib/api';
@@ -51,8 +51,16 @@ const QUICK_ACTIONS = [
 ];
 
 function DashboardPage() {
-  const { churchId, churchName, role } = useAuth();
+  const { churchId, churchName, role, isSuperAdmin } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect operators to their dedicated dashboard
+  useEffect(() => {
+    if (isSuperAdmin) {
+      navigate({ to: '/operator' });
+    }
+  }, [isSuperAdmin, navigate]);
+
   const goTo = useCallback((to: string) => navigate({ to } as never), [navigate]);
   const { data, isLoading, isError } = useQuery({
     queryKey: ['insights', churchId],
