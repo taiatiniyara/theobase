@@ -11,6 +11,7 @@ import {
 import { handleChurchRegister } from './auth/register';
 import { handleParseCsv } from './auth/csv';
 import { handlePlacementRequest } from './org/placement';
+import { handleOrgTree } from './org/tree';
 import { authenticate, requireChurchId } from './auth/middleware';
 import type { Env } from './env';
 
@@ -61,6 +62,10 @@ export default {
 
     if (path === '/placement/request' && request.method === 'POST') {
       return cors(await handlePlacementRequest(request, env));
+    }
+
+    if (path === '/org/tree' && request.method === 'GET') {
+      return cors(await handleOrgTree(request, env));
     }
 
     if (path === '/church/seed-demo' && request.method === 'POST') {
