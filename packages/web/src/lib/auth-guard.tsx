@@ -10,7 +10,7 @@ interface RequireAuthProps {
 const PUBLIC_PATHS = ['/login', '/church/register', '/visitor'];
 
 export function useAuthGuard(allowedRoles?: string[]): boolean {
-  const { churchId, role } = useAuth();
+  const { churchId, role, isSuperAdmin } = useAuth();
   const { location } = useRouterState();
   const navigate = useNavigate();
   const path = location.pathname;
@@ -18,12 +18,12 @@ export function useAuthGuard(allowedRoles?: string[]): boolean {
   const isPublic = PUBLIC_PATHS.some((p) => path === p || path.startsWith(p + '/'));
 
   useEffect(() => {
-    if (!churchId && !isPublic) {
+    if (!churchId && !isSuperAdmin && !isPublic) {
       navigate({ to: '/login', search: { redirect: path } });
     }
-  }, [churchId, isPublic, path, navigate]);
+  }, [churchId, isSuperAdmin, isPublic, path, navigate]);
 
-  if (!churchId && !isPublic) return false;
+  if (!churchId && !isSuperAdmin && !isPublic) return false;
 
   if (allowedRoles && allowedRoles.length > 0 && role && !allowedRoles.includes(role) && role !== 'operator') {
     return false;
@@ -33,7 +33,7 @@ export function useAuthGuard(allowedRoles?: string[]): boolean {
 }
 
 export function RequireAuth({ children, allowedRoles }: RequireAuthProps) {
-  const { churchId, role } = useAuth();
+  const { churchId, role, isSuperAdmin } = useAuth();
   const { location } = useRouterState();
   const navigate = useNavigate();
   const path = location.pathname;
@@ -41,12 +41,12 @@ export function RequireAuth({ children, allowedRoles }: RequireAuthProps) {
   const isPublic = PUBLIC_PATHS.some((p) => path === p || path.startsWith(p + '/'));
 
   useEffect(() => {
-    if (!churchId && !isPublic) {
+    if (!churchId && !isSuperAdmin && !isPublic) {
       navigate({ to: '/login', search: { redirect: path } });
     }
-  }, [churchId, isPublic, path, navigate]);
+  }, [churchId, isSuperAdmin, isPublic, path, navigate]);
 
-  if (!churchId && !isPublic) {
+  if (!churchId && !isSuperAdmin && !isPublic) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-neutral-50">
         <p className="text-neutral-500">Redirecting to login...</p>

@@ -6,6 +6,7 @@ export interface AuthState {
   churchName: string | null;
   role: string | null;
   email: string | null;
+  isSuperAdmin: boolean;
   isLoading: boolean;
 }
 
@@ -22,6 +23,7 @@ interface JwtPayload {
   tokenVersion: number;
   iat: number;
   exp: number;
+  isSuperAdmin?: boolean;
 }
 
 const STORAGE_KEYS = {
@@ -30,6 +32,7 @@ const STORAGE_KEYS = {
   churchName: 'churchName',
   role: 'role',
   email: 'email',
+  isSuperAdmin: 'isSuperAdmin',
 } as const;
 
 function base64UrlDecode(str: string): string {
@@ -48,14 +51,30 @@ function parseJwtPayload(token: string): JwtPayload | null {
 
 function loadFromStorage(): Omit<AuthState, 'isLoading'> {
   const token = localStorage.getItem(STORAGE_KEYS.token);
-  if (!token) return { token: null, churchId: null, churchName: null, role: null, email: null };
+  if (!token) {
+    return {
+      token: null,
+      churchId: null,
+      churchName: null,
+      role: null,
+      email: null,
+      isSuperAdmin: false,
+    };
+  }
 
   const payload = parseJwtPayload(token);
   if (!payload || payload.exp < Date.now() / 1000) {
     for (const key of Object.values(STORAGE_KEYS)) {
       localStorage.removeItem(key);
     }
-    return { token: null, churchId: null, churchName: null, role: null, email: null };
+    return {
+      token: null,
+      churchId: null,
+      churchName: null,
+      role: null,
+      email: null,
+      isSuperAdmin: false,
+    };
   }
 
   return {
@@ -64,6 +83,9 @@ function loadFromStorage(): Omit<AuthState, 'isLoading'> {
     churchName: localStorage.getItem(STORAGE_KEYS.churchName),
     role: localStorage.getItem(STORAGE_KEYS.role) ?? payload.role,
     email: localStorage.getItem(STORAGE_KEYS.email) ?? payload.sub,
+    isSuperAdmin:
+      localStorage.getItem(STORAGE_KEYS.isSuperAdmin) === 'true' ||
+      !!payload.isSuperAdmin,
   };
 }
 
@@ -78,6 +100,8 @@ function saveToStorage(state: Omit<AuthState, 'isLoading'>): void {
     else localStorage.removeItem(STORAGE_KEYS.role);
     if (state.email) localStorage.setItem(STORAGE_KEYS.email, state.email);
     else localStorage.removeItem(STORAGE_KEYS.email);
+    if (state.isSuperAdmin) localStorage.setItem(STORAGE_KEYS.isSuperAdmin, 'true');
+    else localStorage.removeItem(STORAGE_KEYS.isSuperAdmin);
   } else {
     for (const key of Object.values(STORAGE_KEYS)) {
       localStorage.removeItem(key);
@@ -100,6 +124,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [churchName, setChurchName] = useState<string | null>(initial.churchName);
   const [role, setRole] = useState<string | null>(initial.role);
   const [email, setEmail] = useState<string | null>(initial.email);
+  const [isSuperAdmin, setIsSuperAdmin] = useState<boolean>(initial.isSuperAdmin);
   const [isLoading, setIsLoading] = useState(false);
 
   const login = useCallback((newToken: string) => {
@@ -112,6 +137,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       churchName: localStorage.getItem(STORAGE_KEYS.churchName),
       role: payload.role,
       email: payload.sub,
+      isSuperAdmin: payload.isSuperAdmin ?? false,
     };
 
     saveToStorage(next);
@@ -120,6 +146,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setChurchName(next.churchName);
     setRole(next.role);
     setEmail(next.email);
+    setIsSuperAdmin(next.isSuperAdmin);
     setIsLoading(false);
   }, []);
 
@@ -130,6 +157,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       churchName: null,
       role: null,
       email: null,
+      isSuperAdmin: false,
     };
     saveToStorage(cleared);
     setToken(null);
@@ -137,6 +165,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setChurchName(null);
     setRole(null);
     setEmail(null);
+    setIsSuperAdmin(false);
     setIsLoading(false);
   }, []);
 
@@ -151,6 +180,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     churchName,
     role,
     email,
+    isSuperAdmin,
     isLoading,
     login,
     logout,

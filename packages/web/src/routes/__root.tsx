@@ -27,10 +27,10 @@ function RootLayout() {
 }
 
 function AppContent() {
-  const { churchId } = useAuth();
+  const { churchId, isSuperAdmin } = useAuth();
   const { location } = useRouterState();
 
-  if (!churchId) {
+  if (!churchId && !isSuperAdmin) {
     if (location.pathname === '/') {
       return <LandingPage />;
     }
@@ -38,6 +38,18 @@ function AppContent() {
       <ErrorBoundary>
         <Outlet />
       </ErrorBoundary>
+    );
+  }
+
+  if (!churchId) {
+    return (
+      <RequireAuth>
+        <ErrorBoundary>
+          <AppShell>
+            <Outlet />
+          </AppShell>
+        </ErrorBoundary>
+      </RequireAuth>
     );
   }
 

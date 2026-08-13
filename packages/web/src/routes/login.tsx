@@ -15,13 +15,13 @@ function LoginPage() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
-  const { churchId } = useAuth();
+  const { churchId, isSuperAdmin } = useAuth();
 
   useEffect(() => {
-    if (churchId) {
+    if (churchId || isSuperAdmin) {
       navigate({ to: '/' });
     }
-  }, [churchId]);
+  }, [churchId, isSuperAdmin]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
