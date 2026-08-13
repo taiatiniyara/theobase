@@ -90,3 +90,97 @@ export async function postChurchMutation(
     }),
   });
 }
+
+// Operator API functions
+
+export interface RestoreDrillResult {
+  drill: string;
+  state: {
+    success: boolean;
+    stateHashMatch: boolean;
+    timestamp: string;
+    churchId: string;
+  };
+}
+
+export async function fetchRestoreDrillStatus(): Promise<RestoreDrillResult> {
+  const response = await fetch(`${getAuthWorkerUrl()}/observability/restore-drill`, {
+    headers: { ...authHeaders() },
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json() as Promise<RestoreDrillResult>;
+}
+
+export async function triggerRestoreDrill(): Promise<Response> {
+  const token = getAuthToken();
+  return fetch(`${getAuthWorkerUrl()}/observability/restore-drill`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+}
+
+export async function fetchPlacementRequests(): Promise<Array<{
+  id: string;
+  requestedBy: string;
+  name: string;
+  territory: string;
+  suggestedParentId: string;
+  status: string;
+}>> {
+  const response = await fetch(`${getAuthWorkerUrl()}/placement/requests`, {
+    headers: { ...authHeaders() },
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json() as Promise<Array<{
+    id: string;
+    requestedBy: string;
+    name: string;
+    territory: string;
+    suggestedParentId: string;
+    status: string;
+  }>>;
+}
+
+export async function confirmPlacementRequest(requestId: string): Promise<Response> {
+  const token = getAuthToken();
+  return fetch(`${getAuthWorkerUrl()}/placement/confirm/${requestId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+}
+
+export async function fetchOrgTree(): Promise<Record<string, unknown>> {
+  const response = await fetch(`${getAuthWorkerUrl()}/op/tree`, {
+    headers: { ...authHeaders() },
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json() as Promise<Record<string, unknown>>;
+}
+
+export async function seedReferenceSpine(): Promise<Response> {
+  const token = getAuthToken();
+  return fetch(`${getAuthWorkerUrl()}/op/seed`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+}
+
+export async function purgeChurchDO(churchId: string): Promise<Response> {
+  const token = getAuthToken();
+  return fetch(`${getAuthWorkerUrl()}/op/purge/${churchId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+}
