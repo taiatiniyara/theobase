@@ -157,4 +157,25 @@ describe('grant-scoped sessions (ADR-0018 §7)', () => {
     );
     expect(authed).toBeNull();
   });
+
+  it('resolves a plain login magic link to the church granted at registration', async () => {
+    await insertUser('user-5', 'clerk@newchurch.org');
+    await insertGrant('grant-4', 'user-5', 'suva-central', 'clerk');
+
+    const token = await signMagicLink({
+      sub: 'clerk@newchurch.org',
+      churchId: '',
+      role: 'member',
+      tokenVersion: 0,
+      unitId: null,
+      isSuperAdmin: false,
+    });
+    await testEnv.theobase_auth!.put(`token:${await hashForKV(token)}`, 'valid');
+
+    const { verify } = await import('./jwt');
+    const { payload } = await verify(await getSessionToken(await makeVerifyRequest(token)));
+    expect(payload.churchId).toBe('suva-central');
+    expect(payload.role).toBe('clerk');
+    expect(payload.unitId).toBe('suva-central');
+  });
 });

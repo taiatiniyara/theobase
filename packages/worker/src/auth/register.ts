@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq } from 'drizzle-orm';
-import { orgUnit, churchExtension, orgAudit } from '@theobase/shared';
+import { orgUnit, churchExtension, orgAudit, user as userTable, roleGrant } from '@theobase/shared';
 import type { Env } from '../env';
 import { signMagicLink } from './jwt';
 import { MAGIC_LINK_EXPIRY_MS } from '@theobase/shared';
@@ -73,9 +73,35 @@ export async function handleChurchRegister(request: Request, env: Env): Promise<
     status: 'active',
   });
 
+  // ADR-0006 §Role Assignment: the first officer to register a church becomes clerk.
+  // Create (or reuse) the user and grant them clerk on the new church so later
+  // magic-link logins resolve this session to the church (handleVerify reads roleGrant).
+  let clerkId: string | null = null;
+  if (email) {
+    const existing = await db.select({ id: userTable.id }).from(userTable).where(eq(userTable.email, email)).get();
+    if (existing) {
+      clerkId = existing.id;
+    } else {
+      clerkId = crypto.randomUUID();
+      await db
+        .insert(userTable)
+        .values({ id: clerkId, email, name: email, tokenVersion: 1, isSuperAdmin: false })
+        .onConflictDoNothing();
+      const created = await db.select({ id: userTable.id }).from(userTable).where(eq(userTable.email, email)).get();
+      clerkId = created?.id ?? null;
+    }
+
+    if (clerkId) {
+      await db
+        .insert(roleGrant)
+        .values({ id: crypto.randomUUID(), userId: clerkId, unitId: churchId, role: 'clerk' })
+        .onConflictDoNothing();
+    }
+  }
+
   await db.insert(orgAudit).values({
     id: crypto.randomUUID(),
-    actor: email ?? 'anonymous',
+    actor: clerkId ?? email ?? 'anonymous',
     action: 'unit:create',
     unitId: churchId,
     after: { id: churchId, name, address: address ?? null, parentId: parent.id },

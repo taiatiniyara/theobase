@@ -111,9 +111,27 @@ describe('church registration under a Conference/Mission (ADR-0019 §5)', () => 
       .bind(body.churchId)
       .first();
     expect(audit).toEqual({
-      actor: 'lautoka@example.com',
+      actor: expect.any(String),
       action: 'unit:create',
       unit_id: body.churchId,
+    });
+
+    const clerk = await testEnv.DB!.prepare(
+      'SELECT id, email FROM user WHERE email = ?',
+    )
+      .bind('lautoka@example.com')
+      .first();
+    expect(clerk).toEqual({ id: expect.any(String), email: 'lautoka@example.com' });
+
+    const grant = await testEnv.DB!.prepare(
+      'SELECT user_id, unit_id, role FROM role_grant WHERE unit_id = ?',
+    )
+      .bind(body.churchId)
+      .first();
+    expect(grant).toEqual({
+      user_id: (clerk as { id: string }).id,
+      unit_id: body.churchId,
+      role: 'clerk',
     });
   });
 
