@@ -15,8 +15,8 @@ Theobase serves non-technical church officers across 215+ countries, many on low
 The Theobase logo (`logo-icon.svg`, `logo-full.svg`, `logo-full-light.svg`) is a geometric three-tier mountain peak in layered blue — symbolising foundation, elevation, and stability. The full mark pairs the mountain icon with the "Theobase" wordmark. Three variants:
 
 - `logo-icon.svg` — mountain icon only. Used for favicons, app icons, and PWA manifests. Lives in `packages/web/public/`.
-- `logo-full.svg` — icon + wordmark in dark text. Used on light backgrounds (login screen, light-mode header). Lives in `branding/` and `packages/web/public/`.
-- `logo-full-light.svg` — icon + wordmark in light text. Used on dark backgrounds (dark-mode header, onboarding, email templates). Lives in `branding/` and `packages/web/public/`.
+- `logo-full.svg` — icon + wordmark in dark text. Used on light backgrounds (login screen, app header). Lives in `branding/` and `packages/web/public/`.
+- `logo-full-light.svg` — icon + wordmark in light text. Used on dark backgrounds (email templates, onboarding assets). Lives in `branding/` and `packages/web/public/`.
 
 The brand palette, extracted directly from the logo:
 
@@ -34,8 +34,7 @@ Semantic colors: green for success/confirmed, amber for pending/attention, red f
 
 A unified design system with token-based theming. Every visual property maps to a design token — colors, spacing, typography, radii, shadows, motion curves. This enables:
 
-- **Dark and light modes** as first-class themes, not afterthoughts.
-- **High-contrast mode** for accessibility and outdoor use (counting rooms are often sunlit).
+- **Light mode today; dark and high-contrast modes planned** as deliberate theme additions — the current app ships light-only (see `docs/design-system.md`).
 - **Per-language typography** — font stacks that render correctly across Latin, Cyrillic, Arabic, Devanagari, Chinese, and Pacific Island scripts.
 
 Generated from a single token file (e.g., Style Dictionary or Tokens Studio) and compiled into CSS custom properties + Tailwind config. Every component references tokens, never raw values.

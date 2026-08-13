@@ -13,8 +13,7 @@ A step-by-step guide to deploying theobase to Cloudflare Workers.
 
 **Accounts required:**
 
-- **Cloudflare account** — for Workers, Durable Objects, D1, R2, Queues, KV, Email Routing, Pages
-- **Stripe account** — for Conference subscription billing via Checkout
+- **Cloudflare account** — for Workers, Durable Objects, D1, R2, KV, Email Routing, Pages
 
 Authenticate wrangler:
 
@@ -25,7 +24,7 @@ npx wrangler login
 ## 2. First-Time Setup
 
 ```sh
-git clone https://github.com/your-org/theobase.git
+git clone https://github.com/taiatiniyara/theobase.git
 cd theobase
 pnpm install
 pnpm --filter @theobase/shared build
@@ -45,10 +44,10 @@ All commands run from the repo root.
 ### 3a. KV Namespace
 
 ```sh
-npx wrangler kv:namespace create theobase-auth
+npx wrangler kv:namespace create theobase_auth
 ```
 
-Output includes an `id` field. Save it — you'll paste it into `wrangler.jsonc` below.
+Output includes an `id` field. Save it — you'll paste it into `wrangler.jsonc` below. The binding name is `theobase_auth` (it matches the configured `remote: true` namespace in `wrangler.jsonc`).
 
 ### 3b. D1 Database
 
@@ -58,28 +57,14 @@ npx wrangler d1 create theobase
 
 Save the `database_id` from the output.
 
-### 3c. R2 Bucket
-
-```sh
-npx wrangler r2 bucket create theobase-errors
-```
-
-No output ID needed for R2 — the binding matches by bucket name.
-
-### 3d. Queue
-
-```sh
-npx wrangler queues create error-queue
-```
-
-### 3e. Update wrangler.jsonc
+### 3c. Update wrangler.jsonc
 
 Open `packages/worker/wrangler.jsonc` and add the KV and D1 bindings with the provisioned IDs:
 
 ```jsonc
 "kv_namespaces": [
   {
-    "binding": "AUTH_KV",
+    "binding": "theobase_auth",
     "id": "<kv-namespace-id-from-3a>"
   }
 ],
@@ -91,6 +76,8 @@ Open `packages/worker/wrangler.jsonc` and add the KV and D1 bindings with the pr
   }
 ]
 ```
+
+> **Not yet provisioned:** an R2 bucket for raw error payloads (`ERROR_STORAGE`) and a Cloudflare Queue for the observability pipeline (`ERROR_QUEUE`) are declared in `env.ts` but are not bound in `wrangler.jsonc` or written by any code yet. The observability pipeline is currently a pass-through: the Worker logs errors and sync-health reports to console. Provision these when the Queue/R2 pipeline ships.
 
 ## 4. Apply D1 Migrations
 
@@ -163,13 +150,13 @@ After deployment, wrangler prints the Worker URL (e.g. `https://theobase-worker.
 
 ## 9. Seed Demo Data
 
-The demo seed provisions "Suva Central SDA Church" under Fiji Mission with 120 synthetic members, 6 months of giving records (24 committed weekly batches), 2 active demo batches, and 6 demo user accounts across key roles.
+The demo seed provisions "Suva Central SDA Church" under Fiji Mission with 120 synthetic members, 6 months of giving records (24 committed weekly batches), 2 active demo batches (one pending counter2, one disputed), and 6 demo user accounts across key roles.
 
 ```sh
 curl -X POST https://theobase-worker.YOURSUBDOMAIN.workers.dev/church/seed-demo
 ```
 
-This hits the `POST /church/seed-demo` endpoint on the Worker. Re-running it destroys and recreates the demo DO — no production data is affected.
+This hits the `POST /church/seed-demo` endpoint on the Worker. Re-running it destroys and recreates the demo DO — no production data is affected. (The root `pnpm seed:demo` script is currently a placeholder that only prints the same curl command.)
 
 Demo accounts (all use magic link login):
 
@@ -182,33 +169,9 @@ Demo accounts (all use magic link login):
 | `pastor@suva.sda` | District Pastor |
 | `member@suva.sda` | Member |
 
-## 10. Stripe Checkout
+## 10. Billing (planned — not yet shipped)
 
-Conference billing uses Stripe Checkout. Set Stripe keys as secrets on the Worker:
-
-```sh
-npx wrangler secret put STRIPE_SECRET_KEY
-# Paste your Stripe secret key (sk_live_... or sk_test_...)
-
-npx wrangler secret put STRIPE_WEBHOOK_SECRET
-# Paste your Stripe webhook signing secret
-```
-
-To create a Checkout session for Conference billing:
-
-```sh
-curl -X POST https://theobase-worker.YOURSUBDOMAIN.workers.dev/billing/create-checkout-session \
-  -H "Content-Type: application/json" \
-  -d '{
-    "conferenceId": "<conference-id>",
-    "churchCount": 5,
-    "plan": "monthly"
-  }'
-```
-
-The Worker returns a Stripe Checkout URL. The Conference admin completes payment via that URL. On success, Stripe fires a webhook; the Worker handler activates the subscription.
-
-For local testing against Stripe test mode, use `sk_test_...` keys and Stripe's test card `4242 4242 4242 4242`.
+Conference subscription billing is **planned but not implemented**. There is no Stripe integration and no `/billing/*` endpoints in the worker today. The commercial model ($3/church/month, billed to the Conference) and the Stripe Checkout design are documented in `docs/adr/0003-commercial-model.md` and `docs/adr/0019-conference-onboarding.md`; deployment steps will be added when billing ships. Do not expect `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` secrets or `/billing/create-checkout-session` to exist.
 
 ## 11. Monitor
 
@@ -222,22 +185,22 @@ npx wrangler tail
 
 Streams live request logs, errors, and console output from the deployed Worker.
 
-### D1 Error Tables
+### Observability
 
-The observability pipeline writes errors to D1 tables. Query them via wrangler:
+`@theobase/observability` posts errors and sync-health reports to `POST /observability/error` and `POST /observability/sync-health` on the Worker, which currently only log them to console. The D1 `error_log` and `sync_health` tables exist in the schema but are **not yet written** — persistence, the Queue/R2 pipeline, and the observability UI are planned (ADR-0014). Once persisted, query them via wrangler:
 
 ```sh
-npx wrangler d1 execute theobase --remote --command "SELECT * FROM errors ORDER BY created_at DESC LIMIT 20"
-npx wrangler d1 execute theobase --remote --command "SELECT * FROM sync_health ORDER BY checked_at DESC LIMIT 10"
+npx wrangler d1 execute theobase --remote --command "SELECT * FROM error_log ORDER BY timestamp DESC LIMIT 20"
+npx wrangler d1 execute theobase --remote --command "SELECT * FROM sync_health ORDER BY updated_at DESC LIMIT 10"
 ```
 
 ### Restore Drill
 
-A Worker Cron trigger (`0 0 1 * *` — first day of each month at midnight UTC) runs the restore drill: it picks a random church, replays its event log into a fresh DO, and verifies the state hash matches. A mismatch triggers a P1 alert.
+A Worker Cron trigger (`0 0 1 * *` — first day of each month at midnight UTC) runs the restore drill: it replays the demo church's event log into a fresh DO, and verifies the state hash matches. A mismatch triggers a P1 alert. "Pick a random church" is planned; the drill currently targets the seeded demo church. Results are written to the D1 `restore_drill` table.
 
-### R2 Error Storage
+### R2 Error Storage (planned)
 
-Raw error payloads are stored in the `theobase-errors` R2 bucket. Browse via the Cloudflare dashboard (**R2 > theobase-errors**).
+Raw error payloads in an R2 bucket (`ERROR_STORAGE`) are planned with the observability pipeline (ADR-0014). No R2 bucket is bound or written today.
 
 ## 12. Troubleshooting
 
@@ -262,7 +225,9 @@ Raw error payloads are stored in the `theobase-errors` R2 bucket. Browse via the
 2. If the frontend is on Cloudflare Pages with a preview deployment (e.g. `<pr>.theobase.pages.dev`), the production APP_URL won't match. Use staging `APP_URL` or add the preview origin to the CORS allow list.
 3. Check the Worker is not returning a CORS error response: `npx wrangler tail` and look for rejected origins.
 
-### Queued messages not processing
+### Queued messages not processing (planned)
+
+No Cloudflare Queue is configured yet — `ERROR_QUEUE` is declared in `env.ts` but not bound in `wrangler.jsonc`. Once the observability Queue ships:
 
 1. Verify the queue exists: `npx wrangler queues list`.
 2. Ensure the queue binding name in `wrangler.jsonc` (**ERROR_QUEUE**) matches the code.
@@ -273,4 +238,4 @@ Raw error payloads are stored in the `theobase-errors` R2 bucket. Browse via the
 1. Run `pnpm typecheck` and `pnpm test` locally first. Fix any failures.
 2. Verify wrangler is authenticated: `npx wrangler whoami`.
 3. Check that the account ID in `wrangler.jsonc` (if set) matches your Cloudflare account.
-4. Ensure all bindings (KV, D1, R2, Queue, DO) are provisioned and their IDs are correct in `wrangler.jsonc`.
+4. Ensure all bindings (KV, D1, DO, send_email) are provisioned and their IDs are correct in `wrangler.jsonc`.

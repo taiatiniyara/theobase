@@ -25,9 +25,11 @@ Theobase serves non-technical church officers. Passwords mean forgotten credenti
 ```typescript
 {
   sub: string; // userId
-  churchId: string; // the user's home church
-  role: string; // 13 roles — see CONTEXT.md permission matrix
+  churchId: string; // the user's active church
+  role: string; // 14 roles — see CONTEXT.md permission matrix
   tokenVersion: number; // incremented on role change or forced logout
+  unitId: string | null; // active grant's org unit (ADR-0018)
+  isSuperAdmin: boolean; // operator flag
   iat: number;
   exp: number;
 }
@@ -35,11 +37,13 @@ Theobase serves non-technical church officers. Passwords mean forgotten credenti
 
 ### Role Assignment
 
-- The first officer to register a church becomes **clerk** by default.
+- The first officer to register a church becomes **clerk** by default (via a durable `role_grant` — ADR-0018/0019).
 - The clerk sends role invites: "Add counter" → enter email → system generates a role-specific invite link.
 - Invite link carries the target role. Invitee clicks, JWT gains that role for that church.
-- One user can hold multiple roles across multiple churches (pastor serving a district).
+- One user can hold multiple roles across multiple churches (pastor serving a district) as multiple grants; the session resolves the active grant.
 - The PWA UI context-switches based on active church + role.
+
+> **Implementation note:** the invite endpoint (`/auth/invite`) currently emails a link but has no accept flow and no role gate. Grant-based invites (`role_grant` + accept) are part of the ADR-0019 body of work.
 
 ### Enforcement
 

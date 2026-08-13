@@ -13,8 +13,8 @@ The Theobase logo is a geometric three-tier mountain peak — foundation, elevat
 | File                  | Location                        | Usage                                                                                           |
 | --------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------- |
 | `logo-icon.svg`       | `packages/web/public/`          | Favicon, app icon, PWA manifest. Mountain icon only.                                            |
-| `logo-full.svg`       | `branding/`, `packages/web/public/` | Light backgrounds: login screen, light-mode header. Icon + wordmark in dark text.               |
-| `logo-full-light.svg` | `branding/`, `packages/web/public/` | Dark backgrounds: dark-mode header, onboarding, email templates. Icon + wordmark in light text. |
+| `logo-full.svg`       | `branding/`, `packages/web/public/` | Light backgrounds: login screen, app header. Icon + wordmark in dark text.               |
+| `logo-full-light.svg` | `branding/`, `packages/web/public/` | Dark backgrounds (email templates, onboarding assets). Icon + wordmark in light text.     |
 
 The brand palette is drawn directly from the layered peaks of the logo:
 
@@ -43,7 +43,7 @@ Every visual property maps to a token. Components reference tokens, never raw va
 --color-brand-500: #3b82f6; /* interactive elements, links */
 --color-brand-600: #2563eb; /* primary action, active nav, pressed */
 --color-brand-700: #1d4ed8; /* hover on primary buttons */
---color-brand-800: #1e40af; /* pressed on primary buttons, dark bg accents */
+--color-brand-800: #1e40af; /* pressed on primary buttons */
 ```
 
 Usage:
@@ -66,7 +66,6 @@ Usage:
 --color-neutral-700: #334155; /* body text (light mode default) */
 --color-neutral-800: #1e293b; /* heading text, emphasis */
 --color-neutral-900: #0f172a; /* high-emphasis headings */
---color-neutral-950: #020617; /* dark mode page background */
 ```
 
 Usage:
@@ -187,11 +186,11 @@ Every interactive element must have a **minimum 48×48px** touch area. If the vi
 
 Theobase is a flat design. Shadows are minimal and purposeful.
 
-| Token         | Usage                          | Light Mode                                                       | Dark Mode                   |
-| ------------- | ------------------------------ | ---------------------------------------------------------------- | --------------------------- |
-| `shadow-none` | Default state for all surfaces | —                                                                | —                           |
-| `shadow-sm`   | Cards (resting)                | `0 1px 2px rgba(0,0,0,0.05)`                                     | `0 1px 2px rgba(0,0,0,0.3)` |
-| `shadow-md`   | Modals, dialogs, bottom sheets | `0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)` | Same, with 0.4 alpha        |
+| Token         | Usage                          | Light Mode                                                       |
+| ------------- | ------------------------------ | ---------------------------------------------------------------- |
+| `shadow-none` | Default state for all surfaces | —                                                                |
+| `shadow-sm`   | Cards (resting)                | `0 1px 2px rgba(0,0,0,0.05)`                                     |
+| `shadow-md`   | Modals, dialogs, bottom sheets | `0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)` |
 
 **NEVER** use `shadow-lg` or `shadow-xl` — flat design principle. Elevation is communicated through layout and borders, not heavy drop shadows.
 
@@ -262,9 +261,9 @@ Every screen in Theobase is exactly one of these three patterns. AI agents must 
 Structure:
 
 ```html
-<div class="flex flex-col min-h-screen bg-neutral-50 dark:bg-neutral-950">
+<div class="flex flex-col min-h-screen bg-neutral-50">
   <header
-    class="h-14 flex items-center justify-between px-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950"
+    class="h-14 flex items-center justify-between px-4 border-b border-neutral-200 bg-neutral-50"
   >
     <!-- Logo + SyncIndicator -->
   </header>
@@ -315,9 +314,9 @@ Rules:
 Structure:
 
 ```html
-<div class="flex flex-col min-h-screen bg-neutral-50 dark:bg-neutral-950">
+<div class="flex flex-col min-h-screen bg-neutral-50">
   <header
-    class="h-14 flex items-center gap-3 px-4 border-b border-neutral-200 dark:border-neutral-800"
+    class="h-14 flex items-center gap-3 px-4 border-b border-neutral-200"
   >
     <button><!-- Back arrow (brand-600) --></button>
     <h1 class="text-lg font-semibold flex-1"><!-- Title --></h1>
@@ -370,9 +369,9 @@ Rules:
 Structure:
 
 ```html
-<div class="flex flex-col min-h-screen bg-neutral-50 dark:bg-neutral-950">
+<div class="flex flex-col min-h-screen bg-neutral-50">
   <header
-    class="h-14 flex items-center gap-3 px-4 border-b border-neutral-200 dark:border-neutral-800"
+    class="h-14 flex items-center gap-3 px-4 border-b border-neutral-200"
   >
     <button class="text-brand-600 font-medium"><!-- Cancel --></button>
     <h1 class="text-lg font-semibold flex-1 text-center"><!-- Title --></h1>
@@ -383,7 +382,7 @@ Structure:
     <section class="space-y-6"><!-- Form Section 2 --></section>
     <!-- ... -->
   </main>
-  <footer class="px-4 py-4 border-t border-neutral-200 dark:border-neutral-800">
+  <footer class="px-4 py-4 border-t border-neutral-200">
     <button class="w-full"><!-- Primary Submit --></button>
   </footer>
 </div>
@@ -449,7 +448,6 @@ input: h-12 w-full px-4 rounded-md border border-neutral-300 bg-white text-neutr
        placeholder:text-neutral-400
        focus:border-brand-500 focus:ring-2 focus:ring-brand-400 focus:ring-offset-0 focus:outline-none
        disabled:bg-neutral-100 disabled:text-neutral-400 disabled:cursor-not-allowed
-       dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100 dark:placeholder:text-neutral-500
 ```
 
 | State    | Visual                                                                              |
@@ -484,14 +482,13 @@ Mobile behavior: when options exceed 10, render as a **bottom sheet** with a sea
 
 ```css
 card: bg-white rounded-lg p-4 shadow-sm border border-neutral-200
-      dark:bg-neutral-800 dark:border-neutral-700
 ```
 
 | Variant     | Usage                                                                                                      |
 | ----------- | ---------------------------------------------------------------------------------------------------------- |
 | Default     | Standard content card                                                                                      |
 | Interactive | Add `hover:shadow-md hover:border-brand-300 cursor-pointer transition-all duration-150` for tappable cards |
-| Insight     | `bg-brand-100 dark:bg-brand-900 border-brand-200 dark:border-brand-800` for dashboard stat cards           |
+| Insight     | `bg-brand-100 border-brand-200` for dashboard stat cards                                                   |
 
 Optional header: `px-4 pt-4 pb-0` with `text-lg font-semibold` title and optional action button on the right.
 
@@ -533,7 +530,6 @@ When no image is available, show the member's initials (up to 2 characters) on `
 
 ```css
 bottom-nav: h-16 w-full bg-white border-t border-neutral-200 flex items-center justify-around px-2 pb-safe
-           dark:bg-neutral-900 dark:border-neutral-800
            fixed bottom-0 left-0 right-0 md:hidden
 ```
 
@@ -548,7 +544,6 @@ bottom-nav: h-16 w-full bg-white border-t border-neutral-200 flex items-center j
 
 ```css
 side-nav: w-[240px] h-screen bg-white border-r border-neutral-200 flex flex-col
-         dark:bg-neutral-900 dark:border-neutral-800
          hidden md:flex fixed left-0 top-0
 ```
 
@@ -556,8 +551,8 @@ Structure:
 
 - **Top:** Logo (logo-full.svg or logo-full-light.svg), 40px padding, linked to Dashboard.
 - **Middle:** Navigation items, vertical list, each item 48px height with `px-4`.
-  - Active item: `bg-brand-100 dark:bg-brand-800` background, `text-brand-700 dark:text-brand-300` text, 3px `brand-600` left border.
-  - Inactive item: `text-neutral-600 dark:text-neutral-400` text, transparent left border, hover `bg-neutral-100`.
+  - Active item: `bg-brand-100` background, `text-brand-700` text, 3px `brand-600` left border.
+  - Inactive item: `text-neutral-600` text, transparent left border, hover `bg-neutral-100`.
 - **Bottom:** User section — avatar + name + role, `mt-auto`, `p-4`, `border-t border-neutral-200`.
 
 **NEVER** show on mobile (hidden with `hidden md:flex`).
@@ -565,14 +560,14 @@ Structure:
 #### Top Bar (Detail / Form screens)
 
 ```css
-top-bar: h-14 w-full bg-neutral-50 dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800
+top-bar: h-14 w-full bg-neutral-50 border-b border-neutral-200
          flex items-center gap-3 px-4
 ```
 
 Structure:
 
 - Left: Back button (`text-brand-600 font-medium`, ← icon + "Back" text).
-- Center: Screen title (`text-lg font-semibold text-neutral-900 dark:text-neutral-100`, `flex-1 text-center`).
+- Center: Screen title (`text-lg font-semibold text-neutral-900`, `flex-1 text-center`).
 - Right: Primary action (Save, Edit) or empty.
 
 **NEVER** place Top Bar and Bottom Nav on the same screen — Top Bar is for Detail and Form layouts, Bottom Nav is for Dashboard.
@@ -582,8 +577,8 @@ Structure:
 #### Member List Item
 
 ```css
-member-item: h-16 flex items-center gap-3 px-4 bg-white dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-700
-             border-b border-neutral-100 dark:border-neutral-800
+member-item: h-16 flex items-center gap-3 px-4 bg-white hover:bg-neutral-50
+             border-b border-neutral-100
 ```
 
 Structure:
@@ -601,15 +596,15 @@ Structure:
 #### Giving Record Row
 
 ```css
-record-row: h-12 flex items-center gap-3 px-4 bg-white dark:bg-neutral-800
-           border-b border-neutral-100 dark:border-neutral-800
+record-row: h-12 flex items-center gap-3 px-4 bg-white
+           border-b border-neutral-100
 ```
 
 Structure:
 
 1. Date (`text-sm text-neutral-500 tabular-nums`, fixed width)
 2. Member name (`text-sm font-medium`, `flex-1`)
-3. Amount (`text-sm font-semibold tabular-nums text-neutral-900 dark:text-neutral-100`, right-aligned)
+3. Amount (`text-sm font-semibold tabular-nums text-neutral-900`, right-aligned)
 4. Type badge (Tithe/Offering/Building, right of amount)
 5. **Swipe-left to remove** (in batch edit mode) with red background + trash icon.
 
@@ -640,7 +635,7 @@ Examples:
 #### Skeleton
 
 ```css
-skeleton: bg-neutral-200 dark:bg-neutral-700 rounded-md animate-pulse
+skeleton: bg-neutral-200 rounded-md animate-pulse
 ```
 
 Match the shape of the component being loaded:
@@ -656,7 +651,7 @@ Match the shape of the component being loaded:
 #### Snackbar
 
 ```css
-snackbar: fixed bottom-20 left-4 right-4 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900
+snackbar: fixed bottom-20 left-4 right-4 bg-neutral-900 text-white
           rounded-lg px-4 py-3 flex items-center gap-3 shadow-md
           animate-in slide-in-from-bottom-4 duration-300
 ```
@@ -679,7 +674,7 @@ snackbar: fixed bottom-20 left-4 right-4 bg-neutral-900 dark:bg-neutral-100 text
 
 ```css
 dialog-overlay: fixed inset-0 bg-black/50 animate-in fade-in duration-200
-dialog-content: fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-neutral-800
+dialog-content: fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white
                 rounded-lg shadow-md p-6 max-w-sm w-[calc(100%-2rem)] max-h-[85vh] overflow-y-auto
                 animate-in zoom-in-95 duration-200
 ```
@@ -715,10 +710,10 @@ Positioned in the top bar (Dashboard header), right of the logo. The dot is a 3p
 #### Numeric Keypad
 
 ```css
-keypad: grid grid-cols-3 gap-2 p-4 bg-neutral-100 dark:bg-neutral-800 rounded-t-lg
-key: h-14 rounded-md bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100
+keypad: grid grid-cols-3 gap-2 p-4 bg-neutral-100 rounded-t-lg
+key: h-14 rounded-md bg-white text-neutral-900
      font-semibold text-2xl flex items-center justify-center active:bg-neutral-200
-     dark:active:bg-neutral-600 transition-colors duration-100
+     transition-colors duration-100
 ```
 
 Layout (calculator style):
@@ -747,7 +742,7 @@ Layout (calculator style):
 #### Amount Display
 
 ```css
-amount-display: text-3xl font-semibold tabular-nums text-neutral-900 dark:text-neutral-100
+amount-display: text-3xl font-semibold tabular-nums text-neutral-900
                 py-6 px-4 text-right min-h-[80px] flex items-center justify-end
 ```
 
@@ -755,12 +750,12 @@ amount-display: text-3xl font-semibold tabular-nums text-neutral-900 dark:text-n
 - Decimal point inserted automatically: typing `12345` displays as `$123.45`.
 - Pressing `.` manually positions the decimal — subsequent digits go to decimal places.
 - Zero state shows `$0.00` in `text-neutral-300`.
-- Background: `bg-neutral-50 dark:bg-neutral-950`.
+- Background: `bg-neutral-50`.
 
 #### Batch Card
 
 ```css
-batch-card: flex items-center gap-3 px-4 py-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700
+batch-card: flex items-center gap-3 px-4 py-3 bg-white rounded-lg border border-neutral-200
 ```
 
 Structure:
@@ -775,8 +770,8 @@ Structure:
 #### Batch Summary
 
 ```css
-batch-summary: flex items-center justify-between px-4 py-4 bg-neutral-100 dark:bg-neutral-800
-               rounded-lg border border-neutral-200 dark:border-neutral-700
+batch-summary: flex items-center justify-between px-4 py-4 bg-neutral-100
+               rounded-lg border border-neutral-200
 ```
 
 Structure:
@@ -788,7 +783,7 @@ Dual-signoff indicator:
 
 ```css
 signoff: flex items-center gap-2
-signoff-counter: w-10 h-10 rounded-full border-2 border-neutral-300 dark:border-neutral-600
+signoff-counter: w-10 h-10 rounded-full border-2 border-neutral-300
                  flex items-center justify-center text-sm font-medium
                  data-[signed=true]:border-success data-[signed=true]:bg-success-light data-[signed=true]:text-green-700
 ```
@@ -804,8 +799,8 @@ signoff-counter: w-10 h-10 rounded-full border-2 border-neutral-300 dark:border-
 
 ```css
 form-section: space-y-4
-form-section-title: text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-0
-form-section-divider: border-t border-neutral-200 dark:border-neutral-800 my-6
+form-section-title: text-base font-semibold text-neutral-900 mb-0
+form-section-divider: border-t border-neutral-200 my-6
 ```
 
 Structure:
@@ -878,6 +873,6 @@ All components in `src/components/ui/` map 1:1 to shadcn/ui primitives. Feature 
 
 12. **RTL support is not optional.** Use CSS logical properties. Test every layout flipped to Arabic/Hebrew.
 
-13. **Dark mode is not a separate theme file.** It uses the same token names with different values, toggled via a `dark` class on `<html>`. Every component works in both modes.
+13. **Do not add dark mode.** The platform ships light mode only. Do not write `dark:` variants or dark-mode conditionals. If dark mode ships later it becomes a new theme, added deliberately — not ad-hoc `dark:` sprinkles.
 
 14. **When in doubt, default to the Dashboard layout.** If a screen doesn't clearly fit Detail or Form, it's a Dashboard with filtered content.

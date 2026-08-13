@@ -31,7 +31,9 @@ The operator's approval queue shows each request with its canned suggestion (ter
 
 ### 4. Billing is the activation gate
 
-The placement gives a **constituted** (registered but not yet commercial) conference. Checkout (existing `/billing/stripe-checkout` + webhook) flips the unit `constituted → organized`. Only `organized` units may add churches. No billing, no live churches — protects the $3/church metering from metering unpaid tenants.
+The placement gives a **constituted** (registered but not yet commercial) conference. Checkout flips the unit `constituted → organized`. Only `organized` units may add churches. No billing, no live churches — protects the $3/church metering from metering unpaid tenants.
+
+> **Status note:** billing does not exist yet — there is no `/billing/*` endpoint and no webhook. When billing ships, the status-flip side-effect (Pen. Consequences below) is what makes `organized` meaningful; today every seeded unit is created `organized` directly.
 
 ### 5. First church is provisioning, not registration
 
@@ -55,6 +57,6 @@ The conference journey does not work until the auth layer resolves sessions from
 
 - A conference exists as a request before it exists as a tree node; nothing half-formed ever appears in the published tree.
 - The operator's queue is the entire per-conference human cost in Phase 1 — one click plus occasional correction.
-- Church clerks get durable grants via invite rather than one-off links; `handleChurchRegister`'s inline role is superseded on the conference path.
-- `/billing` webhook gains a side-effect (status flip), tying revenue to tenant activation for the first time.
+- Church clerks get durable grants via invite rather than one-off links; `handleChurchRegister`'s inline role is superseded on the conference path. (Today the clerk is granted via `role_grant` at registration; a full invite-accept flow is still to come.)
+- `/billing` webhook gains a side-effect (status flip) once billing ships, tying revenue to tenant activation for the first time.
 - Phase 2 regresses nothing: the request queue and suggestion machinery carry over, the registry only changes where suggestions come from.

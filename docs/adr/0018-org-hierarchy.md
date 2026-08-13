@@ -47,8 +47,8 @@ Mergers and splits (churches merging, conferences dividing) are **out of scope**
 ### 5. Operator-authored hierarchy; clean slate
 
 - The **operator is the Super Admin**: `user.isSuperAdmin` flag, *not* a grant row. The operator belongs to no church and no org unit; the whole tree is theirs to author and inspect. No context-switching, no grant, no expiration.
-- **No shipped reference data.** The GC/division spine is created by the operator, not seeded. No canonical seed.
-- **No demo seed.** `pnpm seed:demo`, the demo church, and the demo onboarding tour are removed (supersedes ADR-0013). A fresh install is an empty tree and one super admin user.
+- **No shipped reference data.** The GC/division spine is created by the operator, not seeded. No canonical seed. **Status note:** `org-seed.ts` (`POST /op/seed`) currently ships an idempotent Fiji reference spine (GC → SPD → TPUM → Fiji Mission → Suva Central) as a dev/operator bootstrap convenience. Whether that stays as the operator's bootstrap tool or is removed when the tree-UI ships is open — it is keyed off `SEED_TOKEN`, not shipped as canonical data.
+- **No demo seed.** `pnpm seed:demo`, the demo church, and the demo onboarding tour are removed (supersedes ADR-0013). A fresh install is an empty tree and one super admin user. **Status note:** this removal is *not yet complete* — `packages/worker/src/demo-seed.ts` and `POST /church/seed-demo` still ship (the restore drill depends on the seeded demo church), and `seed:demo` is a placeholder script. Removing the demo seed is outstanding work that ADR-0013's remaining references must be reconciled against when it lands.
 - Two authoring tools, both shipped now: a checked-in bootstrap script for the static spine, and an operator admin tree-UI for creating and maintaining units.
 - The operator **onboards conferences and their users** (creates the conference/union/division units and grants their officers).
 - **Churches self-register** against an operator-created conference. A territory's first church exists only once someone registers it — acceptable, there is no data to migrate.
@@ -92,7 +92,7 @@ Append-only `orgAudit` rows in D1 record every tree/grant/subscription mutation 
 ## Consequences
 
 - A fresh install is an empty tree plus one super admin. The operator's bootstrap script becomes the reference for standing up a territory (e.g. Fiji: GC → SPD → TPUM → Fiji Mission → Suva Central).
-- Schema changes ripple across `packages/shared`: new `orgUnit`/`roleGrant`/`transfer`/`orgAudit` tables and a `user.isSuperAdmin` column; `member`, `giving_batch`, and other `churchId` columns re-point at church units. Draft tables sit in `packages/shared/src/org.ts` until wired into `schema.ts`.
+- Schema changes ripple across `packages/shared`: new `orgUnit`/`roleGrant`/`transfer`/`orgAudit` tables and a `user.isSuperAdmin` column; `member`, `giving_batch`, and other `churchId` columns re-point at church units. The org tables are now wired into `schema.ts` (with Drizzle migrations in `packages/worker/drizzle/`); the legacy `conference`, `church`, and `role_assignment` tables remain in the schema until the migration is fully cut over.
 - Conference-role users stop being fake-attached to a church and instead hold grants on real units.
 - The transfer flow is honest for the first time: cross-tenant, D1-authoritative, with the receiving unit's officer accepting.
 - The super admin (not a grant-holder) is invisible to grant-scoped queries by construction.

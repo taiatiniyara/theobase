@@ -35,9 +35,9 @@ PII at rest is encrypted (Cloudflare D1, R2, and Durable Object Storage all use 
 ### JWT Security
 
 - Magic link tokens: RS256 signed, 10-minute expiry, single-use (consumed on first validation, stored in Workers KV for the expiry window to prevent replay).
-- Session JWTs: 7-day expiry. Refreshed transparently when >24h remain.
-- Signing key rotation: keys stored in Cloudflare Secrets, rotated quarterly.
-- On role change, all existing session JWTs for that user are revoked (tracked via a `tokenVersion` field on the user record — JWTs carry the version, DO rejects mismatches).
+- Session JWTs: 7-day expiry. Refreshed via `/auth/refresh`; re-signing is currently unconditional (a "refresh when <24h remain" rule is defined but not wired).
+- Signing key rotation: keys stored in Cloudflare Secrets (or auto-generated and persisted in KV), rotated when needed.
+- On role/grant change, all existing session JWTs for that user are revoked (tracked via a `tokenVersion` field on the user record — JWTs carry the version, DO rejects mismatches).
 
 ### DO Isolation
 
@@ -47,10 +47,10 @@ PII at rest is encrypted (Cloudflare D1, R2, and Durable Object Storage all use 
 
 ### Rate Limiting & Input Sanitisation
 
-- Workers KV-based rate limiter: 5 login attempts per email per 15 minutes. 100 requests per IP per minute on the API.
+- Workers KV-based rate limiter on `/auth/send-link`: 20 attempts per email per 60 seconds (`RATE_LIMIT_MAX_ATTEMPTS` / `RATE_LIMIT_WINDOW_MS`). Broader per-IP limits are planned.
 - All DO inputs validated via Drizzle-zod schemas. No raw input reaches DO state.
 - D1 queries use Drizzle's parameterised queries → no SQL injection surface.
-- CORS: only `theobase.app`, `staging.theobase.app`, and `*.theobase.pages.dev` origins.
+- CORS: the worker reflects a single configured origin, `APP_URL` (default `https://theobase.app`), via `Access-Control-Allow-Origin`. Staging/preview origins must be reflected by setting `APP_URL` accordingly. A multi-origin allow-list is planned.
 
 ### Threat Model (Top Risks)
 

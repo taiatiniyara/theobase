@@ -13,10 +13,9 @@ The DO event log is the backup — every mutation emits an append-only event wit
 A monthly automated restore drill:
 
 - Worker Cron trigger runs on the 1st of every month.
-- Picks one random church DO.
-- Replays its event log into a fresh DO instance.
-- Compares the reconstructed state hash to the production DO's state hash.
-- Writes the result to D1 `restore_drills` table: `id, churchId, success (bool), durationMs, stateHashMatch (bool), timestamp`.
+- Replays the seeded demo church's event log into a fresh DO instance. (Picking a random church is planned; the drill currently targets the demo church.)
+- Compares the reconstructed state to the production DO's state (state-hash match).
+- Writes the result to D1 `restore_drill` table: `id, churchId, success (bool), durationMs, stateHashMatch (bool), timestamp`.
 - If `success = false` or `stateHashMatch = false` → P1 alert in observability.
 
 A successful drill every month proves the event log is a reliable backup.

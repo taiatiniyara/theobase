@@ -4,6 +4,8 @@
 
 Accepted (2026-08-10)
 
+> **Status note:** ADR-0018 §5 proposes removing the demo seed (empty tree + one super admin). That removal is **not yet complete** — `demo-seed.ts` and `POST /church/seed-demo` still ship and the restore drill depends on the demo church. This ADR describes what is currently in the code. Revisit when the ADR-0018 removal lands.
+
 ## Context
 
 Theobase must be demonstrable to Conference treasurers before real churches are onboarded. An empty church with "no data yet" fails to sell the platform. A realistic, pre-populated demo shows the proactive intelligence, reports, and counting room in action.
@@ -47,7 +49,7 @@ A seed script (`pnpm seed:demo`) that provisions a complete demo church:
 
 ### Reset
 
-Re-running `pnpm seed:demo` destroys and recreates the demo DO. No production data is affected.
+Re-running the seed (`POST /church/seed-demo`) destroys and recreates the demo DO. No production data is affected. (Note: `pnpm seed:demo` is currently a placeholder script that prints the curl command rather than seeding directly.)
 
 ## Consequences
 

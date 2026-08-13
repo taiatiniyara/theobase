@@ -16,10 +16,12 @@ Infrastructure that records every error from day one, with no user-facing UI:
 
 | Component         | Implementation                                                                                                                                                                                                                                                                       |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| PWA client        | `@theobase/observability` — wraps errors, breadcrumbs, sync metrics. Pushes to `metrics` Queue. Never blocks the user.                                                                                                                                                               |
-| DO error catches  | Every DO catches unhandled errors, pushes to `metrics` Queue with DO ID, event log position, and stack trace.                                                                                                                                                                        |
-| Worker middleware | Request timing and error rate per endpoint. Error responses pushed to Queue.                                                                                                                                                                                                         |
-| Storage           | D1 `errors` table: `id, churchId, userId, severity, type, message, stackTrace, breadcrumbTrail, deviceInfo, timestamp, resolved`. D1 `sync_health` table: `churchId, queueDepth, lastSyncAt, syncSuccessRate, doLatencyMs, updatedAt`. R2: full error payloads and raw stack traces. |
+| PWA client        | `@theobase/observability` — wraps errors, breadcrumbs, sync metrics. HTTP-POSTs to the Worker's `/observability/error` and `/observability/sync-health`. Never blocks the user.                                                                                                     |
+| DO error catches  | Planned — DOs catch unhandled errors and push to the observability Queue. Not yet wired.                                                                                                                                                                                            |
+| Worker middleware | Request timing and error rate per endpoint. Planned — error responses pushed to the Queue. The Worker currently `console.error`s received payloads and returns `{ok:true}`; nothing is persisted.                                                                                     |
+| Storage           | D1 `error_log` table: `id, churchId, userId, severity, type, message, stackTrace, breadcrumbTrail, deviceInfo, timestamp, resolved`. D1 `sync_health` table: `churchId, queueDepth, lastSyncAt, syncSuccessRate, doLatencyMs, updatedAt`. Tables exist in the schema but are not yet written. R2 raw payload storage is planned. |
+
+> **Current status:** the client pipeline and Worker endpoints ship, but the pipeline terminates in the Worker's console. Persisting to D1 (or via a Cloudflare Queue) is outstanding work.
 
 ### v1.5 — Observability UI (post-MVP)
 

@@ -6,7 +6,8 @@
 - [ ] All images have alt attributes
 - [ ] Form inputs have associated labels
 - [ ] Color contrast meets 4.5:1 minimum
-- [ ] `@axe-core/playwright` on critical flows: login → members → counting room → commit
+- [ ] `@axe-core/react` runs in component tests
+- [ ] `@axe-core/playwright` on critical flows: login → members → counting room → commit *(planned — not yet shipped)*
 
 ## Manual (Release Gate)
 ### Screen Reader

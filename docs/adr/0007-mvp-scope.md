@@ -19,7 +19,7 @@ Theobase was triggered by the Fiji Mission's financial tracking problems. The fi
 - Church registration + DO auto-provisioning
 - Role invite system
 - PWA with offline sync (IndexedDB + WebSocket write-ahead log)
-- Design system: light/dark mode, system font, three canonical layouts, component catalog
+- Design system: light mode, system font, three canonical layouts, component catalog
 - English + Fijian Hindi
 
 **Membership:**

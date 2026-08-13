@@ -17,8 +17,8 @@ The architecture maps to the five SOC 2 Trust Service Criteria as follows:
 | Requirement        | Implementation                                                                                                                                            |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Authentication     | Magic link + JWT (ADR-0006)                                                                                                                               |
-| MFA                | TOTP required for treasurer and counter roles (they handle money). Clerk and pastor may enable voluntarily.                                               |
-| Session management | 7-day JWT with inactivity timeout (30 min idle → re-auth required for sensitive operations). Token version invalidation on role change.                   |
+| MFA                | TOTP primitives shipped (`/auth/setup-mfa`, `/auth/verify-mfa`). **Enforcement is not wired** — required-for-treasurer/counter gating and secret persistence are planned.                                                |
+| Session management | 7-day JWT with token version invalidation on role/grant change. Inactivity timeout (30 min idle → re-auth for sensitive ops) is planned.                   |
 | Access logging     | Every DO mutation emits to the event log with actor, timestamp, and IP. A separate access log tracks all read operations (who viewed which member, when). |
 | Encryption         | TLS 1.3 in transit. AES-256 at rest (Cloudflare D1, R2, DO Storage).                                                                                      |
 

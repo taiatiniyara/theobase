@@ -89,7 +89,7 @@ Before implementing anything that touches access control, confirm the role's per
 WCAG 2.2 AA is enforced:
 - `eslint-plugin-jsx-a11y` at lint stage
 - `@axe-core/react` at test stage
-- `@axe-core/playwright` on E2E critical flows
+- `@axe-core/playwright` on E2E critical flows *(planned — not yet shipped)*
 - Manual screen-reader / keyboard / zoom checklist before release
 
 A PR that fails automated checks cannot merge.
