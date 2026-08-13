@@ -1,7 +1,8 @@
 import { DurableObject } from 'cloudflare:workers';
 import type { ChurchEvent, ChurchOperation, Role } from '@theobase/shared';
 import { isValidTransition, suggestHouseholds, type MembershipState, APP_VERSION } from '@theobase/shared';
-import { verify } from './auth/jwt';
+import type { Env } from './env';
+import { verify, importKeysFromEnv } from './auth/jwt';
 
 const LAST_HASH_KEY = 'lastHash';
 
@@ -602,6 +603,9 @@ export class ChurchDO extends DurableObject {
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
     const path = url.pathname;
+
+    const env = (this.ctx as unknown as { env?: Env }).env;
+    await importKeysFromEnv(env ?? {});
 
     const upgradeHeader = request.headers.get('Upgrade');
     if (upgradeHeader === 'websocket' && path === '/ws') {

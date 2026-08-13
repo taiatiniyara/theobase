@@ -1,4 +1,4 @@
-import { SignJWT, jwtVerify, importPKCS8, importSPKI, generateKeyPair } from 'jose';
+import { SignJWT, jwtVerify, importPKCS8, importSPKI, generateKeyPair, exportPKCS8, exportSPKI } from 'jose';
 import type { JwtPayload } from '@theobase/shared';
 import { MAGIC_LINK_EXPIRY_MS, SESSION_EXPIRY_MS } from '@theobase/shared';
 
@@ -10,6 +10,7 @@ export async function initKeys(): Promise<void> {
 
   const { privateKey: priv, publicKey: pub } = await generateKeyPair('RS256', {
     modulusLength: 2048,
+    extractable: true,
   });
   privateKey = priv;
   publicKey = pub;
@@ -58,11 +59,45 @@ export function shouldRefresh(payload: JwtPayload): boolean {
 export async function importKeysFromEnv(env: {
   JWT_PRIVATE_KEY?: string;
   JWT_PUBLIC_KEY?: string;
+  theobase_auth?: KVNamespace;
 }): Promise<void> {
-  if (env.JWT_PRIVATE_KEY) {
+  if (env.JWT_PRIVATE_KEY && env.JWT_PUBLIC_KEY) {
     privateKey = await importPKCS8(env.JWT_PRIVATE_KEY, 'RS256');
-  }
-  if (env.JWT_PUBLIC_KEY) {
     publicKey = await importSPKI(env.JWT_PUBLIC_KEY, 'RS256');
+    return;
+  }
+
+  if (env.theobase_auth) {
+    const [storedPriv, storedPub] = await Promise.all([
+      env.theobase_auth.get('jwt:privateKey'),
+      env.theobase_auth.get('jwt:publicKey'),
+    ]);
+    if (storedPriv && storedPub) {
+      privateKey = await importPKCS8(storedPriv, 'RS256');
+      publicKey = await importSPKI(storedPub, 'RS256');
+      return;
+    }
+  }
+
+  await initKeys();
+
+  if (env.theobase_auth && privateKey && publicKey) {
+    const [privPem, pubPem] = await Promise.all([
+      exportPKCS8(privateKey),
+      exportSPKI(publicKey),
+    ]);
+    await Promise.all([
+      env.theobase_auth.put('jwt:privateKey', privPem),
+      env.theobase_auth.put('jwt:publicKey', pubPem),
+    ]);
+
+    const [storedPriv, storedPub] = await Promise.all([
+      env.theobase_auth.get('jwt:privateKey'),
+      env.theobase_auth.get('jwt:publicKey'),
+    ]);
+    if (storedPriv && storedPub) {
+      privateKey = await importPKCS8(storedPriv, 'RS256');
+      publicKey = await importSPKI(storedPub, 'RS256');
+    }
   }
 }

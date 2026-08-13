@@ -8,6 +8,8 @@ export interface Env {
   };
   APP_URL: string;
   DB?: D1Database;
+  JWT_PRIVATE_KEY?: string;
+  JWT_PUBLIC_KEY?: string;
   ERROR_QUEUE?: Queue;
   ERROR_STORAGE?: R2Bucket;
   SEED_TOKEN?: string;

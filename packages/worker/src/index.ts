@@ -9,6 +9,7 @@ import {
   handleInvite,
 } from './auth/handlers';
 import { handleChurchRegister } from './auth/register';
+import { importKeysFromEnv } from './auth/jwt';
 import { handleParseCsv } from './auth/csv';
 import { handlePlacementRequest } from './org/placement';
 import { handleOrgTree } from './org/tree';
@@ -26,6 +27,8 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     const path = url.pathname;
+
+    await importKeysFromEnv(env);
 
     const corsHeaders: Record<string, string> = {
       'Access-Control-Allow-Origin': env.APP_URL || '*',

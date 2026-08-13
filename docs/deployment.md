@@ -130,7 +130,22 @@ In `packages/worker/wrangler.jsonc`, set `APP_URL` to the deployed frontend URL.
 
 If you're deploying the frontend to Cloudflare Pages separately, this must match the Pages domain (e.g. `https://theobase.pages.dev`, `https://staging.theobase.app`, or `https://theobase.app` with a custom domain).
 
-## 7. Deploy
+## 7. JWT Signing Keys
+
+Magic link and session JWTs are signed with an RS256 keypair. **These keys must be stable across Worker isolates and restarts** — if the worker generates its own random keys in memory, a token signed by one isolate cannot be verified by another, producing "Invalid token" errors.
+
+Generate a keypair and install it as Worker secrets:
+
+```sh
+cd packages/worker
+pnpm gen:jwt-keys
+npx wrangler secret put JWT_PRIVATE_KEY < jwt-private-key.pem
+npx wrangler secret put JWT_PUBLIC_KEY < jwt-public-key.pem
+```
+
+Store `jwt-private-key.pem` somewhere safe (password manager / secret store). Rotating it invalidates all outstanding magic links and sessions. If the secrets are missing, the worker generates one keypair and persists it in the `theobase_auth` KV namespace so all isolates share it — but that keypair is lost if the KV namespace is ever deleted, so provisioning secrets is recommended for durability.
+
+## 8. Deploy
 
 The root `deploy` script builds the shared library, builds the web PWA, and deploys the Worker:
 
@@ -146,7 +161,7 @@ This runs:
 
 After deployment, wrangler prints the Worker URL (e.g. `https://theobase-worker.YOURSUBDOMAIN.workers.dev`). Note this for the next step.
 
-## 8. Seed Demo Data
+## 9. Seed Demo Data
 
 The demo seed provisions "Suva Central SDA Church" under Fiji Mission with 120 synthetic members, 6 months of giving records (24 committed weekly batches), 2 active demo batches, and 6 demo user accounts across key roles.
 
@@ -167,7 +182,7 @@ Demo accounts (all use magic link login):
 | `pastor@suva.sda` | District Pastor |
 | `member@suva.sda` | Member |
 
-## 9. Stripe Checkout
+## 10. Stripe Checkout
 
 Conference billing uses Stripe Checkout. Set Stripe keys as secrets on the Worker:
 
@@ -195,7 +210,7 @@ The Worker returns a Stripe Checkout URL. The Conference admin completes payment
 
 For local testing against Stripe test mode, use `sk_test_...` keys and Stripe's test card `4242 4242 4242 4242`.
 
-## 10. Monitor
+## 11. Monitor
 
 ### Worker Logs
 
@@ -224,7 +239,7 @@ A Worker Cron trigger (`0 0 1 * *` — first day of each month at midnight UTC) 
 
 Raw error payloads are stored in the `theobase-errors` R2 bucket. Browse via the Cloudflare dashboard (**R2 > theobase-errors**).
 
-## 11. Troubleshooting
+## 12. Troubleshooting
 
 ### Magic link emails not sending
 

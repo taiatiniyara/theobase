@@ -11,7 +11,8 @@
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
     "seed:demo": "npx wrangler --env prod secret:seed || (echo 'Ensure wrangler is configured and the worker is deployed, then run: curl -X POST https://theobase-worker.theobase.workers.dev/church/seed-demo')",
-    "seed:org": "npx wrangler --env prod secret:seed || (echo 'Ensure wrangler is configured and the worker is deployed, then run: curl -X POST https://theobase-worker.theobase.workers.dev/op/seed -H \"Authorization: Bearer $SEED_TOKEN\"')"
+    "seed:org": "npx wrangler --env prod secret:seed || (echo 'Ensure wrangler is configured and the worker is deployed, then run: curl -X POST https://theobase-worker.theobase.workers.dev/op/seed -H \"Authorization: Bearer $SEED_TOKEN\"')",
+    "gen:jwt-keys": "node scripts/gen-jwt-keys.mjs"
   },
   "dependencies": {
     "@theobase/shared": "workspace:*",
