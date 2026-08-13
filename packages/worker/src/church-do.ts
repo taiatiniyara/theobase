@@ -475,6 +475,12 @@ export class ChurchDO extends DurableObject {
   private events: ChurchEvent[] = [];
   private lastHash = '';
   private initialized = false;
+  private doEnv: Env;
+
+  constructor(ctx: DurableObjectState, env: Env) {
+    super(ctx, env);
+    this.doEnv = env;
+  }
 
   async initialize(): Promise<void> {
     if (this.initialized) return;
@@ -604,8 +610,8 @@ export class ChurchDO extends DurableObject {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    const env = (this.ctx as unknown as { env?: Env }).env;
-    await importKeysFromEnv(env ?? {});
+    const env = this.doEnv;
+    await importKeysFromEnv(env);
 
     const upgradeHeader = request.headers.get('Upgrade');
     if (upgradeHeader === 'websocket' && path === '/ws') {
@@ -619,6 +625,25 @@ export class ChurchDO extends DurableObject {
     }
 
     try {
+      if (request.method === 'POST' && path === '/purge') {
+        const seedToken = this.doEnv.SEED_TOKEN || '';
+        const authHeader = request.headers.get('Authorization');
+        const isSeed = seedToken && authHeader === `Bearer ${seedToken}`;
+        if (!isSeed) {
+          try {
+            const { payload } = await verify((authHeader ?? '').slice(7));
+            if (!payload.isSuperAdmin) return versionedResponse({ error: 'Unauthorized' }, 401);
+          } catch {
+            return versionedResponse({ error: 'Unauthorized' }, 401);
+          }
+        }
+        await this.ctx.storage.deleteAll();
+        this.events = [];
+        this.lastHash = '';
+        this.initialized = false;
+        return versionedResponse({ purged: true });
+      }
+
       if (request.method === 'GET' && path === '/insights') {
         const state = await this.reconstructState();
         const givingRecords = Object.values((state.givingRecords as Record<string, Record<string, unknown>>) ?? {}) as Array<Record<string, unknown>>;
@@ -854,7 +879,7 @@ export class ChurchDO extends DurableObject {
         if (!authHeader?.startsWith('Bearer ')) {
           return versionedResponse({ error: 'Unauthorized' }, 401);
         }
-        const seedToken = (this.ctx as unknown as { env?: { SEED_TOKEN?: string } }).env?.SEED_TOKEN;
+        const seedToken = this.doEnv.SEED_TOKEN;
         const isDemoSeed = seedToken ? authHeader === `Bearer ${seedToken}` : false;
         const user = isDemoSeed
           ? { sub: 'demo-seed@theobase.dev', churchId: 'demo', role: 'operator' as const, churchName: 'Demo', tokenVersion: 1 }

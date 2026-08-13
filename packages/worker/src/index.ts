@@ -93,6 +93,31 @@ export default {
       }));
     }
 
+    if (path.startsWith('/op/purge/') && request.method === 'POST') {
+      const seedToken = env.SEED_TOKEN || '';
+      const authHeader = request.headers.get('Authorization');
+      const isSeed = seedToken && authHeader === `Bearer ${seedToken}`;
+      if (!isSeed) {
+        const authed = await authenticate(request, env);
+        if (!authed?.user.isSuperAdmin) {
+          return cors(new Response(JSON.stringify({ error: 'Unauthorized' }), {
+            status: 401, headers: { 'Content-Type': 'application/json' },
+          }));
+        }
+      }
+      const churchId = path.slice('/op/purge/'.length);
+      const doId = env.CHURCH_DO.idFromName(churchId);
+      const stub = env.CHURCH_DO.get(doId);
+      const resp = await stub.fetch(new Request('http://localhost/purge', {
+        method: 'POST',
+        headers: { Authorization: authHeader ?? '' },
+      }));
+      return cors(new Response(resp.body, {
+        status: resp.status,
+        headers: Object.fromEntries(resp.headers.entries()),
+      }));
+    }
+
     if (path === '/observability/error' && request.method === 'POST') {
       const body = await request.json() as Record<string, unknown>;
       console.error('[Obs] Error:', body.severity, body.message);
@@ -154,7 +179,11 @@ export default {
 
       const doUrl = new URL(doPath, request.url);
       const doRequest = new Request(doUrl, request);
-      return cors(await stub.fetch(doRequest));
+      const doResp = await stub.fetch(doRequest);
+      return cors(new Response(doResp.body, {
+        status: doResp.status,
+        headers: Object.fromEntries(doResp.headers.entries()),
+      }));
     }
 
     return new Response(`Hello from ${APP_NAME} Worker!`, {
