@@ -1,0 +1,28 @@
+:root {
+  --theo-blue-300: #93c5fd;
+  --theo-blue-400: #60a5fa;
+  --theo-blue-500: #3b82f6;
+
+  --theo-stone-50: #fafaf9;
+  --theo-stone-200: #e7e5e4;
+  --theo-stone-600: #57534e;
+  --theo-stone-800: #292524;
+
+  --theo-green-600: #16a34a;
+  --theo-amber-600: #d97706;
+  --theo-red-600: #dc2626;
+
+  --theo-action: var(--theo-blue-500);
+  --theo-bg: var(--theo-stone-50);
+  --theo-surface: #ffffff;
+  --theo-text: var(--theo-stone-800);
+  --theo-text-muted: var(--theo-stone-600);
+  --theo-border: var(--theo-stone-200);
+
+  --theo-success: var(--theo-green-600);
+  --theo-warning: var(--theo-amber-600);
+  --theo-danger: var(--theo-red-600);
+
+  --theo-font-display: "Lexend", system-ui, sans-serif;
+  --theo-font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+}

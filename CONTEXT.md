@@ -69,11 +69,33 @@ The document by which a member or family moves membership from one congregation 
 **Transfer**:
 A two-sided membership event — the sending church votes and issues the letter, the receiving church votes and accepts it, and only then does the member settle on the new roll. Cancellable back to `Missing` if the member never arrives.
 
+### Events
+
+**Event**:
+The append-only record of something that happened — a membership event or a finance event — carrying its date, its author, and its evidence or authorizing act.
+_Avoid_: Transaction, record, entry
+
+**Correcting event**:
+An event recorded to void or reverse an earlier event; corrections add to the log, they never edit it.
+_Avoid_: Edit, undo, fix
+
 ### Offices and governance
 
 **Office**:
-A role a person is appointed to, which gates what they can do in the system.
-_Avoid_: Role, position, job
+An appointment a person holds at a single unit, which grants the ability to perform certain actions. Offices are scoped to the unit kind where held — a Church Treasurer and a Conference Treasurer are different offices. An office gates who may *act*; it does not record authorization.
+_Avoid_: Role, position, job, permission
+
+**Action**:
+A granular thing a person can do in the system — record a baptism, sign a cash count, approve a disbursement. Actions are declared by the core and modules; policy maps each office to the actions it may perform.
+_Avoid_: Capability, permission, operation
+
+**Authorizing act**:
+The recorded prerequisite that makes an action valid — a board vote, a session vote, a letter of transfer, or a dual signature. It rides as evidence on the event, not as a permission on the person.
+_Avoid_: Approval, sign-off
+
+**Appointment**:
+The recorded event that places a person into an office at a unit, carrying its authorizing act (a board or session vote) and an effective period. A person's power to act flows only from a current appointment.
+_Avoid_: Assignment, role grant
 
 **Church clerk**:
 The office responsible for the congregation's membership records.
@@ -88,7 +110,7 @@ The body that authorizes certain actions — marking members missing, approving 
 The congregation voting in business meeting; authorizes baptisms, transfers, and removals.
 
 **Dual signature**:
-The requirement that two distinct, unrelated appointed people sign a cash count before it is valid.
+The requirement that two distinct, unrelated appointed people sign a cash count before it is valid. _Distinct_ means two different people; _unrelated_ means not members of the same Family. The system enforces both at signing time.
 
 ### Finance
 
@@ -133,6 +155,10 @@ The record of banking counted cash — amount, date, bank reference, and a photo
 
 **Policy**:
 The versioned rules a unit operates under — fund chart, offering calendar, remittance percentages, and reporting schedule — scoped to the unit tree with inheritance and overrides.
+
+**Obligation**:
+A policy-defined requirement on a unit — a monthly report due, an offering to be counted, a vote to be held — satisfied by recording its matching event in the log.
+_Avoid_: Task, duty, to-do
 
 ### Commercial
 

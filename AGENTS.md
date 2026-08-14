@@ -24,3 +24,11 @@ Five canonical triage roles, default label strings. See `docs/agents/triage-labe
 ### Domain docs
 
 Single-context — one `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+### Branding
+
+Theobase's identity system — mark, palette, type, voice, positioning — lives in `branding/BRAND.md`. Follow it when writing UI or user-facing strings.
+
+### UI
+
+The interaction model — task-first home, action-first modules, evidence, dual signature, sync, onboarding — lives in `docs/ui.md`. Follow it when building or changing the frontend.

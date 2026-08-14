@@ -1,11 +1,11 @@
 # Graph Report - theobase  (2026-08-15)
 
 ## Corpus Check
-- 127 files · ~90,301 words
+- 126 files · ~89,883 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 455 nodes · 422 edges · 56 communities (38 shown, 18 thin omitted)
+- 443 nodes · 411 edges · 55 communities (37 shown, 18 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
@@ -62,19 +62,18 @@
 - Access is granted by office, authorized by act — not a role matrix
 - Device-local identity: a per-person PIN on a provisioned device
 - Theobase — brand & identity
-- Theobase UI — interaction model
 
 ## God Nodes (most connected - your core abstractions)
 1. `template.sh script` - 11 edges
 2. `Triage` - 9 edges
 3. `Language` - 9 edges
 4. `Theobase — brand & identity` - 9 edges
-5. `Theobase UI — interaction model` - 9 edges
-6. `Ask Matt` - 8 edges
-7. `Codebase Design` - 8 edges
-8. `Diagnosing Bugs` - 8 edges
-9. `HTML Report Format` - 8 edges
-10. `During the session` - 7 edges
+5. `Ask Matt` - 8 edges
+6. `Codebase Design` - 8 edges
+7. `Diagnosing Bugs` - 8 edges
+8. `HTML Report Format` - 8 edges
+9. `During the session` - 7 edges
+10. `Process` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
 - None detected - all connections are within the same source files.
@@ -82,7 +81,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (56 total, 18 thin omitted)
+## Communities (55 total, 18 thin omitted)
 
 ### Community 0 - "Issue tracker: GitHub"
 Cohesion: 0.06
@@ -165,8 +164,8 @@ Cohesion: 0.29
 Nodes (6): Conventions, Issue tracker: GitHub, Pull requests as a triage surface, Wayfinding operations, When a skill says "fetch the relevant ticket", When a skill says "publish to the issue tracker"
 
 ### Community 20 - "Agent skills"
-Cohesion: 0.25
-Nodes (7): Agent skills, Branding, Domain docs, graphify, Issue tracker, Triage labels, UI
+Cohesion: 0.33
+Nodes (5): Agent skills, Domain docs, graphify, Issue tracker, Triage labels
 
 ### Community 21 - "Domain Docs"
 Cohesion: 0.33
@@ -200,12 +199,8 @@ Nodes (3): Contributing, License, Theobase
 Cohesion: 0.20
 Nodes (9): Assets, Essence, In-app, Mark, Palette, Positioning, Theobase — brand & identity, Type (+1 more)
 
-### Community 55 - "Theobase UI — interaction model"
-Cohesion: 0.20
-Nodes (9): Acting, Brand, Compliance, Identity & onboarding, Labels & language, Navigation, Office surfaces, Offline & sync (+1 more)
-
 ## Knowledge Gaps
-- **283 isolated node(s):** `$schema`, `.opencode/plugins/graphify.js`, `The five options`, `The tree`, `Primary and secondary sources` (+278 more)
+- **273 isolated node(s):** `$schema`, `.opencode/plugins/graphify.js`, `The five options`, `The tree`, `Primary and secondary sources` (+268 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -213,7 +208,7 @@ Nodes (9): Acting, Brand, Compliance, Identity & onboarding, Labels & language, 
 _Questions this graph is uniquely positioned to answer:_
 
 - **What connects `$schema`, `.opencode/plugins/graphify.js`, `The five options` to the rest of the system?**
-  _283 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _273 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Issue tracker: GitHub` be split into smaller, more focused modules?**
   _Cohesion score 0.05555555555555555 - nodes in this community are weakly interconnected._
 - **Should `Triage` be split into smaller, more focused modules?**

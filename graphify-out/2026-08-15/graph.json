@@ -2216,17 +2216,6 @@
       "norm_label": "agent skills"
     },
     {
-      "label": "Branding",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L28",
-      "_origin": "ast",
-      "id": "agents_branding",
-      "community": 20,
-      "community_name": "Agent skills",
-      "norm_label": "branding"
-    },
-    {
       "label": "Domain docs",
       "file_type": "document",
       "source_file": "AGENTS.md",
@@ -2269,17 +2258,6 @@
       "community": 20,
       "community_name": "Agent skills",
       "norm_label": "triage labels"
-    },
-    {
-      "label": "UI",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L32",
-      "_origin": "ast",
-      "id": "agents_ui",
-      "community": 20,
-      "community_name": "Agent skills",
-      "norm_label": "ui"
     },
     {
       "label": "agents/domain.md",
@@ -4146,116 +4124,6 @@
       "norm_label": "voice"
     },
     {
-      "label": "ui.md",
-      "file_type": "document",
-      "source_file": "docs/ui.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "docs_ui",
-      "community": 55,
-      "community_name": "Theobase UI \u2014 interaction model",
-      "norm_label": "ui.md"
-    },
-    {
-      "label": "Acting",
-      "file_type": "document",
-      "source_file": "docs/ui.md",
-      "source_location": "L11",
-      "_origin": "ast",
-      "id": "docs_ui_acting",
-      "community": 55,
-      "community_name": "Theobase UI \u2014 interaction model",
-      "norm_label": "acting"
-    },
-    {
-      "label": "Brand",
-      "file_type": "document",
-      "source_file": "docs/ui.md",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "docs_ui_brand",
-      "community": 55,
-      "community_name": "Theobase UI \u2014 interaction model",
-      "norm_label": "brand"
-    },
-    {
-      "label": "Compliance",
-      "file_type": "document",
-      "source_file": "docs/ui.md",
-      "source_location": "L18",
-      "_origin": "ast",
-      "id": "docs_ui_compliance",
-      "community": 55,
-      "community_name": "Theobase UI \u2014 interaction model",
-      "norm_label": "compliance"
-    },
-    {
-      "label": "Identity & onboarding",
-      "file_type": "document",
-      "source_file": "docs/ui.md",
-      "source_location": "L30",
-      "_origin": "ast",
-      "id": "docs_ui_identity_onboarding",
-      "community": 55,
-      "community_name": "Theobase UI \u2014 interaction model",
-      "norm_label": "identity & onboarding"
-    },
-    {
-      "label": "Labels & language",
-      "file_type": "document",
-      "source_file": "docs/ui.md",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "docs_ui_labels_language",
-      "community": 55,
-      "community_name": "Theobase UI \u2014 interaction model",
-      "norm_label": "labels & language"
-    },
-    {
-      "label": "Navigation",
-      "file_type": "document",
-      "source_file": "docs/ui.md",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "docs_ui_navigation",
-      "community": 55,
-      "community_name": "Theobase UI \u2014 interaction model",
-      "norm_label": "navigation"
-    },
-    {
-      "label": "Office surfaces",
-      "file_type": "document",
-      "source_file": "docs/ui.md",
-      "source_location": "L36",
-      "_origin": "ast",
-      "id": "docs_ui_office_surfaces",
-      "community": 55,
-      "community_name": "Theobase UI \u2014 interaction model",
-      "norm_label": "office surfaces"
-    },
-    {
-      "label": "Offline & sync",
-      "file_type": "document",
-      "source_file": "docs/ui.md",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "docs_ui_offline_sync",
-      "community": 55,
-      "community_name": "Theobase UI \u2014 interaction model",
-      "norm_label": "offline & sync"
-    },
-    {
-      "label": "Theobase UI \u2014 interaction model",
-      "file_type": "document",
-      "source_file": "docs/ui.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "docs_ui_theobase_ui_interaction_model",
-      "community": 55,
-      "community_name": "Theobase UI \u2014 interaction model",
-      "norm_label": "theobase ui \u2014 interaction model"
-    },
-    {
       "label": "template.sh",
       "file_type": "code",
       "source_file": ".claude/skills/wizard/template.sh",
@@ -5420,28 +5288,6 @@
       "_origin": "ast",
       "source": "agents_agent_skills",
       "target": "agents_domain_docs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "AGENTS.md",
-      "source_location": "L28",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "agents_agent_skills",
-      "target": "agents_branding",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "AGENTS.md",
-      "source_location": "L32",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "agents_agent_skills",
-      "target": "agents_ui",
       "confidence_score": 1.0
     },
     {
@@ -9127,105 +8973,6 @@
       "_origin": "ast",
       "source": "docs_agents_triage_labels",
       "target": "docs_agents_triage_labels_triage_labels",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ui.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "docs_ui",
-      "target": "docs_ui_theobase_ui_interaction_model",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ui.md",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "docs_ui_theobase_ui_interaction_model",
-      "target": "docs_ui_acting",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ui.md",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "docs_ui_theobase_ui_interaction_model",
-      "target": "docs_ui_compliance",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ui.md",
-      "source_location": "L24",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "docs_ui_theobase_ui_interaction_model",
-      "target": "docs_ui_offline_sync",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ui.md",
-      "source_location": "L30",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "docs_ui_theobase_ui_interaction_model",
-      "target": "docs_ui_identity_onboarding",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ui.md",
-      "source_location": "L36",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "docs_ui_theobase_ui_interaction_model",
-      "target": "docs_ui_office_surfaces",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ui.md",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "docs_ui_theobase_ui_interaction_model",
-      "target": "docs_ui_labels_language",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ui.md",
-      "source_location": "L45",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "docs_ui_theobase_ui_interaction_model",
-      "target": "docs_ui_brand",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ui.md",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "docs_ui_theobase_ui_interaction_model",
-      "target": "docs_ui_navigation",
       "confidence_score": 1.0
     },
     {
