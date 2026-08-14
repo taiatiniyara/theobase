@@ -1,0 +1,5 @@
+# Theobase is a replacement for the denomination's church systems
+
+Theobase is a replacement for the denomination's church systems — ACMS (Adventist Church Management System: membership, records, and ministry reporting) and ACAS (Adventist Church Accounting System: local-church finance), which together supersede the older eAdventist membership system — rather than an aggregator layered on top of them. We chose replacement so theobase can own the full grassroots data model — membership plus finances, attendance, and ministry — in one place, aggregating upward through the hierarchy. The alternative, reading and importing from the denominational systems, was rejected because it would leave theobase dependent on the very systems it aims to supersede and unable to deliver the "everything in one place" vision.
+
+Consequences: theobase must provide a migration path off ACMS/ACAS/eAdventist data (export/import), and must not assume those systems are present in any deployment. It competes with active denominational platforms, so its differentiators — policy woven in, offline-first, minimal human work — must be defensible.
