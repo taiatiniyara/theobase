@@ -133,3 +133,25 @@ The record of banking counted cash — amount, date, bank reference, and a photo
 
 **Policy**:
 The versioned rules a unit operates under — fund chart, offering calendar, remittance percentages, and reporting schedule — scoped to the unit tree with inheritance and overrides.
+
+### Commercial
+
+**Subscriber**:
+A Conference or Mission that pays Theobase a recurring fee for access. The paying boundary is the same as the tenant boundary.
+_Avoid_: Customer, client, payer, account, user
+
+**Subscription**:
+A Subscriber's recurring, paid access to Theobase, covering every module.
+_Avoid_: License, plan, seat
+
+**Subscription fee**:
+The recurring charge for a Subscription — a flat monthly amount per Church. Only organized Churches are counted; Companies, Groups, and Branches are not.
+_Avoid_: Price, rate, tariff
+
+**Operated service**:
+The hosted Theobase that a Subscriber pays for — hosting, backups, updates, sync aggregation, evidence storage, the policy-data feed, and support. The software itself is free and open.
+_Avoid_: Cloud, hosted platform
+
+**Self-hosting**:
+Running Theobase on a Subscriber's own infrastructure at no subscription cost, instead of the operated service.
+_Avoid_: On-premise
