@@ -1,3 +1,0 @@
-# Minimize third-party SaaS; Stripe is the sole exception
-
-The operated service runs entirely on Cloudflare (ADR-0018) and deliberately avoids third-party SaaS except one: Stripe for subscription billing. Outbound email uses Cloudflare Email Sending (not Resend), observability uses Cloudflare-native logs and Analytics Engine (not Sentry), and there is no other external vendor. We chose this because the moat is operational (ADR-0012) and every external dependency widens the SOC2 surface and dilutes the single-vendor simplification Cloudflare already buys us; billing is the one function Cloudflare cannot perform, so Stripe is the sole justified exception.
