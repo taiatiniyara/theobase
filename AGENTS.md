@@ -23,3 +23,17 @@ Rules:
   query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current
   (AST-only, no API cost).
+
+## Agent skills
+
+### Issue tracker
+
+Issues live in GitHub Issues for taiatiniyara/theobase (via the `gh` CLI). See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Uses the default five triage labels. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context layout: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
