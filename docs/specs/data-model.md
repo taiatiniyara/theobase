@@ -12,6 +12,7 @@ The concrete entity/relation contract behind the glossary (`CONTEXT.md`) and ADR
 - **Action** — enum. See `offices-actions.md`.
 - **Fund** — name + type ∈ {tithe, offering} + remittance split (tithe 100% upward; offerings a COP `{local%, upward%}` split). The fund chart is the set of funds.
 - **Policy** — versioned, tree-scoped. See `policy-schema.md`.
+- **Event** — the append-only log record (ADR-0007): `id`, `unit`, `type`, `occurredAt`, `recordedAt`, `author` (acting officer), `attestation` (the officer's Passkey assertion over the event hash), `evidence` refs, and a payload; a correcting event adds `voids`. See `event-catalog.md`.
 
 ## Derived (not tables)
 

@@ -1,6 +1,6 @@
 # Theobase runs entirely on Cloudflare
 
-Theobase runs entirely on Cloudflare: Workers for compute, Durable Objects for per-unit authoritative state, D1 for relational projections, R2 for evidence blobs, Queues for the sync-plus-rollup pipeline, Email Routing for the (minimal) email we send, and Pages for the PWA/office shells. It is a pnpm-workspaces monorepo — `packages/shared`, `packages/worker`, `packages/web` — deployed to `theobase.app` (production) and `staging.theobase.app` (beta).
+Theobase runs entirely on Cloudflare: Workers for compute, Durable Objects for per-unit authoritative state, D1 for relational projections, R2 for evidence blobs, Queues for the sync-plus-rollup pipeline, Email Routing + Email Sending for the (minimal) email we handle, and Pages for the PWA/office shells. It is a pnpm-workspaces monorepo — `packages/shared`, `packages/worker`, `packages/web` — deployed to `theobase.app` (production) and `staging.theobase.app` (beta).
 
 We chose Cloudflare because the offline-first, per-unit-authority shape (ADR-0002, ADR-0008) maps naturally onto it: a Durable Object gives each unit a single authoritative owner that two devices cannot double-write, D1 gives the mission office fast relational reads over the event log without touching per-church objects, and the edge gives the grassroots PWA a close sync endpoint wherever the church happens to be. The traditional alternative — a Postgres server behind an app server — was rejected because per-tenant isolation and global edge reach would have to be hand-built.
 

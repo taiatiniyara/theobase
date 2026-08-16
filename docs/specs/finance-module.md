@@ -36,4 +36,4 @@ amount, payee, fund/budget line, invoice/receipt photo (evidence), approval (aut
 
 ## Reports
 
-The Tithe & Offerings report and the statistical report are projections (ADR-0007) requiring only human approval. The cash count sheet is a projection; the two signatures live on the confirm events.
+The Tithe & Offerings report and the statistical report are projections (ADR-0007) requiring only human approval. The cash count sheet is a projection; the **dual signature** lives on the two counters' confirm events, and each confirm event carries its counter's **attestation** (`CONTEXT.md`).

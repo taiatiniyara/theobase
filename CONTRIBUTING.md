@@ -15,6 +15,10 @@ All contributions are licensed under AGPL-3.0. By submitting a Contribution you 
 
 This repository contains **code only**. The denomination's **policy content** (fund charts, offering calendars, remittance percentages) is not in this repository and is not open-sourced (see ADR-0013). Do not commit policy data.
 
+## Development
+
+pnpm-workspaces monorepo (`packages/shared`, `packages/worker`, `packages/web`); React 18 + Vite, Biome for lint/format, `tsc --noEmit` for typecheck, Vitest + Playwright for tests (ADR-0022). See `docs/specs/deployment.md` and `docs/specs/testing.md`.
+
 ## Process
 
 1. Open an issue first for anything beyond a small fix — the roadmap is public, and we would rather point you at the right place.

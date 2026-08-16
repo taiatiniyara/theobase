@@ -4,7 +4,7 @@ The append-only event log (ADR-0007, ADR-0019). Events are the sync unit and the
 
 ## Common shape
 
-Every event carries: `id`, `unit`, `type`, `occurredAt` (business date), `recordedAt` (capture time), `author` (acting officer), `evidence` refs, and a type-specific payload. Correcting events additionally carry `voids` (the event they reverse).
+Every event carries: `id`, `unit`, `type`, `occurredAt` (business date), `recordedAt` (capture time), `author` (acting officer), `attestation` (the author's Passkey assertion over the event hash — `CONTEXT.md`), `evidence` refs, and a type-specific payload. Correcting events additionally carry `voids` (the event they reverse).
 
 ## Correcting events
 

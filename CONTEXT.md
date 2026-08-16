@@ -79,6 +79,10 @@ _Avoid_: Transaction, record, entry
 An event recorded to void or reverse an earlier event; corrections add to the log, they never edit it.
 _Avoid_: Edit, undo, fix
 
+**Attestation**:
+The officer's cryptographic sign-off on an event, produced offline by their Passkey over the event's hash, so the log can prove which officer recorded it.
+_Avoid_: Signature (reserved — see Dual signature)
+
 ### Offices and governance
 
 **Office**:

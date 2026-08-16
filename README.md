@@ -10,6 +10,10 @@ An offline-first, phone-first information system for the grassroots of the Seven
 
 `CONTEXT.md` holds the domain language; `docs/adr/` holds the architectural and commercial decisions.
 
+## Stack
+
+The operated service runs entirely on Cloudflare — Workers, Durable Objects, D1, R2, Queues, Email Routing + Sending, Pages (ADR-0018). The application stack is React 18 + Vite + Tailwind + Zustand + XState + Dexie + i18next in a pnpm-workspaces monorepo, linted and formatted with Biome (ADR-0022). Stripe is the only third-party SaaS, used for subscription billing (ADR-0021).
+
 ## License
 
 AGPL-3.0. See `LICENSE`.

@@ -8,6 +8,10 @@ Offline-first sync (ADR-0002); DO-as-authority (ADR-0019).
 - **Bidirectional**: push local events, pull committed state + remote events since last sync.
 - **Backfill allowed**: `occurredAt` may be older than the latest seen; `recordedAt` is capture time.
 
+## Attestation
+
+Every event carries the authoring officer's **attestation** — a WebAuthn assertion over the event hash, produced offline by their Passkey (`CONTEXT.md`). The DO verifies the signature against the credential's public key it holds from provisioning; a mismatched or absent attestation rejects the event. The attestation proves attribution, not authorization — the authorizing act rides on the event as evidence (ADR-0014).
+
 ## Idempotency & partial sync
 
 - Client-generated event id; the DO dedupes on it.

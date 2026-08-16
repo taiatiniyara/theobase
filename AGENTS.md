@@ -37,6 +37,10 @@ The interaction model — task-first home, action-first modules, evidence, dual 
 
 Implementation specs — data model, event catalog, offices/actions, policy schema, finance module, sync protocol, testing, migration, deployment, non-functional — live in `docs/specs/`. Read the relevant spec before implementing its area.
 
+### Tooling
+
+The stack is React 18 + Vite + Tailwind + Zustand + XState + Dexie + i18next in a pnpm-workspaces monorepo (ADR-0018, ADR-0022). Lint/format with Biome, typecheck with `tsc --noEmit`, test with Vitest + Playwright. See `docs/specs/deployment.md` and `docs/specs/testing.md`.
+
 ### Strategy
 
 The champion thesis, moat, and platform roadmap live in `docs/strategy.md`. Read it before making product-direction or scope decisions.

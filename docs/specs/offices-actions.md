@@ -43,3 +43,7 @@ Default seed mapping:
 ## Authorizing acts
 
 Not part of the mapping. An authorizing act rides on the event as evidence (ADR-0014); it does not grant the office.
+
+## Attestation vs dual signature
+
+Distinct concepts, one word each (`CONTEXT.md`): **attestation** is the acting officer's cryptographic sign-off on the event (their Passkey assertion); **dual signature** is the two-unrelated-counters rule on a cash count. Every event carries an attestation; only cash counts (and disbursements) additionally require the dual signature.
