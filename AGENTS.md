@@ -32,3 +32,11 @@ Theobase's identity system — mark, palette, type, voice, positioning — lives
 ### UI
 
 The interaction model — task-first home, action-first modules, evidence, dual signature, sync, onboarding — lives in `docs/ui.md`. Follow it when building or changing the frontend.
+
+### Specs
+
+Implementation specs — data model, event catalog, offices/actions, policy schema, finance module, sync protocol, testing, migration, deployment, non-functional — live in `docs/specs/`. Read the relevant spec before implementing its area.
+
+### Strategy
+
+The champion thesis, moat, and platform roadmap live in `docs/strategy.md`. Read it before making product-direction or scope decisions.

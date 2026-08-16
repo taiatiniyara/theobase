@@ -61,13 +61,13 @@ The set of members recorded against a single membership-holding unit.
 _Avoid_: Register, list, roster
 
 **Membership event**:
-An act that changes a person's membership state — baptism, re-baptism, profession of faith, transfer in/out, death, removal, or being marked missing. Each event requires its authorizing act (a church vote, a board vote, or a letter of transfer) to be recorded before the roll changes.
+An act that changes a person's membership state — baptism, re-baptism, profession of faith, transfer in/out, death, removal, or being marked missing. Each event carries its authorizing act — a church vote, a board vote, or a letter of transfer — except death, which the clerk records without one.
 
 **Letter of transfer**:
 The document by which a member or family moves membership from one congregation to another.
 
 **Transfer**:
-A two-sided membership event — the sending church votes and issues the letter, the receiving church votes and accepts it, and only then does the member settle on the new roll. Cancellable back to `Missing` if the member never arrives.
+A two-sided membership event — the sending church votes and issues the letter, the receiving church votes and accepts it, and only then does the member settle on the new roll. Until the letter is accepted, the member remains on the granting church's roll.
 
 ### Events
 
@@ -97,33 +97,57 @@ _Avoid_: Approval, sign-off
 The recorded event that places a person into an office at a unit, carrying its authorizing act (a board or session vote) and an effective period. A person's power to act flows only from a current appointment.
 _Avoid_: Assignment, role grant
 
+**Provisioning**:
+Binding an officer's device key to their appointment at a unit, via a code or QR, so the officer can act. A device is just where a key lives — a shared church phone holds several keys, a personal phone holds one.
+_Avoid_: Registration, sign-up
+
+**Sync-lease**:
+The policy-scoped period (default 90 days) a device's authority lasts without syncing; it renews on every sync and lapses — a warning first, then a block on writing — if the device stays offline too long.
+_Avoid_: Session, token
+
 **Church clerk**:
 The office responsible for the congregation's membership records.
 
 **Church treasurer**:
 The office responsible for the congregation's money.
 
+**Counter**:
+The office responsible for counting tithe and offerings in the counting room; a cash count requires two unrelated counters to sign (dual signature).
+_Avoid_: Teller, cashier
+
 **Church board**:
-The body that authorizes certain actions — marking members missing, approving budgets.
+The body that authorizes certain actions — recording resignations, approving budgets.
 
 **Church in session**:
-The congregation voting in business meeting; authorizes baptisms, transfers, and removals.
+The congregation voting in business meeting; authorizes baptisms, transfers, removals, and marking members missing.
+
+**Auditor**:
+A person granted read-only access to the giving records and cash counts of the churches they are assigned to audit.
 
 **Dual signature**:
 The requirement that two distinct, unrelated appointed people sign a cash count before it is valid. _Distinct_ means two different people; _unrelated_ means not members of the same Family. The system enforces both at signing time.
 
 ### Finance
 
+**Tithe and Offerings**:
+The two kinds of money a member gives to the church — tithe (returned) and offerings (voluntary gifts) — recorded together. A giver's combined record is their giving history.
+_Avoid_: Donation, contribution
+
 **Tithe**:
-One-tenth of a member's income, given to the church; remitted almost entirely up the hierarchy.
+One-tenth of a member's income, returned to the church; remitted almost entirely up the hierarchy.
 _Avoid_: Tithing, dues
 
 **Offering**:
-A voluntary contribution beyond tithe, usually to a specific fund or purpose.
+A voluntary gift beyond tithe, usually designated to a specific fund or purpose. A giver's offerings are their gifts.
+_Avoid_: Donation
 
 **Fund**:
-A named category money is given to, with a policy-defined remittance split (local versus upward). The set of funds is the fund chart.
+A named category money is given to, with a policy-defined remittance split. Tithe is remitted 100% upward; offerings split between local and upward per the offering plan. The set of funds is the fund chart.
 _Avoid_: Account, category, bucket
+
+**Fund chart**:
+The set of funds a unit operates under, each with a type (tithe or offering) and a remittance split (local versus upward). Policy data, versioned and tree-scoped.
+_Avoid_: Account list, category list
 
 **Remittance**:
 The money a lower unit sends up to its parent unit, according to policy-defined splits.
@@ -131,18 +155,18 @@ The money a lower unit sends up to its parent unit, according to policy-defined 
 **Tithe & Offerings report**:
 The monthly financial report a church submits to its conference or mission.
 
-**Cash count sheet**:
-The record of counting an offering, signed by two unrelated people.
+**Cash count**:
+The session of counting tithe and offerings: opened by a counter, tallied independently by two counters, committed when both confirm — or after a joint reconcile on a mismatch — and later deposited. The two confirmations are the events; the cash count sheet is its projection.
+_Avoid_: Giving batch, batch
 
-**Donation**:
-Money given to the church, optionally linked to a named giver (a Person or Family) via an envelope.
-_Avoid_: Gift, contribution
+**Cash count sheet**:
+The record of counting tithe and offerings, signed by two unrelated people.
 
 **Envelope**:
 A named tithe or offering envelope from a giver.
 
 **Receipt**:
-The record given to a donor for their donation, generated automatically.
+The record given to a giver for their tithe and offerings, generated automatically.
 
 **Disbursement**:
 Money spent by the church, drawn from a fund or budget line; requires its authorizing approval and dual signature.
@@ -160,11 +184,19 @@ The versioned rules a unit operates under — fund chart, offering calendar, rem
 A policy-defined requirement on a unit — a monthly report due, an offering to be counted, a vote to be held — satisfied by recording its matching event in the log.
 _Avoid_: Task, duty, to-do
 
+**Policy package**:
+The versioned, tree-scoped bundle of policy data — fund chart, offering calendar, remittance split, reporting schedule, and office-to-action map — distributed as a data feed, separate from the code.
+_Avoid_: Config, settings
+
 ### Commercial
 
 **Subscriber**:
 A Conference or Mission that pays Theobase a recurring fee for access. The paying boundary is the same as the tenant boundary.
 _Avoid_: Customer, client, payer, account, user
+
+**Tenant**:
+A Conference or Mission whose data, policy, and officers are isolated from every other tenant; levels above the Conference read aggregates across tenants.
+_Avoid_: Account, workspace
 
 **Subscription**:
 A Subscriber's recurring, paid access to Theobase, covering every module.
@@ -177,6 +209,26 @@ _Avoid_: Price, rate, tariff
 **Operated service**:
 The hosted Theobase that a Subscriber pays for — hosting, backups, updates, sync aggregation, evidence storage, the policy-data feed, and support. The software itself is free and open.
 _Avoid_: Cloud, hosted platform
+
+**Operator**:
+Taia Tiniyara's own staff, who run the operated service — placing conferences, seeding demo data, purging churches, watching cost and health. The operator is not a church office.
+_Avoid_: Admin, superuser
+
+**Placement request**:
+A Conference's claim to be placed in the hierarchy before billing activates it — name, territory, and a suggested parent. No unit is created until an operator places it.
+_Avoid_: Application, sign-up
+
+**Constituted**:
+A unit's state after placement but before billing activation — registered, not yet operational.
+_Avoid_: Pending, draft
+
+**Organized**:
+A unit's activated state; only an organized Conference may add churches.
+_Avoid_: Active, live
+
+**Tenant lifecycle**:
+The path a Conference or Mission walks from claim to operation: placement request, operator placement (constituted), billing activation (organized), and church provisioning.
+_Avoid_: Onboarding flow, funnel
 
 **Self-hosting**:
 Running Theobase on a Subscriber's own infrastructure at no subscription cost, instead of the operated service.
