@@ -9,11 +9,12 @@ import {
   listChurchesForMission,
   listDistrictsForMission,
 } from '../src/db/queries'
+import { createTestActor } from './helpers'
 
 describe('org hierarchy', () => {
   it('supports "all districts in a mission" and "all churches in a district"', async () => {
     const db = getDb(env.DB)
-    const ctx = { actorId: 1 }
+    const ctx = { actorId: await createTestActor(db) }
 
     const mission = await createMission(db, 'Fiji Mission', ctx)
     const districtA = await createDistrict(db, mission.id, 'District A', ctx)
@@ -38,7 +39,7 @@ describe('org hierarchy', () => {
 
   it('keeps districts/churches scoped to their own mission/district', async () => {
     const db = getDb(env.DB)
-    const ctx = { actorId: 1 }
+    const ctx = { actorId: await createTestActor(db) }
 
     const missionA = await createMission(db, 'Mission A', ctx)
     const missionB = await createMission(db, 'Mission B', ctx)

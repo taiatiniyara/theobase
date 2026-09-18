@@ -9,6 +9,13 @@
   "observability": {
     "enabled": true
   },
+  // Public/non-secret config. SESSION_SECRET is NOT here — it's a real
+  // secret, set via `.dev.vars` locally (see .dev.vars.example) and
+  // `wrangler secret put SESSION_SECRET` in production; its type is
+  // declared by hand in src/types/env.d.ts instead of via `wrangler types`.
+  "vars": {
+    "WEB_ORIGIN": "http://localhost:5173,http://localhost:4173"
+  },
   // Placeholder bindings — create the real resources before first deploy:
   //   wrangler d1 create theobase-db
   //   wrangler r2 bucket create theobase-storage

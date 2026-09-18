@@ -13,7 +13,12 @@ export default defineConfig({
     cloudflareTest({
       wrangler: { configPath: './wrangler.jsonc' },
       miniflare: {
-        bindings: { TEST_MIGRATIONS: migrations },
+        bindings: {
+          TEST_MIGRATIONS: migrations,
+          // Not read from .dev.vars — tests get their own fixed value
+          // so they never depend on a developer's local secret.
+          SESSION_SECRET: 'test-only-session-secret-do-not-use-in-prod',
+        },
       },
     }),
   ],
