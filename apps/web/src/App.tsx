@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { CountEntryForm } from './features/counts/CountEntryForm'
+import { SyncStatusIndicator } from './features/sync/SyncStatusIndicator'
 import { syncPendingCounts } from './lib/sync'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <h1 className="text-brand dark:text-brand-light px-4 pt-6 text-2xl font-semibold">
         Theobase
       </h1>
+      <SyncStatusIndicator />
       <CountEntryForm />
     </main>
   )

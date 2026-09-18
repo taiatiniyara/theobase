@@ -1,5 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { __resetDBForTests, getCachedCategories, listPendingCounts, saveLocalCount } from '../src/lib/db'
+import {
+  __resetDBForTests,
+  getCachedCategories,
+  listPending,
+  listPendingCounts,
+  saveLocalCount,
+} from '../src/lib/db'
 import { refreshCategories, syncPendingCounts } from '../src/lib/sync'
 
 function deleteDatabase(): Promise<void> {
@@ -54,6 +60,11 @@ describe('syncPendingCounts', () => {
     const pending = await listPendingCounts()
     expect(pending).toHaveLength(1)
     expect(pending[0].payload.clientRecordId).toBe('sync-offline')
+
+    // Recorded as a 'network' failure, not 'rejected' — a status
+    // indicator (#13) needs this distinction to stay calm here.
+    const [raw] = await listPending()
+    expect(raw.lastError?.type).toBe('network')
   })
 
   it('leaves a count pending when the server rejects it, without throwing', async () => {
@@ -70,6 +81,12 @@ describe('syncPendingCounts', () => {
     })
 
     await expect(syncPendingCounts()).resolves.toEqual({ synced: 0, failed: 1 })
+
+    // Recorded as 'rejected', not 'network' — this is the case #13's
+    // status indicator should escalate on immediately.
+    const [raw] = await listPending()
+    expect(raw.lastError?.type).toBe('rejected')
+    expect(raw.lastError?.message).toContain('bad request')
   })
 
   it('syncs the ones it can and leaves the rest pending, rather than stopping at the first failure', async () => {

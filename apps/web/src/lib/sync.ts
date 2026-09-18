@@ -1,5 +1,11 @@
-import { apiFetch } from './api'
-import { cacheCategories, listPendingCounts, markSynced, type LocalCountPayload } from './db'
+import { ApiError, apiFetch } from './api'
+import {
+  cacheCategories,
+  listPendingCounts,
+  markSynced,
+  recordSyncAttemptFailure,
+  type LocalCountPayload,
+} from './db'
 
 interface Category {
   id: number
@@ -39,10 +45,19 @@ export async function syncPendingCounts(): Promise<{ synced: number; failed: num
       await submitCount(payload)
       await markSynced(outboxId)
       synced += 1
-    } catch {
+    } catch (err) {
       failed += 1
       // Keep trying the rest — one bad/rejected record (or one that's
       // still offline) shouldn't block the others from syncing.
+      //
+      // ApiError means the server actually responded (with a rejection
+      // — bad data, unauthorized, locked); anything else means the
+      // request itself didn't get a response (offline, timeout, ...).
+      // The status indicator (#13) treats these very differently.
+      await recordSyncAttemptFailure(outboxId, {
+        type: err instanceof ApiError ? 'rejected' : 'network',
+        message: err instanceof Error ? err.message : String(err),
+      })
     }
   }
 
