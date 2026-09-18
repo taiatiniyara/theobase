@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm'
-import { check, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { check, integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core'
 import { ROLES } from '../auth/roles'
 
 // Org hierarchy: Mission -> District -> Church. District is a
@@ -111,6 +111,66 @@ export const accounts = sqliteTable(
         (${table.role} = 'platform_operator'
           AND ${table.churchId} IS NULL AND ${table.districtId} IS NULL AND ${table.missionId} IS NULL)
       `,
+    ),
+  ],
+)
+
+// Each Mission's own master list of fund/offering categories (Calendars
+// of Offerings vary by division/union/mission — see CONTEXT.md > Data
+// model notes). isTithe distinguishes Tithe from the rest per the
+// reference notes (kept separate, remitted up, never used locally) —
+// nothing enforces that yet (no money movement through the app at
+// all for MVP), it's just a flag later reporting/UI can key off.
+//
+// No delete path: `active` is how a Mission "removes" a category.
+// Once count records (a later ticket) start referencing a category by
+// id, hard-deleting the row would either break that FK or silently
+// invalidate history — soft-deactivation is what keeps "category
+// changes never retroactively alter past count records" true at the
+// storage level, not just as an app-level promise.
+export const fundCategories = sqliteTable(
+  'fund_categories',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    missionId: integer('mission_id')
+      .notNull()
+      .references(() => missions.id),
+    name: text('name').notNull(),
+    isTithe: integer('is_tithe', { mode: 'boolean' }).notNull().default(false),
+    active: integer('active', { mode: 'boolean' }).notNull().default(true),
+    createdAt: text('created_at')
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [uniqueIndex('fund_categories_mission_name_unique').on(table.missionId, table.name)],
+)
+
+// Per-church override of a Mission category's applicability.
+// Deliberately sparse: a category applies to a church by default (no
+// row here) unless a Clerk has explicitly toggled it off (or back on)
+// for that church — see fundCategories.ts's
+// listActiveFundCategoriesForChurch for the default-enabled join this
+// implies. One row per (church, category) pair, upserted on toggle
+// rather than accumulating history rows — audit_log is the history.
+export const churchFundCategories = sqliteTable(
+  'church_fund_categories',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    churchId: integer('church_id')
+      .notNull()
+      .references(() => churches.id),
+    fundCategoryId: integer('fund_category_id')
+      .notNull()
+      .references(() => fundCategories.id),
+    enabled: integer('enabled', { mode: 'boolean' }).notNull(),
+    updatedAt: text('updated_at')
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    uniqueIndex('church_fund_categories_church_category_unique').on(
+      table.churchId,
+      table.fundCategoryId,
     ),
   ],
 )
