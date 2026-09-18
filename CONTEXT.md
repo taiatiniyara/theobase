@@ -117,6 +117,19 @@ _Decisions from a UI/UX grilling session, dated 2026-09-18. These are settled pr
 
 **All-Cloudflare**: Workers, Pages, D1, R2, edge network. Coherent choice — Cloudflare's global edge network puts compute close to users regardless of region, which fits a product built around patchy Pacific connectivity, and pairs naturally with a PWA (Pages hosting, Workers for sync/API, D1 for structured data, R2 for file/blob storage).
 
+**Repo layout**: npm-workspaces monorepo — `apps/web` (the PWA) and `apps/api` (the Worker), scaffolded in ticket #6.
+
+**Stack decisions (settled 2026-09-18, from the tech-stack grilling conversation):**
+- **Frontend**: Vite + React + TypeScript, `vite-plugin-pwa` for the manifest/service worker.
+- **Styling**: **Tailwind CSS**. Chosen over plain CSS/CSS Modules and a component library (e.g. shadcn/ui) — fast to keep visually consistent across the many role-scoped screens (Treasurer, Clerk, Pastor, Mission, platform-operator) for a solo-dev-plus-AI workflow, without pulling in a component library's visual defaults that would fight the deliberately plain, icon+label, minimal-decoration tone set in UI/UX above.
+- **API**: Hono on Cloudflare Workers.
+- **D1 data access**: **Drizzle ORM**. Chosen over raw SQL (too much hand-written boilerplate/migrations across the growing schema — org hierarchy, accounts, counts, reconciliation, audit log) and Kysely (no built-in migration tooling). Typesafe schema + migrations, with an escape hatch to raw SQL when needed.
+- **Local-first storage**: `idb` (thin IndexedDB wrapper) backing an outbox-style pending-sync store, built in ticket #6 (`apps/web/src/lib/db.ts`). Product tickets add their own object stores to the same database rather than opening separate ones.
+- **Data fetching/caching**: TanStack Query on the frontend — pairs with the outbox pattern for queuing offline mutations and refetching on reconnect.
+- **Sessions**: **signed httpOnly cookies**, not JWTs in client storage. One session model shared by both login flows (phone+PIN for local-church roles, email+password for institutional roles) — avoids client-side token storage/refresh logic in the PWA and keeps session tokens out of reach of XSS, which matters for a financial-records app.
+- **Testing**: Vitest for unit tests; Playwright for browser/e2e smoke tests (used ad hoc in ticket #6 to verify the PWA shell end-to-end).
+- **CI**: GitHub Actions — lint/typecheck/build across both workspaces on push, set up in ticket #6.
+
 ## Hosting, legal & compliance
 
 - No current legal blocker to hosting Fiji residents' data offshore — Fiji has no data protection law in force yet (a Privacy Bill has been drafted; enactment status unconfirmed as of this research).

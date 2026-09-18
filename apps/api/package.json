@@ -1,0 +1,25 @@
+{
+  "name": "@theobase/api",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo \"(no lint configured for api yet)\"",
+    "test": "vitest run",
+    "deploy": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply theobase-db --local"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "hono": "^4.13.8"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.22.0",
+    "drizzle-kit": "^0.31.10",
+    "vitest": "^4.1.11",
+    "wrangler": "^4.110.0"
+  }
+}

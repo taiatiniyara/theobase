@@ -1,0 +1,36 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "theobase-api",
+  "main": "src/index.ts",
+  // Capped below today's date: @cloudflare/vitest-pool-workers vendors its
+  // own (slightly older) workerd binary, which rejects a newer date here.
+  // Bump this only after confirming the test pool's workerd supports it.
+  "compatibility_date": "2026-08-22",
+  "observability": {
+    "enabled": true
+  },
+  // Public/non-secret config. SESSION_SECRET is NOT here — it's a real
+  // secret, set via `.dev.vars` locally (see .dev.vars.example) and
+  // `wrangler secret put SESSION_SECRET` in production; its type is
+  // declared by hand in src/types/env.d.ts instead of via `wrangler types`.
+  "vars": {
+    "WEB_ORIGIN": "http://localhost:5173,http://localhost:4173"
+  },
+  // Placeholder bindings — create the real resources before first deploy:
+  //   wrangler d1 create theobase-db
+  //   wrangler r2 bucket create theobase-storage
+  // then paste the returned database_id below.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "theobase-db",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "STORAGE",
+      "bucket_name": "theobase-storage"
+    }
+  ]
+}
