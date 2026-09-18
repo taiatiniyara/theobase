@@ -1,35 +1,24 @@
-import { useEffect, useState } from 'react'
-import { pendingCount } from './lib/db'
+import { useEffect } from 'react'
+import { CountEntryForm } from './features/counts/CountEntryForm'
+import { syncPendingCounts } from './lib/sync'
 
-// Scaffolding smoke test only — confirms the PWA shell, local-first
-// storage, and API are wired up. Product screens land in later tickets.
 function App() {
-  const [storageReady, setStorageReady] = useState<boolean | null>(null)
-  const [apiStatus, setApiStatus] = useState<'checking' | 'ok' | 'unreachable'>('checking')
-
   useEffect(() => {
-    pendingCount()
-      .then(() => setStorageReady(true))
-      .catch(() => setStorageReady(false))
-  }, [])
-
-  useEffect(() => {
-    const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8787'
-    fetch(`${apiUrl}/health`)
-      .then((res) => setApiStatus(res.ok ? 'ok' : 'unreachable'))
-      .catch(() => setApiStatus('unreachable'))
+    // "Syncs opportunistically": not just right after a fresh submit
+    // (CountEntryForm already does that), but whenever the app opens
+    // with connectivity — a count saved during a previous, now-closed
+    // offline session still needs a chance to sync.
+    void syncPendingCounts()
+    window.addEventListener('online', syncPendingCounts)
+    return () => window.removeEventListener('online', syncPendingCounts)
   }, [])
 
   return (
-    <main className="mx-auto max-w-md px-4 py-8">
-      <h1 className="text-brand dark:text-brand-light text-2xl font-semibold">Theobase</h1>
-      <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
-        Scaffolding check — this page is replaced once product screens land.
-      </p>
-      <ul className="mt-4 space-y-1 text-sm">
-        <li>Local-first storage: {storageReady === null ? 'checking…' : storageReady ? 'ready' : 'failed'}</li>
-        <li>API: {apiStatus}</li>
-      </ul>
+    <main className="mx-auto max-w-md">
+      <h1 className="text-brand dark:text-brand-light px-4 pt-6 text-2xl font-semibold">
+        Theobase
+      </h1>
+      <CountEntryForm />
     </main>
   )
 }

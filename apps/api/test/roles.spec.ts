@@ -5,11 +5,10 @@ import { createInstitutionalAccount, createLocalAccount } from '../src/auth/acco
 import { type AppEnv, requireAuth, requireRole } from '../src/auth/middleware'
 import { assertValidScope } from '../src/auth/roles'
 import { canAccessChurch, canAccessDistrict, canAccessMission } from '../src/auth/scope'
-import { createSession, setSessionCookie } from '../src/auth/session'
 import { getDb } from '../src/db/client'
 import { createChurch, createDistrict } from '../src/db/queries'
 import { accounts } from '../src/db/schema'
-import { createTestActor, createTestChurch, createTestMission } from './helpers'
+import { createTestActor, createTestChurch, createTestMission, loginAs } from './helpers'
 
 // Builds a district/church under a *specific* mission that a test
 // already created, rather than createTestChurch's own independent
@@ -120,23 +119,6 @@ describe('requireAuth / requireRole middleware', () => {
     c.json({ ok: true }),
   )
 
-  async function loginAs(accountId: number): Promise<string> {
-    const db = getDb(env.DB)
-    const session = await createSession(db, accountId)
-    // Build the cookie via the real Hono cookie helper against a throwaway
-    // context, so this test exercises the exact same signing path
-    // production code uses rather than hand-rolling a fake cookie string.
-    const cookieApp = new Hono<AppEnv>()
-    let cookieHeader = ''
-    cookieApp.get('/set', async (ctx) => {
-      await setSessionCookie(ctx, session.id, env.SESSION_SECRET)
-      cookieHeader = ctx.res.headers.get('set-cookie')?.split(';')[0] ?? ''
-      return ctx.body(null)
-    })
-    await cookieApp.request('/set', {}, env)
-    return cookieHeader
-  }
-
   it('requireAuth rejects when there is no session', async () => {
     const res = await app.request('/protected', {}, env)
     expect(res.status).toBe(401)
@@ -152,7 +134,7 @@ describe('requireAuth / requireRole middleware', () => {
       role: 'treasurer',
       churchId: church.id,
     })
-    const cookie = await loginAs(account.id)
+    const cookie = await loginAs(db, account.id)
 
     const res = await app.request('/protected', { headers: { cookie } }, env)
     expect(res.status).toBe(200)
@@ -168,7 +150,7 @@ describe('requireAuth / requireRole middleware', () => {
       role: 'treasurer',
       churchId: church.id,
     })
-    const cookie = await loginAs(account.id)
+    const cookie = await loginAs(db, account.id)
 
     const res = await app.request('/mission-admin-only', { headers: { cookie } }, env)
     expect(res.status).toBe(403)
@@ -184,7 +166,7 @@ describe('requireAuth / requireRole middleware', () => {
       role: 'mission_admin',
       missionId: mission.id,
     })
-    const cookie = await loginAs(account.id)
+    const cookie = await loginAs(db, account.id)
 
     const res = await app.request('/mission-admin-only', { headers: { cookie } }, env)
     expect(res.status).toBe(200)

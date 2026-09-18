@@ -1,5 +1,9 @@
-import type { Database } from '../src/db/client'
+import { env } from 'cloudflare:test'
+import { Hono } from 'hono'
 import { createInstitutionalAccount } from '../src/auth/accounts'
+import type { AppEnv } from '../src/auth/middleware'
+import { createSession, setSessionCookie } from '../src/auth/session'
+import type { Database } from '../src/db/client'
 import { createChurch, createDistrict, createMission } from '../src/db/queries'
 
 let counter = 0
@@ -35,4 +39,21 @@ export async function createTestChurch(db: Database) {
   const mission = await createMission(db, `Test Mission ${counter}`, { actorId })
   const district = await createDistrict(db, mission.id, `Test District ${counter}`, { actorId })
   return createChurch(db, district.id, `Test Church ${counter}`, { actorId })
+}
+
+// Builds a real signed session cookie via the actual Hono cookie
+// helper (against a throwaway context) rather than hand-rolling a fake
+// cookie string, so route tests exercise the exact same signing path
+// production code uses.
+export async function loginAs(db: Database, accountId: number): Promise<string> {
+  const session = await createSession(db, accountId)
+  const cookieApp = new Hono<AppEnv>()
+  let cookieHeader = ''
+  cookieApp.get('/set', async (ctx) => {
+    await setSessionCookie(ctx, session.id, env.SESSION_SECRET)
+    cookieHeader = ctx.res.headers.get('set-cookie')?.split(';')[0] ?? ''
+    return ctx.body(null)
+  })
+  await cookieApp.request('/set', {}, env)
+  return cookieHeader
 }

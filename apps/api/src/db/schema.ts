@@ -175,6 +175,58 @@ export const churchFundCategories = sqliteTable(
   ],
 )
 
+// A Treasurer's weekly count — see CONTEXT.md > Real-world workflow /
+// UI-UX > Count-entry form. clientRecordId is a client-generated id
+// (a UUID from apps/web's local storage), unique here, so a submission
+// retried after a flaky sync (client never saw the response, doesn't
+// know if it landed) is idempotent rather than creating a duplicate
+// financial record — essential given "no assumption sync happens
+// within X days" means retries can be arbitrarily delayed and repeated.
+//
+// No dual sign-off / reconciliation status here yet — those are #12
+// and #14, layered on top later. This ticket is deliberately just
+// "the treasurer's numbers, saved reliably," matching its own scope.
+export const counts = sqliteTable('counts', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  clientRecordId: text('client_record_id').notNull().unique(),
+  churchId: integer('church_id')
+    .notNull()
+    .references(() => churches.id),
+  enteredByAccountId: integer('entered_by_account_id')
+    .notNull()
+    .references(() => accounts.id),
+  sabbathDate: text('sabbath_date').notNull(), // YYYY-MM-DD
+  recordedAt: text('recorded_at').notNull(), // client's local entry time, not server insert time
+  createdAt: text('created_at')
+    .notNull()
+    .default(sql`(current_timestamp)`),
+})
+
+// One line per fund category amount within a count. fundCategoryId is
+// a snapshot reference — categories are never hard-deleted (see
+// fundCategories above), so this stays resolvable even after a
+// category is later deactivated or a church's toggle changes.
+// amountCents is an integer (minor currency unit) to avoid float
+// rounding on money; no currency column yet — single-Mission MVP,
+// not worth multi-currency infrastructure until it's actually needed.
+export const countLines = sqliteTable(
+  'count_lines',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    countId: integer('count_id')
+      .notNull()
+      .references(() => counts.id),
+    fundCategoryId: integer('fund_category_id')
+      .notNull()
+      .references(() => fundCategories.id),
+    amountCents: integer('amount_cents').notNull(),
+  },
+  (table) => [
+    uniqueIndex('count_lines_count_category_unique').on(table.countId, table.fundCategoryId),
+    check('count_lines_amount_non_negative', sql`${table.amountCents} >= 0`),
+  ],
+)
+
 // Session id is a random opaque token, held in a signed httpOnly
 // cookie (signing prevents tampering with which session id is sent;
 // server-side storage here — rather than a fully stateless signed
