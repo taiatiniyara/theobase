@@ -1,36 +1,12 @@
-:root {
-  --text: #1a1a1a;
-  --bg: #f5f1e8;
-  --accent: #0e4a52;
-  color-scheme: light dark;
-  font: 16px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
-  color: var(--text);
-  background: var(--bg);
-}
+@import 'tailwindcss';
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #f5f1e8;
-    --bg: #10262a;
-    --accent: #7fd6c4;
-  }
-}
-
-* {
-  box-sizing: border-box;
+@theme {
+  --color-brand: #0e4a52;
+  --color-brand-bg: #f5f1e8;
+  --color-brand-bg-dark: #10262a;
+  --color-brand-light: #7fd6c4;
 }
 
 body {
-  margin: 0;
-}
-
-#root {
-  min-height: 100svh;
-  padding: 16px;
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-h1 {
-  color: var(--accent);
+  @apply bg-brand-bg text-neutral-900 dark:bg-brand-bg-dark dark:text-brand-bg;
 }
