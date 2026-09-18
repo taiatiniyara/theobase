@@ -3,6 +3,7 @@ import { env } from 'cloudflare:test'
 import { describe, expect, it } from 'vitest'
 import { createInstitutionalAccount, createLocalAccount } from '../src/auth/accounts'
 import { getDb } from '../src/db/client'
+import { createTestChurch, createTestMission } from './helpers'
 
 const ORIGIN = 'http://localhost:5173'
 
@@ -15,7 +16,14 @@ function cookieFrom(res: Response): string {
 describe('local login (phone + PIN)', () => {
   it('logs in with a correct PIN, sets a session cookie, and /auth/me resolves it', async () => {
     const db = getDb(env.DB)
-    await createLocalAccount(db, { displayName: 'Treasurer Tia', phone: '+6791234567', pin: '4321' })
+    const church = await createTestChurch(db)
+    await createLocalAccount(db, {
+      displayName: 'Treasurer Tia',
+      phone: '+6791234567',
+      pin: '4321',
+      role: 'treasurer',
+      churchId: church.id,
+    })
 
     const loginRes = await app.request(
       '/auth/local/login',
@@ -43,7 +51,14 @@ describe('local login (phone + PIN)', () => {
 
   it('rejects a wrong PIN', async () => {
     const db = getDb(env.DB)
-    await createLocalAccount(db, { displayName: 'Treasurer Wrong', phone: '+6790000001', pin: '1111' })
+    const church = await createTestChurch(db)
+    await createLocalAccount(db, {
+      displayName: 'Treasurer Wrong',
+      phone: '+6790000001',
+      pin: '1111',
+      role: 'treasurer',
+      churchId: church.id,
+    })
 
     const res = await app.request(
       '/auth/local/login',
@@ -72,7 +87,14 @@ describe('local login (phone + PIN)', () => {
 
   it('locks the account after repeated failed attempts', async () => {
     const db = getDb(env.DB)
-    await createLocalAccount(db, { displayName: 'Treasurer Locked', phone: '+6790000002', pin: '5555' })
+    const church = await createTestChurch(db)
+    await createLocalAccount(db, {
+      displayName: 'Treasurer Locked',
+      phone: '+6790000002',
+      pin: '5555',
+      role: 'treasurer',
+      churchId: church.id,
+    })
 
     for (let i = 0; i < 5; i++) {
       const res = await app.request(
@@ -104,10 +126,13 @@ describe('local login (phone + PIN)', () => {
 describe('institutional login (email + password)', () => {
   it('logs in with a correct password and shares the same session model as local login', async () => {
     const db = getDb(env.DB)
+    const mission = await createTestMission(db)
     await createInstitutionalAccount(db, {
       displayName: 'CFO Carmen',
       email: 'cfo@example.test',
       password: 'correct-horse-battery-staple',
+      role: 'mission_admin',
+      missionId: mission.id,
     })
 
     const loginRes = await app.request(
@@ -131,10 +156,13 @@ describe('institutional login (email + password)', () => {
 
   it('rejects a wrong password', async () => {
     const db = getDb(env.DB)
+    const mission = await createTestMission(db)
     await createInstitutionalAccount(db, {
       displayName: 'CFO Wrong',
       email: 'wrong@example.test',
       password: 'correct-horse-battery-staple',
+      role: 'mission_admin',
+      missionId: mission.id,
     })
 
     const res = await app.request(
@@ -158,7 +186,14 @@ describe('session lifecycle', () => {
 
   it('logout clears the session so /auth/me stops working', async () => {
     const db = getDb(env.DB)
-    await createLocalAccount(db, { displayName: 'Treasurer Logout', phone: '+6790000003', pin: '2468' })
+    const church = await createTestChurch(db)
+    await createLocalAccount(db, {
+      displayName: 'Treasurer Logout',
+      phone: '+6790000003',
+      pin: '2468',
+      role: 'treasurer',
+      churchId: church.id,
+    })
 
     const loginRes = await app.request(
       '/auth/local/login',

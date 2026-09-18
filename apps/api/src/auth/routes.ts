@@ -1,30 +1,28 @@
 import { Hono } from 'hono'
 import { getDb } from '../db/client'
-import type { accounts } from '../db/schema'
 import { attemptInstitutionalLogin, attemptLocalLogin } from './login'
+import { type Account, type AppEnv, requireAuth } from './middleware'
 import {
   clearSessionCookie,
   createSession,
   deleteSession,
   getCurrentSessionId,
-  getSessionAccount,
   setSessionCookie,
 } from './session'
-
-type Account = typeof accounts.$inferSelect
 
 function publicAccount(account: Account) {
   return {
     id: account.id,
     displayName: account.displayName,
     accountType: account.accountType,
+    role: account.role,
     churchId: account.churchId,
     districtId: account.districtId,
     missionId: account.missionId,
   }
 }
 
-export const auth = new Hono<{ Bindings: CloudflareBindings }>()
+export const auth = new Hono<AppEnv>()
 
 auth.post('/local/login', async (c) => {
   const body = await c.req
@@ -86,11 +84,6 @@ auth.post('/logout', async (c) => {
   return c.json({ ok: true })
 })
 
-auth.get('/me', async (c) => {
-  const db = getDb(c.env.DB)
-  const account = await getSessionAccount(c, db, c.env.SESSION_SECRET)
-  if (!account) {
-    return c.json({ error: 'not authenticated' }, 401)
-  }
-  return c.json({ account: publicAccount(account) })
+auth.get('/me', requireAuth, async (c) => {
+  return c.json({ account: publicAccount(c.get('account')) })
 })

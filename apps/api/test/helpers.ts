@@ -1,5 +1,6 @@
 import type { Database } from '../src/db/client'
 import { createInstitutionalAccount } from '../src/auth/accounts'
+import { createChurch, createDistrict, createMission } from '../src/db/queries'
 
 let counter = 0
 
@@ -15,6 +16,23 @@ export async function createTestActor(db: Database) {
     displayName: `Test Actor ${counter}`,
     email: `test-actor-${counter}@example.test`,
     password: 'test-password-not-real',
+    role: 'platform_operator',
   })
   return account.id
+}
+
+// role-scoped accounts (treasurer/clerk need a churchId, mission_admin/
+// mission_staff need a missionId) need a real hierarchy row to point
+// at — these build a fresh Mission -> District -> Church chain per
+// call so tests don't share (and collide on) org entities.
+export async function createTestMission(db: Database) {
+  const actorId = await createTestActor(db)
+  return createMission(db, `Test Mission ${counter}`, { actorId })
+}
+
+export async function createTestChurch(db: Database) {
+  const actorId = await createTestActor(db)
+  const mission = await createMission(db, `Test Mission ${counter}`, { actorId })
+  const district = await createDistrict(db, mission.id, `Test District ${counter}`, { actorId })
+  return createChurch(db, district.id, `Test Church ${counter}`, { actorId })
 }

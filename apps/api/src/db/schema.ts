@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm'
 import { check, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { ROLES } from '../auth/roles'
 
 // Org hierarchy: Mission -> District -> Church. District is a
 // first-class level (not a Mission->Church shortcut) — see
@@ -42,17 +43,19 @@ export const churches = sqliteTable('churches', {
 //    SMS/OTP dependency for routine login.
 //  - 'institutional': Mission Admin/Staff/platform-operator — email +
 //    password. That constraint doesn't apply to office users.
-// The CHECK below keeps exactly the right credential columns
-// populated for each type at the DB level, not just in app code.
-// churchId/districtId/missionId are nullable org-scope pointers; the
-// Role & permission model ticket (#9) interprets them per role
-// (platform-operator has none set).
+// The CHECKs below keep exactly the right credential columns
+// populated for each type, the right role for each type, and the
+// right org-scope column for each role — all at the DB level, not
+// just in app code (auth/roles.ts's assertValidScope mirrors the
+// scope one for a clearer error message, but the constraint here is
+// the real guarantee). See auth/roles.ts for what each role means.
 export const accounts = sqliteTable(
   'accounts',
   {
     id: integer('id').primaryKey({ autoIncrement: true }),
     displayName: text('display_name').notNull(),
     accountType: text('account_type', { enum: ['local', 'institutional'] }).notNull(),
+    role: text('role', { enum: ROLES }).notNull(),
 
     phone: text('phone').unique(),
     pinHash: text('pin_hash'),
@@ -82,6 +85,31 @@ export const accounts = sqliteTable(
         (${table.accountType} = 'institutional'
           AND ${table.email} IS NOT NULL AND ${table.passwordHash} IS NOT NULL
           AND ${table.phone} IS NULL AND ${table.pinHash} IS NULL)
+      `,
+    ),
+    check(
+      'accounts_role_matches_account_type',
+      sql`
+        (${table.role} IN ('treasurer', 'clerk', 'pastor') AND ${table.accountType} = 'local')
+        OR
+        (${table.role} IN ('mission_admin', 'mission_staff', 'platform_operator')
+          AND ${table.accountType} = 'institutional')
+      `,
+    ),
+    check(
+      'accounts_scope_matches_role',
+      sql`
+        (${table.role} IN ('treasurer', 'clerk')
+          AND ${table.churchId} IS NOT NULL AND ${table.districtId} IS NULL AND ${table.missionId} IS NULL)
+        OR
+        (${table.role} = 'pastor'
+          AND ${table.districtId} IS NOT NULL AND ${table.churchId} IS NULL AND ${table.missionId} IS NULL)
+        OR
+        (${table.role} IN ('mission_admin', 'mission_staff')
+          AND ${table.missionId} IS NOT NULL AND ${table.churchId} IS NULL AND ${table.districtId} IS NULL)
+        OR
+        (${table.role} = 'platform_operator'
+          AND ${table.churchId} IS NULL AND ${table.districtId} IS NULL AND ${table.missionId} IS NULL)
       `,
     ),
   ],

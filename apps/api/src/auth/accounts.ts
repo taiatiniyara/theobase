@@ -1,19 +1,21 @@
 import { eq } from 'drizzle-orm'
 import type { Database } from '../db/client'
 import { accounts, auditLog } from '../db/schema'
+import { assertValidScope, type InstitutionalRole, type LocalRole } from './roles'
 import { hashSecret } from './crypto'
 
 // Internal account-creation helpers only — deliberately not exposed
 // as an HTTP endpoint. Who is allowed to create which kind of account
 // (Clerk adding a local-church account, Mission Admin adding Mission
 // staff, the platform-operator onboarding a Mission) is an
-// authorization question owned by later tickets (#9, #18, #21); this
-// ticket only builds the login mechanism itself.
+// authorization question owned by later tickets (#18, #21); this
+// ticket only builds the role/scope model itself.
 
 export interface CreateLocalAccountInput {
   displayName: string
   phone: string
   pin: string
+  role: LocalRole
   churchId?: number
   districtId?: number
 }
@@ -22,6 +24,7 @@ export interface CreateInstitutionalAccountInput {
   displayName: string
   email: string
   password: string
+  role: InstitutionalRole
   missionId?: number
 }
 
@@ -42,16 +45,21 @@ export async function createLocalAccount(
   if (!PIN_PATTERN.test(input.pin)) {
     throw new Error('PIN must be 4-8 digits')
   }
+  const churchId = input.churchId ?? null
+  const districtId = input.districtId ?? null
+  assertValidScope(input.role, { churchId, districtId, missionId: null })
+
   const pinHash = await hashSecret(input.pin)
   const [account] = await db
     .insert(accounts)
     .values({
       displayName: input.displayName,
       accountType: 'local',
+      role: input.role,
       phone: input.phone,
       pinHash,
-      churchId: input.churchId ?? null,
-      districtId: input.districtId ?? null,
+      churchId,
+      districtId,
     })
     .returning()
   await db.insert(auditLog).values({
@@ -75,15 +83,19 @@ export async function createInstitutionalAccount(
   if (input.password.length < PASSWORD_MIN_LENGTH) {
     throw new Error(`Password must be at least ${PASSWORD_MIN_LENGTH} characters`)
   }
+  const missionId = input.missionId ?? null
+  assertValidScope(input.role, { churchId: null, districtId: null, missionId })
+
   const passwordHash = await hashSecret(input.password)
   const [account] = await db
     .insert(accounts)
     .values({
       displayName: input.displayName,
       accountType: 'institutional',
+      role: input.role,
       email: input.email,
       passwordHash,
-      missionId: input.missionId ?? null,
+      missionId,
     })
     .returning()
   await db.insert(auditLog).values({
