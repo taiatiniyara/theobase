@@ -42,7 +42,11 @@ export async function attemptLocalLogin(
   pin: string,
 ): Promise<LoginResult> {
   const account = await findAccountByPhone(db, phone)
-  if (!account) {
+  if (!account || !account.active) {
+    // A removed account (#18) is treated exactly like "no such
+    // account" — same constant-time no-op, same generic reason — so a
+    // login attempt can't be used to learn that a phone number used to
+    // belong to a real, now-deactivated account.
     await verifySecret(pin, null) // constant-time no-op — see verifySecret's DUMMY_HASH
     return { ok: false, reason: 'invalid_credentials' }
   }
@@ -64,7 +68,7 @@ export async function attemptInstitutionalLogin(
   password: string,
 ): Promise<LoginResult> {
   const account = await findAccountByEmail(db, email)
-  if (!account) {
+  if (!account || !account.active) {
     await verifySecret(password, null)
     return { ok: false, reason: 'invalid_credentials' }
   }

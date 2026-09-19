@@ -71,6 +71,13 @@
       "when": 1789806195944,
       "tag": "0009_closed_mandroid",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1789808950013,
+      "tag": "0010_nervous_the_hunter",
+      "breakpoints": true
     }
   ]
 }

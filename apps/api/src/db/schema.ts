@@ -91,6 +91,17 @@ export const accounts = sqliteTable(
     // a PIN reset.
     localVerifierSeed: text('local_verifier_seed'),
 
+    // Soft-removal only — see #18's Pastor removal sign-off flow.
+    // Accounts are never hard-deleted: counts.enteredByAccountId,
+    // audit_log.actorId, reconciliations.sentByAccountId, etc. all
+    // reference accounts, and a real audit trail needs "who did this"
+    // to keep resolving to a real record even after that person is
+    // removed. A plain NOT NULL DEFAULT column, not a CHECK — adding a
+    // constraint here would hit the same D1 rebuild-inside-a-
+    // transaction limitation documented below for localVerifierSeed,
+    // since `accounts` is FK-referenced everywhere.
+    active: integer('active', { mode: 'boolean' }).notNull().default(true),
+
     createdAt: text('created_at')
       .notNull()
       .default(sql`(current_timestamp)`),
@@ -148,6 +159,68 @@ export const accounts = sqliteTable(
     // column, and it only ever operates on already-local accounts) is
     // an acceptable, app-level-only substitute here, unlike the
     // higher-stakes constraints elsewhere in this table.
+  ],
+)
+
+// Async Pastor sign-off for removing/replacing a Treasurer or Clerk —
+// see CONTEXT.md > UI/UX > Pastor account-removal sign-off flow. A
+// brand-new table (nothing else references it yet), so unlike the
+// columns above, its invariants are real CHECK constraints from day
+// one rather than app-only promises.
+//
+// Deliberately asynchronous, unlike dual sign-off (#12): the Clerk
+// submits a request, and the Pastor reviews it later, on their own
+// login — there's no same-room/same-moment guarantee here the way
+// there is for counting.
+export const ACCOUNT_REMOVAL_STATUSES = ['pending', 'approved', 'rejected'] as const
+export type AccountRemovalStatus = (typeof ACCOUNT_REMOVAL_STATUSES)[number]
+
+export const accountRemovalRequests = sqliteTable(
+  'account_removal_requests',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    targetAccountId: integer('target_account_id')
+      .notNull()
+      .references(() => accounts.id),
+    requestedByAccountId: integer('requested_by_account_id')
+      .notNull()
+      .references(() => accounts.id),
+    status: text('status', { enum: ACCOUNT_REMOVAL_STATUSES }).notNull().default('pending'),
+    reviewedByAccountId: integer('reviewed_by_account_id').references(() => accounts.id),
+    reviewedAt: text('reviewed_at'),
+    // Required on rejection, same pattern as discrepancy resolution
+    // (#14) — gives the Clerk something concrete to act on. Never set
+    // on approval: there's nothing to explain there beyond "approved."
+    rejectionReason: text('rejection_reason'),
+    createdAt: text('created_at')
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    check(
+      'account_removal_requests_review_progression',
+      sql`
+        (${table.status} = 'pending'
+          AND ${table.reviewedByAccountId} IS NULL AND ${table.reviewedAt} IS NULL
+          AND ${table.rejectionReason} IS NULL)
+        OR
+        (${table.status} = 'approved'
+          AND ${table.reviewedByAccountId} IS NOT NULL AND ${table.reviewedAt} IS NOT NULL
+          AND ${table.rejectionReason} IS NULL)
+        OR
+        (${table.status} = 'rejected'
+          AND ${table.reviewedByAccountId} IS NOT NULL AND ${table.reviewedAt} IS NOT NULL
+          AND ${table.rejectionReason} IS NOT NULL)
+      `,
+    ),
+    // At most one open request per target at a time — see #18's
+    // "pending state" note: the account stays fully active regardless,
+    // but a second Clerk (or the same one) piling on a duplicate
+    // request while one is already awaiting the Pastor would just be
+    // noise on their attention card, not a real second case.
+    uniqueIndex('account_removal_requests_one_pending_per_target')
+      .on(table.targetAccountId)
+      .where(sql`${table.status} = 'pending'`),
   ],
 )
 

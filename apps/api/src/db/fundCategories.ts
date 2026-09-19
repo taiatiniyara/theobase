@@ -1,4 +1,4 @@
-import { and, eq, isNull, or } from 'drizzle-orm'
+import { and, eq, isNull, or, sql } from 'drizzle-orm'
 import type { AuditContext } from './audit'
 import { recordAudit } from './audit'
 import type { Database } from './client'
@@ -121,4 +121,40 @@ export function listActiveFundCategoriesForChurch(db: Database, churchId: number
         or(isNull(churchFundCategories.enabled), eq(churchFundCategories.enabled, true)),
       ),
     )
+}
+
+// Clerk's category-toggles settings tab (#18) needs every active
+// Mission category, including ones currently disabled for this church
+// — listActiveFundCategoriesForChurch above only returns the enabled
+// ones, which is right for the count-entry form but wrong for a
+// settings screen where a Clerk needs to see (and flip back on) a
+// disabled category too.
+export async function listFundCategoriesWithChurchToggle(db: Database, churchId: number) {
+  const rows = await db
+    .select({
+      id: fundCategories.id,
+      name: fundCategories.name,
+      isTithe: fundCategories.isTithe,
+      // A raw sql fragment doesn't get drizzle's usual integer<->boolean
+      // column-mode conversion, so this comes back as a plain 0/1 —
+      // coerced to a real boolean below rather than leaking a SQLite
+      // integer into the JSON response.
+      enabled: sql<number>`coalesce(${churchFundCategories.enabled}, 1)`,
+    })
+    .from(churches)
+    .innerJoin(districts, eq(churches.districtId, districts.id))
+    .innerJoin(
+      fundCategories,
+      and(eq(fundCategories.missionId, districts.missionId), eq(fundCategories.active, true)),
+    )
+    .leftJoin(
+      churchFundCategories,
+      and(
+        eq(churchFundCategories.churchId, churches.id),
+        eq(churchFundCategories.fundCategoryId, fundCategories.id),
+      ),
+    )
+    .where(eq(churches.id, churchId))
+
+  return rows.map((row) => ({ ...row, enabled: Boolean(row.enabled) }))
 }

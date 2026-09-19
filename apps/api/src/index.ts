@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import { accountsRoutes } from './accounts/routes'
 import { auth } from './auth/routes'
 import { churchesRoutes } from './churches/routes'
 import { countsRoutes } from './counts/routes'
@@ -32,5 +33,6 @@ app.route('/counts', countsRoutes)
 app.route('/reconciliations', reconciliationsRoutes)
 app.route('/missions', missionsRoutes)
 app.route('/churches', churchesRoutes)
+app.route('/accounts', accountsRoutes)
 
 export default app

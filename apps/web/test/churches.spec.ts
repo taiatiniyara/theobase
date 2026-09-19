@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { fetchChurchRecords } from '../src/lib/churches'
+import { fetchChurchCategories, fetchChurchRecords, setChurchCategoryEnabled } from '../src/lib/churches'
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -24,5 +24,26 @@ describe('fetchChurchRecords', () => {
     const result = await fetchChurchRecords()
     expect(String(fetchSpy.mock.calls[0][0])).toContain('/churches/me/records')
     expect(result.records).toEqual(records)
+  })
+})
+
+describe('fetchChurchCategories / setChurchCategoryEnabled', () => {
+  it('fetchChurchCategories hits the categories endpoint', async () => {
+    const fetchSpy = vi.fn().mockResolvedValue(new Response(JSON.stringify({ categories: [] }), { status: 200 }))
+    vi.stubGlobal('fetch', fetchSpy)
+    await fetchChurchCategories()
+    expect(String(fetchSpy.mock.calls[0][0])).toContain('/churches/me/categories')
+  })
+
+  it('setChurchCategoryEnabled PATCHes the toggle', async () => {
+    const fetchSpy = vi
+      .fn()
+      .mockResolvedValue(new Response(JSON.stringify({ categories: [{ id: 3, enabled: false }] }), { status: 200 }))
+    vi.stubGlobal('fetch', fetchSpy)
+    await setChurchCategoryEnabled(3, false)
+    const [url, init] = fetchSpy.mock.calls[0]
+    expect(String(url)).toContain('/churches/me/categories/3')
+    expect(init?.method).toBe('PATCH')
+    expect(JSON.parse(init?.body as string)).toEqual({ enabled: false })
   })
 })

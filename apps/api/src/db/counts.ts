@@ -56,6 +56,16 @@ async function assertEligibleCoSigner(
   if (coSigner.accountType !== 'local') {
     throw new IneligibleCoSignerError('The co-signer must be a local-church account')
   }
+  // Also defense in depth, same reasoning as the accountType check
+  // above: a co-signer removed via #18's Pastor sign-off flow is
+  // rejected server-side even if their device still has an
+  // already-earned offline verifier cached from before the removal
+  // (see #23) — a local cache has no way to learn about a server-side
+  // removal until it's next online, and this is the point where
+  // "online" actually re-checks it.
+  if (!coSigner.active) {
+    throw new IneligibleCoSignerError('This account is no longer active')
+  }
   const eligible = await canAccessChurch(db, coSigner, churchId)
   if (!eligible) {
     throw new IneligibleCoSignerError('This account is not eligible to co-sign at this church')

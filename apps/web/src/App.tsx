@@ -1,23 +1,38 @@
 import { useEffect, useState } from 'react'
+import { ClerkHome } from './features/clerk/ClerkHome'
 import { MissionExceptionsTab } from './features/missions/MissionExceptionsTab'
+import { PastorRemovalApprovals } from './features/pastor/PastorRemovalApprovals'
 import { ReconciliationDetail } from './features/reconciliations/ReconciliationDetail'
 import { TreasurerHome } from './features/treasurer/TreasurerHome'
 import { syncPendingCounts } from './lib/sync'
 
-type Screen = { name: 'home' } | { name: 'reconciliation'; countId: number } | { name: 'exceptions' }
+type Screen =
+  | { name: 'home' }
+  | { name: 'reconciliation'; countId: number }
+  | { name: 'exceptions' }
+  | { name: 'clerk' }
+  | { name: 'pastor-approvals' }
 
 // Provisional, query-param-based navigation: ?count=<id> opens that
 // count's reconciliation detail screen (#15), ?exceptions=1 opens the
-// Mission exceptions tab (#16), otherwise the app shows the
+// Mission exceptions tab (#16), ?clerk=1 opens the Clerk landing
+// screen (#18), ?pastor-approvals=1 opens the Pastor's removal-request
+// approvals (#18's async sign-off flow), otherwise the app shows the
 // Treasurer home screen (#17). There's no real role-based navigation
-// shell yet — the other role-specific screens that would link into
-// these (#18 Clerk, #19 Pastor, #20 Mission roster, #24 login) are
-// separate, not-yet-built tickets — so this is only enough to make
-// each screen reachable at all until one of those replaces it.
+// shell yet — that's #19 (Pastor district roster), #20 (Mission
+// roster), and #24 (login screen), none built yet — so this is only
+// enough to make each screen reachable at all until one of those
+// replaces it.
 function screenFromLocation(): Screen {
   const params = new URLSearchParams(window.location.search)
   if (params.has('exceptions')) {
     return { name: 'exceptions' }
+  }
+  if (params.has('clerk')) {
+    return { name: 'clerk' }
+  }
+  if (params.has('pastor-approvals')) {
+    return { name: 'pastor-approvals' }
   }
   const raw = params.get('count')
   const parsed = raw ? Number(raw) : null
@@ -58,6 +73,8 @@ function App() {
       {screen.name === 'home' && <TreasurerHome />}
       {screen.name === 'reconciliation' && <ReconciliationDetail countId={screen.countId} />}
       {screen.name === 'exceptions' && <MissionExceptionsTab />}
+      {screen.name === 'clerk' && <ClerkHome />}
+      {screen.name === 'pastor-approvals' && <PastorRemovalApprovals />}
     </main>
   )
 }

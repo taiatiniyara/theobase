@@ -55,15 +55,18 @@ export function clearSessionCookie(c: Context) {
   deleteCookie(c, SESSION_COOKIE, { path: '/' })
 }
 
-async function deleteExpiredSession(db: Database, sessionId: string) {
+export async function deleteSession(db: Database, sessionId: string) {
   await db.delete(sessions).where(eq(sessions.id, sessionId))
 }
 
 // Resolves the current request's session cookie to its account, or
 // null if there's no session, the cookie's signature doesn't verify,
-// or the session has expired. Expired sessions are lazily deleted
-// (not audit-logged — this is routine housekeeping, not a mutating
-// action on the entity itself).
+// the session has expired, or the account has since been removed
+// (#18's Pastor sign-off flow). Both an expired session and a removed
+// account's session are revoked outright when found, not just skipped
+// for this one check, so a stale cookie can't keep re-asking the
+// question — this is routine housekeeping, not a mutating action on
+// the entity itself, so neither is audit-logged here.
 export async function getSessionAccount(c: Context, db: Database, secret: string) {
   const sessionId = await getSignedCookie(c, secret, SESSION_COOKIE)
   if (!sessionId) return null
@@ -72,16 +75,23 @@ export async function getSessionAccount(c: Context, db: Database, secret: string
   if (!session) return null
 
   if (session.expiresAt !== null && new Date(session.expiresAt).getTime() <= Date.now()) {
-    await deleteExpiredSession(db, session.id)
+    await deleteSession(db, session.id)
     return null
   }
 
   const account = await findAccountById(db, session.accountId)
-  return account ?? null
-}
+  if (!account) return null
 
-export async function deleteSession(db: Database, sessionId: string) {
-  await db.delete(sessions).where(eq(sessions.id, sessionId))
+  // A removal takes effect the moment this device is next online, the
+  // same way a server-side lock already does — see the comment on
+  // sessions.expiresAt for why there's no hard session expiry to fall
+  // back on otherwise.
+  if (!account.active) {
+    await deleteSession(db, session.id)
+    return null
+  }
+
+  return account
 }
 
 export async function getCurrentSessionId(c: Context, secret: string) {

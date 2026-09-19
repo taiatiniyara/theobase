@@ -28,7 +28,7 @@ export interface CreateInstitutionalAccountInput {
   missionId?: number
 }
 
-const PIN_PATTERN = /^\d{4,8}$/
+export const PIN_PATTERN = /^\d{4,8}$/
 
 // actorId is optional because the very first account ever created
 // (the platform-operator bootstrapping themselves — see #21) has no
