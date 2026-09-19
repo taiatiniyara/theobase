@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm'
 import type { Database } from '../db/client'
 import { accounts, auditLog } from '../db/schema'
 import { assertValidScope, type InstitutionalRole, type LocalRole } from './roles'
-import { hashSecret } from './crypto'
+import { generateToken, hashSecret } from './crypto'
 
 // Internal account-creation helpers only — deliberately not exposed
 // as an HTTP endpoint. Who is allowed to create which kind of account
@@ -105,6 +105,25 @@ export async function createInstitutionalAccount(
     action: actorId ? 'create' : 'create_self_provisioned',
   })
   return account
+}
+
+// Lazily issues (and returns) the account's local-verifier seed —
+// generated once on the first successful PIN verification (full login
+// or a co-signer check), stable after that. See the comment on
+// accounts.localVerifierSeed in schema.ts for what this is for.
+// Deliberately not audit-logged: it's a device-caching mechanism, not
+// a domain event a Mission or church needs visibility into.
+export async function ensureLocalVerifierSeed(db: Database, accountId: number): Promise<string> {
+  const account = await findAccountById(db, accountId)
+  if (!account) {
+    throw new Error(`No such account: ${accountId}`)
+  }
+  if (account.localVerifierSeed) {
+    return account.localVerifierSeed
+  }
+  const seed = generateToken()
+  await db.update(accounts).set({ localVerifierSeed: seed }).where(eq(accounts.id, accountId))
+  return seed
 }
 
 export function findAccountByPhone(db: Database, phone: string) {

@@ -7,7 +7,21 @@ import { findAccountById } from './accounts'
 import { generateToken } from './crypto'
 
 export const SESSION_COOKIE = 'theobase_session'
-const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000 // 30 days
+
+// The *server-side* session row never expires as of #23 (see the
+// comment on sessions.expiresAt in schema.ts) — but the *cookie*
+// holding the session id is a separate, browser-enforced constraint:
+// Chrome (and the updated cookie spec generally) caps any cookie's
+// lifetime at 400 days regardless of what a server asks for. So
+// "indefinite" in practice means "up to ~400 days without reopening
+// the app" — a real platform ceiling this architecture can't work
+// around while still using an httpOnly cookie (the alternative, a
+// token in JS-readable storage manually attached to requests, trades
+// this limit away for XSS exposure, which isn't a trade worth making
+// here). Reopening the app before that ceiling resets the clock, since
+// nothing here forces a fixed absolute expiry — only a genuinely
+// unopened device for over a year would hit it.
+const COOKIE_MAX_AGE_SECONDS = 400 * 24 * 60 * 60
 
 // One session model shared by both login flows (local phone+PIN and
 // institutional email+password) — callers elsewhere (role/permission
@@ -15,9 +29,8 @@ const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000 // 30 days
 // which flow the account logged in through.
 export async function createSession(db: Database, accountId: number) {
   const id = generateToken()
-  const expiresAt = new Date(Date.now() + SESSION_TTL_MS).toISOString()
-  await db.insert(sessions).values({ id, accountId, expiresAt })
-  return { id, expiresAt }
+  await db.insert(sessions).values({ id, accountId })
+  return { id }
 }
 
 export async function setSessionCookie(c: Context, sessionId: string, secret: string) {
@@ -34,7 +47,7 @@ export async function setSessionCookie(c: Context, sessionId: string, secret: st
     // (non-wildcard) CORS origins + credentials — see src/index.ts.
     sameSite: 'Lax',
     path: '/',
-    maxAge: SESSION_TTL_MS / 1000,
+    maxAge: COOKIE_MAX_AGE_SECONDS,
   })
 }
 
@@ -58,7 +71,7 @@ export async function getSessionAccount(c: Context, db: Database, secret: string
   const session = await db.query.sessions.findFirst({ where: eq(sessions.id, sessionId) })
   if (!session) return null
 
-  if (new Date(session.expiresAt).getTime() <= Date.now()) {
+  if (session.expiresAt !== null && new Date(session.expiresAt).getTime() <= Date.now()) {
     await deleteExpiredSession(db, session.id)
     return null
   }

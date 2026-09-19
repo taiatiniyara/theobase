@@ -70,6 +70,17 @@ export const accounts = sqliteTable(
     failedLoginAttempts: integer('failed_login_attempts').notNull().default(0),
     lockedUntil: text('locked_until'),
 
+    // Local-role only (see #23). Server-generated on first successful
+    // PIN verification (full login, or a co-signer check for dual
+    // sign-off — see auth/routes.ts's /verify-pin), then handed to the
+    // device that earned it so it can derive and cache its own offline
+    // verifier. Deliberately a separate secret from pinHash: a stolen
+    // server dump and a stolen device don't cross-compromise each
+    // other, and this can be rotated independently to revoke every
+    // device's cached offline-verification capability without forcing
+    // a PIN reset.
+    localVerifierSeed: text('local_verifier_seed'),
+
     createdAt: text('created_at')
       .notNull()
       .default(sql`(current_timestamp)`),
@@ -112,6 +123,21 @@ export const accounts = sqliteTable(
           AND ${table.churchId} IS NULL AND ${table.districtId} IS NULL AND ${table.missionId} IS NULL)
       `,
     ),
+    // No CHECK constraint enforcing localVerifierSeed is local-only:
+    // adding one here would force drizzle-kit's SQLite table-rebuild
+    // strategy (DROP+recreate `accounts`), which fails against D1
+    // specifically — D1 wraps migration files in a transaction, and
+    // `PRAGMA foreign_keys=OFF` (the standard SQLite recipe for
+    // rebuilding a table other tables still reference) is silently
+    // ineffective inside a transaction, so the DROP fails with a live
+    // FK violation the moment any real session/audit_log/counts row
+    // exists (confirmed empirically, not just from docs). The
+    // constraint would only prevent an unused, harmless value sitting
+    // on an institutional row — low enough stakes that
+    // ensureLocalVerifierSeed (the only code path that ever sets this
+    // column, and it only ever operates on already-local accounts) is
+    // an acceptable, app-level-only substitute here, unlike the
+    // higher-stakes constraints elsewhere in this table.
   ],
 )
 
@@ -232,6 +258,18 @@ export const countLines = sqliteTable(
 // server-side storage here — rather than a fully stateless signed
 // JWT — is what makes a session revocable, e.g. once a "log out other
 // devices" or forced-logout feature exists).
+//
+// expiresAt is nullable and, as of #23, always null: a hard expiry
+// (the original 30-day TTL) could strand a treasurer mid-offline-
+// period with no way back in, contradicting CONTEXT.md's "no
+// assumption sync happens within X days." A session still gets
+// revoked "opportunistically once connectivity returns" for free —
+// getSessionAccount re-fetches the account from D1 on every request
+// that actually reaches the Worker, so a server-side lock or removal
+// takes effect the moment the device is next online, without this
+// column's help. The column stays nullable rather than being dropped
+// so a future ticket can reintroduce a real expiry without another
+// destructive migration.
 export const sessions = sqliteTable('sessions', {
   id: text('id').primaryKey(),
   accountId: integer('account_id')
@@ -240,7 +278,7 @@ export const sessions = sqliteTable('sessions', {
   createdAt: text('created_at')
     .notNull()
     .default(sql`(current_timestamp)`),
-  expiresAt: text('expires_at').notNull(),
+  expiresAt: text('expires_at'),
 })
 
 // Append-only audit log. Every mutating action across the app writes

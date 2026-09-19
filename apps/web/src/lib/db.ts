@@ -33,6 +33,23 @@ export interface SyncAttemptError {
   message: string
 }
 
+// A device's cached, offline-verifiable proof that it once confirmed
+// (online) that this phone+PIN pair is real — see #23 and
+// localVerifier.ts. `verifier` is HMAC(seed, pin), never the PIN
+// itself; failedAttempts/lockedUntil mirror the server's own lockout
+// (login.ts) since an offline device can't rely on the server to
+// enforce that while it has no connectivity.
+export interface LocalVerifierRecord {
+  phone: string
+  accountId: number
+  displayName: string
+  seed: string
+  verifier: string
+  cachedAt: string
+  failedAttempts: number
+  lockedUntil: string | null
+}
+
 interface TheobaseDB extends DBSchema {
   outbox: {
     key: number
@@ -51,10 +68,14 @@ interface TheobaseDB extends DBSchema {
     key: number
     value: { id: number; name: string; isTithe: boolean; cachedAt: string }
   }
+  localVerifiers: {
+    key: string // phone
+    value: LocalVerifierRecord
+  }
 }
 
 const DB_NAME = 'theobase'
-const DB_VERSION = 2
+const DB_VERSION = 3
 
 let dbPromise: Promise<IDBPDatabase<TheobaseDB>> | null = null
 
@@ -71,6 +92,9 @@ export function getDB(): Promise<IDBPDatabase<TheobaseDB>> {
         }
         if (oldVersion < 2) {
           db.createObjectStore('categories', { keyPath: 'id' })
+        }
+        if (oldVersion < 3) {
+          db.createObjectStore('localVerifiers', { keyPath: 'phone' })
         }
       },
     })
@@ -199,4 +223,19 @@ export async function getCachedCategories(): Promise<
 > {
   const db = await getDB()
   return db.getAll('categories')
+}
+
+// Raw storage for local-verifier records (see LocalVerifierRecord
+// above). The crypto (deriving a verifier from a seed+PIN) and lockout
+// logic live in localVerifier.ts — this is deliberately just storage,
+// same split as outbox/sync.ts.
+
+export async function getLocalVerifier(phone: string): Promise<LocalVerifierRecord | undefined> {
+  const db = await getDB()
+  return db.get('localVerifiers', phone)
+}
+
+export async function putLocalVerifier(record: LocalVerifierRecord): Promise<void> {
+  const db = await getDB()
+  await db.put('localVerifiers', record)
 }
