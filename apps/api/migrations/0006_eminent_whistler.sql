@@ -1,0 +1,1 @@
+ALTER TABLE `counts` ADD `co_signer_account_id` integer REFERENCES accounts(id);

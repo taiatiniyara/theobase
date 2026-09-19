@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   __resetDBForTests,
   getCachedCategories,
+  getChurchContext,
   listPending,
   listPendingCounts,
   saveLocalCount,
@@ -37,6 +38,7 @@ describe('syncPendingCounts', () => {
       clientRecordId: 'sync-ok',
       sabbathDate: '2026-09-19',
       recordedAt: new Date().toISOString(),
+      coSignerAccountId: 2,
       lines: [],
     })
 
@@ -52,6 +54,7 @@ describe('syncPendingCounts', () => {
       clientRecordId: 'sync-offline',
       sabbathDate: '2026-09-19',
       recordedAt: new Date().toISOString(),
+      coSignerAccountId: 2,
       lines: [],
     })
 
@@ -77,6 +80,7 @@ describe('syncPendingCounts', () => {
       clientRecordId: 'sync-rejected',
       sabbathDate: '2026-09-19',
       recordedAt: new Date().toISOString(),
+      coSignerAccountId: 2,
       lines: [],
     })
 
@@ -106,12 +110,14 @@ describe('syncPendingCounts', () => {
       clientRecordId: 'multi-a',
       sabbathDate: '2026-09-19',
       recordedAt: new Date().toISOString(),
+      coSignerAccountId: 2,
       lines: [],
     })
     await saveLocalCount({
       clientRecordId: 'multi-b',
       sabbathDate: '2026-09-19',
       recordedAt: new Date().toISOString(),
+      coSignerAccountId: 2,
       lines: [],
     })
 
@@ -134,7 +140,12 @@ describe('refreshCategories', () => {
     ]
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue(new Response(JSON.stringify({ categories }), { status: 200 })),
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({ categories, church: { id: 7, districtId: 3 }, account: { id: 9 } }),
+          { status: 200 },
+        ),
+      ),
     )
 
     expect(await getCachedCategories()).toHaveLength(0)
@@ -142,6 +153,11 @@ describe('refreshCategories', () => {
 
     const cached = await getCachedCategories()
     expect(cached.map((c) => c.id).sort()).toEqual([1, 2])
+
+    // Church context (#12) is cached alongside categories in the same
+    // request, since it's needed offline for dual sign-off's
+    // eligibility check.
+    expect(await getChurchContext()).toEqual({ treasurerAccountId: 9, churchId: 7, districtId: 3 })
   })
 
   it('rejects (leaving the existing cache untouched) when the request fails', async () => {

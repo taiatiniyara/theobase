@@ -2,11 +2,25 @@ import { ApiError, apiFetch } from './api'
 import { cacheVerifier, verifyPinLocally } from './localVerifier'
 
 export type PinVerificationResult =
-  | { ok: true; accountId: number; displayName: string; source: 'cache' | 'network' }
+  | {
+      ok: true
+      accountId: number
+      displayName: string
+      role: string
+      churchId: number | null
+      districtId: number | null
+      source: 'cache' | 'network'
+    }
   | { ok: false; reason: 'invalid' | 'locked' | 'unavailable_offline' }
 
 interface VerifyPinResponse {
-  account: { id: number; displayName: string }
+  account: {
+    id: number
+    displayName: string
+    role: string
+    churchId: number | null
+    districtId: number | null
+  }
   localVerifierSeed: string
 }
 
@@ -27,7 +41,15 @@ interface VerifyPinResponse {
 export async function verifyPin(phone: string, pin: string): Promise<PinVerificationResult> {
   const local = await verifyPinLocally(phone, pin)
   if (local.ok) {
-    return { ok: true, accountId: local.accountId, displayName: local.displayName, source: 'cache' }
+    return {
+      ok: true,
+      accountId: local.accountId,
+      displayName: local.displayName,
+      role: local.role,
+      churchId: local.churchId,
+      districtId: local.districtId,
+      source: 'cache',
+    }
   }
   if (local.reason !== 'not_cached') {
     return { ok: false, reason: local.reason }
@@ -45,11 +67,22 @@ export async function verifyPin(phone: string, pin: string): Promise<PinVerifica
     await cacheVerifier({
       accountId: body.account.id,
       displayName: body.account.displayName,
+      role: body.account.role,
+      churchId: body.account.churchId,
+      districtId: body.account.districtId,
       phone,
       seed: body.localVerifierSeed,
       pin,
     })
-    return { ok: true, accountId: body.account.id, displayName: body.account.displayName, source: 'network' }
+    return {
+      ok: true,
+      accountId: body.account.id,
+      displayName: body.account.displayName,
+      role: body.account.role,
+      churchId: body.account.churchId,
+      districtId: body.account.districtId,
+      source: 'network',
+    }
   } catch (err) {
     if (err instanceof ApiError) {
       return { ok: false, reason: err.status === 423 ? 'locked' : 'invalid' }

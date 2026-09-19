@@ -11,11 +11,15 @@ const NOT_SYNCED = ''
 // The count-entry form's payload shape (ticket #11). categoryName is
 // duplicated onto the line (not just fundCategoryId) so a saved-but-
 // unsynced count can still render sensibly offline even if the local
-// category cache changes before it syncs.
+// category cache changes before it syncs. coSignerAccountId (#12) is
+// only ever set once dual sign-off has actually completed — see
+// features/counts/CountEntryForm.tsx — a count is never saved locally
+// without one, matching "not entered until sign-off completes."
 export interface LocalCountPayload {
   clientRecordId: string
   sabbathDate: string
   recordedAt: string
+  coSignerAccountId: number
   lines: { fundCategoryId: number; categoryName: string; amountCents: number }[]
 }
 
@@ -39,10 +43,21 @@ export interface SyncAttemptError {
 // itself; failedAttempts/lockedUntil mirror the server's own lockout
 // (login.ts) since an offline device can't rely on the server to
 // enforce that while it has no connectivity.
+//
+// role/churchId/districtId (#12) are cached alongside the verifier so
+// dual sign-off's co-signer eligibility check (features/counts/
+// coSignEligibility.ts) can run fully offline too — the whole point of
+// "earn it online first, then cache" (#23) is that nothing about using
+// an already-earned verifier needs a network round-trip, and knowing
+// *who* the co-signer is (their role and org scope) is as much a part
+// of that as knowing their PIN was right.
 export interface LocalVerifierRecord {
   phone: string
   accountId: number
   displayName: string
+  role: string
+  churchId: number | null
+  districtId: number | null
   seed: string
   verifier: string
   cachedAt: string
@@ -72,10 +87,26 @@ interface TheobaseDB extends DBSchema {
     key: string // phone
     value: LocalVerifierRecord
   }
+  // A singleton: the logged-in treasurer's own account id, church, and
+  // its district (#12) — cached alongside categories so dual sign-off's
+  // eligibility check (is the co-signer the treasurer themself? does a
+  // co-signing Pastor's cached districtId match *this* church's
+  // district?) works offline too, without a separate round-trip at the
+  // moment sign-off actually happens.
+  context: {
+    key: string
+    value: {
+      key: 'church'
+      treasurerAccountId: number
+      churchId: number
+      districtId: number
+      cachedAt: string
+    }
+  }
 }
 
 const DB_NAME = 'theobase'
-const DB_VERSION = 3
+const DB_VERSION = 4
 
 let dbPromise: Promise<IDBPDatabase<TheobaseDB>> | null = null
 
@@ -95,6 +126,9 @@ export function getDB(): Promise<IDBPDatabase<TheobaseDB>> {
         }
         if (oldVersion < 3) {
           db.createObjectStore('localVerifiers', { keyPath: 'phone' })
+        }
+        if (oldVersion < 4) {
+          db.createObjectStore('context', { keyPath: 'key' })
         }
       },
     })
@@ -223,6 +257,34 @@ export async function getCachedCategories(): Promise<
 > {
   const db = await getDB()
   return db.getAll('categories')
+}
+
+// The treasurer's own account id, church, and district — see the
+// `context` store's comment above for why dual sign-off (#12) needs
+// this cached.
+export async function cacheChurchContext(
+  treasurerAccountId: number,
+  churchId: number,
+  districtId: number,
+): Promise<void> {
+  const db = await getDB()
+  await db.put('context', {
+    key: 'church',
+    treasurerAccountId,
+    churchId,
+    districtId,
+    cachedAt: new Date().toISOString(),
+  })
+}
+
+export async function getChurchContext(): Promise<
+  { treasurerAccountId: number; churchId: number; districtId: number } | null
+> {
+  const db = await getDB()
+  const record = await db.get('context', 'church')
+  return record
+    ? { treasurerAccountId: record.treasurerAccountId, churchId: record.churchId, districtId: record.districtId }
+    : null
 }
 
 // Raw storage for local-verifier records (see LocalVerifierRecord

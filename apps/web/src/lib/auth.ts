@@ -2,7 +2,13 @@ import { apiFetch } from './api'
 import { cacheVerifier } from './localVerifier'
 
 interface LocalLoginResponse {
-  account: { id: number; displayName: string }
+  account: {
+    id: number
+    displayName: string
+    role: string
+    churchId: number | null
+    districtId: number | null
+  }
   localVerifierSeed: string
 }
 
@@ -27,6 +33,9 @@ export async function completeLocalLogin(
   await cacheVerifier({
     accountId: body.account.id,
     displayName: body.account.displayName,
+    role: body.account.role,
+    churchId: body.account.churchId,
+    districtId: body.account.districtId,
     phone,
     seed: body.localVerifierSeed,
     pin,

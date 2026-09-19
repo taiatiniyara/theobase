@@ -209,9 +209,16 @@ export const churchFundCategories = sqliteTable(
 // financial record — essential given "no assumption sync happens
 // within X days" means retries can be arbitrarily delayed and repeated.
 //
-// No dual sign-off / reconciliation status here yet — those are #12
-// and #14, layered on top later. This ticket is deliberately just
-// "the treasurer's numbers, saved reliably," matching its own scope.
+// coSignerAccountId is conceptually required — see #12: a count isn't
+// "entered" until dual sign-off completes, so the application layer
+// (db/counts.ts's createCount) never creates a row without one; it's
+// nullable here only because D1 can't safely add a NOT NULL column (or
+// a CHECK constraint) to a table that count_lines already holds live
+// FK references to — the same platform limitation hit and documented
+// on accounts.localVerifierSeed in #23 (PRAGMA foreign_keys=OFF is
+// silently ineffective inside a D1 migration's transaction, so
+// drizzle-kit's usual rebuild-the-table recipe fails against any
+// database with real data). A plain ADD COLUMN sidesteps it.
 export const counts = sqliteTable('counts', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   clientRecordId: text('client_record_id').notNull().unique(),
@@ -221,6 +228,7 @@ export const counts = sqliteTable('counts', {
   enteredByAccountId: integer('entered_by_account_id')
     .notNull()
     .references(() => accounts.id),
+  coSignerAccountId: integer('co_signer_account_id').references(() => accounts.id),
   sabbathDate: text('sabbath_date').notNull(), // YYYY-MM-DD
   recordedAt: text('recorded_at').notNull(), // client's local entry time, not server insert time
   createdAt: text('created_at')

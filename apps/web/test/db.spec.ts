@@ -29,6 +29,7 @@ describe('local count storage', () => {
       clientRecordId: 'abc-123',
       sabbathDate: '2026-09-19',
       recordedAt: new Date().toISOString(),
+      coSignerAccountId: 2,
       lines: [{ fundCategoryId: 1, categoryName: 'Tithe', amountCents: 5_000 }],
     })
 
@@ -43,6 +44,7 @@ describe('local count storage', () => {
       clientRecordId: 'restart-1',
       sabbathDate: '2026-09-19',
       recordedAt: new Date().toISOString(),
+      coSignerAccountId: 2,
       lines: [],
     })
 
@@ -61,6 +63,7 @@ describe('local count storage', () => {
       clientRecordId: 'sync-me',
       sabbathDate: '2026-09-19',
       recordedAt: new Date().toISOString(),
+      coSignerAccountId: 2,
       lines: [],
     })
 
@@ -75,12 +78,14 @@ describe('local count storage', () => {
       clientRecordId: 'multi-1',
       sabbathDate: '2026-09-19',
       recordedAt: new Date().toISOString(),
+      coSignerAccountId: 2,
       lines: [],
     })
     await saveLocalCount({
       clientRecordId: 'multi-2',
       sabbathDate: '2026-09-26',
       recordedAt: new Date().toISOString(),
+      coSignerAccountId: 2,
       lines: [],
     })
 

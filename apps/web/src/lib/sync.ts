@@ -1,6 +1,7 @@
 import { ApiError, apiFetch } from './api'
 import {
   cacheCategories,
+  cacheChurchContext,
   listPendingCounts,
   markSynced,
   recordSyncAttemptFailure,
@@ -11,6 +12,12 @@ interface Category {
   id: number
   name: string
   isTithe: boolean
+}
+
+interface CategoriesResponse {
+  categories: Category[]
+  church: { id: number; districtId: number }
+  account: { id: number }
 }
 
 // Fetches the latest categories and updates the local cache. Callers
@@ -25,9 +32,15 @@ interface Category {
 // caller to learn the second part happened, is exactly how a screen
 // ends up stuck showing stale (or on a first-ever run, empty) data
 // forever. React's reactivity has to be able to see both steps.
+//
+// Also caches the treasurer's own church/district (see the `context`
+// store in db.ts) — dual sign-off's co-signer eligibility check (#12)
+// needs it and this is the only request that already carries it, so
+// there's no reason for a separate round-trip just to fetch it again.
 export async function refreshCategories(): Promise<void> {
-  const { categories } = await apiFetch<{ categories: Category[] }>('/counts/categories')
+  const { categories, church, account } = await apiFetch<CategoriesResponse>('/counts/categories')
   await cacheCategories(categories)
+  await cacheChurchContext(account.id, church.id, church.districtId)
 }
 
 // Attempts to push every locally-queued count to the server. Never
@@ -71,6 +84,7 @@ async function submitCount(payload: LocalCountPayload): Promise<void> {
       clientRecordId: payload.clientRecordId,
       sabbathDate: payload.sabbathDate,
       recordedAt: payload.recordedAt,
+      coSignerAccountId: payload.coSignerAccountId,
       lines: payload.lines.map((l) => ({
         fundCategoryId: l.fundCategoryId,
         amountCents: l.amountCents,

@@ -28,19 +28,39 @@ afterEach(() => {
 
 const PHONE = '+6795551111'
 
+const TIA = {
+  accountId: 1,
+  displayName: 'Tia',
+  role: 'treasurer',
+  churchId: 5,
+  districtId: 50,
+  phone: PHONE,
+  seed: 'seed',
+  pin: '1234',
+}
+
+const TIA_VERIFIED = {
+  ok: true,
+  accountId: TIA.accountId,
+  displayName: TIA.displayName,
+  role: TIA.role,
+  churchId: TIA.churchId,
+  districtId: TIA.districtId,
+}
+
 describe('verifyPin — cached (no network call at all)', () => {
   it('succeeds from cache without touching fetch', async () => {
-    await cacheVerifier({ accountId: 1, displayName: 'Tia', phone: PHONE, seed: 'seed', pin: '1234' })
+    await cacheVerifier(TIA)
     const fetchSpy = vi.fn()
     vi.stubGlobal('fetch', fetchSpy)
 
     const result = await verifyPin(PHONE, '1234')
-    expect(result).toEqual({ ok: true, accountId: 1, displayName: 'Tia', source: 'cache' })
+    expect(result).toEqual({ ...TIA_VERIFIED, source: 'cache' })
     expect(fetchSpy).not.toHaveBeenCalled()
   })
 
   it('rejects a wrong PIN against a cached phone without touching fetch', async () => {
-    await cacheVerifier({ accountId: 1, displayName: 'Tia', phone: PHONE, seed: 'seed', pin: '1234' })
+    await cacheVerifier(TIA)
     const fetchSpy = vi.fn()
     vi.stubGlobal('fetch', fetchSpy)
 
@@ -50,12 +70,12 @@ describe('verifyPin — cached (no network call at all)', () => {
   })
 
   it('works offline for a previously-cached phone', async () => {
-    await cacheVerifier({ accountId: 1, displayName: 'Tia', phone: PHONE, seed: 'seed', pin: '1234' })
+    await cacheVerifier(TIA)
     setOnline(false)
     vi.stubGlobal('fetch', vi.fn())
 
     const result = await verifyPin(PHONE, '1234')
-    expect(result).toEqual({ ok: true, accountId: 1, displayName: 'Tia', source: 'cache' })
+    expect(result).toEqual({ ...TIA_VERIFIED, source: 'cache' })
   })
 })
 
@@ -77,14 +97,25 @@ describe('verifyPin — not cached, online (earns the cache for next time)', () 
       'fetch',
       vi.fn().mockResolvedValue(
         new Response(
-          JSON.stringify({ account: { id: 7, displayName: 'Sam' }, localVerifierSeed: 'server-seed' }),
+          JSON.stringify({
+            account: { id: 7, displayName: 'Sam', role: 'clerk', churchId: 5, districtId: null },
+            localVerifierSeed: 'server-seed',
+          }),
           { status: 200 },
         ),
       ),
     )
 
     const result = await verifyPin(PHONE, '4321')
-    expect(result).toEqual({ ok: true, accountId: 7, displayName: 'Sam', source: 'network' })
+    expect(result).toEqual({
+      ok: true,
+      accountId: 7,
+      displayName: 'Sam',
+      role: 'clerk',
+      churchId: 5,
+      districtId: null,
+      source: 'network',
+    })
 
     // Now offline, and without needing another network call, the same
     // pair verifies from what was just earned — the actual point of #23.
@@ -92,7 +123,15 @@ describe('verifyPin — not cached, online (earns the cache for next time)', () 
     const fetchSpy = vi.fn()
     vi.stubGlobal('fetch', fetchSpy)
     const second = await verifyPin(PHONE, '4321')
-    expect(second).toEqual({ ok: true, accountId: 7, displayName: 'Sam', source: 'cache' })
+    expect(second).toEqual({
+      ok: true,
+      accountId: 7,
+      displayName: 'Sam',
+      role: 'clerk',
+      churchId: 5,
+      districtId: null,
+      source: 'cache',
+    })
     expect(fetchSpy).not.toHaveBeenCalled()
   })
 

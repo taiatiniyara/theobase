@@ -42,6 +42,9 @@ function timingSafeEqual(a: string, b: string): boolean {
 export async function cacheVerifier(input: {
   accountId: number
   displayName: string
+  role: string
+  churchId: number | null
+  districtId: number | null
   phone: string
   seed: string
   pin: string
@@ -51,6 +54,9 @@ export async function cacheVerifier(input: {
     phone: input.phone,
     accountId: input.accountId,
     displayName: input.displayName,
+    role: input.role,
+    churchId: input.churchId,
+    districtId: input.districtId,
     seed: input.seed,
     verifier,
     cachedAt: new Date().toISOString(),
@@ -59,8 +65,16 @@ export async function cacheVerifier(input: {
   })
 }
 
+export interface VerifiedAccount {
+  accountId: number
+  displayName: string
+  role: string
+  churchId: number | null
+  districtId: number | null
+}
+
 export type LocalVerifyResult =
-  | { ok: true; accountId: number; displayName: string }
+  | ({ ok: true } & VerifiedAccount)
   | { ok: false; reason: 'not_cached' | 'invalid' | 'locked' }
 
 // Verifies a PIN entirely on-device, no network involved — this is
@@ -82,7 +96,14 @@ export async function verifyPinLocally(phone: string, pin: string): Promise<Loca
     if (record.failedAttempts > 0 || record.lockedUntil) {
       await putLocalVerifier({ ...record, failedAttempts: 0, lockedUntil: null })
     }
-    return { ok: true, accountId: record.accountId, displayName: record.displayName }
+    return {
+      ok: true,
+      accountId: record.accountId,
+      displayName: record.displayName,
+      role: record.role,
+      churchId: record.churchId,
+      districtId: record.districtId,
+    }
   }
 
   const failedAttempts = record.failedAttempts + 1

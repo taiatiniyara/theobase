@@ -1,4 +1,6 @@
 import { eq } from 'drizzle-orm'
+import { findAccountById } from '../auth/accounts'
+import { canAccessChurch } from '../auth/scope'
 import type { AuditContext } from './audit'
 import { recordAudit } from './audit'
 import type { Database } from './client'
@@ -8,9 +10,56 @@ export interface CreateCountInput {
   clientRecordId: string
   churchId: number
   enteredByAccountId: number
+  coSignerAccountId: number
   sabbathDate: string
   recordedAt: string
   lines: { fundCategoryId: number; amountCents: number }[]
+}
+
+// Thrown for a co-signer that fails eligibility — the route layer maps
+// this to a 400 with the message as-is, distinct from validation
+// errors (missing/malformed fields) that never reach this function.
+export class IneligibleCoSignerError extends Error {}
+
+// See CONTEXT.md > UI/UX > Co-signer eligibility: any account at the
+// church other than the treasurer who entered the count, or a
+// district-scoped Pastor covering that church. Reuses canAccessChurch
+// (#9) rather than duplicating its church/district matching — the
+// shapes happen to coincide exactly once accountType local-only is
+// enforced, since mission_admin/mission_staff/platform_operator can
+// never reach here anyway (see the comment below on why that's worth
+// checking explicitly rather than assumed).
+async function assertEligibleCoSigner(
+  db: Database,
+  coSignerAccountId: number,
+  enteredByAccountId: number,
+  churchId: number,
+): Promise<void> {
+  if (coSignerAccountId === enteredByAccountId) {
+    throw new IneligibleCoSignerError('The co-signer cannot be the same person who entered the count')
+  }
+
+  const coSigner = await findAccountById(db, coSignerAccountId)
+  if (!coSigner) {
+    throw new IneligibleCoSignerError('No such co-signer account')
+  }
+  // The client already verified this account's PIN before ever
+  // reaching this call (locally cached, or via /auth/local/verify-pin
+  // — see #23); this endpoint takes the resulting accountId on trust
+  // for *whether the PIN was right*, the same way the rest of a
+  // treasurer's authenticated session is trusted. What it does
+  // re-check server-side is *eligibility* — accountType here is
+  // defense in depth against a malformed/malicious request supplying
+  // an arbitrary id: verify-pin could never itself have returned an
+  // institutional account (they have no phone/PIN to check), but
+  // nothing stops a client from sending one directly to this endpoint.
+  if (coSigner.accountType !== 'local') {
+    throw new IneligibleCoSignerError('The co-signer must be a local-church account')
+  }
+  const eligible = await canAccessChurch(db, coSigner, churchId)
+  if (!eligible) {
+    throw new IneligibleCoSignerError('This account is not eligible to co-sign at this church')
+  }
 }
 
 // Idempotent by clientRecordId — a retried sync (client never saw the
@@ -30,12 +79,15 @@ export async function createCount(db: Database, input: CreateCountInput, ctx: Au
   })
   if (existing) return existing
 
+  await assertEligibleCoSigner(db, input.coSignerAccountId, input.enteredByAccountId, input.churchId)
+
   const [count] = await db
     .insert(counts)
     .values({
       clientRecordId: input.clientRecordId,
       churchId: input.churchId,
       enteredByAccountId: input.enteredByAccountId,
+      coSignerAccountId: input.coSignerAccountId,
       sabbathDate: input.sabbathDate,
       recordedAt: input.recordedAt,
     })
@@ -53,7 +105,11 @@ export async function createCount(db: Database, input: CreateCountInput, ctx: Au
 
   await recordAudit(db, 'count', count.id, 'create', {
     ...ctx,
-    metadata: { sabbathDate: input.sabbathDate, lineCount: input.lines.length },
+    metadata: {
+      sabbathDate: input.sabbathDate,
+      lineCount: input.lines.length,
+      coSignerAccountId: input.coSignerAccountId,
+    },
   })
 
   return count

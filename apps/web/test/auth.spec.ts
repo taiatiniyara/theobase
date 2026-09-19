@@ -30,7 +30,10 @@ describe('completeLocalLogin', () => {
       'fetch',
       vi.fn().mockResolvedValue(
         new Response(
-          JSON.stringify({ account: { id: 3, displayName: 'Tia' }, localVerifierSeed: 'server-seed' }),
+          JSON.stringify({
+            account: { id: 3, displayName: 'Tia', role: 'treasurer', churchId: 5, districtId: null },
+            localVerifierSeed: 'server-seed',
+          }),
           { status: 200 },
         ),
       ),
@@ -40,7 +43,14 @@ describe('completeLocalLogin', () => {
     expect(result).toEqual({ accountId: 3, displayName: 'Tia' })
 
     const local = await verifyPinLocally(PHONE, '1234')
-    expect(local).toEqual({ ok: true, accountId: 3, displayName: 'Tia' })
+    expect(local).toEqual({
+      ok: true,
+      accountId: 3,
+      displayName: 'Tia',
+      role: 'treasurer',
+      churchId: 5,
+      districtId: null,
+    })
   })
 
   it('throws (and caches nothing) on a rejected login', async () => {

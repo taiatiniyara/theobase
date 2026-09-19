@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { createCount } from '../db/counts'
+import { createCount, IneligibleCoSignerError } from '../db/counts'
 import { getDb } from '../db/client'
 import { listActiveFundCategoriesForChurch } from '../db/fundCategories'
 import { type AppEnv, requireAuth, requireRole } from '../auth/middleware'
@@ -24,12 +24,24 @@ interface CreateCountBody {
   clientRecordId?: unknown
   sabbathDate?: unknown
   recordedAt?: unknown
+  coSignerAccountId?: unknown
   lines?: unknown
 }
 
 function validateCreateCountBody(
   body: CreateCountBody,
-): { ok: true; value: { clientRecordId: string; sabbathDate: string; recordedAt: string; lines: { fundCategoryId: number; amountCents: number }[] } } | { ok: false; error: string } {
+):
+  | {
+      ok: true
+      value: {
+        clientRecordId: string
+        sabbathDate: string
+        recordedAt: string
+        coSignerAccountId: number
+        lines: { fundCategoryId: number; amountCents: number }[]
+      }
+    }
+  | { ok: false; error: string } {
   if (typeof body.clientRecordId !== 'string' || body.clientRecordId.length === 0) {
     return { ok: false, error: 'clientRecordId is required' }
   }
@@ -41,6 +53,19 @@ function validateCreateCountBody(
   }
   if (typeof body.recordedAt !== 'string' || Number.isNaN(Date.parse(body.recordedAt))) {
     return { ok: false, error: 'recordedAt must be a valid ISO timestamp' }
+  }
+  // Presence only — see CONTEXT.md > UI/UX > Dual sign-off: a count
+  // isn't "entered" until sign-off completes, so the client is only
+  // ever meant to call this once it already has a verified co-signer.
+  // Actual eligibility (right church/district, not the same person who
+  // entered it) is checked in db/counts.ts's createCount, which is
+  // where the real domain knowledge (org hierarchy) lives.
+  if (
+    typeof body.coSignerAccountId !== 'number' ||
+    !Number.isInteger(body.coSignerAccountId) ||
+    body.coSignerAccountId <= 0
+  ) {
+    return { ok: false, error: 'coSignerAccountId is required' }
   }
   if (!Array.isArray(body.lines)) {
     return { ok: false, error: 'lines must be an array' }
@@ -63,6 +88,7 @@ function validateCreateCountBody(
       clientRecordId: body.clientRecordId,
       sabbathDate: body.sabbathDate,
       recordedAt: body.recordedAt,
+      coSignerAccountId: body.coSignerAccountId,
       lines,
     },
   }
@@ -76,14 +102,32 @@ export const countsRoutes = new Hono<AppEnv>()
 // separate thing to get right; using the session's own churchId
 // closes off "can I submit into someone else's church" by construction
 // instead.
+//
+// Also returns the church's districtId — not used for anything on
+// this endpoint itself, but the count-entry form (#11) caches it
+// alongside the categories so dual sign-off (#12) can check *offline*
+// whether a co-signing Pastor's district matches this church, without
+// a separate round-trip at the moment sign-off actually happens.
+//
+// account.id is included too so the client can reject "the treasurer
+// naming themselves as co-signer" at PIN-entry time, before spending a
+// PIN attempt on it — createCount still re-checks this server-side
+// (the client copy is only a fail-closed convenience, never the
+// authority).
 countsRoutes.get('/categories', requireAuth, requireRole('treasurer'), async (c) => {
   const db = getDb(c.env.DB)
   const account = c.get('account')
   // churchId is typed nullable (it's shared across all roles), but
   // requireRole('treasurer') plus the accounts_scope_matches_role CHECK
   // constraint together guarantee a treasurer account always has one.
-  const categories = await listActiveFundCategoriesForChurch(db, account.churchId as number)
-  return c.json({ categories })
+  const churchId = account.churchId as number
+  const categories = await listActiveFundCategoriesForChurch(db, churchId)
+  const church = await db.query.churches.findFirst({ where: (ch, { eq }) => eq(ch.id, churchId) })
+  return c.json({
+    categories,
+    church: { id: churchId, districtId: church?.districtId },
+    account: { id: account.id },
+  })
 })
 
 countsRoutes.post('/', requireAuth, requireRole('treasurer'), async (c) => {
@@ -95,18 +139,27 @@ countsRoutes.post('/', requireAuth, requireRole('treasurer'), async (c) => {
 
   const db = getDb(c.env.DB)
   const account = c.get('account')
-  const count = await createCount(
-    db,
-    {
-      clientRecordId: validated.value.clientRecordId,
-      churchId: account.churchId as number,
-      enteredByAccountId: account.id,
-      sabbathDate: validated.value.sabbathDate,
-      recordedAt: validated.value.recordedAt,
-      lines: validated.value.lines,
-    },
-    { actorId: account.id },
-  )
+  let count
+  try {
+    count = await createCount(
+      db,
+      {
+        clientRecordId: validated.value.clientRecordId,
+        churchId: account.churchId as number,
+        enteredByAccountId: account.id,
+        coSignerAccountId: validated.value.coSignerAccountId,
+        sabbathDate: validated.value.sabbathDate,
+        recordedAt: validated.value.recordedAt,
+        lines: validated.value.lines,
+      },
+      { actorId: account.id },
+    )
+  } catch (err) {
+    if (err instanceof IneligibleCoSignerError) {
+      return c.json({ error: err.message }, 400)
+    }
+    throw err
+  }
 
   return c.json({ count })
 })
