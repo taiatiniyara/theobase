@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { type ChurchRecord, fetchChurchRecords } from '../../lib/churches'
+import { RecordStatusBadge } from './RecordStatusBadge'
 
 function formatCents(cents: number): string {
   return (cents / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -7,27 +8,6 @@ function formatCents(cents: number): string {
 
 function errorMessage(err: unknown): string {
   return err instanceof Error ? err.message : 'Something went wrong'
-}
-
-// Compact badges/chips, not the full 4-stage stepper — see CONTEXT.md >
-// UI/UX > Reconciliation status display: the stepper only belongs on a
-// single record's detail view (#15), a list needs to stay dense and
-// scannable instead.
-function StatusBadge({ record }: { record: ChurchRecord }) {
-  if (record.status === 'submitted') {
-    return <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-xs font-medium text-neutral-600">Submitted</span>
-  }
-  if (record.status === 'in_transit') {
-    return <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">In Transit</span>
-  }
-  // status === 'received'
-  if (!record.hasDiscrepancy) {
-    return <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">Received</span>
-  }
-  if (record.discrepancyResolvedAt) {
-    return <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">Resolved</span>
-  }
-  return <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">Discrepancy</span>
 }
 
 // The shared oversight-view component CONTEXT.md calls for — reused
@@ -66,7 +46,7 @@ export function ChurchRecordsView() {
               <span className="font-medium">{record.sabbathDate}</span>
               <span className="text-sm text-neutral-500 tabular-nums">${formatCents(record.totalAmountCents)}</span>
             </span>
-            <StatusBadge record={record} />
+            <RecordStatusBadge record={record} />
           </a>
         </li>
       ))}

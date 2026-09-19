@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ClerkHome } from './features/clerk/ClerkHome'
 import { MissionExceptionsTab } from './features/missions/MissionExceptionsTab'
+import { PastorHome } from './features/pastor/PastorHome'
 import { PastorRemovalApprovals } from './features/pastor/PastorRemovalApprovals'
 import { ReconciliationDetail } from './features/reconciliations/ReconciliationDetail'
 import { TreasurerHome } from './features/treasurer/TreasurerHome'
@@ -11,18 +12,20 @@ type Screen =
   | { name: 'reconciliation'; countId: number }
   | { name: 'exceptions' }
   | { name: 'clerk' }
+  | { name: 'pastor' }
   | { name: 'pastor-approvals' }
 
 // Provisional, query-param-based navigation: ?count=<id> opens that
 // count's reconciliation detail screen (#15), ?exceptions=1 opens the
 // Mission exceptions tab (#16), ?clerk=1 opens the Clerk landing
-// screen (#18), ?pastor-approvals=1 opens the Pastor's removal-request
-// approvals (#18's async sign-off flow), otherwise the app shows the
-// Treasurer home screen (#17). There's no real role-based navigation
-// shell yet — that's #19 (Pastor district roster), #20 (Mission
-// roster), and #24 (login screen), none built yet — so this is only
-// enough to make each screen reachable at all until one of those
-// replaces it.
+// screen (#18), ?pastor=1 opens the Pastor's district roster home
+// screen (#19), ?pastor-approvals=1 opens the Pastor's removal-request
+// approvals (#18's async sign-off flow, linked from the pastor home
+// screen's attention card), otherwise the app shows the Treasurer home
+// screen (#17). There's no real role-based navigation shell yet — that's
+// #20 (Mission roster) and #24 (login screen), neither built yet — so
+// this is only enough to make each screen reachable at all until one
+// of those replaces it.
 function screenFromLocation(): Screen {
   const params = new URLSearchParams(window.location.search)
   if (params.has('exceptions')) {
@@ -33,6 +36,9 @@ function screenFromLocation(): Screen {
   }
   if (params.has('pastor-approvals')) {
     return { name: 'pastor-approvals' }
+  }
+  if (params.has('pastor')) {
+    return { name: 'pastor' }
   }
   const raw = params.get('count')
   const parsed = raw ? Number(raw) : null
@@ -74,6 +80,7 @@ function App() {
       {screen.name === 'reconciliation' && <ReconciliationDetail countId={screen.countId} />}
       {screen.name === 'exceptions' && <MissionExceptionsTab />}
       {screen.name === 'clerk' && <ClerkHome />}
+      {screen.name === 'pastor' && <PastorHome />}
       {screen.name === 'pastor-approvals' && <PastorRemovalApprovals />}
     </main>
   )

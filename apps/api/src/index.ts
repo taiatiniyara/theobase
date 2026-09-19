@@ -4,6 +4,7 @@ import { accountsRoutes } from './accounts/routes'
 import { auth } from './auth/routes'
 import { churchesRoutes } from './churches/routes'
 import { countsRoutes } from './counts/routes'
+import { districtsRoutes } from './districts/routes'
 import { missionsRoutes } from './missions/routes'
 import { reconciliationsRoutes } from './reconciliations/routes'
 
@@ -34,5 +35,6 @@ app.route('/reconciliations', reconciliationsRoutes)
 app.route('/missions', missionsRoutes)
 app.route('/churches', churchesRoutes)
 app.route('/accounts', accountsRoutes)
+app.route('/districts', districtsRoutes)
 
 export default app

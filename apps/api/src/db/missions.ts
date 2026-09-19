@@ -3,7 +3,7 @@ import type { AuditContext } from './audit'
 import { recordAudit } from './audit'
 import type { Database } from './client'
 import { listChurchesForMission } from './queries'
-import { churches, counts, districts, missions, reconciliations } from './schema'
+import { counts, missions, reconciliations } from './schema'
 
 // One expected count per Sabbath — a known, certain cadence, unlike
 // stuck-reconciliation staleness below — so this is a plain constant
@@ -73,22 +73,26 @@ export interface MissionExceptions {
   }[]
 }
 
-// The Mission exceptions tab (#16): two independently-computed overdue
-// signals (see CONTEXT.md > UI/UX > Exceptions tab overdue thresholds
-// for why they're not unified into one "overdue" concept — their
-// cadence certainty is genuinely different) plus unresolved
-// discrepancies, so Mission staff have one place to see everything
-// that currently needs attention rather than sorting the full roster.
-export async function getMissionExceptions(
+// The shared core behind both the Mission exceptions tab (#16, every
+// church in a Mission) and the Pastor's district roster (#19, every
+// church in one district) — everything below only needs "which
+// churches am I scoped to," never a Mission or District id directly,
+// so the same per-church Sabbath-cadence and staleness math serves
+// both without duplicating it. See CONTEXT.md > UI/UX > Exceptions tab
+// overdue thresholds for why missing-count and stuck-reconciliation
+// are two independent signals rather than one unified "overdue"
+// concept — their cadence certainty is genuinely different.
+export async function computeExceptionsForChurches(
   db: Database,
-  missionId: number,
-  now = new Date(),
+  churchList: { id: number; name: string; createdAt: string }[],
+  thresholdDays: number,
+  now: Date,
 ): Promise<MissionExceptions> {
-  const mission = await db.query.missions.findFirst({ where: eq(missions.id, missionId) })
-  const threshold = mission?.stuckReconciliationThresholdDays ?? 45
-
-  const churchList = await listChurchesForMission(db, missionId)
   const churchNameById = new Map(churchList.map((c) => [c.id, c.name]))
+  const churchIds = churchList.map((c) => c.id)
+  if (churchIds.length === 0) {
+    return { missingCount: [], stuckReconciliation: [], discrepancies: [] }
+  }
 
   // --- Missing weekly count: both of the last 2 expected Sabbaths absent ---
   const sabbaths = recentSaturdaysUTC(now, MISSED_SABBATHS_TO_FLAG)
@@ -110,7 +114,7 @@ export async function getMissionExceptions(
     }
   }
 
-  // --- Stuck reconciliation: still Submitted/In Transit past the Mission's threshold ---
+  // --- Stuck reconciliation: still Submitted/In Transit past the threshold ---
   const stuckRows = await db
     .select({
       reconciliationId: reconciliations.id,
@@ -121,11 +125,9 @@ export async function getMissionExceptions(
     })
     .from(reconciliations)
     .innerJoin(counts, eq(counts.id, reconciliations.countId))
-    .innerJoin(churches, eq(churches.id, counts.churchId))
-    .innerJoin(districts, eq(districts.id, churches.districtId))
     .where(
       and(
-        eq(districts.missionId, missionId),
+        inArray(counts.churchId, churchIds),
         or(eq(reconciliations.status, 'submitted'), eq(reconciliations.status, 'in_transit')),
       ),
     )
@@ -133,7 +135,7 @@ export async function getMissionExceptions(
   const stuckReconciliation: MissionExceptions['stuckReconciliation'] = []
   for (const row of stuckRows) {
     const ageDays = (now.getTime() - new Date(row.createdAt).getTime()) / (1000 * 60 * 60 * 24)
-    if (ageDays >= threshold) {
+    if (ageDays >= thresholdDays) {
       stuckReconciliation.push({
         reconciliationId: row.reconciliationId,
         countId: row.countId,
@@ -155,11 +157,9 @@ export async function getMissionExceptions(
     })
     .from(reconciliations)
     .innerJoin(counts, eq(counts.id, reconciliations.countId))
-    .innerJoin(churches, eq(churches.id, counts.churchId))
-    .innerJoin(districts, eq(districts.id, churches.districtId))
     .where(
       and(
-        eq(districts.missionId, missionId),
+        inArray(counts.churchId, churchIds),
         eq(reconciliations.hasDiscrepancy, true),
         isNull(reconciliations.discrepancyResolvedAt),
       ),
@@ -174,4 +174,15 @@ export async function getMissionExceptions(
   }))
 
   return { missingCount, stuckReconciliation, discrepancies }
+}
+
+export async function getMissionExceptions(
+  db: Database,
+  missionId: number,
+  now = new Date(),
+): Promise<MissionExceptions> {
+  const mission = await db.query.missions.findFirst({ where: eq(missions.id, missionId) })
+  const threshold = mission?.stuckReconciliationThresholdDays ?? 45
+  const churchList = await listChurchesForMission(db, missionId)
+  return computeExceptionsForChurches(db, churchList, threshold, now)
 }
