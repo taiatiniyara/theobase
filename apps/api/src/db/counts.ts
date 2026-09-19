@@ -4,7 +4,7 @@ import { canAccessChurch } from '../auth/scope'
 import type { AuditContext } from './audit'
 import { recordAudit } from './audit'
 import type { Database } from './client'
-import { countLines, counts } from './schema'
+import { countLines, counts, reconciliations } from './schema'
 
 export interface CreateCountInput {
   clientRecordId: string
@@ -111,6 +111,14 @@ export async function createCount(db: Database, input: CreateCountInput, ctx: Au
       coSignerAccountId: input.coSignerAccountId,
     },
   })
+
+  // #14: a count isn't just "entered" once dual-signed-off — it starts
+  // a reconciliation lifecycle (Submitted -> In Transit -> Received)
+  // that the Mission and the originating church both track. Created
+  // here, not lazily on first status-changing action, so "does this
+  // count have a reconciliation record yet" is never a question a
+  // caller has to handle.
+  await db.insert(reconciliations).values({ countId: count.id })
 
   return count
 }

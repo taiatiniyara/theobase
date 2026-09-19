@@ -261,6 +261,137 @@ export const countLines = sqliteTable(
   ],
 )
 
+// The reconciliation lifecycle for a single count — see CONTEXT.md >
+// Real-world workflow (Reconciliation) and UI/UX > Reconciliation
+// detail screen. One row per count (countId is unique), created
+// alongside it in 'submitted' status by db/counts.ts's createCount —
+// a count is never dual-signed-off without immediately having
+// something to track its physical journey to the Mission.
+//
+// This is a brand-new table (not an ALTER on a populated one), so
+// unlike counts.coSignerAccountId or accounts.localVerifierSeed, the
+// D1 foreign_keys=OFF-inside-a-transaction limitation documented there
+// doesn't apply here — there's nothing to safely enforce with CHECK
+// constraints from day one, so this does.
+export const RECONCILIATION_STATUSES = ['submitted', 'in_transit', 'received'] as const
+export type ReconciliationStatus = (typeof RECONCILIATION_STATUSES)[number]
+
+export const reconciliations = sqliteTable(
+  'reconciliations',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    countId: integer('count_id')
+      .notNull()
+      .unique()
+      .references(() => counts.id),
+    status: text('status', { enum: RECONCILIATION_STATUSES }).notNull().default('submitted'),
+
+    // Submitted -> In Transit: set together when the local church taps
+    // "mark as sent". courierName is optional free text, not
+    // structured logistics — see CONTEXT.md.
+    courierName: text('courier_name'),
+    sentAt: text('sent_at'),
+    sentByAccountId: integer('sent_by_account_id').references(() => accounts.id),
+
+    // In Transit -> Received: set together when Mission staff record
+    // the itemized amount actually received (see reconciliationLines).
+    receivedAt: text('received_at'),
+    receivedByAccountId: integer('received_by_account_id').references(() => accounts.id),
+
+    // Set automatically at receive time by comparing reconciliationLines
+    // to the original count_lines, per category — never a manual
+    // judgment call. See CONTEXT.md's "per-category granularity catches
+    // gaps a total-only comparison would hide" acceptance criterion.
+    hasDiscrepancy: integer('has_discrepancy', { mode: 'boolean' }).notNull().default(false),
+
+    // Discrepancy resolution is dual-control, not a single action — see
+    // CONTEXT.md > UI/UX > Mission-level staff/CFO role > Dual control:
+    // routine "received, matches" needs only one Mission staffer, but
+    // *resolving* a flagged discrepancy needs a second, different
+    // Mission staffer to confirm before it clears the exceptions tab.
+    // Modeled as propose (reason + proposer) then confirm (a distinct
+    // confirmer) — the CHECK below is what actually guarantees
+    // "a different person", not just the app-level check in
+    // db/reconciliations.ts.
+    discrepancyProposedByAccountId: integer('discrepancy_proposed_by_account_id').references(
+      () => accounts.id,
+    ),
+    discrepancyProposedReason: text('discrepancy_proposed_reason'),
+    discrepancyProposedAt: text('discrepancy_proposed_at'),
+    discrepancyConfirmedByAccountId: integer('discrepancy_confirmed_by_account_id').references(
+      () => accounts.id,
+    ),
+    discrepancyResolvedAt: text('discrepancy_resolved_at'),
+
+    createdAt: text('created_at')
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    check(
+      'reconciliations_status_progression',
+      sql`
+        (${table.status} = 'submitted'
+          AND ${table.sentAt} IS NULL AND ${table.sentByAccountId} IS NULL
+          AND ${table.receivedAt} IS NULL AND ${table.receivedByAccountId} IS NULL)
+        OR
+        (${table.status} = 'in_transit'
+          AND ${table.sentAt} IS NOT NULL AND ${table.sentByAccountId} IS NOT NULL
+          AND ${table.receivedAt} IS NULL AND ${table.receivedByAccountId} IS NULL)
+        OR
+        (${table.status} = 'received'
+          AND ${table.sentAt} IS NOT NULL AND ${table.sentByAccountId} IS NOT NULL
+          AND ${table.receivedAt} IS NOT NULL AND ${table.receivedByAccountId} IS NOT NULL)
+      `,
+    ),
+    check(
+      'reconciliations_discrepancy_requires_received',
+      sql`${table.hasDiscrepancy} = 0 OR ${table.status} = 'received'`,
+    ),
+    check(
+      'reconciliations_resolution_requires_discrepancy',
+      sql`${table.discrepancyProposedByAccountId} IS NULL OR ${table.hasDiscrepancy} = 1`,
+    ),
+    check(
+      'reconciliations_resolution_confirmed_requires_proposed',
+      sql`${table.discrepancyConfirmedByAccountId} IS NULL OR ${table.discrepancyProposedByAccountId} IS NOT NULL`,
+    ),
+    check(
+      'reconciliations_resolution_confirmer_differs_from_proposer',
+      sql`${table.discrepancyConfirmedByAccountId} IS NULL
+        OR ${table.discrepancyConfirmedByAccountId} != ${table.discrepancyProposedByAccountId}`,
+    ),
+    check(
+      'reconciliations_resolved_at_requires_confirmed',
+      sql`${table.discrepancyResolvedAt} IS NULL OR ${table.discrepancyConfirmedByAccountId} IS NOT NULL`,
+    ),
+  ],
+)
+
+// One row per fund category in the amount Mission staff actually
+// received — itemized the same way count_lines is, so the discrepancy
+// comparison is per-category (see reconciliations.hasDiscrepancy).
+export const reconciliationLines = sqliteTable(
+  'reconciliation_lines',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    reconciliationId: integer('reconciliation_id')
+      .notNull()
+      .references(() => reconciliations.id),
+    fundCategoryId: integer('fund_category_id')
+      .notNull()
+      .references(() => fundCategories.id),
+    receivedAmountCents: integer('received_amount_cents').notNull(),
+  },
+  (table) => [
+    uniqueIndex('reconciliation_lines_reconciliation_category_unique').on(
+      table.reconciliationId,
+      table.fundCategoryId,
+    ),
+    check('reconciliation_lines_amount_non_negative', sql`${table.receivedAmountCents} >= 0`),
+  ],
+)
+
 // Session id is a random opaque token, held in a signed httpOnly
 // cookie (signing prevents tampering with which session id is sent;
 // server-side storage here — rather than a fully stateless signed
