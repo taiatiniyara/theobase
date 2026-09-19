@@ -1,36 +1,45 @@
 import { useEffect, useState } from 'react'
 import { CountEntryForm } from './features/counts/CountEntryForm'
+import { MissionExceptionsTab } from './features/missions/MissionExceptionsTab'
 import { ReconciliationDetail } from './features/reconciliations/ReconciliationDetail'
 import { SyncStatusIndicator } from './features/sync/SyncStatusIndicator'
 import { syncPendingCounts } from './lib/sync'
 
+type Screen = { name: 'count-entry' } | { name: 'reconciliation'; countId: number } | { name: 'exceptions' }
+
 // Provisional, query-param-based navigation: ?count=<id> opens that
-// count's reconciliation detail screen (#15), otherwise the app shows
-// the count-entry screen as before. There's no real navigation shell
-// yet — the role-based home screens that would link into this (#17
+// count's reconciliation detail screen (#15), ?exceptions=1 opens the
+// Mission exceptions tab (#16), otherwise the app shows the
+// count-entry screen as before. There's no real navigation shell yet —
+// the role-based home screens that would link into these (#17
 // Treasurer, #18 Clerk, #19 Pastor, #20 Mission) are separate,
-// not-yet-built tickets — so this is only enough to make the detail
-// screen reachable at all until one of those replaces it.
-function useReconciliationCountId(): number | null {
-  const [countId, setCountId] = useState<number | null>(() => {
-    const raw = new URLSearchParams(window.location.search).get('count')
-    const parsed = raw ? Number(raw) : null
-    return parsed && Number.isInteger(parsed) && parsed > 0 ? parsed : null
-  })
+// not-yet-built tickets — so this is only enough to make each screen
+// reachable at all until one of those replaces it.
+function screenFromLocation(): Screen {
+  const params = new URLSearchParams(window.location.search)
+  if (params.has('exceptions')) {
+    return { name: 'exceptions' }
+  }
+  const raw = params.get('count')
+  const parsed = raw ? Number(raw) : null
+  if (parsed && Number.isInteger(parsed) && parsed > 0) {
+    return { name: 'reconciliation', countId: parsed }
+  }
+  return { name: 'count-entry' }
+}
+
+function useScreen(): Screen {
+  const [screen, setScreen] = useState<Screen>(screenFromLocation)
   useEffect(() => {
-    const onPopState = () => {
-      const raw = new URLSearchParams(window.location.search).get('count')
-      const parsed = raw ? Number(raw) : null
-      setCountId(parsed && Number.isInteger(parsed) && parsed > 0 ? parsed : null)
-    }
+    const onPopState = () => setScreen(screenFromLocation())
     window.addEventListener('popstate', onPopState)
     return () => window.removeEventListener('popstate', onPopState)
   }, [])
-  return countId
+  return screen
 }
 
 function App() {
-  const reconciliationCountId = useReconciliationCountId()
+  const screen = useScreen()
 
   useEffect(() => {
     // "Syncs opportunistically": not just right after a fresh submit
@@ -47,14 +56,14 @@ function App() {
       <h1 className="text-brand dark:text-brand-light px-4 pt-6 text-2xl font-semibold">
         Theobase
       </h1>
-      {reconciliationCountId === null ? (
+      {screen.name === 'count-entry' && (
         <>
           <SyncStatusIndicator />
           <CountEntryForm />
         </>
-      ) : (
-        <ReconciliationDetail countId={reconciliationCountId} />
       )}
+      {screen.name === 'reconciliation' && <ReconciliationDetail countId={screen.countId} />}
+      {screen.name === 'exceptions' && <MissionExceptionsTab />}
     </main>
   )
 }

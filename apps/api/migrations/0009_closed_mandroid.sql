@@ -1,0 +1,1 @@
+ALTER TABLE `missions` ADD `stuck_reconciliation_threshold_days` integer DEFAULT 45 NOT NULL;

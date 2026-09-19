@@ -9,6 +9,16 @@ import { ROLES } from '../auth/roles'
 export const missions = sqliteTable('missions', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   name: text('name').notNull(),
+  // The Mission exceptions tab's "stuck reconciliation" flag (#16) —
+  // unlike the missing-weekly-count flag (a hardcoded 2 Sabbaths, since
+  // that cadence is certain), how long a count can sit in Submitted or
+  // In Transit before it's worth flagging genuinely varies by Mission
+  // (real trip cadence for remote churches is still an open item per
+  // CONTEXT.md), so this is a per-Mission setting rather than a
+  // constant. Ships with a conservative default (45 days) per
+  // CONTEXT.md's settled decision, editable by that Mission's Admin
+  // (see missions/routes.ts) once the full settings screen exists (#20).
+  stuckReconciliationThresholdDays: integer('stuck_reconciliation_threshold_days').notNull().default(45),
   createdAt: text('created_at')
     .notNull()
     .default(sql`(current_timestamp)`),

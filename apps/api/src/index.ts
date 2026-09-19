@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { auth } from './auth/routes'
 import { countsRoutes } from './counts/routes'
+import { missionsRoutes } from './missions/routes'
 import { reconciliationsRoutes } from './reconciliations/routes'
 
 const app = new Hono<{ Bindings: CloudflareBindings }>()
@@ -28,5 +29,6 @@ app.get('/health/db', async (c) => {
 app.route('/auth', auth)
 app.route('/counts', countsRoutes)
 app.route('/reconciliations', reconciliationsRoutes)
+app.route('/missions', missionsRoutes)
 
 export default app
