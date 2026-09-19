@@ -392,6 +392,27 @@ export const reconciliationLines = sqliteTable(
   ],
 )
 
+// The local church's response to a flagged discrepancy — see #15 and
+// CONTEXT.md > UI/UX > Reconciliation detail screen > Church response
+// ("we recounted, our figure was correct"). Deliberately one-directional
+// (the church posts, Mission reads) rather than a general-purpose
+// thread: that's the one piece of this ticket CONTEXT.md actually
+// describes, and a back-and-forth conversation feature is easy to add
+// later without a destructive migration if it's ever asked for.
+export const reconciliationComments = sqliteTable('reconciliation_comments', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  reconciliationId: integer('reconciliation_id')
+    .notNull()
+    .references(() => reconciliations.id),
+  authorAccountId: integer('author_account_id')
+    .notNull()
+    .references(() => accounts.id),
+  body: text('body').notNull(),
+  createdAt: text('created_at')
+    .notNull()
+    .default(sql`(current_timestamp)`),
+})
+
 // Session id is a random opaque token, held in a signed httpOnly
 // cookie (signing prevents tampering with which session id is sent;
 // server-side storage here — rather than a fully stateless signed

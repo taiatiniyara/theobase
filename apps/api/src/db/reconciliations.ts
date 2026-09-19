@@ -4,7 +4,15 @@ import { canAccessChurch } from '../auth/scope'
 import type { AuditContext } from './audit'
 import { recordAudit } from './audit'
 import type { Database } from './client'
-import { countLines, counts, reconciliationLines, reconciliations } from './schema'
+import {
+  accounts,
+  countLines,
+  counts,
+  fundCategories,
+  reconciliationComments,
+  reconciliationLines,
+  reconciliations,
+} from './schema'
 
 export class ReconciliationNotFoundError extends Error {}
 // Org-scope failure — the account has no standing to act on this
@@ -61,11 +69,40 @@ export function getReconciliationByCountId(db: Database, countId: number) {
   return db.query.reconciliations.findFirst({ where: eq(reconciliations.countId, countId) })
 }
 
+// Joins in the category name — same reasoning as
+// listCommentsForReconciliation below, and matches
+// listSubmittedLinesWithCategoryNames in reconciliations/routes.ts so
+// the detail screen (#15) can render both sides of the comparison the
+// same way.
 export function listLinesForReconciliation(db: Database, reconciliationId: number) {
   return db
-    .select()
+    .select({
+      fundCategoryId: reconciliationLines.fundCategoryId,
+      categoryName: fundCategories.name,
+      receivedAmountCents: reconciliationLines.receivedAmountCents,
+    })
     .from(reconciliationLines)
+    .innerJoin(fundCategories, eq(fundCategories.id, reconciliationLines.fundCategoryId))
     .where(eq(reconciliationLines.reconciliationId, reconciliationId))
+}
+
+// Joins in the author's display name — the UI (#15) renders a comment
+// thread, and "account id 7 said..." isn't something a treasurer or
+// Mission staffer can do anything useful with.
+export function listCommentsForReconciliation(db: Database, reconciliationId: number) {
+  return db
+    .select({
+      id: reconciliationComments.id,
+      reconciliationId: reconciliationComments.reconciliationId,
+      authorAccountId: reconciliationComments.authorAccountId,
+      authorDisplayName: accounts.displayName,
+      body: reconciliationComments.body,
+      createdAt: reconciliationComments.createdAt,
+    })
+    .from(reconciliationComments)
+    .innerJoin(accounts, eq(accounts.id, reconciliationComments.authorAccountId))
+    .where(eq(reconciliationComments.reconciliationId, reconciliationId))
+    .orderBy(reconciliationComments.createdAt)
 }
 
 // Submitted -> In Transit. Callers are role-gated to treasurer/clerk/
@@ -264,4 +301,38 @@ export async function confirmDiscrepancyResolution(
   })
 
   return updated
+}
+
+// The church's response to a flagged discrepancy (e.g. "we recounted,
+// our figure was correct") — see CONTEXT.md > UI/UX > Reconciliation
+// detail screen > Church response. Local-church-only (mirrors
+// mark-sent's accountType check) and only while a discrepancy is
+// actually flagged — a comment on a clean reconciliation isn't the
+// feature this is; nothing in CONTEXT.md describes a general-purpose
+// discussion thread.
+export async function addReconciliationComment(
+  db: Database,
+  reconciliationId: number,
+  actor: Account,
+  body: string,
+  ctx: AuditContext,
+) {
+  const { reconciliation, count } = await loadReconciliationWithCount(db, reconciliationId)
+  await assertChurchAccess(db, actor, count.churchId, 'local')
+
+  if (!reconciliation.hasDiscrepancy) {
+    throw new ReconciliationStateError('There is no flagged discrepancy to comment on')
+  }
+
+  const [comment] = await db
+    .insert(reconciliationComments)
+    .values({ reconciliationId, authorAccountId: actor.id, body })
+    .returning()
+
+  await recordAudit(db, 'reconciliation', reconciliationId, 'comment', {
+    ...ctx,
+    metadata: { countId: count.id, commentId: comment.id, body },
+  })
+
+  return comment
 }

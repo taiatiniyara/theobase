@@ -42,3 +42,23 @@ export async function completeLocalLogin(
   })
   return { accountId: body.account.id, displayName: body.account.displayName }
 }
+
+interface InstitutionalLoginResponse {
+  account: { id: number; displayName: string }
+}
+
+// Institutional accounts (Mission Admin/Staff, platform-operator) have
+// no offline-PIN story — see CONTEXT.md's Login note under
+// Mission-level staff/CFO role — so this is just the session cookie,
+// no local-verifier caching to do. A login screen (#24) will call this
+// for the email+password half of its form.
+export async function completeInstitutionalLogin(
+  email: string,
+  password: string,
+): Promise<{ accountId: number; displayName: string }> {
+  const body = await apiFetch<InstitutionalLoginResponse>('/auth/institutional/login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  })
+  return { accountId: body.account.id, displayName: body.account.displayName }
+}

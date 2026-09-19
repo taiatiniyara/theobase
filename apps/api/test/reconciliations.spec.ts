@@ -6,8 +6,10 @@ import { getDb } from '../src/db/client'
 import { createCount } from '../src/db/counts'
 import { createDistrict } from '../src/db/queries'
 import {
+  addReconciliationComment,
   confirmDiscrepancyResolution,
   getReconciliationByCountId,
+  listCommentsForReconciliation,
   listLinesForReconciliation,
   markReceived,
   markSent,
@@ -464,6 +466,103 @@ describe('discrepancy resolution (dual control)', () => {
   })
 })
 
+describe('church response: discrepancy comments', () => {
+  async function setupDiscrepancy(db: ReturnType<typeof getDb>) {
+    const fixture = await setupSubmittedCount(db)
+    await markSent(db, fixture.reconciliation.id, fixture.treasurer, null, { actorId: fixture.treasurer.id })
+    await markReceived(
+      db,
+      fixture.reconciliation.id,
+      fixture.missionStaff,
+      [
+        { fundCategoryId: fixture.tithe.id, amountCents: 10_000 },
+        { fundCategoryId: fixture.other.id, amountCents: 4_000 },
+      ],
+      { actorId: fixture.missionStaff.id },
+    )
+    const reconciliation = (await getReconciliationByCountId(db, fixture.count.id))!
+    return { ...fixture, reconciliation }
+  }
+
+  it('the treasurer can add a comment on a flagged discrepancy, visible to Mission', async () => {
+    const db = getDb(env.DB)
+    const { treasurer, reconciliation } = await setupDiscrepancy(db)
+
+    const comment = await addReconciliationComment(
+      db,
+      reconciliation.id,
+      treasurer,
+      'We recounted, our figure was correct',
+      { actorId: treasurer.id },
+    )
+    expect(comment.body).toBe('We recounted, our figure was correct')
+
+    const comments = await listCommentsForReconciliation(db, reconciliation.id)
+    expect(comments).toHaveLength(1)
+    expect(comments[0]).toMatchObject({
+      authorAccountId: treasurer.id,
+      authorDisplayName: 'Test Treasurer',
+      body: 'We recounted, our figure was correct',
+    })
+
+    const audit = await db
+      .select()
+      .from(auditLog)
+      .where(and(eq(auditLog.entityType, 'reconciliation'), eq(auditLog.entityId, reconciliation.id)))
+    expect(audit.find((a) => a.action === 'comment')).toMatchObject({ actorId: treasurer.id })
+  })
+
+  it('a same-church Clerk or district Pastor can also comment', async () => {
+    const db = getDb(env.DB)
+    const { coSigner, reconciliation } = await setupDiscrepancy(db)
+    const comment = await addReconciliationComment(db, reconciliation.id, coSigner, 'Checking with the bank', {
+      actorId: coSigner.id,
+    })
+    expect(comment.authorAccountId).toBe(coSigner.id)
+  })
+
+  it('rejects a comment from a Mission staff account', async () => {
+    const db = getDb(env.DB)
+    const { missionStaff, reconciliation } = await setupDiscrepancy(db)
+    await expect(
+      addReconciliationComment(db, reconciliation.id, missionStaff, 'Trying to comment as Mission', {
+        actorId: missionStaff.id,
+      }),
+    ).rejects.toThrow(ReconciliationAccessError)
+  })
+
+  it('rejects a comment from an unrelated church', async () => {
+    const db = getDb(env.DB)
+    const { reconciliation } = await setupDiscrepancy(db)
+    const otherChurch = await createTestChurch(db)
+    const outsider = await createTestTreasurer(db, otherChurch.id)
+    await expect(
+      addReconciliationComment(db, reconciliation.id, outsider, 'Not my church', { actorId: outsider.id }),
+    ).rejects.toThrow(ReconciliationAccessError)
+  })
+
+  it('rejects a comment when there is no flagged discrepancy', async () => {
+    const db = getDb(env.DB)
+    const { treasurer, missionStaff, reconciliation, tithe, other } = await setupSubmittedCount(db)
+    await markSent(db, reconciliation.id, treasurer, null, { actorId: treasurer.id })
+    await markReceived(
+      db,
+      reconciliation.id,
+      missionStaff,
+      [
+        { fundCategoryId: tithe.id, amountCents: 10_000 },
+        { fundCategoryId: other.id, amountCents: 5_000 },
+      ],
+      { actorId: missionStaff.id },
+    )
+    await expect(
+      addReconciliationComment(db, reconciliation.id, treasurer, 'Nothing flagged here', {
+        actorId: treasurer.id,
+      }),
+    ).rejects.toThrow(ReconciliationStateError)
+  })
+})
+
 describe('HTTP routes', () => {
   it('rejects an unauthenticated mark-sent request', async () => {
     const res = await app.request(
@@ -643,13 +742,21 @@ describe('HTTP routes', () => {
 
   it('GET /reconciliations/by-count/:countId is visible to the originating church, not just Mission', async () => {
     const db = getDb(env.DB)
-    const { treasurer, reconciliation, count } = await setupSubmittedCount(db)
+    const { treasurer, reconciliation, count, tithe } = await setupSubmittedCount(db)
     const cookie = await loginAs(db, treasurer.id)
     const res = await app.request(`/reconciliations/by-count/${count.id}`, { headers: { cookie } }, env)
     expect(res.status).toBe(200)
-    const body = await res.json<{ reconciliation: { id: number; status: string } }>()
+    const body = await res.json<{
+      reconciliation: { id: number; status: string }
+      submittedLines: { fundCategoryId: number; categoryName: string; amountCents: number }[]
+    }>()
     expect(body.reconciliation.id).toBe(reconciliation.id)
     expect(body.reconciliation.status).toBe('submitted')
+    expect(body.submittedLines).toContainEqual({
+      fundCategoryId: tithe.id,
+      categoryName: 'Tithe',
+      amountCents: 10_000,
+    })
   })
 
   it('GET /reconciliations/by-count/:countId returns 404 for a non-existent count', async () => {
@@ -658,5 +765,98 @@ describe('HTTP routes', () => {
     const cookie = await loginAs(db, treasurer.id)
     const res = await app.request('/reconciliations/by-count/999999', { headers: { cookie } }, env)
     expect(res.status).toBe(404)
+  })
+
+  it('GET /reconciliations/by-count/:countId returns 403 for an account from an unrelated church/mission', async () => {
+    const db = getDb(env.DB)
+    const { count } = await setupSubmittedCount(db)
+    const otherChurch = await createTestChurch(db)
+    const outsider = await createTestTreasurer(db, otherChurch.id)
+    const cookie = await loginAs(db, outsider.id)
+    const res = await app.request(`/reconciliations/by-count/${count.id}`, { headers: { cookie } }, env)
+    expect(res.status).toBe(403)
+  })
+
+  it('GET /reconciliations/by-count/:countId returns 403 for a platform-operator (no standing financial-record access by default)', async () => {
+    const db = getDb(env.DB)
+    const { count } = await setupSubmittedCount(db)
+    const platformOperator = await createInstitutionalAccount(db, {
+      displayName: 'Platform Operator',
+      email: nextEmail(),
+      password: 'correct-horse-battery-staple',
+      role: 'platform_operator',
+    })
+    const cookie = await loginAs(db, platformOperator.id)
+    const res = await app.request(`/reconciliations/by-count/${count.id}`, { headers: { cookie } }, env)
+    expect(res.status).toBe(403)
+  })
+
+  it('posts a comment via HTTP and it shows up in the by-count response for both church and Mission', async () => {
+    const db = getDb(env.DB)
+    const { treasurer, missionStaff, reconciliation, count, tithe, other } = await setupSubmittedCount(db)
+    await app.request(
+      `/reconciliations/${reconciliation.id}/mark-sent`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', cookie: await loginAs(db, treasurer.id) },
+        body: '{}',
+      },
+      env,
+    )
+    const missionCookie = await loginAs(db, missionStaff.id)
+    await app.request(
+      `/reconciliations/${reconciliation.id}/receive`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', cookie: missionCookie },
+        body: JSON.stringify({
+          lines: [
+            { fundCategoryId: tithe.id, amountCents: 10_000 },
+            { fundCategoryId: other.id, amountCents: 4_000 },
+          ],
+        }),
+      },
+      env,
+    )
+
+    const treasurerCookie = await loginAs(db, treasurer.id)
+    const commentRes = await app.request(
+      `/reconciliations/${reconciliation.id}/comments`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', cookie: treasurerCookie },
+        body: JSON.stringify({ body: 'We recounted, our figure was correct' }),
+      },
+      env,
+    )
+    expect(commentRes.status).toBe(200)
+
+    const missionView = await app.request(
+      `/reconciliations/by-count/${count.id}`,
+      { headers: { cookie: missionCookie } },
+      env,
+    )
+    const missionBody = await missionView.json<{ comments: { body: string; authorDisplayName: string }[] }>()
+    expect(missionBody.comments).toHaveLength(1)
+    expect(missionBody.comments[0]).toMatchObject({
+      body: 'We recounted, our figure was correct',
+      authorDisplayName: 'Test Treasurer',
+    })
+  })
+
+  it('rejects a Mission staffer trying to post a comment (wrong role)', async () => {
+    const db = getDb(env.DB)
+    const { missionStaff, reconciliation } = await setupSubmittedCount(db)
+    const cookie = await loginAs(db, missionStaff.id)
+    const res = await app.request(
+      `/reconciliations/${reconciliation.id}/comments`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', cookie },
+        body: JSON.stringify({ body: 'Trying anyway' }),
+      },
+      env,
+    )
+    expect(res.status).toBe(403)
   })
 })

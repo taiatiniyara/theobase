@@ -13,8 +13,8 @@ import App from './App.tsx'
 // for anything that needs the real service worker.
 if (import.meta.env.DEV) {
   Promise.all([import('./lib/pinVerification'), import('./lib/auth')]).then(
-    ([{ verifyPin }, { completeLocalLogin }]) => {
-      Object.assign(window, { __theobaseTest: { verifyPin, completeLocalLogin } })
+    ([{ verifyPin }, { completeLocalLogin, completeInstitutionalLogin }]) => {
+      Object.assign(window, { __theobaseTest: { verifyPin, completeLocalLogin, completeInstitutionalLogin } })
     },
   )
 }

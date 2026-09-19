@@ -57,6 +57,13 @@
       "when": 1789797624388,
       "tag": "0007_fearless_polaris",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1789799702388,
+      "tag": "0008_married_bulldozer",
+      "breakpoints": true
     }
   ]
 }

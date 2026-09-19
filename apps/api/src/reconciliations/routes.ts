@@ -1,10 +1,14 @@
+import { eq } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { type AppEnv, requireAuth, requireRole } from '../auth/middleware'
+import { canAccessChurch } from '../auth/scope'
 import { getDb } from '../db/client'
-import { listLinesForCount } from '../db/counts'
+import { countLines, counts, fundCategories } from '../db/schema'
 import {
+  addReconciliationComment,
   confirmDiscrepancyResolution,
   getReconciliationByCountId,
+  listCommentsForReconciliation,
   listLinesForReconciliation,
   markReceived,
   markSent,
@@ -32,6 +36,10 @@ interface ProposeResolutionBody {
   reason?: unknown
 }
 
+interface CommentBody {
+  body?: unknown
+}
+
 function validateReceiveBody(
   body: ReceiveBody,
 ): { ok: true; value: { fundCategoryId: number; amountCents: number }[] } | { ok: false; error: string } {
@@ -55,15 +63,33 @@ function validateReceiveBody(
 
 export const reconciliationsRoutes = new Hono<AppEnv>()
 
+// Category names, not just ids, joined in here rather than making the
+// detail screen (#15) fetch them separately — the treasurer-only
+// /counts/categories endpoint isn't callable by a Mission account
+// viewing the same record, and there's no reason both audiences
+// shouldn't get everything they need to render this screen in one
+// request.
+function listSubmittedLinesWithCategoryNames(db: ReturnType<typeof getDb>, countId: number) {
+  return db
+    .select({
+      fundCategoryId: countLines.fundCategoryId,
+      categoryName: fundCategories.name,
+      amountCents: countLines.amountCents,
+    })
+    .from(countLines)
+    .innerJoin(fundCategories, eq(fundCategories.id, countLines.fundCategoryId))
+    .where(eq(countLines.countId, countId))
+}
+
 // Visible to both Mission and the originating local church — see
-// CONTEXT.md's "not Mission-only" transparency note — so this reads
-// through db/counts.ts's own listLinesForCount rather than gating on
-// role, the same way countsRoutes' own routes don't split by role
-// beyond requireAuth. Access is still scoped: db/reconciliations.ts's
-// action endpoints below check org-scope, but a plain read here is
-// intentionally the one thing this ticket doesn't further restrict —
-// the reconciliation detail screen (#15) is what actually renders this
-// for either audience.
+// CONTEXT.md's "not Mission-only" transparency note — but *not* to
+// everyone who happens to be authenticated: canAccessChurch is the
+// same org-scope check the action endpoints below use, and it already
+// returns false for platform_operator by construction — see
+// CONTEXT.md > UI/UX > Platform-operator role's "no standing access to
+// any Mission's actual financial records ... by default." A read is
+// still a read of real tithe/offering amounts, so it gets the same
+// scope check any write here does, not a looser one.
 reconciliationsRoutes.get('/by-count/:countId', requireAuth, async (c) => {
   const countId = Number(c.req.param('countId'))
   if (!Number.isInteger(countId) || countId <= 0) {
@@ -74,11 +100,17 @@ reconciliationsRoutes.get('/by-count/:countId', requireAuth, async (c) => {
   if (!reconciliation) {
     return c.json({ error: 'not found' }, 404)
   }
-  const [submittedLines, receivedLines] = await Promise.all([
-    listLinesForCount(db, countId),
+  const count = await db.query.counts.findFirst({ where: eq(counts.id, countId) })
+  const account = c.get('account')
+  if (!count || !(await canAccessChurch(db, account, count.churchId))) {
+    return c.json({ error: 'forbidden' }, 403)
+  }
+  const [submittedLines, receivedLines, comments] = await Promise.all([
+    listSubmittedLinesWithCategoryNames(db, countId),
     listLinesForReconciliation(db, reconciliation.id),
+    listCommentsForReconciliation(db, reconciliation.id),
   ])
-  return c.json({ reconciliation, submittedLines, receivedLines })
+  return c.json({ reconciliation, submittedLines, receivedLines, comments })
 })
 
 reconciliationsRoutes.post(
@@ -162,6 +194,34 @@ reconciliationsRoutes.post(
         actorId: account.id,
       })
       return c.json({ reconciliation })
+    } catch (err) {
+      if (err instanceof ReconciliationNotFoundError) return c.json({ error: err.message }, 404)
+      if (err instanceof ReconciliationAccessError) return c.json({ error: err.message }, 403)
+      if (err instanceof ReconciliationStateError) return c.json({ error: err.message }, 409)
+      throw err
+    }
+  },
+)
+
+reconciliationsRoutes.post(
+  '/:id/comments',
+  requireAuth,
+  requireRole('treasurer', 'clerk', 'pastor'),
+  async (c) => {
+    const id = Number(c.req.param('id'))
+    if (!Number.isInteger(id) || id <= 0) {
+      return c.json({ error: 'invalid id' }, 400)
+    }
+    const body = await c.req.json<CommentBody>().catch(() => ({}) as CommentBody)
+    if (typeof body.body !== 'string' || body.body.trim().length === 0) {
+      return c.json({ error: 'body is required' }, 400)
+    }
+
+    const db = getDb(c.env.DB)
+    const account = c.get('account')
+    try {
+      const comment = await addReconciliationComment(db, id, account, body.body, { actorId: account.id })
+      return c.json({ comment })
     } catch (err) {
       if (err instanceof ReconciliationNotFoundError) return c.json({ error: err.message }, 404)
       if (err instanceof ReconciliationAccessError) return c.json({ error: err.message }, 403)
